@@ -41,6 +41,7 @@ export default function App() {
   
   const [searchKeyword, setSearchKeyword] = useState('');
   const [viewFilter, setViewFilter] = useState(0);
+  const [lengthFilter, setLengthFilter] = useState('all'); // 'all' | 'shorts' | 'long'
   const [ttoTtoMode, setTtoTtoMode] = useState(false);
   const [sortType, setSortType] = useState('multiplier');
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'scrapbook'
@@ -251,16 +252,18 @@ export default function App() {
     let result = [...videos];
     if (searchKeyword) result = result.filter(v => v.title.toLowerCase().includes(searchKeyword.toLowerCase()));
     if (viewFilter > 0) result = result.filter(v => v.view_count >= viewFilter);
+    if (lengthFilter === 'shorts') result = result.filter(v => v.isShorts);
+    else if (lengthFilter === 'long') result = result.filter(v => !v.isShorts);
     if (ttoTtoMode) result = result.filter(v => v.daysOld >= 180);
 
-    if (sortType === 'date') result.sort((a, b) => b.daysOld - a.daysOld); 
+    if (sortType === 'date') result.sort((a, b) => a.daysOld - b.daysOld); 
     else if (sortType === 'views') result.sort((a, b) => b.view_count - a.view_count);
     else if (sortType === 'multiplier') result.sort((a, b) => b.multiplier - a.multiplier); 
     else if (sortType === 'viral') result.sort((a, b) => b.views_per_day - a.views_per_day);
     else if (sortType === 'likes') result.sort((a, b) => b.like_ratio - a.like_ratio);
 
     return result;
-  }, [videos, searchKeyword, viewFilter, ttoTtoMode, sortType]);
+  }, [videos, searchKeyword, viewFilter, lengthFilter, ttoTtoMode, sortType]);
 
   const toggleCheckVideo = (videoId) => {
     setCheckedVideos(prev => prev.includes(videoId) ? prev.filter(id => id !== videoId) : [...prev, videoId]);
@@ -470,8 +473,15 @@ export default function App() {
                     <option value={1000000}>👑 100만 이상</option>
                   </select>
 
+                  <select value={lengthFilter} onChange={(e) => setLengthFilter(e.target.value)} className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none cursor-pointer text-slate-700 font-medium">
+                    <option value="all">🎬 길이 전체</option>
+                    <option value="shorts">📱 쇼츠만</option>
+                    <option value="long">🎞️ 롱폼만</option>
+                  </select>
+
                   <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
                     <button onClick={() => setSortType('multiplier')} className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${sortType === 'multiplier' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>대박지수</button>
+                    <button onClick={() => setSortType('viral')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'viral' ? 'bg-white shadow text-orange-600' : 'text-slate-500 hover:text-slate-800'}`}>화제성(일평균)</button>
                     <button onClick={() => setSortType('date')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'date' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-800'}`}>최신순</button>
                     <button onClick={() => setSortType('likes')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'likes' ? 'bg-white shadow text-rose-600' : 'text-slate-500 hover:text-slate-800'}`}>참여율(좋아요)</button>
                   </div>
@@ -607,7 +617,7 @@ export default function App() {
                   {savedVideos.map((video) => (
                     <div key={video.videoId} className="border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition-all group bg-white flex flex-col">
                       <div className="relative">
-                        <img src={video.thumbnail.replace('default.jpg', 'mqdefault.jpg')} alt="thumb" className="w-full aspect-video object-cover" />
+                        <img src={`https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`} alt="thumb" className="w-full aspect-video object-cover" />
                         <div className="absolute top-2 left-2 flex gap-1">
                           {video.isShorts && <span className="bg-pink-600 text-white text-xs px-2 py-1 rounded font-bold shadow-sm">Shorts</span>}
                         </div>
