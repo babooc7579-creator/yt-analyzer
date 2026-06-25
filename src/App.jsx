@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, CheckSquare, Square, Rocket, TrendingUp, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, Clock, ThumbsUp, MessageSquareText, X, Bookmark } from 'lucide-react';
+import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, CheckSquare, Square, Rocket, TrendingUp, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, Clock, ThumbsUp, MessageSquareText, X, Bookmark, RefreshCw } from 'lucide-react';
 
 const DEFAULT_CATEGORIES = ['해짜', '영화', '드라마', '역사', '정치', '지식/정보', '미분류1', '미분류2', '미분류3'];
+
+// ⚠️ Azure Portal > yt-analyzer-func > 개요 화면의 "기본 도메인" 값과 일치해야 합니다.
+const FUNCTION_API_BASE = 'https://yt-analyzer-func-hyd8hxbwb8gkephq.koreacentral-01.azurewebsites.net/api';
+
 const LANGUAGES = [
   { code: 'KR', label: '🇰🇷 KR', name: '한국어' },
   { code: 'EN', label: '🇺🇸 EN', name: '영어' },
@@ -20,9 +24,9 @@ export default function App() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [isEditingCategory, setIsEditingCategory] = useState(false);
 
-  const [savedChannels, setSavedChannels] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('yt_crm_channels')) || []; } catch { return []; }
-  });
+  const [savedChannels, setSavedChannels] = useState([]);
+  const [channelsLoading, setChannelsLoading] = useState(true);
+  const [isScanning, setIsScanning] = useState(false);
   const [savedVideos, setSavedVideos] = useState(() => {
     try { return JSON.parse(localStorage.getItem('yt_crm_saved_videos')) || []; } catch { return []; }
   });
@@ -51,9 +55,25 @@ export default function App() {
   
   const [commentModal, setCommentModal] = useState({ isOpen: false, videoTitle: '', comments: [], loading: false });
 
-  useEffect(() => { localStorage.setItem('yt_crm_channels', JSON.stringify(savedChannels)); }, [savedChannels]);
   useEffect(() => { localStorage.setItem('yt_crm_categories', JSON.stringify(categories)); }, [categories]);
   useEffect(() => { localStorage.setItem('yt_crm_saved_videos', JSON.stringify(savedVideos)); }, [savedVideos]);
+
+  // 채널 목록은 더 이상 브라우저에만 저장하지 않고, 클라우드(Cosmos DB)에서 불러옵니다.
+  const loadChannelsFromCloud = async () => {
+    setChannelsLoading(true);
+    try {
+      const res = await fetch(`${FUNCTION_API_BASE}/channels`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '채널 목록을 불러오지 못했습니다.');
+      setSavedChannels(data.channels || []);
+    } catch (err) {
+      setError(`채널 목록 로딩 실패: ${err.message} (Function App CORS 설정을 확인해주세요)`);
+    } finally {
+      setChannelsLoading(false);
+    }
+  };
+
+  useEffect(() => { loadChannelsFromCloud(); }, []);
 
   const API_BASE = "https://www.googleapis.com/youtube/v3";
 
@@ -79,48 +99,44 @@ export default function App() {
   };
 
   const handleAddChannel = async () => {
-    if (!apiKey) { setError('API Key를 먼저 입력해주세요.'); return; }
     if (!newChannelInput.trim()) return;
 
     setLoading(true); setError(''); setProgressMsg('채널 정보 확인 중...');
     try {
-      let queryParam = newChannelInput.trim().startsWith('UC') && newChannelInput.length === 24 
-        ? `id=${newChannelInput.trim()}` 
-        : `forHandle=${newChannelInput.trim().startsWith('@') ? newChannelInput.trim() : '@' + newChannelInput.trim()}`;
-
-      const res = await fetch(`${API_BASE}/channels?part=snippet,contentDetails&${queryParam}&key=${apiKey}`);
+      const res = await fetch(`${FUNCTION_API_BASE}/channels`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ handle: newChannelInput.trim(), category: newChannelCategory, language: newChannelLang }),
+      });
       const data = await res.json();
-      if (data.error) throw new Error(data.error.message);
-      if (!data.items || data.items.length === 0) throw new Error('채널을 찾을 수 없습니다.');
+      if (!data.success) throw new Error(data.error || '채널 추가에 실패했습니다.');
 
-      const channelInfo = {
-        id: data.items[0].id,
-        title: data.items[0].snippet.title,
-        thumbnail: data.items[0].snippet.thumbnails?.default?.url,
-        uploadsId: data.items[0].contentDetails.relatedPlaylists.uploads,
-        category: newChannelCategory,
-        language: newChannelLang,
-      };
-
-      if (!savedChannels.some(c => c.id === channelInfo.id)) {
-        setSavedChannels(prev => [...prev, channelInfo]);
+      if (savedChannels.some(c => c.id === data.channel.id)) {
+        setError('이미 리스트에 존재하는 채널입니다.');
+      } else {
+        setSavedChannels(prev => [...prev, data.channel]);
         setNewChannelInput('');
         setSelectedCategoryTab(newChannelCategory);
-        setProgressMsg('채널이 성공적으로 추가되었습니다!');
-      } else {
-        setError('이미 리스트에 존재하는 채널입니다.');
+        setProgressMsg('채널이 클라우드에 성공적으로 추가되었습니다! (최초 분석 시 영상 최대 250개를 수집합니다)');
       }
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
-      setTimeout(() => setProgressMsg(''), 3000);
+      setTimeout(() => setProgressMsg(''), 4000);
     }
   };
 
-  const deleteChannel = (id) => {
-    setSavedChannels(prev => prev.filter(c => c.id !== id));
-    setSelectedChannelIds(prev => prev.filter(cId => cId !== id));
+  const deleteChannel = async (id, category) => {
+    try {
+      const res = await fetch(`${FUNCTION_API_BASE}/channels/${id}?category=${encodeURIComponent(category)}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '채널 삭제에 실패했습니다.');
+      setSavedChannels(prev => prev.filter(c => c.id !== id));
+      setSelectedChannelIds(prev => prev.filter(cId => cId !== id));
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const toggleChannelSelection = (id) => {
@@ -129,98 +145,72 @@ export default function App() {
 
   const fetchSelectedChannels = async () => {
     if (selectedChannelIds.length === 0) { setError('분석할 채널을 하나 이상 선택해주세요.'); return; }
-    if (selectedChannelIds.length > 5) { setError('API 할당량 보호를 위해 한 번에 최대 5개까지만 분석 가능합니다.'); return; }
 
     setLoading(true); setError(''); setVideos([]); setCheckedVideos([]); setActiveTab('dashboard');
-    let allFetchedVideos = [];
-    
+    setProgressMsg('클라우드에 저장된 영상 데이터를 불러오는 중...');
+
     try {
-      for (let i = 0; i < selectedChannelIds.length; i++) {
-        const channel = savedChannels.find(c => c.id === selectedChannelIds[i]);
-        if (!channel) continue;
+      const res = await fetch(`${FUNCTION_API_BASE}/videos?channelIds=${selectedChannelIds.join(',')}`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '영상 데이터를 불러오지 못했습니다.');
 
-        setProgressMsg(`[${channel.title}] 영상 목록 수집 중... (${i+1}/${selectedChannelIds.length})`);
-        
-        let channelVideos = [];
-        let pageToken = '';
-        let pagesToFetch = 5; // 최대 250개
+      // 백엔드 필드명(camelCase) -> 화면에서 쓰는 필드명으로 변환 + daysOld/views_per_day는 매번 새로 계산
+      const mapped = (data.videos || []).map(v => {
+        const daysOld = getDaysDiff(v.uploadDate);
+        return {
+          videoId: v.id,
+          title: v.title,
+          thumbnail: v.thumbnail,
+          upload_date: v.uploadDate,
+          channel_title: v.channelTitle,
+          channel_id: v.channelId,
+          language: v.language,
+          daysOld,
+          view_count: v.viewCount || 0,
+          like_count: v.likeCount || 0,
+          like_ratio: v.likeRatio || 0,
+          duration: v.duration || '00:00',
+          isShorts: v.isShorts || false,
+          multiplier: v.multiplier || 0,
+          views_per_day: Math.round((v.viewCount || 0) / daysOld),
+        };
+      });
 
-        while (pagesToFetch > 0) {
-          const res = await fetch(`${API_BASE}/playlistItems?part=snippet&playlistId=${channel.uploadsId}&maxResults=50&pageToken=${pageToken}&key=${apiKey}`);
-          const data = await res.json();
-          if (data.error) throw new Error(data.error.message);
-
-          if (data.items) {
-            const mapped = data.items.map(item => ({
-              videoId: item.snippet.resourceId.videoId,
-              title: item.snippet.title,
-              thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
-              upload_date: item.snippet.publishedAt.substring(0, 10),
-              channel_title: channel.title,
-              channel_id: channel.id,
-              language: channel.language,
-              daysOld: getDaysDiff(item.snippet.publishedAt.substring(0, 10)),
-              view_count: 0,
-              like_count: 0,
-              like_ratio: 0,
-              duration: '00:00',
-              isShorts: false
-            }));
-            channelVideos.push(...mapped);
-          }
-          pageToken = data.nextPageToken || '';
-          if (!pageToken) break;
-          pagesToFetch--;
-        }
-
-        setProgressMsg(`[${channel.title}] 상세 지표(조회/좋아요/길이) 스캔 중...`);
-        let totalViewsForAvg = 0;
-        let validVideosForAvg = 0;
-
-        for (let j = 0; j < channelVideos.length; j += 50) {
-          const batch = channelVideos.slice(j, j + 50);
-          const ids = batch.map(v => v.videoId).join(',');
-          // 핵심: statistics와 contentDetails를 한 번의 호출로 합쳐서 API 할당량 절약
-          const statRes = await fetch(`${API_BASE}/videos?part=statistics,contentDetails&id=${ids}&key=${apiKey}`);
-          const statData = await statRes.json();
-          
-          if (statData.items) {
-            statData.items.forEach(statItem => {
-              const vid = channelVideos.find(v => v.videoId === statItem.id);
-              if (vid) {
-                vid.view_count = parseInt(statItem.statistics.viewCount || 0, 10);
-                vid.like_count = parseInt(statItem.statistics.likeCount || 0, 10);
-                vid.like_ratio = vid.view_count > 0 ? ((vid.like_count / vid.view_count) * 100).toFixed(1) : 0;
-                
-                const durationInfo = parseDuration(statItem.contentDetails.duration);
-                vid.duration = durationInfo.formatted;
-                vid.isShorts = durationInfo.isShorts;
-
-                if (vid.view_count > 0) {
-                  totalViewsForAvg += vid.view_count;
-                  validVideosForAvg++;
-                }
-              }
-            });
-          }
-        }
-
-        const avgViews = validVideosForAvg > 0 ? totalViewsForAvg / validVideosForAvg : 1;
-        channelVideos.forEach(v => {
-          v.views_per_day = Math.round(v.view_count / v.daysOld);
-          v.multiplier = v.view_count / avgViews; 
-        });
-
-        allFetchedVideos.push(...channelVideos);
+      setVideos(mapped);
+      if (mapped.length === 0) {
+        setProgressMsg('아직 수집된 영상이 없습니다. 먼저 "지금 스캔"을 눌러 데이터를 모아주세요.');
+      } else {
+        setProgressMsg(`불러오기 완료! 총 ${mapped.length}개의 영상을 가져왔습니다.`);
       }
-
-      setVideos(allFetchedVideos);
-      setProgressMsg(`분석 완료! 총 ${allFetchedVideos.length}개의 영상을 가져왔습니다.`);
       setTimeout(() => setProgressMsg(''), 3000);
-
     } catch (err) {
-      setError(err.message); setProgressMsg('');
-    } finally { setLoading(false); }
+      setError(`${err.message} (Function App CORS 설정을 확인해주세요)`); setProgressMsg('');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // "지금 스캔" 버튼: Function App에 새벽 자동 스캔과 똑같은 작업을 즉시 1회 실행시킴
+  const handleManualScan = async () => {
+    setIsScanning(true); setError('');
+    setProgressMsg('전체 채널 스캔 중... (채널 수와 영상 양에 따라 1분 이상 걸릴 수 있어요)');
+    try {
+      const res = await fetch(`${FUNCTION_API_BASE}/scan`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '스캔에 실패했습니다.');
+
+      const totalNew = (data.results || []).reduce((sum, r) => sum + (r.newVideosFound || 0), 0);
+      const ttoTtoCount = (data.results || []).reduce((sum, r) => sum + (r.ttoTtoCandidates?.length || 0), 0);
+      setProgressMsg(`스캔 완료! 신규 영상 ${totalNew}개 발견${ttoTtoCount > 0 ? `, 또터또 후보 ${ttoTtoCount}개 발견!` : ''}`);
+
+      // 지금 선택된 채널이 있으면 화면 데이터도 같이 새로고침
+      if (selectedChannelIds.length > 0) await fetchSelectedChannels();
+    } catch (err) {
+      setError(`스캔 실패: ${err.message}`);
+    } finally {
+      setIsScanning(false);
+      setTimeout(() => setProgressMsg(''), 5000);
+    }
   };
 
   const fetchTopComments = async (videoId, videoTitle) => {
@@ -351,7 +341,7 @@ export default function App() {
             </h1>
             
             <div className="mb-4">
-              <input type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="YouTube API Key 입력" className="w-full text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
+              <input type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="YouTube API Key (댓글 스캔에만 필요)" className="w-full text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
             </div>
 
             {/* 채널 추가 폼 */}
@@ -411,7 +401,9 @@ export default function App() {
             <hr className="my-4 border-slate-100" />
             
             <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
-              {savedChannels.filter(c => c.category === selectedCategoryTab).length === 0 ? (
+              {channelsLoading ? (
+                <p className="text-sm text-slate-400 text-center py-4 flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> 클라우드에서 채널 불러오는 중...</p>
+              ) : savedChannels.filter(c => c.category === selectedCategoryTab).length === 0 ? (
                 <p className="text-sm text-slate-400 text-center py-4">저장된 채널이 없습니다.</p>
               ) : (
                 savedChannels.filter(c => c.category === selectedCategoryTab).map(channel => (
@@ -424,7 +416,7 @@ export default function App() {
                       <p className="text-sm font-semibold text-slate-800 truncate" title={channel.title}>{channel.title}</p>
                       <p className="text-[10px] font-medium text-slate-500">{LANGUAGES.find(l => l.code === channel.language)?.label}</p>
                     </div>
-                    <button onClick={() => deleteChannel(channel.id)} className="p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => deleteChannel(channel.id, channel.category)} className="p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 ))
               )}
@@ -486,6 +478,15 @@ export default function App() {
                     <button onClick={() => setSortType('likes')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'likes' ? 'bg-white shadow text-rose-600' : 'text-slate-500 hover:text-slate-800'}`}>참여율(좋아요)</button>
                   </div>
                 </div>
+
+                <button
+                  onClick={handleManualScan}
+                  disabled={isScanning}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all shadow-sm ${isScanning ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
+                >
+                  {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCw className="w-5 h-5" />}
+                  {isScanning ? '스캔 중...' : '지금 스캔'}
+                </button>
 
                 <button 
                   onClick={() => setTtoTtoMode(!ttoTtoMode)}
