@@ -4,7 +4,7 @@ import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, 
 const DEFAULT_CATEGORIES = ['해짜', '영화', '드라마', '역사', '정치', '지식/정보', '미분류1', '미분류2', '미분류3'];
 
 // ⚠️ Azure Portal > yt-analyzer-func > 개요 화면의 "기본 도메인" 값과 일치해야 합니다.
-const FUNCTION_API_BASE = 'https://yt-analyzer-func-hyd8hxbwb8gkephq.koreacentral-01.azurewebsites.net/api';
+const FUNCTION_API_BASE = 'https://yt-analyzer-func-hyd8hxbwb8gkephg.koreacentral-01.azurewebsites.net/api';
 
 const LANGUAGES = [
   { code: 'KR', label: '🇰🇷 KR', name: '한국어' },
