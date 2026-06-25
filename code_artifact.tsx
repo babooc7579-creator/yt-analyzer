@@ -1,0 +1,651 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, CheckSquare, Square, Rocket, TrendingUp, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, Clock, ThumbsUp, MessageSquareText, X, Bookmark } from 'lucide-react';
+
+const DEFAULT_CATEGORIES = ['해짜', '영화', '드라마', '역사', '정치', '지식/정보', '미분류1', '미분류2', '미분류3'];
+const LANGUAGES = [
+  { code: 'KR', label: '🇰🇷 KR', name: '한국어' },
+  { code: 'EN', label: '🇺🇸 EN', name: '영어' },
+  { code: 'JP', label: '🇯🇵 JP', name: '일본어' },
+  { code: 'ES', label: '🇪🇸 ES', name: '스페인어' },
+  { code: 'ETC', label: '🌐 기타', name: '기타 언어' }
+];
+
+export default function App() {
+  const [apiKey, setApiKey] = useState('');
+  
+  // 상태 관리
+  const [categories, setCategories] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('yt_crm_categories')) || DEFAULT_CATEGORIES; } catch { return DEFAULT_CATEGORIES; }
+  });
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isEditingCategory, setIsEditingCategory] = useState(false);
+
+  const [savedChannels, setSavedChannels] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('yt_crm_channels')) || []; } catch { return []; }
+  });
+  const [savedVideos, setSavedVideos] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('yt_crm_saved_videos')) || []; } catch { return []; }
+  });
+  
+  const [newChannelInput, setNewChannelInput] = useState('');
+  const [newChannelCategory, setNewChannelCategory] = useState(categories[0]);
+  const [newChannelLang, setNewChannelLang] = useState('EN');
+  
+  const [selectedCategoryTab, setSelectedCategoryTab] = useState(categories[0]);
+  const [selectedChannelIds, setSelectedChannelIds] = useState([]);
+  
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [progressMsg, setProgressMsg] = useState('');
+  const [error, setError] = useState('');
+  
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [viewFilter, setViewFilter] = useState(0);
+  const [ttoTtoMode, setTtoTtoMode] = useState(false);
+  const [sortType, setSortType] = useState('multiplier');
+  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'scrapbook'
+  
+  const [checkedVideos, setCheckedVideos] = useState([]);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
+  
+  const [commentModal, setCommentModal] = useState({ isOpen: false, videoTitle: '', comments: [], loading: false });
+
+  useEffect(() => { localStorage.setItem('yt_crm_channels', JSON.stringify(savedChannels)); }, [savedChannels]);
+  useEffect(() => { localStorage.setItem('yt_crm_categories', JSON.stringify(categories)); }, [categories]);
+  useEffect(() => { localStorage.setItem('yt_crm_saved_videos', JSON.stringify(savedVideos)); }, [savedVideos]);
+
+  const API_BASE = "https://www.googleapis.com/youtube/v3";
+
+  const getDaysDiff = (uploadDate) => {
+    const today = new Date();
+    const upDate = new Date(uploadDate);
+    return Math.max(1, Math.ceil(Math.abs(today - upDate) / (1000 * 60 * 60 * 24)));
+  };
+
+  const parseDuration = (durationStr) => {
+    const match = durationStr.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+    if (!match) return { isShorts: false, formatted: '00:00' };
+    const hours = (parseInt(match[1]) || 0);
+    const minutes = (parseInt(match[2]) || 0);
+    const seconds = (parseInt(match[3]) || 0);
+    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+    const isShorts = totalSeconds <= 61; // 60초 이하 (여유분 1초 포함)
+    
+    let formatted = '';
+    if (hours > 0) formatted += `${hours}:`;
+    formatted += `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    return { isShorts, formatted };
+  };
+
+  const handleAddChannel = async () => {
+    if (!apiKey) { setError('API Key를 먼저 입력해주세요.'); return; }
+    if (!newChannelInput.trim()) return;
+
+    setLoading(true); setError(''); setProgressMsg('채널 정보 확인 중...');
+    try {
+      let queryParam = newChannelInput.trim().startsWith('UC') && newChannelInput.length === 24 
+        ? `id=${newChannelInput.trim()}` 
+        : `forHandle=${newChannelInput.trim().startsWith('@') ? newChannelInput.trim() : '@' + newChannelInput.trim()}`;
+
+      const res = await fetch(`${API_BASE}/channels?part=snippet,contentDetails&${queryParam}&key=${apiKey}`);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      if (!data.items || data.items.length === 0) throw new Error('채널을 찾을 수 없습니다.');
+
+      const channelInfo = {
+        id: data.items[0].id,
+        title: data.items[0].snippet.title,
+        thumbnail: data.items[0].snippet.thumbnails?.default?.url,
+        uploadsId: data.items[0].contentDetails.relatedPlaylists.uploads,
+        category: newChannelCategory,
+        language: newChannelLang,
+      };
+
+      if (!savedChannels.some(c => c.id === channelInfo.id)) {
+        setSavedChannels(prev => [...prev, channelInfo]);
+        setNewChannelInput('');
+        setSelectedCategoryTab(newChannelCategory);
+        setProgressMsg('채널이 성공적으로 추가되었습니다!');
+      } else {
+        setError('이미 리스트에 존재하는 채널입니다.');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+      setTimeout(() => setProgressMsg(''), 3000);
+    }
+  };
+
+  const deleteChannel = (id) => {
+    setSavedChannels(prev => prev.filter(c => c.id !== id));
+    setSelectedChannelIds(prev => prev.filter(cId => cId !== id));
+  };
+
+  const toggleChannelSelection = (id) => {
+    setSelectedChannelIds(prev => prev.includes(id) ? prev.filter(cId => cId !== id) : [...prev, id]);
+  };
+
+  const fetchSelectedChannels = async () => {
+    if (selectedChannelIds.length === 0) { setError('분석할 채널을 하나 이상 선택해주세요.'); return; }
+    if (selectedChannelIds.length > 5) { setError('API 할당량 보호를 위해 한 번에 최대 5개까지만 분석 가능합니다.'); return; }
+
+    setLoading(true); setError(''); setVideos([]); setCheckedVideos([]); setActiveTab('dashboard');
+    let allFetchedVideos = [];
+    
+    try {
+      for (let i = 0; i < selectedChannelIds.length; i++) {
+        const channel = savedChannels.find(c => c.id === selectedChannelIds[i]);
+        if (!channel) continue;
+
+        setProgressMsg(`[${channel.title}] 영상 목록 수집 중... (${i+1}/${selectedChannelIds.length})`);
+        
+        let channelVideos = [];
+        let pageToken = '';
+        let pagesToFetch = 5; // 최대 250개
+
+        while (pagesToFetch > 0) {
+          const res = await fetch(`${API_BASE}/playlistItems?part=snippet&playlistId=${channel.uploadsId}&maxResults=50&pageToken=${pageToken}&key=${apiKey}`);
+          const data = await res.json();
+          if (data.error) throw new Error(data.error.message);
+
+          if (data.items) {
+            const mapped = data.items.map(item => ({
+              videoId: item.snippet.resourceId.videoId,
+              title: item.snippet.title,
+              thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
+              upload_date: item.snippet.publishedAt.substring(0, 10),
+              channel_title: channel.title,
+              channel_id: channel.id,
+              language: channel.language,
+              daysOld: getDaysDiff(item.snippet.publishedAt.substring(0, 10)),
+              view_count: 0,
+              like_count: 0,
+              like_ratio: 0,
+              duration: '00:00',
+              isShorts: false
+            }));
+            channelVideos.push(...mapped);
+          }
+          pageToken = data.nextPageToken || '';
+          if (!pageToken) break;
+          pagesToFetch--;
+        }
+
+        setProgressMsg(`[${channel.title}] 상세 지표(조회/좋아요/길이) 스캔 중...`);
+        let totalViewsForAvg = 0;
+        let validVideosForAvg = 0;
+
+        for (let j = 0; j < channelVideos.length; j += 50) {
+          const batch = channelVideos.slice(j, j + 50);
+          const ids = batch.map(v => v.videoId).join(',');
+          // 핵심: statistics와 contentDetails를 한 번의 호출로 합쳐서 API 할당량 절약
+          const statRes = await fetch(`${API_BASE}/videos?part=statistics,contentDetails&id=${ids}&key=${apiKey}`);
+          const statData = await statRes.json();
+          
+          if (statData.items) {
+            statData.items.forEach(statItem => {
+              const vid = channelVideos.find(v => v.videoId === statItem.id);
+              if (vid) {
+                vid.view_count = parseInt(statItem.statistics.viewCount || 0, 10);
+                vid.like_count = parseInt(statItem.statistics.likeCount || 0, 10);
+                vid.like_ratio = vid.view_count > 0 ? ((vid.like_count / vid.view_count) * 100).toFixed(1) : 0;
+                
+                const durationInfo = parseDuration(statItem.contentDetails.duration);
+                vid.duration = durationInfo.formatted;
+                vid.isShorts = durationInfo.isShorts;
+
+                if (vid.view_count > 0) {
+                  totalViewsForAvg += vid.view_count;
+                  validVideosForAvg++;
+                }
+              }
+            });
+          }
+        }
+
+        const avgViews = validVideosForAvg > 0 ? totalViewsForAvg / validVideosForAvg : 1;
+        channelVideos.forEach(v => {
+          v.views_per_day = Math.round(v.view_count / v.daysOld);
+          v.multiplier = v.view_count / avgViews; 
+        });
+
+        allFetchedVideos.push(...channelVideos);
+      }
+
+      setVideos(allFetchedVideos);
+      setProgressMsg(`분석 완료! 총 ${allFetchedVideos.length}개의 영상을 가져왔습니다.`);
+      setTimeout(() => setProgressMsg(''), 3000);
+
+    } catch (err) {
+      setError(err.message); setProgressMsg('');
+    } finally { setLoading(false); }
+  };
+
+  const fetchTopComments = async (videoId, videoTitle) => {
+    if (!apiKey) { setError('API Key가 필요합니다.'); return; }
+    setCommentModal({ isOpen: true, videoTitle, comments: [], loading: true });
+    
+    try {
+      const res = await fetch(`${API_BASE}/commentThreads?part=snippet&videoId=${videoId}&order=relevance&maxResults=10&key=${apiKey}`);
+      const data = await res.json();
+      if (data.error) {
+        if (data.error.errors[0].reason === 'commentsDisabled') throw new Error('이 영상은 댓글이 사용 중지되었습니다.');
+        throw new Error(data.error.message);
+      }
+
+      const comments = data.items ? data.items.map(item => ({
+        id: item.id,
+        author: item.snippet.topLevelComment.snippet.authorDisplayName,
+        text: item.snippet.topLevelComment.snippet.textOriginal,
+        likeCount: item.snippet.topLevelComment.snippet.likeCount
+      })) : [];
+
+      setCommentModal({ isOpen: true, videoTitle, comments, loading: false });
+    } catch (err) {
+      setCommentModal({ isOpen: true, videoTitle, comments: [], error: err.message, loading: false });
+    }
+  };
+
+  const filteredAndSortedVideos = useMemo(() => {
+    let result = [...videos];
+    if (searchKeyword) result = result.filter(v => v.title.toLowerCase().includes(searchKeyword.toLowerCase()));
+    if (viewFilter > 0) result = result.filter(v => v.view_count >= viewFilter);
+    if (ttoTtoMode) result = result.filter(v => v.daysOld >= 180);
+
+    if (sortType === 'date') result.sort((a, b) => b.daysOld - a.daysOld); 
+    else if (sortType === 'views') result.sort((a, b) => b.view_count - a.view_count);
+    else if (sortType === 'multiplier') result.sort((a, b) => b.multiplier - a.multiplier); 
+    else if (sortType === 'viral') result.sort((a, b) => b.views_per_day - a.views_per_day);
+    else if (sortType === 'likes') result.sort((a, b) => b.like_ratio - a.like_ratio);
+
+    return result;
+  }, [videos, searchKeyword, viewFilter, ttoTtoMode, sortType]);
+
+  const toggleCheckVideo = (videoId) => {
+    setCheckedVideos(prev => prev.includes(videoId) ? prev.filter(id => id !== videoId) : [...prev, videoId]);
+  };
+
+  const toggleScrapVideo = (video) => {
+    setSavedVideos(prev => {
+      const isSaved = prev.some(v => v.videoId === video.videoId);
+      if (isSaved) return prev.filter(v => v.videoId !== video.videoId);
+      return [...prev, video];
+    });
+  };
+
+  const isVideoSaved = (videoId) => savedVideos.some(v => v.videoId === videoId);
+
+  const copyAI_RemakePrompt = (targetVideos) => {
+    if (targetVideos.length === 0) return;
+    
+    let prompt = `다음은 내가 벤치마킹을 위해 수집한 글로벌 타채널의 '떡상(Viral)' 영상 목록이야.\n\n`;
+    targetVideos.forEach((v, idx) => {
+      const langLabel = LANGUAGES.find(l => l.code === v.language)?.label || '';
+      prompt += `${idx + 1}. [${langLabel}] 원본 제목: "${v.title}"\n   (조회수: ${v.view_count.toLocaleString()}회 / 찐팬 참여도(좋아요): ${v.like_ratio}% / 포맷: ${v.isShorts ? '쇼츠' : '롱폼'})\n\n`;
+    });
+
+    prompt += `\n[요청 사항]\n1. 위 영상들의 원본 제목을 한국어로 자연스럽게 번역해 줘.\n2. 이 영상들이 평소보다 몇 배씩 터질 수 있었던 '핵심 후킹 포인트(소재의 참신함 등)'를 분석해 줘.\n3. 이 과거의 영광을 '2026년 현재 한국 유튜브 트렌드'에 맞게 리메이크한다면 어떻게 해야 할까? 가장 자극적이고 클릭을 유도할 수 있는 [새로운 제목 3가지]와 [대본 인트로 뼈대]를 제안해 줘.`;
+
+    navigator.clipboard.writeText(prompt);
+    setCopiedPrompt(true);
+    setTimeout(() => setCopiedPrompt(false), 3000);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8fafc] p-4 md:p-6 font-sans text-slate-800">
+      
+      {/* 댓글 모달창 */}
+      {commentModal.isOpen && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200">
+            <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                <MessageSquareText className="w-5 h-5 text-indigo-500" />
+                찐팬 반응 분석 (Top 10)
+              </h3>
+              <button onClick={() => setCommentModal({ isOpen: false, videoTitle: '', comments: [], loading: false })} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4 bg-indigo-50/50 border-b border-indigo-100 text-sm font-medium text-indigo-900 line-clamp-1">
+              원본 영상: {commentModal.videoTitle}
+            </div>
+            <div className="p-4 overflow-y-auto flex-1 space-y-4">
+              {commentModal.loading ? (
+                <div className="flex flex-col items-center justify-center py-10 text-slate-500 gap-3">
+                  <Loader2 className="w-8 h-8 animate-spin text-indigo-500" /> 댓글 데이터를 불러오는 중...
+                </div>
+              ) : commentModal.error ? (
+                <div className="text-center py-10 text-red-500 bg-red-50 rounded-xl border border-red-100">{commentModal.error}</div>
+              ) : commentModal.comments.length === 0 ? (
+                <div className="text-center py-10 text-slate-500">조회된 댓글이 없습니다.</div>
+              ) : (
+                commentModal.comments.map((comment) => (
+                  <div key={comment.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-semibold text-sm text-slate-800">@{comment.author}</span>
+                      <span className="flex items-center gap-1 text-xs text-rose-500 font-bold bg-rose-50 px-2 py-0.5 rounded-full">
+                        <ThumbsUp className="w-3 h-3" /> {comment.likeCount > 0 ? comment.likeCount.toLocaleString() : '0'}
+                      </span>
+                    </div>
+                    <p className="text-slate-600 text-sm whitespace-pre-wrap">{comment.text}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        {/* ================= 좌측: CRM 패널 ================= */}
+        <div className="lg:col-span-1 space-y-4">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+            <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
+              <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
+            </h1>
+            
+            <div className="mb-4">
+              <input type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="YouTube API Key 입력" className="w-full text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
+            </div>
+
+            {/* 채널 추가 폼 */}
+            <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-4">
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs font-bold text-indigo-800 block">새 채널 모니터링 추가</label>
+                <button onClick={() => setIsEditingCategory(!isEditingCategory)} className="text-[10px] text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-semibold">
+                  <Settings className="w-3 h-3" /> 카테고리 설정
+                </button>
+              </div>
+              
+              {isEditingCategory && (
+                <div className="mb-3 p-2 bg-white rounded border border-indigo-200 shadow-inner">
+                  <div className="flex gap-1 mb-2">
+                    <input type="text" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="새 카테고리명" className="w-full text-xs px-2 py-1.5 border border-slate-200 rounded" />
+                    <button onClick={() => { if(newCategoryName && !categories.includes(newCategoryName)) { setCategories([...categories, newCategoryName]); setNewCategoryName(''); } }} className="px-2 py-1 bg-indigo-600 text-white rounded text-xs font-bold whitespace-nowrap"><Plus className="w-3 h-3" /></button>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {categories.map(cat => (
+                      <span key={cat} className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] text-slate-600">
+                        {cat}
+                        <button onClick={() => setCategories(categories.filter(c => c !== cat))} className="text-red-400 hover:text-red-600"><Trash2 className="w-2.5 h-2.5" /></button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-2 mb-2">
+                <select value={newChannelCategory} onChange={(e) => setNewChannelCategory(e.target.value)} className="w-1/2 text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer">
+                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+                <select value={newChannelLang} onChange={(e) => setNewChannelLang(e.target.value)} className="w-1/2 text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium">
+                  {LANGUAGES.map(lang => <option key={lang.code} value={lang.code}>{lang.label}</option>)}
+                </select>
+              </div>
+              
+              <div className="flex gap-2">
+                <input type="text" value={newChannelInput} onChange={(e) => setNewChannelInput(e.target.value)} placeholder="@핸들명 입력" className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none" onKeyDown={(e) => e.key === 'Enter' && handleAddChannel()} />
+                <button onClick={handleAddChannel} disabled={loading} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors">추가</button>
+              </div>
+            </div>
+
+            {/* 카테고리 폴더 리스트 */}
+            <div className="space-y-1">
+              {categories.map(cat => {
+                const count = savedChannels.filter(c => c.category === cat).length;
+                return (
+                  <button key={cat} onClick={() => setSelectedCategoryTab(cat)} className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-between ${selectedCategoryTab === cat ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}>
+                    <span className="flex items-center gap-2"><FolderOpen className={`w-4 h-4 ${selectedCategoryTab === cat ? 'text-indigo-200' : 'text-slate-400'}`} /> {cat}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full ${selectedCategoryTab === cat ? 'bg-indigo-500/50 text-indigo-100' : 'bg-slate-200 text-slate-500'}`}>{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+            
+            <hr className="my-4 border-slate-100" />
+            
+            <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
+              {savedChannels.filter(c => c.category === selectedCategoryTab).length === 0 ? (
+                <p className="text-sm text-slate-400 text-center py-4">저장된 채널이 없습니다.</p>
+              ) : (
+                savedChannels.filter(c => c.category === selectedCategoryTab).map(channel => (
+                  <div key={channel.id} className={`flex items-center gap-2 p-2 rounded-xl border transition-all ${selectedChannelIds.includes(channel.id) ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
+                    <button onClick={() => toggleChannelSelection(channel.id)} className="text-indigo-600 focus:outline-none shrink-0">
+                      {selectedChannelIds.includes(channel.id) ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5 text-slate-300" />}
+                    </button>
+                    <img src={channel.thumbnail} alt="" className="w-7 h-7 rounded-full border border-slate-200 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-slate-800 truncate" title={channel.title}>{channel.title}</p>
+                      <p className="text-[10px] font-medium text-slate-500">{LANGUAGES.find(l => l.code === channel.language)?.label}</p>
+                    </div>
+                    <button onClick={() => deleteChannel(channel.id)} className="p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <button 
+              onClick={fetchSelectedChannels} 
+              disabled={loading || selectedChannelIds.length === 0}
+              className={`w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all ${loading ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : selectedChannelIds.length > 0 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5' : 'bg-slate-100 text-slate-400'}`}
+            >
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
+              {loading ? '데이터 스캔 중...' : `선택된 ${selectedChannelIds.length}개 채널 분석`}
+            </button>
+            {error && <p className="mt-2 text-xs text-red-500 text-center">{error}</p>}
+            {progressMsg && !error && <p className="mt-2 text-xs text-indigo-600 text-center font-medium">{progressMsg}</p>}
+          </div>
+        </div>
+
+        {/* ================= 우측: 메인 뷰어 ================= */}
+        <div className="lg:col-span-3 flex flex-col h-full space-y-4">
+          
+          {/* 탭 네비게이션 */}
+          <div className="flex gap-2">
+            <button onClick={() => setActiveTab('dashboard')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'dashboard' ? 'bg-white shadow-sm text-indigo-700 ring-1 ring-indigo-100' : 'bg-slate-200/50 text-slate-500 hover:bg-white hover:shadow-sm'}`}>
+              <Search className="w-4 h-4" /> 분석 대시보드
+            </button>
+            <button onClick={() => setActiveTab('scrapbook')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'scrapbook' ? 'bg-white shadow-sm text-yellow-600 ring-1 ring-yellow-100' : 'bg-slate-200/50 text-slate-500 hover:bg-white hover:shadow-sm'}`}>
+              <Bookmark className="w-4 h-4" /> 영구 스크랩북 <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">{savedVideos.length}</span>
+            </button>
+          </div>
+
+          {activeTab === 'dashboard' ? (
+            <>
+              {/* 컨트롤 바 */}
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row gap-4 justify-between items-center z-20">
+                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                  <div className="relative">
+                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} placeholder="제목 검색..." className="pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm w-40 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                  </div>
+
+                  <select value={viewFilter} onChange={(e) => setViewFilter(Number(e.target.value))} className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none cursor-pointer text-slate-700 font-medium">
+                    <option value={0}>👁️ 조회수 전체</option>
+                    <option value={100000}>🔥 10만 이상</option>
+                    <option value={500000}>🔥🔥 50만 이상</option>
+                    <option value={1000000}>👑 100만 이상</option>
+                  </select>
+
+                  <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                    <button onClick={() => setSortType('multiplier')} className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${sortType === 'multiplier' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>대박지수</button>
+                    <button onClick={() => setSortType('date')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'date' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-800'}`}>최신순</button>
+                    <button onClick={() => setSortType('likes')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'likes' ? 'bg-white shadow text-rose-600' : 'text-slate-500 hover:text-slate-800'}`}>참여율(좋아요)</button>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setTtoTtoMode(!ttoTtoMode)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-extrabold transition-all duration-300 shadow-sm ${ttoTtoMode ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-rose-200 ring-2 ring-rose-200 ring-offset-1 scale-105' : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200'}`}
+                >
+                  <Rocket className={`w-5 h-5 ${ttoTtoMode ? 'animate-bounce' : ''}`} />
+                  또터또 발굴 (6개월+)
+                </button>
+              </div>
+
+              {checkedVideos.length > 0 && (
+                <div className="bg-indigo-900 rounded-xl p-4 flex justify-between items-center shadow-lg animate-in slide-in-from-top-4">
+                  <span className="text-indigo-100 font-medium text-sm"><span className="text-white font-bold text-lg">{checkedVideos.length}</span>개 선택됨</span>
+                  <button onClick={() => copyAI_RemakePrompt(videos.filter(v => checkedVideos.includes(v.videoId)))} className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white rounded-lg font-bold shadow-md transition-transform hover:scale-105">
+                    {copiedPrompt ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                    {copiedPrompt ? '복사 완료! AI에게 붙여넣으세요' : '🇰🇷 AI 리메이크 프롬프트 복사'}
+                  </button>
+                </div>
+              )}
+
+              {/* 데이터 테이블 */}
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
+                {videos.length === 0 ? (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-10 bg-slate-50">
+                    <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-4"><Youtube className="w-10 h-10 text-indigo-300" /></div>
+                    <h3 className="text-xl font-bold text-slate-700 mb-2">벤치마킹 데이터 대기 중</h3>
+                    <p className="text-slate-500 max-w-md">좌측에서 채널을 선택하고 분석을 시작하세요.<br/>글로벌 떡상 트렌드와 찐팬 반응이 여기에 펼쳐집니다.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto overflow-y-auto flex-1">
+                    <table className="w-full text-sm text-left">
+                      <thead className="text-xs text-slate-500 uppercase bg-slate-100 sticky top-0 shadow-sm z-10">
+                        <tr>
+                          <th className="px-3 py-3 text-center">선택</th>
+                          <th className="px-2 py-3 text-center">저장</th>
+                          <th className="px-3 py-3">영상 정보 (제목/길이/댓글)</th>
+                          <th className="px-3 py-3 text-right">총 조회수</th>
+                          <th className="px-3 py-3 text-right text-indigo-700 font-bold">대박지수</th>
+                          <th className="px-3 py-3 text-right text-rose-600 font-bold">참여율(좋아요)</th>
+                          <th className="px-3 py-3 text-right">경과일</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {filteredAndSortedVideos.length === 0 ? (
+                          <tr><td colSpan="7" className="text-center py-10 text-slate-500">필터 조건에 맞는 영상이 없습니다.</td></tr>
+                        ) : (
+                          filteredAndSortedVideos.map((v) => (
+                            <tr key={v.videoId} className={`transition-colors ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50/50' : 'hover:bg-slate-50'}`}>
+                              <td className="px-3 py-4 text-center">
+                                <button onClick={() => toggleCheckVideo(v.videoId)} className="focus:outline-none">
+                                  {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-5 h-5 text-indigo-600" /> : <Square className="w-5 h-5 text-slate-300 hover:text-indigo-400" />}
+                                </button>
+                              </td>
+                              <td className="px-2 py-4 text-center">
+                                <button onClick={() => toggleScrapVideo(v)} className="p-1 rounded-full hover:bg-yellow-100 transition-colors group">
+                                  <Star className={`w-5 h-5 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
+                                </button>
+                              </td>
+                              <td className="px-3 py-4 max-w-[350px]">
+                                <div className="flex gap-3">
+                                  <img src={v.thumbnail} alt="" className="w-24 h-14 object-cover rounded shadow-sm border border-slate-200 shrink-0" />
+                                  <div className="flex flex-col justify-between">
+                                    <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="font-bold text-slate-800 hover:text-indigo-600 line-clamp-2 leading-tight mb-1">{v.title}</a>
+                                    <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                                      <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
+                                      {v.isShorts ? (
+                                        <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-bold">📱 Shorts ({v.duration})</span>
+                                      ) : (
+                                        <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-medium flex items-center gap-1"><Clock className="w-3 h-3" /> {v.duration}</span>
+                                      )}
+                                      <button onClick={() => fetchTopComments(v.videoId, v.title)} className="text-[10px] bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-1.5 py-0.5 rounded font-semibold border border-indigo-100 flex items-center gap-1 transition-colors">
+                                        <MessageSquareText className="w-3 h-3" /> 댓글 스캔
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-3 py-4 text-right">
+                                <span className="font-bold text-slate-700">{v.view_count.toLocaleString()}</span>
+                              </td>
+                              <td className="px-3 py-4 text-right">
+                                <span className={`inline-flex items-center gap-1 font-extrabold px-2 py-1 rounded-lg ${v.multiplier >= 3 ? 'bg-rose-100 text-rose-700' : v.multiplier >= 1.5 ? 'bg-indigo-100 text-indigo-700' : 'text-slate-500'}`}>
+                                  {v.multiplier >= 3 && <TrendingUp className="w-3 h-3" />}
+                                  {v.multiplier.toFixed(1)}x
+                                </span>
+                              </td>
+                              <td className="px-3 py-4 text-right">
+                                <div className="flex flex-col items-end">
+                                  <span className={`text-sm font-bold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-600'}`}>{v.like_ratio}%</span>
+                                  <span className="text-[10px] text-slate-400">👍 {v.like_count.toLocaleString()}</span>
+                                </div>
+                              </td>
+                              <td className="px-3 py-4 text-right">
+                                <span className={`text-xs font-medium ${v.daysOld >= 180 ? 'text-orange-600 bg-orange-50 px-2 py-1 rounded' : 'text-slate-500'}`}>
+                                  {v.daysOld}일 전<br/><span className="text-[10px] text-slate-400 font-normal">({v.upload_date})</span>
+                                </span>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <Bookmark className="w-6 h-6 text-yellow-500 fill-yellow-500" /> 영구 보관 스크랩북
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-1">별표(⭐️)를 눌러 모아둔 나만의 영감 보관소입니다. (브라우저를 닫아도 유지됩니다)</p>
+                </div>
+                <button onClick={() => copyAI_RemakePrompt(savedVideos)} disabled={savedVideos.length === 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideos.length > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>
+                  <Lightbulb className="w-5 h-5" /> 스크랩북 전체 AI 기획안 만들기
+                </button>
+              </div>
+
+              {savedVideos.length === 0 ? (
+                <div className="text-center py-20 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                  <Star className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-slate-700 mb-2">스크랩된 영상이 없습니다.</h3>
+                  <p className="text-slate-500">분석 대시보드에서 ⭐️ 버튼을 눌러 레퍼런스 영상을 모아보세요.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {savedVideos.map((video) => (
+                    <div key={video.videoId} className="border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition-all group bg-white flex flex-col">
+                      <div className="relative">
+                        <img src={video.thumbnail.replace('default.jpg', 'mqdefault.jpg')} alt="thumb" className="w-full aspect-video object-cover" />
+                        <div className="absolute top-2 left-2 flex gap-1">
+                          {video.isShorts && <span className="bg-pink-600 text-white text-xs px-2 py-1 rounded font-bold shadow-sm">Shorts</span>}
+                        </div>
+                        <div className="absolute bottom-2 right-2 flex gap-2">
+                          <span className="bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">{video.duration}</span>
+                        </div>
+                      </div>
+                      <div className="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                          <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="font-bold text-slate-800 line-clamp-2 text-sm hover:text-indigo-600 mb-2 leading-snug" title={video.title}>{video.title}</a>
+                          <div className="flex flex-wrap gap-1 mb-3">
+                            <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">{video.channel_title}</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-end pt-3 border-t border-slate-100">
+                          <div>
+                            <p className="text-xs text-slate-500 mb-0.5">조회수 / 참여율</p>
+                            <p className="font-bold text-slate-800 text-sm">{video.view_count.toLocaleString()} <span className="text-xs text-rose-500 ml-1">({video.like_ratio}%)</span></p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button onClick={() => fetchTopComments(video.videoId, video.title)} className="p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors" title="댓글 확인">
+                              <MessageSquareText className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => toggleScrapVideo(video)} className="p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="스크랩 해제">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+}
