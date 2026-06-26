@@ -32,9 +32,26 @@ export default function App() {
   });
   
   const [newChannelInput, setNewChannelInput] = useState('');
-  const [newChannelCategory, setNewChannelCategory] = useState(categories[0]);
+  const [newChannelTags, setNewChannelTags] = useState([]); // 여러 태그 선택 가능
   const [newChannelLang, setNewChannelLang] = useState('EN');
-  
+  const [newChannelNote, setNewChannelNote] = useState('');
+  const [channelPreview, setChannelPreview] = useState(null); // 저장 전 미리보기 결과
+  const [previewLoading, setPreviewLoading] = useState(false);
+
+  // 일괄 추가 모드 (여러 줄 붙여넣기)
+  const [addMode, setAddMode] = useState('single'); // 'single' | 'bulk'
+  const [bulkInput, setBulkInput] = useState('');
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkResult, setBulkResult] = useState(null); // { total, added, results }
+
+  // 태그 이름 수정 (rename)
+  const [renamingCategory, setRenamingCategory] = useState(null); // 수정 중인 카테고리 원래 이름
+  const [renameValue, setRenameValue] = useState('');
+  const [renameLoading, setRenameLoading] = useState(false);
+
+  // 결(태그) 단위 일괄 스캔 - 현재 스캔 중인 태그 ('ALL'이면 전체 스캔)
+  const [scanningTag, setScanningTag] = useState(null);
+
   const [selectedCategoryTab, setSelectedCategoryTab] = useState(categories[0]);
   const [selectedChannelIds, setSelectedChannelIds] = useState([]);
   
@@ -54,6 +71,7 @@ export default function App() {
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   
   const [commentModal, setCommentModal] = useState({ isOpen: false, videoTitle: '', comments: [], loading: false });
+  const [notesModal, setNotesModal] = useState({ isOpen: false, channel: null, newNoteText: '', saving: false });
 
   useEffect(() => { localStorage.setItem('yt_crm_categories', JSON.stringify(categories)); }, [categories]);
   useEffect(() => { localStorage.setItem('yt_crm_saved_videos', JSON.stringify(savedVideos)); }, [savedVideos]);
@@ -83,6 +101,14 @@ export default function App() {
     return Math.max(1, Math.ceil(Math.abs(today - upDate) / (1000 * 60 * 60 * 24)));
   };
 
+  // 큰 숫자를 한국식으로 축약 (예: 25000 -> 2.5만, 1200000 -> 120만)
+  const formatCompactKo = (num) => {
+    const n = Number(num) || 0;
+    if (n >= 100000000) return `${(n / 100000000).toFixed(1).replace(/\.0$/, '')}억`;
+    if (n >= 10000) return `${(n / 10000).toFixed(1).replace(/\.0$/, '')}만`;
+    return n.toLocaleString();
+  };
+
   const parseDuration = (durationStr) => {
     const match = durationStr.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
     if (!match) return { isShorts: false, formatted: '00:00' };
@@ -98,33 +124,86 @@ export default function App() {
     return { isShorts, formatted };
   };
 
-  const handleAddChannel = async () => {
+  // 1단계: 입력값으로 채널 정보만 미리 불러오기 (아직 저장 안 함)
+  const handlePreviewChannel = async () => {
     if (!newChannelInput.trim()) return;
+    setPreviewLoading(true); setError(''); setChannelPreview(null);
+    try {
+      const res = await fetch(`${FUNCTION_API_BASE}/channel-preview?handle=${encodeURIComponent(newChannelInput.trim())}`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '채널을 불러오지 못했습니다.');
 
-    setLoading(true); setError(''); setProgressMsg('채널 정보 확인 중...');
+      if (savedChannels.some(c => c.id === data.channel.id)) {
+        setError('이미 등록된 채널입니다.');
+      } else {
+        setChannelPreview(data.channel);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
+
+  const cancelChannelPreview = () => {
+    setChannelPreview(null); setNewChannelInput(''); setNewChannelTags([]); setNewChannelNote('');
+  };
+
+  // 2단계: 미리보기 확인 후, 태그/언어/첫 기록과 함께 실제 저장
+  const handleSaveChannel = async () => {
+    if (!channelPreview) return;
+    setLoading(true); setError(''); setProgressMsg('채널 저장 중...');
     try {
       const res = await fetch(`${FUNCTION_API_BASE}/channels`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ handle: newChannelInput.trim(), category: newChannelCategory, language: newChannelLang }),
+        body: JSON.stringify({ handle: newChannelInput.trim(), tags: newChannelTags, language: newChannelLang, note: newChannelNote }),
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.error || '채널 추가에 실패했습니다.');
 
-      if (savedChannels.some(c => c.id === data.channel.id)) {
-        setError('이미 리스트에 존재하는 채널입니다.');
-      } else {
-        setSavedChannels(prev => [...prev, data.channel]);
-        setNewChannelInput('');
-        setSelectedCategoryTab(newChannelCategory);
-        setProgressMsg('채널이 클라우드에 성공적으로 추가되었습니다! (최초 분석 시 영상 최대 250개를 수집합니다)');
-      }
+      setSavedChannels(prev => [...prev, data.channel]);
+      if (newChannelTags[0]) setSelectedCategoryTab(newChannelTags[0]);
+      setProgressMsg('채널이 클라우드에 성공적으로 추가되었습니다! (최초 분석 시 영상 최대 250개를 수집합니다)');
+      cancelChannelPreview();
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
       setTimeout(() => setProgressMsg(''), 4000);
     }
+  };
+
+  // 일괄 추가: 텍스트 영역의 여러 줄(핸들/링크)을 한 번에 등록 (POST /channels/bulk)
+  const handleBulkAdd = async () => {
+    const handles = bulkInput.split('\n').map((l) => l.trim()).filter(Boolean);
+    if (handles.length === 0) { setError('등록할 채널을 한 줄에 하나씩 입력해주세요.'); return; }
+
+    setBulkLoading(true); setError(''); setBulkResult(null);
+    setProgressMsg(`${handles.length}개 채널 일괄 등록 중... (채널 수에 따라 시간이 걸릴 수 있어요)`);
+    try {
+      const res = await fetch(`${FUNCTION_API_BASE}/channels/bulk`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ handles, tags: newChannelTags, language: newChannelLang }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '일괄 추가에 실패했습니다.');
+
+      setBulkResult(data);
+      if (newChannelTags[0]) setSelectedCategoryTab(newChannelTags[0]);
+      setProgressMsg(`일괄 추가 완료! ${data.total}개 중 ${data.added}개 성공`);
+      await loadChannelsFromCloud(); // 새로 추가된 채널들을 화면에 반영
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBulkLoading(false);
+      setTimeout(() => setProgressMsg(''), 5000);
+    }
+  };
+
+  const resetBulkAdd = () => {
+    setBulkInput(''); setBulkResult(null); setAddMode('single'); setNewChannelTags([]);
   };
 
   const deleteChannel = async (id, category) => {
@@ -136,6 +215,34 @@ export default function App() {
       setSelectedChannelIds(prev => prev.filter(cId => cId !== id));
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const toggleNewChannelTag = (tag) => {
+    setNewChannelTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  };
+
+  const openNotesModal = (channel) => setNotesModal({ isOpen: true, channel, newNoteText: '', saving: false });
+
+  const addChannelNote = async () => {
+    const text = notesModal.newNoteText.trim();
+    if (!text || !notesModal.channel) return;
+    setNotesModal(prev => ({ ...prev, saving: true }));
+    try {
+      const { id, category } = notesModal.channel;
+      const res = await fetch(`${FUNCTION_API_BASE}/channels/${id}/notes?category=${encodeURIComponent(category)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '기록 저장에 실패했습니다.');
+
+      setSavedChannels(prev => prev.map(c => c.id === data.channel.id ? data.channel : c));
+      setNotesModal({ isOpen: true, channel: data.channel, newNoteText: '', saving: false });
+    } catch (err) {
+      setError(err.message);
+      setNotesModal(prev => ({ ...prev, saving: false }));
     }
   };
 
@@ -190,12 +297,14 @@ export default function App() {
     }
   };
 
-  // "지금 스캔" 버튼: Function App에 새벽 자동 스캔과 똑같은 작업을 즉시 1회 실행시킴
-  const handleManualScan = async () => {
-    setIsScanning(true); setError('');
-    setProgressMsg('전체 채널 스캔 중... (채널 수와 영상 양에 따라 1분 이상 걸릴 수 있어요)');
+  // "지금 스캔" / "이 태그만 스캔" 버튼: Function App에 새벽 자동 스캔과 똑같은 작업을 즉시 1회 실행시킴
+  // tag가 있으면 그 태그(결)에 속한 채널만, 없으면 전체 채널을 스캔
+  const runScanRequest = async (tag) => {
+    setIsScanning(true); setScanningTag(tag || 'ALL'); setError('');
+    setProgressMsg(`${tag ? `'${tag}' 태그 채널` : '전체 채널'} 스캔 중... (채널 수와 영상 양에 따라 1분 이상 걸릴 수 있어요)`);
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/scan`);
+      const url = tag ? `${FUNCTION_API_BASE}/scan?tag=${encodeURIComponent(tag)}` : `${FUNCTION_API_BASE}/scan`;
+      const res = await fetch(url);
       const data = await res.json();
       if (!data.success) throw new Error(data.error || '스캔에 실패했습니다.');
 
@@ -203,13 +312,46 @@ export default function App() {
       const ttoTtoCount = (data.results || []).reduce((sum, r) => sum + (r.ttoTtoCandidates?.length || 0), 0);
       setProgressMsg(`스캔 완료! 신규 영상 ${totalNew}개 발견${ttoTtoCount > 0 ? `, 또터또 후보 ${ttoTtoCount}개 발견!` : ''}`);
 
+      await loadChannelsFromCloud(); // 채널 통계(구독자/평균조회수 등)도 같이 갱신됐으니 새로고침
       // 지금 선택된 채널이 있으면 화면 데이터도 같이 새로고침
       if (selectedChannelIds.length > 0) await fetchSelectedChannels();
     } catch (err) {
       setError(`스캔 실패: ${err.message}`);
     } finally {
-      setIsScanning(false);
+      setIsScanning(false); setScanningTag(null);
       setTimeout(() => setProgressMsg(''), 5000);
+    }
+  };
+
+  const handleManualScan = () => runScanRequest(null);
+  const handleTagScan = (tag) => runScanRequest(tag);
+
+  // 태그 이름 일괄 변경: 해당 태그가 붙은 모든 채널의 태그/카테고리를 한 번에 변경 (GET /tags/rename)
+  const startRenameCategory = (cat) => { setRenamingCategory(cat); setRenameValue(cat); };
+  const cancelRenameCategory = () => { setRenamingCategory(null); setRenameValue(''); };
+
+  const confirmRenameCategory = async () => {
+    const from = renamingCategory;
+    const to = renameValue.trim();
+    if (!from || !to || from === to) { cancelRenameCategory(); return; }
+    if (categories.includes(to)) { setError('이미 존재하는 카테고리 이름입니다.'); return; }
+
+    setRenameLoading(true); setError('');
+    try {
+      const res = await fetch(`${FUNCTION_API_BASE}/tags/rename?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || '태그 이름 변경에 실패했습니다.');
+
+      setCategories(prev => prev.map(c => (c === from ? to : c)));
+      if (selectedCategoryTab === from) setSelectedCategoryTab(to);
+      setProgressMsg(`'${from}' → '${to}'로 변경 완료 (채널 ${data.channelsAffected}개 영향)`);
+      await loadChannelsFromCloud();
+      cancelRenameCategory();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setRenameLoading(false);
+      setTimeout(() => setProgressMsg(''), 4000);
     }
   };
 
@@ -331,6 +473,54 @@ export default function App() {
         </div>
       )}
 
+      {/* 채널 분석/기록 모달창 */}
+      {notesModal.isOpen && notesModal.channel && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200">
+            <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                <History className="w-5 h-5 text-indigo-500" />
+                {notesModal.channel.title} - 분석 기록
+              </h3>
+              <button onClick={() => setNotesModal({ isOpen: false, channel: null, newNoteText: '', saving: false })} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 border-b border-slate-100">
+              <textarea
+                value={notesModal.newNoteText}
+                onChange={(e) => setNotesModal(prev => ({ ...prev, newNoteText: e.target.value }))}
+                placeholder="예) 또 떡상함, 패턴인듯 / 시니어롱폼 소재로 쓰기 좋음 / 톤이 우리 채널이랑 비슷함..."
+                className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg outline-none resize-none focus:ring-2 focus:ring-indigo-500"
+                rows={2}
+              />
+              <button
+                onClick={addChannelNote}
+                disabled={notesModal.saving || !notesModal.newNoteText.trim()}
+                className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 text-white rounded-lg text-sm font-semibold transition-colors"
+              >
+                {notesModal.saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                기록 추가
+              </button>
+            </div>
+
+            <div className="p-4 overflow-y-auto flex-1 space-y-3">
+              {(!notesModal.channel.notes || notesModal.channel.notes.length === 0) ? (
+                <div className="text-center py-10 text-slate-400 text-sm">아직 기록이 없어요. 위에서 첫 기록을 남겨보세요!</div>
+              ) : (
+                notesModal.channel.notes.map((note, idx) => (
+                  <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <p className="text-[10px] text-slate-400 mb-1">{new Date(note.date).toLocaleString('ko-KR')}</p>
+                    <p className="text-sm text-slate-700 whitespace-pre-wrap">{note.text}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
         
         {/* ================= 좌측: CRM 패널 ================= */}
@@ -348,9 +538,17 @@ export default function App() {
             <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-4">
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs font-bold text-indigo-800 block">새 채널 모니터링 추가</label>
-                <button onClick={() => setIsEditingCategory(!isEditingCategory)} className="text-[10px] text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-semibold">
-                  <Settings className="w-3 h-3" /> 카테고리 설정
-                </button>
+                <div className="flex items-center gap-2">
+                  {!channelPreview && (
+                    <div className="flex bg-white rounded-md border border-indigo-200 overflow-hidden text-[10px] font-bold">
+                      <button onClick={() => setAddMode('single')} className={`px-2 py-1 transition-colors ${addMode === 'single' ? 'bg-indigo-600 text-white' : 'text-indigo-500 hover:bg-indigo-50'}`}>단일</button>
+                      <button onClick={() => setAddMode('bulk')} className={`px-2 py-1 transition-colors ${addMode === 'bulk' ? 'bg-indigo-600 text-white' : 'text-indigo-500 hover:bg-indigo-50'}`}>일괄</button>
+                    </div>
+                  )}
+                  <button onClick={() => setIsEditingCategory(!isEditingCategory)} className="text-[10px] text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-semibold whitespace-nowrap">
+                    <Settings className="w-3 h-3" /> 카테고리 설정
+                  </button>
+                </div>
               </div>
               
               {isEditingCategory && (
@@ -361,39 +559,163 @@ export default function App() {
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {categories.map(cat => (
-                      <span key={cat} className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] text-slate-600">
-                        {cat}
-                        <button onClick={() => setCategories(categories.filter(c => c !== cat))} className="text-red-400 hover:text-red-600"><Trash2 className="w-2.5 h-2.5" /></button>
-                      </span>
+                      renamingCategory === cat ? (
+                        <span key={cat} className="inline-flex items-center gap-1 px-1 py-0.5 bg-white border border-indigo-300 rounded ring-1 ring-indigo-200">
+                          <input
+                            autoFocus
+                            type="text"
+                            value={renameValue}
+                            onChange={(e) => setRenameValue(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') confirmRenameCategory(); if (e.key === 'Escape') cancelRenameCategory(); }}
+                            className="text-[10px] px-1 py-0.5 w-16 border border-slate-200 rounded outline-none"
+                          />
+                          <button onClick={confirmRenameCategory} disabled={renameLoading} className="text-emerald-600 hover:text-emerald-800">
+                            {renameLoading ? <Loader2 className="w-2.5 h-2.5 animate-spin" /> : <CheckCircle2 className="w-2.5 h-2.5" />}
+                          </button>
+                          <button onClick={cancelRenameCategory} className="text-slate-400 hover:text-slate-600"><X className="w-2.5 h-2.5" /></button>
+                        </span>
+                      ) : (
+                        <span key={cat} className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] text-slate-600">
+                          {cat}
+                          <button onClick={() => startRenameCategory(cat)} className="text-indigo-400 hover:text-indigo-600" title="이름 변경 (이 태그가 붙은 모든 채널에 일괄 반영)"><Settings className="w-2.5 h-2.5" /></button>
+                          <button onClick={() => setCategories(categories.filter(c => c !== cat))} className="text-red-400 hover:text-red-600"><Trash2 className="w-2.5 h-2.5" /></button>
+                        </span>
+                      )
                     ))}
                   </div>
+                  <p className="text-[9px] text-slate-400 mt-1.5">⚙️ 아이콘으로 이름 변경 시, 이 태그가 붙은 모든 채널에 클라우드에서 즉시 반영됩니다.</p>
                 </div>
               )}
 
-              <div className="flex gap-2 mb-2">
-                <select value={newChannelCategory} onChange={(e) => setNewChannelCategory(e.target.value)} className="w-1/2 text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer">
-                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                </select>
-                <select value={newChannelLang} onChange={(e) => setNewChannelLang(e.target.value)} className="w-1/2 text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium">
-                  {LANGUAGES.map(lang => <option key={lang.code} value={lang.code}>{lang.label}</option>)}
-                </select>
-              </div>
-              
-              <div className="flex gap-2">
-                <input type="text" value={newChannelInput} onChange={(e) => setNewChannelInput(e.target.value)} placeholder="@핸들명 입력" className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none" onKeyDown={(e) => e.key === 'Enter' && handleAddChannel()} />
-                <button onClick={handleAddChannel} disabled={loading} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors">추가</button>
-              </div>
+              {addMode === 'bulk' ? (
+                <div className="space-y-2 animate-in fade-in duration-200">
+                  <textarea
+                    value={bulkInput}
+                    onChange={(e) => setBulkInput(e.target.value)}
+                    placeholder={'핸들 / 채널링크 / 영상링크를 한 줄에 하나씩 붙여넣으세요\n예)\n@channel1\nhttps://youtube.com/@channel2\nhttps://youtu.be/xxxxxxxxxxx'}
+                    className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none resize-none font-mono text-xs"
+                    rows={5}
+                    disabled={bulkLoading}
+                  />
+                  <p className="text-[10px] text-slate-500">{bulkInput.split('\n').map(l => l.trim()).filter(Boolean).length}개 줄 인식됨</p>
+
+                  <div>
+                    <p className="text-[10px] text-slate-500 mb-1">태그 선택 (전체 일괄 적용, 여러 개 가능)</p>
+                    <div className="flex flex-wrap gap-1">
+                      {categories.map(cat => (
+                        <button
+                          key={cat}
+                          type="button"
+                          onClick={() => toggleNewChannelTag(cat)}
+                          className={`px-2 py-1 rounded-full text-[11px] font-semibold border transition-colors ${newChannelTags.includes(cat) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <select value={newChannelLang} onChange={(e) => setNewChannelLang(e.target.value)} className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium">
+                    {LANGUAGES.map(lang => <option key={lang.code} value={lang.code}>{lang.label}</option>)}
+                  </select>
+
+                  <button onClick={handleBulkAdd} disabled={bulkLoading || !bulkInput.trim()} className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">
+                    {bulkLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                    {bulkLoading ? '일괄 등록 중...' : '일괄 등록'}
+                  </button>
+
+                  {bulkResult && (
+                    <div className="p-2 bg-white rounded-lg border border-indigo-200 text-xs space-y-1 max-h-32 overflow-y-auto">
+                      <p className="font-bold text-slate-700">총 {bulkResult.total}개 중 {bulkResult.added}개 성공</p>
+                      {bulkResult.results.filter(r => !r.success).map((r, i) => (
+                        <p key={i} className="text-red-500 truncate">✗ {r.handle}: {r.error}</p>
+                      ))}
+                      <button onClick={resetBulkAdd} className="mt-1 w-full text-center text-indigo-600 hover:text-indigo-800 font-semibold">닫기</button>
+                    </div>
+                  )}
+                </div>
+              ) : !channelPreview ? (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newChannelInput}
+                    onChange={(e) => setNewChannelInput(e.target.value)}
+                    placeholder="핸들 / 채널링크 / 영상링크"
+                    className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none"
+                    onKeyDown={(e) => e.key === 'Enter' && handlePreviewChannel()}
+                  />
+                  <button onClick={handlePreviewChannel} disabled={previewLoading} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
+                    {previewLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                    불러오기
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2 animate-in fade-in duration-200">
+                  {/* 미리보기 카드 */}
+                  <div className="flex items-center gap-2 p-2 bg-white rounded-lg border border-indigo-200">
+                    <img src={channelPreview.thumbnail} alt="" className="w-9 h-9 rounded-full border border-slate-200" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold text-slate-800 truncate">{channelPreview.title}</p>
+                      <p className="text-[10px] text-emerald-600 font-semibold">✓ 채널 확인됨</p>
+                    </div>
+                    <button onClick={cancelChannelPreview} className="text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] text-slate-500 mb-1">태그 선택 (여러 개 가능, 안 골라도 OK)</p>
+                    <div className="flex flex-wrap gap-1">
+                      {categories.map(cat => (
+                        <button
+                          key={cat}
+                          type="button"
+                          onClick={() => toggleNewChannelTag(cat)}
+                          className={`px-2 py-1 rounded-full text-[11px] font-semibold border transition-colors ${newChannelTags.includes(cat) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <select value={newChannelLang} onChange={(e) => setNewChannelLang(e.target.value)} className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium">
+                    {LANGUAGES.map(lang => <option key={lang.code} value={lang.code}>{lang.label}</option>)}
+                  </select>
+
+                  <textarea
+                    value={newChannelNote}
+                    onChange={(e) => setNewChannelNote(e.target.value)}
+                    placeholder="첫 기록 메모 (선택) - 예) 시니어롱폼 소재용, 톤 비슷함"
+                    className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none resize-none"
+                    rows={2}
+                  />
+
+                  <div className="flex gap-2">
+                    <button onClick={cancelChannelPreview} className="flex-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-semibold transition-colors">취소</button>
+                    <button onClick={handleSaveChannel} disabled={loading} className="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">저장</button>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* 카테고리 폴더 리스트 */}
+            {/* 카테고리(태그) 폴더 리스트 */}
             <div className="space-y-1">
               {categories.map(cat => {
-                const count = savedChannels.filter(c => c.category === cat).length;
+                const count = savedChannels.filter(c => c.tags?.includes(cat)).length;
                 return (
-                  <button key={cat} onClick={() => setSelectedCategoryTab(cat)} className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-between ${selectedCategoryTab === cat ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}>
-                    <span className="flex items-center gap-2"><FolderOpen className={`w-4 h-4 ${selectedCategoryTab === cat ? 'text-indigo-200' : 'text-slate-400'}`} /> {cat}</span>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full ${selectedCategoryTab === cat ? 'bg-indigo-500/50 text-indigo-100' : 'bg-slate-200 text-slate-500'}`}>{count}</span>
-                  </button>
+                  <div key={cat} className="flex items-center gap-1">
+                    <button onClick={() => setSelectedCategoryTab(cat)} className={`flex-1 text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-between ${selectedCategoryTab === cat ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}>
+                      <span className="flex items-center gap-2"><FolderOpen className={`w-4 h-4 ${selectedCategoryTab === cat ? 'text-indigo-200' : 'text-slate-400'}`} /> {cat}</span>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${selectedCategoryTab === cat ? 'bg-indigo-500/50 text-indigo-100' : 'bg-slate-200 text-slate-500'}`}>{count}</span>
+                    </button>
+                    <button
+                      onClick={() => handleTagScan(cat)}
+                      disabled={isScanning || count === 0}
+                      title={`'${cat}' 태그 채널만 스캔`}
+                      className="p-2 text-slate-400 hover:text-emerald-600 disabled:text-slate-200 disabled:cursor-not-allowed transition-colors shrink-0"
+                    >
+                      {scanningTag === cat ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <RefreshCw className="w-4 h-4" />}
+                    </button>
+                  </div>
                 );
               })}
             </div>
@@ -403,10 +725,10 @@ export default function App() {
             <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
               {channelsLoading ? (
                 <p className="text-sm text-slate-400 text-center py-4 flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> 클라우드에서 채널 불러오는 중...</p>
-              ) : savedChannels.filter(c => c.category === selectedCategoryTab).length === 0 ? (
+              ) : savedChannels.filter(c => c.tags?.includes(selectedCategoryTab)).length === 0 ? (
                 <p className="text-sm text-slate-400 text-center py-4">저장된 채널이 없습니다.</p>
               ) : (
-                savedChannels.filter(c => c.category === selectedCategoryTab).map(channel => (
+                savedChannels.filter(c => c.tags?.includes(selectedCategoryTab)).map(channel => (
                   <div key={channel.id} className={`flex items-center gap-2 p-2 rounded-xl border transition-all ${selectedChannelIds.includes(channel.id) ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
                     <button onClick={() => toggleChannelSelection(channel.id)} className="text-indigo-600 focus:outline-none shrink-0">
                       {selectedChannelIds.includes(channel.id) ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5 text-slate-300" />}
@@ -414,8 +736,21 @@ export default function App() {
                     <img src={channel.thumbnail} alt="" className="w-7 h-7 rounded-full border border-slate-200 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-slate-800 truncate" title={channel.title}>{channel.title}</p>
-                      <p className="text-[10px] font-medium text-slate-500">{LANGUAGES.find(l => l.code === channel.language)?.label}</p>
+                      <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                        <span className="text-[10px] font-medium text-slate-500">{LANGUAGES.find(l => l.code === channel.language)?.label}</span>
+                        {channel.stats && (
+                          <>
+                            <span className="text-[9px] text-slate-400" title="구독자 수">👤{formatCompactKo(channel.stats.subscriberCount)}</span>
+                            <span className="text-[9px] text-slate-400" title="전체 영상 수">🎬{formatCompactKo(channel.stats.totalVideoCount)}</span>
+                            <span className="text-[9px] text-slate-400" title="평균 조회수">👁️{formatCompactKo(channel.stats.avgViewCount)}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
+                    <button onClick={() => openNotesModal(channel)} className="relative p-1 text-slate-400 hover:text-indigo-600 transition-colors shrink-0" title="분석/기록 남기기">
+                      <History className="w-4 h-4" />
+                      {channel.notes?.length > 0 && <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center">{channel.notes.length}</span>}
+                    </button>
                     <button onClick={() => deleteChannel(channel.id, channel.category)} className="p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 ))
