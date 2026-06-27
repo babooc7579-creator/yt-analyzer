@@ -936,7 +936,7 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="overflow-x-auto overflow-y-auto flex-1">
-                    <table className="w-full text-sm text-left">
+                    <table className="w-full text-sm text-left border-separate border-spacing-y-3">
                       <thead className="text-xs text-slate-500 uppercase bg-slate-100 sticky top-0 shadow-sm z-10">
                         <tr>
                           <th className="px-3 py-3 text-center">선택</th>
@@ -948,7 +948,7 @@ export default function App() {
                           <th className="px-3 py-3 text-right">경과일</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody>
                         {filteredAndSortedVideos.length === 0 ? (
                           <tr>
                             <td colSpan="7" className="py-12">
@@ -961,55 +961,76 @@ export default function App() {
                           </tr>
                         ) : (
                           filteredAndSortedVideos.map((v) => (
-                            <tr key={v.videoId} className={`transition-colors ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50/50' : 'hover:bg-slate-50'}`}>
-                              <td className="px-3 py-4 text-center">
-                                <button onClick={() => toggleCheckVideo(v.videoId)} className="focus:outline-none">
-                                  {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-5 h-5 text-indigo-600" /> : <Square className="w-5 h-5 text-slate-300 hover:text-indigo-400" />}
+                            <tr key={v.videoId} className={`group transition-all ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50 ring-1 ring-indigo-200' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'bg-rose-50/70 ring-1 ring-rose-100 hover:ring-rose-200' : 'bg-white hover:bg-slate-50 ring-1 ring-slate-100 hover:ring-slate-200'}`}>
+                              <td className="px-4 py-5 text-center rounded-l-2xl">
+                                <button onClick={() => toggleCheckVideo(v.videoId)} className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors">
+                                  {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-6 h-6 text-indigo-600" /> : <Square className="w-6 h-6 text-slate-300 hover:text-indigo-400" />}
                                 </button>
                               </td>
-                              <td className="px-2 py-4 text-center">
-                                <button onClick={() => toggleScrapVideo(v)} className="p-1 rounded-full hover:bg-yellow-100 transition-colors group">
-                                  <Star className={`w-5 h-5 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
+                              <td className="px-2 py-5 text-center">
+                                <button onClick={() => toggleScrapVideo(v)} className="p-2 rounded-full hover:bg-yellow-100 transition-colors">
+                                  <Star className={`w-6 h-6 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
                                 </button>
                               </td>
-                              <td className="px-3 py-4 max-w-[350px]">
-                                <div className="flex gap-3">
-                                  <img src={v.thumbnail} alt="" className="w-24 h-14 object-cover rounded shadow-sm border border-slate-200 shrink-0" />
-                                  <div className="flex flex-col justify-between">
-                                    <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="font-bold text-slate-800 hover:text-indigo-600 line-clamp-2 leading-tight mb-1">{v.title}</a>
-                                    <div className="flex flex-wrap items-center gap-1.5 mt-1">
-                                      <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
-                                      {v.isShorts ? (
-                                        <span className="text-[10px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-bold">📱 Shorts ({v.duration})</span>
-                                      ) : (
-                                        <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-medium flex items-center gap-1"><Clock className="w-3 h-3" /> {v.duration}</span>
+                              <td className="px-4 py-5 min-w-[520px]">
+                                <div className="flex gap-5">
+                                  <img src={v.thumbnail} alt="" className="w-36 h-20 object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 bg-slate-100" />
+                                  <div className="flex flex-col justify-center min-w-0">
+                                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                                      {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-sm">
+                                          <Rocket className="w-3 h-3" /> 또터또 후보
+                                        </span>
                                       )}
-                                      <button onClick={() => fetchTopComments(v.videoId, v.title)} title="YouTube API로 댓글 Top 10을 조회합니다." className="text-[10px] bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-1.5 py-0.5 rounded font-semibold border border-indigo-100 flex items-center gap-1 transition-colors">
+                                      {v.multiplier >= 3 && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[10px] font-bold text-orange-700">
+                                          <TrendingUp className="w-3 h-3" /> 강한 반응
+                                        </span>
+                                      )}
+                                    </div>
+                                    <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="text-base font-extrabold text-slate-900 hover:text-indigo-600 line-clamp-2 leading-snug mb-2">{v.title}</a>
+                                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                                      <span className="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded-full border border-slate-200 font-semibold">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
+                                      {v.isShorts ? (
+                                        <span className="text-[11px] bg-pink-100 text-pink-700 px-2 py-1 rounded-full font-bold">📱 Shorts ({v.duration})</span>
+                                      ) : (
+                                        <span className="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded-full font-semibold flex items-center gap-1"><Clock className="w-3 h-3" /> {v.duration}</span>
+                                      )}
+                                      <button onClick={() => fetchTopComments(v.videoId, v.title)} title="YouTube API로 댓글 Top 10을 조회합니다." className="text-[11px] bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-2 py-1 rounded-full font-bold border border-indigo-100 flex items-center gap-1 transition-colors">
                                         <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
                                       </button>
                                     </div>
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-3 py-4 text-right">
-                                <span className="font-bold text-slate-700">{v.view_count.toLocaleString()}</span>
+                              <td className="px-4 py-5 text-right">
+                                <div className="inline-flex min-w-[120px] flex-col rounded-xl bg-white/80 border border-slate-200 px-3 py-2 shadow-sm">
+                                  <span className="text-[10px] font-bold text-slate-400">총 조회수</span>
+                                  <span className="text-base font-extrabold text-slate-800">{v.view_count.toLocaleString()}</span>
+                                </div>
                               </td>
-                              <td className="px-3 py-4 text-right">
-                                <span className={`inline-flex items-center gap-1 font-extrabold px-2 py-1 rounded-lg ${v.multiplier >= 3 ? 'bg-rose-100 text-rose-700' : v.multiplier >= 1.5 ? 'bg-indigo-100 text-indigo-700' : 'text-slate-500'}`}>
-                                  {v.multiplier >= 3 && <TrendingUp className="w-3 h-3" />}
-                                  {v.multiplier.toFixed(1)}x
-                                </span>
+                              <td className="px-4 py-5 text-right">
+                                <div className={`inline-flex min-w-[110px] flex-col rounded-xl border px-3 py-2 shadow-sm ${v.multiplier >= 3 ? 'bg-rose-600 border-rose-600 text-white' : v.multiplier >= 1.5 ? 'bg-indigo-50 border-indigo-100 text-indigo-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
+                                  <span className={`text-[10px] font-bold ${v.multiplier >= 3 ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</span>
+                                  <span className="inline-flex items-center justify-end gap-1 text-lg font-extrabold">
+                                    {v.multiplier >= 3 && <TrendingUp className="w-4 h-4" />}
+                                    {v.multiplier.toFixed(1)}x
+                                  </span>
+                                </div>
                               </td>
-                              <td className="px-3 py-4 text-right">
-                                <div className="flex flex-col items-end">
-                                  <span className={`text-sm font-bold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-600'}`}>{v.like_ratio}%</span>
+                              <td className="px-4 py-5 text-right">
+                                <div className="inline-flex min-w-[110px] flex-col rounded-xl bg-white/80 border border-slate-200 px-3 py-2 shadow-sm">
+                                  <span className="text-[10px] font-bold text-slate-400">참여율</span>
+                                  <span className={`text-base font-extrabold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-700'}`}>{v.like_ratio}%</span>
                                   <span className="text-[10px] text-slate-400">👍 {v.like_count.toLocaleString()}</span>
                                 </div>
                               </td>
-                              <td className="px-3 py-4 text-right">
-                                <span className={`text-xs font-medium ${v.daysOld >= 180 ? 'text-orange-600 bg-orange-50 px-2 py-1 rounded' : 'text-slate-500'}`}>
-                                  {v.daysOld}일 전<br/><span className="text-[10px] text-slate-400 font-normal">({v.upload_date})</span>
-                                </span>
+                              <td className="px-4 py-5 text-right rounded-r-2xl">
+                                <div className={`inline-flex min-w-[120px] flex-col rounded-xl border px-3 py-2 shadow-sm ${v.daysOld >= 180 ? 'bg-orange-50 border-orange-100 text-orange-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
+                                  <span className="text-[10px] font-bold text-slate-400">경과일</span>
+                                  <span className="text-base font-extrabold">{v.daysOld}일 전</span>
+                                  <span className="text-[10px] text-slate-400 font-normal">({v.upload_date})</span>
+                                </div>
                               </td>
                             </tr>
                           ))
