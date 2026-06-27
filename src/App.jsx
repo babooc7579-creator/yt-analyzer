@@ -67,7 +67,7 @@ export default function App() {
   const [sortType, setSortType] = useState('multiplier');
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'scrapbook'
   const [viewMode, setViewMode] = useState('card'); // 'card' or 'list'
-  const [focusMode, setFocusMode] = useState(false);
+  const [showWorkPanel, setShowWorkPanel] = useState(false);
   
   const [checkedVideos, setCheckedVideos] = useState([]);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
@@ -523,10 +523,10 @@ export default function App() {
         </div>
       )}
 
-      <div className={`w-full mx-auto grid grid-cols-1 gap-6 ${focusMode && viewMode === 'card' && activeTab === 'dashboard' ? 'max-w-[2400px]' : 'max-w-[1920px] xl:grid-cols-[360px_minmax(0,1fr)_300px] 2xl:grid-cols-[380px_minmax(0,1fr)_340px]'}`}>
+      <div className={`w-full mx-auto grid grid-cols-1 gap-6 ${showWorkPanel ? 'max-w-[1920px] xl:grid-cols-[380px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
         
         {/* ================= 좌측: CRM 패널 ================= */}
-        <div className={`space-y-4 ${focusMode && viewMode === 'card' && activeTab === 'dashboard' ? 'hidden' : ''}`}>
+        <div className={`space-y-4 ${showWorkPanel ? '' : 'hidden'}`}>
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
             <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
@@ -881,14 +881,12 @@ export default function App() {
                     <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>리스트 보기</button>
                   </div>
 
-                  {viewMode === 'card' && (
-                    <button
-                      onClick={() => setFocusMode(!focusMode)}
-                      className={`px-3 py-2 rounded-lg text-sm font-bold transition-all border ${focusMode ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-200 hover:text-indigo-700'}`}
-                    >
-                      {focusMode ? '기본 보기' : '집중 보기'}
-                    </button>
-                  )}
+                  <button
+                    onClick={() => setShowWorkPanel(!showWorkPanel)}
+                    className={`px-3 py-2 rounded-lg text-sm font-bold transition-all border ${showWorkPanel ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-200 hover:text-indigo-700'}`}
+                  >
+                    {showWorkPanel ? '작업 패널 닫기' : '작업 패널 열기'}
+                  </button>
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -959,12 +957,12 @@ export default function App() {
                     </div>
                   </div>
                 ) : viewMode === 'card' ? (
-                  <div className={`flex-1 overflow-y-auto bg-slate-50 ${focusMode ? 'p-6' : 'p-5'}`}>
-                    <div className={`grid gap-6 ${focusMode ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2300px]:grid-cols-5' : 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3'}`}>
+                  <div className={`flex-1 overflow-y-auto bg-slate-50 ${showWorkPanel ? 'p-5' : 'p-6'}`}>
+                    <div className={`grid gap-6 ${showWorkPanel ? 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2300px]:grid-cols-5'}`}>
                       {filteredAndSortedVideos.map((v, index) => (
                         <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
-                          <div className={`relative overflow-hidden bg-slate-100 ${focusMode ? 'min-h-[520px]' : 'min-h-[430px]'}`}>
-                            <img src={v.thumbnail} alt="" className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${focusMode ? 'min-h-[520px]' : 'min-h-[430px]'}`} />
+                          <div className={`relative overflow-hidden bg-slate-100 ${showWorkPanel ? 'min-h-[430px]' : 'min-h-[520px]'}`}>
+                            <img src={v.thumbnail} alt="" className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${showWorkPanel ? 'min-h-[430px]' : 'min-h-[520px]'}`} />
                             <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
                             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
                             <div className="absolute left-3 top-3 flex flex-wrap gap-2">
@@ -989,7 +987,7 @@ export default function App() {
                               </button>
                             </div>
                           </div>
-                          <div className={`${focusMode ? 'p-4' : 'p-5'}`}>
+                          <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
                             <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600">{v.title}</a>
                             <div className="mt-3 flex flex-wrap items-center gap-2">
                               <span className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
@@ -1003,19 +1001,19 @@ export default function App() {
                               </button>
                             </div>
                             <div className="mt-4 grid grid-cols-2 gap-2">
-                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border border-slate-200 bg-slate-50`}>
+                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border border-slate-200 bg-slate-50`}>
                                 <p className="text-[10px] font-bold text-slate-400">총 조회수</p>
                                 <p className="text-sm font-extrabold text-slate-800">{v.view_count.toLocaleString()}</p>
                               </div>
-                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border ${v.multiplier >= 3 ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= 1.5 ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${v.multiplier >= 3 ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= 1.5 ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
                                 <p className={`text-[10px] font-bold ${v.multiplier >= 3 ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</p>
                                 <p className="text-sm font-extrabold">{v.multiplier.toFixed(1)}x</p>
                               </div>
-                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border border-slate-200 bg-slate-50`}>
+                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border border-slate-200 bg-slate-50`}>
                                 <p className="text-[10px] font-bold text-slate-400">참여율</p>
                                 <p className={`text-sm font-extrabold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-800'}`}>{v.like_ratio}% <span className="text-[10px] font-medium text-slate-400">👍 {v.like_count.toLocaleString()}</span></p>
                               </div>
-                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border ${v.daysOld >= 180 ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${v.daysOld >= 180 ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
                                 <p className="text-[10px] font-bold text-slate-400">경과일</p>
                                 <p className="text-sm font-extrabold">{v.daysOld}일 전</p>
                               </div>
@@ -1200,7 +1198,7 @@ export default function App() {
 
         </div>
 
-        <aside className={`hidden xl:flex flex-col gap-4 ${focusMode && viewMode === 'card' && activeTab === 'dashboard' ? 'xl:hidden' : ''}`}>
+        <aside className="hidden">
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
             <p className="text-sm font-extrabold text-slate-900 mb-3">오늘의 다음 행동</p>
             <div className="space-y-3">
