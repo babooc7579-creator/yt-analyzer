@@ -529,6 +529,12 @@ export default function App() {
             <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
             </h1>
+            <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 leading-relaxed space-y-1">
+              <p className="font-bold text-slate-700">작업 순서 안내</p>
+              <p>1. 먼저 채널을 저장합니다.</p>
+              <p>2. 새 영상이 필요하면 “유튜브 새 영상 수집”을 실행합니다. 이 작업은 YouTube API를 호출합니다.</p>
+              <p>3. 저장된 데이터만 보려면 채널을 선택한 뒤 “저장된 영상 불러오기”를 누릅니다.</p>
+            </div>
             
             <div className="mb-4">
               <input type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="YouTube API Key (댓글 스캔에만 필요)" className="w-full text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
@@ -861,8 +867,12 @@ export default function App() {
                 {videos.length === 0 ? (
                   <div className="flex-1 flex flex-col items-center justify-center text-center p-10 bg-slate-50">
                     <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-4"><Youtube className="w-10 h-10 text-indigo-300" /></div>
-                    <h3 className="text-xl font-bold text-slate-700 mb-2">벤치마킹 데이터 대기 중</h3>
-                    <p className="text-slate-500 max-w-md">좌측에서 채널을 선택하고 분석을 시작하세요.<br/>글로벌 떡상 트렌드와 찐팬 반응이 여기에 펼쳐집니다.</p>
+                    <h3 className="text-xl font-bold text-slate-700 mb-2">아직 볼 영상 데이터가 없습니다</h3>
+                    <div className="text-slate-500 max-w-lg space-y-2">
+                      <p>먼저 왼쪽에서 채널을 저장한 뒤, 필요한 채널을 선택하세요.</p>
+                      <p>새 영상이 필요하면 “유튜브 새 영상 수집”을 실행합니다. 이 작업은 YouTube API를 호출합니다.</p>
+                      <p>이미 수집된 데이터만 보려면 “저장된 영상 불러오기”를 누릅니다. 이 작업은 저장된 데이터만 조회합니다.</p>
+                    </div>
                   </div>
                 ) : (
                   <div className="overflow-x-auto overflow-y-auto flex-1">
@@ -880,7 +890,7 @@ export default function App() {
                       </thead>
                       <tbody className="divide-y divide-slate-100">
                         {filteredAndSortedVideos.length === 0 ? (
-                          <tr><td colSpan="7" className="text-center py-10 text-slate-500">필터 조건에 맞는 영상이 없습니다.</td></tr>
+                          <tr><td colSpan="7" className="text-center py-10 text-slate-500">필터 조건에 맞는 영상이 없습니다. 필터를 낮추거나, 새 영상이 필요하면 “유튜브 새 영상 수집”을 실행해 주세요.</td></tr>
                         ) : (
                           filteredAndSortedVideos.map((v) => (
                             <tr key={v.videoId} className={`transition-colors ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50/50' : 'hover:bg-slate-50'}`}>
@@ -963,7 +973,7 @@ export default function App() {
                 <div className="text-center py-20 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
                   <Star className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                   <h3 className="text-lg font-bold text-slate-700 mb-2">스크랩된 영상이 없습니다.</h3>
-                  <p className="text-slate-500">분석 대시보드에서 ⭐️ 버튼을 눌러 레퍼런스 영상을 모아보세요.</p>
+                  <p className="text-slate-500 max-w-md mx-auto">먼저 채널을 저장하고 “저장된 영상 불러오기”로 영상을 확인한 뒤, 분석 대시보드에서 별표 버튼을 눌러 레퍼런스 영상을 모아보세요.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
