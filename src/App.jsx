@@ -635,19 +635,22 @@ export default function App() {
                   )}
                 </div>
               ) : !channelPreview ? (
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newChannelInput}
-                    onChange={(e) => setNewChannelInput(e.target.value)}
-                    placeholder="핸들 / 채널링크 / 영상링크"
-                    className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none"
-                    onKeyDown={(e) => e.key === 'Enter' && handlePreviewChannel()}
-                  />
-                  <button onClick={handlePreviewChannel} disabled={previewLoading} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
-                    {previewLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                    불러오기
-                  </button>
+                <div className="space-y-1.5">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newChannelInput}
+                      onChange={(e) => setNewChannelInput(e.target.value)}
+                      placeholder="핸들 / 채널링크 / 영상링크"
+                      className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none"
+                      onKeyDown={(e) => e.key === 'Enter' && handlePreviewChannel()}
+                    />
+                    <button onClick={handlePreviewChannel} disabled={previewLoading} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
+                      {previewLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                      채널 미리보기
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-slate-500">아직 저장하지 않고 채널 정보만 먼저 확인합니다.</p>
                 </div>
               ) : (
                 <div className="space-y-2 animate-in fade-in duration-200">
@@ -691,8 +694,9 @@ export default function App() {
 
                   <div className="flex gap-2">
                     <button onClick={cancelChannelPreview} className="flex-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-semibold transition-colors">취소</button>
-                    <button onClick={handleSaveChannel} disabled={loading} className="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">저장</button>
+                    <button onClick={handleSaveChannel} disabled={loading} className="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">채널 저장</button>
                   </div>
+                  <p className="text-[10px] text-slate-500">채널을 클라우드 목록에 저장합니다. 영상 수집은 스캔 시 진행됩니다.</p>
                 </div>
               )}
             </div>
@@ -710,7 +714,8 @@ export default function App() {
                     <button
                       onClick={() => handleTagScan(cat)}
                       disabled={isScanning || count === 0}
-                      title={`'${cat}' 태그 채널만 스캔`}
+                      title={`'${cat}' 태그 채널만 새 영상 여부를 확인합니다`}
+                      aria-label={`'${cat}' 태그만 스캔`}
                       className="p-2 text-slate-400 hover:text-emerald-600 disabled:text-slate-200 disabled:cursor-not-allowed transition-colors shrink-0"
                     >
                       {scanningTag === cat ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <RefreshCw className="w-4 h-4" />}
@@ -719,6 +724,7 @@ export default function App() {
                 );
               })}
             </div>
+            <p className="mt-1.5 text-[10px] text-slate-500">태그 옆 새로고침 버튼은 선택한 태그의 채널만 새 영상 여부를 확인합니다.</p>
             
             <hr className="my-4 border-slate-100" />
             
@@ -763,8 +769,9 @@ export default function App() {
               className={`w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all ${loading ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : selectedChannelIds.length > 0 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5' : 'bg-slate-100 text-slate-400'}`}
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
-              {loading ? '데이터 스캔 중...' : `선택된 ${selectedChannelIds.length}개 채널 분석`}
+              {loading ? '저장된 영상 불러오는 중...' : `저장된 영상 불러오기 (${selectedChannelIds.length}개 채널)`}
             </button>
+            <p className="mt-1.5 text-[10px] text-slate-500 text-center">이미 수집되어 저장된 영상만 불러옵니다. 유튜브 API를 새로 호출하지 않습니다.</p>
             {error && <p className="mt-2 text-xs text-red-500 text-center">{error}</p>}
             {progressMsg && !error && <p className="mt-2 text-xs text-indigo-600 text-center font-medium">{progressMsg}</p>}
           </div>
@@ -814,14 +821,17 @@ export default function App() {
                   </div>
                 </div>
 
-                <button
-                  onClick={handleManualScan}
-                  disabled={isScanning}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all shadow-sm ${isScanning ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
-                >
-                  {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCw className="w-5 h-5" />}
-                  {isScanning ? '스캔 중...' : '지금 스캔'}
-                </button>
+                <div className="flex flex-col gap-1">
+                  <button
+                    onClick={handleManualScan}
+                    disabled={isScanning}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-bold transition-all shadow-sm ${isScanning ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
+                  >
+                    {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCw className="w-5 h-5" />}
+                    {isScanning ? '새 영상 수집 중...' : '유튜브 새 영상 수집'}
+                  </button>
+                  <p className="max-w-[220px] text-[10px] leading-snug text-slate-500">유튜브 API를 호출해 새 영상을 확인합니다. 이미 저장된 영상은 중복 저장하지 않고 갱신합니다.</p>
+                </div>
 
                 <button 
                   onClick={() => setTtoTtoMode(!ttoTtoMode)}
@@ -835,15 +845,19 @@ export default function App() {
               {checkedVideos.length > 0 && (
                 <div className="bg-indigo-900 rounded-xl p-4 flex justify-between items-center shadow-lg animate-in slide-in-from-top-4">
                   <span className="text-indigo-100 font-medium text-sm"><span className="text-white font-bold text-lg">{checkedVideos.length}</span>개 선택됨</span>
-                  <button onClick={() => copyAI_RemakePrompt(videos.filter(v => checkedVideos.includes(v.videoId)))} className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white rounded-lg font-bold shadow-md transition-transform hover:scale-105">
-                    {copiedPrompt ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                    {copiedPrompt ? '복사 완료! AI에게 붙여넣으세요' : '🇰🇷 AI 리메이크 프롬프트 복사'}
-                  </button>
+                  <div className="flex flex-col items-end gap-1">
+                    <button onClick={() => copyAI_RemakePrompt(videos.filter(v => checkedVideos.includes(v.videoId)))} className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white rounded-lg font-bold shadow-md transition-transform hover:scale-105">
+                      {copiedPrompt ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                      {copiedPrompt ? '복사 완료! AI에게 붙여넣으세요' : 'AI 리메이크 프롬프트 복사'}
+                    </button>
+                    <p className="text-[10px] text-indigo-100">선택한 영상으로 리메이크 요청문을 만들어 클립보드에 복사합니다.</p>
+                  </div>
                 </div>
               )}
 
               {/* 데이터 테이블 */}
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
+                <p className="px-4 pt-3 text-[10px] text-slate-500">댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.</p>
                 {videos.length === 0 ? (
                   <div className="flex-1 flex flex-col items-center justify-center text-center p-10 bg-slate-50">
                     <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-4"><Youtube className="w-10 h-10 text-indigo-300" /></div>
@@ -892,8 +906,8 @@ export default function App() {
                                       ) : (
                                         <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-medium flex items-center gap-1"><Clock className="w-3 h-3" /> {v.duration}</span>
                                       )}
-                                      <button onClick={() => fetchTopComments(v.videoId, v.title)} className="text-[10px] bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-1.5 py-0.5 rounded font-semibold border border-indigo-100 flex items-center gap-1 transition-colors">
-                                        <MessageSquareText className="w-3 h-3" /> 댓글 스캔
+                                      <button onClick={() => fetchTopComments(v.videoId, v.title)} title="YouTube API로 댓글 Top 10을 조회합니다." className="text-[10px] bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-1.5 py-0.5 rounded font-semibold border border-indigo-100 flex items-center gap-1 transition-colors">
+                                        <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
                                       </button>
                                     </div>
                                   </div>
@@ -937,9 +951,12 @@ export default function App() {
                   </h2>
                   <p className="text-sm text-slate-500 mt-1">별표(⭐️)를 눌러 모아둔 나만의 영감 보관소입니다. (브라우저를 닫아도 유지됩니다)</p>
                 </div>
-                <button onClick={() => copyAI_RemakePrompt(savedVideos)} disabled={savedVideos.length === 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideos.length > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>
-                  <Lightbulb className="w-5 h-5" /> 스크랩북 전체 AI 기획안 만들기
-                </button>
+                <div className="flex flex-col items-end gap-1">
+                  <button onClick={() => copyAI_RemakePrompt(savedVideos)} disabled={savedVideos.length === 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideos.length > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>
+                    <Lightbulb className="w-5 h-5" /> AI 리메이크 프롬프트 복사
+                  </button>
+                  <p className="max-w-[260px] text-right text-[10px] text-slate-500">스크랩한 영상 전체로 리메이크 요청문을 만들어 클립보드에 복사합니다.</p>
+                </div>
               </div>
 
               {savedVideos.length === 0 ? (
@@ -974,7 +991,7 @@ export default function App() {
                             <p className="font-bold text-slate-800 text-sm">{video.view_count.toLocaleString()} <span className="text-xs text-rose-500 ml-1">({video.like_ratio}%)</span></p>
                           </div>
                           <div className="flex gap-2">
-                            <button onClick={() => fetchTopComments(video.videoId, video.title)} className="p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors" title="댓글 확인">
+                            <button onClick={() => fetchTopComments(video.videoId, video.title)} className="p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors" title="댓글 Top 10 보기 - YouTube API로 댓글을 조회합니다">
                               <MessageSquareText className="w-4 h-4" />
                             </button>
                             <button onClick={() => toggleScrapVideo(video)} className="p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="스크랩 해제">
