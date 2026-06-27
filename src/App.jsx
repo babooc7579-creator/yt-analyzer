@@ -521,10 +521,10 @@ export default function App() {
         </div>
       )}
 
-      <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="w-full max-w-[1920px] mx-auto grid grid-cols-1 xl:grid-cols-[360px_minmax(0,1fr)_300px] 2xl:grid-cols-[380px_minmax(0,1fr)_340px] gap-6">
         
         {/* ================= 좌측: CRM 패널 ================= */}
-        <div className="lg:col-span-1 space-y-4">
+        <div className="space-y-4">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
             <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
@@ -811,7 +811,7 @@ export default function App() {
         </div>
 
         {/* ================= 우측: 메인 뷰어 ================= */}
-        <div className="lg:col-span-3 flex flex-col h-full space-y-4">
+        <div className="flex flex-col h-full space-y-4 min-w-0">
           
           {/* 탭 네비게이션 */}
           <div className="flex gap-2">
@@ -825,9 +825,9 @@ export default function App() {
 
           {activeTab === 'dashboard' ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <RefreshCw className="w-5 h-5 text-emerald-600 mt-0.5" />
                     <div>
                       <p className="text-sm font-extrabold text-emerald-800">유튜브 새 영상 수집</p>
@@ -836,7 +836,7 @@ export default function App() {
                   </div>
                 </div>
                 <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <Play className="w-5 h-5 text-blue-600 mt-0.5" />
                     <div>
                       <p className="text-sm font-extrabold text-blue-800">저장된 영상 불러오기</p>
@@ -847,11 +847,11 @@ export default function App() {
               </div>
 
               {/* 컨트롤 바 */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row gap-4 justify-between items-center z-20">
-                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-col 2xl:flex-row gap-4 justify-between items-center z-20">
+                <div className="flex flex-wrap items-center gap-3 w-full 2xl:w-auto">
                   <div className="relative">
                     <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} placeholder="제목 검색..." className="pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm w-40 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                    <input type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} placeholder="제목 검색..." className="pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm w-56 focus:ring-2 focus:ring-indigo-500 outline-none" />
                   </div>
 
                   <select value={viewFilter} onChange={(e) => setViewFilter(Number(e.target.value))} className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none cursor-pointer text-slate-700 font-medium">
@@ -914,11 +914,11 @@ export default function App() {
                 <p className="px-4 pt-3 text-[10px] text-slate-500">댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.</p>
                 {videos.length === 0 ? (
                   <div className="flex-1 flex items-center justify-center p-6 bg-slate-50">
-                    <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl shadow-sm p-8 text-center">
+                    <div className="w-full max-w-5xl bg-white border border-slate-200 rounded-2xl shadow-sm p-8 text-center">
                       <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-5"><Youtube className="w-10 h-10 text-indigo-400" /></div>
                       <h3 className="text-2xl font-extrabold text-slate-800 mb-2">아직 볼 영상 데이터가 없습니다</h3>
                       <p className="text-sm text-slate-500 mb-6">아래 순서대로 진행하면 소재 발굴 화면에 영상이 표시됩니다.</p>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-left">
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-left">
                         <div className="border border-indigo-100 bg-indigo-50/60 rounded-xl p-4">
                           <p className="text-sm font-bold text-indigo-800">1. 채널 저장</p>
                           <p className="text-xs text-slate-600 mt-2">왼쪽에서 채널을 미리보기한 뒤 클라우드 목록에 저장합니다.</p>
@@ -1099,6 +1099,66 @@ export default function App() {
           )}
 
         </div>
+
+        <aside className="hidden xl:flex flex-col gap-4">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+            <p className="text-sm font-extrabold text-slate-900 mb-3">오늘의 다음 행동</p>
+            <div className="space-y-3">
+              <div className="border border-indigo-100 bg-indigo-50/60 rounded-xl p-3">
+                <p className="text-xs font-bold text-indigo-800">1. 채널 저장</p>
+                <p className="text-[11px] text-slate-600 mt-1">아직 없는 채널은 왼쪽에서 먼저 저장합니다.</p>
+              </div>
+              <div className="border border-emerald-100 bg-emerald-50 rounded-xl p-3">
+                <p className="text-xs font-bold text-emerald-800">2. 새 영상 수집</p>
+                <p className="text-[11px] text-slate-600 mt-1">새 데이터가 필요할 때만 실행합니다.</p>
+              </div>
+              <div className="border border-blue-100 bg-blue-50 rounded-xl p-3">
+                <p className="text-xs font-bold text-blue-800">3. 저장 영상 조회</p>
+                <p className="text-[11px] text-slate-600 mt-1">저장된 데이터만 보고 싶을 때 사용합니다.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+            <p className="text-sm font-extrabold text-slate-900 mb-3">현재 상태</p>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-slate-50 rounded-xl p-3 text-center">
+                <p className="text-2xl font-extrabold text-slate-800">{selectedChannelIds.length}</p>
+                <p className="text-[11px] text-slate-500">선택 채널</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-3 text-center">
+                <p className="text-2xl font-extrabold text-slate-800">{videos.length}</p>
+                <p className="text-[11px] text-slate-500">불러온 영상</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-3 text-center">
+                <p className="text-2xl font-extrabold text-slate-800">{savedVideos.length}</p>
+                <p className="text-[11px] text-slate-500">스크랩</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-3 text-center">
+                <p className="text-2xl font-extrabold text-slate-800">{checkedVideos.length}</p>
+                <p className="text-[11px] text-slate-500">선택 영상</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+            <p className="text-sm font-extrabold text-slate-900 mb-3">수집과 조회 차이</p>
+            <div className="space-y-3 text-[11px] text-slate-600 leading-relaxed">
+              <p><span className="font-bold text-emerald-700">유튜브 새 영상 수집</span>은 YouTube API를 호출해 새 영상 여부를 확인합니다.</p>
+              <p><span className="font-bold text-blue-700">저장된 영상 불러오기</span>는 이미 저장된 데이터만 조회합니다.</p>
+              <p className="rounded-lg bg-amber-50 border border-amber-100 p-3 text-amber-800">API 호출이 필요한 작업은 필요한 때만 실행하세요.</p>
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+            <p className="text-sm font-extrabold text-slate-900 mb-3">또터또 발굴 기준</p>
+            <div className="space-y-2 text-[11px] text-slate-600">
+              <p>업로드 후 6개월 이상 지난 영상</p>
+              <p>채널 평균보다 반응이 컸던 영상</p>
+              <p>지금 다시 써도 소재로 확장 가능한 영상</p>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );
