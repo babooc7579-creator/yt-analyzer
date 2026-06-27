@@ -67,6 +67,7 @@ export default function App() {
   const [sortType, setSortType] = useState('multiplier');
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'scrapbook'
   const [viewMode, setViewMode] = useState('card'); // 'card' or 'list'
+  const [focusMode, setFocusMode] = useState(false);
   
   const [checkedVideos, setCheckedVideos] = useState([]);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
@@ -522,10 +523,10 @@ export default function App() {
         </div>
       )}
 
-      <div className="w-full max-w-[1920px] mx-auto grid grid-cols-1 xl:grid-cols-[360px_minmax(0,1fr)_300px] 2xl:grid-cols-[380px_minmax(0,1fr)_340px] gap-6">
+      <div className={`w-full mx-auto grid grid-cols-1 gap-6 ${focusMode && viewMode === 'card' && activeTab === 'dashboard' ? 'max-w-[2400px]' : 'max-w-[1920px] xl:grid-cols-[360px_minmax(0,1fr)_300px] 2xl:grid-cols-[380px_minmax(0,1fr)_340px]'}`}>
         
         {/* ================= 좌측: CRM 패널 ================= */}
-        <div className="space-y-4">
+        <div className={`space-y-4 ${focusMode && viewMode === 'card' && activeTab === 'dashboard' ? 'hidden' : ''}`}>
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
             <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
@@ -879,6 +880,15 @@ export default function App() {
                     <button onClick={() => setViewMode('card')} className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'card' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>카드 보기</button>
                     <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>리스트 보기</button>
                   </div>
+
+                  {viewMode === 'card' && (
+                    <button
+                      onClick={() => setFocusMode(!focusMode)}
+                      className={`px-3 py-2 rounded-lg text-sm font-bold transition-all border ${focusMode ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-200 hover:text-indigo-700'}`}
+                    >
+                      {focusMode ? '기본 보기' : '집중 보기'}
+                    </button>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -949,12 +959,12 @@ export default function App() {
                     </div>
                   </div>
                 ) : viewMode === 'card' ? (
-                  <div className="flex-1 overflow-y-auto bg-slate-50 p-5">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
+                  <div className={`flex-1 overflow-y-auto bg-slate-50 ${focusMode ? 'p-6' : 'p-5'}`}>
+                    <div className={`grid gap-5 ${focusMode ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2100px]:grid-cols-5' : 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3'}`}>
                       {filteredAndSortedVideos.map((v, index) => (
                         <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
                           <div className="relative bg-slate-900">
-                            <img src={v.thumbnail} alt="" className="mx-auto aspect-[9/16] max-h-[420px] w-full object-cover sm:object-contain" />
+                            <img src={v.thumbnail} alt="" className={`mx-auto aspect-[9/16] w-full object-cover sm:object-contain ${focusMode ? 'max-h-[560px]' : 'max-h-[420px]'}`} />
                             <div className="absolute left-3 top-3 flex flex-wrap gap-2">
                               <span className="rounded-full bg-black/75 px-2.5 py-1 text-xs font-extrabold text-white">#{index + 1}</span>
                               {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
@@ -1188,7 +1198,7 @@ export default function App() {
 
         </div>
 
-        <aside className="hidden xl:flex flex-col gap-4">
+        <aside className={`hidden xl:flex flex-col gap-4 ${focusMode && viewMode === 'card' && activeTab === 'dashboard' ? 'xl:hidden' : ''}`}>
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
             <p className="text-sm font-extrabold text-slate-900 mb-3">오늘의 다음 행동</p>
             <div className="space-y-3">
