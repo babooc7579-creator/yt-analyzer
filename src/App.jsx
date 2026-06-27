@@ -529,11 +529,28 @@ export default function App() {
             <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
             </h1>
-            <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 leading-relaxed space-y-1">
-              <p className="font-bold text-slate-700">작업 순서 안내</p>
-              <p>1. 먼저 채널을 저장합니다.</p>
-              <p>2. 새 영상이 필요하면 “유튜브 새 영상 수집”을 실행합니다. 이 작업은 YouTube API를 호출합니다.</p>
-              <p>3. 저장된 데이터만 보려면 채널을 선택한 뒤 “저장된 영상 불러오기”를 누릅니다.</p>
+            <div className="mb-4 border border-indigo-100 bg-indigo-50/60 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                <div>
+                  <p className="text-sm font-extrabold text-slate-900">오늘의 작업 흐름</p>
+                  <p className="text-[11px] text-slate-500">채널 저장 → 새 영상 수집 → 저장된 영상 확인</p>
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <div className="bg-white border border-indigo-100 rounded-lg p-3">
+                  <p className="text-xs font-bold text-slate-800">1. 먼저 채널 저장</p>
+                  <p className="text-[11px] text-slate-500 mt-1">소재를 모을 유튜브 채널을 클라우드 목록에 추가합니다.</p>
+                </div>
+                <div className="bg-white border border-emerald-100 rounded-lg p-3">
+                  <p className="text-xs font-bold text-emerald-700">2. 유튜브 새 영상 수집</p>
+                  <p className="text-[11px] text-slate-500 mt-1">YouTube API를 호출해 새 영상 여부를 확인합니다.</p>
+                </div>
+                <div className="bg-white border border-blue-100 rounded-lg p-3">
+                  <p className="text-xs font-bold text-blue-700">3. 저장된 영상 불러오기</p>
+                  <p className="text-[11px] text-slate-500 mt-1">이미 저장된 데이터만 조회합니다. 새 API 호출은 없습니다.</p>
+                </div>
+              </div>
             </div>
             
             <div className="mb-4">
@@ -730,7 +747,10 @@ export default function App() {
                 );
               })}
             </div>
-            <p className="mt-1.5 text-[10px] text-slate-500">태그 옆 새로고침 버튼은 선택한 태그의 채널만 새 영상 여부를 확인합니다.</p>
+            <div className="mt-2 bg-emerald-50 border border-emerald-100 rounded-lg p-2.5">
+              <p className="text-[11px] font-bold text-emerald-700">이 태그만 스캔</p>
+              <p className="text-[10px] text-slate-600 mt-0.5">태그 옆 새로고침 버튼은 선택한 태그의 채널만 새 영상 여부를 확인합니다. YouTube API 호출이 발생합니다.</p>
+            </div>
             
             <hr className="my-4 border-slate-100" />
             
@@ -738,7 +758,11 @@ export default function App() {
               {channelsLoading ? (
                 <p className="text-sm text-slate-400 text-center py-4 flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> 클라우드에서 채널 불러오는 중...</p>
               ) : savedChannels.filter(c => c.tags?.includes(selectedCategoryTab)).length === 0 ? (
-                <p className="text-sm text-slate-400 text-center py-4">저장된 채널이 없습니다.</p>
+                <div className="text-center py-5 px-3 bg-slate-50 border border-dashed border-slate-200 rounded-xl">
+                  <FolderOpen className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                  <p className="text-sm font-bold text-slate-600">저장된 채널이 없습니다.</p>
+                  <p className="text-[11px] text-slate-500 mt-1">먼저 위에서 채널을 미리보기한 뒤 저장해 주세요.</p>
+                </div>
               ) : (
                 savedChannels.filter(c => c.tags?.includes(selectedCategoryTab)).map(channel => (
                   <div key={channel.id} className={`flex items-center gap-2 p-2 rounded-xl border transition-all ${selectedChannelIds.includes(channel.id) ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
@@ -777,7 +801,10 @@ export default function App() {
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
               {loading ? '저장된 영상 불러오는 중...' : `저장된 영상 불러오기 (${selectedChannelIds.length}개 채널)`}
             </button>
-            <p className="mt-1.5 text-[10px] text-slate-500 text-center">이미 수집되어 저장된 영상만 불러옵니다. 유튜브 API를 새로 호출하지 않습니다.</p>
+            <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg p-2.5 text-center">
+              <p className="text-[11px] font-bold text-blue-700">저장된 영상 불러오기</p>
+              <p className="text-[10px] text-slate-600 mt-0.5">이미 수집되어 저장된 영상만 조회합니다. 유튜브 API를 새로 호출하지 않습니다.</p>
+            </div>
             {error && <p className="mt-2 text-xs text-red-500 text-center">{error}</p>}
             {progressMsg && !error && <p className="mt-2 text-xs text-indigo-600 text-center font-medium">{progressMsg}</p>}
           </div>
@@ -798,6 +825,27 @@ export default function App() {
 
           {activeTab === 'dashboard' ? (
             <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                  <div className="flex items-start gap-3">
+                    <RefreshCw className="w-5 h-5 text-emerald-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-extrabold text-emerald-800">유튜브 새 영상 수집</p>
+                      <p className="text-xs text-slate-600 mt-1">YouTube API를 호출해 신규 영상을 확인합니다. 새 영상이 필요할 때만 실행하세요.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                  <div className="flex items-start gap-3">
+                    <Play className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-extrabold text-blue-800">저장된 영상 불러오기</p>
+                      <p className="text-xs text-slate-600 mt-1">클라우드에 이미 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* 컨트롤 바 */}
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-col md:flex-row gap-4 justify-between items-center z-20">
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -865,13 +913,25 @@ export default function App() {
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
                 <p className="px-4 pt-3 text-[10px] text-slate-500">댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.</p>
                 {videos.length === 0 ? (
-                  <div className="flex-1 flex flex-col items-center justify-center text-center p-10 bg-slate-50">
-                    <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-4"><Youtube className="w-10 h-10 text-indigo-300" /></div>
-                    <h3 className="text-xl font-bold text-slate-700 mb-2">아직 볼 영상 데이터가 없습니다</h3>
-                    <div className="text-slate-500 max-w-lg space-y-2">
-                      <p>먼저 왼쪽에서 채널을 저장한 뒤, 필요한 채널을 선택하세요.</p>
-                      <p>새 영상이 필요하면 “유튜브 새 영상 수집”을 실행합니다. 이 작업은 YouTube API를 호출합니다.</p>
-                      <p>이미 수집된 데이터만 보려면 “저장된 영상 불러오기”를 누릅니다. 이 작업은 저장된 데이터만 조회합니다.</p>
+                  <div className="flex-1 flex items-center justify-center p-6 bg-slate-50">
+                    <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl shadow-sm p-8 text-center">
+                      <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-5"><Youtube className="w-10 h-10 text-indigo-400" /></div>
+                      <h3 className="text-2xl font-extrabold text-slate-800 mb-2">아직 볼 영상 데이터가 없습니다</h3>
+                      <p className="text-sm text-slate-500 mb-6">아래 순서대로 진행하면 소재 발굴 화면에 영상이 표시됩니다.</p>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-left">
+                        <div className="border border-indigo-100 bg-indigo-50/60 rounded-xl p-4">
+                          <p className="text-sm font-bold text-indigo-800">1. 채널 저장</p>
+                          <p className="text-xs text-slate-600 mt-2">왼쪽에서 채널을 미리보기한 뒤 클라우드 목록에 저장합니다.</p>
+                        </div>
+                        <div className="border border-emerald-100 bg-emerald-50 rounded-xl p-4">
+                          <p className="text-sm font-bold text-emerald-800">2. 새 영상 수집</p>
+                          <p className="text-xs text-slate-600 mt-2">새 데이터가 필요하면 “유튜브 새 영상 수집”을 실행합니다. YouTube API를 호출합니다.</p>
+                        </div>
+                        <div className="border border-blue-100 bg-blue-50 rounded-xl p-4">
+                          <p className="text-sm font-bold text-blue-800">3. 저장 데이터 조회</p>
+                          <p className="text-xs text-slate-600 mt-2">저장된 데이터만 보려면 “저장된 영상 불러오기”를 누릅니다.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -890,7 +950,15 @@ export default function App() {
                       </thead>
                       <tbody className="divide-y divide-slate-100">
                         {filteredAndSortedVideos.length === 0 ? (
-                          <tr><td colSpan="7" className="text-center py-10 text-slate-500">필터 조건에 맞는 영상이 없습니다. 필터를 낮추거나, 새 영상이 필요하면 “유튜브 새 영상 수집”을 실행해 주세요.</td></tr>
+                          <tr>
+                            <td colSpan="7" className="py-12">
+                              <div className="mx-auto max-w-xl text-center bg-slate-50 border border-dashed border-slate-200 rounded-xl p-6">
+                                <Filter className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                                <p className="text-base font-bold text-slate-700">필터 조건에 맞는 영상이 없습니다</p>
+                                <p className="text-sm text-slate-500 mt-2">필터를 낮추거나, 새 영상이 필요하면 “유튜브 새 영상 수집”을 실행해 주세요.</p>
+                              </div>
+                            </td>
+                          </tr>
                         ) : (
                           filteredAndSortedVideos.map((v) => (
                             <tr key={v.videoId} className={`transition-colors ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50/50' : 'hover:bg-slate-50'}`}>
@@ -970,10 +1038,23 @@ export default function App() {
               </div>
 
               {savedVideos.length === 0 ? (
-                <div className="text-center py-20 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                <div className="text-center py-20 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 px-6">
                   <Star className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-bold text-slate-700 mb-2">스크랩된 영상이 없습니다.</h3>
-                  <p className="text-slate-500 max-w-md mx-auto">먼저 채널을 저장하고 “저장된 영상 불러오기”로 영상을 확인한 뒤, 분석 대시보드에서 별표 버튼을 눌러 레퍼런스 영상을 모아보세요.</p>
+                  <h3 className="text-xl font-extrabold text-slate-700 mb-2">스크랩된 영상이 없습니다</h3>
+                  <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-3 mt-5 text-left">
+                    <div className="bg-white border border-slate-200 rounded-xl p-4">
+                      <p className="text-sm font-bold text-slate-700">1. 채널 저장</p>
+                      <p className="text-xs text-slate-500 mt-2">먼저 소재를 모을 채널을 저장합니다.</p>
+                    </div>
+                    <div className="bg-white border border-slate-200 rounded-xl p-4">
+                      <p className="text-sm font-bold text-slate-700">2. 영상 불러오기</p>
+                      <p className="text-xs text-slate-500 mt-2">“저장된 영상 불러오기”로 영상을 확인합니다.</p>
+                    </div>
+                    <div className="bg-white border border-slate-200 rounded-xl p-4">
+                      <p className="text-sm font-bold text-slate-700">3. 별표 저장</p>
+                      <p className="text-xs text-slate-500 mt-2">분석 대시보드에서 별표 버튼을 눌러 모읍니다.</p>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
