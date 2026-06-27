@@ -66,6 +66,7 @@ export default function App() {
   const [ttoTtoMode, setTtoTtoMode] = useState(false);
   const [sortType, setSortType] = useState('multiplier');
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'scrapbook'
+  const [viewMode, setViewMode] = useState('card'); // 'card' or 'list'
   
   const [checkedVideos, setCheckedVideos] = useState([]);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
@@ -873,6 +874,11 @@ export default function App() {
                     <button onClick={() => setSortType('date')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'date' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-800'}`}>최신순</button>
                     <button onClick={() => setSortType('likes')} className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'likes' ? 'bg-white shadow text-rose-600' : 'text-slate-500 hover:text-slate-800'}`}>참여율(좋아요)</button>
                   </div>
+
+                  <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                    <button onClick={() => setViewMode('card')} className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'card' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>카드 보기</button>
+                    <button onClick={() => setViewMode('list')} className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>리스트 보기</button>
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -934,6 +940,79 @@ export default function App() {
                       </div>
                     </div>
                   </div>
+                ) : filteredAndSortedVideos.length === 0 ? (
+                  <div className="flex-1 flex items-center justify-center p-8 bg-slate-50">
+                    <div className="mx-auto max-w-xl text-center bg-white border border-dashed border-slate-200 rounded-2xl p-8 shadow-sm">
+                      <Filter className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                      <p className="text-base font-bold text-slate-700">필터 조건에 맞는 영상이 없습니다</p>
+                      <p className="text-sm text-slate-500 mt-2">필터를 낮추거나, 새 영상이 필요하면 “유튜브 새 영상 수집”을 실행해 주세요.</p>
+                    </div>
+                  </div>
+                ) : viewMode === 'card' ? (
+                  <div className="flex-1 overflow-y-auto bg-slate-50 p-5">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
+                      {filteredAndSortedVideos.map((v, index) => (
+                        <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
+                          <div className="relative bg-slate-900">
+                            <img src={v.thumbnail} alt="" className="mx-auto aspect-[9/16] max-h-[420px] w-full object-cover sm:object-contain" />
+                            <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+                              <span className="rounded-full bg-black/75 px-2.5 py-1 text-xs font-extrabold text-white">#{index + 1}</span>
+                              {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-xs font-extrabold text-white shadow-sm">
+                                  <Rocket className="w-3 h-3" /> 또터또 후보
+                                </span>
+                              )}
+                              {v.multiplier >= 3 && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-bold text-orange-700">
+                                  <TrendingUp className="w-3 h-3" /> 강한 반응
+                                </span>
+                              )}
+                            </div>
+                            <div className="absolute right-3 top-3 flex gap-2">
+                              <button onClick={() => toggleCheckVideo(v.videoId)} className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-indigo-50">
+                                {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-5 h-5 text-indigo-600" /> : <Square className="w-5 h-5 text-slate-400 hover:text-indigo-500" />}
+                              </button>
+                              <button onClick={() => toggleScrapVideo(v)} className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-yellow-50">
+                                <Star className={`w-5 h-5 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-400 group-hover:text-yellow-400'}`} />
+                              </button>
+                            </div>
+                          </div>
+                          <div className="p-5">
+                            <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600">{v.title}</a>
+                            <div className="mt-3 flex flex-wrap items-center gap-2">
+                              <span className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
+                              {v.isShorts ? (
+                                <span className="rounded-full bg-pink-100 px-2 py-1 text-[11px] font-bold text-pink-700">📱 Shorts ({v.duration})</span>
+                              ) : (
+                                <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600"><Clock className="w-3 h-3" /> {v.duration}</span>
+                              )}
+                              <button onClick={() => fetchTopComments(v.videoId, v.title)} title="YouTube API로 댓글 Top 10을 조회합니다." className="flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-1 text-[11px] font-bold text-indigo-600 transition-colors hover:bg-indigo-100">
+                                <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
+                              </button>
+                            </div>
+                            <div className="mt-4 grid grid-cols-2 gap-2">
+                              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                <p className="text-[10px] font-bold text-slate-400">총 조회수</p>
+                                <p className="text-sm font-extrabold text-slate-800">{v.view_count.toLocaleString()}</p>
+                              </div>
+                              <div className={`rounded-xl border p-3 ${v.multiplier >= 3 ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= 1.5 ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                                <p className={`text-[10px] font-bold ${v.multiplier >= 3 ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</p>
+                                <p className="text-sm font-extrabold">{v.multiplier.toFixed(1)}x</p>
+                              </div>
+                              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                <p className="text-[10px] font-bold text-slate-400">참여율</p>
+                                <p className={`text-sm font-extrabold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-800'}`}>{v.like_ratio}% <span className="text-[10px] font-medium text-slate-400">👍 {v.like_count.toLocaleString()}</span></p>
+                              </div>
+                              <div className={`rounded-xl border p-3 ${v.daysOld >= 180 ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                                <p className="text-[10px] font-bold text-slate-400">경과일</p>
+                                <p className="text-sm font-extrabold">{v.daysOld}일 전</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 ) : (
                   <div className="overflow-x-auto overflow-y-auto flex-1">
                     <table className="w-full text-sm text-left border-separate border-spacing-y-3">
@@ -949,18 +1028,7 @@ export default function App() {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredAndSortedVideos.length === 0 ? (
-                          <tr>
-                            <td colSpan="7" className="py-12">
-                              <div className="mx-auto max-w-xl text-center bg-slate-50 border border-dashed border-slate-200 rounded-xl p-6">
-                                <Filter className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-                                <p className="text-base font-bold text-slate-700">필터 조건에 맞는 영상이 없습니다</p>
-                                <p className="text-sm text-slate-500 mt-2">필터를 낮추거나, 새 영상이 필요하면 “유튜브 새 영상 수집”을 실행해 주세요.</p>
-                              </div>
-                            </td>
-                          </tr>
-                        ) : (
-                          filteredAndSortedVideos.map((v) => (
+                        {filteredAndSortedVideos.map((v) => (
                             <tr key={v.videoId} className={`group transition-all ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50 ring-1 ring-indigo-200' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'bg-rose-50/70 ring-1 ring-rose-100 hover:ring-rose-200' : 'bg-white hover:bg-slate-50 ring-1 ring-slate-100 hover:ring-slate-200'}`}>
                               <td className="px-4 py-5 text-center rounded-l-2xl">
                                 <button onClick={() => toggleCheckVideo(v.videoId)} className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors">
@@ -1033,8 +1101,7 @@ export default function App() {
                                 </div>
                               </td>
                             </tr>
-                          ))
-                        )}
+                          ))}
                       </tbody>
                     </table>
                   </div>
