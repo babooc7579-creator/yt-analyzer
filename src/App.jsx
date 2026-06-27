@@ -960,11 +960,13 @@ export default function App() {
                   </div>
                 ) : viewMode === 'card' ? (
                   <div className={`flex-1 overflow-y-auto bg-slate-50 ${focusMode ? 'p-6' : 'p-5'}`}>
-                    <div className={`grid gap-5 ${focusMode ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2100px]:grid-cols-5' : 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3'}`}>
+                    <div className={`grid gap-6 ${focusMode ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2300px]:grid-cols-5' : 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3'}`}>
                       {filteredAndSortedVideos.map((v, index) => (
                         <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
-                          <div className="relative bg-slate-900">
-                            <img src={v.thumbnail} alt="" className={`mx-auto aspect-[9/16] w-full object-cover sm:object-contain ${focusMode ? 'max-h-[560px]' : 'max-h-[420px]'}`} />
+                          <div className={`relative overflow-hidden bg-slate-100 ${focusMode ? 'min-h-[520px]' : 'min-h-[430px]'}`}>
+                            <img src={v.thumbnail} alt="" className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${focusMode ? 'min-h-[520px]' : 'min-h-[430px]'}`} />
+                            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
+                            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
                             <div className="absolute left-3 top-3 flex flex-wrap gap-2">
                               <span className="rounded-full bg-black/75 px-2.5 py-1 text-xs font-extrabold text-white">#{index + 1}</span>
                               {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
@@ -987,7 +989,7 @@ export default function App() {
                               </button>
                             </div>
                           </div>
-                          <div className="p-5">
+                          <div className={`${focusMode ? 'p-4' : 'p-5'}`}>
                             <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600">{v.title}</a>
                             <div className="mt-3 flex flex-wrap items-center gap-2">
                               <span className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
@@ -1001,19 +1003,19 @@ export default function App() {
                               </button>
                             </div>
                             <div className="mt-4 grid grid-cols-2 gap-2">
-                              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border border-slate-200 bg-slate-50`}>
                                 <p className="text-[10px] font-bold text-slate-400">총 조회수</p>
                                 <p className="text-sm font-extrabold text-slate-800">{v.view_count.toLocaleString()}</p>
                               </div>
-                              <div className={`rounded-xl border p-3 ${v.multiplier >= 3 ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= 1.5 ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border ${v.multiplier >= 3 ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= 1.5 ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
                                 <p className={`text-[10px] font-bold ${v.multiplier >= 3 ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</p>
                                 <p className="text-sm font-extrabold">{v.multiplier.toFixed(1)}x</p>
                               </div>
-                              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border border-slate-200 bg-slate-50`}>
                                 <p className="text-[10px] font-bold text-slate-400">참여율</p>
                                 <p className={`text-sm font-extrabold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-800'}`}>{v.like_ratio}% <span className="text-[10px] font-medium text-slate-400">👍 {v.like_count.toLocaleString()}</span></p>
                               </div>
-                              <div className={`rounded-xl border p-3 ${v.daysOld >= 180 ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              <div className={`${focusMode ? 'p-2.5' : 'p-3'} rounded-xl border ${v.daysOld >= 180 ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
                                 <p className="text-[10px] font-bold text-slate-400">경과일</p>
                                 <p className="text-sm font-extrabold">{v.daysOld}일 전</p>
                               </div>
