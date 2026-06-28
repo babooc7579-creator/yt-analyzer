@@ -355,11 +355,19 @@ export default function App() {
   // "지금 스캔" / "이 태그만 스캔" 버튼: Function App에 새벽 자동 스캔과 똑같은 작업을 즉시 1회 실행시킴
   // tag가 있으면 그 태그(결)에 속한 채널만, 없으면 전체 채널을 스캔
   const runScanRequest = async (tag) => {
-    setIsScanning(true); setScanningTag(tag || 'ALL'); setError('');
-    setProgressMsg(`${tag ? `'${tag}' 태그 채널` : '전체 채널'} 스캔 중... (채널 수와 영상 양에 따라 1분 이상 걸릴 수 있어요)`);
+    const scanSelectedChannels = !tag && selectedChannelIds.length > 0;
+    const channelIdsForScan = [...selectedChannelIds];
+
+    setIsScanning(true); setScanningTag(scanSelectedChannels ? 'SELECTED' : (tag || 'ALL')); setError('');
+    setProgressMsg(`${scanSelectedChannels ? `선택 채널 ${channelIdsForScan.length}개` : tag ? `'${tag}' 태그 채널` : '전체 채널'} 새 영상 수집 중... (YouTube API 호출이 발생합니다)`);
     try {
-      const url = tag ? `${FUNCTION_API_BASE}/scan?tag=${encodeURIComponent(tag)}` : `${FUNCTION_API_BASE}/scan`;
-      const res = await fetch(url);
+      const res = scanSelectedChannels
+        ? await fetch(`${FUNCTION_API_BASE}/scan/selected`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ channelIds: channelIdsForScan, reason: 'manual' }),
+        })
+        : await fetch(tag ? `${FUNCTION_API_BASE}/scan?tag=${encodeURIComponent(tag)}` : `${FUNCTION_API_BASE}/scan`);
       const data = await res.json();
       if (!data.success) throw new Error(data.error || '스캔에 실패했습니다.');
 
@@ -963,9 +971,13 @@ export default function App() {
                     className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-bold transition-all shadow-sm ${isScanning ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
                   >
                     {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCw className="w-5 h-5" />}
-                    {isScanning ? '새 영상 수집 중...' : '유튜브 새 영상 수집'}
+                    {isScanning ? '새 영상 수집 중...' : selectedChannelIds.length > 0 ? `선택 채널 새 영상 수집 (${selectedChannelIds.length}개)` : '전체 채널 새 영상 수집'}
                   </button>
-                  <p className="max-w-[220px] text-[10px] leading-snug text-slate-500">유튜브 API를 호출해 새 영상을 확인합니다. 이미 저장된 영상은 중복 저장하지 않고 갱신합니다.</p>
+                  <p className="max-w-[240px] text-[10px] leading-snug text-slate-500">
+                    {selectedChannelIds.length > 0
+                      ? '체크한 채널만 YouTube API로 새 영상 여부를 확인합니다. 체크하지 않은 채널은 수집하지 않습니다.'
+                      : '선택한 채널이 없으면 전체 채널을 YouTube API로 확인합니다. 특정 채널만 수집하려면 먼저 채널을 체크하세요.'}
+                  </p>
                 </div>
 
                 <button 
