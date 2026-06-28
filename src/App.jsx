@@ -14,6 +14,76 @@ const LANGUAGES = [
   { code: 'ETC', label: '🌐 기타', name: '기타 언어' }
 ];
 
+const CREATOR_OS_PRODUCT_MAP = [
+  {
+    title: '디스커버리 탐색',
+    description: '발굴: 오늘 볼 만한 소재 신호를 찾습니다.',
+    items: [
+      { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
+      { id: 'discovery-trends', label: '트렌드 스캐너', status: 'soon', summary: '외부 트렌드와 급상승 신호를 연결할 예정입니다.' },
+      { id: 'discovery-ttotto', label: '또터또 탐색', status: 'soon', summary: '오래됐지만 다시 터질 후보를 전용 화면으로 분리할 예정입니다.' },
+      { id: 'discovery-keywords', label: '키워드 탐색', status: 'soon', summary: '키워드별 소재 흐름을 모아볼 예정입니다.' },
+      { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'soon', summary: '오늘 다시 확인할 채널 묶음을 준비 중입니다.' },
+    ],
+  },
+  {
+    title: '레퍼런스 금고',
+    description: '보관: 영상과 채널을 자산처럼 쌓습니다.',
+    items: [
+      { id: 'vault-all', label: '올인원 보관함', status: 'live', summary: '기존 영상 보드와 카드/리스트 보기를 사용합니다.' },
+      { id: 'vault-videos', label: '저장한 영상', status: 'live', summary: '저장된 영상 데이터와 영상 보드를 확인합니다.' },
+      { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '기존 채널 목록과 수집 상태를 확인합니다.' },
+      { id: 'vault-tags', label: '태그별 금고', status: 'soon', summary: '채널의 결과 태그별 보관함을 분리할 예정입니다.' },
+      { id: 'vault-sources', label: '레퍼런스 출처', status: 'soon', summary: '소재가 어디에서 왔는지 추적할 예정입니다.' },
+    ],
+  },
+  {
+    title: '제작 스튜디오',
+    description: '제작: 저장한 소재를 제작 후보로 전환합니다.',
+    items: [
+      { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '기존 스크랩북과 AI 프롬프트 복사 흐름을 사용합니다.' },
+      { id: 'studio-scrapbook', label: '제작/스크랩북', status: 'live', summary: '별표로 모은 영상을 제작 후보로 봅니다.' },
+      { id: 'studio-script', label: '대본 보드', status: 'soon', summary: '제목, 인트로, 대본 초안을 관리할 예정입니다.' },
+      { id: 'studio-calendar', label: '업로드 캘린더', status: 'soon', summary: '제작 일정과 업로드 후보를 연결할 예정입니다.' },
+      { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '미검토, 분석중, 대본화, 제작완료 상태를 관리할 예정입니다.' },
+    ],
+  },
+  {
+    title: 'AI 공방',
+    description: '분석: 소재를 제목, 대본, 작전으로 바꿉니다.',
+    items: [
+      { id: 'ai-hook', label: '후킹 분석', status: 'soon', summary: '영상이 터진 첫 끌림 요소를 분석할 예정입니다.' },
+      { id: 'ai-structure', label: '기승전결 분석', status: 'soon', summary: '원본 영상의 전개 구조를 분해할 예정입니다.' },
+      { id: 'ai-wow', label: '와우포인트 분석', status: 'soon', summary: '시청자가 멈춰 보는 놀람 지점을 찾을 예정입니다.' },
+      { id: 'ai-shorts-script', label: '쇼츠 대본 생성', status: 'soon', summary: '레퍼런스를 쇼츠용 대본 초안으로 바꿀 예정입니다.' },
+      { id: 'ai-title-thumb', label: '제목/썸네일 문구 생성', status: 'soon', summary: '클릭을 부르는 제목과 썸네일 문구를 제안할 예정입니다.' },
+      { id: 'ai-remix', label: '우라까이 재구성 도우미', status: 'soon', summary: '복제가 아니라 안전한 재구성 방향을 잡을 예정입니다.' },
+      { id: 'ai-risk', label: '복사 위험 체크', status: 'soon', summary: '원본과 너무 가까운 표현 위험을 점검할 예정입니다.' },
+    ],
+  },
+  {
+    title: '오퍼레이션 관제',
+    description: '수집: 채널, 선택 수집, 운영 상태를 통제합니다.',
+    items: [
+      { id: 'ops-channels', label: '채널 목록', status: 'live', summary: '기존 채널 목록과 마지막 수집 상태를 사용합니다.' },
+      { id: 'ops-add-channel', label: '새 채널 등록', status: 'live', summary: '기존 채널 미리보기와 저장 영역을 사용합니다.' },
+      { id: 'ops-selected-scan', label: '선택 채널 수집', status: 'live', summary: '체크한 채널만 새 영상 수집을 실행할 수 있습니다.' },
+      { id: 'ops-scan-log', label: '수집 로그', status: 'soon', summary: '수집 이력과 실패 원인을 모아볼 예정입니다.' },
+      { id: 'ops-api', label: 'API 사용량', status: 'soon', summary: 'YouTube API 호출량과 비용 위험을 볼 수 있게 할 예정입니다.' },
+    ],
+  },
+  {
+    title: '인사이트 / 학습',
+    description: '축적: 성과와 패턴을 다음 판단으로 남깁니다.',
+    items: [
+      { id: 'insight-report', label: '성과 리포트', status: 'soon', summary: '채널과 소재 성과를 리포트로 볼 예정입니다.' },
+      { id: 'insight-patterns', label: '터진 패턴 학습', status: 'soon', summary: '반복되는 성공 패턴을 정리할 예정입니다.' },
+      { id: 'insight-notes', label: '운영 노트', status: 'soon', summary: '운영자가 남긴 판단 기록을 모아볼 예정입니다.' },
+      { id: 'insight-benchmark', label: '벤치마크 리포트', status: 'soon', summary: '채널별 벤치마크 분석을 준비 중입니다.' },
+    ],
+  },
+];
+
 export default function App() {
   const [apiKey, setApiKey] = useState('');
   
@@ -68,6 +138,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'scrapbook'
   const [viewMode, setViewMode] = useState('card'); // 'card' or 'list'
   const [showWorkPanel, setShowWorkPanel] = useState(false);
+  const [creatorView, setCreatorView] = useState('home');
   
   const [checkedVideos, setCheckedVideos] = useState([]);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
@@ -490,8 +561,47 @@ export default function App() {
     setTimeout(() => setCopiedPrompt(false), 3000);
   };
 
+  const creatorItems = CREATOR_OS_PRODUCT_MAP.flatMap(section => section.items.map(item => ({ ...item, sectionTitle: section.title })));
+  const activeCreatorItem = creatorItems.find(item => item.id === creatorView) || creatorItems[0];
+  const readyCreatorViews = ['vault-all', 'vault-videos', 'vault-channels', 'studio-candidates', 'studio-scrapbook', 'ops-channels', 'ops-add-channel', 'ops-selected-scan'];
+  const channelCreatorViews = ['vault-channels', 'ops-channels', 'ops-add-channel', 'ops-selected-scan'];
+  const scrapbookCreatorViews = ['studio-candidates', 'studio-scrapbook'];
+  const isHomeView = creatorView === 'home';
+  const isComingSoonView = activeCreatorItem?.status === 'soon';
+  const isLegacyWorkspaceView = readyCreatorViews.includes(creatorView);
+  const latestScannedAt = savedChannels.reduce((latest, channel) => {
+    const value = channel.lastScanSummary?.scannedAt || channel.lastScannedAt;
+    if (!value) return latest;
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return latest;
+    return !latest || date > latest ? date : latest;
+  }, null);
+  const latestScanText = latestScannedAt ? formatRelativeTime(latestScannedAt) : '수집 기록 없음';
+  const ttoTtoAssetCount = videos.filter(v => v.daysOld >= 180 && v.multiplier >= 1.5).length;
+
+  const openCreatorView = (item) => {
+    setCreatorView(item.id);
+
+    if (channelCreatorViews.includes(item.id)) {
+      setActiveTab('dashboard');
+      setShowWorkPanel(true);
+      return;
+    }
+
+    if (scrapbookCreatorViews.includes(item.id)) {
+      setActiveTab('scrapbook');
+      setShowWorkPanel(false);
+      return;
+    }
+
+    if (item.id === 'vault-all' || item.id === 'vault-videos') {
+      setActiveTab('dashboard');
+      setShowWorkPanel(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] p-4 md:p-6 font-sans text-slate-800">
+    <div className="min-h-screen bg-slate-950 p-4 md:p-6 font-sans text-slate-100">
       
       {/* 댓글 모달창 */}
       {commentModal.isOpen && (
@@ -584,6 +694,162 @@ export default function App() {
         </div>
       )}
 
+      <div className="mx-auto flex w-full max-w-[2600px] flex-col gap-4 xl:flex-row">
+        <aside className="xl:sticky xl:top-6 xl:h-[calc(100vh-48px)] xl:w-[340px] shrink-0 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/95 p-4 shadow-2xl shadow-slate-950/40">
+          <div className="mb-5 rounded-2xl border border-indigo-400/20 bg-gradient-to-br from-slate-950 to-indigo-950/80 p-4 text-white">
+            <p className="text-xs font-bold uppercase tracking-wide text-indigo-200">Creator OS</p>
+            <h1 className="mt-1 text-xl font-extrabold">타임머신 CRM</h1>
+            <p className="mt-2 text-xs leading-relaxed text-slate-300">수집한 레퍼런스를 다시 터질 소재로 바꾸는 운영 지도입니다.</p>
+          </div>
+
+          <div className="space-y-4">
+            {CREATOR_OS_PRODUCT_MAP.map(section => (
+              <div key={section.title}>
+                <div className="mb-2 px-1">
+                  <p className="text-[11px] font-extrabold text-slate-100">{section.title}</p>
+                  <p className="text-[10px] leading-snug text-slate-500">{section.description}</p>
+                </div>
+                <div className="space-y-1">
+                  {section.items.map(item => {
+                    const isActive = creatorView === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => openCreatorView(item)}
+                        className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${isActive ? 'border-indigo-400/60 bg-indigo-500/15 text-white shadow-sm' : 'border-transparent text-slate-400 hover:border-slate-700 hover:bg-slate-800/70 hover:text-slate-100'}`}
+                      >
+                        <span className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-bold">{item.label}</span>
+                          {item.status === 'soon' && (
+                            <span className="shrink-0 rounded-full border border-slate-700 bg-slate-950/70 px-1.5 py-0.5 text-[9px] font-bold text-slate-400">준비중</span>
+                          )}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        <div className="min-w-0 flex-1 space-y-4">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-xl shadow-slate-950/30">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-xs font-bold text-indigo-300">{activeCreatorItem?.sectionTitle}</p>
+                <h2 className="mt-1 text-2xl font-extrabold text-white">{activeCreatorItem?.label}</h2>
+                <p className="mt-1 text-sm text-slate-400">{activeCreatorItem?.summary}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
+                  <p className="text-xl font-extrabold text-white">{savedChannels.length}</p>
+                  <p className="text-[10px] font-semibold text-slate-500">채널</p>
+                </div>
+                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
+                  <p className="text-xl font-extrabold text-white">{videos.length}</p>
+                  <p className="text-[10px] font-semibold text-slate-500">영상</p>
+                </div>
+                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
+                  <p className="text-xl font-extrabold text-white">{selectedChannelIds.length}</p>
+                  <p className="text-[10px] font-semibold text-slate-500">선택 채널</p>
+                </div>
+                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
+                  <p className="text-xl font-extrabold text-white">{savedVideos.length}</p>
+                  <p className="text-[10px] font-semibold text-slate-500">제작 후보</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {isHomeView ? (
+            <div className="grid grid-cols-1 gap-4 2xl:grid-cols-[1.2fr_0.8fr]">
+              <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl shadow-slate-950/30">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-2xl bg-indigo-500/15 p-4">
+                    <Sparkles className="h-8 w-8 text-indigo-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-extrabold text-indigo-300">오늘의 레이더</p>
+                    <h3 className="mt-1 text-2xl font-extrabold text-white">오늘 볼 소재와 다음 행동을 먼저 정합니다</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-400">발굴 → 수집 → 보관 → 분석 → 제작 → 축적 흐름으로 레퍼런스 자산을 운영합니다.</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                    <p className="text-[11px] font-bold text-slate-500">저장된 채널</p>
+                    <p className="mt-2 text-3xl font-extrabold text-white">{savedChannels.length}</p>
+                    <p className="mt-1 text-xs text-slate-400">레퍼런스를 모으는 채널 자산</p>
+                  </div>
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                    <p className="text-[11px] font-bold text-slate-500">불러온 영상</p>
+                    <p className="mt-2 text-3xl font-extrabold text-white">{videos.length}</p>
+                    <p className="mt-1 text-xs text-slate-400">현재 보드에 올라온 영상</p>
+                  </div>
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                    <p className="text-[11px] font-bold text-slate-500">스크랩 소재</p>
+                    <p className="mt-2 text-3xl font-extrabold text-white">{savedVideos.length}</p>
+                    <p className="mt-1 text-xs text-slate-400">제작 후보로 남긴 영상</p>
+                  </div>
+                  <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/30 p-4">
+                    <p className="text-[11px] font-bold text-emerald-300">최근 수집 상태</p>
+                    <p className="mt-2 text-lg font-extrabold text-white">{latestScanText}</p>
+                    <p className="mt-1 text-xs text-emerald-100/70">채널의 마지막 수집 기록 기준</p>
+                  </div>
+                  <div className="rounded-2xl border border-rose-500/20 bg-rose-950/30 p-4">
+                    <p className="text-[11px] font-bold text-rose-300">또터또 후보</p>
+                    <p className="mt-2 text-3xl font-extrabold text-white">{ttoTtoAssetCount}</p>
+                    <p className="mt-1 text-xs text-rose-100/70">오래됐지만 반응이 강한 영상</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
+                  <button onClick={() => openCreatorView({ id: 'ops-add-channel' })} className="rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-indigo-300/40">
+                    <p className="text-sm font-extrabold text-indigo-200">1. 새 채널 등록</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400">소재를 모을 채널을 먼저 클라우드 목록에 저장합니다.</p>
+                  </button>
+                  <button onClick={() => openCreatorView({ id: 'ops-selected-scan' })} className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-emerald-300/40">
+                    <p className="text-sm font-extrabold text-emerald-200">2. 선택 채널 수집</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400">체크한 채널만 YouTube API로 새 영상 여부를 확인합니다.</p>
+                  </button>
+                  <button onClick={() => openCreatorView({ id: 'vault-all' })} className="rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-300/40">
+                    <p className="text-sm font-extrabold text-blue-200">3. 보관함 탐색</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400">저장된 영상 보드에서 카드 보기와 리스트 보기로 후보를 고릅니다.</p>
+                  </button>
+                </div>
+              </section>
+
+              <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl shadow-slate-950/30">
+                <p className="text-sm font-extrabold text-white">운영 기준</p>
+                <div className="mt-4 space-y-3 text-sm text-slate-400">
+                  <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4">
+                    <p className="font-bold text-emerald-200">수집은 API 호출</p>
+                    <p className="mt-1 text-xs leading-relaxed">새 영상 수집은 YouTube API를 호출합니다. 필요한 채널만 체크해서 실행하세요.</p>
+                  </div>
+                  <div className="rounded-xl border border-blue-400/20 bg-blue-500/10 p-4">
+                    <p className="font-bold text-blue-200">불러오기는 저장 데이터 조회</p>
+                    <p className="mt-1 text-xs leading-relaxed">저장된 영상 불러오기는 이미 DB에 있는 영상만 보여줍니다.</p>
+                  </div>
+                  <div className="rounded-xl border border-orange-400/20 bg-orange-500/10 p-4">
+                    <p className="font-bold text-orange-200">또터또 기준</p>
+                    <p className="mt-1 text-xs leading-relaxed">오래됐지만 채널 평균보다 반응이 강한 영상을 우선 확인합니다.</p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          ) : isComingSoonView ? (
+            <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/90 p-10 text-center shadow-xl shadow-slate-950/30">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-800">
+                <Settings className="h-8 w-8 text-slate-400" />
+              </div>
+              <p className="mt-5 text-sm font-extrabold text-indigo-300">{activeCreatorItem?.sectionTitle}</p>
+              <h3 className="mt-2 text-2xl font-extrabold text-white">{activeCreatorItem?.label} 준비중</h3>
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-400">{activeCreatorItem?.summary}</p>
+              <p className="mx-auto mt-4 max-w-xl rounded-xl border border-amber-400/20 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100">이 화면은 안내 전용입니다. 클릭해도 새 API 호출, DB 변경, localStorage 삭제가 발생하지 않습니다.</p>
+            </div>
+          ) : isLegacyWorkspaceView ? (
       <div className={`w-full mx-auto grid grid-cols-1 gap-6 ${showWorkPanel ? 'max-w-[2100px] xl:grid-cols-[420px_minmax(0,1fr)] 2xl:grid-cols-[440px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
         
         {/* ================= 좌측: CRM 패널 ================= */}
@@ -1336,6 +1602,9 @@ export default function App() {
             </div>
           </div>
         </aside>
+      </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
