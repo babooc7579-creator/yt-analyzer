@@ -21,7 +21,7 @@ const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
       { id: 'discovery-trends', label: '트렌드 스캐너', status: 'soon', summary: '외부 트렌드와 급상승 신호를 연결할 예정입니다.' },
-      { id: 'discovery-ttotto', label: '또터또 탐색', status: 'soon', summary: '오래됐지만 다시 터질 후보를 전용 화면으로 분리할 예정입니다.' },
+      { id: 'discovery-ttotto', label: '터또터 탐색', status: 'soon', summary: '시간이 지나 노출이 멈춘 검증된 후보를 전용 화면으로 분리할 예정입니다.' },
       { id: 'discovery-keywords', label: '키워드 탐색', status: 'soon', summary: '키워드별 소재 흐름을 모아볼 예정입니다.' },
       { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'soon', summary: '오늘 다시 확인할 채널 묶음을 준비 중입니다.' },
     ],
@@ -444,7 +444,7 @@ export default function App() {
 
       const totalNew = (data.results || []).reduce((sum, r) => sum + (r.newVideosFound || 0), 0);
       const ttoTtoCount = (data.results || []).reduce((sum, r) => sum + (r.ttoTtoCandidates?.length || 0), 0);
-      setProgressMsg(`스캔 완료! 신규 영상 ${totalNew}개 발견${ttoTtoCount > 0 ? `, 또터또 후보 ${ttoTtoCount}개 발견!` : ''}`);
+      setProgressMsg(`스캔 완료! 신규 영상 ${totalNew}개 발견${ttoTtoCount > 0 ? `, 터또터 후보 ${ttoTtoCount}개 발견!` : ''}`);
 
       await loadChannelsFromCloud(); // 채널 통계(구독자/평균조회수 등)도 같이 갱신됐으니 새로고침
       // 지금 선택된 채널이 있으면 화면 데이터도 같이 새로고침
@@ -569,6 +569,7 @@ export default function App() {
   const isHomeView = creatorView === 'home';
   const isComingSoonView = activeCreatorItem?.status === 'soon';
   const isLegacyWorkspaceView = readyCreatorViews.includes(creatorView);
+  const isReferenceVaultView = creatorView === 'vault-all' || creatorView === 'vault-videos';
   const latestScannedAt = savedChannels.reduce((latest, channel) => {
     const value = channel.lastScanSummary?.scannedAt || channel.lastScannedAt;
     if (!value) return latest;
@@ -578,6 +579,7 @@ export default function App() {
   }, null);
   const latestScanText = latestScannedAt ? formatRelativeTime(latestScannedAt) : '수집 기록 없음';
   const ttoTtoAssetCount = videos.filter(v => v.daysOld >= 180 && v.multiplier >= 1.5).length;
+  const visibleScrapCount = videos.filter(v => isVideoSaved(v.videoId)).length;
 
   const openCreatorView = (item) => {
     setCreatorView(item.id);
@@ -695,21 +697,21 @@ export default function App() {
       )}
 
       <div className="mx-auto flex w-full max-w-[2600px] flex-col gap-4 xl:flex-row">
-        <aside className="xl:sticky xl:top-6 xl:h-[calc(100vh-48px)] xl:w-[340px] shrink-0 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/95 p-4 shadow-2xl shadow-slate-950/40">
+        <aside className="xl:sticky xl:top-6 xl:h-[calc(100vh-48px)] xl:w-[350px] shrink-0 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/95 p-4 shadow-2xl shadow-slate-950/40 [scrollbar-color:#334155_transparent] [scrollbar-width:thin]">
           <div className="mb-5 rounded-2xl border border-indigo-400/20 bg-gradient-to-br from-slate-950 to-indigo-950/80 p-4 text-white">
-            <p className="text-xs font-bold uppercase tracking-wide text-indigo-200">Creator OS</p>
-            <h1 className="mt-1 text-xl font-extrabold">타임머신 CRM</h1>
-            <p className="mt-2 text-xs leading-relaxed text-slate-300">수집한 레퍼런스를 다시 터질 소재로 바꾸는 운영 지도입니다.</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-200">타임머신 CRM</p>
+            <h1 className="mt-1 text-2xl font-extrabold tracking-tight">Creator OS</h1>
+            <p className="mt-2 text-xs leading-relaxed text-slate-300">유튜브 레퍼런스를 발굴하고 제작 자산으로 축적하는 지휘실입니다.</p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-5">
             {CREATOR_OS_PRODUCT_MAP.map(section => (
               <div key={section.title}>
-                <div className="mb-2 px-1">
-                  <p className="text-[11px] font-extrabold text-slate-100">{section.title}</p>
+                <div className="mb-2.5 px-1">
+                  <p className="text-[11px] font-extrabold tracking-wide text-slate-100">{section.title}</p>
                   <p className="text-[10px] leading-snug text-slate-500">{section.description}</p>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {section.items.map(item => {
                     const isActive = creatorView === item.id;
                     return (
@@ -717,12 +719,12 @@ export default function App() {
                         key={item.id}
                         type="button"
                         onClick={() => openCreatorView(item)}
-                        className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${isActive ? 'border-indigo-400/60 bg-indigo-500/15 text-white shadow-sm' : 'border-transparent text-slate-400 hover:border-slate-700 hover:bg-slate-800/70 hover:text-slate-100'}`}
+                        className={`w-full rounded-xl border px-3 py-2.5 text-left transition-all ${isActive ? 'border-indigo-400/60 bg-indigo-500/15 text-white shadow-[inset_3px_0_0_rgba(129,140,248,0.9)]' : 'border-transparent text-slate-400 hover:border-slate-700 hover:bg-slate-800/70 hover:text-slate-100'}`}
                       >
                         <span className="flex items-center justify-between gap-2">
                           <span className="text-xs font-bold">{item.label}</span>
                           {item.status === 'soon' && (
-                            <span className="shrink-0 rounded-full border border-slate-700 bg-slate-950/70 px-1.5 py-0.5 text-[9px] font-bold text-slate-400">준비중</span>
+                            <span className="shrink-0 rounded-full border border-slate-700/70 bg-slate-950/40 px-1.5 py-0.5 text-[8px] font-bold text-slate-500">준비중</span>
                           )}
                         </span>
                       </button>
@@ -799,24 +801,36 @@ export default function App() {
                     <p className="mt-1 text-xs text-emerald-100/70">채널의 마지막 수집 기록 기준</p>
                   </div>
                   <div className="rounded-2xl border border-rose-500/20 bg-rose-950/30 p-4">
-                    <p className="text-[11px] font-bold text-rose-300">또터또 후보</p>
+                    <p className="text-[11px] font-bold text-rose-300">터또터 후보</p>
                     <p className="mt-2 text-3xl font-extrabold text-white">{ttoTtoAssetCount}</p>
-                    <p className="mt-1 text-xs text-rose-100/70">오래됐지만 반응이 강한 영상</p>
+                    <p className="mt-1 text-xs text-rose-100/70">노출이 멈춘 검증된 영상</p>
                   </div>
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
-                  <button onClick={() => openCreatorView({ id: 'ops-add-channel' })} className="rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-indigo-300/40">
-                    <p className="text-sm font-extrabold text-indigo-200">1. 새 채널 등록</p>
+                  <button onClick={() => openCreatorView({ id: 'ops-add-channel' })} className="group rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-indigo-300/50 hover:bg-indigo-500/15">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-extrabold text-indigo-200">1. 새 채널 등록</p>
+                      <Plus className="h-4 w-4 text-indigo-300 transition-transform group-hover:scale-110" />
+                    </div>
                     <p className="mt-2 text-xs leading-relaxed text-slate-400">소재를 모을 채널을 먼저 클라우드 목록에 저장합니다.</p>
+                    <p className="mt-3 text-[10px] font-bold text-indigo-300">오퍼레이션 관제로 이동</p>
                   </button>
-                  <button onClick={() => openCreatorView({ id: 'ops-selected-scan' })} className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-emerald-300/40">
-                    <p className="text-sm font-extrabold text-emerald-200">2. 선택 채널 수집</p>
+                  <button onClick={() => openCreatorView({ id: 'ops-selected-scan' })} className="group rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-emerald-300/50 hover:bg-emerald-500/15">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-extrabold text-emerald-200">2. 선택 채널 수집</p>
+                      <RefreshCw className="h-4 w-4 text-emerald-300 transition-transform group-hover:rotate-45" />
+                    </div>
                     <p className="mt-2 text-xs leading-relaxed text-slate-400">체크한 채널만 YouTube API로 새 영상 여부를 확인합니다.</p>
+                    <p className="mt-3 text-[10px] font-bold text-emerald-300">수집 범위 직접 통제</p>
                   </button>
-                  <button onClick={() => openCreatorView({ id: 'vault-all' })} className="rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-300/40">
-                    <p className="text-sm font-extrabold text-blue-200">3. 보관함 탐색</p>
+                  <button onClick={() => openCreatorView({ id: 'vault-all' })} className="group rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-300/50 hover:bg-blue-500/15">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm font-extrabold text-blue-200">3. 보관함 탐색</p>
+                      <Bookmark className="h-4 w-4 text-blue-300 transition-transform group-hover:scale-110" />
+                    </div>
                     <p className="mt-2 text-xs leading-relaxed text-slate-400">저장된 영상 보드에서 카드 보기와 리스트 보기로 후보를 고릅니다.</p>
+                    <p className="mt-3 text-[10px] font-bold text-blue-300">레퍼런스 금고 열기</p>
                   </button>
                 </div>
               </section>
@@ -833,8 +847,8 @@ export default function App() {
                     <p className="mt-1 text-xs leading-relaxed">저장된 영상 불러오기는 이미 DB에 있는 영상만 보여줍니다.</p>
                   </div>
                   <div className="rounded-xl border border-orange-400/20 bg-orange-500/10 p-4">
-                    <p className="font-bold text-orange-200">또터또 기준</p>
-                    <p className="mt-1 text-xs leading-relaxed">오래됐지만 채널 평균보다 반응이 강한 영상을 우선 확인합니다.</p>
+                    <p className="font-bold text-orange-200">터또터 기준</p>
+                    <p className="mt-1 text-xs leading-relaxed">한 번 반응이 검증된 영상을 재편집해 다시 살릴 후보를 우선 확인합니다.</p>
                   </div>
                 </div>
               </section>
@@ -850,11 +864,11 @@ export default function App() {
               <p className="mx-auto mt-4 max-w-xl rounded-xl border border-amber-400/20 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100">이 화면은 안내 전용입니다. 클릭해도 새 API 호출, DB 변경, localStorage 삭제가 발생하지 않습니다.</p>
             </div>
           ) : isLegacyWorkspaceView ? (
-      <div className={`w-full mx-auto grid grid-cols-1 gap-6 ${showWorkPanel ? 'max-w-[2100px] xl:grid-cols-[420px_minmax(0,1fr)] 2xl:grid-cols-[440px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
+      <div className={`w-full mx-auto grid grid-cols-1 gap-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 ${showWorkPanel ? 'max-w-[2100px] xl:grid-cols-[420px_minmax(0,1fr)] 2xl:grid-cols-[440px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
         
         {/* ================= 좌측: CRM 패널 ================= */}
         <div className={`space-y-4 ${showWorkPanel ? '' : 'hidden'}`}>
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+          <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-5">
             <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
             </h1>
@@ -1168,30 +1182,74 @@ export default function App() {
 
           {activeTab === 'dashboard' ? (
             <>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                  <div className="flex items-start gap-4">
-                    <RefreshCw className="w-5 h-5 text-emerald-600 mt-0.5" />
+              {isReferenceVaultView ? (
+                <div className="overflow-hidden rounded-2xl border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-200 shadow-sm">
+                  <div className="flex flex-col gap-5 p-5 xl:flex-row xl:items-end xl:justify-between">
                     <div>
-                      <p className="text-sm font-extrabold text-emerald-800">유튜브 새 영상 수집</p>
-                      <p className="text-xs text-slate-600 mt-1">YouTube API를 호출해 신규 영상을 확인합니다. 새 영상이 필요할 때만 실행하세요.</p>
+                      <p className="text-xs font-extrabold text-indigo-700">Reference Vault</p>
+                      <h3 className="mt-1 text-2xl font-extrabold text-slate-950">레퍼런스 금고</h3>
+                      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">저장된 영상과 스크랩 소재를 한 곳에서 훑고, 제작에 활용할 후보를 고르는 작업 캔버스입니다.</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 md:grid-cols-5">
+                      <div className="rounded-xl border border-slate-300 bg-white/80 px-4 py-3">
+                        <p className="text-[10px] font-bold text-slate-400">불러온 영상</p>
+                        <p className="mt-1 text-xl font-extrabold text-slate-900">{videos.length}</p>
+                      </div>
+                      <div className="rounded-xl border border-slate-300 bg-white/80 px-4 py-3">
+                        <p className="text-[10px] font-bold text-slate-400">저장 채널</p>
+                        <p className="mt-1 text-xl font-extrabold text-slate-900">{savedChannels.length}</p>
+                      </div>
+                      <div className="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3">
+                        <p className="text-[10px] font-bold text-yellow-600">스크랩 소재</p>
+                        <p className="mt-1 text-xl font-extrabold text-slate-900">{savedVideos.length}</p>
+                      </div>
+                      <div className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3">
+                        <p className="text-[10px] font-bold text-indigo-600">현재 보드 스크랩</p>
+                        <p className="mt-1 text-xl font-extrabold text-slate-900">{visibleScrapCount}</p>
+                      </div>
+                      <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
+                        <p className="text-[10px] font-bold text-rose-600">터또터 후보</p>
+                        <p className="mt-1 text-xl font-extrabold text-slate-900">{ttoTtoAssetCount}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                  <div className="flex items-start gap-4">
-                    <Play className="w-5 h-5 text-blue-600 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-extrabold text-blue-800">저장된 영상 불러오기</p>
-                      <p className="text-xs text-slate-600 mt-1">클라우드에 이미 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.</p>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                    <div className="flex items-start gap-4">
+                      <RefreshCw className="w-5 h-5 text-emerald-600 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-extrabold text-emerald-800">유튜브 새 영상 수집</p>
+                        <p className="text-xs text-slate-600 mt-1">YouTube API를 호출해 신규 영상을 확인합니다. 새 영상이 필요할 때만 실행하세요.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                    <div className="flex items-start gap-4">
+                      <Play className="w-5 h-5 text-blue-600 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-extrabold text-blue-800">저장된 영상 불러오기</p>
+                        <p className="text-xs text-slate-600 mt-1">클라우드에 이미 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* 컨트롤 바 */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex flex-col 2xl:flex-row gap-4 justify-between items-center z-20">
-                <div className="flex flex-wrap items-center gap-3 w-full 2xl:w-auto">
+              <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-4 flex flex-col 2xl:flex-row gap-4 justify-between items-stretch z-20">
+                <div className="flex flex-col gap-3 min-w-0 flex-1">
+                  {isReferenceVaultView && (
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <p className="text-xs font-extrabold text-slate-900">보관함 도구막대</p>
+                        <p className="text-[11px] text-slate-500">검색, 필터, 정렬, 보기 방식을 바꿔 제작 소재를 좁혀봅니다.</p>
+                      </div>
+                      <p className="text-[10px] font-semibold text-slate-500">현재 표시 {filteredAndSortedVideos.length}개 / 전체 {videos.length}개</p>
+                    </div>
+                  )}
+                  <div className="flex flex-wrap items-center gap-3 w-full">
                   <div className="relative">
                     <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} placeholder="제목 검색..." className="pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm w-56 focus:ring-2 focus:ring-indigo-500 outline-none" />
@@ -1228,18 +1286,19 @@ export default function App() {
                   >
                     {showWorkPanel ? '작업 패널 닫기' : '작업 패널 열기'}
                   </button>
+                  </div>
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50 px-3 py-3 2xl:max-w-[520px]">
                   <button
                     onClick={handleManualScan}
                     disabled={isScanning}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-bold transition-all shadow-sm ${isScanning ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
+                    className={`shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm ${isScanning ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
                   >
                     {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCw className="w-5 h-5" />}
                     {isScanning ? '새 영상 수집 중...' : selectedChannelIds.length > 0 ? `선택 채널 새 영상 수집 (${selectedChannelIds.length}개)` : '전체 채널 새 영상 수집'}
                   </button>
-                  <p className="max-w-[240px] text-[10px] leading-snug text-slate-500">
+                  <p className="max-w-[260px] text-[10px] leading-snug text-slate-600">
                     {selectedChannelIds.length > 0
                       ? '체크한 채널만 YouTube API로 새 영상 여부를 확인합니다. 체크하지 않은 채널은 수집하지 않습니다.'
                       : '선택한 채널이 없으면 전체 채널을 YouTube API로 확인합니다. 특정 채널만 수집하려면 먼저 채널을 체크하세요.'}
@@ -1251,7 +1310,7 @@ export default function App() {
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl font-extrabold transition-all duration-300 shadow-sm ${ttoTtoMode ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-rose-200 ring-2 ring-rose-200 ring-offset-1 scale-105' : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200'}`}
                 >
                   <Rocket className={`w-5 h-5 ${ttoTtoMode ? 'animate-bounce' : ''}`} />
-                  또터또 발굴 (6개월+)
+                  터또터 발굴 (6개월+)
                 </button>
               </div>
 
@@ -1269,26 +1328,26 @@ export default function App() {
               )}
 
               {/* 데이터 테이블 */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
+              <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
                 <p className="px-4 pt-3 text-[10px] text-slate-500">댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.</p>
                 {videos.length === 0 ? (
                   <div className="flex-1 flex items-center justify-center p-6 bg-slate-50">
                     <div className="w-full max-w-5xl bg-white border border-slate-200 rounded-2xl shadow-sm p-8 text-center">
-                      <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-5"><Youtube className="w-10 h-10 text-indigo-400" /></div>
-                      <h3 className="text-2xl font-extrabold text-slate-800 mb-2">아직 볼 영상 데이터가 없습니다</h3>
-                      <p className="text-sm text-slate-500 mb-6">아래 순서대로 진행하면 소재 발굴 화면에 영상이 표시됩니다.</p>
+                      <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-5"><Bookmark className="w-10 h-10 text-indigo-400" /></div>
+                      <h3 className="text-2xl font-extrabold text-slate-800 mb-2">레퍼런스 금고가 비어 있습니다</h3>
+                      <p className="text-sm text-slate-500 mb-6">채널을 저장하고, 필요한 경우 새 영상을 수집한 뒤, 저장된 데이터를 불러오면 금고에 제작 소재가 쌓입니다.</p>
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-left">
                         <div className="border border-indigo-100 bg-indigo-50/60 rounded-xl p-4">
                           <p className="text-sm font-bold text-indigo-800">1. 채널 저장</p>
-                          <p className="text-xs text-slate-600 mt-2">왼쪽에서 채널을 미리보기한 뒤 클라우드 목록에 저장합니다.</p>
+                          <p className="text-xs text-slate-600 mt-2">작업 패널에서 채널을 미리보기한 뒤 클라우드 목록에 저장합니다.</p>
                         </div>
                         <div className="border border-emerald-100 bg-emerald-50 rounded-xl p-4">
                           <p className="text-sm font-bold text-emerald-800">2. 새 영상 수집</p>
-                          <p className="text-xs text-slate-600 mt-2">새 데이터가 필요하면 “유튜브 새 영상 수집”을 실행합니다. YouTube API를 호출합니다.</p>
+                          <p className="text-xs text-slate-600 mt-2">새 데이터가 필요할 때만 실행합니다. 이 단계는 YouTube API를 호출합니다.</p>
                         </div>
                         <div className="border border-blue-100 bg-blue-50 rounded-xl p-4">
                           <p className="text-sm font-bold text-blue-800">3. 저장 데이터 조회</p>
-                          <p className="text-xs text-slate-600 mt-2">저장된 데이터만 보려면 “저장된 영상 불러오기”를 누릅니다.</p>
+                          <p className="text-xs text-slate-600 mt-2">“저장된 영상 불러오기”는 DB에 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.</p>
                         </div>
                       </div>
                     </div>
@@ -1302,7 +1361,7 @@ export default function App() {
                     </div>
                   </div>
                 ) : viewMode === 'card' ? (
-                  <div className={`flex-1 overflow-y-auto bg-slate-50 ${showWorkPanel ? 'p-5' : 'p-6'}`}>
+                  <div className={`flex-1 overflow-y-auto bg-slate-100 ${showWorkPanel ? 'p-5' : 'p-6'}`}>
                     <div className={`grid gap-6 ${showWorkPanel ? 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2300px]:grid-cols-5'}`}>
                       {filteredAndSortedVideos.map((v, index) => (
                         <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
@@ -1314,7 +1373,7 @@ export default function App() {
                               <span className="rounded-full bg-black/75 px-2.5 py-1 text-xs font-extrabold text-white">#{index + 1}</span>
                               {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
                                 <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-xs font-extrabold text-white shadow-sm">
-                                  <Rocket className="w-3 h-3" /> 또터또 후보
+                                  <Rocket className="w-3 h-3" /> 터또터 후보
                                 </span>
                               )}
                               {v.multiplier >= 3 && (
@@ -1324,16 +1383,20 @@ export default function App() {
                               )}
                             </div>
                             <div className="absolute right-3 top-3 flex gap-2">
-                              <button onClick={() => toggleCheckVideo(v.videoId)} className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-indigo-50">
+                              <button onClick={() => toggleCheckVideo(v.videoId)} title="AI 리메이크 프롬프트에 포함할 제작 검토 후보로 선택" className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-indigo-50">
                                 {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-5 h-5 text-indigo-600" /> : <Square className="w-5 h-5 text-slate-400 hover:text-indigo-500" />}
                               </button>
-                              <button onClick={() => toggleScrapVideo(v)} className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-yellow-50">
+                              <button onClick={() => toggleScrapVideo(v)} title="스크랩 소재로 저장/해제" className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-yellow-50">
                                 <Star className={`w-5 h-5 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-400 group-hover:text-yellow-400'}`} />
                               </button>
                             </div>
                           </div>
                           <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
                             <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600">{v.title}</a>
+                            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                              {isVideoSaved(v.videoId) && <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700">스크랩 소재</span>}
+                              {checkedVideos.includes(v.videoId) && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">AI 리메이크 검토</span>}
+                            </div>
                             <div className="mt-3 flex flex-wrap items-center gap-2">
                               <span className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
                               {v.isShorts ? (
@@ -1373,8 +1436,8 @@ export default function App() {
                     <table className="w-full text-sm text-left border-separate border-spacing-y-3">
                       <thead className="text-xs text-slate-500 uppercase bg-slate-100 sticky top-0 shadow-sm z-10">
                         <tr>
-                          <th className="px-3 py-3 text-center">선택</th>
-                          <th className="px-2 py-3 text-center">저장</th>
+                          <th className="px-3 py-3 text-center">AI 검토</th>
+                          <th className="px-2 py-3 text-center">스크랩</th>
                           <th className="px-3 py-3">영상 정보 (제목/길이/댓글)</th>
                           <th className="px-3 py-3 text-right">총 조회수</th>
                           <th className="px-3 py-3 text-right text-indigo-700 font-bold">대박지수</th>
@@ -1386,12 +1449,12 @@ export default function App() {
                         {filteredAndSortedVideos.map((v) => (
                             <tr key={v.videoId} className={`group transition-all ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50 ring-1 ring-indigo-200' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'bg-rose-50/70 ring-1 ring-rose-100 hover:ring-rose-200' : 'bg-white hover:bg-slate-50 ring-1 ring-slate-100 hover:ring-slate-200'}`}>
                               <td className="px-4 py-5 text-center rounded-l-2xl">
-                                <button onClick={() => toggleCheckVideo(v.videoId)} className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors">
+                                <button onClick={() => toggleCheckVideo(v.videoId)} title="AI 리메이크 프롬프트에 포함할 제작 검토 후보로 선택" className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors">
                                   {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-6 h-6 text-indigo-600" /> : <Square className="w-6 h-6 text-slate-300 hover:text-indigo-400" />}
                                 </button>
                               </td>
                               <td className="px-2 py-5 text-center">
-                                <button onClick={() => toggleScrapVideo(v)} className="p-2 rounded-full hover:bg-yellow-100 transition-colors">
+                                <button onClick={() => toggleScrapVideo(v)} title="스크랩 소재로 저장/해제" className="p-2 rounded-full hover:bg-yellow-100 transition-colors">
                                   <Star className={`w-6 h-6 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
                                 </button>
                               </td>
@@ -1400,9 +1463,19 @@ export default function App() {
                                   <img src={v.thumbnail} alt="" className="w-36 h-20 object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 bg-slate-100" />
                                   <div className="flex flex-col justify-center min-w-0">
                                     <div className="flex flex-wrap items-center gap-2 mb-2">
+                                      {isVideoSaved(v.videoId) && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-[10px] font-bold text-yellow-700">
+                                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-500" /> 스크랩 소재
+                                        </span>
+                                      )}
+                                      {checkedVideos.includes(v.videoId) && (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold text-indigo-700">
+                                          <CheckSquare className="w-3 h-3" /> AI 리메이크 검토
+                                        </span>
+                                      )}
                                       {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
                                         <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-sm">
-                                          <Rocket className="w-3 h-3" /> 또터또 후보
+                                          <Rocket className="w-3 h-3" /> 터또터 후보
                                         </span>
                                       )}
                                       {v.multiplier >= 3 && (
@@ -1464,7 +1537,7 @@ export default function App() {
               </div>
             </>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
+            <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
                   <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
@@ -1594,7 +1667,7 @@ export default function App() {
           </div>
 
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
-            <p className="text-sm font-extrabold text-slate-900 mb-3">또터또 발굴 기준</p>
+            <p className="text-sm font-extrabold text-slate-900 mb-3">터또터 발굴 기준</p>
             <div className="space-y-2 text-[11px] text-slate-600">
               <p>업로드 후 6개월 이상 지난 영상</p>
               <p>채널 평균보다 반응이 컸던 영상</p>
