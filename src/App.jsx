@@ -576,7 +576,7 @@ export default function App() {
         </div>
       )}
 
-      <div className={`w-full mx-auto grid grid-cols-1 gap-6 ${showWorkPanel ? 'max-w-[1920px] xl:grid-cols-[380px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
+      <div className={`w-full mx-auto grid grid-cols-1 gap-6 ${showWorkPanel ? 'max-w-[2100px] xl:grid-cols-[420px_minmax(0,1fr)] 2xl:grid-cols-[440px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
         
         {/* ================= 좌측: CRM 패널 ================= */}
         <div className={`space-y-4 ${showWorkPanel ? '' : 'hidden'}`}>
@@ -809,7 +809,7 @@ export default function App() {
             
             <hr className="my-4 border-slate-100" />
             
-            <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
+            <div className="space-y-3 max-h-[420px] xl:max-h-[520px] overflow-y-auto pr-1.5">
               {channelsLoading ? (
                 <p className="text-sm text-slate-400 text-center py-4 flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> 클라우드에서 채널 불러오는 중...</p>
               ) : savedChannels.filter(c => c.tags?.includes(selectedCategoryTab)).length === 0 ? (
@@ -822,14 +822,14 @@ export default function App() {
                 savedChannels.filter(c => c.tags?.includes(selectedCategoryTab)).map(channel => {
                   const scanDisplay = getChannelScanDisplay(channel);
                   return (
-                    <div key={channel.id} className={`flex items-start gap-2 p-2 rounded-xl border transition-all ${selectedChannelIds.includes(channel.id) ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
+                    <div key={channel.id} className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${selectedChannelIds.includes(channel.id) ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
                       <button onClick={() => toggleChannelSelection(channel.id)} className="text-indigo-600 focus:outline-none shrink-0 mt-1">
                         {selectedChannelIds.includes(channel.id) ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5 text-slate-300" />}
                       </button>
-                      <img src={channel.thumbnail} alt="" className="w-7 h-7 rounded-full border border-slate-200 shrink-0 mt-1" />
+                      <img src={channel.thumbnail} alt="" className="w-9 h-9 rounded-full border border-slate-200 shrink-0 mt-1" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-slate-800 truncate" title={channel.title}>{channel.title}</p>
-                        <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                        <p className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2" title={channel.title}>{channel.title}</p>
+                        <div className="flex items-center gap-x-2 gap-y-1 flex-wrap mt-1">
                           <span className="text-[10px] font-medium text-slate-500">{LANGUAGES.find(l => l.code === channel.language)?.label}</span>
                           {channel.stats && (
                             <>
@@ -839,12 +839,12 @@ export default function App() {
                             </>
                           )}
                         </div>
-                        <div className="mt-1.5 rounded-lg bg-slate-50 border border-slate-100 px-2 py-1.5">
-                          <div className="flex items-center justify-between gap-2">
+                        <div className="mt-2 rounded-lg bg-slate-50 border border-slate-100 px-2.5 py-2">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
                             <span className="text-[10px] font-semibold text-slate-500">최근 수집: {scanDisplay.scannedText}</span>
-                            <span className={`shrink-0 rounded-full border px-1.5 py-0.5 text-[9px] font-bold ${scanDisplay.statusMeta.className}`}>{scanDisplay.statusMeta.label}</span>
+                            <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold ${scanDisplay.statusMeta.className}`}>{scanDisplay.statusMeta.label}</span>
                           </div>
-                          <p className="mt-0.5 truncate text-[10px] text-slate-500" title={scanDisplay.error || undefined}>
+                          <p className="mt-1 text-[10px] leading-snug text-slate-500 break-words" title={scanDisplay.error || undefined}>
                             {scanDisplay.hasSummary
                               ? `새 영상 ${scanDisplay.newVideosFound} · 갱신 ${scanDisplay.statsRefreshed}${scanDisplay.coverageRate ? ` · ${scanDisplay.coverageRate}` : ''}${scanDisplay.error ? ` · ${scanDisplay.error}` : ''}`
                               : '수집 요약 없음'}
