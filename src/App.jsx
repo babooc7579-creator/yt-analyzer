@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, CheckSquare, Square, Rocket, TrendingUp, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, Clock, ThumbsUp, MessageSquareText, X, Bookmark, RefreshCw } from 'lucide-react';
+import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
+import { createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, removeChannel, renameTag, saveScrapbookVideos, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest } from './services/functionApi';
+import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
+import { filterAndSortVideos, hasStrongReaction, isTtoTtoCandidate, mapCloudVideoToViewModel, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from './utils/video';
 
 const DEFAULT_CATEGORIES = ['해짜', '영화', '드라마', '역사', '정치', '지식/정보', '미분류1', '미분류2', '미분류3'];
-
-// ⚠️ Azure Portal > yt-analyzer-func > 개요 화면의 "기본 도메인" 값과 일치해야 합니다.
-const FUNCTION_API_BASE = 'https://yt-analyzer-func-hyd8hxbwb8gkephg.koreacentral-01.azurewebsites.net/api';
 
 const LANGUAGES = [
   { code: 'KR', label: '🇰🇷 KR', name: '한국어' },
@@ -89,7 +90,7 @@ export default function App() {
   
   // 상태 관리
   const [categories, setCategories] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('yt_crm_categories')) || DEFAULT_CATEGORIES; } catch { return DEFAULT_CATEGORIES; }
+    return readJsonStorage(STORAGE_KEYS.categories, DEFAULT_CATEGORIES) || DEFAULT_CATEGORIES;
   });
   const [newCategoryName, setNewCategoryName] = useState('');
   const [isEditingCategory, setIsEditingCategory] = useState(false);
@@ -98,8 +99,9 @@ export default function App() {
   const [channelsLoading, setChannelsLoading] = useState(true);
   const [isScanning, setIsScanning] = useState(false);
   const [savedVideos, setSavedVideos] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('yt_crm_saved_videos')) || []; } catch { return []; }
+    return readJsonStorage(STORAGE_KEYS.savedVideos, []) || [];
   });
+  const [scrapbookCloudReady, setScrapbookCloudReady] = useState(false);
   
   const [newChannelInput, setNewChannelInput] = useState('');
   const [newChannelTags, setNewChannelTags] = useState([]); // 여러 태그 선택 가능
@@ -146,15 +148,40 @@ export default function App() {
   const [commentModal, setCommentModal] = useState({ isOpen: false, videoTitle: '', comments: [], loading: false });
   const [notesModal, setNotesModal] = useState({ isOpen: false, channel: null, newNoteText: '', saving: false });
 
-  useEffect(() => { localStorage.setItem('yt_crm_categories', JSON.stringify(categories)); }, [categories]);
-  useEffect(() => { localStorage.setItem('yt_crm_saved_videos', JSON.stringify(savedVideos)); }, [savedVideos]);
+  useEffect(() => { writeJsonStorage(STORAGE_KEYS.categories, categories); }, [categories]);
+  useEffect(() => { writeJsonStorage(STORAGE_KEYS.savedVideos, savedVideos); }, [savedVideos]);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const syncScrapbookFromCloud = async () => {
+      const localSavedVideos = readJsonStorage(STORAGE_KEYS.savedVideos, []) || [];
+
+      try {
+        if (localSavedVideos.length > 0) {
+          await saveScrapbookVideos(localSavedVideos);
+        }
+
+        const data = await fetchScrapbook();
+        if (!data.success) throw new Error(data.error || '스크랩북을 불러오지 못했습니다.');
+        if (isCancelled) return;
+
+        setSavedVideos(data.videos || []);
+        setScrapbookCloudReady(true);
+      } catch {
+        if (!isCancelled) setScrapbookCloudReady(false);
+      }
+    };
+
+    syncScrapbookFromCloud();
+    return () => { isCancelled = true; };
+  }, []);
 
   // 채널 목록은 더 이상 브라우저에만 저장하지 않고, 클라우드(Cosmos DB)에서 불러옵니다.
   const loadChannelsFromCloud = async () => {
     setChannelsLoading(true);
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/channels`);
-      const data = await res.json();
+      const data = await fetchChannels();
       if (!data.success) throw new Error(data.error || '채널 목록을 불러오지 못했습니다.');
       setSavedChannels(data.channels || []);
     } catch (err) {
@@ -165,8 +192,6 @@ export default function App() {
   };
 
   useEffect(() => { loadChannelsFromCloud(); }, []);
-
-  const API_BASE = "https://www.googleapis.com/youtube/v3";
 
   const getDaysDiff = (uploadDate) => {
     const today = new Date();
@@ -255,8 +280,7 @@ export default function App() {
     if (!newChannelInput.trim()) return;
     setPreviewLoading(true); setError(''); setChannelPreview(null);
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/channel-preview?handle=${encodeURIComponent(newChannelInput.trim())}`);
-      const data = await res.json();
+      const data = await fetchChannelPreview(newChannelInput.trim());
       if (!data.success) throw new Error(data.error || '채널을 불러오지 못했습니다.');
 
       if (savedChannels.some(c => c.id === data.channel.id)) {
@@ -280,12 +304,7 @@ export default function App() {
     if (!channelPreview) return;
     setLoading(true); setError(''); setProgressMsg('채널 저장 중...');
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/channels`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ handle: newChannelInput.trim(), tags: newChannelTags, language: newChannelLang, note: newChannelNote }),
-      });
-      const data = await res.json();
+      const data = await createChannel({ handle: newChannelInput.trim(), tags: newChannelTags, language: newChannelLang, note: newChannelNote });
       if (!data.success) throw new Error(data.error || '채널 추가에 실패했습니다.');
 
       setSavedChannels(prev => [...prev, data.channel]);
@@ -308,12 +327,7 @@ export default function App() {
     setBulkLoading(true); setError(''); setBulkResult(null);
     setProgressMsg(`${handles.length}개 채널 일괄 등록 중... (채널 수에 따라 시간이 걸릴 수 있어요)`);
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/channels/bulk`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ handles, tags: newChannelTags, language: newChannelLang }),
-      });
-      const data = await res.json();
+      const data = await createChannelsBulk({ handles, tags: newChannelTags, language: newChannelLang });
       if (!data.success) throw new Error(data.error || '일괄 추가에 실패했습니다.');
 
       setBulkResult(data);
@@ -334,8 +348,7 @@ export default function App() {
 
   const deleteChannel = async (id, category) => {
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/channels/${id}?category=${encodeURIComponent(category)}`, { method: 'DELETE' });
-      const data = await res.json();
+      const data = await removeChannel({ id, category });
       if (!data.success) throw new Error(data.error || '채널 삭제에 실패했습니다.');
       setSavedChannels(prev => prev.filter(c => c.id !== id));
       setSelectedChannelIds(prev => prev.filter(cId => cId !== id));
@@ -356,12 +369,7 @@ export default function App() {
     setNotesModal(prev => ({ ...prev, saving: true }));
     try {
       const { id, category } = notesModal.channel;
-      const res = await fetch(`${FUNCTION_API_BASE}/channels/${id}/notes?category=${encodeURIComponent(category)}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
-      });
-      const data = await res.json();
+      const data = await createChannelNote({ id, category, text });
       if (!data.success) throw new Error(data.error || '기록 저장에 실패했습니다.');
 
       setSavedChannels(prev => prev.map(c => c.id === data.channel.id ? data.channel : c));
@@ -383,31 +391,13 @@ export default function App() {
     setProgressMsg('클라우드에 저장된 영상 데이터를 불러오는 중...');
 
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/videos?channelIds=${selectedChannelIds.join(',')}`);
-      const data = await res.json();
+      const data = await fetchStoredVideosByChannelIds(selectedChannelIds);
       if (!data.success) throw new Error(data.error || '영상 데이터를 불러오지 못했습니다.');
 
       // 백엔드 필드명(camelCase) -> 화면에서 쓰는 필드명으로 변환 + daysOld/views_per_day는 매번 새로 계산
-      const mapped = (data.videos || []).map(v => {
-        const daysOld = getDaysDiff(v.uploadDate);
-        return {
-          videoId: v.id,
-          title: v.title,
-          thumbnail: v.thumbnail,
-          upload_date: v.uploadDate,
-          channel_title: v.channelTitle,
-          channel_id: v.channelId,
-          language: v.language,
-          daysOld,
-          view_count: v.viewCount || 0,
-          like_count: v.likeCount || 0,
-          like_ratio: v.likeRatio || 0,
-          duration: v.duration || '00:00',
-          isShorts: v.isShorts || false,
-          multiplier: v.multiplier || 0,
-          views_per_day: Math.round((v.viewCount || 0) / daysOld),
-        };
-      });
+      const mapped = (data.videos || []).map((video) => (
+        mapCloudVideoToViewModel(video, getDaysDiff(video.uploadDate))
+      ));
 
       setVideos(mapped);
       if (mapped.length === 0) {
@@ -432,14 +422,9 @@ export default function App() {
     setIsScanning(true); setScanningTag(scanSelectedChannels ? 'SELECTED' : (tag || 'ALL')); setError('');
     setProgressMsg(`${scanSelectedChannels ? `선택 채널 ${channelIdsForScan.length}개` : tag ? `'${tag}' 태그 채널` : '전체 채널'} 새 영상 수집 중... (YouTube API 호출이 발생합니다)`);
     try {
-      const res = scanSelectedChannels
-        ? await fetch(`${FUNCTION_API_BASE}/scan/selected`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ channelIds: channelIdsForScan, reason: 'manual' }),
-        })
-        : await fetch(tag ? `${FUNCTION_API_BASE}/scan?tag=${encodeURIComponent(tag)}` : `${FUNCTION_API_BASE}/scan`);
-      const data = await res.json();
+      const data = scanSelectedChannels
+        ? await scanSelectedChannelsRequest(channelIdsForScan)
+        : await scanChannels({ tag });
       if (!data.success) throw new Error(data.error || '스캔에 실패했습니다.');
 
       const totalNew = (data.results || []).reduce((sum, r) => sum + (r.newVideosFound || 0), 0);
@@ -472,8 +457,7 @@ export default function App() {
 
     setRenameLoading(true); setError('');
     try {
-      const res = await fetch(`${FUNCTION_API_BASE}/tags/rename?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
-      const data = await res.json();
+      const data = await renameTag({ from, to });
       if (!data.success) throw new Error(data.error || '태그 이름 변경에 실패했습니다.');
 
       setCategories(prev => prev.map(c => (c === from ? to : c)));
@@ -494,8 +478,7 @@ export default function App() {
     setCommentModal({ isOpen: true, videoTitle, comments: [], loading: true });
     
     try {
-      const res = await fetch(`${API_BASE}/commentThreads?part=snippet&videoId=${videoId}&order=relevance&maxResults=10&key=${apiKey}`);
-      const data = await res.json();
+      const data = await fetchTopCommentsFromYoutube({ videoId, apiKey });
       if (data.error) {
         if (data.error.errors[0].reason === 'commentsDisabled') throw new Error('이 영상은 댓글이 사용 중지되었습니다.');
         throw new Error(data.error.message);
@@ -515,32 +498,29 @@ export default function App() {
   };
 
   const filteredAndSortedVideos = useMemo(() => {
-    let result = [...videos];
-    if (searchKeyword) result = result.filter(v => v.title.toLowerCase().includes(searchKeyword.toLowerCase()));
-    if (viewFilter > 0) result = result.filter(v => v.view_count >= viewFilter);
-    if (lengthFilter === 'shorts') result = result.filter(v => v.isShorts);
-    else if (lengthFilter === 'long') result = result.filter(v => !v.isShorts);
-    if (ttoTtoMode) result = result.filter(v => v.daysOld >= 180);
-
-    if (sortType === 'date') result.sort((a, b) => a.daysOld - b.daysOld); 
-    else if (sortType === 'views') result.sort((a, b) => b.view_count - a.view_count);
-    else if (sortType === 'multiplier') result.sort((a, b) => b.multiplier - a.multiplier); 
-    else if (sortType === 'viral') result.sort((a, b) => b.views_per_day - a.views_per_day);
-    else if (sortType === 'likes') result.sort((a, b) => b.like_ratio - a.like_ratio);
-
-    return result;
+    return filterAndSortVideos({ videos, searchKeyword, viewFilter, lengthFilter, ttoTtoMode, sortType });
   }, [videos, searchKeyword, viewFilter, lengthFilter, ttoTtoMode, sortType]);
 
   const toggleCheckVideo = (videoId) => {
     setCheckedVideos(prev => prev.includes(videoId) ? prev.filter(id => id !== videoId) : [...prev, videoId]);
   };
 
-  const toggleScrapVideo = (video) => {
+  const toggleScrapVideo = async (video) => {
+    const isSaved = savedVideos.some(v => v.videoId === video.videoId);
+
     setSavedVideos(prev => {
-      const isSaved = prev.some(v => v.videoId === video.videoId);
       if (isSaved) return prev.filter(v => v.videoId !== video.videoId);
       return [...prev, video];
     });
+
+    if (!scrapbookCloudReady) return;
+
+    try {
+      if (isSaved) await deleteScrapbookVideo(video.videoId);
+      else await saveScrapbookVideos([video]);
+    } catch {
+      setScrapbookCloudReady(false);
+    }
   };
 
   const isVideoSaved = (videoId) => savedVideos.some(v => v.videoId === videoId);
@@ -578,7 +558,7 @@ export default function App() {
     return !latest || date > latest ? date : latest;
   }, null);
   const latestScanText = latestScannedAt ? formatRelativeTime(latestScannedAt) : '수집 기록 없음';
-  const ttoTtoAssetCount = videos.filter(v => v.daysOld >= 180 && v.multiplier >= 1.5).length;
+  const ttoTtoAssetCount = videos.filter(isTtoTtoCandidate).length;
   const visibleScrapCount = videos.filter(v => isVideoSaved(v.videoId)).length;
 
   const openCreatorView = (item) => {
@@ -1364,19 +1344,19 @@ export default function App() {
                   <div className={`flex-1 overflow-y-auto bg-slate-100 ${showWorkPanel ? 'p-5' : 'p-6'}`}>
                     <div className={`grid gap-6 ${showWorkPanel ? 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2300px]:grid-cols-5'}`}>
                       {filteredAndSortedVideos.map((v, index) => (
-                        <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
+                        <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : hasStrongReaction(v) || isTtoTtoCandidate(v) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
                           <div className={`relative overflow-hidden bg-slate-100 ${showWorkPanel ? 'min-h-[430px]' : 'min-h-[520px]'}`}>
                             <img src={v.thumbnail} alt="" className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${showWorkPanel ? 'min-h-[430px]' : 'min-h-[520px]'}`} />
                             <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
                             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
                             <div className="absolute left-3 top-3 flex flex-wrap gap-2">
                               <span className="rounded-full bg-black/75 px-2.5 py-1 text-xs font-extrabold text-white">#{index + 1}</span>
-                              {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
+                              {(hasStrongReaction(v) || isTtoTtoCandidate(v)) && (
                                 <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-xs font-extrabold text-white shadow-sm">
                                   <Rocket className="w-3 h-3" /> 터또터 후보
                                 </span>
                               )}
-                              {v.multiplier >= 3 && (
+                              {hasStrongReaction(v) && (
                                 <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-bold text-orange-700">
                                   <TrendingUp className="w-3 h-3" /> 강한 반응
                                 </span>
@@ -1413,15 +1393,15 @@ export default function App() {
                                 <p className="text-[10px] font-bold text-slate-400">총 조회수</p>
                                 <p className="text-sm font-extrabold text-slate-800">{v.view_count.toLocaleString()}</p>
                               </div>
-                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${v.multiplier >= 3 ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= 1.5 ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
-                                <p className={`text-[10px] font-bold ${v.multiplier >= 3 ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</p>
+                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${hasStrongReaction(v) ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= TTOTTO_MIN_MULTIPLIER ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                                <p className={`text-[10px] font-bold ${hasStrongReaction(v) ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</p>
                                 <p className="text-sm font-extrabold">{v.multiplier.toFixed(1)}x</p>
                               </div>
                               <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border border-slate-200 bg-slate-50`}>
                                 <p className="text-[10px] font-bold text-slate-400">참여율</p>
                                 <p className={`text-sm font-extrabold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-800'}`}>{v.like_ratio}% <span className="text-[10px] font-medium text-slate-400">👍 {v.like_count.toLocaleString()}</span></p>
                               </div>
-                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${v.daysOld >= 180 ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${v.daysOld >= TTOTTO_MIN_DAYS_OLD ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
                                 <p className="text-[10px] font-bold text-slate-400">경과일</p>
                                 <p className="text-sm font-extrabold">{v.daysOld}일 전</p>
                               </div>
@@ -1447,7 +1427,7 @@ export default function App() {
                       </thead>
                       <tbody>
                         {filteredAndSortedVideos.map((v) => (
-                            <tr key={v.videoId} className={`group transition-all ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50 ring-1 ring-indigo-200' : v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5) ? 'bg-rose-50/70 ring-1 ring-rose-100 hover:ring-rose-200' : 'bg-white hover:bg-slate-50 ring-1 ring-slate-100 hover:ring-slate-200'}`}>
+                            <tr key={v.videoId} className={`group transition-all ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50 ring-1 ring-indigo-200' : hasStrongReaction(v) || isTtoTtoCandidate(v) ? 'bg-rose-50/70 ring-1 ring-rose-100 hover:ring-rose-200' : 'bg-white hover:bg-slate-50 ring-1 ring-slate-100 hover:ring-slate-200'}`}>
                               <td className="px-4 py-5 text-center rounded-l-2xl">
                                 <button onClick={() => toggleCheckVideo(v.videoId)} title="AI 리메이크 프롬프트에 포함할 제작 검토 후보로 선택" className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors">
                                   {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-6 h-6 text-indigo-600" /> : <Square className="w-6 h-6 text-slate-300 hover:text-indigo-400" />}
@@ -1473,12 +1453,12 @@ export default function App() {
                                           <CheckSquare className="w-3 h-3" /> AI 리메이크 검토
                                         </span>
                                       )}
-                                      {(v.multiplier >= 3 || (v.daysOld >= 180 && v.multiplier >= 1.5)) && (
+                                      {(hasStrongReaction(v) || isTtoTtoCandidate(v)) && (
                                         <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-sm">
                                           <Rocket className="w-3 h-3" /> 터또터 후보
                                         </span>
                                       )}
-                                      {v.multiplier >= 3 && (
+                                      {hasStrongReaction(v) && (
                                         <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[10px] font-bold text-orange-700">
                                           <TrendingUp className="w-3 h-3" /> 강한 반응
                                         </span>
@@ -1506,10 +1486,10 @@ export default function App() {
                                 </div>
                               </td>
                               <td className="px-4 py-5 text-right">
-                                <div className={`inline-flex min-w-[110px] flex-col rounded-xl border px-3 py-2 shadow-sm ${v.multiplier >= 3 ? 'bg-rose-600 border-rose-600 text-white' : v.multiplier >= 1.5 ? 'bg-indigo-50 border-indigo-100 text-indigo-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
-                                  <span className={`text-[10px] font-bold ${v.multiplier >= 3 ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</span>
+                                <div className={`inline-flex min-w-[110px] flex-col rounded-xl border px-3 py-2 shadow-sm ${hasStrongReaction(v) ? 'bg-rose-600 border-rose-600 text-white' : v.multiplier >= TTOTTO_MIN_MULTIPLIER ? 'bg-indigo-50 border-indigo-100 text-indigo-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
+                                  <span className={`text-[10px] font-bold ${hasStrongReaction(v) ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</span>
                                   <span className="inline-flex items-center justify-end gap-1 text-lg font-extrabold">
-                                    {v.multiplier >= 3 && <TrendingUp className="w-4 h-4" />}
+                                    {hasStrongReaction(v) && <TrendingUp className="w-4 h-4" />}
                                     {v.multiplier.toFixed(1)}x
                                   </span>
                                 </div>
@@ -1522,7 +1502,7 @@ export default function App() {
                                 </div>
                               </td>
                               <td className="px-4 py-5 text-right rounded-r-2xl">
-                                <div className={`inline-flex min-w-[120px] flex-col rounded-xl border px-3 py-2 shadow-sm ${v.daysOld >= 180 ? 'bg-orange-50 border-orange-100 text-orange-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
+                                <div className={`inline-flex min-w-[120px] flex-col rounded-xl border px-3 py-2 shadow-sm ${v.daysOld >= TTOTTO_MIN_DAYS_OLD ? 'bg-orange-50 border-orange-100 text-orange-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
                                   <span className="text-[10px] font-bold text-slate-400">경과일</span>
                                   <span className="text-base font-extrabold">{v.daysOld}일 전</span>
                                   <span className="text-[10px] text-slate-400 font-normal">({v.upload_date})</span>
