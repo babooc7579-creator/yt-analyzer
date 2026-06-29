@@ -1,3 +1,7 @@
+export const TTOTTO_MIN_DAYS_OLD = 180;
+export const TTOTTO_MIN_MULTIPLIER = 1.5;
+export const STRONG_REACTION_MULTIPLIER = 3;
+
 export const parseDuration = (durationString) => {
   const match = durationString?.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
 
@@ -42,4 +46,42 @@ export const mapCloudVideoToViewModel = (video, daysOld) => {
     multiplier: video.multiplier || 0,
     views_per_day: Math.round(viewCount / Math.max(1, daysOld)),
   };
+};
+
+export const isTtoTtoCandidate = (video) => (
+  Number(video?.daysOld || 0) >= TTOTTO_MIN_DAYS_OLD
+  && Number(video?.multiplier || 0) >= TTOTTO_MIN_MULTIPLIER
+);
+
+export const hasStrongReaction = (video) => (
+  Number(video?.multiplier || 0) >= STRONG_REACTION_MULTIPLIER
+);
+
+export const filterAndSortVideos = ({
+  videos,
+  searchKeyword,
+  viewFilter,
+  lengthFilter,
+  ttoTtoMode,
+  sortType,
+}) => {
+  let result = [...videos];
+
+  if (searchKeyword) {
+    const loweredKeyword = searchKeyword.toLowerCase();
+    result = result.filter((video) => video.title.toLowerCase().includes(loweredKeyword));
+  }
+
+  if (viewFilter > 0) result = result.filter((video) => video.view_count >= viewFilter);
+  if (lengthFilter === 'shorts') result = result.filter((video) => video.isShorts);
+  else if (lengthFilter === 'long') result = result.filter((video) => !video.isShorts);
+  if (ttoTtoMode) result = result.filter((video) => video.daysOld >= TTOTTO_MIN_DAYS_OLD);
+
+  if (sortType === 'date') result.sort((a, b) => a.daysOld - b.daysOld);
+  else if (sortType === 'views') result.sort((a, b) => b.view_count - a.view_count);
+  else if (sortType === 'multiplier') result.sort((a, b) => b.multiplier - a.multiplier);
+  else if (sortType === 'viral') result.sort((a, b) => b.views_per_day - a.views_per_day);
+  else if (sortType === 'likes') result.sort((a, b) => b.like_ratio - a.like_ratio);
+
+  return result;
 };
