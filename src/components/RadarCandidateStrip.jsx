@@ -10,6 +10,8 @@ const getRadarScore = (video) => {
   return ttoTtoBonus + strongBonus + Number(video.multiplier || 0) * 10 + Number(video.like_ratio || 0) + savedAgeBonus;
 };
 
+const HIDDEN_RADAR_STATUSES = ['reviewed', 'later', 'production_candidate', 'production_active', 'uploaded'];
+
 export default function RadarCandidateStrip({
   videos,
   savedVideos,
@@ -17,19 +19,20 @@ export default function RadarCandidateStrip({
   isVideoSaved,
   onToggleScrap,
   onMarkVideoStatus,
+  onPromoteToProduction,
   onClearDecisions,
   onOpenVault,
   onOpenScrapbook,
 }) {
   const decidedCount = useMemo(() => (
-    Object.values(videoUserRecords).filter((record) => record?.status === 'reviewed' || record?.status === 'later').length
+    Object.values(videoUserRecords).filter((record) => HIDDEN_RADAR_STATUSES.includes(record?.status)).length
   ), [videoUserRecords]);
 
   const candidates = useMemo(() => (
     [...videos]
       .filter((video) => {
         const status = videoUserRecords[video.videoId]?.status;
-        return status !== 'reviewed' && status !== 'later';
+        return !HIDDEN_RADAR_STATUSES.includes(status);
       })
       .sort((a, b) => getRadarScore(b) - getRadarScore(a))
       .slice(0, 3)
@@ -128,9 +131,12 @@ export default function RadarCandidateStrip({
                 <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-extrabold text-slate-900 hover:bg-rose-50">
                   <Play className="h-4 w-4" /> 영상 보기 <ExternalLink className="h-3 w-3" />
                 </a>
-                <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <button onClick={() => onToggleScrap(video)} className={`inline-flex items-center justify-center gap-1 rounded-xl px-3 py-2 text-[11px] font-extrabold ${saved ? 'bg-yellow-400 text-slate-950 hover:bg-yellow-300' : 'bg-yellow-500/10 text-yellow-100 ring-1 ring-yellow-400/20 hover:bg-yellow-500/15'}`}>
                     <Star className={`h-3.5 w-3.5 ${saved ? 'fill-slate-950' : ''}`} /> {saved ? '저장됨' : '스크랩'}
+                  </button>
+                  <button onClick={() => onPromoteToProduction(video)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-indigo-500/15 px-3 py-2 text-[11px] font-extrabold text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/20">
+                    <Rocket className="h-3.5 w-3.5" /> 제작 후보
                   </button>
                   <button onClick={() => onMarkVideoStatus(video.videoId, 'reviewed')} className="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-500/10 px-3 py-2 text-[11px] font-extrabold text-emerald-100 ring-1 ring-emerald-400/20 hover:bg-emerald-500/15">
                     <CheckCircle2 className="h-3.5 w-3.5" /> 검토 완료

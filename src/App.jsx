@@ -12,6 +12,7 @@ import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
+import ProductionKanban from './components/ProductionKanban';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
 import VideoCard from './components/VideoCard';
 import VideoListTable from './components/VideoListTable';
@@ -479,6 +480,13 @@ export default function App() {
     }
   };
 
+  const promoteVideoToProduction = async (video) => {
+    if (!isVideoSaved(video.videoId)) {
+      await toggleScrapVideo(video);
+    }
+    await markRadarVideoStatus(video.videoId, 'production_candidate');
+  };
+
   const clearRadarDecisions = async () => {
     setVideoUserRecords({});
     try {
@@ -756,6 +764,7 @@ export default function App() {
                   isVideoSaved={isVideoSaved}
                   onToggleScrap={toggleScrapVideo}
                   onMarkVideoStatus={markRadarVideoStatus}
+                  onPromoteToProduction={promoteVideoToProduction}
                   onClearDecisions={clearRadarDecisions}
                   onOpenVault={() => openCreatorView({ id: 'vault-all' })}
                   onOpenScrapbook={() => openCreatorView({ id: 'studio-scrapbook' })}
@@ -1114,7 +1123,14 @@ export default function App() {
                 </div>
               </div>
 
-              {savedVideos.length === 0 ? (
+              {creatorView === 'studio-candidates' ? (
+                <ProductionKanban
+                  videos={savedVideos}
+                  videoUserRecords={videoUserRecords}
+                  onMoveVideo={markRadarVideoStatus}
+                  onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
+                />
+              ) : savedVideos.length === 0 ? (
                 <div className="text-center py-20 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 px-6">
                   <Star className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                   <h3 className="text-xl font-extrabold text-slate-700 mb-2">스크랩된 영상이 없습니다</h3>
