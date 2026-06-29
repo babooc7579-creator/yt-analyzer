@@ -4,16 +4,9 @@ import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/stor
 import { createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, removeChannel, renameTag, saveScrapbookVideos, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
 import { filterAndSortVideos, hasStrongReaction, isTtoTtoCandidate, mapCloudVideoToViewModel, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from './utils/video';
-
-const DEFAULT_CATEGORIES = ['해짜', '영화', '드라마', '역사', '정치', '지식/정보', '미분류1', '미분류2', '미분류3'];
-
-const LANGUAGES = [
-  { code: 'KR', label: '🇰🇷 KR', name: '한국어' },
-  { code: 'EN', label: '🇺🇸 EN', name: '영어' },
-  { code: 'JP', label: '🇯🇵 JP', name: '일본어' },
-  { code: 'ES', label: '🇪🇸 ES', name: '스페인어' },
-  { code: 'ETC', label: '🌐 기타', name: '기타 언어' }
-];
+import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
+import { DEFAULT_CATEGORIES } from './constants/categories';
+import { LANGUAGES } from './constants/languages';
 
 const CREATOR_OS_PRODUCT_MAP = [
   {
@@ -222,18 +215,6 @@ export default function App() {
     if (hours < 24) return `${hours}시간 전`;
     if (days < 7) return `${days}일 전`;
     return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
-  };
-
-  const formatOptionalNumber = (value) => {
-    const numberValue = Number(value);
-    return Number.isFinite(numberValue) ? numberValue.toLocaleString() : '-';
-  };
-
-  const formatCoverageRate = (value) => {
-    const numberValue = Number(value);
-    if (!Number.isFinite(numberValue)) return null;
-    const percent = numberValue <= 1 ? numberValue * 100 : numberValue;
-    return `${percent.toFixed(1).replace(/\.0$/, '')}%`;
   };
 
   const getScanStatusMeta = (status) => {
