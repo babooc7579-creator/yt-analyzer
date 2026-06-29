@@ -8,6 +8,8 @@ import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
 import { LANGUAGES } from './constants/languages';
+import ChannelTagTabs from './components/ChannelTagTabs';
+import LoadStoredVideosButton from './components/LoadStoredVideosButton';
 import VideoCard from './components/VideoCard';
 
 export default function App() {
@@ -960,32 +962,15 @@ export default function App() {
             </div>
 
             {/* 카테고리(태그) 폴더 리스트 */}
-            <div className="space-y-1">
-              {categories.map(cat => {
-                const count = savedChannels.filter(c => c.tags?.includes(cat)).length;
-                return (
-                  <div key={cat} className="flex items-center gap-1">
-                    <button onClick={() => setSelectedCategoryTab(cat)} className={`flex-1 text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-between ${selectedCategoryTab === cat ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}>
-                      <span className="flex items-center gap-2"><FolderOpen className={`w-4 h-4 ${selectedCategoryTab === cat ? 'text-indigo-200' : 'text-slate-400'}`} /> {cat}</span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${selectedCategoryTab === cat ? 'bg-indigo-500/50 text-indigo-100' : 'bg-slate-200 text-slate-500'}`}>{count}</span>
-                    </button>
-                    <button
-                      onClick={() => handleTagScan(cat)}
-                      disabled={isScanning || count === 0}
-                      title={`'${cat}' 태그 채널만 새 영상 여부를 확인합니다`}
-                      aria-label={`'${cat}' 태그만 스캔`}
-                      className="p-2 text-slate-400 hover:text-emerald-600 disabled:text-slate-200 disabled:cursor-not-allowed transition-colors shrink-0"
-                    >
-                      {scanningTag === cat ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <RefreshCw className="w-4 h-4" />}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-2 bg-emerald-50 border border-emerald-100 rounded-lg p-2.5">
-              <p className="text-[11px] font-bold text-emerald-700">이 태그만 스캔</p>
-              <p className="text-[10px] text-slate-600 mt-0.5">태그 옆 새로고침 버튼은 선택한 태그의 채널만 새 영상 여부를 확인합니다. YouTube API 호출이 발생합니다.</p>
-            </div>
+            <ChannelTagTabs
+              categories={categories}
+              channels={savedChannels}
+              selectedCategory={selectedCategoryTab}
+              scanningTag={scanningTag}
+              isScanning={isScanning}
+              onSelectCategory={setSelectedCategoryTab}
+              onScanTag={handleTagScan}
+            />
             
             <hr className="my-4 border-slate-100" />
             
@@ -1042,18 +1027,11 @@ export default function App() {
               )}
             </div>
 
-            <button 
-              onClick={fetchSelectedChannels} 
-              disabled={loading || selectedChannelIds.length === 0}
-              className={`w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all ${loading ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : selectedChannelIds.length > 0 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5' : 'bg-slate-100 text-slate-400'}`}
-            >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
-              {loading ? '저장된 영상 불러오는 중...' : `저장된 영상 불러오기 (${selectedChannelIds.length}개 채널)`}
-            </button>
-            <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg p-2.5 text-center">
-              <p className="text-[11px] font-bold text-blue-700">저장된 영상 불러오기</p>
-              <p className="text-[10px] text-slate-600 mt-0.5">이미 수집되어 저장된 영상만 조회합니다. 유튜브 API를 새로 호출하지 않습니다.</p>
-            </div>
+            <LoadStoredVideosButton
+              loading={loading}
+              selectedChannelCount={selectedChannelIds.length}
+              onLoad={fetchSelectedChannels}
+            />
             {error && <p className="mt-2 text-xs text-red-500 text-center">{error}</p>}
             {progressMsg && !error && <p className="mt-2 text-xs text-indigo-600 text-center font-medium">{progressMsg}</p>}
           </div>
