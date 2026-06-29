@@ -8,6 +8,7 @@ import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
 import { LANGUAGES } from './constants/languages';
+import VideoCard from './components/VideoCard';
 
 export default function App() {
   const [apiKey, setApiKey] = useState('');
@@ -1255,70 +1256,17 @@ export default function App() {
                   <div className={`flex-1 overflow-y-auto bg-slate-100 ${showWorkPanel ? 'p-5' : 'p-6'}`}>
                     <div className={`grid gap-6 ${showWorkPanel ? 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2300px]:grid-cols-5'}`}>
                       {filteredAndSortedVideos.map((v, index) => (
-                        <div key={v.videoId} className={`group overflow-hidden rounded-2xl border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${checkedVideos.includes(v.videoId) ? 'border-indigo-300 bg-indigo-50' : hasStrongReaction(v) || isTtoTtoCandidate(v) ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
-                          <div className={`relative overflow-hidden bg-slate-100 ${showWorkPanel ? 'min-h-[430px]' : 'min-h-[520px]'}`}>
-                            <img src={v.thumbnail} alt="" className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${showWorkPanel ? 'min-h-[430px]' : 'min-h-[520px]'}`} />
-                            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
-                            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
-                            <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-                              <span className="rounded-full bg-black/75 px-2.5 py-1 text-xs font-extrabold text-white">#{index + 1}</span>
-                              {(hasStrongReaction(v) || isTtoTtoCandidate(v)) && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-xs font-extrabold text-white shadow-sm">
-                                  <Rocket className="w-3 h-3" /> 터또터 후보
-                                </span>
-                              )}
-                              {hasStrongReaction(v) && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-bold text-orange-700">
-                                  <TrendingUp className="w-3 h-3" /> 강한 반응
-                                </span>
-                              )}
-                            </div>
-                            <div className="absolute right-3 top-3 flex gap-2">
-                              <button onClick={() => toggleCheckVideo(v.videoId)} title="AI 리메이크 프롬프트에 포함할 제작 검토 후보로 선택" className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-indigo-50">
-                                {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-5 h-5 text-indigo-600" /> : <Square className="w-5 h-5 text-slate-400 hover:text-indigo-500" />}
-                              </button>
-                              <button onClick={() => toggleScrapVideo(v)} title="스크랩 소재로 저장/해제" className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-yellow-50">
-                                <Star className={`w-5 h-5 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-400 group-hover:text-yellow-400'}`} />
-                              </button>
-                            </div>
-                          </div>
-                          <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
-                            <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600">{v.title}</a>
-                            <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                              {isVideoSaved(v.videoId) && <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700">스크랩 소재</span>}
-                              {checkedVideos.includes(v.videoId) && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">AI 리메이크 검토</span>}
-                            </div>
-                            <div className="mt-3 flex flex-wrap items-center gap-2">
-                              <span className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
-                              {v.isShorts ? (
-                                <span className="rounded-full bg-pink-100 px-2 py-1 text-[11px] font-bold text-pink-700">📱 Shorts ({v.duration})</span>
-                              ) : (
-                                <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600"><Clock className="w-3 h-3" /> {v.duration}</span>
-                              )}
-                              <button onClick={() => fetchTopComments(v.videoId, v.title)} title="YouTube API로 댓글 Top 10을 조회합니다." className="flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-1 text-[11px] font-bold text-indigo-600 transition-colors hover:bg-indigo-100">
-                                <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
-                              </button>
-                            </div>
-                            <div className="mt-4 grid grid-cols-2 gap-2">
-                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border border-slate-200 bg-slate-50`}>
-                                <p className="text-[10px] font-bold text-slate-400">총 조회수</p>
-                                <p className="text-sm font-extrabold text-slate-800">{v.view_count.toLocaleString()}</p>
-                              </div>
-                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${hasStrongReaction(v) ? 'border-rose-500 bg-rose-600 text-white' : v.multiplier >= TTOTTO_MIN_MULTIPLIER ? 'border-indigo-100 bg-indigo-50 text-indigo-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
-                                <p className={`text-[10px] font-bold ${hasStrongReaction(v) ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</p>
-                                <p className="text-sm font-extrabold">{v.multiplier.toFixed(1)}x</p>
-                              </div>
-                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border border-slate-200 bg-slate-50`}>
-                                <p className="text-[10px] font-bold text-slate-400">참여율</p>
-                                <p className={`text-sm font-extrabold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-800'}`}>{v.like_ratio}% <span className="text-[10px] font-medium text-slate-400">👍 {v.like_count.toLocaleString()}</span></p>
-                              </div>
-                              <div className={`${showWorkPanel ? 'p-3' : 'p-2.5'} rounded-xl border ${v.daysOld >= TTOTTO_MIN_DAYS_OLD ? 'border-orange-100 bg-orange-50 text-orange-700' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
-                                <p className="text-[10px] font-bold text-slate-400">경과일</p>
-                                <p className="text-sm font-extrabold">{v.daysOld}일 전</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        <VideoCard
+                          key={v.videoId}
+                          video={v}
+                          rank={index + 1}
+                          isChecked={checkedVideos.includes(v.videoId)}
+                          isSaved={isVideoSaved(v.videoId)}
+                          showWorkPanel={showWorkPanel}
+                          onToggleCheck={toggleCheckVideo}
+                          onToggleScrap={toggleScrapVideo}
+                          onFetchComments={fetchTopComments}
+                        />
                       ))}
                     </div>
                   </div>
