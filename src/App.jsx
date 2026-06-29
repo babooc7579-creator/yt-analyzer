@@ -33,6 +33,9 @@ export default function App() {
   const [savedVideos, setSavedVideos] = useState(() => {
     return readJsonStorage(STORAGE_KEYS.savedVideos, []) || [];
   });
+  const [videoUserRecords, setVideoUserRecords] = useState(() => {
+    return readJsonStorage(STORAGE_KEYS.videoUserRecords, {}) || {};
+  });
   const [scrapbookCloudReady, setScrapbookCloudReady] = useState(false);
   
   const [newChannelInput, setNewChannelInput] = useState('');
@@ -82,6 +85,7 @@ export default function App() {
 
   useEffect(() => { writeJsonStorage(STORAGE_KEYS.categories, categories); }, [categories]);
   useEffect(() => { writeJsonStorage(STORAGE_KEYS.savedVideos, savedVideos); }, [savedVideos]);
+  useEffect(() => { writeJsonStorage(STORAGE_KEYS.videoUserRecords, videoUserRecords); }, [videoUserRecords]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -437,6 +441,21 @@ export default function App() {
 
   const isVideoSaved = (videoId) => savedVideos.some(v => v.videoId === videoId);
 
+  const markRadarVideoStatus = (videoId, status) => {
+    setVideoUserRecords(prev => ({
+      ...prev,
+      [videoId]: {
+        ...(prev[videoId] || {}),
+        status,
+        updatedAt: new Date().toISOString(),
+      },
+    }));
+  };
+
+  const clearRadarDecisions = () => {
+    setVideoUserRecords({});
+  };
+
   const copyAI_RemakePrompt = (targetVideos) => {
     if (targetVideos.length === 0) return;
     
@@ -701,6 +720,11 @@ export default function App() {
                 <RadarCandidateStrip
                   videos={videos}
                   savedVideos={savedVideos}
+                  videoUserRecords={videoUserRecords}
+                  isVideoSaved={isVideoSaved}
+                  onToggleScrap={toggleScrapVideo}
+                  onMarkVideoStatus={markRadarVideoStatus}
+                  onClearDecisions={clearRadarDecisions}
                   onOpenVault={() => openCreatorView({ id: 'vault-all' })}
                   onOpenScrapbook={() => openCreatorView({ id: 'studio-scrapbook' })}
                 />
