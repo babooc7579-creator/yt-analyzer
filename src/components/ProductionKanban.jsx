@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { CheckCircle2, Clock, ExternalLink, Play, Rocket, Star } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { CheckCircle2, Clock, ExternalLink, Play, Rocket, Save, Star } from 'lucide-react';
 
 const COLUMNS = [
   {
@@ -35,6 +35,12 @@ export default function ProductionKanban({
   onUpdateVideoRecord,
   onOpenReferenceVault,
 }) {
+  const [draftRecords, setDraftRecords] = useState({});
+
+  useEffect(() => {
+    setDraftRecords(videoUserRecords);
+  }, [videoUserRecords]);
+
   const groupedVideos = useMemo(() => (
     videos.reduce((acc, video) => {
       const status = getProductionStatus(videoUserRecords[video.videoId]);
@@ -46,6 +52,35 @@ export default function ProductionKanban({
       uploaded: [],
     })
   ), [videos, videoUserRecords]);
+
+  const updateDraftRecord = (videoId, updates) => {
+    setDraftRecords(prev => ({
+      ...prev,
+      [videoId]: {
+        ...(prev[videoId] || videoUserRecords[videoId] || {}),
+        videoId,
+        ...updates,
+      },
+    }));
+  };
+
+  const hasUnsavedChanges = (videoId) => {
+    const saved = videoUserRecords[videoId] || {};
+    const draft = draftRecords[videoId] || {};
+
+    return (saved.draftTitle || '') !== (draft.draftTitle || '')
+      || (saved.note || '') !== (draft.note || '')
+      || (saved.targetPublishDate || '') !== (draft.targetPublishDate || '');
+  };
+
+  const saveDraftRecord = (videoId) => {
+    const draft = draftRecords[videoId] || {};
+    onUpdateVideoRecord(videoId, {
+      draftTitle: draft.draftTitle || '',
+      note: draft.note || '',
+      targetPublishDate: draft.targetPublishDate || '',
+    });
+  };
 
   if (videos.length === 0) {
     return (
@@ -89,7 +124,8 @@ export default function ProductionKanban({
                 <div className="rounded-xl border border-dashed border-slate-300 bg-white/70 p-5 text-center text-xs font-semibold text-slate-400">비어 있음</div>
               ) : (
                 groupedVideos[column.id].map((video) => {
-                  const record = videoUserRecords[video.videoId] || {};
+                  const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
+                  const isDirty = hasUnsavedChanges(video.videoId);
 
                   return (
                     <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -111,7 +147,7 @@ export default function ProductionKanban({
                             <input
                               type="text"
                               value={record.draftTitle || ''}
-                              onChange={(event) => onUpdateVideoRecord(video.videoId, { draftTitle: event.target.value })}
+                              onChange={(event) => updateDraftRecord(video.videoId, { draftTitle: event.target.value })}
                               placeholder="예) 한국형으로 바꾼 제목 초안"
                               className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-200"
                             />
@@ -120,7 +156,7 @@ export default function ProductionKanban({
                             <span className="text-[10px] font-extrabold text-slate-500">메모</span>
                             <textarea
                               value={record.note || ''}
-                              onChange={(event) => onUpdateVideoRecord(video.videoId, { note: event.target.value })}
+                              onChange={(event) => updateDraftRecord(video.videoId, { note: event.target.value })}
                               placeholder="후킹 포인트, 참고할 장면, 만들 방향"
                               rows={2}
                               className="mt-1 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200"
@@ -131,10 +167,17 @@ export default function ProductionKanban({
                             <input
                               type="date"
                               value={record.targetPublishDate || ''}
-                              onChange={(event) => onUpdateVideoRecord(video.videoId, { targetPublishDate: event.target.value })}
+                              onChange={(event) => updateDraftRecord(video.videoId, { targetPublishDate: event.target.value })}
                               className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200"
                             />
                           </label>
+                          <button
+                            onClick={() => saveDraftRecord(video.videoId)}
+                            disabled={!isDirty}
+                            className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isDirty ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+                          >
+                            <Save className="h-3.5 w-3.5" /> {isDirty ? '변경 내용 저장' : '저장됨'}
+                          </button>
                         </div>
 
                         <div className="mt-3 grid grid-cols-1 gap-2">
