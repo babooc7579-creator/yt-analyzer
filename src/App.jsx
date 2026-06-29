@@ -756,11 +756,11 @@ export default function App() {
               <p className="mx-auto mt-4 max-w-xl rounded-xl border border-amber-400/20 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100">이 화면은 안내 전용입니다. 클릭해도 새 API 호출, DB 변경, localStorage 삭제가 발생하지 않습니다.</p>
             </div>
           ) : isLegacyWorkspaceView ? (
-      <div className={`w-full mx-auto grid grid-cols-1 gap-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 ${showWorkPanel ? 'max-w-[2100px] xl:grid-cols-[420px_minmax(0,1fr)] 2xl:grid-cols-[440px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
+      <div className={`w-full mx-auto grid grid-cols-1 gap-5 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 ${showWorkPanel ? 'max-w-[2400px] xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
         
         {/* ================= 좌측: CRM 패널 ================= */}
         <div className={`space-y-4 ${showWorkPanel ? '' : 'hidden'}`}>
-          <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-5">
+          <div className="bg-slate-100 rounded-xl shadow-sm border border-slate-300 p-4">
             <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
             </h1>
