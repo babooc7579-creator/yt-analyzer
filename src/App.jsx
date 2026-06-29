@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, ThumbsUp, MessageSquareText, X, Bookmark, RefreshCw } from 'lucide-react';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
-import { createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, removeChannel, renameTag, saveScrapbookVideos, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest } from './services/functionApi';
+import { clearVideoUserRecords, createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, fetchVideoUserRecords, removeChannel, renameTag, saveScrapbookVideos, saveVideoUserRecord, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
 import { filterAndSortVideos, isTtoTtoCandidate, mapCloudVideoToViewModel } from './utils/video';
 import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
@@ -86,6 +86,24 @@ export default function App() {
   useEffect(() => { writeJsonStorage(STORAGE_KEYS.categories, categories); }, [categories]);
   useEffect(() => { writeJsonStorage(STORAGE_KEYS.savedVideos, savedVideos); }, [savedVideos]);
   useEffect(() => { writeJsonStorage(STORAGE_KEYS.videoUserRecords, videoUserRecords); }, [videoUserRecords]);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const syncVideoUserRecordsFromCloud = async () => {
+      try {
+        const data = await fetchVideoUserRecords();
+        if (!data.success) throw new Error(data.error || '영상 판단 기록을 불러오지 못했습니다.');
+        if (isCancelled) return;
+        setVideoUserRecords(data.records || {});
+      } catch {
+        // Cloud sync is best-effort for now. Local records remain available as a fallback.
+      }
+    };
+
+    syncVideoUserRecordsFromCloud();
+    return () => { isCancelled = true; };
+  }, []);
 
   useEffect(() => {
     let isCancelled = false;
@@ -441,19 +459,33 @@ export default function App() {
 
   const isVideoSaved = (videoId) => savedVideos.some(v => v.videoId === videoId);
 
-  const markRadarVideoStatus = (videoId, status) => {
+  const markRadarVideoStatus = async (videoId, status) => {
+    const record = {
+      ...(videoUserRecords[videoId] || {}),
+      videoId,
+      status,
+      updatedAt: new Date().toISOString(),
+    };
+
     setVideoUserRecords(prev => ({
       ...prev,
-      [videoId]: {
-        ...(prev[videoId] || {}),
-        status,
-        updatedAt: new Date().toISOString(),
-      },
+      [videoId]: record,
     }));
+
+    try {
+      await saveVideoUserRecord(record);
+    } catch {
+      // Keep the local decision so the daily workflow is not blocked by a temporary cloud error.
+    }
   };
 
-  const clearRadarDecisions = () => {
+  const clearRadarDecisions = async () => {
     setVideoUserRecords({});
+    try {
+      await clearVideoUserRecords();
+    } catch {
+      // Local reset still gives the user a clean radar; cloud can be retried on next change.
+    }
   };
 
   const copyAI_RemakePrompt = (targetVideos) => {
