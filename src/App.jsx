@@ -3,7 +3,7 @@ import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, 
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
 import { createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, removeChannel, renameTag, saveScrapbookVideos, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
-import { filterAndSortVideos, mapCloudVideoToViewModel } from './utils/video';
+import { filterAndSortVideos, isTtoTtoCandidate, mapCloudVideoToViewModel } from './utils/video';
 import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
@@ -12,6 +12,7 @@ import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
+import RadarCandidateStrip from './components/RadarCandidateStrip';
 import VideoCard from './components/VideoCard';
 import VideoListTable from './components/VideoListTable';
 import VideoToolbar from './components/VideoToolbar';
@@ -696,6 +697,13 @@ export default function App() {
                     <p className="mt-1 text-xs text-rose-100/70">노출이 멈춘 검증된 영상</p>
                   </div>
                 </div>
+
+                <RadarCandidateStrip
+                  videos={videos}
+                  savedVideos={savedVideos}
+                  onOpenVault={() => openCreatorView({ id: 'vault-all' })}
+                  onOpenScrapbook={() => openCreatorView({ id: 'studio-scrapbook' })}
+                />
 
                 <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
                   <button onClick={() => openCreatorView({ id: 'ops-add-channel' })} className="group rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-indigo-300/50 hover:bg-indigo-500/15">
