@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, CheckSquare, Square, Rocket, TrendingUp, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, Clock, ThumbsUp, MessageSquareText, X, Bookmark, RefreshCw } from 'lucide-react';
+import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, ThumbsUp, MessageSquareText, X, Bookmark, RefreshCw } from 'lucide-react';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
 import { createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, removeChannel, renameTag, saveScrapbookVideos, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
-import { filterAndSortVideos, hasStrongReaction, isTtoTtoCandidate, mapCloudVideoToViewModel, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from './utils/video';
+import { filterAndSortVideos, mapCloudVideoToViewModel } from './utils/video';
 import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
@@ -13,6 +13,7 @@ import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
 import VideoCard from './components/VideoCard';
+import VideoListTable from './components/VideoListTable';
 import VideoToolbar from './components/VideoToolbar';
 
 export default function App() {
@@ -1021,107 +1022,14 @@ export default function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto overflow-y-auto flex-1">
-                    <table className="w-full text-sm text-left border-separate border-spacing-y-3">
-                      <thead className="text-xs text-slate-500 uppercase bg-slate-100 sticky top-0 shadow-sm z-10">
-                        <tr>
-                          <th className="px-3 py-3 text-center">AI 검토</th>
-                          <th className="px-2 py-3 text-center">스크랩</th>
-                          <th className="px-3 py-3">영상 정보 (제목/길이/댓글)</th>
-                          <th className="px-3 py-3 text-right">총 조회수</th>
-                          <th className="px-3 py-3 text-right text-indigo-700 font-bold">대박지수</th>
-                          <th className="px-3 py-3 text-right text-rose-600 font-bold">참여율(좋아요)</th>
-                          <th className="px-3 py-3 text-right">경과일</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredAndSortedVideos.map((v) => (
-                            <tr key={v.videoId} className={`group transition-all ${checkedVideos.includes(v.videoId) ? 'bg-indigo-50 ring-1 ring-indigo-200' : hasStrongReaction(v) || isTtoTtoCandidate(v) ? 'bg-rose-50/70 ring-1 ring-rose-100 hover:ring-rose-200' : 'bg-white hover:bg-slate-50 ring-1 ring-slate-100 hover:ring-slate-200'}`}>
-                              <td className="px-4 py-5 text-center rounded-l-2xl">
-                                <button onClick={() => toggleCheckVideo(v.videoId)} title="AI 리메이크 프롬프트에 포함할 제작 검토 후보로 선택" className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors">
-                                  {checkedVideos.includes(v.videoId) ? <CheckSquare className="w-6 h-6 text-indigo-600" /> : <Square className="w-6 h-6 text-slate-300 hover:text-indigo-400" />}
-                                </button>
-                              </td>
-                              <td className="px-2 py-5 text-center">
-                                <button onClick={() => toggleScrapVideo(v)} title="스크랩 소재로 저장/해제" className="p-2 rounded-full hover:bg-yellow-100 transition-colors">
-                                  <Star className={`w-6 h-6 ${isVideoSaved(v.videoId) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
-                                </button>
-                              </td>
-                              <td className="px-4 py-5 min-w-[520px]">
-                                <div className="flex gap-5">
-                                  <img src={v.thumbnail} alt="" className="w-36 h-20 object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 bg-slate-100" />
-                                  <div className="flex flex-col justify-center min-w-0">
-                                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                                      {isVideoSaved(v.videoId) && (
-                                        <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-[10px] font-bold text-yellow-700">
-                                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-500" /> 스크랩 소재
-                                        </span>
-                                      )}
-                                      {checkedVideos.includes(v.videoId) && (
-                                        <span className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold text-indigo-700">
-                                          <CheckSquare className="w-3 h-3" /> AI 리메이크 검토
-                                        </span>
-                                      )}
-                                      {(hasStrongReaction(v) || isTtoTtoCandidate(v)) && (
-                                        <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-sm">
-                                          <Rocket className="w-3 h-3" /> 터또터 후보
-                                        </span>
-                                      )}
-                                      {hasStrongReaction(v) && (
-                                        <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[10px] font-bold text-orange-700">
-                                          <TrendingUp className="w-3 h-3" /> 강한 반응
-                                        </span>
-                                      )}
-                                    </div>
-                                    <a href={`https://youtube.com/watch?v=${v.videoId}`} target="_blank" rel="noreferrer" className="text-base font-extrabold text-slate-900 hover:text-indigo-600 line-clamp-2 leading-snug mb-2">{v.title}</a>
-                                    <div className="flex flex-wrap items-center gap-2 mt-1">
-                                      <span className="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded-full border border-slate-200 font-semibold">{LANGUAGES.find(l => l.code === v.language)?.label || '🌐'}</span>
-                                      {v.isShorts ? (
-                                        <span className="text-[11px] bg-pink-100 text-pink-700 px-2 py-1 rounded-full font-bold">📱 Shorts ({v.duration})</span>
-                                      ) : (
-                                        <span className="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded-full font-semibold flex items-center gap-1"><Clock className="w-3 h-3" /> {v.duration}</span>
-                                      )}
-                                      <button onClick={() => fetchTopComments(v.videoId, v.title)} title="YouTube API로 댓글 Top 10을 조회합니다." className="text-[11px] bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-2 py-1 rounded-full font-bold border border-indigo-100 flex items-center gap-1 transition-colors">
-                                        <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-4 py-5 text-right">
-                                <div className="inline-flex min-w-[120px] flex-col rounded-xl bg-white/80 border border-slate-200 px-3 py-2 shadow-sm">
-                                  <span className="text-[10px] font-bold text-slate-400">총 조회수</span>
-                                  <span className="text-base font-extrabold text-slate-800">{v.view_count.toLocaleString()}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-5 text-right">
-                                <div className={`inline-flex min-w-[110px] flex-col rounded-xl border px-3 py-2 shadow-sm ${hasStrongReaction(v) ? 'bg-rose-600 border-rose-600 text-white' : v.multiplier >= TTOTTO_MIN_MULTIPLIER ? 'bg-indigo-50 border-indigo-100 text-indigo-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
-                                  <span className={`text-[10px] font-bold ${hasStrongReaction(v) ? 'text-rose-100' : 'text-slate-400'}`}>대박지수</span>
-                                  <span className="inline-flex items-center justify-end gap-1 text-lg font-extrabold">
-                                    {hasStrongReaction(v) && <TrendingUp className="w-4 h-4" />}
-                                    {v.multiplier.toFixed(1)}x
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-5 text-right">
-                                <div className="inline-flex min-w-[110px] flex-col rounded-xl bg-white/80 border border-slate-200 px-3 py-2 shadow-sm">
-                                  <span className="text-[10px] font-bold text-slate-400">참여율</span>
-                                  <span className={`text-base font-extrabold ${v.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-700'}`}>{v.like_ratio}%</span>
-                                  <span className="text-[10px] text-slate-400">👍 {v.like_count.toLocaleString()}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-5 text-right rounded-r-2xl">
-                                <div className={`inline-flex min-w-[120px] flex-col rounded-xl border px-3 py-2 shadow-sm ${v.daysOld >= TTOTTO_MIN_DAYS_OLD ? 'bg-orange-50 border-orange-100 text-orange-700' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
-                                  <span className="text-[10px] font-bold text-slate-400">경과일</span>
-                                  <span className="text-base font-extrabold">{v.daysOld}일 전</span>
-                                  <span className="text-[10px] text-slate-400 font-normal">({v.upload_date})</span>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <VideoListTable
+                    videos={filteredAndSortedVideos}
+                    checkedVideos={checkedVideos}
+                    isVideoSaved={isVideoSaved}
+                    toggleCheckVideo={toggleCheckVideo}
+                    toggleScrapVideo={toggleScrapVideo}
+                    fetchTopComments={fetchTopComments}
+                  />
                 )}
               </div>
             </>
