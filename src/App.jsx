@@ -480,6 +480,26 @@ export default function App() {
     }
   };
 
+  const updateVideoUserRecord = async (videoId, updates) => {
+    const record = {
+      ...(videoUserRecords[videoId] || {}),
+      videoId,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+
+    setVideoUserRecords(prev => ({
+      ...prev,
+      [videoId]: record,
+    }));
+
+    try {
+      await saveVideoUserRecord(record);
+    } catch {
+      // Local edits remain visible even if cloud sync is temporarily unavailable.
+    }
+  };
+
   const promoteVideoToProduction = async (video) => {
     if (!isVideoSaved(video.videoId)) {
       await toggleScrapVideo(video);
@@ -1128,6 +1148,7 @@ export default function App() {
                   videos={savedVideos}
                   videoUserRecords={videoUserRecords}
                   onMoveVideo={markRadarVideoStatus}
+                  onUpdateVideoRecord={updateVideoUserRecord}
                   onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
                 />
               ) : savedVideos.length === 0 ? (

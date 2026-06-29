@@ -32,6 +32,7 @@ export default function ProductionKanban({
   videos,
   videoUserRecords,
   onMoveVideo,
+  onUpdateVideoRecord,
   onOpenReferenceVault,
 }) {
   const groupedVideos = useMemo(() => (
@@ -87,43 +88,79 @@ export default function ProductionKanban({
               {groupedVideos[column.id].length === 0 ? (
                 <div className="rounded-xl border border-dashed border-slate-300 bg-white/70 p-5 text-center text-xs font-semibold text-slate-400">비어 있음</div>
               ) : (
-                groupedVideos[column.id].map((video) => (
-                  <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                    <img src={video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`} alt="" className="aspect-video w-full object-cover bg-slate-100" />
-                    <div className="p-3">
-                      <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600">
-                        {video.title}
-                      </a>
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">{video.channel_title || video.channelTitle || '채널 정보 없음'}</span>
-                        {video.multiplier !== undefined && (
-                          <span className="rounded-full bg-rose-50 px-2 py-1 text-[10px] font-bold text-rose-600">대박지수 {Number(video.multiplier || 0).toFixed(1)}x</span>
-                        )}
-                      </div>
+                groupedVideos[column.id].map((video) => {
+                  const record = videoUserRecords[video.videoId] || {};
 
-                      <div className="mt-3 grid grid-cols-1 gap-2">
-                        {column.id !== 'production_candidate' && (
-                          <button onClick={() => onMoveVideo(video.videoId, 'production_candidate')} className="rounded-lg bg-indigo-50 px-3 py-2 text-[11px] font-extrabold text-indigo-700 hover:bg-indigo-100">
-                            제작 후보로
-                          </button>
-                        )}
-                        {column.id !== 'production_active' && (
-                          <button onClick={() => onMoveVideo(video.videoId, 'production_active')} className="inline-flex items-center justify-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-extrabold text-emerald-700 hover:bg-emerald-100">
-                            <Clock className="h-3.5 w-3.5" /> 제작 중으로
-                          </button>
-                        )}
-                        {column.id !== 'uploaded' && (
-                          <button onClick={() => onMoveVideo(video.videoId, 'uploaded')} className="inline-flex items-center justify-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-white hover:bg-slate-800">
-                            <CheckCircle2 className="h-3.5 w-3.5" /> 업로드 완료
-                          </button>
-                        )}
-                        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50">
-                          <Play className="h-3.5 w-3.5" /> 원본 보기 <ExternalLink className="h-3 w-3" />
+                  return (
+                    <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                      <img src={video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`} alt="" className="aspect-video w-full object-cover bg-slate-100" />
+                      <div className="p-3">
+                        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600">
+                          {video.title}
                         </a>
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">{video.channel_title || video.channelTitle || '채널 정보 없음'}</span>
+                          {video.multiplier !== undefined && (
+                            <span className="rounded-full bg-rose-50 px-2 py-1 text-[10px] font-bold text-rose-600">대박지수 {Number(video.multiplier || 0).toFixed(1)}x</span>
+                          )}
+                        </div>
+
+                        <div className="mt-3 space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3">
+                          <label className="block">
+                            <span className="text-[10px] font-extrabold text-slate-500">내가 만들 제목</span>
+                            <input
+                              type="text"
+                              value={record.draftTitle || ''}
+                              onChange={(event) => onUpdateVideoRecord(video.videoId, { draftTitle: event.target.value })}
+                              placeholder="예) 한국형으로 바꾼 제목 초안"
+                              className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-200"
+                            />
+                          </label>
+                          <label className="block">
+                            <span className="text-[10px] font-extrabold text-slate-500">메모</span>
+                            <textarea
+                              value={record.note || ''}
+                              onChange={(event) => onUpdateVideoRecord(video.videoId, { note: event.target.value })}
+                              placeholder="후킹 포인트, 참고할 장면, 만들 방향"
+                              rows={2}
+                              className="mt-1 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200"
+                            />
+                          </label>
+                          <label className="block">
+                            <span className="text-[10px] font-extrabold text-slate-500">업로드 예정일</span>
+                            <input
+                              type="date"
+                              value={record.targetPublishDate || ''}
+                              onChange={(event) => onUpdateVideoRecord(video.videoId, { targetPublishDate: event.target.value })}
+                              className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200"
+                            />
+                          </label>
+                        </div>
+
+                        <div className="mt-3 grid grid-cols-1 gap-2">
+                          {column.id !== 'production_candidate' && (
+                            <button onClick={() => onMoveVideo(video.videoId, 'production_candidate')} className="rounded-lg bg-indigo-50 px-3 py-2 text-[11px] font-extrabold text-indigo-700 hover:bg-indigo-100">
+                              제작 후보로
+                            </button>
+                          )}
+                          {column.id !== 'production_active' && (
+                            <button onClick={() => onMoveVideo(video.videoId, 'production_active')} className="inline-flex items-center justify-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-extrabold text-emerald-700 hover:bg-emerald-100">
+                              <Clock className="h-3.5 w-3.5" /> 제작 중으로
+                            </button>
+                          )}
+                          {column.id !== 'uploaded' && (
+                            <button onClick={() => onMoveVideo(video.videoId, 'uploaded')} className="inline-flex items-center justify-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-white hover:bg-slate-800">
+                              <CheckCircle2 className="h-3.5 w-3.5" /> 업로드 완료
+                            </button>
+                          )}
+                          <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50">
+                            <Play className="h-3.5 w-3.5" /> 원본 보기 <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </article>
-                ))
+                    </article>
+                  );
+                })
               )}
             </div>
           </section>
