@@ -79,3 +79,18 @@ export const deleteScrapbookVideo = (videoId) => (
     method: 'DELETE',
   })
 );
+
+export const fetchVideoUserRecords = () => getJson('/video-records');
+
+export const saveVideoUserRecord = (record) => (
+  sendJson('/video-records', {
+    method: 'POST',
+    body: JSON.stringify(record),
+  })
+);
+
+export const clearVideoUserRecords = () => (
+  sendJson('/video-records', {
+    method: 'DELETE',
+  })
+);
