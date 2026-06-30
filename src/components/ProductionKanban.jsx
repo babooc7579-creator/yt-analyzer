@@ -28,6 +28,8 @@ const getProductionStatus = (record) => {
   return 'production_candidate';
 };
 
+const getTodayDate = () => new Date().toISOString().slice(0, 10);
+
 export default function ProductionKanban({
   videos,
   videoUserRecords,
@@ -192,9 +194,14 @@ export default function ProductionKanban({
                             </button>
                           )}
                           {column.id !== 'uploaded' && (
-                            <button onClick={() => onMoveVideo(video.videoId, 'uploaded')} className="inline-flex items-center justify-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-white hover:bg-slate-800">
+                            <button onClick={() => onMoveVideo(video.videoId, 'uploaded', { uploadedAt: record.uploadedAt || getTodayDate() })} className="inline-flex items-center justify-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-white hover:bg-slate-800">
                               <CheckCircle2 className="h-3.5 w-3.5" /> 업로드 완료
                             </button>
+                          )}
+                          {column.id === 'uploaded' && (
+                            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center text-[11px] font-bold text-slate-600">
+                              업로드 완료일: {record.uploadedAt || '기록 없음'}
+                            </div>
                           )}
                           <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50">
                             <Play className="h-3.5 w-3.5" /> 원본 보기 <ExternalLink className="h-3 w-3" />
