@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Bookmark, CheckCircle2, Clock, ExternalLink, Play, Rocket, Star, TrendingUp } from 'lucide-react';
+import { RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS } from '../constants/status';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 
 const getRadarScore = (video) => {
@@ -9,8 +10,6 @@ const getRadarScore = (video) => {
 
   return ttoTtoBonus + strongBonus + Number(video.multiplier || 0) * 10 + Number(video.like_ratio || 0) + savedAgeBonus;
 };
-
-const HIDDEN_RADAR_STATUSES = ['reviewed', 'later', 'production_candidate', 'production_active', 'uploaded'];
 
 export default function RadarCandidateStrip({
   videos,
@@ -25,14 +24,14 @@ export default function RadarCandidateStrip({
   onOpenScrapbook,
 }) {
   const decidedCount = useMemo(() => (
-    Object.values(videoUserRecords).filter((record) => HIDDEN_RADAR_STATUSES.includes(record?.status)).length
+    Object.values(videoUserRecords).filter((record) => RADAR_HIDDEN_VIDEO_STATUSES.includes(record?.status)).length
   ), [videoUserRecords]);
 
   const candidates = useMemo(() => (
     [...videos]
       .filter((video) => {
         const status = videoUserRecords[video.videoId]?.status;
-        return !HIDDEN_RADAR_STATUSES.includes(status);
+        return !RADAR_HIDDEN_VIDEO_STATUSES.includes(status);
       })
       .sort((a, b) => getRadarScore(b) - getRadarScore(a))
       .slice(0, 3)
@@ -138,10 +137,10 @@ export default function RadarCandidateStrip({
                   <button onClick={() => onPromoteToProduction(video)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-indigo-500/15 px-3 py-2 text-[11px] font-extrabold text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/20">
                     <Rocket className="h-3.5 w-3.5" /> 제작 후보
                   </button>
-                  <button onClick={() => onMarkVideoStatus(video.videoId, 'reviewed')} className="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-500/10 px-3 py-2 text-[11px] font-extrabold text-emerald-100 ring-1 ring-emerald-400/20 hover:bg-emerald-500/15">
+                  <button onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.REVIEWED)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-500/10 px-3 py-2 text-[11px] font-extrabold text-emerald-100 ring-1 ring-emerald-400/20 hover:bg-emerald-500/15">
                     <CheckCircle2 className="h-3.5 w-3.5" /> 검토 완료
                   </button>
-                  <button onClick={() => onMarkVideoStatus(video.videoId, 'later')} className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-800 px-3 py-2 text-[11px] font-extrabold text-slate-200 hover:bg-slate-700">
+                  <button onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.LEGACY_LATER)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-800 px-3 py-2 text-[11px] font-extrabold text-slate-200 hover:bg-slate-700">
                     <Clock className="h-3.5 w-3.5" /> 나중에
                   </button>
                 </div>
