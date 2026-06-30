@@ -1263,8 +1263,10 @@ export default function App() {
                     videos={filteredAndSortedVideos}
                     checkedVideos={checkedVideos}
                     isVideoSaved={isVideoSaved}
+                    isProductionCandidate={(videoId) => hasAnyVideoStatus(videoUserRecords[videoId], [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])}
                     toggleCheckVideo={toggleCheckVideo}
                     toggleScrapVideo={toggleScrapVideo}
+                    promoteVideoToProduction={promoteVideoToProduction}
                     fetchTopComments={fetchTopComments}
                   />
                 )}
