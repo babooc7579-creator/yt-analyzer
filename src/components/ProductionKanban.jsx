@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, CheckCircle2, Clock, ExternalLink, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
+import { AlertCircle, CalendarDays, CheckCircle2, Clock, ExternalLink, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
 
 const COLUMNS = [
   {
@@ -29,6 +29,7 @@ const getProductionStatus = (record) => {
 };
 
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
+const formatDate = (date) => date ? date.split('-').join('.') : '';
 
 export default function ProductionKanban({
   videos,
@@ -56,6 +57,31 @@ export default function ProductionKanban({
       uploaded: [],
     })
   ), [videos, videoUserRecords]);
+
+  const productionSummary = useMemo(() => {
+    const today = getTodayDate();
+    const scheduledVideos = videos
+      .map(video => {
+        const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
+        return {
+          video,
+          date: record.targetPublishDate || '',
+        };
+      })
+      .filter(item => item.date)
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    return {
+      candidateCount: groupedVideos.production_candidate.length,
+      activeCount: groupedVideos.production_active.length,
+      uploadedCount: groupedVideos.uploaded.length,
+      nextScheduled: scheduledVideos.find(item => item.date >= today) || scheduledVideos[0],
+      activeWithoutDate: groupedVideos.production_active.filter((video) => {
+        const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
+        return !record.targetPublishDate;
+      }).length,
+    };
+  }, [draftRecords, groupedVideos, videoUserRecords, videos]);
 
   const updateDraftRecord = (videoId, updates) => {
     setDraftRecords(prev => ({
@@ -141,6 +167,31 @@ export default function ProductionKanban({
             <p className="mt-1 text-xs text-slate-500">스크랩한 소재를 제작 후보, 제작 중, 업로드 완료로 관리합니다.</p>
           </div>
           <p className="text-xs font-semibold text-slate-500">총 {videos.length}개 소재</p>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-4">
+          <div className="rounded-xl border border-indigo-100 bg-indigo-50 px-3 py-3">
+            <p className="text-[10px] font-extrabold uppercase text-indigo-500">제작 후보</p>
+            <p className="mt-1 text-lg font-black text-indigo-900">{productionSummary.candidateCount}개</p>
+          </div>
+          <div className="rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-3">
+            <p className="text-[10px] font-extrabold uppercase text-emerald-600">제작 중</p>
+            <p className="mt-1 text-lg font-black text-emerald-900">{productionSummary.activeCount}개</p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
+            <p className="text-[10px] font-extrabold uppercase text-slate-500">업로드 완료</p>
+            <p className="mt-1 text-lg font-black text-slate-900">{productionSummary.uploadedCount}개</p>
+          </div>
+          <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
+            <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
+              <CalendarDays className="h-3 w-3" /> 다음 예정
+            </p>
+            <p className="mt-1 truncate text-sm font-black text-amber-950">
+              {productionSummary.nextScheduled ? formatDate(productionSummary.nextScheduled.date) : '일정 없음'}
+            </p>
+            {productionSummary.activeWithoutDate > 0 && (
+              <p className="mt-1 text-[10px] font-bold text-amber-700">제작 중 {productionSummary.activeWithoutDate}개 일정 미정</p>
+            )}
+          </div>
         </div>
       </div>
 
