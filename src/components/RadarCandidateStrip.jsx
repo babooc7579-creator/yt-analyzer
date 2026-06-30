@@ -55,6 +55,17 @@ export default function RadarCandidateStrip({
     }, { reviewed: 0, later: 0, excluded: 0, production: 0 })
   ), [videos, videoUserRecords]);
 
+  const decisionBuckets = useMemo(() => (
+    videos.reduce((buckets, video) => {
+      const record = videoUserRecords[video.videoId];
+      if (hasVideoStatus(record, VIDEO_STATUS.REVIEWED)) buckets.reviewed.push(video);
+      if (hasAnyVideoStatus(record, [VIDEO_STATUS.LEGACY_LATER, VIDEO_STATUS.WATCH_LATER])) buckets.later.push(video);
+      if (hasVideoStatus(record, VIDEO_STATUS.EXCLUDED)) buckets.excluded.push(video);
+      if (hasAnyVideoStatus(record, [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])) buckets.production.push(video);
+      return buckets;
+    }, { reviewed: [], later: [], excluded: [], production: [] })
+  ), [videos, videoUserRecords]);
+
   const candidates = useMemo(() => (
     [...videos]
       .filter((video) => {
@@ -131,6 +142,50 @@ export default function RadarCandidateStrip({
           <p className="mt-1 text-lg font-black text-white">{decisionSummary.excluded}</p>
         </div>
       </div>
+
+      {decidedCount > 0 && (
+        <div className="mt-3 rounded-2xl border border-slate-700 bg-slate-950/50 p-3">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-extrabold text-white">처리 기록</p>
+              <p className="mt-0.5 text-[10px] text-slate-400">현재 불러온 영상에서 이미 판단한 항목입니다. 제목을 누르면 YouTube에서 다시 확인할 수 있습니다.</p>
+            </div>
+          </div>
+          <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
+            {[
+              { key: 'reviewed', label: '봤음', videos: decisionBuckets.reviewed },
+              { key: 'later', label: '나중에 보기', videos: decisionBuckets.later },
+              { key: 'production', label: '제작 후보', videos: decisionBuckets.production },
+              { key: 'excluded', label: '제외', videos: decisionBuckets.excluded },
+            ].map((group) => (
+              <div key={group.key} className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5">
+                <p className="text-[10px] font-extrabold text-slate-300">{group.label}</p>
+                {group.videos.length === 0 ? (
+                  <p className="mt-2 text-[10px] text-slate-500">아직 없음</p>
+                ) : (
+                  <div className="mt-2 space-y-1.5">
+                    {group.videos.slice(0, 3).map((video) => (
+                      <a
+                        key={`${group.key}-${video.videoId}`}
+                        href={`https://youtube.com/watch?v=${video.videoId}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block truncate rounded-lg bg-slate-950/70 px-2 py-1.5 text-[10px] font-bold text-slate-200 hover:text-white"
+                        title={video.title}
+                      >
+                        {video.title}
+                      </a>
+                    ))}
+                    {group.videos.length > 3 && (
+                      <p className="text-[10px] font-bold text-slate-500">외 {group.videos.length - 3}개</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
         {candidates.map((video, index) => {
