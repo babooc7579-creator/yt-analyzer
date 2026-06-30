@@ -496,8 +496,10 @@ export default function App() {
 
     try {
       await saveVideoUserRecord(record);
+      return true;
     } catch {
       // Local edits remain visible even if cloud sync is temporarily unavailable.
+      return false;
     }
   };
 
