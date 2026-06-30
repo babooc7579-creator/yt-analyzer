@@ -13,6 +13,7 @@ import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelNotesModal from './components/ChannelNotesModal';
 import ChannelTagTabs from './components/ChannelTagTabs';
+import CreatorWorkspaceHeader from './components/CreatorWorkspaceHeader';
 import HomeActionShortcuts from './components/HomeActionShortcuts';
 import HomeOperatingGuidelines from './components/HomeOperatingGuidelines';
 import LegacyWorkPanelIntro from './components/LegacyWorkPanelIntro';
@@ -712,33 +713,13 @@ export default function App() {
         </aside>
 
         <div className="min-w-0 flex-1 space-y-4">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-xl shadow-slate-950/30">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="text-xs font-bold text-indigo-300">{activeCreatorItem?.sectionTitle}</p>
-                <h2 className="mt-1 text-2xl font-extrabold text-white">{activeCreatorItem?.label}</h2>
-                <p className="mt-1 text-sm text-slate-400">{activeCreatorItem?.summary}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
-                  <p className="text-xl font-extrabold text-white">{savedChannels.length}</p>
-                  <p className="text-[10px] font-semibold text-slate-500">채널</p>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
-                  <p className="text-xl font-extrabold text-white">{videos.length}</p>
-                  <p className="text-[10px] font-semibold text-slate-500">영상</p>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
-                  <p className="text-xl font-extrabold text-white">{selectedChannelIds.length}</p>
-                  <p className="text-[10px] font-semibold text-slate-500">선택 채널</p>
-                </div>
-                <div className="rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-3 text-center">
-                  <p className="text-xl font-extrabold text-white">{savedVideos.length}</p>
-                  <p className="text-[10px] font-semibold text-slate-500">제작 후보</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <CreatorWorkspaceHeader
+            item={activeCreatorItem}
+            channelCount={savedChannels.length}
+            videoCount={videos.length}
+            selectedChannelCount={selectedChannelIds.length}
+            savedVideoCount={savedVideos.length}
+          />
 
           {isHomeView ? (
             <div className="grid grid-cols-1 gap-4 2xl:grid-cols-[1.2fr_0.8fr]">
