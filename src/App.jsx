@@ -582,6 +582,13 @@ export default function App() {
     return !latest || date > latest ? date : latest;
   }, null);
   const latestScanText = latestScannedAt ? formatRelativeTime(latestScannedAt) : '수집 기록 없음';
+  const scannableChannelCount = savedChannels.filter(isChannelScannable).length;
+  const activeSelectedChannelCount = savedChannels.filter(channel => (
+    selectedChannelIds.includes(channel.id) && isChannelScannable(channel)
+  )).length;
+  const getScannableChannelCount = (category) => (
+    savedChannels.filter(channel => channel.tags?.includes(category) && isChannelScannable(channel)).length
+  );
   const ttoTtoAssetCount = videos.filter(isTtoTtoCandidate).length;
   const visibleScrapCount = videos.filter(v => isVideoSaved(v.videoId)).length;
 
@@ -961,6 +968,7 @@ export default function App() {
               categories={categories}
               channels={savedChannels}
               selectedCategory={selectedCategoryTab}
+              getScannableChannelCount={getScannableChannelCount}
               scanningTag={scanningTag}
               isScanning={isScanning}
               onSelectCategory={setSelectedCategoryTab}
@@ -1081,6 +1089,8 @@ export default function App() {
                 setShowWorkPanel={setShowWorkPanel}
                 isScanning={isScanning}
                 selectedChannelCount={selectedChannelIds.length}
+                activeSelectedChannelCount={activeSelectedChannelCount}
+                scannableChannelCount={scannableChannelCount}
                 handleManualScan={handleManualScan}
                 ttoTtoMode={ttoTtoMode}
                 setTtoTtoMode={setTtoTtoMode}
