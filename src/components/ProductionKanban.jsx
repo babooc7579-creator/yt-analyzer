@@ -130,6 +130,7 @@ export default function ProductionKanban({
       activeCount: groupedVideos.production_active.length,
       uploadedCount: groupedVideos.uploaded.length,
       nextScheduled: scheduledVideos.find(item => item.date >= today) || scheduledVideos[0],
+      overdueCount: scheduledVideos.filter(item => item.date < today).length,
       activeWithoutDate: groupedVideos.production_active.filter((video) => {
         const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
         return !record.targetPublishDate;
@@ -242,6 +243,14 @@ export default function ProductionKanban({
             <p className="mt-1 truncate text-sm font-black text-amber-950">
               {productionSummary.nextScheduled ? formatDate(productionSummary.nextScheduled.date) : '일정 없음'}
             </p>
+            {productionSummary.nextScheduled && (
+              <p className="mt-1 line-clamp-1 text-[10px] font-bold text-amber-800">
+                {productionSummary.nextScheduled.video.title}
+              </p>
+            )}
+            {productionSummary.overdueCount > 0 && (
+              <p className="mt-1 text-[10px] font-bold text-rose-600">지난 일정 {productionSummary.overdueCount}개 확인 필요</p>
+            )}
             {productionSummary.activeWithoutDate > 0 && (
               <p className="mt-1 text-[10px] font-bold text-amber-700">제작 중 {productionSummary.activeWithoutDate}개 일정 미정</p>
             )}
