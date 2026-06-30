@@ -1117,6 +1117,31 @@ export default function App() {
                       </div>
                     </div>
                   </div>
+                  <div className="border-t border-slate-300/70 bg-white/60 px-5 py-4">
+                    <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+                      <div className="rounded-xl border border-blue-100 bg-blue-50/80 p-4">
+                        <div className="flex items-center gap-2">
+                          <Play className="h-4 w-4 text-blue-700" />
+                          <p className="text-sm font-extrabold text-blue-900">1. 저장된 영상 보기</p>
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-slate-600">이미 DB에 저장된 영상만 불러와서 봅니다. 새 YouTube API 호출은 없습니다.</p>
+                      </div>
+                      <div className="rounded-xl border border-yellow-100 bg-yellow-50/80 p-4">
+                        <div className="flex items-center gap-2">
+                          <Bookmark className="h-4 w-4 text-yellow-700" />
+                          <p className="text-sm font-extrabold text-yellow-900">2. 소재 보관</p>
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-slate-600">나중에 다시 볼 영상은 소재 보관에 넣습니다. 보관한 영상은 스크랩북에서 모아볼 수 있습니다.</p>
+                      </div>
+                      <div className="rounded-xl border border-indigo-100 bg-indigo-50/80 p-4">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="h-4 w-4 text-indigo-700" />
+                          <p className="text-sm font-extrabold text-indigo-900">3. 제작 후보로 보내기</p>
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-slate-600">만들 만한 소재는 제작 후보로 보내면 제작 칸반에서 이어서 관리합니다.</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
