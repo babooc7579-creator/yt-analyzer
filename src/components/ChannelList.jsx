@@ -1,8 +1,10 @@
 import { CheckSquare, FolderOpen, History, Loader2, Square, Trash2 } from 'lucide-react';
 import { getLanguageLabel } from '../constants/languages';
 import {
+  CHANNEL_GRADE,
   CHANNEL_GRADE_LABELS,
   CHANNEL_GRADE_TONES,
+  CHANNEL_STATUS,
   CHANNEL_STATUS_LABELS,
   CHANNEL_STATUS_TONES,
   getChannelGrade,
@@ -16,6 +18,8 @@ function ChannelListItem({
   scanDisplay,
   onToggleSelection,
   onOpenNotes,
+  onUpdateMetadata,
+  isUpdating,
   onDelete,
 }) {
   const grade = getChannelGrade(channel);
@@ -44,6 +48,36 @@ function ChannelListItem({
               <span className="text-[9px] text-slate-400" title="평균 조회수">👁️{formatCompactKo(channel.stats.avgViewCount)}</span>
             </>
           )}
+        </div>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <label className="block">
+            <span className="sr-only">채널 등급</span>
+            <select
+              value={grade}
+              disabled={isUpdating}
+              onChange={(event) => onUpdateMetadata(channel, { grade: event.target.value })}
+              className="w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[10px] font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+              title="채널 등급"
+            >
+              {Object.values(CHANNEL_GRADE).map((value) => (
+                <option key={value} value={value}>등급 {CHANNEL_GRADE_LABELS[value]}</option>
+              ))}
+            </select>
+          </label>
+          <label className="block">
+            <span className="sr-only">채널 상태</span>
+            <select
+              value={status}
+              disabled={isUpdating}
+              onChange={(event) => onUpdateMetadata(channel, { status: event.target.value })}
+              className="w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[10px] font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
+              title="채널 상태"
+            >
+              {Object.values(CHANNEL_STATUS).map((value) => (
+                <option key={value} value={value}>{CHANNEL_STATUS_LABELS[value]}</option>
+              ))}
+            </select>
+          </label>
         </div>
         <div className="mt-2 rounded-lg bg-slate-50 border border-slate-100 px-2.5 py-2">
           <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -74,6 +108,8 @@ export default function ChannelList({
   getScanDisplay,
   onToggleSelection,
   onOpenNotes,
+  onUpdateMetadata,
+  updatingChannelId,
   onDelete,
 }) {
   const visibleChannels = channels.filter((channel) => channel.tags?.includes(selectedCategory));
@@ -97,6 +133,8 @@ export default function ChannelList({
             scanDisplay={getScanDisplay(channel)}
             onToggleSelection={onToggleSelection}
             onOpenNotes={onOpenNotes}
+            onUpdateMetadata={onUpdateMetadata}
+            isUpdating={updatingChannelId === channel.id}
             onDelete={onDelete}
           />
         ))
