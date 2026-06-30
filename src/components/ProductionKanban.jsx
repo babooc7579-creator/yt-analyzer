@@ -30,6 +30,44 @@ const getProductionStatus = (record) => {
 
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 const formatDate = (date) => date ? date.split('-').join('.') : '';
+const getDateDistance = (date) => {
+  if (!date) return null;
+  const today = new Date(`${getTodayDate()}T00:00:00`);
+  const target = new Date(`${date}T00:00:00`);
+  return Math.round((target - today) / 86400000);
+};
+
+const getScheduleSignal = (record) => {
+  const distance = getDateDistance(record?.targetPublishDate);
+  if (distance === null) {
+    return {
+      label: '일정 미정',
+      tone: 'bg-slate-100 text-slate-500',
+    };
+  }
+  if (distance < 0) {
+    return {
+      label: `${Math.abs(distance)}일 지남`,
+      tone: 'bg-rose-50 text-rose-600',
+    };
+  }
+  if (distance === 0) {
+    return {
+      label: '오늘 예정',
+      tone: 'bg-amber-100 text-amber-800',
+    };
+  }
+  if (distance <= 3) {
+    return {
+      label: `${distance}일 남음`,
+      tone: 'bg-amber-50 text-amber-700',
+    };
+  }
+  return {
+    label: formatDate(record.targetPublishDate),
+    tone: 'bg-slate-100 text-slate-600',
+  };
+};
 
 export default function ProductionKanban({
   videos,
@@ -46,8 +84,8 @@ export default function ProductionKanban({
     setDraftRecords(videoUserRecords);
   }, [videoUserRecords]);
 
-  const groupedVideos = useMemo(() => (
-    videos.reduce((acc, video) => {
+  const groupedVideos = useMemo(() => {
+    const grouped = videos.reduce((acc, video) => {
       const status = getProductionStatus(videoUserRecords[video.videoId]);
       acc[status].push(video);
       return acc;
@@ -55,8 +93,24 @@ export default function ProductionKanban({
       production_candidate: [],
       production_active: [],
       uploaded: [],
-    })
-  ), [videos, videoUserRecords]);
+    });
+
+    grouped.production_candidate.sort((a, b) => Number(b.multiplier || 0) - Number(a.multiplier || 0));
+    grouped.production_active.sort((a, b) => {
+      const aRecord = videoUserRecords[a.videoId] || {};
+      const bRecord = videoUserRecords[b.videoId] || {};
+      const aDate = aRecord.targetPublishDate || '9999-12-31';
+      const bDate = bRecord.targetPublishDate || '9999-12-31';
+      return aDate.localeCompare(bDate);
+    });
+    grouped.uploaded.sort((a, b) => {
+      const aRecord = videoUserRecords[a.videoId] || {};
+      const bRecord = videoUserRecords[b.videoId] || {};
+      return (bRecord.uploadedAt || '').localeCompare(aRecord.uploadedAt || '');
+    });
+
+    return grouped;
+  }, [videos, videoUserRecords]);
 
   const productionSummary = useMemo(() => {
     const today = getTodayDate();
@@ -217,6 +271,7 @@ export default function ProductionKanban({
                   const isSaving = saveState === 'saving';
                   const moveState = moveStates[video.videoId];
                   const isMoving = moveState === 'saving';
+                  const scheduleSignal = getScheduleSignal(record);
 
                   return (
                     <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -227,6 +282,9 @@ export default function ProductionKanban({
                         </a>
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">{video.channel_title || video.channelTitle || '채널 정보 없음'}</span>
+                          {column.id !== 'production_candidate' && (
+                            <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${scheduleSignal.tone}`}>{scheduleSignal.label}</span>
+                          )}
                           {video.multiplier !== undefined && (
                             <span className="rounded-full bg-rose-50 px-2 py-1 text-[10px] font-bold text-rose-600">대박지수 {Number(video.multiplier || 0).toFixed(1)}x</span>
                           )}
