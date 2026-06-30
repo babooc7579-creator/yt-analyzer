@@ -151,7 +151,7 @@ export default function RadarCandidateStrip({
     return (
       <div className="mt-6 rounded-2xl border border-dashed border-slate-700 bg-slate-950/70 p-5">
         <p className="text-sm font-extrabold text-white">오늘 볼 후보</p>
-        <p className="mt-2 text-xs leading-relaxed text-slate-400">아직 화면에 불러온 영상이 없습니다. 저장된 영상 불러오기를 실행하면 여기에서 오늘 먼저 볼 후보를 보여줍니다.</p>
+        <p className="mt-2 text-xs leading-relaxed text-slate-400">아직 화면에 불러온 영상이 없습니다. 저장된 영상을 불러오면 여기에서 오늘 먼저 볼 후보를 보여줍니다.</p>
         <button onClick={onOpenVault} className="mt-4 inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-200 hover:bg-blue-500/15">
           <Bookmark className="h-4 w-4" /> 레퍼런스 금고 열기
         </button>
@@ -183,7 +183,7 @@ export default function RadarCandidateStrip({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-extrabold text-rose-100">오늘 볼 후보</p>
-          <p className="mt-1 text-xs text-rose-100/70">현재 불러온 영상에서 터또터 가능성과 반응 강도를 기준으로 먼저 볼 3개를 골랐습니다. 전체 처리 기록 {allDecisionCount}개는 숨겨집니다.</p>
+          <p className="mt-1 text-xs text-rose-100/70">현재 불러온 영상에서 또터또 가능성과 반응 강도를 기준으로 먼저 볼 3개를 고릅니다. 전체 처리 기록 {allDecisionCount}개는 숨겨집니다.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {allDecisionCount > 0 && (
@@ -220,7 +220,7 @@ export default function RadarCandidateStrip({
                 <div className="mb-2 flex flex-wrap gap-1.5">
                   {isTtoTto && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">
-                      <Rocket className="h-3 w-3" /> 터또터
+                      <Rocket className="h-3 w-3" /> 또터또
                     </span>
                   )}
                   {isStrong && (
@@ -247,7 +247,7 @@ export default function RadarCandidateStrip({
                 </div>
                 <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                   <div className="rounded-xl bg-slate-900 px-2 py-2">
-                    <p className="text-[9px] font-bold text-slate-500">대박지수</p>
+                    <p className="text-[9px] font-bold text-slate-500">대박 지수</p>
                     <p className="text-sm font-extrabold text-white">{Number(video.multiplier || 0).toFixed(1)}x</p>
                   </div>
                   <div className="rounded-xl bg-slate-900 px-2 py-2">
