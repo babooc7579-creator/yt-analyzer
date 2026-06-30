@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Filter, FolderOpen, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, ThumbsUp, MessageSquareText, X, Bookmark } from 'lucide-react';
+import { AlertCircle, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, Filter, FolderOpen, Sparkles, Copy, CheckCircle2, Globe, Settings, MessageSquareText, Bookmark } from 'lucide-react';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
 import { clearVideoUserRecords, createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, fetchVideoUserRecords, removeChannel, renameTag, saveScrapbookVideos, saveVideoUserRecord, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest, updateChannel } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
@@ -11,6 +11,7 @@ import { LANGUAGES } from './constants/languages';
 import { CHANNEL_STATUS, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS, hasAnyVideoStatus, isChannelScannable, withRecordStatus } from './constants/status';
 import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
+import ChannelNotesModal from './components/ChannelNotesModal';
 import ChannelTagTabs from './components/ChannelTagTabs';
 import HomeActionShortcuts from './components/HomeActionShortcuts';
 import HomeOperatingGuidelines from './components/HomeOperatingGuidelines';
@@ -20,6 +21,7 @@ import ProductionKanban from './components/ProductionKanban';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
 import ReferenceVaultSummary from './components/ReferenceVaultSummary';
 import StoredVideoGuide from './components/StoredVideoGuide';
+import TopCommentsModal from './components/TopCommentsModal';
 import VideoCard from './components/VideoCard';
 import VideoListTable from './components/VideoListTable';
 import VideoToolbar from './components/VideoToolbar';
@@ -656,96 +658,17 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 p-4 md:p-6 font-sans text-slate-100">
       
-      {/* 댓글 모달창 */}
-      {commentModal.isOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200">
-            <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                <MessageSquareText className="w-5 h-5 text-indigo-500" />
-                찐팬 반응 분석 (Top 10)
-              </h3>
-              <button onClick={() => setCommentModal({ isOpen: false, videoTitle: '', comments: [], loading: false })} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-4 bg-indigo-50/50 border-b border-indigo-100 text-sm font-medium text-indigo-900 line-clamp-1">
-              원본 영상: {commentModal.videoTitle}
-            </div>
-            <div className="p-4 overflow-y-auto flex-1 space-y-4">
-              {commentModal.loading ? (
-                <div className="flex flex-col items-center justify-center py-10 text-slate-500 gap-3">
-                  <Loader2 className="w-8 h-8 animate-spin text-indigo-500" /> 댓글 데이터를 불러오는 중...
-                </div>
-              ) : commentModal.error ? (
-                <div className="text-center py-10 text-red-500 bg-red-50 rounded-xl border border-red-100">{commentModal.error}</div>
-              ) : commentModal.comments.length === 0 ? (
-                <div className="text-center py-10 text-slate-500">조회된 댓글이 없습니다.</div>
-              ) : (
-                commentModal.comments.map((comment) => (
-                  <div key={comment.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="font-semibold text-sm text-slate-800">@{comment.author}</span>
-                      <span className="flex items-center gap-1 text-xs text-rose-500 font-bold bg-rose-50 px-2 py-0.5 rounded-full">
-                        <ThumbsUp className="w-3 h-3" /> {comment.likeCount > 0 ? comment.likeCount.toLocaleString() : '0'}
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm whitespace-pre-wrap">{comment.text}</p>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <TopCommentsModal
+        modal={commentModal}
+        onClose={() => setCommentModal({ isOpen: false, videoTitle: '', comments: [], loading: false })}
+      />
 
-      {/* 채널 분석/기록 모달창 */}
-      {notesModal.isOpen && notesModal.channel && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200">
-            <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                <History className="w-5 h-5 text-indigo-500" />
-                {notesModal.channel.title} - 분석 기록
-              </h3>
-              <button onClick={() => setNotesModal({ isOpen: false, channel: null, newNoteText: '', saving: false })} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-4 border-b border-slate-100">
-              <textarea
-                value={notesModal.newNoteText}
-                onChange={(e) => setNotesModal(prev => ({ ...prev, newNoteText: e.target.value }))}
-                placeholder="예) 또 떡상함, 패턴인듯 / 시니어롱폼 소재로 쓰기 좋음 / 톤이 우리 채널이랑 비슷함..."
-                className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg outline-none resize-none focus:ring-2 focus:ring-indigo-500"
-                rows={2}
-              />
-              <button
-                onClick={addChannelNote}
-                disabled={notesModal.saving || !notesModal.newNoteText.trim()}
-                className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 text-white rounded-lg text-sm font-semibold transition-colors"
-              >
-                {notesModal.saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                기록 추가
-              </button>
-            </div>
-
-            <div className="p-4 overflow-y-auto flex-1 space-y-3">
-              {(!notesModal.channel.notes || notesModal.channel.notes.length === 0) ? (
-                <div className="text-center py-10 text-slate-400 text-sm">아직 기록이 없어요. 위에서 첫 기록을 남겨보세요!</div>
-              ) : (
-                notesModal.channel.notes.map((note, idx) => (
-                  <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <p className="text-[10px] text-slate-400 mb-1">{new Date(note.date).toLocaleString('ko-KR')}</p>
-                    <p className="text-sm text-slate-700 whitespace-pre-wrap">{note.text}</p>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <ChannelNotesModal
+        modal={notesModal}
+        onChangeText={(value) => setNotesModal(prev => ({ ...prev, newNoteText: value }))}
+        onAddNote={addChannelNote}
+        onClose={() => setNotesModal({ isOpen: false, channel: null, newNoteText: '', saving: false })}
+      />
 
       <div className="mx-auto flex w-full max-w-[2600px] flex-col gap-4 xl:flex-row">
         <aside className="xl:sticky xl:top-6 xl:h-[calc(100vh-48px)] xl:w-[350px] shrink-0 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/95 p-4 shadow-2xl shadow-slate-950/40 [scrollbar-color:#334155_transparent] [scrollbar-width:thin]">
