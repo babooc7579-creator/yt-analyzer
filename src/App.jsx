@@ -13,6 +13,7 @@ import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
 import HomeActionShortcuts from './components/HomeActionShortcuts';
+import HomeOperatingGuidelines from './components/HomeOperatingGuidelines';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
 import HomeRadarSummary from './components/HomeRadarSummary';
 import ProductionKanban from './components/ProductionKanban';
@@ -847,23 +848,7 @@ export default function App() {
                 />
               </section>
 
-              <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl shadow-slate-950/30">
-                <p className="text-sm font-extrabold text-white">운영 기준</p>
-                <div className="mt-4 space-y-3 text-sm text-slate-400">
-                  <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-4">
-                    <p className="font-bold text-emerald-200">수집은 API 호출</p>
-                    <p className="mt-1 text-xs leading-relaxed">새 영상 수집은 YouTube API를 호출합니다. 필요한 채널만 체크해서 실행하세요.</p>
-                  </div>
-                  <div className="rounded-xl border border-blue-400/20 bg-blue-500/10 p-4">
-                    <p className="font-bold text-blue-200">불러오기는 저장 데이터 조회</p>
-                    <p className="mt-1 text-xs leading-relaxed">저장된 영상 불러오기는 이미 DB에 있는 영상만 보여줍니다.</p>
-                  </div>
-                  <div className="rounded-xl border border-orange-400/20 bg-orange-500/10 p-4">
-                    <p className="font-bold text-orange-200">터또터 기준</p>
-                    <p className="mt-1 text-xs leading-relaxed">한 번 반응이 검증된 영상을 재편집해 다시 살릴 후보를 우선 확인합니다.</p>
-                  </div>
-                </div>
-              </section>
+              <HomeOperatingGuidelines />
             </div>
           ) : isComingSoonView ? (
             <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/90 p-10 text-center shadow-xl shadow-slate-950/30">
