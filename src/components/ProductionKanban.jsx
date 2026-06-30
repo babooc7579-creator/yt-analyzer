@@ -199,8 +199,8 @@ export default function ProductionKanban({
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
         <Star className="mx-auto h-12 w-12 text-slate-300" />
-        <h3 className="mt-4 text-lg font-extrabold text-slate-800">제작 칸반에 올릴 후보가 없습니다</h3>
-        <p className="mt-2 text-sm text-slate-500">레이더나 레퍼런스 금고에서 스크랩을 누르면 이곳에 제작 후보로 모입니다.</p>
+        <h3 className="mt-4 text-lg font-extrabold text-slate-800">제작 칸반에 후보가 없습니다</h3>
+        <p className="mt-2 text-sm text-slate-500">레이더나 레퍼런스 금고에서 제작 후보로 보내면 이곳에 모입니다.</p>
         <button onClick={onOpenReferenceVault} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-700">
           <Rocket className="h-4 w-4" /> 레퍼런스 금고 열기
         </button>
@@ -234,7 +234,7 @@ export default function ProductionKanban({
           </div>
           <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
             <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
-              <CalendarDays className="h-3 w-3" /> 다음 예정
+              <CalendarDays className="h-3 w-3" /> 다음 일정
             </p>
             <p className="mt-1 truncate text-sm font-black text-amber-950">
               {productionSummary.nextScheduled ? formatDate(productionSummary.nextScheduled.date) : '일정 없음'}
@@ -291,7 +291,7 @@ export default function ProductionKanban({
                             <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${scheduleSignal.tone}`}>{scheduleSignal.label}</span>
                           )}
                           {video.multiplier !== undefined && (
-                            <span className="rounded-full bg-rose-50 px-2 py-1 text-[10px] font-bold text-rose-600">대박지수 {Number(video.multiplier || 0).toFixed(1)}x</span>
+                            <span className="rounded-full bg-rose-50 px-2 py-1 text-[10px] font-bold text-rose-600">대박 지수 {Number(video.multiplier || 0).toFixed(1)}x</span>
                           )}
                         </div>
 
@@ -302,7 +302,7 @@ export default function ProductionKanban({
                               type="text"
                               value={record.draftTitle || ''}
                               onChange={(event) => updateDraftRecord(video.videoId, { draftTitle: event.target.value })}
-                              placeholder="예) 한국형으로 바꾼 제목 초안"
+                              placeholder="내 채널에 맞게 바꿀 제목 초안"
                               className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-200"
                             />
                           </label>
@@ -311,7 +311,7 @@ export default function ProductionKanban({
                             <textarea
                               value={record.note || ''}
                               onChange={(event) => updateDraftRecord(video.videoId, { note: event.target.value })}
-                              placeholder="후킹 포인트, 참고할 장면, 만들 방향"
+                              placeholder="훅 포인트, 참고할 장면, 만들 방향"
                               rows={2}
                               className="mt-1 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200"
                             />
@@ -335,12 +335,12 @@ export default function ProductionKanban({
                           </button>
                           {saveState === 'saved' && (
                             <p className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600">
-                              <CheckCircle2 className="h-3 w-3" /> 클라우드에 저장됐습니다
+                              <CheckCircle2 className="h-3 w-3" /> 클라우드에 저장됐습니다.
                             </p>
                           )}
                           {saveState === 'error' && (
                             <p className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600">
-                              <AlertCircle className="h-3 w-3" /> 저장 실패. 다시 저장해 주세요
+                              <AlertCircle className="h-3 w-3" /> 저장 실패. 다시 저장해 주세요.
                             </p>
                           )}
                         </div>
@@ -363,12 +363,12 @@ export default function ProductionKanban({
                           )}
                           {moveState === 'error' && (
                             <p className="inline-flex items-center justify-center gap-1 text-[10px] font-bold text-red-600">
-                              <AlertCircle className="h-3 w-3" /> 상태 저장 실패. 다시 눌러 주세요
+                              <AlertCircle className="h-3 w-3" /> 상태 저장 실패. 다시 눌러 주세요.
                             </p>
                           )}
                           {column.id === PRODUCTION_STATUS.DONE && (
                             <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center text-[11px] font-bold text-slate-600">
-                              업로드 완료일: {record.uploadedAt || '기록 없음'}
+                              업로드 완료일 {record.uploadedAt || '기록 없음'}
                             </div>
                           )}
                           <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50">
