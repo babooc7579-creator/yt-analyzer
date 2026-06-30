@@ -39,6 +39,13 @@ export const removeChannel = ({ id, category }) => (
   })
 );
 
+export const updateChannel = ({ id, category, updates }) => (
+  sendJson(`/channels/${id}?category=${encodeURIComponent(category)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updates),
+  })
+);
+
 export const createChannelNote = ({ id, category, text }) => (
   sendJson(`/channels/${id}/notes?category=${encodeURIComponent(category)}`, {
     method: 'POST',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, ThumbsUp, MessageSquareText, X, Bookmark, RefreshCw } from 'lucide-react';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
-import { clearVideoUserRecords, createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, fetchVideoUserRecords, removeChannel, renameTag, saveScrapbookVideos, saveVideoUserRecord, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest } from './services/functionApi';
+import { clearVideoUserRecords, createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, fetchVideoUserRecords, removeChannel, renameTag, saveScrapbookVideos, saveVideoUserRecord, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest, updateChannel } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
 import { filterAndSortVideos, isTtoTtoCandidate, mapCloudVideoToViewModel } from './utils/video';
 import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
@@ -31,6 +31,7 @@ export default function App() {
 
   const [savedChannels, setSavedChannels] = useState([]);
   const [channelsLoading, setChannelsLoading] = useState(true);
+  const [updatingChannelId, setUpdatingChannelId] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [savedVideos, setSavedVideos] = useState(() => {
     return readJsonStorage(STORAGE_KEYS.savedVideos, []) || [];
@@ -290,6 +291,22 @@ export default function App() {
       setSelectedChannelIds(prev => prev.filter(cId => cId !== id));
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const updateChannelMetadata = async (channel, updates) => {
+    setUpdatingChannelId(channel.id);
+    setError('');
+
+    try {
+      const data = await updateChannel({ id: channel.id, category: channel.category, updates });
+      if (!data.success) throw new Error(data.error || '채널 정보를 저장하지 못했습니다.');
+
+      setSavedChannels(prev => prev.map(c => c.id === data.channel.id ? data.channel : c));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUpdatingChannelId(null);
     }
   };
 
@@ -949,6 +966,8 @@ export default function App() {
               getScanDisplay={getChannelScanDisplay}
               onToggleSelection={toggleChannelSelection}
               onOpenNotes={openNotesModal}
+              onUpdateMetadata={updateChannelMetadata}
+              updatingChannelId={updatingChannelId}
               onDelete={deleteChannel}
             />
 
