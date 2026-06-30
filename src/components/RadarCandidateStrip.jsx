@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Bookmark, CheckCircle2, Clock, ExternalLink, Play, Rocket, Star, TrendingUp, XCircle } from 'lucide-react';
+import { Bookmark, CheckCircle2, Clock, ExternalLink, Play, RotateCcw, Rocket, Star, TrendingUp, XCircle } from 'lucide-react';
 import { hasAnyVideoStatus, hasVideoStatus, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS } from '../constants/status';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 
@@ -36,25 +36,11 @@ export default function RadarCandidateStrip({
   onToggleScrap,
   onMarkVideoStatus,
   onPromoteToProduction,
+  onRestoreVideo,
   onClearDecisions,
   onOpenVault,
   onOpenScrapbook,
 }) {
-  const decidedCount = useMemo(() => (
-    Object.values(videoUserRecords).filter((record) => hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES)).length
-  ), [videoUserRecords]);
-
-  const decisionSummary = useMemo(() => (
-    videos.reduce((summary, video) => {
-      const record = videoUserRecords[video.videoId];
-      if (hasVideoStatus(record, VIDEO_STATUS.REVIEWED)) summary.reviewed += 1;
-      if (hasAnyVideoStatus(record, [VIDEO_STATUS.LEGACY_LATER, VIDEO_STATUS.WATCH_LATER])) summary.later += 1;
-      if (hasVideoStatus(record, VIDEO_STATUS.EXCLUDED)) summary.excluded += 1;
-      if (hasAnyVideoStatus(record, [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])) summary.production += 1;
-      return summary;
-    }, { reviewed: 0, later: 0, excluded: 0, production: 0 })
-  ), [videos, videoUserRecords]);
-
   const decisionBuckets = useMemo(() => (
     videos.reduce((buckets, video) => {
       const record = videoUserRecords[video.videoId];
@@ -66,6 +52,19 @@ export default function RadarCandidateStrip({
     }, { reviewed: [], later: [], excluded: [], production: [] })
   ), [videos, videoUserRecords]);
 
+  const decisionSummary = {
+    reviewed: decisionBuckets.reviewed.length,
+    later: decisionBuckets.later.length,
+    excluded: decisionBuckets.excluded.length,
+    production: decisionBuckets.production.length,
+  };
+
+  const loadedDecisionCount = decisionSummary.reviewed + decisionSummary.later + decisionSummary.excluded + decisionSummary.production;
+
+  const allDecisionCount = useMemo(() => (
+    Object.values(videoUserRecords).filter((record) => hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES)).length
+  ), [videoUserRecords]);
+
   const candidates = useMemo(() => (
     [...videos]
       .filter((video) => {
@@ -75,6 +74,78 @@ export default function RadarCandidateStrip({
       .sort((a, b) => getRadarScore(b) - getRadarScore(a))
       .slice(0, 3)
   ), [videos, videoUserRecords]);
+
+  const decisionGroups = [
+    { key: 'reviewed', label: '봤음', videos: decisionBuckets.reviewed },
+    { key: 'later', label: '나중에 보기', videos: decisionBuckets.later },
+    { key: 'production', label: '제작 후보', videos: decisionBuckets.production },
+    { key: 'excluded', label: '제외', videos: decisionBuckets.excluded },
+  ];
+
+  const renderDecisionSummary = () => (
+    <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4">
+      <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-2">
+        <p className="text-[10px] font-extrabold text-emerald-100">봤음</p>
+        <p className="mt-1 text-lg font-black text-white">{decisionSummary.reviewed}</p>
+      </div>
+      <div className="rounded-xl border border-slate-500/30 bg-slate-900/60 px-3 py-2">
+        <p className="text-[10px] font-extrabold text-slate-200">나중에 보기</p>
+        <p className="mt-1 text-lg font-black text-white">{decisionSummary.later}</p>
+      </div>
+      <div className="rounded-xl border border-indigo-400/20 bg-indigo-500/10 px-3 py-2">
+        <p className="text-[10px] font-extrabold text-indigo-100">제작 후보</p>
+        <p className="mt-1 text-lg font-black text-white">{decisionSummary.production}</p>
+      </div>
+      <div className="rounded-xl border border-slate-500/30 bg-slate-950/70 px-3 py-2">
+        <p className="text-[10px] font-extrabold text-slate-300">제외</p>
+        <p className="mt-1 text-lg font-black text-white">{decisionSummary.excluded}</p>
+      </div>
+    </div>
+  );
+
+  const renderDecisionLists = () => loadedDecisionCount > 0 && (
+    <div className="mt-3 rounded-2xl border border-slate-700 bg-slate-950/50 p-3">
+      <div>
+        <p className="text-xs font-extrabold text-white">처리 기록</p>
+        <p className="mt-0.5 text-[10px] text-slate-400">현재 불러온 영상에서 이미 판단한 항목입니다. 실수한 항목은 다시 레이더로 돌릴 수 있습니다.</p>
+      </div>
+      <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
+        {decisionGroups.map((group) => (
+          <div key={group.key} className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5">
+            <p className="text-[10px] font-extrabold text-slate-300">{group.label}</p>
+            {group.videos.length === 0 ? (
+              <p className="mt-2 text-[10px] text-slate-500">아직 없음</p>
+            ) : (
+              <div className="mt-2 space-y-1.5">
+                {group.videos.slice(0, 3).map((video) => (
+                  <div key={`${group.key}-${video.videoId}`} className="rounded-lg bg-slate-950/70 p-1.5">
+                    <a
+                      href={`https://youtube.com/watch?v=${video.videoId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block truncate text-[10px] font-bold text-slate-200 hover:text-white"
+                      title={video.title}
+                    >
+                      {video.title}
+                    </a>
+                    <button
+                      onClick={() => onRestoreVideo(video.videoId)}
+                      className="mt-1 inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-200 hover:text-white"
+                    >
+                      <RotateCcw className="h-3 w-3" /> 레이더로 되돌리기
+                    </button>
+                  </div>
+                ))}
+                {group.videos.length > 3 && (
+                  <p className="text-[10px] font-bold text-slate-500">외 {group.videos.length - 3}개</p>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   if (videos.length === 0) {
     return (
@@ -92,7 +163,7 @@ export default function RadarCandidateStrip({
     return (
       <div className="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-5">
         <p className="text-sm font-extrabold text-emerald-100">오늘 볼 후보를 모두 처리했습니다</p>
-        <p className="mt-2 text-xs leading-relaxed text-emerald-100/70">검토 완료 또는 나중에 보기로 표시한 후보는 오늘의 레이더에서 숨겨집니다. 필요하면 판단 기록을 초기화할 수 있습니다.</p>
+        <p className="mt-2 text-xs leading-relaxed text-emerald-100/70">봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있습니다.</p>
         <div className="mt-4 flex flex-wrap gap-2">
           <button onClick={onOpenVault} className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/15">
             <Bookmark className="h-4 w-4" /> 레퍼런스 금고 열기
@@ -101,6 +172,8 @@ export default function RadarCandidateStrip({
             <CheckCircle2 className="h-4 w-4" /> 판단 기록 초기화
           </button>
         </div>
+        {renderDecisionSummary()}
+        {renderDecisionLists()}
       </div>
     );
   }
@@ -110,10 +183,10 @@ export default function RadarCandidateStrip({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-extrabold text-rose-100">오늘 볼 후보</p>
-          <p className="mt-1 text-xs text-rose-100/70">현재 불러온 영상에서 터또터 가능성과 반응 강도를 기준으로 먼저 볼 3개를 골랐습니다. 처리한 후보 {decidedCount}개는 숨겨집니다.</p>
+          <p className="mt-1 text-xs text-rose-100/70">현재 불러온 영상에서 터또터 가능성과 반응 강도를 기준으로 먼저 볼 3개를 골랐습니다. 전체 처리 기록 {allDecisionCount}개는 숨겨집니다.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          {decidedCount > 0 && (
+          {allDecisionCount > 0 && (
             <button onClick={onClearDecisions} className="inline-flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-900">
               판단 초기화
             </button>
@@ -124,68 +197,8 @@ export default function RadarCandidateStrip({
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4">
-        <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-2">
-          <p className="text-[10px] font-extrabold text-emerald-100">봤음</p>
-          <p className="mt-1 text-lg font-black text-white">{decisionSummary.reviewed}</p>
-        </div>
-        <div className="rounded-xl border border-slate-500/30 bg-slate-900/60 px-3 py-2">
-          <p className="text-[10px] font-extrabold text-slate-200">나중에 보기</p>
-          <p className="mt-1 text-lg font-black text-white">{decisionSummary.later}</p>
-        </div>
-        <div className="rounded-xl border border-indigo-400/20 bg-indigo-500/10 px-3 py-2">
-          <p className="text-[10px] font-extrabold text-indigo-100">제작 후보</p>
-          <p className="mt-1 text-lg font-black text-white">{decisionSummary.production}</p>
-        </div>
-        <div className="rounded-xl border border-slate-500/30 bg-slate-950/70 px-3 py-2">
-          <p className="text-[10px] font-extrabold text-slate-300">제외</p>
-          <p className="mt-1 text-lg font-black text-white">{decisionSummary.excluded}</p>
-        </div>
-      </div>
-
-      {decidedCount > 0 && (
-        <div className="mt-3 rounded-2xl border border-slate-700 bg-slate-950/50 p-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-extrabold text-white">처리 기록</p>
-              <p className="mt-0.5 text-[10px] text-slate-400">현재 불러온 영상에서 이미 판단한 항목입니다. 제목을 누르면 YouTube에서 다시 확인할 수 있습니다.</p>
-            </div>
-          </div>
-          <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              { key: 'reviewed', label: '봤음', videos: decisionBuckets.reviewed },
-              { key: 'later', label: '나중에 보기', videos: decisionBuckets.later },
-              { key: 'production', label: '제작 후보', videos: decisionBuckets.production },
-              { key: 'excluded', label: '제외', videos: decisionBuckets.excluded },
-            ].map((group) => (
-              <div key={group.key} className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5">
-                <p className="text-[10px] font-extrabold text-slate-300">{group.label}</p>
-                {group.videos.length === 0 ? (
-                  <p className="mt-2 text-[10px] text-slate-500">아직 없음</p>
-                ) : (
-                  <div className="mt-2 space-y-1.5">
-                    {group.videos.slice(0, 3).map((video) => (
-                      <a
-                        key={`${group.key}-${video.videoId}`}
-                        href={`https://youtube.com/watch?v=${video.videoId}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="block truncate rounded-lg bg-slate-950/70 px-2 py-1.5 text-[10px] font-bold text-slate-200 hover:text-white"
-                        title={video.title}
-                      >
-                        {video.title}
-                      </a>
-                    ))}
-                    {group.videos.length > 3 && (
-                      <p className="text-[10px] font-bold text-slate-500">외 {group.videos.length - 3}개</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {renderDecisionSummary()}
+      {renderDecisionLists()}
 
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
         {candidates.map((video, index) => {

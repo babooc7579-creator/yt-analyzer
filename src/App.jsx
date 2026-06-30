@@ -8,7 +8,7 @@ import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
 import { LANGUAGES } from './constants/languages';
-import { CHANNEL_STATUS, PRODUCTION_STATUS, isChannelScannable, withRecordStatus } from './constants/status';
+import { CHANNEL_STATUS, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS, isChannelScannable, withRecordStatus } from './constants/status';
 import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
@@ -541,6 +541,33 @@ export default function App() {
     await markRadarVideoStatus(video.videoId, PRODUCTION_STATUS.CANDIDATE);
   };
 
+  const restoreVideoToRadar = async (videoId) => {
+    const existingRecord = videoUserRecords[videoId] || {};
+    const keptStatusIds = Array.isArray(existingRecord.statusIds)
+      ? existingRecord.statusIds.filter(status => !RADAR_HIDDEN_VIDEO_STATUSES.includes(status))
+      : [];
+
+    const record = {
+      ...existingRecord,
+      videoId,
+      status: VIDEO_STATUS.UNSEEN,
+      statusIds: [...new Set([...keptStatusIds, VIDEO_STATUS.UNSEEN])],
+      updatedAt: new Date().toISOString(),
+    };
+
+    setVideoUserRecords(prev => ({
+      ...prev,
+      [videoId]: record,
+    }));
+
+    try {
+      await saveVideoUserRecord(record);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const clearRadarDecisions = async () => {
     setVideoUserRecords({});
     try {
@@ -826,6 +853,7 @@ export default function App() {
                   onToggleScrap={toggleScrapVideo}
                   onMarkVideoStatus={markRadarVideoStatus}
                   onPromoteToProduction={promoteVideoToProduction}
+                  onRestoreVideo={restoreVideoToRadar}
                   onClearDecisions={clearRadarDecisions}
                   onOpenVault={() => openCreatorView({ id: 'vault-all' })}
                   onOpenScrapbook={() => openCreatorView({ id: 'studio-scrapbook' })}
