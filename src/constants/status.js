@@ -92,6 +92,14 @@ export const getChannelStatus = (channel = {}) => (
   Object.values(CHANNEL_STATUS).includes(channel.status) ? channel.status : CHANNEL_STATUS.ACTIVE
 );
 
+export const SCANNABLE_CHANNEL_STATUSES = [
+  CHANNEL_STATUS.ACTIVE,
+];
+
+export const isChannelScannable = (channel = {}) => (
+  SCANNABLE_CHANNEL_STATUSES.includes(getChannelStatus(channel))
+);
+
 export const RADAR_HIDDEN_VIDEO_STATUSES = [
   VIDEO_STATUS.REVIEWED,
   VIDEO_STATUS.LEGACY_LATER,

@@ -8,7 +8,7 @@ import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
 import { LANGUAGES } from './constants/languages';
-import { PRODUCTION_STATUS, withRecordStatus } from './constants/status';
+import { CHANNEL_STATUS, PRODUCTION_STATUS, isChannelScannable, withRecordStatus } from './constants/status';
 import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
@@ -303,6 +303,9 @@ export default function App() {
       if (!data.success) throw new Error(data.error || '채널 정보를 저장하지 못했습니다.');
 
       setSavedChannels(prev => prev.map(c => c.id === data.channel.id ? data.channel : c));
+      if (updates.status && updates.status !== CHANNEL_STATUS.ACTIVE) {
+        setSelectedChannelIds(prev => prev.filter(id => id !== data.channel.id));
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -370,7 +373,15 @@ export default function App() {
   // tag가 있으면 그 태그(결)에 속한 채널만, 없으면 전체 채널을 스캔
   const runScanRequest = async (tag) => {
     const scanSelectedChannels = !tag && selectedChannelIds.length > 0;
-    const channelIdsForScan = [...selectedChannelIds];
+    const selectedChannelsForScan = savedChannels.filter(channel => (
+      selectedChannelIds.includes(channel.id) && isChannelScannable(channel)
+    ));
+    const channelIdsForScan = selectedChannelsForScan.map(channel => channel.id);
+
+    if (scanSelectedChannels && channelIdsForScan.length === 0) {
+      setError('운영중 상태의 채널을 하나 이상 선택해 주세요. 보류/제외 채널은 새 영상 수집에서 제외됩니다.');
+      return;
+    }
 
     setIsScanning(true); setScanningTag(scanSelectedChannels ? 'SELECTED' : (tag || 'ALL')); setError('');
     setProgressMsg(`${scanSelectedChannels ? `선택 채널 ${channelIdsForScan.length}개` : tag ? `'${tag}' 태그 채널` : '전체 채널'} 새 영상 수집 중... (YouTube API 호출이 발생합니다)`);
