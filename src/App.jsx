@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Play, AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Search, Filter, FolderOpen, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, ThumbsUp, MessageSquareText, X, Bookmark, RefreshCw } from 'lucide-react';
+import { AlertCircle, Loader2, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, History, Filter, FolderOpen, Sparkles, Copy, CheckCircle2, Plus, Globe, Settings, ThumbsUp, MessageSquareText, X, Bookmark } from 'lucide-react';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
 import { clearVideoUserRecords, createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, fetchVideoUserRecords, removeChannel, renameTag, saveScrapbookVideos, saveVideoUserRecord, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest, updateChannel } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
@@ -19,9 +19,11 @@ import HomeRadarSummary from './components/HomeRadarSummary';
 import ProductionKanban from './components/ProductionKanban';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
 import ReferenceVaultSummary from './components/ReferenceVaultSummary';
+import StoredVideoGuide from './components/StoredVideoGuide';
 import VideoCard from './components/VideoCard';
 import VideoListTable from './components/VideoListTable';
 import VideoToolbar from './components/VideoToolbar';
+import WorkspaceTabs from './components/WorkspaceTabs';
 
 export default function App() {
   const [apiKey, setApiKey] = useState('');
@@ -977,14 +979,11 @@ export default function App() {
         <div className="flex flex-col h-full space-y-4 min-w-0">
           
           {/* 탭 네비게이션 */}
-          <div className="flex gap-2">
-            <button onClick={() => setActiveTab('dashboard')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'dashboard' ? 'bg-white shadow-sm text-indigo-700 ring-1 ring-indigo-100' : 'bg-slate-200/50 text-slate-500 hover:bg-white hover:shadow-sm'}`}>
-              <Search className="w-4 h-4" /> 분석 대시보드
-            </button>
-            <button onClick={() => setActiveTab('scrapbook')} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${activeTab === 'scrapbook' ? 'bg-white shadow-sm text-yellow-600 ring-1 ring-yellow-100' : 'bg-slate-200/50 text-slate-500 hover:bg-white hover:shadow-sm'}`}>
-              <Bookmark className="w-4 h-4" /> 영구 스크랩북 <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">{savedVideos.length}</span>
-            </button>
-          </div>
+          <WorkspaceTabs
+            activeTab={activeTab}
+            savedVideoCount={savedVideos.length}
+            onSelectTab={setActiveTab}
+          />
 
           {activeTab === 'dashboard' ? (
             <>
@@ -997,26 +996,7 @@ export default function App() {
                   ttoTtoCount={ttoTtoAssetCount}
                 />
               ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                    <div className="flex items-start gap-4">
-                      <RefreshCw className="w-5 h-5 text-emerald-600 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-extrabold text-emerald-800">유튜브 새 영상 수집</p>
-                        <p className="text-xs text-slate-600 mt-1">YouTube API를 호출해 신규 영상을 확인합니다. 새 영상이 필요할 때만 실행하세요.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                    <div className="flex items-start gap-4">
-                      <Play className="w-5 h-5 text-blue-600 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-extrabold text-blue-800">저장된 영상 불러오기</p>
-                        <p className="text-xs text-slate-600 mt-1">클라우드에 이미 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <StoredVideoGuide />
               )}
 
               {/* 컨트롤 바 */}
