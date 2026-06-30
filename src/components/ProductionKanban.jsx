@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, Clock, ExternalLink, Play, Rocket, Save, Star } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Clock, ExternalLink, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
 
 const COLUMNS = [
   {
@@ -38,6 +38,7 @@ export default function ProductionKanban({
   onOpenReferenceVault,
 }) {
   const [draftRecords, setDraftRecords] = useState({});
+  const [saveStates, setSaveStates] = useState({});
 
   useEffect(() => {
     setDraftRecords(videoUserRecords);
@@ -75,13 +76,28 @@ export default function ProductionKanban({
       || (saved.targetPublishDate || '') !== (draft.targetPublishDate || '');
   };
 
-  const saveDraftRecord = (videoId) => {
+  const saveDraftRecord = async (videoId) => {
     const draft = draftRecords[videoId] || {};
-    onUpdateVideoRecord(videoId, {
+    setSaveStates(prev => ({ ...prev, [videoId]: 'saving' }));
+
+    const didSave = await onUpdateVideoRecord(videoId, {
       draftTitle: draft.draftTitle || '',
       note: draft.note || '',
       targetPublishDate: draft.targetPublishDate || '',
     });
+
+    setSaveStates(prev => ({ ...prev, [videoId]: didSave ? 'saved' : 'error' }));
+
+    if (didSave) {
+      setTimeout(() => {
+        setSaveStates(prev => {
+          if (prev[videoId] !== 'saved') return prev;
+          const next = { ...prev };
+          delete next[videoId];
+          return next;
+        });
+      }, 2200);
+    }
   };
 
   if (videos.length === 0) {
@@ -128,6 +144,8 @@ export default function ProductionKanban({
                 groupedVideos[column.id].map((video) => {
                   const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
                   const isDirty = hasUnsavedChanges(video.videoId);
+                  const saveState = saveStates[video.videoId];
+                  const isSaving = saveState === 'saving';
 
                   return (
                     <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -175,11 +193,22 @@ export default function ProductionKanban({
                           </label>
                           <button
                             onClick={() => saveDraftRecord(video.videoId)}
-                            disabled={!isDirty}
-                            className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isDirty ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+                            disabled={!isDirty || isSaving}
+                            className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isDirty && !isSaving ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
                           >
-                            <Save className="h-3.5 w-3.5" /> {isDirty ? '변경 내용 저장' : '저장됨'}
+                            {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+                            {isSaving ? '저장 중...' : isDirty ? '변경 내용 저장' : '저장됨'}
                           </button>
+                          {saveState === 'saved' && (
+                            <p className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600">
+                              <CheckCircle2 className="h-3 w-3" /> 클라우드에 저장됐습니다
+                            </p>
+                          )}
+                          {saveState === 'error' && (
+                            <p className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600">
+                              <AlertCircle className="h-3 w-3" /> 저장 실패. 다시 저장해 주세요
+                            </p>
+                          )}
                         </div>
 
                         <div className="mt-3 grid grid-cols-1 gap-2">
