@@ -1,31 +1,32 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AlertCircle, CalendarDays, CheckCircle2, Clock, ExternalLink, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
+import { PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 
 const COLUMNS = [
   {
-    id: 'production_candidate',
-    title: '제작 후보',
+    id: PRODUCTION_STATUS.CANDIDATE,
+    title: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.CANDIDATE],
     description: '만들지 말지 판단할 소재',
     tone: 'border-indigo-200 bg-indigo-50',
   },
   {
-    id: 'production_active',
-    title: '제작 중',
+    id: PRODUCTION_STATUS.ACTIVE,
+    title: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.ACTIVE],
     description: '지금 영상화하는 소재',
     tone: 'border-emerald-200 bg-emerald-50',
   },
   {
-    id: 'uploaded',
-    title: '업로드 완료',
+    id: PRODUCTION_STATUS.DONE,
+    title: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.DONE],
     description: '완성 후 기록으로 남긴 소재',
     tone: 'border-slate-200 bg-slate-50',
   },
 ];
 
 const getProductionStatus = (record) => {
-  if (record?.status === 'production_active') return 'production_active';
-  if (record?.status === 'uploaded') return 'uploaded';
-  return 'production_candidate';
+  if (record?.status === PRODUCTION_STATUS.ACTIVE) return PRODUCTION_STATUS.ACTIVE;
+  if (record?.status === PRODUCTION_STATUS.DONE) return PRODUCTION_STATUS.DONE;
+  return PRODUCTION_STATUS.CANDIDATE;
 };
 
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
@@ -90,20 +91,20 @@ export default function ProductionKanban({
       acc[status].push(video);
       return acc;
     }, {
-      production_candidate: [],
-      production_active: [],
-      uploaded: [],
+      [PRODUCTION_STATUS.CANDIDATE]: [],
+      [PRODUCTION_STATUS.ACTIVE]: [],
+      [PRODUCTION_STATUS.DONE]: [],
     });
 
-    grouped.production_candidate.sort((a, b) => Number(b.multiplier || 0) - Number(a.multiplier || 0));
-    grouped.production_active.sort((a, b) => {
+    grouped[PRODUCTION_STATUS.CANDIDATE].sort((a, b) => Number(b.multiplier || 0) - Number(a.multiplier || 0));
+    grouped[PRODUCTION_STATUS.ACTIVE].sort((a, b) => {
       const aRecord = videoUserRecords[a.videoId] || {};
       const bRecord = videoUserRecords[b.videoId] || {};
       const aDate = aRecord.targetPublishDate || '9999-12-31';
       const bDate = bRecord.targetPublishDate || '9999-12-31';
       return aDate.localeCompare(bDate);
     });
-    grouped.uploaded.sort((a, b) => {
+    grouped[PRODUCTION_STATUS.DONE].sort((a, b) => {
       const aRecord = videoUserRecords[a.videoId] || {};
       const bRecord = videoUserRecords[b.videoId] || {};
       return (bRecord.uploadedAt || '').localeCompare(aRecord.uploadedAt || '');
@@ -126,12 +127,12 @@ export default function ProductionKanban({
       .sort((a, b) => a.date.localeCompare(b.date));
 
     return {
-      candidateCount: groupedVideos.production_candidate.length,
-      activeCount: groupedVideos.production_active.length,
-      uploadedCount: groupedVideos.uploaded.length,
+      candidateCount: groupedVideos[PRODUCTION_STATUS.CANDIDATE].length,
+      activeCount: groupedVideos[PRODUCTION_STATUS.ACTIVE].length,
+      uploadedCount: groupedVideos[PRODUCTION_STATUS.DONE].length,
       nextScheduled: scheduledVideos.find(item => item.date >= today) || scheduledVideos[0],
       overdueCount: scheduledVideos.filter(item => item.date < today).length,
-      activeWithoutDate: groupedVideos.production_active.filter((video) => {
+      activeWithoutDate: groupedVideos[PRODUCTION_STATUS.ACTIVE].filter((video) => {
         const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
         return !record.targetPublishDate;
       }).length,
@@ -291,7 +292,7 @@ export default function ProductionKanban({
                         </a>
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">{video.channel_title || video.channelTitle || '채널 정보 없음'}</span>
-                          {column.id !== 'production_candidate' && (
+                          {column.id !== PRODUCTION_STATUS.CANDIDATE && (
                             <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${scheduleSignal.tone}`}>{scheduleSignal.label}</span>
                           )}
                           {video.multiplier !== undefined && (
@@ -350,18 +351,18 @@ export default function ProductionKanban({
                         </div>
 
                         <div className="mt-3 grid grid-cols-1 gap-2">
-                          {column.id !== 'production_candidate' && (
-                            <button onClick={() => moveVideo(video.videoId, 'production_candidate')} disabled={isMoving} className={`rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}>
+                          {column.id !== PRODUCTION_STATUS.CANDIDATE && (
+                            <button onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.CANDIDATE)} disabled={isMoving} className={`rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}>
                               {isMoving ? '이동 중...' : '제작 후보로'}
                             </button>
                           )}
-                          {column.id !== 'production_active' && (
-                            <button onClick={() => moveVideo(video.videoId, 'production_active')} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}>
+                          {column.id !== PRODUCTION_STATUS.ACTIVE && (
+                            <button onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.ACTIVE)} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}>
                               {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Clock className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '제작 중으로'}
                             </button>
                           )}
-                          {column.id !== 'uploaded' && (
-                            <button onClick={() => moveVideo(video.videoId, 'uploaded', { uploadedAt: record.uploadedAt || getTodayDate() })} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
+                          {column.id !== PRODUCTION_STATUS.DONE && (
+                            <button onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.DONE, { uploadedAt: record.uploadedAt || getTodayDate() })} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
                               {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '업로드 완료'}
                             </button>
                           )}
@@ -370,7 +371,7 @@ export default function ProductionKanban({
                               <AlertCircle className="h-3 w-3" /> 상태 저장 실패. 다시 눌러 주세요
                             </p>
                           )}
-                          {column.id === 'uploaded' && (
+                          {column.id === PRODUCTION_STATUS.DONE && (
                             <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center text-[11px] font-bold text-slate-600">
                               업로드 완료일: {record.uploadedAt || '기록 없음'}
                             </div>

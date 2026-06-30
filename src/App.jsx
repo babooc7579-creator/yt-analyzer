@@ -8,6 +8,7 @@ import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
 import { LANGUAGES } from './constants/languages';
+import { PRODUCTION_STATUS } from './constants/status';
 import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
@@ -509,7 +510,7 @@ export default function App() {
     if (!isVideoSaved(video.videoId)) {
       await toggleScrapVideo(video);
     }
-    await markRadarVideoStatus(video.videoId, 'production_candidate');
+    await markRadarVideoStatus(video.videoId, PRODUCTION_STATUS.CANDIDATE);
   };
 
   const clearRadarDecisions = async () => {
