@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Bookmark, CheckCircle2, Clock, ExternalLink, Play, Rocket, Star, TrendingUp, XCircle } from 'lucide-react';
-import { hasAnyVideoStatus, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS } from '../constants/status';
+import { hasAnyVideoStatus, hasVideoStatus, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS } from '../constants/status';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 
 const getRadarScore = (video) => {
@@ -43,6 +43,17 @@ export default function RadarCandidateStrip({
   const decidedCount = useMemo(() => (
     Object.values(videoUserRecords).filter((record) => hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES)).length
   ), [videoUserRecords]);
+
+  const decisionSummary = useMemo(() => (
+    videos.reduce((summary, video) => {
+      const record = videoUserRecords[video.videoId];
+      if (hasVideoStatus(record, VIDEO_STATUS.REVIEWED)) summary.reviewed += 1;
+      if (hasAnyVideoStatus(record, [VIDEO_STATUS.LEGACY_LATER, VIDEO_STATUS.WATCH_LATER])) summary.later += 1;
+      if (hasVideoStatus(record, VIDEO_STATUS.EXCLUDED)) summary.excluded += 1;
+      if (hasAnyVideoStatus(record, [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])) summary.production += 1;
+      return summary;
+    }, { reviewed: 0, later: 0, excluded: 0, production: 0 })
+  ), [videos, videoUserRecords]);
 
   const candidates = useMemo(() => (
     [...videos]
@@ -99,6 +110,25 @@ export default function RadarCandidateStrip({
           <button onClick={onOpenScrapbook} className="inline-flex items-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-500/10 px-3 py-2 text-xs font-bold text-yellow-100 hover:bg-yellow-500/15">
             <Star className="h-4 w-4" /> 스크랩 {savedVideos.length}개
           </button>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4">
+        <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-2">
+          <p className="text-[10px] font-extrabold text-emerald-100">봤음</p>
+          <p className="mt-1 text-lg font-black text-white">{decisionSummary.reviewed}</p>
+        </div>
+        <div className="rounded-xl border border-slate-500/30 bg-slate-900/60 px-3 py-2">
+          <p className="text-[10px] font-extrabold text-slate-200">나중에 보기</p>
+          <p className="mt-1 text-lg font-black text-white">{decisionSummary.later}</p>
+        </div>
+        <div className="rounded-xl border border-indigo-400/20 bg-indigo-500/10 px-3 py-2">
+          <p className="text-[10px] font-extrabold text-indigo-100">제작 후보</p>
+          <p className="mt-1 text-lg font-black text-white">{decisionSummary.production}</p>
+        </div>
+        <div className="rounded-xl border border-slate-500/30 bg-slate-950/70 px-3 py-2">
+          <p className="text-[10px] font-extrabold text-slate-300">제외</p>
+          <p className="mt-1 text-lg font-black text-white">{decisionSummary.excluded}</p>
         </div>
       </div>
 
