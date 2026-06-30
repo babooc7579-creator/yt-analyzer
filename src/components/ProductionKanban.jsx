@@ -39,6 +39,7 @@ export default function ProductionKanban({
 }) {
   const [draftRecords, setDraftRecords] = useState({});
   const [saveStates, setSaveStates] = useState({});
+  const [moveStates, setMoveStates] = useState({});
 
   useEffect(() => {
     setDraftRecords(videoUserRecords);
@@ -100,6 +101,23 @@ export default function ProductionKanban({
     }
   };
 
+  const moveVideo = async (videoId, status, extraUpdates = {}) => {
+    setMoveStates(prev => ({ ...prev, [videoId]: 'saving' }));
+    const didMove = await onMoveVideo(videoId, status, extraUpdates);
+    setMoveStates(prev => ({ ...prev, [videoId]: didMove ? 'saved' : 'error' }));
+
+    if (didMove) {
+      setTimeout(() => {
+        setMoveStates(prev => {
+          if (prev[videoId] !== 'saved') return prev;
+          const next = { ...prev };
+          delete next[videoId];
+          return next;
+        });
+      }, 1600);
+    }
+  };
+
   if (videos.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
@@ -146,6 +164,8 @@ export default function ProductionKanban({
                   const isDirty = hasUnsavedChanges(video.videoId);
                   const saveState = saveStates[video.videoId];
                   const isSaving = saveState === 'saving';
+                  const moveState = moveStates[video.videoId];
+                  const isMoving = moveState === 'saving';
 
                   return (
                     <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -213,19 +233,24 @@ export default function ProductionKanban({
 
                         <div className="mt-3 grid grid-cols-1 gap-2">
                           {column.id !== 'production_candidate' && (
-                            <button onClick={() => onMoveVideo(video.videoId, 'production_candidate')} className="rounded-lg bg-indigo-50 px-3 py-2 text-[11px] font-extrabold text-indigo-700 hover:bg-indigo-100">
-                              제작 후보로
+                            <button onClick={() => moveVideo(video.videoId, 'production_candidate')} disabled={isMoving} className={`rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}>
+                              {isMoving ? '이동 중...' : '제작 후보로'}
                             </button>
                           )}
                           {column.id !== 'production_active' && (
-                            <button onClick={() => onMoveVideo(video.videoId, 'production_active')} className="inline-flex items-center justify-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-extrabold text-emerald-700 hover:bg-emerald-100">
-                              <Clock className="h-3.5 w-3.5" /> 제작 중으로
+                            <button onClick={() => moveVideo(video.videoId, 'production_active')} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}>
+                              {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Clock className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '제작 중으로'}
                             </button>
                           )}
                           {column.id !== 'uploaded' && (
-                            <button onClick={() => onMoveVideo(video.videoId, 'uploaded', { uploadedAt: record.uploadedAt || getTodayDate() })} className="inline-flex items-center justify-center gap-1 rounded-lg bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-white hover:bg-slate-800">
-                              <CheckCircle2 className="h-3.5 w-3.5" /> 업로드 완료
+                            <button onClick={() => moveVideo(video.videoId, 'uploaded', { uploadedAt: record.uploadedAt || getTodayDate() })} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
+                              {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '업로드 완료'}
                             </button>
+                          )}
+                          {moveState === 'error' && (
+                            <p className="inline-flex items-center justify-center gap-1 text-[10px] font-bold text-red-600">
+                              <AlertCircle className="h-3 w-3" /> 상태 저장 실패. 다시 눌러 주세요
+                            </p>
                           )}
                           {column.id === 'uploaded' && (
                             <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center text-[11px] font-bold text-slate-600">

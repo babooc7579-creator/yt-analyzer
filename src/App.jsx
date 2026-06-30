@@ -476,8 +476,10 @@ export default function App() {
 
     try {
       await saveVideoUserRecord(record);
+      return true;
     } catch {
       // Keep the local decision so the daily workflow is not blocked by a temporary cloud error.
+      return false;
     }
   };
 
