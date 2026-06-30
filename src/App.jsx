@@ -460,11 +460,12 @@ export default function App() {
 
   const isVideoSaved = (videoId) => savedVideos.some(v => v.videoId === videoId);
 
-  const markRadarVideoStatus = async (videoId, status) => {
+  const markRadarVideoStatus = async (videoId, status, extraUpdates = {}) => {
     const record = {
       ...(videoUserRecords[videoId] || {}),
       videoId,
       status,
+      ...extraUpdates,
       updatedAt: new Date().toISOString(),
     };
 
