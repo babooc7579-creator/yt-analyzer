@@ -70,6 +70,28 @@ export const CHANNEL_STATUS_LABELS = {
   [CHANNEL_STATUS.DISCARDED]: '폐기',
 };
 
+export const CHANNEL_GRADE_TONES = {
+  [CHANNEL_GRADE.S]: 'border-rose-200 bg-rose-50 text-rose-700',
+  [CHANNEL_GRADE.A]: 'border-indigo-200 bg-indigo-50 text-indigo-700',
+  [CHANNEL_GRADE.B]: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  [CHANNEL_GRADE.C]: 'border-slate-200 bg-slate-50 text-slate-600',
+  [CHANNEL_GRADE.UNCLASSIFIED]: 'border-slate-200 bg-white text-slate-500',
+};
+
+export const CHANNEL_STATUS_TONES = {
+  [CHANNEL_STATUS.ACTIVE]: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  [CHANNEL_STATUS.PAUSED]: 'border-amber-200 bg-amber-50 text-amber-700',
+  [CHANNEL_STATUS.DISCARDED]: 'border-slate-200 bg-slate-100 text-slate-500',
+};
+
+export const getChannelGrade = (channel = {}) => (
+  Object.values(CHANNEL_GRADE).includes(channel.grade) ? channel.grade : CHANNEL_GRADE.UNCLASSIFIED
+);
+
+export const getChannelStatus = (channel = {}) => (
+  Object.values(CHANNEL_STATUS).includes(channel.status) ? channel.status : CHANNEL_STATUS.ACTIVE
+);
+
 export const RADAR_HIDDEN_VIDEO_STATUSES = [
   VIDEO_STATUS.REVIEWED,
   VIDEO_STATUS.LEGACY_LATER,
