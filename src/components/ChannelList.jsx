@@ -1,5 +1,13 @@
 import { CheckSquare, FolderOpen, History, Loader2, Square, Trash2 } from 'lucide-react';
 import { getLanguageLabel } from '../constants/languages';
+import {
+  CHANNEL_GRADE_LABELS,
+  CHANNEL_GRADE_TONES,
+  CHANNEL_STATUS_LABELS,
+  CHANNEL_STATUS_TONES,
+  getChannelGrade,
+  getChannelStatus,
+} from '../constants/status';
 import { formatCompactKo } from '../utils/formatters';
 
 function ChannelListItem({
@@ -10,6 +18,9 @@ function ChannelListItem({
   onOpenNotes,
   onDelete,
 }) {
+  const grade = getChannelGrade(channel);
+  const status = getChannelStatus(channel);
+
   return (
     <div className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
       <button onClick={() => onToggleSelection(channel.id)} className="text-indigo-600 focus:outline-none shrink-0 mt-1">
@@ -20,6 +31,12 @@ function ChannelListItem({
         <p className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2" title={channel.title}>{channel.title}</p>
         <div className="flex items-center gap-x-2 gap-y-1 flex-wrap mt-1">
           <span className="text-[10px] font-medium text-slate-500">{getLanguageLabel(channel.language)}</span>
+          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-extrabold ${CHANNEL_GRADE_TONES[grade]}`}>
+            등급 {CHANNEL_GRADE_LABELS[grade]}
+          </span>
+          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-extrabold ${CHANNEL_STATUS_TONES[status]}`}>
+            {CHANNEL_STATUS_LABELS[status]}
+          </span>
           {channel.stats && (
             <>
               <span className="text-[9px] text-slate-400" title="구독자 수">👤{formatCompactKo(channel.stats.subscriberCount)}</span>
