@@ -11,6 +11,23 @@ const getRadarScore = (video) => {
   return ttoTtoBonus + strongBonus + Number(video.multiplier || 0) * 10 + Number(video.like_ratio || 0) + savedAgeBonus;
 };
 
+const getRadarReasons = (video) => {
+  const reasons = [];
+
+  if (isTtoTtoCandidate(video)) reasons.push('오래됐지만 다시 볼 만함');
+  if (hasStrongReaction(video)) reasons.push('채널 평균보다 강한 반응');
+  if (Number(video.like_ratio || 0) >= 3) reasons.push('참여율 양호');
+  if (Number(video.view_count || 0) >= 1000000) reasons.push('검증된 조회수');
+
+  return reasons.length > 0 ? reasons : ['기본 점수 상위'];
+};
+
+const getPriorityLabel = (score) => {
+  if (score >= 180) return '최우선';
+  if (score >= 120) return '우선 검토';
+  return '확인 필요';
+};
+
 export default function RadarCandidateStrip({
   videos,
   savedVideos,
@@ -90,12 +107,16 @@ export default function RadarCandidateStrip({
           const isTtoTto = isTtoTtoCandidate(video);
           const isStrong = hasStrongReaction(video);
           const saved = isVideoSaved(video.videoId);
+          const radarScore = Math.round(getRadarScore(video));
+          const priorityLabel = getPriorityLabel(radarScore);
+          const reasons = getRadarReasons(video);
 
           return (
             <article key={video.videoId} className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80">
               <div className="relative">
                 <img src={video.thumbnail} alt="" className="aspect-video w-full object-cover" />
                 <span className="absolute left-2 top-2 rounded-full bg-black/80 px-2 py-1 text-[10px] font-extrabold text-white">#{index + 1}</span>
+                <span className="absolute right-2 top-2 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">{priorityLabel}</span>
               </div>
               <div className="p-4">
                 <div className="mb-2 flex flex-wrap gap-1.5">
@@ -113,6 +134,19 @@ export default function RadarCandidateStrip({
                 <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100">
                   {video.title}
                 </a>
+                <div className="mt-3 rounded-xl border border-rose-400/20 bg-rose-500/10 px-3 py-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-extrabold text-rose-100">후보 판단 점수</p>
+                    <p className="text-sm font-black text-white">{radarScore}</p>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {reasons.map((reason) => (
+                      <span key={reason} className="rounded-full border border-rose-300/20 bg-white/10 px-2 py-1 text-[10px] font-bold text-rose-50">
+                        {reason}
+                      </span>
+                    ))}
+                  </div>
+                </div>
                 <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                   <div className="rounded-xl bg-slate-900 px-2 py-2">
                     <p className="text-[9px] font-bold text-slate-500">대박지수</p>
