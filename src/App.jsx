@@ -1223,9 +1223,11 @@ export default function App() {
                           rank={index + 1}
                           isChecked={checkedVideos.includes(v.videoId)}
                           isSaved={isVideoSaved(v.videoId)}
+                          isProductionCandidate={hasAnyVideoStatus(videoUserRecords[v.videoId], [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])}
                           showWorkPanel={showWorkPanel}
                           onToggleCheck={toggleCheckVideo}
                           onToggleScrap={toggleScrapVideo}
+                          onPromoteToProduction={promoteVideoToProduction}
                           onFetchComments={fetchTopComments}
                         />
                       ))}
