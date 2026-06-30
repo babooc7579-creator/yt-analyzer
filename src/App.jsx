@@ -8,7 +8,7 @@ import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { CREATOR_OS_PRODUCT_MAP, getCreatorOsItem } from './constants/creatorOs';
 import { LANGUAGES } from './constants/languages';
-import { PRODUCTION_STATUS } from './constants/status';
+import { PRODUCTION_STATUS, withRecordStatus } from './constants/status';
 import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
@@ -462,13 +462,13 @@ export default function App() {
   const isVideoSaved = (videoId) => savedVideos.some(v => v.videoId === videoId);
 
   const markRadarVideoStatus = async (videoId, status, extraUpdates = {}) => {
-    const record = {
+    const record = withRecordStatus({
       ...(videoUserRecords[videoId] || {}),
       videoId,
-      status,
+    }, status, {
       ...extraUpdates,
       updatedAt: new Date().toISOString(),
-    };
+    });
 
     setVideoUserRecords(prev => ({
       ...prev,
