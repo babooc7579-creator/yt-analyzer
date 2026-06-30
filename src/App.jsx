@@ -12,6 +12,7 @@ import { CHANNEL_STATUS, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_S
 import ChannelAddForm from './components/ChannelAddForm';
 import ChannelList from './components/ChannelList';
 import ChannelTagTabs from './components/ChannelTagTabs';
+import HomeActionShortcuts from './components/HomeActionShortcuts';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
 import HomeRadarSummary from './components/HomeRadarSummary';
 import ProductionKanban from './components/ProductionKanban';
@@ -839,32 +840,11 @@ export default function App() {
                   onOpenScrapbook={() => openCreatorView({ id: 'studio-scrapbook' })}
                 />
 
-                <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
-                  <button onClick={() => openCreatorView({ id: 'ops-add-channel' })} className="group rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-indigo-300/50 hover:bg-indigo-500/15">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-extrabold text-indigo-200">1. 새 채널 등록</p>
-                      <Plus className="h-4 w-4 text-indigo-300 transition-transform group-hover:scale-110" />
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-400">소재를 모을 채널을 먼저 클라우드 목록에 저장합니다.</p>
-                    <p className="mt-3 text-[10px] font-bold text-indigo-300">오퍼레이션 관제로 이동</p>
-                  </button>
-                  <button onClick={() => openCreatorView({ id: 'ops-selected-scan' })} className="group rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-emerald-300/50 hover:bg-emerald-500/15">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-extrabold text-emerald-200">2. 선택 채널 수집</p>
-                      <RefreshCw className="h-4 w-4 text-emerald-300 transition-transform group-hover:rotate-45" />
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-400">체크한 채널만 YouTube API로 새 영상 여부를 확인합니다.</p>
-                    <p className="mt-3 text-[10px] font-bold text-emerald-300">수집 범위 직접 통제</p>
-                  </button>
-                  <button onClick={() => openCreatorView({ id: 'vault-all' })} className="group rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-blue-300/50 hover:bg-blue-500/15">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-extrabold text-blue-200">3. 보관함 탐색</p>
-                      <Bookmark className="h-4 w-4 text-blue-300 transition-transform group-hover:scale-110" />
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-400">저장된 영상 보드에서 카드 보기와 리스트 보기로 후보를 고릅니다.</p>
-                    <p className="mt-3 text-[10px] font-bold text-blue-300">레퍼런스 금고 열기</p>
-                  </button>
-                </div>
+                <HomeActionShortcuts
+                  onOpenAddChannel={() => openCreatorView({ id: 'ops-add-channel' })}
+                  onOpenSelectedScan={() => openCreatorView({ id: 'ops-selected-scan' })}
+                  onOpenVault={() => openCreatorView({ id: 'vault-all' })}
+                />
               </section>
 
               <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl shadow-slate-950/30">
