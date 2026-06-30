@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Bookmark, CheckCircle2, Clock, ExternalLink, Play, Rocket, Star, TrendingUp } from 'lucide-react';
-import { RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS } from '../constants/status';
+import { hasAnyVideoStatus, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS } from '../constants/status';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 
 const getRadarScore = (video) => {
@@ -24,14 +24,14 @@ export default function RadarCandidateStrip({
   onOpenScrapbook,
 }) {
   const decidedCount = useMemo(() => (
-    Object.values(videoUserRecords).filter((record) => RADAR_HIDDEN_VIDEO_STATUSES.includes(record?.status)).length
+    Object.values(videoUserRecords).filter((record) => hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES)).length
   ), [videoUserRecords]);
 
   const candidates = useMemo(() => (
     [...videos]
       .filter((video) => {
-        const status = videoUserRecords[video.videoId]?.status;
-        return !RADAR_HIDDEN_VIDEO_STATUSES.includes(status);
+        const record = videoUserRecords[video.videoId];
+        return !hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES);
       })
       .sort((a, b) => getRadarScore(b) - getRadarScore(a))
       .slice(0, 3)

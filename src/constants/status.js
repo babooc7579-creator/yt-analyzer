@@ -80,3 +80,40 @@ export const RADAR_HIDDEN_VIDEO_STATUSES = [
   VIDEO_STATUS.EXCLUDED,
   VIDEO_STATUS.USED,
 ];
+
+export const getVideoStatusIds = (record = {}) => {
+  const statusIds = Array.isArray(record.statusIds) ? record.statusIds.filter(Boolean) : [];
+  if (record.status && !statusIds.includes(record.status)) return [...statusIds, record.status];
+  return statusIds;
+};
+
+export const hasVideoStatus = (record, status) => getVideoStatusIds(record).includes(status);
+
+export const hasAnyVideoStatus = (record, statuses) => (
+  getVideoStatusIds(record).some(status => statuses.includes(status))
+);
+
+export const getProductionStatusFromRecord = (record = {}) => {
+  const statusIds = getVideoStatusIds(record);
+  if (statusIds.includes(PRODUCTION_STATUS.DONE)) return PRODUCTION_STATUS.DONE;
+  if (statusIds.includes(PRODUCTION_STATUS.ACTIVE)) return PRODUCTION_STATUS.ACTIVE;
+  if (statusIds.includes(PRODUCTION_STATUS.DECIDED)) return PRODUCTION_STATUS.DECIDED;
+  if (statusIds.includes(PRODUCTION_STATUS.REVIEWING)) return PRODUCTION_STATUS.REVIEWING;
+  if (statusIds.includes(PRODUCTION_STATUS.ON_HOLD)) return PRODUCTION_STATUS.ON_HOLD;
+  return PRODUCTION_STATUS.CANDIDATE;
+};
+
+export const withRecordStatus = (record = {}, status, extraUpdates = {}) => {
+  const productionStatuses = Object.values(PRODUCTION_STATUS);
+  const currentStatusIds = getVideoStatusIds(record);
+  const statusIds = productionStatuses.includes(status)
+    ? currentStatusIds.filter(currentStatus => !productionStatuses.includes(currentStatus))
+    : currentStatusIds;
+
+  return {
+    ...record,
+    status,
+    statusIds: [...new Set([...statusIds, status])],
+    ...extraUpdates,
+  };
+};

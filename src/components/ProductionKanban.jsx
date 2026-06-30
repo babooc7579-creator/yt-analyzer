@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AlertCircle, CalendarDays, CheckCircle2, Clock, ExternalLink, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
-import { PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
+import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 
 const COLUMNS = [
   {
@@ -22,12 +22,6 @@ const COLUMNS = [
     tone: 'border-slate-200 bg-slate-50',
   },
 ];
-
-const getProductionStatus = (record) => {
-  if (record?.status === PRODUCTION_STATUS.ACTIVE) return PRODUCTION_STATUS.ACTIVE;
-  if (record?.status === PRODUCTION_STATUS.DONE) return PRODUCTION_STATUS.DONE;
-  return PRODUCTION_STATUS.CANDIDATE;
-};
 
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 const formatDate = (date) => date ? date.split('-').join('.') : '';
@@ -87,7 +81,8 @@ export default function ProductionKanban({
 
   const groupedVideos = useMemo(() => {
     const grouped = videos.reduce((acc, video) => {
-      const status = getProductionStatus(videoUserRecords[video.videoId]);
+      const recordStatus = getProductionStatusFromRecord(videoUserRecords[video.videoId]);
+      const status = acc[recordStatus] ? recordStatus : PRODUCTION_STATUS.CANDIDATE;
       acc[status].push(video);
       return acc;
     }, {
