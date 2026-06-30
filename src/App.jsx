@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { AlertCircle, Youtube, FileSpreadsheet, Star, Lightbulb, Trash2, FolderOpen, Globe, Settings, MessageSquareText, Bookmark } from 'lucide-react';
+import { AlertCircle, Youtube, FileSpreadsheet, Trash2, FolderOpen, Globe, Settings, MessageSquareText } from 'lucide-react';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/storage';
 import { clearVideoUserRecords, createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, fetchVideoUserRecords, removeChannel, renameTag, saveScrapbookVideos, saveVideoUserRecord, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest, updateChannel } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
@@ -23,6 +23,8 @@ import ProductionKanban from './components/ProductionKanban';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
 import ReferenceVaultEmptyState from './components/ReferenceVaultEmptyState';
 import ReferenceVaultSummary from './components/ReferenceVaultSummary';
+import ScrapbookEmptyState from './components/ScrapbookEmptyState';
+import ScrapbookHeader from './components/ScrapbookHeader';
 import SelectedVideosActionBar from './components/SelectedVideosActionBar';
 import StoredVideoGuide from './components/StoredVideoGuide';
 import TopCommentsModal from './components/TopCommentsModal';
@@ -956,20 +958,10 @@ export default function App() {
             </>
           ) : (
             <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                    <Bookmark className="w-6 h-6 text-yellow-500 fill-yellow-500" /> 영구 보관 스크랩북
-                  </h2>
-                  <p className="text-sm text-slate-500 mt-1">별표(⭐️)를 눌러 모아둔 나만의 영감 보관소입니다. (브라우저를 닫아도 유지됩니다)</p>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <button onClick={() => copyAI_RemakePrompt(savedVideos)} disabled={savedVideos.length === 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideos.length > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>
-                    <Lightbulb className="w-5 h-5" /> AI 리메이크 프롬프트 복사
-                  </button>
-                  <p className="max-w-[260px] text-right text-[10px] text-slate-500">스크랩한 영상 전체로 리메이크 요청문을 만들어 클립보드에 복사합니다.</p>
-                </div>
-              </div>
+              <ScrapbookHeader
+                savedVideoCount={savedVideos.length}
+                onCopyPrompt={() => copyAI_RemakePrompt(savedVideos)}
+              />
 
               {creatorView === 'studio-candidates' ? (
                 <ProductionKanban
@@ -980,24 +972,7 @@ export default function App() {
                   onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
                 />
               ) : savedVideos.length === 0 ? (
-                <div className="text-center py-20 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 px-6">
-                  <Star className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-extrabold text-slate-700 mb-2">스크랩된 영상이 없습니다</h3>
-                  <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-3 mt-5 text-left">
-                    <div className="bg-white border border-slate-200 rounded-xl p-4">
-                      <p className="text-sm font-bold text-slate-700">1. 채널 저장</p>
-                      <p className="text-xs text-slate-500 mt-2">먼저 소재를 모을 채널을 저장합니다.</p>
-                    </div>
-                    <div className="bg-white border border-slate-200 rounded-xl p-4">
-                      <p className="text-sm font-bold text-slate-700">2. 영상 불러오기</p>
-                      <p className="text-xs text-slate-500 mt-2">“저장된 영상 불러오기”로 영상을 확인합니다.</p>
-                    </div>
-                    <div className="bg-white border border-slate-200 rounded-xl p-4">
-                      <p className="text-sm font-bold text-slate-700">3. 별표 저장</p>
-                      <p className="text-xs text-slate-500 mt-2">분석 대시보드에서 별표 버튼을 눌러 모읍니다.</p>
-                    </div>
-                  </div>
-                </div>
+                <ScrapbookEmptyState />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                   {savedVideos.map((video) => (
