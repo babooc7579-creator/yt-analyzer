@@ -4,6 +4,7 @@ import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from './services/stor
 import { clearVideoUserRecords, createChannel, createChannelNote, createChannelsBulk, deleteScrapbookVideo, fetchChannelPreview, fetchChannels, fetchScrapbook, fetchStoredVideosByChannelIds, fetchVideoUserRecords, removeChannel, renameTag, saveScrapbookVideos, saveVideoUserRecord, scanChannels, scanSelectedChannels as scanSelectedChannelsRequest, updateChannel } from './services/functionApi';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/youtubeApi';
 import { filterAndSortVideos, isTtoTtoCandidate, mapCloudVideoToViewModel } from './utils/video';
+import { getDaysDiff } from './utils/dates';
 import { formatCoverageRate, formatOptionalNumber } from './utils/formatters';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { getCreatorOsItem } from './constants/creatorOs';
@@ -159,12 +160,6 @@ export default function App() {
 
   useEffect(() => { loadChannelsFromCloud(); }, []);
 
-  const getDaysDiff = (uploadDate) => {
-    const today = new Date();
-    const upDate = new Date(uploadDate);
-    return Math.max(1, Math.ceil(Math.abs(today - upDate) / (1000 * 60 * 60 * 24)));
-  };
-
   const formatRelativeTime = (dateValue) => {
     if (!dateValue) return '';
     const date = new Date(dateValue);
@@ -204,21 +199,6 @@ export default function App() {
       hasSummary: Boolean(summary),
       error: summary?.error || null,
     };
-  };
-
-  const parseDuration = (durationStr) => {
-    const match = durationStr.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-    if (!match) return { isShorts: false, formatted: '00:00' };
-    const hours = (parseInt(match[1]) || 0);
-    const minutes = (parseInt(match[2]) || 0);
-    const seconds = (parseInt(match[3]) || 0);
-    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-    const isShorts = totalSeconds <= 61; // 60초 이하 (여유분 1초 포함)
-    
-    let formatted = '';
-    if (hours > 0) formatted += `${hours}:`;
-    formatted += `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    return { isShorts, formatted };
   };
 
   // 1단계: 입력값으로 채널 정보만 미리 불러오기 (아직 저장 안 함)
