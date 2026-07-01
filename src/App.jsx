@@ -19,8 +19,7 @@ import CreatorWorkspaceHeader from './components/CreatorWorkspaceHeader';
 import HiddenLegacyAside from './components/HiddenLegacyAside';
 import HomeActionShortcuts from './components/HomeActionShortcuts';
 import HomeOperatingGuidelines from './components/HomeOperatingGuidelines';
-import LegacyWorkPanelIntro from './components/LegacyWorkPanelIntro';
-import LoadStoredVideosButton from './components/LoadStoredVideosButton';
+import LegacyChannelPanel from './components/LegacyChannelPanel';
 import HomeRadarSummary from './components/HomeRadarSummary';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
 import ScrapbookWorkspace from './components/ScrapbookWorkspace';
@@ -728,89 +727,64 @@ export default function App() {
           ) : isLegacyWorkspaceView ? (
       <div className={`w-full mx-auto grid grid-cols-1 gap-5 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 ${showWorkPanel ? 'max-w-[2400px] xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
         
-        {/* ================= 좌측: CRM 패널 ================= */}
-        <div className={`space-y-4 ${showWorkPanel ? '' : 'hidden'}`}>
-          <div className="bg-slate-100 rounded-xl shadow-sm border border-slate-300 p-4">
-            <LegacyWorkPanelIntro
-              apiKey={apiKey}
-              onChangeApiKey={setApiKey}
-            />
-
-            {/* 채널 추가 폼 */}
-            <ChannelAddForm
-              addMode={addMode}
-              setAddMode={setAddMode}
-              bulkInput={bulkInput}
-              setBulkInput={setBulkInput}
-              bulkLoading={bulkLoading}
-              bulkResult={bulkResult}
-              resetBulkAdd={resetBulkAdd}
-              handleBulkAdd={handleBulkAdd}
-              categories={categories}
-              setCategories={setCategories}
-              newCategoryName={newCategoryName}
-              setNewCategoryName={setNewCategoryName}
-              isEditingCategory={isEditingCategory}
-              setIsEditingCategory={setIsEditingCategory}
-              renamingCategory={renamingCategory}
-              renameValue={renameValue}
-              setRenameValue={setRenameValue}
-              renameLoading={renameLoading}
-              startRenameCategory={startRenameCategory}
-              confirmRenameCategory={confirmRenameCategory}
-              cancelRenameCategory={cancelRenameCategory}
-              newChannelInput={newChannelInput}
-              setNewChannelInput={setNewChannelInput}
-              newChannelTags={newChannelTags}
-              toggleNewChannelTag={toggleNewChannelTag}
-              newChannelLang={newChannelLang}
-              setNewChannelLang={setNewChannelLang}
-              newChannelNote={newChannelNote}
-              setNewChannelNote={setNewChannelNote}
-              channelPreview={channelPreview}
-              previewLoading={previewLoading}
-              handlePreviewChannel={handlePreviewChannel}
-              cancelChannelPreview={cancelChannelPreview}
-              handleSaveChannel={handleSaveChannel}
-              loading={loading}
-            />
-
-            {/* 카테고리(태그) 폴더 리스트 */}
-            <ChannelTagTabs
-              categories={categories}
-              channels={savedChannels}
-              selectedCategory={selectedCategoryTab}
-              getScannableChannelCount={getScannableChannelCount}
-              scanningTag={scanningTag}
-              isScanning={isScanning}
-              onSelectCategory={setSelectedCategoryTab}
-              onScanTag={handleTagScan}
-            />
-            
-            <hr className="my-4 border-slate-100" />
-            
-            <ChannelList
-              channels={savedChannels}
-              selectedCategory={selectedCategoryTab}
-              selectedChannelIds={selectedChannelIds}
-              channelsLoading={channelsLoading}
-              getScanDisplay={getChannelScanDisplay}
-              onToggleSelection={toggleChannelSelection}
-              onOpenNotes={openNotesModal}
-              onUpdateMetadata={updateChannelMetadata}
-              updatingChannelId={updatingChannelId}
-              onDelete={deleteChannel}
-            />
-
-            <LoadStoredVideosButton
-              loading={loading}
-              selectedChannelCount={selectedChannelIds.length}
-              onLoad={fetchSelectedChannels}
-            />
-            {error && <p className="mt-2 text-xs text-red-500 text-center">{error}</p>}
-            {progressMsg && !error && <p className="mt-2 text-xs text-indigo-600 text-center font-medium">{progressMsg}</p>}
-          </div>
-        </div>
+        <LegacyChannelPanel
+          addMode={addMode}
+          apiKey={apiKey}
+          bulkInput={bulkInput}
+          bulkLoading={bulkLoading}
+          bulkResult={bulkResult}
+          cancelChannelPreview={cancelChannelPreview}
+          cancelRenameCategory={cancelRenameCategory}
+          categories={categories}
+          channelPreview={channelPreview}
+          channelsLoading={channelsLoading}
+          confirmRenameCategory={confirmRenameCategory}
+          error={error}
+          getChannelScanDisplay={getChannelScanDisplay}
+          getScannableChannelCount={getScannableChannelCount}
+          handleBulkAdd={handleBulkAdd}
+          handlePreviewChannel={handlePreviewChannel}
+          handleSaveChannel={handleSaveChannel}
+          handleTagScan={handleTagScan}
+          isEditingCategory={isEditingCategory}
+          isScanning={isScanning}
+          loading={loading}
+          newCategoryName={newCategoryName}
+          newChannelInput={newChannelInput}
+          newChannelLang={newChannelLang}
+          newChannelNote={newChannelNote}
+          newChannelTags={newChannelTags}
+          onChangeApiKey={setApiKey}
+          onDeleteChannel={deleteChannel}
+          onLoadStoredVideos={fetchSelectedChannels}
+          onOpenNotes={openNotesModal}
+          onToggleChannelSelection={toggleChannelSelection}
+          onUpdateChannelMetadata={updateChannelMetadata}
+          previewLoading={previewLoading}
+          progressMsg={progressMsg}
+          renameLoading={renameLoading}
+          renameValue={renameValue}
+          renamingCategory={renamingCategory}
+          resetBulkAdd={resetBulkAdd}
+          savedChannels={savedChannels}
+          scanningTag={scanningTag}
+          selectedCategoryTab={selectedCategoryTab}
+          selectedChannelIds={selectedChannelIds}
+          setAddMode={setAddMode}
+          setBulkInput={setBulkInput}
+          setCategories={setCategories}
+          setIsEditingCategory={setIsEditingCategory}
+          setNewCategoryName={setNewCategoryName}
+          setNewChannelInput={setNewChannelInput}
+          setNewChannelLang={setNewChannelLang}
+          setNewChannelNote={setNewChannelNote}
+          setRenameValue={setRenameValue}
+          setSelectedCategoryTab={setSelectedCategoryTab}
+          showWorkPanel={showWorkPanel}
+          startRenameCategory={startRenameCategory}
+          toggleNewChannelTag={toggleNewChannelTag}
+          updatingChannelId={updatingChannelId}
+        />
 
         {/* ================= 우측: 메인 뷰어 ================= */}
         <div className="flex flex-col h-full space-y-4 min-w-0">
