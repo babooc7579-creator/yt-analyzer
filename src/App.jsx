@@ -22,15 +22,12 @@ import LegacyWorkPanelIntro from './components/LegacyWorkPanelIntro';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
 import HomeRadarSummary from './components/HomeRadarSummary';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
-import ReferenceVaultEmptyState from './components/ReferenceVaultEmptyState';
 import ReferenceVaultSummary from './components/ReferenceVaultSummary';
 import ScrapbookWorkspace from './components/ScrapbookWorkspace';
 import SelectedVideosActionBar from './components/SelectedVideosActionBar';
 import StoredVideoGuide from './components/StoredVideoGuide';
 import TopCommentsModal from './components/TopCommentsModal';
-import VideoCard from './components/VideoCard';
-import VideoFilterEmptyState from './components/VideoFilterEmptyState';
-import VideoListTable from './components/VideoListTable';
+import VideoResultsPanel from './components/VideoResultsPanel';
 import VideoToolbar from './components/VideoToolbar';
 import WorkspaceTabs from './components/WorkspaceTabs';
 
@@ -876,42 +873,19 @@ export default function App() {
               {/* 데이터 테이블 */}
               <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
                 <p className="px-4 pt-3 text-[10px] text-slate-500">댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.</p>
-                {videos.length === 0 ? (
-                  <ReferenceVaultEmptyState />
-                ) : filteredAndSortedVideos.length === 0 ? (
-                  <VideoFilterEmptyState />
-                ) : viewMode === 'card' ? (
-                  <div className={`flex-1 overflow-y-auto bg-slate-100 ${showWorkPanel ? 'p-5' : 'p-6'}`}>
-                    <div className={`grid gap-6 ${showWorkPanel ? 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[2300px]:grid-cols-5'}`}>
-                      {filteredAndSortedVideos.map((v, index) => (
-                        <VideoCard
-                          key={v.videoId}
-                          video={v}
-                          rank={index + 1}
-                          isChecked={checkedVideos.includes(v.videoId)}
-                          isSaved={isVideoSaved(v.videoId)}
-                          isProductionCandidate={hasAnyVideoStatus(videoUserRecords[v.videoId], [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])}
-                          showWorkPanel={showWorkPanel}
-                          onToggleCheck={toggleCheckVideo}
-                          onToggleScrap={toggleScrapVideo}
-                          onPromoteToProduction={promoteVideoToProduction}
-                          onFetchComments={fetchTopComments}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <VideoListTable
-                    videos={filteredAndSortedVideos}
-                    checkedVideos={checkedVideos}
-                    isVideoSaved={isVideoSaved}
-                    isProductionCandidate={(videoId) => hasAnyVideoStatus(videoUserRecords[videoId], [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])}
-                    toggleCheckVideo={toggleCheckVideo}
-                    toggleScrapVideo={toggleScrapVideo}
-                    promoteVideoToProduction={promoteVideoToProduction}
-                    fetchTopComments={fetchTopComments}
-                  />
-                )}
+                <VideoResultsPanel
+                  checkedVideos={checkedVideos}
+                  filteredVideos={filteredAndSortedVideos}
+                  isProductionCandidate={(videoId) => hasAnyVideoStatus(videoUserRecords[videoId], [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])}
+                  isVideoSaved={isVideoSaved}
+                  onFetchComments={fetchTopComments}
+                  onPromoteToProduction={promoteVideoToProduction}
+                  onToggleCheck={toggleCheckVideo}
+                  onToggleScrap={toggleScrapVideo}
+                  showWorkPanel={showWorkPanel}
+                  videos={videos}
+                  viewMode={viewMode}
+                />
               </div>
             </>
           ) : (
