@@ -21,13 +21,10 @@ import HomeOperatingGuidelines from './components/HomeOperatingGuidelines';
 import LegacyWorkPanelIntro from './components/LegacyWorkPanelIntro';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
 import HomeRadarSummary from './components/HomeRadarSummary';
-import ProductionKanban from './components/ProductionKanban';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
 import ReferenceVaultEmptyState from './components/ReferenceVaultEmptyState';
 import ReferenceVaultSummary from './components/ReferenceVaultSummary';
-import ScrapbookEmptyState from './components/ScrapbookEmptyState';
-import ScrapbookHeader from './components/ScrapbookHeader';
-import ScrapbookVideoCard from './components/ScrapbookVideoCard';
+import ScrapbookWorkspace from './components/ScrapbookWorkspace';
 import SelectedVideosActionBar from './components/SelectedVideosActionBar';
 import StoredVideoGuide from './components/StoredVideoGuide';
 import TopCommentsModal from './components/TopCommentsModal';
@@ -918,35 +915,17 @@ export default function App() {
               </div>
             </>
           ) : (
-            <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
-              <ScrapbookHeader
-                savedVideoCount={savedVideos.length}
-                onCopyPrompt={() => copyAI_RemakePrompt(savedVideos)}
-              />
-
-              {creatorView === 'studio-candidates' ? (
-                <ProductionKanban
-                  videos={savedVideos}
-                  videoUserRecords={videoUserRecords}
-                  onMoveVideo={markRadarVideoStatus}
-                  onUpdateVideoRecord={updateVideoUserRecord}
-                  onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
-                />
-              ) : savedVideos.length === 0 ? (
-                <ScrapbookEmptyState />
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {savedVideos.map((video) => (
-                    <ScrapbookVideoCard
-                      key={video.videoId}
-                      video={video}
-                      onFetchComments={fetchTopComments}
-                      onRemoveScrap={toggleScrapVideo}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            <ScrapbookWorkspace
+              creatorView={creatorView}
+              savedVideos={savedVideos}
+              videoUserRecords={videoUserRecords}
+              onCopyPrompt={() => copyAI_RemakePrompt(savedVideos)}
+              onFetchComments={fetchTopComments}
+              onMoveVideo={markRadarVideoStatus}
+              onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
+              onRemoveScrap={toggleScrapVideo}
+              onUpdateVideoRecord={updateVideoUserRecord}
+            />
           )}
 
         </div>
