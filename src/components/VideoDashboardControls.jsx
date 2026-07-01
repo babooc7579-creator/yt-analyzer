@@ -1,0 +1,83 @@
+import ReferenceVaultSummary from './ReferenceVaultSummary';
+import SelectedVideosActionBar from './SelectedVideosActionBar';
+import StoredVideoGuide from './StoredVideoGuide';
+import VideoToolbar from './VideoToolbar';
+
+export default function VideoDashboardControls({
+  activeSelectedChannelCount,
+  checkedVideos,
+  copiedPrompt,
+  filteredCount,
+  isReferenceVaultView,
+  isScanning,
+  lengthFilter,
+  onCopyPrompt,
+  onManualScan,
+  savedChannelCount,
+  savedVideoCount,
+  scannableChannelCount,
+  searchKeyword,
+  selectedChannelCount,
+  setLengthFilter,
+  setSearchKeyword,
+  setShowWorkPanel,
+  setSortType,
+  setTtoTtoMode,
+  setViewFilter,
+  setViewMode,
+  showWorkPanel,
+  sortType,
+  totalVideoCount,
+  ttoTtoAssetCount,
+  ttoTtoMode,
+  viewFilter,
+  viewMode,
+  visibleScrapCount,
+}) {
+  return (
+    <>
+      {isReferenceVaultView ? (
+        <ReferenceVaultSummary
+          videoCount={totalVideoCount}
+          channelCount={savedChannelCount}
+          scrapCount={savedVideoCount}
+          visibleScrapCount={visibleScrapCount}
+          ttoTtoCount={ttoTtoAssetCount}
+        />
+      ) : (
+        <StoredVideoGuide />
+      )}
+
+      <VideoToolbar
+        isReferenceVaultView={isReferenceVaultView}
+        filteredCount={filteredCount}
+        totalCount={totalVideoCount}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+        viewFilter={viewFilter}
+        setViewFilter={setViewFilter}
+        lengthFilter={lengthFilter}
+        setLengthFilter={setLengthFilter}
+        sortType={sortType}
+        setSortType={setSortType}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        showWorkPanel={showWorkPanel}
+        setShowWorkPanel={setShowWorkPanel}
+        isScanning={isScanning}
+        selectedChannelCount={selectedChannelCount}
+        activeSelectedChannelCount={activeSelectedChannelCount}
+        scannableChannelCount={scannableChannelCount}
+        handleManualScan={onManualScan}
+        ttoTtoMode={ttoTtoMode}
+        setTtoTtoMode={setTtoTtoMode}
+      />
+
+      <SelectedVideosActionBar
+        selectedCount={checkedVideos.length}
+        copiedPrompt={copiedPrompt}
+        onCopyPrompt={onCopyPrompt}
+      />
+    </>
+  );
+}
