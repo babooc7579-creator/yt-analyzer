@@ -15,6 +15,7 @@ export default function LegacyChannelPanel({
   categories,
   channelPreview,
   channelsLoading,
+  cloudOnlyTags,
   confirmRenameCategory,
   error,
   getChannelScanDisplay,
@@ -80,6 +81,7 @@ export default function LegacyChannelPanel({
           resetBulkAdd={resetBulkAdd}
           handleBulkAdd={handleBulkAdd}
           categories={categories}
+          cloudOnlyTags={cloudOnlyTags}
           setCategories={setCategories}
           newCategoryName={newCategoryName}
           setNewCategoryName={setNewCategoryName}
