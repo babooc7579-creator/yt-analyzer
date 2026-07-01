@@ -12,6 +12,7 @@ export default function ChannelAddForm({
   resetBulkAdd,
   handleBulkAdd,
   categories,
+  cloudOnlyTags = [],
   setCategories,
   newCategoryName,
   setNewCategoryName,
@@ -82,13 +83,20 @@ export default function ChannelAddForm({
               ) : (
                 <span key={cat} className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] text-slate-600">
                   {cat}
-                  <button onClick={() => startRenameCategory(cat)} className="text-indigo-400 hover:text-indigo-600" title="이름 변경 (이 태그가 붙은 모든 채널에 일괄 반영)"><Settings className="w-2.5 h-2.5" /></button>
-                  <button onClick={() => setCategories(categories.filter((c) => c !== cat))} className="text-red-400 hover:text-red-600"><Trash2 className="w-2.5 h-2.5" /></button>
+                  <button onClick={() => startRenameCategory(cat)} className="text-indigo-400 hover:text-indigo-600" title="Cloud 태그 이름 변경 - 이 태그가 붙은 모든 채널에 일괄 반영됩니다"><Settings className="w-2.5 h-2.5" /></button>
+                  <button onClick={() => setCategories(categories.filter((c) => c !== cat))} className="text-red-400 hover:text-red-600" title="화면 목록에서만 숨깁니다. 이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다."><Trash2 className="w-2.5 h-2.5" /></button>
                 </span>
               )
             ))}
           </div>
-          <p className="text-[9px] text-slate-400 mt-1.5">⚙️ 아이콘으로 이름 변경 시, 이 태그가 붙은 모든 채널에 클라우드에서 즉시 반영됩니다.</p>
+          <p className="text-[9px] text-slate-400 mt-1.5">⚙️ 이름 변경은 Cloud 태그를 바꿉니다. 휴지통은 화면 목록에서만 숨기며, 이미 채널에 붙은 Cloud 태그는 삭제하지 않습니다.</p>
+          {cloudOnlyTags.length > 0 && (
+            <div className="mt-2 rounded-lg border border-amber-100 bg-amber-50 p-2 text-[10px] leading-relaxed text-amber-800">
+              <p className="font-bold">Cloud에는 있지만 화면 목록에는 없는 태그가 있습니다.</p>
+              <p className="mt-1 font-semibold">{cloudOnlyTags.slice(0, 4).join(', ')}{cloudOnlyTags.length > 4 ? ` 외 ${cloudOnlyTags.length - 4}개` : ''}</p>
+              <p className="mt-1 text-amber-700">카테고리를 지워도 Cloud 채널 태그는 삭제되지 않습니다. 다시 보려면 같은 이름으로 카테고리를 추가하세요.</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -102,7 +110,7 @@ export default function ChannelAddForm({
             rows={5}
             disabled={bulkLoading}
           />
-          <p className="text-[10px] text-slate-500">{bulkInput.split('\n').map((l) => l.trim()).filter(Boolean).length}개 줄 인식됨</p>
+          <p className="text-[10px] text-slate-500">{bulkInput.split('\n').map((l) => l.trim()).filter(Boolean).length}개 줄 인식됨. 채널 정보를 YouTube에서 확인한 뒤 클라우드 목록에 저장합니다.</p>
 
           <div>
             <p className="text-[10px] text-slate-500 mb-1">태그 선택 (전체 일괄 적용, 여러 개 가능)</p>
@@ -155,7 +163,7 @@ export default function ChannelAddForm({
               채널 미리보기
             </button>
           </div>
-          <p className="text-[10px] text-slate-500">아직 저장하지 않고 채널 정보만 먼저 확인합니다.</p>
+          <p className="text-[10px] text-slate-500">아직 클라우드에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다.</p>
         </div>
       ) : (
         <div className="space-y-2 animate-in fade-in duration-200">

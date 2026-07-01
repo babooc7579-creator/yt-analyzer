@@ -111,6 +111,38 @@ export const RADAR_HIDDEN_VIDEO_STATUSES = [
   VIDEO_STATUS.USED,
 ];
 
+const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object || {}, key);
+
+export const normalizeStatusIds = (statusIds) => (
+  Array.isArray(statusIds)
+    ? [...new Set(statusIds.map(status => (typeof status === 'string' ? status.trim() : '')).filter(Boolean))]
+    : []
+);
+
+export const normalizeVideoUserRecord = (record = {}) => {
+  const statusIds = hasOwn(record, 'statusIds')
+    ? normalizeStatusIds(record.statusIds)
+    : normalizeStatusIds(record.status ? [record.status] : []);
+
+  return {
+    ...record,
+    statusIds,
+  };
+};
+
+export const normalizeVideoUserRecords = (records = {}) => {
+  if (!records || typeof records !== 'object') return {};
+
+  return Object.entries(records).reduce((acc, [videoId, record]) => {
+    if (!record || typeof record !== 'object') return acc;
+    acc[videoId] = normalizeVideoUserRecord({
+      ...record,
+      videoId: record.videoId || videoId,
+    });
+    return acc;
+  }, {});
+};
+
 export const getVideoStatusIds = (record = {}) => {
   const statusIds = Array.isArray(record.statusIds) ? record.statusIds.filter(Boolean) : [];
   if (record.status && !statusIds.includes(record.status)) return [...statusIds, record.status];

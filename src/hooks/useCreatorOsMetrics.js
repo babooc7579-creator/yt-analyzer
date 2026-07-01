@@ -1,0 +1,77 @@
+import { useMemo } from 'react';
+import { RADAR_HIDDEN_VIDEO_STATUSES, PRODUCTION_STATUS, VIDEO_STATUS, hasAnyVideoStatus, isChannelScannable } from '../constants/status';
+import { formatRelativeTime } from '../utils/channelScanDisplay';
+import { getCloudOnlyTags, getLatestChannelScanDate } from '../utils/channels';
+import { isTtoTtoCandidate } from '../utils/video';
+
+export function useCreatorOsMetrics({
+  categories,
+  savedChannels,
+  savedVideos,
+  selectedChannelIds,
+  videoUserRecords,
+  videos,
+}) {
+  const latestScannedAt = useMemo(() => (
+    getLatestChannelScanDate(savedChannels)
+  ), [savedChannels]);
+
+  const latestScanText = latestScannedAt
+    ? formatRelativeTime(latestScannedAt)
+    : '수집 기록 없음';
+
+  const scannableChannelCount = useMemo(() => (
+    savedChannels.filter(isChannelScannable).length
+  ), [savedChannels]);
+
+  const activeSelectedChannelCount = useMemo(() => (
+    savedChannels.filter(channel => (
+      selectedChannelIds.includes(channel.id) && isChannelScannable(channel)
+    )).length
+  ), [savedChannels, selectedChannelIds]);
+
+  const getScannableChannelCount = (category) => (
+    savedChannels.filter(channel => (
+      channel.tags?.includes(category) && isChannelScannable(channel)
+    )).length
+  );
+
+  const cloudOnlyTags = useMemo(() => (
+    getCloudOnlyTags(savedChannels, categories)
+  ), [savedChannels, categories]);
+
+  const ttoTtoAssetCount = useMemo(() => (
+    videos.filter(isTtoTtoCandidate).length
+  ), [videos]);
+
+  const visibleScrapCount = useMemo(() => {
+    const savedVideoIds = new Set(savedVideos.map(video => video.videoId));
+    return videos.filter(video => savedVideoIds.has(video.videoId)).length;
+  }, [savedVideos, videos]);
+
+  const loadedDecisionCount = useMemo(() => (
+    videos.filter(video => (
+      hasAnyVideoStatus(videoUserRecords[video.videoId], RADAR_HIDDEN_VIDEO_STATUSES)
+    )).length
+  ), [videoUserRecords, videos]);
+
+  const openRadarCandidateCount = Math.max(videos.length - loadedDecisionCount, 0);
+
+  const productionCandidateCount = useMemo(() => (
+    videos.filter(video => (
+      hasAnyVideoStatus(videoUserRecords[video.videoId], [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])
+    )).length
+  ), [videoUserRecords, videos]);
+
+  return {
+    activeSelectedChannelCount,
+    cloudOnlyTags,
+    getScannableChannelCount,
+    latestScanText,
+    openRadarCandidateCount,
+    productionCandidateCount,
+    scannableChannelCount,
+    ttoTtoAssetCount,
+    visibleScrapCount,
+  };
+}
