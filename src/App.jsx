@@ -22,13 +22,10 @@ import LegacyWorkPanelIntro from './components/LegacyWorkPanelIntro';
 import LoadStoredVideosButton from './components/LoadStoredVideosButton';
 import HomeRadarSummary from './components/HomeRadarSummary';
 import RadarCandidateStrip from './components/RadarCandidateStrip';
-import ReferenceVaultSummary from './components/ReferenceVaultSummary';
 import ScrapbookWorkspace from './components/ScrapbookWorkspace';
-import SelectedVideosActionBar from './components/SelectedVideosActionBar';
-import StoredVideoGuide from './components/StoredVideoGuide';
 import TopCommentsModal from './components/TopCommentsModal';
+import VideoDashboardControls from './components/VideoDashboardControls';
 import VideoResultsPanel from './components/VideoResultsPanel';
-import VideoToolbar from './components/VideoToolbar';
 import WorkspaceTabs from './components/WorkspaceTabs';
 
 export default function App() {
@@ -826,50 +823,39 @@ export default function App() {
 
           {activeTab === 'dashboard' ? (
             <>
-              {isReferenceVaultView ? (
-                <ReferenceVaultSummary
-                  videoCount={videos.length}
-                  channelCount={savedChannels.length}
-                  scrapCount={savedVideos.length}
-                  visibleScrapCount={visibleScrapCount}
-                  ttoTtoCount={ttoTtoAssetCount}
-                />
-              ) : (
-                <StoredVideoGuide />
-              )}
-
-              {/* 컨트롤 바 */}
-              <VideoToolbar
-                isReferenceVaultView={isReferenceVaultView}
+              <VideoDashboardControls
+                activeSelectedChannelCount={activeSelectedChannelCount}
+                checkedVideos={checkedVideos}
+                copiedPrompt={copiedPrompt}
                 filteredCount={filteredAndSortedVideos.length}
-                totalCount={videos.length}
-                searchKeyword={searchKeyword}
-                setSearchKeyword={setSearchKeyword}
-                viewFilter={viewFilter}
-                setViewFilter={setViewFilter}
+                isReferenceVaultView={isReferenceVaultView}
+                isScanning={isScanning}
                 lengthFilter={lengthFilter}
+                onCopyPrompt={() => copyAI_RemakePrompt(videos.filter(v => checkedVideos.includes(v.videoId)))}
+                onManualScan={handleManualScan}
+                savedChannelCount={savedChannels.length}
+                savedVideoCount={savedVideos.length}
+                scannableChannelCount={scannableChannelCount}
+                searchKeyword={searchKeyword}
+                selectedChannelCount={selectedChannelIds.length}
                 setLengthFilter={setLengthFilter}
-                sortType={sortType}
+                setSearchKeyword={setSearchKeyword}
+                setShowWorkPanel={setShowWorkPanel}
                 setSortType={setSortType}
-                viewMode={viewMode}
+                setTtoTtoMode={setTtoTtoMode}
+                setViewFilter={setViewFilter}
                 setViewMode={setViewMode}
                 showWorkPanel={showWorkPanel}
-                setShowWorkPanel={setShowWorkPanel}
-                isScanning={isScanning}
-                selectedChannelCount={selectedChannelIds.length}
-                activeSelectedChannelCount={activeSelectedChannelCount}
-                scannableChannelCount={scannableChannelCount}
-                handleManualScan={handleManualScan}
+                sortType={sortType}
+                totalVideoCount={videos.length}
+                ttoTtoAssetCount={ttoTtoAssetCount}
                 ttoTtoMode={ttoTtoMode}
-                setTtoTtoMode={setTtoTtoMode}
+                viewFilter={viewFilter}
+                viewMode={viewMode}
+                visibleScrapCount={visibleScrapCount}
               />
 
-              <SelectedVideosActionBar
-                selectedCount={checkedVideos.length}
-                copiedPrompt={copiedPrompt}
-                onCopyPrompt={() => copyAI_RemakePrompt(videos.filter(v => checkedVideos.includes(v.videoId)))}
-              />
-
+              {/* 컨트롤 바 */}
               {/* 데이터 테이블 */}
               <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
                 <p className="px-4 pt-3 text-[10px] text-slate-500">댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.</p>
