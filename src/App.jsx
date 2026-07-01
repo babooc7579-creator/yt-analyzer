@@ -5,9 +5,9 @@ import { fetchTopComments as fetchTopCommentsFromYoutube } from './services/yout
 import { filterAndSortVideos, isTtoTtoCandidate, mapCloudVideoToViewModel } from './utils/video';
 import { formatRelativeTime, getChannelScanDisplay } from './utils/channelScanDisplay';
 import { getDaysDiff } from './utils/dates';
+import { buildAIRemakePrompt } from './utils/prompts';
 import { DEFAULT_CATEGORIES } from './constants/categories';
 import { getCreatorOsItem } from './constants/creatorOs';
-import { LANGUAGES } from './constants/languages';
 import { CHANNEL_STATUS, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS, hasAnyVideoStatus, isChannelScannable, withRecordStatus } from './constants/status';
 import ChannelNotesModal from './components/ChannelNotesModal';
 import ComingSoonView from './components/ComingSoonView';
@@ -523,14 +523,7 @@ export default function App() {
 
   const copyAI_RemakePrompt = (targetVideos) => {
     if (targetVideos.length === 0) return;
-    
-    let prompt = `다음은 내가 벤치마킹을 위해 수집한 글로벌 타채널의 '떡상(Viral)' 영상 목록이야.\n\n`;
-    targetVideos.forEach((v, idx) => {
-      const langLabel = LANGUAGES.find(l => l.code === v.language)?.label || '';
-      prompt += `${idx + 1}. [${langLabel}] 원본 제목: "${v.title}"\n   (조회수: ${v.view_count.toLocaleString()}회 / 찐팬 참여도(좋아요): ${v.like_ratio}% / 포맷: ${v.isShorts ? '쇼츠' : '롱폼'})\n\n`;
-    });
-
-    prompt += `\n[요청 사항]\n1. 위 영상들의 원본 제목을 한국어로 자연스럽게 번역해 줘.\n2. 이 영상들이 평소보다 몇 배씩 터질 수 있었던 '핵심 후킹 포인트(소재의 참신함 등)'를 분석해 줘.\n3. 이 과거의 영광을 '2026년 현재 한국 유튜브 트렌드'에 맞게 리메이크한다면 어떻게 해야 할까? 가장 자극적이고 클릭을 유도할 수 있는 [새로운 제목 3가지]와 [대본 인트로 뼈대]를 제안해 줘.`;
+    const prompt = buildAIRemakePrompt(targetVideos);
 
     navigator.clipboard.writeText(prompt);
     setCopiedPrompt(true);
