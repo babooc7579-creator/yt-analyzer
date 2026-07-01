@@ -7,7 +7,7 @@ import { formatRelativeTime, getChannelScanDisplay } from './utils/channelScanDi
 import { getDaysDiff } from './utils/dates';
 import { buildAIRemakePrompt } from './utils/prompts';
 import { DEFAULT_CATEGORIES } from './constants/categories';
-import { getCreatorOsItem } from './constants/creatorOs';
+import { CHANNEL_CREATOR_VIEWS, READY_CREATOR_VIEWS, REFERENCE_VAULT_VIEWS, SCRAPBOOK_CREATOR_VIEWS, getCreatorOsItem } from './constants/creatorOs';
 import { CHANNEL_STATUS, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS, hasAnyVideoStatus, isChannelScannable, withRecordStatus } from './constants/status';
 import ChannelNotesModal from './components/ChannelNotesModal';
 import ComingSoonView from './components/ComingSoonView';
@@ -531,13 +531,10 @@ export default function App() {
   };
 
   const activeCreatorItem = getCreatorOsItem(creatorView);
-  const readyCreatorViews = ['vault-all', 'vault-videos', 'vault-channels', 'studio-candidates', 'studio-scrapbook', 'ops-channels', 'ops-add-channel', 'ops-selected-scan'];
-  const channelCreatorViews = ['vault-channels', 'ops-channels', 'ops-add-channel', 'ops-selected-scan'];
-  const scrapbookCreatorViews = ['studio-candidates', 'studio-scrapbook'];
   const isHomeView = creatorView === 'home';
   const isComingSoonView = activeCreatorItem?.status === 'soon';
-  const isLegacyWorkspaceView = readyCreatorViews.includes(creatorView);
-  const isReferenceVaultView = creatorView === 'vault-all' || creatorView === 'vault-videos';
+  const isLegacyWorkspaceView = READY_CREATOR_VIEWS.includes(creatorView);
+  const isReferenceVaultView = REFERENCE_VAULT_VIEWS.includes(creatorView);
   const latestScannedAt = savedChannels.reduce((latest, channel) => {
     const value = channel.lastScanSummary?.scannedAt || channel.lastScannedAt;
     if (!value) return latest;
@@ -566,13 +563,13 @@ export default function App() {
   const openCreatorView = (item) => {
     setCreatorView(item.id);
 
-    if (channelCreatorViews.includes(item.id)) {
+    if (CHANNEL_CREATOR_VIEWS.includes(item.id)) {
       setActiveTab('dashboard');
       setShowWorkPanel(true);
       return;
     }
 
-    if (scrapbookCreatorViews.includes(item.id)) {
+    if (SCRAPBOOK_CREATOR_VIEWS.includes(item.id)) {
       setActiveTab('scrapbook');
       setShowWorkPanel(false);
       return;

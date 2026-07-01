@@ -72,6 +72,34 @@ export const CREATOR_OS_ITEMS = CREATOR_OS_PRODUCT_MAP.flatMap((section) => (
   section.items.map((item) => ({ ...item, sectionTitle: section.title }))
 ));
 
+export const READY_CREATOR_VIEWS = [
+  'vault-all',
+  'vault-videos',
+  'vault-channels',
+  'studio-candidates',
+  'studio-scrapbook',
+  'ops-channels',
+  'ops-add-channel',
+  'ops-selected-scan',
+];
+
+export const CHANNEL_CREATOR_VIEWS = [
+  'vault-channels',
+  'ops-channels',
+  'ops-add-channel',
+  'ops-selected-scan',
+];
+
+export const SCRAPBOOK_CREATOR_VIEWS = [
+  'studio-candidates',
+  'studio-scrapbook',
+];
+
+export const REFERENCE_VAULT_VIEWS = [
+  'vault-all',
+  'vault-videos',
+];
+
 export const getCreatorOsItem = (itemId) => {
   return CREATOR_OS_ITEMS.find((item) => item.id === itemId) || CREATOR_OS_ITEMS[0];
 };
