@@ -6,6 +6,8 @@
 
 중요: 이 문서는 결정 보고서입니다. 코드, API, DB schema, localStorage key는 변경하지 않습니다.
 
+1차 MVP에서 제작 후보와 제작 칸반을 어디까지 볼지는 `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md`를 기준으로 확인합니다.
+
 ---
 
 ## 1. 현재 상황
