@@ -490,8 +490,11 @@ export default function DiscoveryLinksWorkspace({
       return;
     }
 
+    const trimmedUrl = form.url.trim();
+
     const success = await onCreateLink({
-      url: form.url.trim(),
+      url: trimmedUrl,
+      platform: getDiscoveryPlatformFromUrl(trimmedUrl),
       title: form.title.trim(),
       memo: form.memo.trim(),
       status: form.status,
