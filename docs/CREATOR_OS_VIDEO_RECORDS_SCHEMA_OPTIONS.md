@@ -2,7 +2,11 @@
 
 작성일: 2026-07-02
 
-이 문서는 `/video-records`의 현재 단일 `status` 구조와 프론트의 `statusIds` 호환 구조를 어떻게 정리할지 선택지를 제시합니다.
+이 문서는 `/video-records`의 기존 단일 `status` 구조와 프론트의 `statusIds` 호환 구조를 어떻게 정리할지 제시했던 선택지 보고서입니다.
+
+2026-07-02 현재 선택지 B가 채택되어 구현됐습니다. 기존 `status`는 유지하고, `statusIds`는 복수 판단 보존용으로 Cloud 저장/조회됩니다.
+
+장기적으로 `status/statusIds`를 더 분리할지, `production_candidates` 별도 모델로 갈지는 `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`에서 별도로 검토합니다.
 
 중요: 이 문서는 결정 보고서입니다. 코드, API, DB schema, localStorage key는 변경하지 않습니다.
 
@@ -18,8 +22,8 @@
 - 프론트는 localStorage `yt_crm_video_user_records`를 캐시/복구 용도로 사용합니다.
 - 프론트는 `status`와 `statusIds`를 함께 해석합니다.
 - 백엔드는 `/video-records` 문서를 Cosmos `videos` container 안에 `docType: video_user_record`로 저장합니다.
-- 백엔드는 단일 `status`만 저장합니다.
-- 백엔드는 `statusIds`를 저장하지 않습니다.
+- 백엔드는 기존 대표 상태 `status`를 유지합니다.
+- 백엔드는 복수 판단 보존용 `statusIds`도 저장/조회합니다.
 - 백엔드 기본 status는 `new`입니다.
 - 프론트 상태 사전에는 `new`가 없습니다.
 
@@ -35,7 +39,7 @@
 | `uploadedAt` | 예 |
 | `createdAt` | 예 |
 | `updatedAt` | 예 |
-| `statusIds` | 아니오 |
+| `statusIds` | 예 |
 
 ---
 
@@ -43,11 +47,11 @@
 
 현재 구조는 MVP로 동작하지만, 다음 문제가 있습니다.
 
-1. 프론트는 복수 상태처럼 보이지만 Cloud DB에는 단일 상태만 남습니다.
-2. `reference_material`과 `production_candidate`처럼 동시에 의미가 있는 상태를 장기 저장하기 어렵습니다.
-3. 백엔드 기본값 `new`와 프론트 기본값 `unseen`이 다릅니다.
-4. 제작 상태와 영상 검토 상태가 같은 `status` 필드에 섞입니다.
-5. localStorage에는 있던 `statusIds`가 Cloud 조회 후 사라질 수 있습니다.
+1. `statusIds` Cloud 보존 문제는 선택지 B 구현으로 1차 해결됐습니다.
+2. 백엔드 기본값 `new`와 프론트 기본값 `unseen`이 다릅니다.
+3. 제작 상태와 영상 검토 상태가 같은 `status/statusIds` 구조 안에 섞입니다.
+4. `uploaded`와 `used`처럼 비슷해 보이지만 의미가 다른 상태가 있습니다.
+5. `production_candidates` 별도 모델은 아직 없습니다.
 
 ---
 
@@ -228,37 +232,41 @@ productionCandidates:
 
 ---
 
-## 8. 결정이 필요한 질문
+## 8. 결정 상태
 
-아래 질문에 대한 결정이 있어야 구현으로 넘어갈 수 있습니다.
+아래 항목은 2026-07-02에 결정됐습니다.
 
-1. 복수 상태를 Cloud DB에 저장해야 하나요?
-2. `statusIds`를 백엔드에 추가하는 방향을 허용하나요?
-3. 기존 단일 `status`는 당분간 유지해도 될까요?
-4. 백엔드 기본값 `new`는 `unseen`으로 바꾸는 것이 좋을까요?
-5. 제작 후보 별도 DB는 지금은 미루고, `videoUserRecords` 기반 MVP를 유지해도 될까요?
+1. 복수 상태는 Cloud DB에 보존합니다.
+2. `statusIds`를 백엔드 저장/조회 응답에 추가합니다.
+3. 기존 단일 `status`는 당분간 유지합니다.
+4. 제작 후보 별도 DB는 지금 만들지 않고, `videoUserRecords` 기반 MVP를 유지합니다.
+
+아래 항목은 아직 별도 검토가 필요합니다.
+
+1. 백엔드 기본값 `new`를 `unseen`으로 바꿀지 여부
+2. `status/statusIds`를 장기적으로 `lifecycleStatus`, `usagePurposeTags`, `productionStatus`로 분리할지 여부
+3. `production_candidates` 별도 DB를 언제 검토할지 여부
 
 ---
 
 ## 9. 지금 하면 안 되는 작업
 
-이 문서 작성 시점에서는 아래 작업을 하지 않습니다.
+현재 단계에서는 아래 작업을 하지 않습니다.
 
-- 백엔드 `/video-records` schema 변경
-- `statusIds` 실제 저장 구현
 - 기존 Cloud DB 데이터 마이그레이션
 - localStorage key 변경
 - `production_candidates` endpoint 추가
 - 제작 칸반 구조 변경
 - 기존 `status` 제거
+- `statusIds` 의미 변경
 
 ---
 
 ## 10. 권장 후속 작업
 
-1. localStorage와 Cloud 동기화 정책 선택지 보고서를 작성합니다.
+1. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md` 기준으로 장기 상태 모델 방향을 결정합니다.
 2. `status: new` 처리 정책을 상태값 사전에 보강합니다.
-3. 사용자가 선택지 B를 승인하면 작은 백엔드 PR로 `statusIds` 보존만 추가합니다.
+3. 선택지 B를 유지한다면 작은 프론트 리팩터링으로 상태 역할 helper를 정리합니다.
 ---
 
 ## 2026-07-02 결정 기록: 선택지 B 채택

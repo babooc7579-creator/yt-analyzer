@@ -66,9 +66,15 @@ Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
 
 `/video-records`의 단일 `status`와 프론트 `statusIds` 불일치를 어떻게 정리할지 선택지를 정리합니다.
 
-백엔드 schema 변경 전 반드시 확인해야 합니다.
+2026-07-02 기준 선택지 B가 채택되어 `statusIds` Cloud 저장/조회가 구현됐습니다. 기존 결정의 배경을 확인할 때 봅니다.
 
-9. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
+9. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
+
+`status/statusIds` 이후의 장기 상태 모델을 어떻게 가져갈지 정리합니다.
+
+제작 상태 분리, `production_candidates` 별도 DB, `lifecycleStatus/usagePurposeTags/productionStatus` 명시 필드 검토 전 확인합니다.
+
+10. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
 
 Cloud DB와 localStorage 충돌을 어떻게 처리할지 선택지를 정리합니다.
 
@@ -76,7 +82,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 ### 6단계. 실행 순서 확인
 
-10. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
+11. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
 
 위 문서들을 바탕으로 다음 작업을 작은 Issue 단위로 쪼갠 실행 계획입니다.
 
@@ -95,7 +101,8 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 | `CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md` | 영상 판단 기록 저장 흐름 | 예 | 일부 | 필수 |
 | `CREATOR_OS_CATEGORY_TAGS_AUDIT.md` | 카테고리/태그 구조 감사 | 예 | 일부 | 필수 |
 | `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md` | 발견 링크/로컬 파일 목표 모델 | 아니오 | 예 | 관련 작업 시 필수 |
-| `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md` | video records schema 선택지 | 예 | 예 | schema 작업 전 필수 |
+| `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md` | statusIds 보존 결정 배경 | 예 | 예 | video records 작업 전 참고 |
+| `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md` | video records 장기 상태 모델 선택지 | 예 | 예 | 제작 상태 분리 전 필수 |
 | `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` | Cloud/localStorage sync 선택지 | 예 | 예 | sync 작업 전 필수 |
 | `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md` | 다음 구현 Issue 순서 | 예 | 예 | 필수 |
 
@@ -109,7 +116,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 | 스캔 버튼 또는 영상 수집 흐름 수정 | `CREATOR_OS_API_BEHAVIOR_MAP.md`, `CREATOR_OS_DATA_OWNERSHIP.md` |
 | 저장 영상 불러오기 수정 | `CREATOR_OS_API_BEHAVIOR_MAP.md` |
 | 영상 상태 저장 수정 | `CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md`, `CREATOR_OS_STATUS_DICTIONARY.md` |
-| 제작 후보 기능 수정 | `CREATOR_OS_STATUS_DICTIONARY.md`, `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md` |
+| 제작 후보 기능 수정 | `CREATOR_OS_STATUS_DICTIONARY.md`, `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md` |
 | 스크랩북 저장 수정 | `CREATOR_OS_DATA_OWNERSHIP.md`, `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` |
 | 카테고리/태그 수정 | `CREATOR_OS_CATEGORY_TAGS_AUDIT.md` |
 | localStorage 제거 또는 key 변경 | `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` |
@@ -137,9 +144,8 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 아래 작업은 문서만으로는 진행하지 않고, 선택지 보고 후 사용자 결정을 받아야 합니다.
 
-- `/video-records`에 `statusIds`를 저장할지
-- 기존 단일 `status`를 계속 유지할지
-- localStorage와 Cloud DB가 충돌할 때 어떤 데이터를 우선할지
+- `status/statusIds` 장기 역할을 어디까지 분리할지
+- `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 명시 필드를 도입할지
 - 카테고리 목록을 Cloud 태그 기준으로 바꿀지
 - `production_candidates` 별도 저장소를 만들지
 - `discovery_links` API를 만들지
@@ -168,8 +174,8 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 ## 7. 다음 추천 순서
 
-1. 화면에서 "저장 영상 불러오기"와 "새 영상 수집" 문구가 실제 동작과 맞는지 audit합니다.
-2. 카테고리 삭제/이름 변경의 의미가 사용자에게 오해 없이 보이는지 audit합니다.
-3. videoUserRecords 저장 실패가 화면에서 조용히 묻히지 않는지 audit합니다.
+1. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md` 기준으로 1차 완성까지의 상태 모델 방향을 결정합니다.
+2. 저장 영상 조회 페이지네이션 필요성을 audit합니다.
+3. scan/API 사용 기록 모델을 검토합니다.
 
-이 3개는 큰 데이터 결정을 하지 않고도 실사용 혼란을 줄일 수 있는 작업입니다.
+상태 모델 결정은 코드 구현 전에 사용자 판단이 필요합니다.
