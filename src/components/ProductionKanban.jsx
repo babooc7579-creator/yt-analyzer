@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AlertCircle, CalendarDays, CheckCircle2, Clock, Copy, ExternalLink, Link as LinkIcon, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
+import {
+  DISCOVERY_RIGHTS_LABELS,
+  DISCOVERY_RIGHTS_TONES,
+  DISCOVERY_RIGHTS_WARNINGS,
+} from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 
 const COLUMNS = [
@@ -22,35 +27,6 @@ const COLUMNS = [
     tone: 'border-slate-200 bg-slate-50',
   },
 ];
-
-const DISCOVERY_RIGHTS_LABELS = {
-  unknown: '권리 미확인',
-  needs_check: '권리 확인 필요',
-  cleared: '사용 가능 확인',
-  do_not_use: '사용 금지',
-};
-
-const DISCOVERY_RIGHTS_TONES = {
-  unknown: 'bg-slate-100 text-slate-600',
-  needs_check: 'bg-rose-50 text-rose-600',
-  cleared: 'bg-emerald-50 text-emerald-700',
-  do_not_use: 'bg-red-50 text-red-700',
-};
-
-const DISCOVERY_RIGHTS_WARNINGS = {
-  needs_check: {
-    title: '권리 확인 후 사용',
-    description: '원본과 출처를 확인하기 전에는 제작에 바로 쓰지 마세요.',
-    cardClass: 'border-rose-200 bg-rose-50',
-    panelClass: 'border-rose-200 bg-white text-rose-700',
-  },
-  do_not_use: {
-    title: '사용 금지 표시',
-    description: '제작에 쓰면 위험한 링크입니다. 후보 제외 또는 발견함에서 상태를 수정하세요.',
-    cardClass: 'border-red-300 bg-red-50',
-    panelClass: 'border-red-200 bg-white text-red-700',
-  },
-};
 
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 const formatDate = (date) => date ? date.split('-').join('.') : '';
@@ -326,7 +302,7 @@ export default function ProductionKanban({
       <article key={link.id} className={`rounded-xl border p-4 ${rightsWarning ? rightsWarning.cardClass : 'border-slate-200 bg-slate-50'}`}>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-extrabold text-amber-800">링크 후보</span>
-          <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown}`}>
+          <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${(DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown).compactBadge}`}>
             {DISCOVERY_RIGHTS_LABELS[link.rightsStatus] || DISCOVERY_RIGHTS_LABELS.unknown}
           </span>
         </div>
