@@ -200,6 +200,17 @@ localStorage 관련 표현은 조심해야 합니다.
 - DB에 저장되는 기능이 아니라 조회 기능으로 설명합니다.
 - 비용성 호출임을 표시합니다.
 
+### 5.6 수집 로그와 API 사용량 로그 없음
+
+현재 `scan_logs`와 `api_quota_logs`는 별도 저장소나 endpoint가 없습니다.
+
+운영 기준:
+
+- 지금은 채널 문서의 `lastScanSummary`를 마지막 수집 상태 표시로만 사용합니다.
+- 과거 수집 이력과 API 사용량 추정은 아직 구현된 기능처럼 표시하지 않습니다.
+- 나중에 구현할 때는 `scan_logs`와 `api_quota_logs`를 개념상 분리합니다.
+- 자세한 목표 모델은 `CREATOR_OS_SCAN_API_USAGE_MODEL.md`를 기준으로 봅니다.
+
 ---
 
 ## 6. 화면별 동작 기준

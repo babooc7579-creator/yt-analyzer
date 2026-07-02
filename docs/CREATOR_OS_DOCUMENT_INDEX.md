@@ -60,7 +60,13 @@ Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
 
 ### 4단계. 미래 기능 모델 확인
 
-8. `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md`
+8. `CREATOR_OS_SCAN_API_USAGE_MODEL.md`
+
+YouTube API 호출이 발생하는 새 영상 수집, 채널 확인, 댓글 조회를 어떻게 기록할지 정리합니다.
+
+`scan_logs`, `api_quota_logs`, 자동 스캔, API 사용량 화면을 검토하기 전에 확인해야 합니다.
+
+9. `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md`
 
 인스타/외부 링크, 로컬 파일, 출처 확인, 제작 후보 연결의 목표 모델을 정리합니다.
 
@@ -68,19 +74,19 @@ Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
 
 ### 5단계. 결정이 필요한 선택지 확인
 
-9. `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md`
+10. `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md`
 
 `/video-records`의 단일 `status`와 프론트 `statusIds` 불일치를 어떻게 정리할지 선택지를 정리합니다.
 
 2026-07-02 기준 선택지 B가 채택되어 `statusIds` Cloud 저장/조회가 구현됐습니다. 기존 결정의 배경을 확인할 때 봅니다.
 
-10. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
+11. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
 
 `status/statusIds` 이후의 장기 상태 모델을 어떻게 가져갈지 정리합니다.
 
 제작 상태 분리, `production_candidates` 별도 DB, `lifecycleStatus/usagePurposeTags/productionStatus` 명시 필드 검토 전 확인합니다.
 
-11. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
+12. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
 
 Cloud DB와 localStorage 충돌을 어떻게 처리할지 선택지를 정리합니다.
 
@@ -88,7 +94,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 ### 6단계. 실행 순서 확인
 
-12. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
+13. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
 
 위 문서들을 바탕으로 다음 작업을 작은 Issue 단위로 쪼갠 실행 계획입니다.
 
@@ -107,6 +113,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 | `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md` | 저장 영상 조회 성능/페이지네이션 판단 | 예 | 일부 | `/videos` 수정 전 필수 |
 | `CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md` | 영상 판단 기록 저장 흐름 | 예 | 일부 | 필수 |
 | `CREATOR_OS_CATEGORY_TAGS_AUDIT.md` | 카테고리/태그 구조 감사 | 예 | 일부 | 필수 |
+| `CREATOR_OS_SCAN_API_USAGE_MODEL.md` | 수집 로그/API 사용량 목표 모델 | 예 | 예 | scan/API 작업 전 필수 |
 | `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md` | 발견 링크/로컬 파일 목표 모델 | 아니오 | 예 | 관련 작업 시 필수 |
 | `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md` | statusIds 보존 결정 배경 | 예 | 예 | video records 작업 전 참고 |
 | `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md` | video records 장기 상태 모델 선택지 | 예 | 예 | 제작 상태 분리 전 필수 |
@@ -127,6 +134,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 | 스크랩북 저장 수정 | `CREATOR_OS_DATA_OWNERSHIP.md`, `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` |
 | 카테고리/태그 수정 | `CREATOR_OS_CATEGORY_TAGS_AUDIT.md` |
 | localStorage 제거 또는 key 변경 | `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` |
+| scan logs 또는 API 사용량 기능 구현 | `CREATOR_OS_SCAN_API_USAGE_MODEL.md`, `CREATOR_OS_API_BEHAVIOR_MAP.md` |
 | discovery links 또는 local assets 구현 | `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md` |
 | 새 DB container 추가 | `CREATOR_OS_DATA_OWNERSHIP.md`, 관련 선택지 문서 |
 
@@ -181,8 +189,9 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 ## 7. 다음 추천 순서
 
-1. scan/API 사용 기록 모델을 검토합니다.
-2. discovery links/local assets MVP 범위를 결정합니다.
-3. 제작 후보와 제작 칸반의 데이터 기준을 결정합니다.
+1. discovery links/local assets MVP 범위를 결정합니다.
+2. 제작 후보와 제작 칸반의 데이터 기준을 결정합니다.
+3. `scan_logs`와 `api_quota_logs` 실제 구현 여부는 별도 선택지 보고 후 결정합니다.
 
 페이지네이션 감사는 2026-07-02에 완료됐고, 현재는 전체 조회 유지가 권장됩니다.
+scan/API 사용 기록 모델 검토도 2026-07-02에 완료됐고, 현재는 구현 없이 목표 모델만 문서화했습니다.

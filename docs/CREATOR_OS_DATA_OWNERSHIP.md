@@ -228,6 +228,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 
 - 수집 로그 화면이 필요해지면 별도 `scan_logs` 모델을 검토합니다.
 - 지금은 `lastScanSummary`를 마지막 상태 표시 용도로만 사용합니다.
+- 자세한 목표 모델은 `CREATOR_OS_SCAN_API_USAGE_MODEL.md`를 기준으로 봅니다.
 
 충돌 위험:
 
@@ -242,6 +243,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 
 - YouTube API 호출량과 비용성 작업을 기록하는 별도 모델 후보입니다.
 - 사용자가 "조회"와 "수집"을 혼동하지 않도록 돕는 운영 로그로 봅니다.
+- 자세한 목표 모델은 `CREATOR_OS_SCAN_API_USAGE_MODEL.md`를 기준으로 봅니다.
 
 충돌 위험:
 
