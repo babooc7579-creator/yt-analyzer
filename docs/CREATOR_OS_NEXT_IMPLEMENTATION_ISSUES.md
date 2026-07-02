@@ -156,14 +156,14 @@
 ### Issue 8. scan/API 사용 기록 모델 검토
 
 - 목적: YouTube API 호출이 언제, 왜 발생했는지 추적할 기준을 만듭니다.
-- 현재 상태: `scan_logs`, `api_quota_logs`는 없습니다. 채널별 `lastScanSummary`만 있습니다.
+- 현재 상태: 2026-07-02 기준 검토 완료. `scan_logs`, `api_quota_logs`는 없습니다. 채널별 `lastScanSummary`만 있습니다.
 - 왜 필요한가: 사용자가 "조회"와 "수집"을 구분하고, API 사용량을 관리하기 위해 필요합니다.
-- 작업 범위: 모델 선택지 작성. 바로 endpoint나 container를 만들지 않습니다.
+- 작업 범위: 모델 선택지 작성 완료. 바로 endpoint나 container를 만들지 않습니다.
 - 건드릴 파일 예상: 문서 우선. 이후 백엔드 Functions, Cosmos container 설정.
 - 건드리면 안 되는 것: 새 container 추가, scan endpoint 동작 변경, 자동 스캔.
 - 위험도: 중간에서 높음.
-- 완료 기준: scan log와 quota log를 따로 둘지, 어떤 필드가 필요한지 정리됩니다.
-- 사용자 판단 필요 여부: 구현 전 필요.
+- 완료 기준: `CREATOR_OS_SCAN_API_USAGE_MODEL.md` 작성 완료. `scan_logs`와 `api_quota_logs`는 개념상 분리하는 방향이 권장됩니다.
+- 사용자 판단 필요 여부: 현재 없음. 실제 구현은 새 저장소 또는 새 `docType`, endpoint가 필요하므로 별도 판단 필요.
 
 ### Issue 9. discovery links/local assets MVP 범위 결정
 
@@ -195,14 +195,14 @@
 
 바로 다음 작업은 아래 순서를 추천합니다.
 
-1. Issue 8: scan/API 사용 기록 모델 검토
-2. Issue 9: discovery links/local assets MVP 범위 결정
-3. Issue 10: 제작 후보와 제작 칸반의 데이터 기준 결정
+1. Issue 9: discovery links/local assets MVP 범위 결정
+2. Issue 10: 제작 후보와 제작 칸반의 데이터 기준 결정
+3. `scan_logs`와 `api_quota_logs` 실제 구현 여부 선택지 보고
 
 이 순서가 안전한 이유:
 
-- 문서 기준과 저장 영상 페이지네이션 감사는 완료됐습니다.
-- 저장 영상 페이지네이션은 현재 유지 판단이 끝났으므로 다음은 비용성 작업인 scan/API 사용 기록 기준을 검토합니다.
+- 문서 기준, 저장 영상 페이지네이션 감사, scan/API 사용 기록 모델 검토는 완료됐습니다.
+- 다음은 아직 구현되지 않은 발견 링크/로컬 파일과 제작 후보 데이터 기준을 결정합니다.
 - 이후에야 데이터 구조 결정으로 넘어갑니다.
 - DB/API 변경은 마지막에 별도 판단을 받고 진행합니다.
 
