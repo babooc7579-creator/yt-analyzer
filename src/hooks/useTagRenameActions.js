@@ -27,6 +27,11 @@ export function useTagRenameActions({
       return;
     }
 
+    const confirmed = window.confirm(
+      `'${from}' 태그 이름을 '${to}'로 변경할까요?\n\n이 작업은 화면 목록만 바꾸는 것이 아니라, Cloud DB에서 이 태그가 붙은 채널들에도 일괄 반영됩니다.`
+    );
+    if (!confirmed) return;
+
     setRenameLoading(true);
     setError('');
 

@@ -40,6 +40,14 @@ export default function ChannelAddForm({
   handleSaveChannel,
   loading,
 }) {
+  const hideCategoryFromLocalList = (category) => {
+    const confirmed = window.confirm(
+      `'${category}' 카테고리를 화면 목록에서 숨길까요?\n\n이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다. 나중에 같은 이름으로 카테고리를 다시 추가하면 목록에 다시 보입니다.`
+    );
+    if (!confirmed) return;
+    setCategories(categories.filter((currentCategory) => currentCategory !== category));
+  };
+
   return (
     <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-4">
       <div className="flex justify-between items-center mb-2">
@@ -84,7 +92,7 @@ export default function ChannelAddForm({
                 <span key={cat} className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] text-slate-600">
                   {cat}
                   <button onClick={() => startRenameCategory(cat)} className="text-indigo-400 hover:text-indigo-600" title="Cloud 태그 이름 변경 - 이 태그가 붙은 모든 채널에 일괄 반영됩니다"><Settings className="w-2.5 h-2.5" /></button>
-                  <button onClick={() => setCategories(categories.filter((c) => c !== cat))} className="text-red-400 hover:text-red-600" title="화면 목록에서만 숨깁니다. 이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다."><Trash2 className="w-2.5 h-2.5" /></button>
+                  <button onClick={() => hideCategoryFromLocalList(cat)} className="text-red-400 hover:text-red-600" title="화면 목록에서만 숨깁니다. 이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다."><Trash2 className="w-2.5 h-2.5" /></button>
                 </span>
               )
             ))}
