@@ -8,7 +8,7 @@ export const mapStoredVideosToViewModels = (videos = []) => (
 
 export const getStoredVideosLoadedMessage = (videoCount) => (
   videoCount === 0
-    ? '아직 수집된 영상이 없습니다. 먼저 "지금 스캔"을 눌러 데이터를 모아주세요.'
+    ? '아직 저장된 영상이 없습니다. 새 데이터가 필요하면 "유튜브 새 영상 수집"을 실행해 주세요.'
     : `불러오기 완료! 총 ${videoCount}개의 영상을 가져왔습니다.`
 );
 
@@ -50,5 +50,5 @@ export const summarizeScanResults = (results = []) => (
 
 export const getScanCompleteMessage = (results = []) => {
   const { totalNew, ttoTtoCount } = summarizeScanResults(results);
-  return `스캔 완료! 신규 영상 ${totalNew}개 발견${ttoTtoCount > 0 ? `, 터또터 후보 ${ttoTtoCount}개 발견!` : ''}`;
+  return `새 영상 수집 완료! 신규 영상 ${totalNew}개 발견${ttoTtoCount > 0 ? `, 터또터 후보 ${ttoTtoCount}개 발견!` : ''}`;
 };
