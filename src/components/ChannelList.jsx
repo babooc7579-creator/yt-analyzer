@@ -109,7 +109,7 @@ function ChannelListItem({
         {channel.notes?.length > 0 && <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center">{channel.notes.length}</span>}
       </button>
       <button
-        onClick={() => onDelete(channel.id, channel.category)}
+        onClick={() => onDelete(channel.id, channel.category, channel.title)}
         className="p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0 mt-1"
         title="Cloud 채널 목록에서 삭제"
         aria-label={`${channel.title} Cloud 채널 목록에서 삭제`}
