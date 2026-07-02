@@ -353,6 +353,7 @@ export default function App() {
               copiedPrompt={copiedPrompt}
               copyPromptForVideos={copyPromptForVideos}
               creatorView={creatorView}
+              discoveryLinks={discoveryLinks}
               deleteChannel={deleteChannel}
               error={error}
               fetchTopComments={fetchTopComments}
