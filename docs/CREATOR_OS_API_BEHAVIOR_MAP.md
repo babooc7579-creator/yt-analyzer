@@ -68,7 +68,7 @@
 | 영상 판단 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 기존 `status` 유지 + `statusIds` 보존. 2026-07-02 배포 smoke 확인 |
 | 영상 판단 기록 전체 삭제 | `clearVideoUserRecords` | `DELETE /video-records` | DB 변경 | 아니오 | 아니오 | 예 | 예 | 가능 | 큰 변경. 사용자 확인 필요 |
 | 발견 링크 불러오기 | `fetchDiscoveryLinks` | `GET /discovery-links` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 기존 `videos` container의 `docType: discovery_link` 조회 |
-| 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태와 URL 추정 `platform` 저장. 자동 크롤링 없음 |
+| 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태와 URL 추정 `platform` 저장. 백엔드도 허용 `platform`을 보존하며, 없거나 잘못되면 URL로 재추정. 자동 크롤링 없음 |
 | 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 메모 등 변경 |
 | 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용 |

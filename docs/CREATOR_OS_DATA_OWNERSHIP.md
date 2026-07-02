@@ -453,3 +453,15 @@ localStorage는 지금 당장 제거하지 않습니다.
 
 - `platform`은 현재 자동 수집이나 외부 사이트 크롤링 결과가 아니라, 사용자가 입력한 URL 문자열에서 추정한 표시/분류 보조값입니다.
 - 플랫폼 값을 수동 수정하는 기능은 아직 만들지 않습니다.
+
+### 2026-07-03 백엔드 확인 기록
+
+`yt-analyzer-functions` repo의 `src/functions/discoveryLinks.js`와 `test/discoveryLinks.test.js` 기준으로 아래를 확인했습니다.
+
+- 백엔드는 `youtube`, `instagram`, `tiktok`, `web`, `unknown`을 discovery link `platform` 허용값으로 둡니다.
+- 새 discovery link 생성 시 프론트가 보낸 `platform`이 허용값이면 그대로 저장합니다.
+- `platform`이 없거나 허용값이 아니면 백엔드가 URL에서 다시 추정합니다.
+- URL 수정 시 `platform`을 같이 보내지 않으면 백엔드가 새 URL 기준으로 다시 추정합니다.
+- 클라이언트 응답에는 `platform`이 포함되고, 내부 필드인 `docType`, `userId`, `channelId`는 제외됩니다.
+
+따라서 프론트에서 새 링크 저장 시 `platform`을 보내는 현재 방식은 백엔드 저장/응답 구조와 맞습니다. 기존 문서에 대한 일괄 마이그레이션은 여전히 하지 않습니다.
