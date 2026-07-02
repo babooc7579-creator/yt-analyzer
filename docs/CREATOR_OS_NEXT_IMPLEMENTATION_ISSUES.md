@@ -18,8 +18,8 @@
 
 - `GET /videos?channelIds=...`는 저장된 영상 DB 조회입니다.
 - `POST /scan/selected`, `GET /scan`, `GET /scan?tag=...`는 YouTube API 호출과 DB 갱신이 발생할 수 있습니다.
-- `/video-records`는 백엔드 기준 단일 `status` 중심입니다.
-- 프론트는 `statusIds`를 함께 다룰 수 있어 백엔드와 불일치 가능성이 있습니다.
+- `/video-records`는 기존 대표 상태 `status`를 유지합니다.
+- `statusIds`는 복수 판단 보존용 보조 필드로 백엔드 저장/조회에 추가됐고, 2026-07-02 배포 smoke로 확인됐습니다.
 - `/scrapbook`은 별도 container가 아니라 `videos` container 안의 `docType: scrapbook` 구조입니다.
 - `scan_logs`, `api_quota_logs`, `production_candidates`, `discovery_links`, `local_assets`는 아직 별도 저장소가 없습니다.
 - 카테고리 화면 목록은 localStorage 중심이고, 실제 채널 태그는 Cloud DB `channels.tags` 중심입니다.
@@ -38,7 +38,7 @@
 
 ### P2: 데이터 기준 결정 후 가능한 작업
 
-`statusIds`, Cloud/localStorage sync, 카테고리/태그 기준처럼 데이터 의미가 바뀔 수 있는 작업입니다.
+`status/statusIds` 장기 분리, Cloud/localStorage sync, 카테고리/태그 기준처럼 데이터 의미가 바뀔 수 있는 작업입니다.
 
 ### P3: 백엔드/API/DB 변경이 필요한 작업
 
@@ -56,7 +56,7 @@
 
 다만 아래 작업을 구현하기 직전에는 사용자 결정을 받아야 합니다.
 
-- `/video-records`에 `statusIds`를 백엔드 저장값으로 추가할지
+- `status`, `statusIds`를 장기적으로 `lifecycleStatus`, `usagePurposeTags`, `productionStatus`로 분리할지
 - Cloud DB와 localStorage가 충돌할 때 어떤 기준으로 복구할지
 - 카테고리 목록을 Cloud 태그 기준으로 바꿀지
 - `production_candidates`를 별도 DB로 만들지
@@ -115,16 +115,16 @@
 - 완료 기준: 저장 실패가 조용히 묻히지 않고 사용자가 인지할 수 있습니다.
 - 사용자 판단 필요 여부: 작게 실패 안내만 추가하면 필요 없음. sync 정책 변경은 필요.
 
-### Issue 5. `/video-records` schema 선택지 확정
+### Issue 5. `/video-records` 장기 상태 모델 검토
 
-- 목적: 프론트의 `statusIds`와 백엔드의 단일 `status` 불일치를 정리할 방향을 결정합니다.
-- 현재 상태: 선택지 문서에서 Codex 추천은 `status`를 유지하면서 `statusIds`를 백엔드에 보존하는 방향입니다.
-- 왜 필요한가: 한 영상이 "나중에 보기"이면서 "제작 후보"일 수 있는지 같은 제품 판단과 연결됩니다.
-- 작업 범위: 선택지 검토 후 결정. 결정 전에는 구현하지 않습니다.
-- 건드릴 파일 예상: 백엔드 `videoUserRecords` endpoint, 프론트 상태 저장 로직, 상태 상수.
-- 건드리면 안 되는 것: 결정 전 코드 수정, 기존 `status` 제거, 기존 데이터 마이그레이션.
+- 목적: 지금은 `status`와 `statusIds`를 함께 쓰되, 장기적으로 영상 상태/용도 태그/제작 진행 상태를 분리할 필요가 있는지 검토합니다.
+- 현재 상태: `status`는 기존 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용으로 Cloud에 저장/조회됩니다.
+- 왜 필요한가: "제작 후보", "자료 참고", "사용함" 같은 값이 많아질수록 단일 상태와 복수 태그의 역할이 흐려질 수 있습니다.
+- 작업 범위: 장기 모델 선택지 검토. 당장 재설계하지 않습니다.
+- 건드릴 파일 예상: 문서 우선. 이후 필요 시 상태 상수, 제작 후보 화면, 백엔드 `videoUserRecords` endpoint.
+- 건드리면 안 되는 것: 기존 `status` 제거, 기존 `statusIds` 의미 변경, 기존 데이터 마이그레이션.
 - 위험도: 높음.
-- 완료 기준: `status`와 `statusIds`의 관계가 명확히 결정됩니다.
+- 완료 기준: 1차 완성까지 현재 구조를 유지할지, 별도 상태 모델 분리를 언제 검토할지 기준이 정리됩니다.
 - 사용자 판단 필요 여부: 필요.
 
 ### Issue 6. Cloud/localStorage sync 정책 확정
@@ -197,7 +197,7 @@
 2. Issue 2: DB 조회와 YouTube API 호출 문구 정리
 3. Issue 3: 카테고리 삭제/이름 변경 의미 정리
 4. Issue 4: videoUserRecords 저장 실패 안내 보강
-5. Issue 5: `/video-records` schema 선택지 확정
+5. Issue 5: `/video-records` 장기 상태 모델 검토
 
 이 순서가 안전한 이유:
 
@@ -216,8 +216,8 @@
 - `App.jsx` 대규모 재작성
 - 새 endpoint 추가
 - 새 Cosmos container 추가
-- `/video-records` schema 변경
-- `statusIds` 백엔드 저장 구현
+- 기존 `status` 제거 또는 의미 변경
+- `statusIds` 전체 재설계
 - localStorage key 변경 또는 제거
 - 기존 데이터 마이그레이션
 - YouTube API 호출이 늘어나는 자동화
