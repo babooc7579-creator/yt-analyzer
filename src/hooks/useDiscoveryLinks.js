@@ -5,6 +5,10 @@ import {
   fetchDiscoveryLinks,
   updateDiscoveryLink,
 } from '../services/functionApi';
+import {
+  DISCOVERY_LINK_STATUS_OPTIONS,
+  DISCOVERY_RIGHTS_STATUS_OPTIONS,
+} from '../constants/discoveryLinks';
 
 const getDiscoveryLinksFromResponse = (data) => {
   if (Array.isArray(data?.links)) return data.links;
@@ -14,6 +18,59 @@ const getDiscoveryLinksFromResponse = (data) => {
 
 const getDiscoveryLinkFromResponse = (data) => {
   return data?.link || data?.item || data?.discoveryLink || null;
+};
+
+const getOptionLabel = (options, value) => (
+  options.find((option) => option.value === value)?.label || value || '미지정'
+);
+
+const getDiscoveryLinkName = (link) => {
+  if (link?.title) return link.title;
+  if (link?.url) {
+    try {
+      return new URL(link.url).hostname.replace(/^www\./, '');
+    } catch {
+      return link.url;
+    }
+  }
+  return '발견 링크';
+};
+
+const getSavingActionForUpdates = (updates) => {
+  const updateKeys = Object.keys(updates || {});
+  if (updateKeys.length === 1 && updateKeys.includes('status')) return 'update_status';
+  if (updateKeys.length === 1 && updateKeys.includes('rightsStatus')) return 'update_rights';
+  if (updateKeys.length > 0 && updateKeys.every((key) => ['title', 'memo'].includes(key))) return 'update_text';
+  return 'update';
+};
+
+const getUpdateNotice = (updates, link) => {
+  const updateKeys = Object.keys(updates || {});
+  const linkName = getDiscoveryLinkName(link);
+
+  if (updateKeys.length === 1 && updates.status !== undefined) {
+    const statusLabel = getOptionLabel(DISCOVERY_LINK_STATUS_OPTIONS, updates.status);
+    return `${linkName}의 검토 상태를 '${statusLabel}'로 저장했습니다.`;
+  }
+
+  if (updateKeys.length === 1 && updates.rightsStatus !== undefined) {
+    const rightsLabel = getOptionLabel(DISCOVERY_RIGHTS_STATUS_OPTIONS, updates.rightsStatus);
+    return `${linkName}의 권리 확인 상태를 '${rightsLabel}'로 저장했습니다.`;
+  }
+
+  if (updateKeys.length > 0 && updateKeys.every((key) => ['title', 'memo'].includes(key))) {
+    if (updates.title !== undefined && updates.memo !== undefined) {
+      return `${linkName}의 제목과 메모를 Cloud에 저장했습니다.`;
+    }
+    if (updates.title !== undefined) {
+      return `${linkName}의 제목을 Cloud에 저장했습니다.`;
+    }
+    if (updates.memo !== undefined) {
+      return `${linkName}의 메모를 Cloud에 저장했습니다.`;
+    }
+  }
+
+  return `${linkName}의 변경 사항을 Cloud에 저장했습니다.`;
 };
 
 export function useDiscoveryLinks() {
@@ -75,7 +132,7 @@ export function useDiscoveryLinks() {
         await loadDiscoveryLinks();
       }
 
-      setNotice('Cloud에 발견 링크를 저장했습니다.');
+      setNotice(`${getDiscoveryLinkName(createdLink || payload)} 링크를 Cloud 발견함에 저장했습니다.`);
       return true;
     } catch (saveError) {
       setError(saveError.message || 'Cloud에 링크를 저장하지 못했습니다.');
@@ -88,9 +145,10 @@ export function useDiscoveryLinks() {
 
   const changeDiscoveryLink = async (id, updates) => {
     setSaving(true);
-    setSavingAction('update');
+    setSavingAction(getSavingActionForUpdates(updates));
     setError('');
     setNotice('');
+    const currentLink = links.find((link) => link.id === id);
 
     try {
       const data = await updateDiscoveryLink({ id, updates });
@@ -107,7 +165,7 @@ export function useDiscoveryLinks() {
         await loadDiscoveryLinks();
       }
 
-      setNotice('Cloud에 링크 변경 사항을 저장했습니다.');
+      setNotice(getUpdateNotice(updates, updatedLink || { ...currentLink, ...updates }));
       return true;
     } catch (saveError) {
       setError(saveError.message || 'Cloud에 링크 변경 사항을 저장하지 못했습니다.');
@@ -123,6 +181,7 @@ export function useDiscoveryLinks() {
     setSavingAction('delete');
     setError('');
     setNotice('');
+    const currentLink = links.find((link) => link.id === id);
 
     try {
       const data = await deleteDiscoveryLink(id);
@@ -131,7 +190,7 @@ export function useDiscoveryLinks() {
       }
 
       setLinks((currentLinks) => currentLinks.filter((link) => link.id !== id));
-      setNotice('Cloud에서 발견 링크를 삭제했습니다.');
+      setNotice(`${getDiscoveryLinkName(currentLink)} 링크를 Cloud 발견함에서 삭제했습니다.`);
       return true;
     } catch (deleteError) {
       setError(deleteError.message || 'Cloud에서 링크를 삭제하지 못했습니다.');
@@ -143,9 +202,12 @@ export function useDiscoveryLinks() {
   };
 
   const savingMessages = {
-    create: 'Cloud에 발견 링크를 저장하는 중입니다.',
-    update: 'Cloud에 링크 변경 사항을 저장하는 중입니다.',
-    delete: 'Cloud에서 발견 링크를 삭제하는 중입니다.',
+    create: '새 발견 링크를 Cloud에 저장하는 중입니다.',
+    update: '링크 변경 사항을 Cloud에 저장하는 중입니다.',
+    update_status: '검토 상태를 Cloud에 저장하는 중입니다.',
+    update_rights: '권리 확인 상태를 Cloud에 저장하는 중입니다.',
+    update_text: '제목과 메모를 Cloud에 저장하는 중입니다.',
+    delete: 'Cloud 발견함에서 링크를 삭제하는 중입니다.',
   };
 
   return {
