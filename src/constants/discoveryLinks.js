@@ -6,6 +6,17 @@ export const DISCOVERY_LINK_STATUS_OPTIONS = [
   { value: 'discarded', label: '제외' },
 ];
 
+export const DISCOVERY_PLATFORM_LABELS = {
+  instagram: 'Instagram',
+  youtube: 'YouTube',
+  tiktok: 'TikTok',
+  web: 'Web',
+};
+
+export const getDiscoveryPlatformLabel = (platform) => (
+  DISCOVERY_PLATFORM_LABELS[platform] || DISCOVERY_PLATFORM_LABELS.web
+);
+
 export const getDiscoveryLinkHost = (url, fallback = '링크') => {
   try {
     return new URL(url).hostname.replace(/^www\./, '');

@@ -21,6 +21,7 @@ import {
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
+  getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
 
 const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
@@ -28,13 +29,6 @@ const ALL_LINK_STATUS_OPTION = ALL_DISCOVERY_LINK_STATUS_OPTION;
 const RIGHTS_STATUS_OPTIONS = DISCOVERY_RIGHTS_STATUS_OPTIONS;
 const ALL_RIGHTS_STATUS_OPTION = ALL_DISCOVERY_RIGHTS_STATUS_OPTION;
 const RIGHTS_STATUS_TONES = DISCOVERY_RIGHTS_TONES;
-
-const PLATFORM_LABELS = {
-  instagram: 'Instagram',
-  youtube: 'YouTube',
-  tiktok: 'TikTok',
-  web: 'Web',
-};
 
 const formatDateTime = (value) => {
   if (!value) return '기록 없음';
@@ -141,7 +135,7 @@ function DiscoveryLinkRow({
   const [draftMemo, setDraftMemo] = useState(link.memo || '');
   const title = link.title || getDiscoveryLinkHost(link.url);
   const sourceHost = getDiscoveryLinkHost(link.url);
-  const platformLabel = PLATFORM_LABELS[link.platform] || 'Web';
+  const platformLabel = getDiscoveryPlatformLabel(link.platform);
   const currentStatus = link.status || 'inbox';
   const currentRightsStatus = link.rightsStatus || 'unknown';
   const rightsTone = RIGHTS_STATUS_TONES[currentRightsStatus] || RIGHTS_STATUS_TONES.unknown;
