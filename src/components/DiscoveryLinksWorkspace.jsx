@@ -67,6 +67,20 @@ const getUrlPreview = (url) => {
   }
 };
 
+const normalizeDiscoveryLinkUrl = (url) => {
+  const trimmedUrl = (url || '').trim();
+  if (!trimmedUrl) return '';
+
+  try {
+    const parsedUrl = new URL(trimmedUrl);
+    const pathname = parsedUrl.pathname.replace(/\/$/, '');
+    const host = parsedUrl.hostname.replace(/^www\./, '');
+    return `${parsedUrl.protocol}//${host}${pathname}${parsedUrl.search}`.toLowerCase();
+  } catch {
+    return trimmedUrl.replace(/\/$/, '').toLowerCase();
+  }
+};
+
 const getLinkStatusValue = (link) => link.status || 'inbox';
 
 const getLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
@@ -423,6 +437,7 @@ export default function DiscoveryLinksWorkspace({
   const [rightsFilter, setRightsFilter] = useState(ALL_RIGHTS_STATUS_OPTION.value);
   const [searchQuery, setSearchQuery] = useState('');
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+  const trimmedFormUrl = form.url.trim();
 
   const statusCounts = useMemo(() => (
     links.reduce((counts, link) => {
@@ -494,20 +509,30 @@ export default function DiscoveryLinksWorkspace({
   };
 
   const urlPreview = getUrlPreview(form.url);
+  const duplicateLink = useMemo(() => {
+    const normalizedFormUrl = normalizeDiscoveryLinkUrl(trimmedFormUrl);
+    if (!normalizedFormUrl) return null;
+
+    return links.find((link) => normalizeDiscoveryLinkUrl(link.url) === normalizedFormUrl) || null;
+  }, [links, trimmedFormUrl]);
+  const hasInvalidUrl = urlPreview?.isValid === false;
+  const isCreateDisabled = saving || !trimmedFormUrl || hasInvalidUrl || Boolean(duplicateLink);
   const showRiskyCandidateHint = needsRiskyCandidateConfirmation(form.status, form.rightsStatus);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (isCreateDisabled) {
+      return;
+    }
+
     if (needsRiskyCandidateConfirmation(form.status, form.rightsStatus) && !confirmRiskyCandidate()) {
       return;
     }
 
-    const trimmedUrl = form.url.trim();
-
     const success = await onCreateLink({
-      url: trimmedUrl,
-      platform: getDiscoveryPlatformFromUrl(trimmedUrl),
+      url: trimmedFormUrl,
+      platform: getDiscoveryPlatformFromUrl(trimmedFormUrl),
       title: form.title.trim(),
       memo: form.memo.trim(),
       status: form.status,
@@ -566,6 +591,14 @@ export default function DiscoveryLinksWorkspace({
                 ) : null}
               </div>
             )}
+            {duplicateLink ? (
+              <div className="rounded-lg border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-100">
+                <p className="font-extrabold">이미 Cloud 발견함에 저장된 링크입니다.</p>
+                <p className="mt-0.5">
+                  새로 저장하지 말고 오른쪽 목록에서 기존 항목을 수정하세요.
+                </p>
+              </div>
+            ) : null}
           </div>
 
           <div className="space-y-1.5">
@@ -631,7 +664,7 @@ export default function DiscoveryLinksWorkspace({
 
           <button
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:bg-slate-700"
-            disabled={saving || !form.url.trim()}
+            disabled={isCreateDisabled}
             type="submit"
           >
             {saving ? (
@@ -639,7 +672,7 @@ export default function DiscoveryLinksWorkspace({
             ) : (
               <Plus className="h-4 w-4" />
             )}
-            {saving ? 'Cloud 저장 중' : '링크 저장'}
+            {saving ? 'Cloud 저장 중' : duplicateLink ? '이미 저장된 링크' : '링크 저장'}
           </button>
         </form>
 
