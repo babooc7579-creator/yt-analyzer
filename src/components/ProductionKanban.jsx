@@ -4,6 +4,7 @@ import {
   DISCOVERY_RIGHTS_LABELS,
   DISCOVERY_RIGHTS_TONES,
   DISCOVERY_RIGHTS_WARNINGS,
+  getDiscoveryLinkHost,
 } from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 
@@ -32,19 +33,7 @@ const getTodayDate = () => new Date().toISOString().slice(0, 10);
 const formatDate = (date) => date ? date.split('-').join('.') : '';
 const getDiscoveryLinkTitle = (link) => {
   if (link.title) return link.title;
-  try {
-    return new URL(link.url).hostname.replace(/^www\./, '');
-  } catch {
-    return '발견 링크';
-  }
-};
-
-const getDiscoveryLinkHost = (link) => {
-  try {
-    return new URL(link.url).hostname.replace(/^www\./, '');
-  } catch {
-    return '링크';
-  }
+  return getDiscoveryLinkHost(link.url, '발견 링크');
 };
 
 const copyTextToClipboard = async (text) => {
@@ -305,7 +294,7 @@ export default function ProductionKanban({
           ? '복사 실패'
           : '링크 복사';
     const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus];
-    const sourceHost = getDiscoveryLinkHost(link);
+    const sourceHost = getDiscoveryLinkHost(link.url);
 
     return (
       <article key={link.id} className={`rounded-xl border p-4 ${rightsWarning ? rightsWarning.cardClass : 'border-slate-200 bg-slate-50'}`}>

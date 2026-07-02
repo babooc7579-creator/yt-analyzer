@@ -20,6 +20,7 @@ import {
   DISCOVERY_LINK_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_TONES,
+  getDiscoveryLinkHost,
 } from '../constants/discoveryLinks';
 
 const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
@@ -43,14 +44,6 @@ const formatDateTime = (value) => {
     dateStyle: 'short',
     timeStyle: 'short',
   }).format(date);
-};
-
-const getHostName = (url) => {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '');
-  } catch {
-    return '링크';
-  }
 };
 
 const getUrlPreview = (url) => {
@@ -121,7 +114,7 @@ const getSearchableLinkText = (link) => (
     link.url,
     link.memo,
     link.platform,
-    getHostName(link.url),
+    getDiscoveryLinkHost(link.url),
   ]
     .filter(Boolean)
     .join(' ')
@@ -146,8 +139,8 @@ function DiscoveryLinkRow({
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(link.title || '');
   const [draftMemo, setDraftMemo] = useState(link.memo || '');
-  const title = link.title || getHostName(link.url);
-  const sourceHost = getHostName(link.url);
+  const title = link.title || getDiscoveryLinkHost(link.url);
+  const sourceHost = getDiscoveryLinkHost(link.url);
   const platformLabel = PLATFORM_LABELS[link.platform] || 'Web';
   const currentStatus = link.status || 'inbox';
   const currentRightsStatus = link.rightsStatus || 'unknown';

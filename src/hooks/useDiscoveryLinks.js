@@ -8,6 +8,7 @@ import {
 import {
   DISCOVERY_LINK_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
+  getDiscoveryLinkHost,
 } from '../constants/discoveryLinks';
 
 const getDiscoveryLinksFromResponse = (data) => {
@@ -27,11 +28,7 @@ const getOptionLabel = (options, value) => (
 const getDiscoveryLinkName = (link) => {
   if (link?.title) return link.title;
   if (link?.url) {
-    try {
-      return new URL(link.url).hostname.replace(/^www\./, '');
-    } catch {
-      return link.url;
-    }
+    return getDiscoveryLinkHost(link.url, link.url);
   }
   return '발견 링크';
 };
