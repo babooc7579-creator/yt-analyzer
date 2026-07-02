@@ -5,8 +5,10 @@ import {
   Link as LinkIcon,
   Plus,
   RefreshCw,
+  Search,
   ShieldCheck,
   Trash2,
+  X,
 } from 'lucide-react';
 
 const LINK_STATUS_OPTIONS = [
@@ -52,6 +54,19 @@ const getHostName = (url) => {
 };
 
 const getLinkStatusValue = (link) => link.status || 'inbox';
+
+const getSearchableLinkText = (link) => (
+  [
+    link.title,
+    link.url,
+    link.memo,
+    link.platform,
+    getHostName(link.url),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+);
 
 function FieldLabel({ children }) {
   return (
@@ -177,6 +192,8 @@ export default function DiscoveryLinksWorkspace({
     rightsStatus: 'unknown',
   });
   const [statusFilter, setStatusFilter] = useState(ALL_LINK_STATUS_OPTION.value);
+  const [searchQuery, setSearchQuery] = useState('');
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
   const statusCounts = useMemo(() => (
     links.reduce((counts, link) => {
@@ -188,10 +205,17 @@ export default function DiscoveryLinksWorkspace({
     }, {})
   ), [links]);
 
-  const filteredLinks = useMemo(() => {
+  const statusMatchedLinks = useMemo(() => {
     if (statusFilter === ALL_LINK_STATUS_OPTION.value) return links;
     return links.filter((link) => getLinkStatusValue(link) === statusFilter);
   }, [links, statusFilter]);
+
+  const filteredLinks = useMemo(() => {
+    if (!normalizedSearchQuery) return statusMatchedLinks;
+    return statusMatchedLinks.filter((link) => (
+      getSearchableLinkText(link).includes(normalizedSearchQuery)
+    ));
+  }, [normalizedSearchQuery, statusMatchedLinks]);
 
   const statusFilterOptions = useMemo(() => ([
     { ...ALL_LINK_STATUS_OPTION, count: links.length },
@@ -376,7 +400,34 @@ export default function DiscoveryLinksWorkspace({
               );
             })}
           </div>
-          {statusFilter !== ALL_LINK_STATUS_OPTION.value ? (
+          <div className="mt-3">
+            <label className="sr-only" htmlFor="discovery-link-search">
+              발견 링크 검색
+            </label>
+            <div className="flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-500 transition focus-within:border-indigo-400 focus-within:bg-white">
+              <Search className="h-4 w-4 shrink-0" />
+              <input
+                className="min-w-0 flex-1 bg-transparent py-2 text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400"
+                id="discovery-link-search"
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="제목, 메모, URL 검색"
+                type="search"
+                value={searchQuery}
+              />
+              {searchQuery ? (
+                <button
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-200 hover:text-slate-700"
+                  onClick={() => setSearchQuery('')}
+                  type="button"
+                  aria-label="검색어 지우기"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          {statusFilter !== ALL_LINK_STATUS_OPTION.value || normalizedSearchQuery ? (
             <p className="mt-2 text-[11px] font-semibold text-slate-500">
               현재 조건에 맞는 링크 {filteredLinks.length}개를 보고 있습니다.
             </p>
@@ -416,9 +467,9 @@ export default function DiscoveryLinksWorkspace({
           </div>
         ) : filteredLinks.length === 0 ? (
           <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
-            <p className="text-sm font-extrabold text-slate-700">이 상태에 해당하는 링크가 없습니다.</p>
+            <p className="text-sm font-extrabold text-slate-700">조건에 맞는 링크가 없습니다.</p>
             <p className="mt-2 text-xs leading-relaxed text-slate-500">
-              다른 상태를 선택하거나 새 링크를 저장해보세요.
+              검색어를 지우거나 다른 상태를 선택해보세요.
             </p>
           </div>
         ) : (
