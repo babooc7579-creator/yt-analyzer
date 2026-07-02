@@ -6,6 +6,12 @@ export const DISCOVERY_LINK_STATUS_OPTIONS = [
   { value: 'discarded', label: '제외' },
 ];
 
+export const getDiscoveryLinkStatusLabel = (status) => (
+  DISCOVERY_LINK_STATUS_OPTIONS.find((option) => option.value === status)?.label
+    || status
+    || '미지정'
+);
+
 export const DISCOVERY_PLATFORM_LABELS = {
   instagram: 'Instagram',
   youtube: 'YouTube',
@@ -47,14 +53,13 @@ export const DISCOVERY_RIGHTS_STATUS_OPTIONS = [
   { value: 'do_not_use', label: '사용 금지' },
 ];
 
-export const ALL_DISCOVERY_RIGHTS_STATUS_OPTION = { value: 'all', label: '권리 전체' };
+export const getDiscoveryRightsStatusLabel = (rightsStatus) => (
+  DISCOVERY_RIGHTS_STATUS_OPTIONS.find((option) => option.value === rightsStatus)?.label
+    || rightsStatus
+    || '미지정'
+);
 
-export const DISCOVERY_RIGHTS_LABELS = {
-  unknown: '권리 미확인',
-  needs_check: '권리 확인 필요',
-  cleared: '사용 가능 확인',
-  do_not_use: '사용 금지',
-};
+export const ALL_DISCOVERY_RIGHTS_STATUS_OPTION = { value: 'all', label: '권리 전체' };
 
 export const DISCOVERY_RIGHTS_TONES = {
   unknown: {
