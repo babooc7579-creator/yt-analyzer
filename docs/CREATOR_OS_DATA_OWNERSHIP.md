@@ -443,7 +443,7 @@ localStorage는 지금 당장 제거하지 않습니다.
 
 적용 원칙:
 
-- 새 링크 저장 시 `platform`은 URL 기준으로 `instagram`, `youtube`, `tiktok`, `web` 중 하나로 추정합니다.
+- 새 링크 저장 시 `platform`은 URL 기준으로 `instagram`, `youtube`, `tiktok`, `web`, `unknown` 중 하나로 추정합니다.
 - 기존 discovery link 문서에는 일괄 마이그레이션을 하지 않습니다.
 - 기존 문서에 `platform`이 없으면 화면에서는 URL을 기준으로 표시용 플랫폼을 추정합니다.
 - 이 변경은 기존 `status`, `rightsStatus`, `docType: discovery_link`, `/discovery-links` endpoint 구조를 바꾸지 않습니다.
