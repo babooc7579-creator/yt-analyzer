@@ -185,7 +185,10 @@ localStorage 관련 표현은 조심해야 합니다.
 운영 기준:
 
 - 지금은 MVP로 유지할 수 있습니다.
-- 영상 수가 많아지면 `limit`, `continuationToken`, 정렬 기준을 검토합니다.
+- 2026-07-02 기준 운영 데이터는 저장 영상 1,821개, 응답 약 1.16MB로 측정됐습니다.
+- 지금 당장 페이지네이션을 넣으면 대박지수/터또터/검색/정렬의 전체 기준이 흔들릴 수 있으므로 구현하지 않습니다.
+- 저장 영상 5,000개 이상, 응답 5MB 이상, 로딩 3초 이상, 카드/리스트 스크롤 지연이 확인되면 `limit`, `continuationToken`, 서버 정렬/검색 기준을 다시 검토합니다.
+- 자세한 판단 근거는 `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md`를 기준으로 봅니다.
 
 ### 5.5 댓글 Top 10은 직접 YouTube API 호출
 
@@ -233,7 +236,7 @@ localStorage 관련 표현은 조심해야 합니다.
 - `GET /scan`을 `POST /scan` 중심으로 바꿀지 여부
 - `GET /tags/rename`을 `PATCH` 또는 `POST`로 바꿀지 여부
 - `/video-records`에 `statusIds`를 추가할지 여부
-- `/videos` 페이지네이션을 언제 도입할지 여부
+- `/videos` 페이지네이션을 어떤 방식으로 구현할지 여부
 - `scan_logs` 또는 `api_quota_logs` endpoint 추가 여부
 - `discovery_links` 또는 `local_assets` API 추가 여부
 - 댓글 조회를 백엔드로 옮길지 여부
