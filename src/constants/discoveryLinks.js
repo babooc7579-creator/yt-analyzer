@@ -1,7 +1,7 @@
 export const DISCOVERY_LINK_STATUS_OPTIONS = [
-  { value: 'inbox', label: '수집함' },
-  { value: 'reviewing', label: '검토중' },
-  { value: 'saved', label: '저장' },
+  { value: 'inbox', label: '받은 링크' },
+  { value: 'reviewing', label: '확인 중' },
+  { value: 'saved', label: '보관' },
   { value: 'candidate', label: '제작 후보' },
   { value: 'discarded', label: '제외' },
 ];
