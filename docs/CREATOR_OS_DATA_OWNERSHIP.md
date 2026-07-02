@@ -434,3 +434,22 @@ localStorage는 지금 당장 제거하지 않습니다.
 - Cloud/localStorage 양방향 병합
 - DB schema 변경
 - endpoint 변경
+
+---
+
+## 2026-07-03 결정 기록: discovery link platform 저장
+
+현재 단계에서는 새로 저장하는 discovery link에 한해 URL에서 추정한 `platform` 값을 함께 Cloud로 보냅니다.
+
+적용 원칙:
+
+- 새 링크 저장 시 `platform`은 URL 기준으로 `instagram`, `youtube`, `tiktok`, `web` 중 하나로 추정합니다.
+- 기존 discovery link 문서에는 일괄 마이그레이션을 하지 않습니다.
+- 기존 문서에 `platform`이 없으면 화면에서는 URL을 기준으로 표시용 플랫폼을 추정합니다.
+- 이 변경은 기존 `status`, `rightsStatus`, `docType: discovery_link`, `/discovery-links` endpoint 구조를 바꾸지 않습니다.
+- 별도 `discovery_links` container 생성이나 DB schema 대개편은 하지 않습니다.
+
+주의:
+
+- `platform`은 현재 자동 수집이나 외부 사이트 크롤링 결과가 아니라, 사용자가 입력한 URL 문자열에서 추정한 표시/분류 보조값입니다.
+- 플랫폼 값을 수동 수정하는 기능은 아직 만들지 않습니다.
