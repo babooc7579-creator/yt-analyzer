@@ -6,6 +6,14 @@ export const DISCOVERY_LINK_STATUS_OPTIONS = [
   { value: 'discarded', label: '제외' },
 ];
 
+export const getDiscoveryLinkHost = (url, fallback = '링크') => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return fallback;
+  }
+};
+
 export const ALL_DISCOVERY_LINK_STATUS_OPTION = { value: 'all', label: '전체' };
 
 export const DISCOVERY_RIGHTS_STATUS_OPTIONS = [
