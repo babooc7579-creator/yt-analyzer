@@ -14,5 +14,10 @@ export const readJsonStorage = (key, fallbackValue) => {
 };
 
 export const writeJsonStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value));
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
 };
