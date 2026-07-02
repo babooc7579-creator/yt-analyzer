@@ -23,6 +23,29 @@ function WorkflowCard({ title, description, value, icon: Icon, className, titleC
   );
 }
 
+function CandidateWorkflowCard({
+  discoveryCandidateCount,
+  discoveryRightsWarningCount,
+  productionCandidateCount,
+}) {
+  return (
+    <WorkflowCard
+      title="3. 제작 후보로 넘기기"
+      description={
+        discoveryRightsWarningCount > 0
+          ? `링크 후보 중 권리 확인이 필요한 항목 ${discoveryRightsWarningCount}개가 있습니다.`
+          : '만들 만한 영상과 외부 발견 링크를 제작 후보로 모으고, 나머지는 봄/나중/제외로 정리합니다.'
+      }
+      value={`영상 ${productionCandidateCount}개 · 링크 ${discoveryCandidateCount}개`}
+      icon={Rocket}
+      className={discoveryRightsWarningCount > 0 ? 'border-amber-400/30 bg-amber-500/10' : 'border-emerald-400/20 bg-emerald-500/10'}
+      titleClassName={discoveryRightsWarningCount > 0 ? 'text-amber-100' : 'text-emerald-100'}
+      iconClassName={discoveryRightsWarningCount > 0 ? 'text-amber-200' : 'text-emerald-200'}
+      descriptionClassName={discoveryRightsWarningCount > 0 ? 'text-amber-100/80' : 'text-emerald-100/70'}
+    />
+  );
+}
+
 export default function HomeRadarSummary({
   savedChannelCount,
   loadedVideoCount,
@@ -31,6 +54,7 @@ export default function HomeRadarSummary({
   ttoTtoAssetCount,
   openRadarCandidateCount,
   discoveryCandidateCount,
+  discoveryRightsWarningCount,
   productionCandidateCount,
 }) {
   return (
@@ -110,15 +134,10 @@ export default function HomeRadarSummary({
             iconClassName="text-rose-200"
             descriptionClassName="text-rose-100/70"
           />
-          <WorkflowCard
-            title="3. 제작 후보로 넘기기"
-            description="만들 만한 영상과 외부 발견 링크를 제작 후보로 모으고, 나머지는 봄/나중/제외로 정리합니다."
-            value={`영상 ${productionCandidateCount}개 · 링크 ${discoveryCandidateCount}개`}
-            icon={Rocket}
-            className="border-emerald-400/20 bg-emerald-500/10"
-            titleClassName="text-emerald-100"
-            iconClassName="text-emerald-200"
-            descriptionClassName="text-emerald-100/70"
+          <CandidateWorkflowCard
+            discoveryCandidateCount={discoveryCandidateCount}
+            discoveryRightsWarningCount={discoveryRightsWarningCount}
+            productionCandidateCount={productionCandidateCount}
           />
         </div>
       </div>

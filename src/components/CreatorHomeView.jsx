@@ -6,6 +6,7 @@ import RadarCandidateStrip from './RadarCandidateStrip';
 export default function CreatorHomeView({
   clearRadarDecisions,
   discoveryCandidateCount,
+  discoveryRightsWarningCount,
   isVideoSaved,
   latestScanText,
   markRadarVideoStatus,
@@ -32,6 +33,7 @@ export default function CreatorHomeView({
           ttoTtoAssetCount={ttoTtoAssetCount}
           openRadarCandidateCount={openRadarCandidateCount}
           discoveryCandidateCount={discoveryCandidateCount}
+          discoveryRightsWarningCount={discoveryRightsWarningCount}
           productionCandidateCount={productionCandidateCount}
         />
 
