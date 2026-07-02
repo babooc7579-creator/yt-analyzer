@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  CheckCircle2,
   ExternalLink,
   Link as LinkIcon,
   Plus,
@@ -138,6 +139,7 @@ function DiscoveryLinkRow({
 
           <button
             className="inline-flex h-9 items-center justify-center rounded-lg border border-red-100 bg-red-50 px-3 text-red-600 transition hover:bg-red-100 disabled:opacity-50"
+            aria-label="발견 링크 삭제"
             disabled={saving}
             onClick={handleDelete}
             title="발견 링크 삭제"
@@ -154,7 +156,9 @@ function DiscoveryLinkRow({
 export default function DiscoveryLinksWorkspace({
   links,
   loading,
+  notice,
   saving,
+  savingMessage,
   error,
   onCreateLink,
   onDeleteLink,
@@ -277,8 +281,12 @@ export default function DiscoveryLinksWorkspace({
             disabled={saving || !form.url.trim()}
             type="submit"
           >
-            <Plus className="h-4 w-4" />
-            링크 저장
+            {saving ? (
+              <RefreshCw className="h-4 w-4 animate-spin" />
+            ) : (
+              <Plus className="h-4 w-4" />
+            )}
+            {saving ? 'Cloud 저장 중' : '링크 저장'}
           </button>
         </form>
 
@@ -317,6 +325,20 @@ export default function DiscoveryLinksWorkspace({
         {error ? (
           <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
             {error}
+          </div>
+        ) : null}
+
+        {savingMessage ? (
+          <div className="mt-4 flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-sm font-semibold text-indigo-700">
+            <RefreshCw className="h-4 w-4 shrink-0 animate-spin" />
+            {savingMessage}
+          </div>
+        ) : null}
+
+        {notice && !savingMessage ? (
+          <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            {notice}
           </div>
         ) : null}
 

@@ -204,7 +204,9 @@ export default function App() {
     discoveryLinks,
     discoveryLinksError,
     discoveryLinksLoading,
+    discoveryLinksNotice,
     discoveryLinksSaving,
+    discoveryLinksSavingMessage,
     addDiscoveryLink,
     changeDiscoveryLink,
     loadDiscoveryLinks,
@@ -323,7 +325,9 @@ export default function App() {
               error={discoveryLinksError}
               links={discoveryLinks}
               loading={discoveryLinksLoading}
+              notice={discoveryLinksNotice}
               saving={discoveryLinksSaving}
+              savingMessage={discoveryLinksSavingMessage}
               onCreateLink={addDiscoveryLink}
               onDeleteLink={removeDiscoveryLink}
               onRefresh={loadDiscoveryLinks}
