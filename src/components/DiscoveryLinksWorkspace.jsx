@@ -33,6 +33,25 @@ const RIGHTS_STATUS_OPTIONS = [
 
 const ALL_RIGHTS_STATUS_OPTION = { value: 'all', label: '권리 전체' };
 
+const RIGHTS_STATUS_TONES = {
+  unknown: {
+    card: 'border-slate-200 bg-white',
+    badge: 'border border-slate-200 bg-slate-100 text-slate-600',
+  },
+  needs_check: {
+    card: 'border-rose-200 bg-rose-50/40',
+    badge: 'border border-rose-100 bg-rose-50 text-rose-700',
+  },
+  cleared: {
+    card: 'border-emerald-100 bg-white',
+    badge: 'border border-emerald-100 bg-emerald-50 text-emerald-700',
+  },
+  do_not_use: {
+    card: 'border-red-300 bg-red-50/60',
+    badge: 'border border-red-200 bg-red-50 text-red-700',
+  },
+};
+
 const PLATFORM_LABELS = {
   instagram: 'Instagram',
   youtube: 'YouTube',
@@ -126,6 +145,7 @@ function DiscoveryLinkRow({
   const platformLabel = PLATFORM_LABELS[link.platform] || 'Web';
   const currentStatus = link.status || 'inbox';
   const currentRightsStatus = link.rightsStatus || 'unknown';
+  const rightsTone = RIGHTS_STATUS_TONES[currentRightsStatus] || RIGHTS_STATUS_TONES.unknown;
 
   const handleDelete = () => {
     const confirmed = window.confirm('이 발견 링크를 Cloud에서 삭제할까요?');
@@ -197,7 +217,7 @@ function DiscoveryLinkRow({
   };
 
   return (
-    <article className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <article className={`rounded-xl border p-4 shadow-sm ${rightsTone.card}`}>
       <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -207,7 +227,7 @@ function DiscoveryLinkRow({
             <span className="rounded-full bg-indigo-50 px-2 py-1 text-[10px] font-extrabold text-indigo-700">
               {LINK_STATUS_OPTIONS.find((option) => option.value === currentStatus)?.label || currentStatus}
             </span>
-            <span className="rounded-full bg-amber-50 px-2 py-1 text-[10px] font-extrabold text-amber-700">
+            <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${rightsTone.badge}`}>
               {RIGHTS_STATUS_OPTIONS.find((option) => option.value === currentRightsStatus)?.label || currentRightsStatus}
             </span>
           </div>
