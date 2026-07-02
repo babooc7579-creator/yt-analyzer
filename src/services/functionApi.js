@@ -101,3 +101,25 @@ export const clearVideoUserRecords = () => (
     method: 'DELETE',
   })
 );
+
+export const fetchDiscoveryLinks = () => getJson('/discovery-links');
+
+export const createDiscoveryLink = (link) => (
+  sendJson('/discovery-links', {
+    method: 'POST',
+    body: JSON.stringify(link),
+  })
+);
+
+export const updateDiscoveryLink = ({ id, updates }) => (
+  sendJson(`/discovery-links/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updates),
+  })
+);
+
+export const deleteDiscoveryLink = (id) => (
+  sendJson(`/discovery-links/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  })
+);

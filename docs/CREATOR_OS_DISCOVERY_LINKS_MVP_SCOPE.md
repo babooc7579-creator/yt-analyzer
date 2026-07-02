@@ -10,13 +10,14 @@
 
 ## 1. 현재 기준 사실
 
-아래 내용은 2026-07-02 현재 repo 기준입니다.
+아래 내용은 2026-07-02 현재 repo 기준입니다. 이후 1차 MVP로 수동 링크 저장 발견함이 부분 구현되었습니다.
 
-- `discovery_links` 저장소는 없습니다.
+- `discovery_links` 별도 Cosmos container는 없습니다.
+- `/discovery-links` API는 존재하며, 기존 `videos` container 안의 `docType: discovery_link` 문서로 저장합니다.
 - `local_assets` 저장소는 없습니다.
-- discovery links 관련 API는 없습니다.
+- discovery links 관련 API는 1차 MVP 범위로 구현되었습니다.
 - local assets 관련 API는 없습니다.
-- 인스타/외부 링크 저장 기능은 아직 구현되어 있지 않습니다.
+- 인스타/외부 링크 수동 저장 기능은 1차 MVP 범위로 부분 구현되어 있습니다.
 - 로컬 파일과 원본 링크를 연결하는 기능은 아직 구현되어 있지 않습니다.
 - 현재 스크랩북은 YouTube 영상 중심이며, Cloud DB `videos` container 안의 `docType: scrapbook`으로 저장됩니다.
 - 현재 제작 후보는 별도 `production_candidates` 저장소 없이 `videoUserRecords` 상태값 위에서 표현됩니다.
@@ -133,7 +134,7 @@ discovery_link = {
 
 사용자 판단 필요:
 
-- 실제 구현 전 저장 위치 결정 필요.
+- 실제 구현 전 API endpoint 이름, `/videos` 조회 분리 방식, 첫 화면 버튼 흐름 결정 필요.
 
 ### 선택지 B: 수동 링크 + 파일 메모 카드
 
@@ -358,6 +359,13 @@ Codex 추천 메뉴명:
 
 실제 구현 전에는 저장 위치를 결정해야 합니다.
 
+2026-07-02 추가 기준:
+
+- 1차 MVP에서는 새 `discovery_links` Cosmos container를 바로 만들지 않습니다.
+- 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 작게 시작하는 방향을 우선 검토합니다.
+- 단, `/videos` 저장 영상 조회에 `docType: discovery_link` 문서가 섞이면 안 됩니다.
+- 링크 수와 기능이 커지면 별도 `discovery_links` container 분리를 다시 검토합니다.
+
 ### 저장 후보 A: 새 `discovery_links` 저장소
 
 장점:
@@ -408,21 +416,22 @@ Codex 추천 메뉴명:
 
 Codex 추천:
 
-- 실제 구현 시에는 **저장 후보 A 또는 B**를 선택지 보고로 결정합니다.
+- 현재 MVP에는 **저장 후보 B: 기존 `videos` container에 `docType: discovery_link`**를 우선 검토합니다.
+- 다만 저장 영상 조회 `/videos`에 discovery link 문서가 섞이지 않는 API 경계가 반드시 필요합니다.
 - localStorage만 사용하는 MVP는 추천하지 않습니다.
 - scrapbook 확장은 빠르지만 장기 구조상 추천하지 않습니다.
 
 ---
 
-## 10. 구현 전 결정이 필요한 질문
+## 10. 다음 확장 전에 결정이 필요한 질문
 
-실제 코드 작업 전에는 아래 질문에 답해야 합니다.
+1차 MVP 이후 확장 작업 전에는 아래 질문에 답해야 합니다.
 
-1. 1차 MVP를 수동 링크 저장만으로 시작할까요?
+1. 1차 MVP 이후 제작 후보 연결까지 넓힐까요?
 2. 파일 메모 카드는 1차에 넣을까요, 2차로 미룰까요?
 3. 발견함을 스크랩북과 분리할까요?
-4. 저장 위치는 새 `discovery_links` 저장소로 갈까요, 기존 container의 `docType`으로 갈까요?
-5. 권리 상태는 `권리 미확인`, `권리 확인 필요`, `참고용` 정도로 충분할까요?
+4. 별도 `discovery_links` container 분리가 필요할까요?
+5. 권리 상태는 `unknown`, `needs_check`, `cleared`, `do_not_use`로 충분할까요?
 6. 링크 메타데이터 자동 수집은 1차에서 제외해도 될까요?
 
 ---
@@ -437,7 +446,7 @@ Codex 추천:
 - 링크 미리보기 메타데이터 자동 수집
 - 로컬 파일 업로드
 - 로컬 파일 경로를 기준 데이터로 저장
-- `discovery_links` API 구현
+- `discovery_links` 별도 container 구현
 - `local_assets` API 구현
 - 새 DB container 생성
 - 스크랩북 구조 변경
@@ -448,8 +457,8 @@ Codex 추천:
 
 ## 12. 최종 판정
 
-현재 단계에서는 discovery links / local assets 기능을 구현하지 않습니다.
+현재 단계에서는 discovery links 1차 MVP가 부분 구현되었습니다. local assets 기능은 아직 구현하지 않습니다.
 
 1차 MVP 범위는 **수동 링크 저장 중심의 발견함**이 가장 안전합니다. 로컬 파일은 실제 파일을 다루지 않고, 필요하면 2차에서 "파일 메모 카드" 수준으로 검토합니다.
 
-실제 구현으로 넘어가기 전에는 저장 위치와 상태값을 사용자에게 선택지로 보고하고 결정받아야 합니다.
+다음 확장으로 넘어가기 전에는 local assets, 제작 후보 연결, 별도 container 분리 여부를 작은 Issue로 나누어 확인해야 합니다.

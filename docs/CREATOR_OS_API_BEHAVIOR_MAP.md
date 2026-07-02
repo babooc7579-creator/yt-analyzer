@@ -26,6 +26,7 @@
 - `POST /channels`, `POST /channels/bulk`는 채널을 Cloud DB에 저장하며, 채널 정보 확인을 위해 YouTube API 조회가 필요합니다.
 - `/scrapbook`은 Cloud DB에 저장되지만 별도 container가 아니라 `videos` container 안의 `docType: scrapbook`입니다.
 - `/video-records`는 Cloud DB에 저장되며 기존 `status`를 대표 상태로 유지합니다. 선택지 B 승인 이후 `statusIds`는 복수 판단 보존용 보조 필드로 저장/조회됩니다.
+- `/discovery-links`는 Cloud DB에 저장되며 기존 `videos` container 안의 `docType: discovery_link` 문서를 조회/저장/수정/삭제합니다.
 - `GET /tags/rename`은 메서드는 GET이지만 실제로 채널 태그를 수정하는 DB 변경 작업입니다.
 - 댓글 Top 10 조회는 프론트에서 YouTube API를 직접 호출합니다.
 - localStorage는 기준 데이터가 아니라 캐시/복구/기존 호환 역할입니다.
@@ -66,6 +67,10 @@
 | 영상 판단 기록 불러오기 | `fetchVideoUserRecords` | `GET /video-records` | DB 조회 | 아니오 | 예 | 아니오 | localStorage 보조 | 가능 | localStorage와 Cloud 차이 가능 |
 | 영상 판단 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 기존 `status` 유지 + `statusIds` 보존. 2026-07-02 배포 smoke 확인 |
 | 영상 판단 기록 전체 삭제 | `clearVideoUserRecords` | `DELETE /video-records` | DB 변경 | 아니오 | 아니오 | 예 | 예 | 가능 | 큰 변경. 사용자 확인 필요 |
+| 발견 링크 불러오기 | `fetchDiscoveryLinks` | `GET /discovery-links` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 기존 `videos` container의 `docType: discovery_link` 조회 |
+| 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태 저장. 자동 크롤링 없음 |
+| 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 메모 등 변경 |
+| 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용 |
 | AI 리메이크 프롬프트 복사 | `copyAI_RemakePrompt` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 클립보드 복사만 |
 | 준비중 메뉴 | `ComingSoonView` | 없음 | 준비중 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 실제 기능처럼 보이면 안 됨 |
@@ -249,7 +254,7 @@ localStorage 관련 표현은 조심해야 합니다.
 - `/video-records`에 `statusIds`를 추가할지 여부
 - `/videos` 페이지네이션을 어떤 방식으로 구현할지 여부
 - `scan_logs` 또는 `api_quota_logs` endpoint 추가 여부
-- `discovery_links` 또는 `local_assets` API 추가 여부
+- `local_assets` API 추가 여부 또는 `discovery_links` 별도 container 분리 여부
 - 댓글 조회를 백엔드로 옮길지 여부
 
 이 항목들은 기존 기능과 데이터 구조에 영향이 있으므로 별도 선택지 보고 후 결정합니다.
@@ -261,7 +266,7 @@ localStorage 관련 표현은 조심해야 합니다.
 다음 작은 작업 후보:
 
 1. `videoUserRecords` 저장 흐름 audit
-2. discovery links / local assets 모델 문서 작성
+2. discovery links 확장 / local assets 모델 문서 갱신
 3. 위험 endpoint 개선 선택지 보고서 작성
 
 코드 변경은 위 기준 문서와 선택지 보고 이후 진행합니다.

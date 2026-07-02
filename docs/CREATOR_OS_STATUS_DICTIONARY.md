@@ -17,12 +17,13 @@
 - `/video-records` 백엔드는 단일 `status` 중심입니다.
 - 프론트는 `statusIds`를 일부 사용하고, `status`를 `statusIds`처럼 해석하는 호환 함수를 가지고 있습니다.
 - 2026-07-02 선택지 B 승인 이후, 현재 단계에서는 기존 `status`를 대표 상태로 유지하고 `statusIds`를 복수 판단 보존용으로 함께 저장/조회합니다.
+- `statusIds`는 최종 상태 설계가 아니라 현재 프론트의 복수 판단값을 Cloud에 보존하기 위한 호환성 확장입니다.
 - 프론트는 영상 검토 상태와 제작 진행 상태를 구분하는 helper를 사용해 같은 record 안의 상태 역할을 분리합니다.
 - `production_candidates` 별도 저장소는 없습니다.
 - 제작 후보와 제작 칸반은 현재 `videoUserRecords` 상태값 위에서 표현됩니다.
 - `scan_logs` 별도 저장소는 없습니다.
 - 수집 상태는 현재 채널 문서의 `lastScanSummary.status` 중심입니다.
-- `discovery_links`와 `local_assets`는 아직 미구현입니다.
+- `discovery_links`는 1차 MVP가 부분 구현되었습니다. `local_assets`는 아직 미구현입니다.
 - 화면/메뉴의 `live`, `soon`은 제품 UI 상태이며 영상/채널/제작 상태와 섞으면 안 됩니다.
 
 ---
@@ -39,7 +40,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 | 제작 후보 상태 | 후보에서 업로드까지 제작 흐름 관리 | `videoUserRecords.status` 위에 얹힘 | 미정. MVP는 `videoUserRecords`, 장기는 별도 모델 검토 | 부분 구현 |
 | 수집 상태 | 스캔 성공/실패/부분 성공 표시 | `channels.lastScanSummary.status` | `scan_logs` 후보, 현재는 채널 마지막 요약 | 부분 구현 |
 | 스크랩북 상태 | 저장됨/삭제됨 여부 | `scrapbook` 문서 존재 여부 | Cloud DB 기준 | 부분 구현 |
-| 발견 링크 상태 | 외부 링크의 검토/출처 상태 | 없음 | `discovery_links` 후보 | 미구현 |
+| 발견 링크 상태 | 외부 링크의 검토 상태와 권리 상태 | `/discovery-links`, `docType: discovery_link` | MVP는 `videos` container 안의 `docType: discovery_link` | 부분 구현 |
 | 로컬 파일 출처 상태 | 다운로드 파일의 원본/권리/연결 상태 | 없음 | `local_assets` 후보 | 미구현 |
 | 화면/메뉴 상태 | 메뉴 사용 가능 여부 표시 | `creatorOs.js` 상수 | UI 구성 상수 | 구현됨 |
 
@@ -107,9 +108,10 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 
 현재 확인된 위험:
 
-- 프론트는 복수 상태처럼 다루지만, 백엔드는 단일 `status` 중심입니다.
-- `statusIds`를 기준 구조로 확정하려면 백엔드 schema 판단이 먼저 필요합니다.
+- `status`는 대표 상태이고, `statusIds`는 복수 판단 보존용 호환 필드입니다.
+- `statusIds`를 최종 상태 모델로 확정한 것은 아닙니다.
 - 지금 당장 단일 `status`를 제거하면 기존 레이더와 제작 칸반 흐름이 깨질 수 있습니다.
+- 장기적으로는 `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 분리를 검토할 수 있습니다.
 
 | 저장값 | 화면 표시 | 현재 의미 | 목표 의미 | 현재 판단 |
 |---|---|---|---|---|
@@ -127,7 +129,8 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 운영 원칙:
 
 - 지금은 `status`와 `statusIds`를 함께 읽는 호환 구조를 유지합니다.
-- 현재 단계에서는 `status`를 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용 보조 필드로 봅니다.
+- 현재 단계에서는 `status`를 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용 호환 필드로 봅니다.
+- `statusIds`는 최종 상태 설계가 아닙니다.
 - 레이더에서 숨겨지는 상태는 별도 목록으로 관리합니다.
 - `later`는 기존 데이터 호환용 값으로 보고, 새 표시명은 `watch_later` 중심으로 정리합니다.
 
@@ -211,25 +214,34 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 
 ## 9. 발견 링크 상태
 
-발견 링크는 아직 구현되어 있지 않은 목표 모델입니다.
+발견 링크는 1차 MVP가 부분 구현된 상태 모델입니다.
 
-목표 후보 상태:
+MVP 메인 상태는 작게 시작합니다. 이 값은 링크가 발견함 안에서 어디에 있는지를 나타냅니다.
 
 | 저장값 후보 | 화면 표시 | 의미 |
 |---|---|---|
-| `new` | 새 링크 | 아직 확인하지 않은 링크 |
+| `inbox` | 받은 링크 | 새로 저장했고 아직 검토하지 않은 링크 |
 | `reviewing` | 확인 중 | 출처와 소재성을 검토 중 |
-| `source_candidate` | 원본 후보 | 원본일 가능성이 있는 링크 |
-| `repost_suspected` | 리포스트 의심 | 원본이 아닐 가능성이 있음 |
-| `rights_check_needed` | 권리 확인 필요 | 사용 전 권리 확인 필요 |
-| `production_candidate` | 제작 후보 | 제작 후보로 보낼 수 있음 |
-| `discarded` | 제외 | 더 이상 보지 않음 |
+| `saved` | 보관 | 나중에 다시 볼 가치가 있어 보관한 링크 |
+| `candidate` | 제작 후보 | 제작 후보로 검토할 수 있는 링크 |
+| `discarded` | 제외 | 더 이상 보지 않을 링크 |
+
+권리 확인은 메인 `status`에 섞지 않고 `rightsStatus`로 분리합니다.
+
+| 저장값 후보 | 화면 표시 | 의미 |
+|---|---|---|
+| `unknown` | 권리 미확인 | 아직 권리 확인을 하지 않음 |
+| `needs_check` | 확인 필요 | 제작 사용 전 확인이 필요함 |
+| `cleared` | 확인 완료 | 사용자가 확인 완료로 표시함 |
+| `do_not_use` | 사용 금지 | 제작에 쓰면 안 되는 자료로 판단함 |
 
 운영 원칙:
 
 - 무단 크롤링이나 자동 다운로드를 전제로 하지 않습니다.
 - 링크 저장과 원본 확인은 수동 판단 중심으로 시작합니다.
-- API 구현은 별도 결정이 필요합니다.
+- 원본 후보/리포스트 의심은 MVP의 메인 `status`에 섞지 않습니다.
+- 원본/리포스트 판단이 필요해지면 별도 `sourceStatus` 또는 메모 필드로 후속 검토합니다.
+- `/discovery-links` API와 프론트의 `발견함 / 링크 수집` 화면에서 이 값을 사용합니다.
 
 ---
 
@@ -280,7 +292,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 
 현재 가장 큰 위험은 다음입니다.
 
-1. `status`와 `statusIds` 불일치
+1. `status`와 `statusIds`를 최종 상태 설계로 오해할 위험
 2. 영상 검토 상태와 제작 후보 상태 혼합
 3. `uploaded`와 `used` 의미 혼동
 4. `later`와 `watch_later`, `production_on_hold` 의미 혼동
@@ -298,7 +310,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 - `production_candidates` 별도 DB 도입 여부
 - `uploaded`를 `done`으로 바꿀지 여부
 - `later` 기존 데이터를 어떻게 마이그레이션할지 여부
-- `discovery_links` 상태값 최종 확정
+- 발견함 MVP 이후 확장 상태값 확정
 - `local_assets` 상태값 최종 확정
 - `scan_logs` 또는 `api_quota_logs` container 추가
 

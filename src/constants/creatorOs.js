@@ -18,7 +18,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
       { id: 'vault-videos', label: '저장한 영상', status: 'live', summary: '저장된 영상 데이터와 영상 보드를 확인합니다.' },
       { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '기존 채널 목록과 수집 상태를 확인합니다.' },
       { id: 'vault-tags', label: '태그별 금고', status: 'soon', summary: '채널의 결과 태그별 보관함을 분리할 예정입니다.' },
-      { id: 'vault-sources', label: '레퍼런스 출처', status: 'soon', summary: '소재가 어디에서 왔는지 추적할 예정입니다.' },
+      { id: 'vault-sources', label: '발견함 / 링크 수집', status: 'live', summary: '외부에서 발견한 링크를 수동 저장하고 검토 상태를 관리합니다.' },
     ],
   },
   {

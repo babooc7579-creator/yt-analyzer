@@ -74,11 +74,17 @@ YouTube API 호출이 발생하는 새 영상 수집, 채널 확인, 댓글 조�
 
 10. `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`
 
-discovery links / local assets의 1차 MVP 범위를 선택지로 정리합니다.
+discovery links / local assets의 1차 MVP 범위와 현재 반영된 수동 링크 저장 기준을 정리합니다.
 
 수동 링크 저장, 파일 메모 카드, 스크랩북 확장, 로컬 파일 참조 중 어디까지 할지 구현 전 확인해야 합니다.
 
-11. `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md`
+11. `CREATOR_OS_DISCOVERY_LINKS_API_BOUNDARY_OPTIONS.md`
+
+발견함 MVP의 API endpoint 이름, `/videos` 조회 분리 방식, 첫 화면 흐름 선택지를 정리합니다.
+
+discovery links 확장 또는 local assets 구현 전에 확인해야 합니다.
+
+12. `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md`
 
 제작 후보와 제작 칸반을 1차 MVP에서 `videoUserRecords` 기반으로 유지할지, 별도 `production_candidates`로 분리할지 정리합니다.
 
@@ -86,19 +92,19 @@ discovery links / local assets의 1차 MVP 범위를 선택지로 정리합니�
 
 ### 5단계. 결정이 필요한 선택지 확인
 
-12. `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md`
+13. `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md`
 
 `/video-records`의 단일 `status`와 프론트 `statusIds` 불일치를 어떻게 정리할지 선택지를 정리합니다.
 
 2026-07-02 기준 선택지 B가 채택되어 `statusIds` Cloud 저장/조회가 구현됐습니다. 기존 결정의 배경을 확인할 때 봅니다.
 
-13. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
+14. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
 
 `status/statusIds` 이후의 장기 상태 모델을 어떻게 가져갈지 정리합니다.
 
 제작 상태 분리, `production_candidates` 별도 DB, `lifecycleStatus/usagePurposeTags/productionStatus` 명시 필드 검토 전 확인합니다.
 
-14. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
+15. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
 
 Cloud DB와 localStorage 충돌을 어떻게 처리할지 선택지를 정리합니다.
 
@@ -106,7 +112,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 ### 6단계. 실행 순서 확인
 
-15. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
+16. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
 
 위 문서들을 바탕으로 다음 작업을 작은 Issue 단위로 쪼갠 실행 계획입니다.
 
@@ -127,7 +133,8 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 | `CREATOR_OS_CATEGORY_TAGS_AUDIT.md` | 카테고리/태그 구조 감사 | 예 | 일부 | 필수 |
 | `CREATOR_OS_SCAN_API_USAGE_MODEL.md` | 수집 로그/API 사용량 목표 모델 | 예 | 예 | scan/API 작업 전 필수 |
 | `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md` | 발견 링크/로컬 파일 목표 모델 | 아니오 | 예 | 관련 작업 시 필수 |
-| `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md` | 발견함 1차 MVP 범위 선택지 | 아니오 | 예 | discovery 구현 전 필수 |
+| `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md` | 발견함 1차 MVP 범위와 구현 기준 | 예 | 예 | discovery 확장 전 필수 |
+| `CREATOR_OS_DISCOVERY_LINKS_API_BOUNDARY_OPTIONS.md` | 발견함 API 경계 결정 기록 | 예 | 예 | discovery 확장 전 필수 |
 | `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md` | 제작 후보/칸반 1차 MVP 범위 | 예 | 예 | 제작 후보 작업 전 필수 |
 | `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md` | statusIds 보존 결정 배경 | 예 | 예 | video records 작업 전 참고 |
 | `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md` | video records 장기 상태 모델 선택지 | 예 | 예 | 제작 상태 분리 전 필수 |
@@ -149,7 +156,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 | 카테고리/태그 수정 | `CREATOR_OS_CATEGORY_TAGS_AUDIT.md` |
 | localStorage 제거 또는 key 변경 | `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` |
 | scan logs 또는 API 사용량 기능 구현 | `CREATOR_OS_SCAN_API_USAGE_MODEL.md`, `CREATOR_OS_API_BEHAVIOR_MAP.md` |
-| discovery links 또는 local assets 구현 | `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md`, `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md` |
+| discovery links 또는 local assets 구현 | `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md`, `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`, `CREATOR_OS_DISCOVERY_LINKS_API_BOUNDARY_OPTIONS.md` |
 | 새 DB container 추가 | `CREATOR_OS_DATA_OWNERSHIP.md`, 관련 선택지 문서 |
 
 ---
@@ -203,11 +210,12 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 ## 7. 다음 추천 순서
 
-1. discovery links 구현 전 저장 위치와 상태값을 사용자에게 선택지로 보고합니다.
+1. discovery links API 경계와 첫 화면 흐름을 사용자에게 선택지로 보고합니다.
 2. `scan_logs`와 `api_quota_logs` 실제 구현 여부는 별도 선택지 보고 후 결정합니다.
 3. 제작 칸반 확장은 1차 MVP 이후 별도 판단합니다.
 
 페이지네이션 감사는 2026-07-02에 완료됐고, 현재는 전체 조회 유지가 권장됩니다.
 scan/API 사용 기록 모델 검토도 2026-07-02에 완료됐고, 현재는 구현 없이 목표 모델만 문서화했습니다.
-discovery links/local assets MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 수동 링크 저장 중심의 발견함이 권장됩니다.
+discovery links/local assets MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 수동 링크 저장 중심의 발견함이 1차 MVP로 부분 구현되었습니다.
+발견함 MVP 저장/상태 기준도 2026-07-02에 갱신됐고, 현재는 새 container 없이 `docType: discovery_link` 방식과 `rightsStatus` 분리가 구현 기준입니다.
 제작 후보/칸반 MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 `videoUserRecords` 기반 유지가 권장됩니다.

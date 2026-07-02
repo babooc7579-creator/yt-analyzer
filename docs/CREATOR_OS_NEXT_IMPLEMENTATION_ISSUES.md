@@ -22,6 +22,7 @@
 - `statusIds`는 복수 판단 보존용 보조 필드로 백엔드 저장/조회에 추가됐고, 2026-07-02 배포 smoke로 확인됐습니다.
 - `/scrapbook`은 별도 container가 아니라 `videos` container 안의 `docType: scrapbook` 구조입니다.
 - `scan_logs`, `api_quota_logs`, `production_candidates`, `discovery_links`, `local_assets`는 아직 별도 저장소가 없습니다.
+- discovery links 1차 MVP는 별도 저장소 없이 기존 `videos` container의 `docType: discovery_link` 방식으로 부분 구현되었습니다.
 - 카테고리 화면 목록은 localStorage 중심이고, 실제 채널 태그는 Cloud DB `channels.tags` 중심입니다.
 - Cloud/localStorage 동기화는 선택지 B로 결정됐습니다. Cloud 조회 성공 시 Cloud가 기준이고, localStorage는 Cloud 실패 시 명시적 fallback으로만 사용합니다.
 
@@ -60,7 +61,7 @@
 - `status`, `statusIds`를 장기적으로 `lifecycleStatus`, `usagePurposeTags`, `productionStatus`로 분리할지
 - 카테고리 목록을 Cloud 태그 기준으로 바꿀지
 - `production_candidates`를 별도 DB로 만들지
-- `discovery_links`, `local_assets` API를 만들지
+- `discovery_links`를 별도 저장소로 분리할지, `local_assets` API를 만들지
 - `scan_logs`, `api_quota_logs` 저장소를 만들지
 
 ---
@@ -168,14 +169,14 @@
 ### Issue 9. discovery links/local assets MVP 범위 결정
 
 - 목적: 인스타/외부 링크와 다운로드한 로컬 파일을 안전하게 연결하는 최소 범위를 정합니다.
-- 현재 상태: 2026-07-02 기준 MVP 범위 검토 완료. 목표 모델 문서는 있지만 실제 기능은 없습니다.
+- 현재 상태: 2026-07-02 기준 MVP 범위 검토 완료. discovery links 수동 저장 1차 MVP는 부분 구현되었고, local assets는 아직 목표 모델 단계입니다.
 - 왜 필요한가: Creator OS가 "소재 발굴"에서 "제작 준비"로 넘어가려면 외부 링크와 파일 출처가 연결되어야 합니다.
-- 작업 범위: 수동 링크 저장 MVP, 로컬 파일 메타데이터, 권리 확인 상태의 최소 범위를 선택지로 정리했습니다.
+- 작업 범위: 수동 링크 저장 MVP는 구현 기준으로 반영했고, 로컬 파일 메타데이터와 권리 확인 상태의 확장 범위를 선택지로 정리했습니다.
 - 건드릴 파일 예상: 문서 우선. 이후 프론트 화면, 백엔드 API, DB 모델.
 - 건드리면 안 되는 것: 인스타 자동 크롤링, 자동 다운로드, 무단 수집, 새 API 구현.
 - 위험도: 높음.
-- 완료 기준: `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md` 작성 완료. 1차 MVP는 수동 링크 저장 중심의 발견함이 권장됩니다.
-- 사용자 판단 필요 여부: 현재 문서화는 완료. 실제 구현 전 저장 위치와 상태값 결정 필요.
+- 완료 기준: `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md` 작성 완료. 1차 MVP는 수동 링크 저장 중심의 발견함으로 부분 구현되었습니다.
+- 사용자 판단 필요 여부: 현재 문서화와 1차 MVP 연결은 완료. MVP 저장 위치는 `docType: discovery_link`, 상태값은 `inbox/reviewing/saved/candidate/discarded`와 `rightsStatus` 분리로 정리됨. 다음 판단은 local assets, 제작 후보 연결, 별도 `discovery_links` container 분리 여부입니다.
 
 ### Issue 10. 제작 후보와 제작 칸반의 데이터 기준 결정
 
@@ -195,15 +196,15 @@
 
 바로 다음 작업은 아래 순서를 추천합니다.
 
-1. discovery links 구현 전 저장 위치와 상태값 선택지 보고
-2. `scan_logs`와 `api_quota_logs` 실제 구현 여부 선택지 보고
-3. 제작 칸반 확장 여부는 1차 MVP 이후 별도 판단
+1. discovery links API 경계와 첫 화면 흐름에 대한 사용자 결정 확인
+2. 결정되면 discovery links 백엔드 최소 API를 작은 Issue로 구현
+3. 이후 프론트 API client와 최소 발견함 화면을 분리 구현
 
 이 순서가 안전한 이유:
 
 - 문서 기준, 저장 영상 페이지네이션 감사, scan/API 사용 기록 모델, discovery MVP 범위 검토, 제작 후보 MVP 범위 검토는 완료됐습니다.
-- 다음은 실제 구현 전 결정이 필요한 저장 위치와 상태값을 선택지로 보고합니다.
-- 이후에야 데이터 구조 결정으로 넘어갑니다.
+- API endpoint 이름, `/videos` 조회 분리 방식, 첫 화면 버튼 흐름 선택지 보고는 완료했습니다.
+- 이후에는 사용자 결정 확인 후 백엔드 최소 API부터 작게 구현합니다.
 - DB/API 변경은 마지막에 별도 판단을 받고 진행합니다.
 
 ---
