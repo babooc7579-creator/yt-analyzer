@@ -659,19 +659,21 @@ export default function DiscoveryLinksWorkspace({
           <div className="mt-2 flex flex-wrap gap-2">
             {rightsFilterOptions.map((option) => {
               const isActive = rightsFilter === option.value;
+              const rightsTone = RIGHTS_STATUS_TONES[option.value];
+              const buttonTone = rightsTone
+                ? `${rightsTone.badge} ${isActive ? 'shadow-sm ring-2 ring-white' : 'opacity-75 hover:opacity-100'}`
+                : isActive
+                  ? 'border-slate-900 bg-slate-900 text-white'
+                  : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100';
               return (
                 <button
-                  className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-extrabold transition ${
-                    isActive
-                      ? 'border-amber-500 bg-amber-50 text-amber-700'
-                      : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
-                  }`}
+                  className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-extrabold transition ${buttonTone}`}
                   key={option.value}
                   onClick={() => setRightsFilter(option.value)}
                   type="button"
                 >
                   <span>{option.label}</span>
-                  <span className={isActive ? 'text-amber-500' : 'text-slate-400'}>
+                  <span className={isActive || rightsTone ? 'text-current opacity-75' : 'text-slate-400'}>
                     {option.count}
                   </span>
                 </button>
