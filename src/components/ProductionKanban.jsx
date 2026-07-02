@@ -39,6 +39,14 @@ const getDiscoveryLinkTitle = (link) => {
   }
 };
 
+const getDiscoveryLinkHost = (link) => {
+  try {
+    return new URL(link.url).hostname.replace(/^www\./, '');
+  } catch {
+    return '링크';
+  }
+};
+
 const copyTextToClipboard = async (text) => {
   if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(text);
@@ -297,11 +305,15 @@ export default function ProductionKanban({
           ? '복사 실패'
           : '링크 복사';
     const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus];
+    const sourceHost = getDiscoveryLinkHost(link);
 
     return (
       <article key={link.id} className={`rounded-xl border p-4 ${rightsWarning ? rightsWarning.cardClass : 'border-slate-200 bg-slate-50'}`}>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-extrabold text-amber-800">링크 후보</span>
+          <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-extrabold text-slate-600">
+            출처 {sourceHost}
+          </span>
           <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${(DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown).compactBadge}`}>
             {DISCOVERY_RIGHTS_LABELS[link.rightsStatus] || DISCOVERY_RIGHTS_LABELS.unknown}
           </span>
