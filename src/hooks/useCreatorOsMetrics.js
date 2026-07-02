@@ -6,6 +6,7 @@ import { isTtoTtoCandidate } from '../utils/video';
 
 export function useCreatorOsMetrics({
   categories,
+  discoveryLinks = [],
   savedChannels,
   savedVideos,
   selectedChannelIds,
@@ -63,9 +64,14 @@ export function useCreatorOsMetrics({
     )).length
   ), [videoUserRecords, videos]);
 
+  const discoveryCandidateCount = useMemo(() => (
+    discoveryLinks.filter((link) => (link.status || '') === 'candidate').length
+  ), [discoveryLinks]);
+
   return {
     activeSelectedChannelCount,
     cloudOnlyTags,
+    discoveryCandidateCount,
     getScannableChannelCount,
     latestScanText,
     openRadarCandidateCount,
