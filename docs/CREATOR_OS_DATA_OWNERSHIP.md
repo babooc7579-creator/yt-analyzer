@@ -179,6 +179,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 
 - MVP 단계에서는 `videoUserRecords` 기반으로 유지할 수 있습니다.
 - 실제 제작 프로젝트, 일정, 업로드 결과, 원본/변형 관계가 커지면 별도 모델을 검토합니다.
+- 1차 MVP 범위는 `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md`를 기준으로 봅니다.
 
 충돌 위험:
 
