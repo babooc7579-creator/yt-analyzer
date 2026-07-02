@@ -136,8 +136,11 @@ export default function RadarCandidateStrip({
                       {video.title}
                     </a>
                     <button
+                      type="button"
                       onClick={() => onRestoreVideo(video.videoId)}
                       className="mt-1 inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-200 hover:text-white"
+                      title="이 영상을 오늘 레이더 후보로 다시 표시"
+                      aria-label={`${video.title} 레이더로 되돌리기`}
                     >
                       <RotateCcw className="h-3 w-3" /> 레이더로 되돌리기
                     </button>
@@ -159,7 +162,12 @@ export default function RadarCandidateStrip({
       <div className="mt-6 rounded-2xl border border-dashed border-slate-700 bg-slate-950/70 p-5">
         <p className="text-sm font-extrabold text-white">오늘 볼 후보</p>
         <p className="mt-2 text-xs leading-relaxed text-slate-400">아직 화면에 불러온 영상이 없습니다. 저장된 영상을 불러오면 여기에서 오늘 먼저 볼 후보를 보여줍니다.</p>
-        <button onClick={onOpenVault} className="mt-4 inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-200 hover:bg-blue-500/15">
+        <button
+          type="button"
+          onClick={onOpenVault}
+          className="mt-4 inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-200 hover:bg-blue-500/15"
+          title="저장된 영상 조회 화면으로 이동"
+        >
           <Bookmark className="h-4 w-4" /> 레퍼런스 금고 열기
         </button>
       </div>
@@ -172,10 +180,20 @@ export default function RadarCandidateStrip({
         <p className="text-sm font-extrabold text-emerald-100">오늘 볼 후보를 모두 처리했습니다</p>
         <p className="mt-2 text-xs leading-relaxed text-emerald-100/70">봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있습니다.</p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <button onClick={onOpenVault} className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/15">
+          <button
+            type="button"
+            onClick={onOpenVault}
+            className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/15"
+            title="저장된 영상 조회 화면으로 이동"
+          >
             <Bookmark className="h-4 w-4" /> 레퍼런스 금고 열기
           </button>
-          <button onClick={onClearDecisions} className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-100 hover:bg-emerald-500/15">
+          <button
+            type="button"
+            onClick={onClearDecisions}
+            className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-100 hover:bg-emerald-500/15"
+            title="Cloud에 저장된 판단 기록을 초기화"
+          >
             <CheckCircle2 className="h-4 w-4" /> 판단 기록 초기화
           </button>
         </div>
@@ -194,11 +212,21 @@ export default function RadarCandidateStrip({
         </div>
         <div className="flex flex-wrap gap-2">
           {allDecisionCount > 0 && (
-            <button onClick={onClearDecisions} className="inline-flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-900">
+            <button
+              type="button"
+              onClick={onClearDecisions}
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-900"
+              title="Cloud에 저장된 판단 기록을 초기화"
+            >
               판단 초기화
             </button>
           )}
-          <button onClick={onOpenScrapbook} className="inline-flex items-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-500/10 px-3 py-2 text-xs font-bold text-yellow-100 hover:bg-yellow-500/15">
+          <button
+            type="button"
+            onClick={onOpenScrapbook}
+            className="inline-flex items-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-500/10 px-3 py-2 text-xs font-bold text-yellow-100 hover:bg-yellow-500/15"
+            title="Cloud 스크랩북 화면으로 이동"
+          >
             <Star className="h-4 w-4" /> 스크랩 {savedVideos.length}개
           </button>
         </div>
@@ -209,6 +237,7 @@ export default function RadarCandidateStrip({
 
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
         {candidates.map((video, index) => {
+          const videoTitle = video.title || '제목 없는 영상';
           const isTtoTto = isTtoTtoCandidate(video);
           const isStrong = hasStrongReaction(video);
           const saved = isVideoSaved(video.videoId);
@@ -219,7 +248,7 @@ export default function RadarCandidateStrip({
           return (
             <article key={video.videoId} className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80">
               <div className="relative">
-                <img src={video.thumbnail} alt="" className="aspect-video w-full object-cover" />
+                <img src={video.thumbnail} alt={`${videoTitle} 썸네일`} className="aspect-video w-full object-cover" />
                 <span className="absolute left-2 top-2 rounded-full bg-black/80 px-2 py-1 text-[10px] font-extrabold text-white">#{index + 1}</span>
                 <span className="absolute right-2 top-2 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">{priorityLabel}</span>
               </div>
@@ -236,7 +265,7 @@ export default function RadarCandidateStrip({
                     </span>
                   )}
                 </div>
-                <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100">
+                <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle}>
                   {video.title}
                 </a>
                 <div className="mt-3 rounded-xl border border-rose-400/20 bg-rose-500/10 px-3 py-2">
@@ -266,24 +295,61 @@ export default function RadarCandidateStrip({
                     <p className="text-sm font-extrabold text-white">{video.like_ratio}%</p>
                   </div>
                 </div>
-                <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-extrabold text-slate-900 hover:bg-rose-50">
+                <a
+                  href={`https://youtube.com/watch?v=${video.videoId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-extrabold text-slate-900 hover:bg-rose-50"
+                  title="YouTube에서 원본 영상 열기"
+                  aria-label={`${videoTitle} YouTube에서 열기`}
+                >
                   <Play className="h-4 w-4" /> 1. 영상 열고 판단 <ExternalLink className="h-3 w-3" />
                 </a>
                 <p className="mt-3 text-[10px] font-bold text-slate-400">2. 판단 결과를 남기면 오늘 레이더에서 숨겨집니다.</p>
                 <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <button onClick={() => onToggleScrap(video)} className={`inline-flex items-center justify-center gap-1 rounded-xl px-3 py-2 text-[11px] font-extrabold ${saved ? 'bg-yellow-400 text-slate-950 hover:bg-yellow-300' : 'bg-yellow-500/10 text-yellow-100 ring-1 ring-yellow-400/20 hover:bg-yellow-500/15'}`}>
+                  <button
+                    type="button"
+                    onClick={() => onToggleScrap(video)}
+                    className={`inline-flex items-center justify-center gap-1 rounded-xl px-3 py-2 text-[11px] font-extrabold ${saved ? 'bg-yellow-400 text-slate-950 hover:bg-yellow-300' : 'bg-yellow-500/10 text-yellow-100 ring-1 ring-yellow-400/20 hover:bg-yellow-500/15'}`}
+                    title={saved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
+                    aria-label={`${videoTitle} ${saved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
+                  >
                     <Star className={`h-3.5 w-3.5 ${saved ? 'fill-slate-950' : ''}`} /> {saved ? '보관됨' : '소재 보관'}
                   </button>
-                  <button onClick={() => onPromoteToProduction(video)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-indigo-500/15 px-3 py-2 text-[11px] font-extrabold text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/20">
+                  <button
+                    type="button"
+                    onClick={() => onPromoteToProduction(video)}
+                    className="inline-flex items-center justify-center gap-1 rounded-xl bg-indigo-500/15 px-3 py-2 text-[11px] font-extrabold text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/20"
+                    title="이 영상을 제작 후보 상태로 저장하고 오늘 레이더에서 숨김"
+                    aria-label={`${videoTitle} 제작 후보로 저장`}
+                  >
                     <Rocket className="h-3.5 w-3.5" /> 제작 후보로
                   </button>
-                  <button onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.REVIEWED)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-500/10 px-3 py-2 text-[11px] font-extrabold text-emerald-100 ring-1 ring-emerald-400/20 hover:bg-emerald-500/15">
+                  <button
+                    type="button"
+                    onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.REVIEWED)}
+                    className="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-500/10 px-3 py-2 text-[11px] font-extrabold text-emerald-100 ring-1 ring-emerald-400/20 hover:bg-emerald-500/15"
+                    title="봤음으로 저장하고 오늘 레이더에서 숨김"
+                    aria-label={`${videoTitle} 봤음으로 저장`}
+                  >
                     <CheckCircle2 className="h-3.5 w-3.5" /> 봤음
                   </button>
-                  <button onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.LEGACY_LATER)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-800 px-3 py-2 text-[11px] font-extrabold text-slate-200 hover:bg-slate-700">
+                  <button
+                    type="button"
+                    onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.LEGACY_LATER)}
+                    className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-800 px-3 py-2 text-[11px] font-extrabold text-slate-200 hover:bg-slate-700"
+                    title="나중에 보기로 저장하고 오늘 레이더에서 숨김"
+                    aria-label={`${videoTitle} 나중에 보기로 저장`}
+                  >
                     <Clock className="h-3.5 w-3.5" /> 나중에 보기
                   </button>
-                  <button onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.EXCLUDED)} className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-800 sm:col-span-2">
+                  <button
+                    type="button"
+                    onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.EXCLUDED)}
+                    className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-800 sm:col-span-2"
+                    title="후보에서 제외로 저장하고 오늘 레이더에서 숨김"
+                    aria-label={`${videoTitle} 후보에서 제외로 저장`}
+                  >
                     <XCircle className="h-3.5 w-3.5" /> 후보에서 제외
                   </button>
                 </div>
