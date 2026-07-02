@@ -5,6 +5,7 @@ import {
   DISCOVERY_RIGHTS_TONES,
   DISCOVERY_RIGHTS_WARNINGS,
   getDiscoveryLinkHost,
+  getDiscoveryLinkPlatform,
   getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
@@ -296,7 +297,7 @@ export default function ProductionKanban({
           : '링크 복사';
     const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus];
     const sourceHost = getDiscoveryLinkHost(link.url);
-    const platformLabel = getDiscoveryPlatformLabel(link.platform);
+    const platformLabel = getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link));
 
     return (
       <article key={link.id} className={`rounded-xl border p-4 ${rightsWarning ? rightsWarning.cardClass : 'border-slate-200 bg-slate-50'}`}>

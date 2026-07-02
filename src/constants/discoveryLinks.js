@@ -34,6 +34,10 @@ export const getDiscoveryPlatformFromUrl = (url) => {
   return 'web';
 };
 
+export const getDiscoveryLinkPlatform = (link) => (
+  link?.platform || getDiscoveryPlatformFromUrl(link?.url || '')
+);
+
 export const ALL_DISCOVERY_LINK_STATUS_OPTION = { value: 'all', label: '전체' };
 
 export const DISCOVERY_RIGHTS_STATUS_OPTIONS = [

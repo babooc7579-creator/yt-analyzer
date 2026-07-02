@@ -21,6 +21,7 @@ import {
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
+  getDiscoveryLinkPlatform,
   getDiscoveryPlatformFromUrl,
   getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
@@ -102,7 +103,7 @@ const getSearchableLinkText = (link) => (
     link.title,
     link.url,
     link.memo,
-    link.platform,
+    getDiscoveryLinkPlatform(link),
     getDiscoveryLinkHost(link.url),
   ]
     .filter(Boolean)
@@ -130,7 +131,7 @@ function DiscoveryLinkRow({
   const [draftMemo, setDraftMemo] = useState(link.memo || '');
   const title = link.title || getDiscoveryLinkHost(link.url);
   const sourceHost = getDiscoveryLinkHost(link.url);
-  const platformLabel = getDiscoveryPlatformLabel(link.platform);
+  const platformLabel = getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link));
   const currentStatus = link.status || 'inbox';
   const currentRightsStatus = link.rightsStatus || 'unknown';
   const rightsTone = RIGHTS_STATUS_TONES[currentRightsStatus] || RIGHTS_STATUS_TONES.unknown;
