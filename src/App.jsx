@@ -249,6 +249,7 @@ export default function App() {
     activeSelectedChannelCount,
     cloudOnlyTags,
     discoveryCandidateCount,
+    discoveryRightsWarningCount,
     getScannableChannelCount,
     latestScanText,
     openRadarCandidateCount,
@@ -311,6 +312,7 @@ export default function App() {
               markRadarVideoStatus={markRadarVideoStatus}
               openRadarCandidateCount={openRadarCandidateCount}
               discoveryCandidateCount={discoveryCandidateCount}
+              discoveryRightsWarningCount={discoveryRightsWarningCount}
               onOpenView={openCreatorView}
               productionCandidateCount={productionCandidateCount}
               promoteVideoToProduction={promoteVideoToProduction}
