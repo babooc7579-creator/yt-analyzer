@@ -26,7 +26,7 @@ export function useVideoCollectionActions({
 }) {
   const loadStoredVideosForSelectedChannels = async () => {
     if (selectedChannelIds.length === 0) {
-      setError('분석할 채널을 하나 이상 선택해주세요.');
+      setError('저장된 영상을 불러올 채널을 하나 이상 선택해 주세요. 이 작업은 DB 조회이며 새 영상 수집은 실행하지 않습니다.');
       return;
     }
 
@@ -35,11 +35,11 @@ export function useVideoCollectionActions({
     setVideos([]);
     clearCheckedVideos();
     setActiveTab('dashboard');
-    setProgressMsg('클라우드에 저장된 영상 데이터를 불러오는 중...');
+    setProgressMsg('클라우드 DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.');
 
     try {
       const data = await fetchStoredVideosByChannelIds(selectedChannelIds);
-      if (!data.success) throw new Error(data.error || '영상 데이터를 불러오지 못했습니다.');
+      if (!data.success) throw new Error(data.error || '클라우드 DB의 저장 영상을 불러오지 못했습니다.');
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
