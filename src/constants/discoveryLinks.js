@@ -17,10 +17,11 @@ export const DISCOVERY_PLATFORM_LABELS = {
   youtube: 'YouTube',
   tiktok: 'TikTok',
   web: 'Web',
+  unknown: 'Unknown',
 };
 
 export const getDiscoveryPlatformLabel = (platform) => (
-  DISCOVERY_PLATFORM_LABELS[platform] || DISCOVERY_PLATFORM_LABELS.web
+  DISCOVERY_PLATFORM_LABELS[platform] || DISCOVERY_PLATFORM_LABELS.unknown
 );
 
 export const getDiscoveryLinkHost = (url, fallback = '링크') => {
