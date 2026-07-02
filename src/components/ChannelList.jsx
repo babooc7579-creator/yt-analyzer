@@ -98,7 +98,13 @@ function ChannelListItem({
           </p>
         </div>
       </div>
-      <button onClick={() => onOpenNotes(channel)} className="relative p-1 text-slate-400 hover:text-indigo-600 transition-colors shrink-0 mt-1" title="분석/기록 남기기">
+      <button
+        type="button"
+        onClick={() => onOpenNotes(channel)}
+        className="relative p-1 text-slate-400 hover:text-indigo-600 transition-colors shrink-0 mt-1"
+        title="분석/기록 남기기"
+        aria-label={`${channel.title} 분석/기록 남기기`}
+      >
         <History className="w-4 h-4" />
         {channel.notes?.length > 0 && <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center">{channel.notes.length}</span>}
       </button>

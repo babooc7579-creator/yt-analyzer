@@ -22,8 +22,11 @@ export default function LoadStoredVideosButton({
   return (
     <>
       <button
+        type="button"
         onClick={onLoad}
         disabled={loading || !hasSelectedChannels}
+        title={helperDescription}
+        aria-label={buttonLabel}
         className={`w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all ${loading ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : hasSelectedChannels ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Play className="w-5 h-5" />}
