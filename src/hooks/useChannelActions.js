@@ -22,7 +22,14 @@ export function useChannelActions({
     return data;
   }, []);
 
-  const deleteChannel = useCallback(async (id, category) => {
+  const deleteChannel = useCallback(async (id, category, title) => {
+    const channelName = title || '이 채널';
+    const confirmed = window.confirm(
+      `'${channelName}' 채널을 Cloud 채널 목록에서 삭제할까요?\n\n이 작업은 Cloud 채널 목록을 바꾸며, 나중에 다시 보려면 채널을 다시 추가해야 합니다.`
+    );
+
+    if (!confirmed) return;
+
     try {
       const data = await removeChannel({ id, category });
       if (!data.success) throw new Error(data.error || '채널 삭제에 실패했습니다.');
