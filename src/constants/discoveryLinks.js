@@ -35,6 +35,7 @@ export const getDiscoveryLinkHost = (url, fallback = '링크') => {
 export const getDiscoveryPlatformFromUrl = (url) => {
   const host = getDiscoveryLinkHost(url, '').toLowerCase();
 
+  if (!host) return 'unknown';
   if (host.includes('instagram.com')) return 'instagram';
   if (host.includes('youtube.com') || host.includes('youtu.be')) return 'youtube';
   if (host.includes('tiktok.com')) return 'tiktok';
