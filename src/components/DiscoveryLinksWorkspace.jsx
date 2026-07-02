@@ -292,6 +292,8 @@ function DiscoveryLinkRow({
                   className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 text-xs font-extrabold text-white transition hover:bg-indigo-500 disabled:bg-slate-300"
                   disabled={saving}
                   onClick={handleSaveEdit}
+                  title="제목과 메모를 Cloud 발견함에 저장"
+                  aria-label={`${title} 제목과 메모 저장`}
                   type="button"
                 >
                   <Save className="h-4 w-4" />
@@ -301,6 +303,8 @@ function DiscoveryLinkRow({
                   className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
                   disabled={saving}
                   onClick={cancelEdit}
+                  title="수정 취소"
+                  aria-label={`${title} 수정 취소`}
                   type="button"
                 >
                   <X className="h-4 w-4" />
@@ -310,7 +314,7 @@ function DiscoveryLinkRow({
             </div>
           ) : (
             <>
-              <h3 className="mt-3 line-clamp-2 text-base font-extrabold text-slate-950">
+              <h3 className="mt-3 line-clamp-2 text-base font-extrabold text-slate-950" title={title}>
                 {title}
               </h3>
               <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
@@ -332,6 +336,8 @@ function DiscoveryLinkRow({
             disabled={saving}
             value={currentStatus}
             onChange={handleStatusChange}
+            title="검토 상태 변경 - Cloud 발견함에 저장됩니다"
+            aria-label={`${title} 검토 상태`}
           >
             {LINK_STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -343,6 +349,8 @@ function DiscoveryLinkRow({
             disabled={saving}
             value={currentRightsStatus}
             onChange={handleRightsStatusChange}
+            title="권리 확인 상태 변경 - Cloud 발견함에 저장됩니다"
+            aria-label={`${title} 권리 확인 상태`}
           >
             {RIGHTS_STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -355,6 +363,7 @@ function DiscoveryLinkRow({
             rel="noreferrer"
             target="_blank"
             title="원본 링크 열기"
+            aria-label={`${title} 원본 링크 열기`}
           >
             <ExternalLink className="h-4 w-4" />
             열기
@@ -665,6 +674,8 @@ export default function DiscoveryLinksWorkspace({
           <button
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 py-3 text-sm font-extrabold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:bg-slate-700"
             disabled={isCreateDisabled}
+            title="링크와 메모를 Cloud 발견함에 저장합니다. 외부 사이트 크롤링은 하지 않습니다."
+            aria-label="Cloud 발견함에 링크 저장"
             type="submit"
           >
             {saving ? (
@@ -701,6 +712,8 @@ export default function DiscoveryLinksWorkspace({
             className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-extrabold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-50"
             disabled={loading || saving}
             onClick={onRefresh}
+            title="Cloud 발견함 목록 다시 불러오기"
+            aria-label="Cloud 발견함 새로고침"
             type="button"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -724,6 +737,8 @@ export default function DiscoveryLinksWorkspace({
                   }`}
                   key={option.value}
                   onClick={() => setStatusFilter(option.value)}
+                  title={`${option.label} 상태 링크만 보기`}
+                  aria-label={`${option.label} 상태 링크 ${option.count}개 보기`}
                   type="button"
                 >
                   <span>{option.label}</span>
@@ -751,6 +766,8 @@ export default function DiscoveryLinksWorkspace({
                   className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-extrabold transition ${buttonTone}`}
                   key={option.value}
                   onClick={() => setRightsFilter(option.value)}
+                  title={`${option.label} 권리 상태 링크만 보기`}
+                  aria-label={`${option.label} 권리 상태 링크 ${option.count}개 보기`}
                   type="button"
                 >
                   <span>{option.label}</span>
@@ -781,6 +798,7 @@ export default function DiscoveryLinksWorkspace({
                   onClick={() => setSearchQuery('')}
                   type="button"
                   aria-label="검색어 지우기"
+                  title="검색어 지우기"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -835,6 +853,8 @@ export default function DiscoveryLinksWorkspace({
             <button
               className="mt-4 inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-4 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100"
               onClick={clearDiscoveryFilters}
+              title="검색어와 필터를 모두 초기화"
+              aria-label="발견함 필터 초기화"
               type="button"
             >
               <X className="h-4 w-4" />
