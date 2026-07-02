@@ -55,11 +55,33 @@ export default function ChannelAddForm({
         <div className="flex items-center gap-2">
           {!channelPreview && (
             <div className="flex bg-white rounded-md border border-indigo-200 overflow-hidden text-[10px] font-bold">
-              <button onClick={() => setAddMode('single')} className={`px-2 py-1 transition-colors ${addMode === 'single' ? 'bg-indigo-600 text-white' : 'text-indigo-500 hover:bg-indigo-50'}`}>단일</button>
-              <button onClick={() => setAddMode('bulk')} className={`px-2 py-1 transition-colors ${addMode === 'bulk' ? 'bg-indigo-600 text-white' : 'text-indigo-500 hover:bg-indigo-50'}`}>일괄</button>
+              <button
+                type="button"
+                onClick={() => setAddMode('single')}
+                className={`px-2 py-1 transition-colors ${addMode === 'single' ? 'bg-indigo-600 text-white' : 'text-indigo-500 hover:bg-indigo-50'}`}
+                title="채널을 하나씩 확인하고 추가"
+                aria-label="단일 채널 추가 모드"
+              >
+                단일
+              </button>
+              <button
+                type="button"
+                onClick={() => setAddMode('bulk')}
+                className={`px-2 py-1 transition-colors ${addMode === 'bulk' ? 'bg-indigo-600 text-white' : 'text-indigo-500 hover:bg-indigo-50'}`}
+                title="여러 채널을 한 번에 확인하고 추가"
+                aria-label="채널 일괄 추가 모드"
+              >
+                일괄
+              </button>
             </div>
           )}
-          <button onClick={() => setIsEditingCategory(!isEditingCategory)} className="text-[10px] text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-semibold whitespace-nowrap">
+          <button
+            type="button"
+            onClick={() => setIsEditingCategory(!isEditingCategory)}
+            className="text-[10px] text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-semibold whitespace-nowrap"
+            title="화면 카테고리와 Cloud 태그 이름을 관리"
+            aria-label="카테고리 설정 열기"
+          >
             <Settings className="w-3 h-3" /> 카테고리 설정
           </button>
         </div>
@@ -69,7 +91,15 @@ export default function ChannelAddForm({
         <div className="mb-3 p-2 bg-white rounded border border-indigo-200 shadow-inner">
           <div className="flex gap-1 mb-2">
             <input type="text" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="새 카테고리명" className="w-full text-xs px-2 py-1.5 border border-slate-200 rounded" />
-            <button onClick={() => { if (newCategoryName && !categories.includes(newCategoryName)) { setCategories([...categories, newCategoryName]); setNewCategoryName(''); } }} className="px-2 py-1 bg-indigo-600 text-white rounded text-xs font-bold whitespace-nowrap"><Plus className="w-3 h-3" /></button>
+            <button
+              type="button"
+              onClick={() => { if (newCategoryName && !categories.includes(newCategoryName)) { setCategories([...categories, newCategoryName]); setNewCategoryName(''); } }}
+              className="px-2 py-1 bg-indigo-600 text-white rounded text-xs font-bold whitespace-nowrap"
+              title="화면 카테고리 추가"
+              aria-label="화면 카테고리 추가"
+            >
+              <Plus className="w-3 h-3" />
+            </button>
           </div>
           <div className="flex flex-wrap gap-1">
             {categories.map((cat) => (
@@ -83,16 +113,47 @@ export default function ChannelAddForm({
                     onKeyDown={(e) => { if (e.key === 'Enter') confirmRenameCategory(); if (e.key === 'Escape') cancelRenameCategory(); }}
                     className="text-[10px] px-1 py-0.5 w-16 border border-slate-200 rounded outline-none"
                   />
-                  <button onClick={confirmRenameCategory} disabled={renameLoading} className="text-emerald-600 hover:text-emerald-800">
+                  <button
+                    type="button"
+                    onClick={confirmRenameCategory}
+                    disabled={renameLoading}
+                    className="text-emerald-600 hover:text-emerald-800"
+                    title="Cloud 태그 이름 변경 저장"
+                    aria-label={`${cat} Cloud 태그 이름 변경 저장`}
+                  >
                     {renameLoading ? <Loader2 className="w-2.5 h-2.5 animate-spin" /> : <CheckCircle2 className="w-2.5 h-2.5" />}
                   </button>
-                  <button onClick={cancelRenameCategory} className="text-slate-400 hover:text-slate-600"><X className="w-2.5 h-2.5" /></button>
+                  <button
+                    type="button"
+                    onClick={cancelRenameCategory}
+                    className="text-slate-400 hover:text-slate-600"
+                    title="태그 이름 변경 취소"
+                    aria-label={`${cat} 태그 이름 변경 취소`}
+                  >
+                    <X className="w-2.5 h-2.5" />
+                  </button>
                 </span>
               ) : (
                 <span key={cat} className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] text-slate-600">
                   {cat}
-                  <button onClick={() => startRenameCategory(cat)} className="text-indigo-400 hover:text-indigo-600" title="Cloud 태그 이름 변경 - 이 태그가 붙은 모든 채널에 일괄 반영됩니다"><Settings className="w-2.5 h-2.5" /></button>
-                  <button onClick={() => hideCategoryFromLocalList(cat)} className="text-red-400 hover:text-red-600" title="화면 목록에서만 숨깁니다. 이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다."><Trash2 className="w-2.5 h-2.5" /></button>
+                  <button
+                    type="button"
+                    onClick={() => startRenameCategory(cat)}
+                    className="text-indigo-400 hover:text-indigo-600"
+                    title="Cloud 태그 이름 변경 - 이 태그가 붙은 모든 채널에 일괄 반영됩니다"
+                    aria-label={`${cat} Cloud 태그 이름 변경`}
+                  >
+                    <Settings className="w-2.5 h-2.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => hideCategoryFromLocalList(cat)}
+                    className="text-red-400 hover:text-red-600"
+                    title="화면 목록에서만 숨깁니다. 이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다."
+                    aria-label={`${cat} 카테고리를 화면 목록에서만 숨기기`}
+                  >
+                    <Trash2 className="w-2.5 h-2.5" />
+                  </button>
                 </span>
               )
             ))}
@@ -129,6 +190,8 @@ export default function ChannelAddForm({
                   type="button"
                   onClick={() => toggleNewChannelTag(cat)}
                   className={`px-2 py-1 rounded-full text-[11px] font-semibold border transition-colors ${newChannelTags.includes(cat) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
+                  title={`${cat} 태그 ${newChannelTags.includes(cat) ? '선택 해제' : '선택'}`}
+                  aria-label={`${cat} 태그 ${newChannelTags.includes(cat) ? '선택 해제' : '선택'}`}
                 >
                   {cat}
                 </button>
@@ -140,7 +203,14 @@ export default function ChannelAddForm({
             {LANGUAGES.map((lang) => <option key={lang.code} value={lang.code}>{lang.label}</option>)}
           </select>
 
-          <button onClick={handleBulkAdd} disabled={bulkLoading || !bulkInput.trim()} className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">
+          <button
+            type="button"
+            onClick={handleBulkAdd}
+            disabled={bulkLoading || !bulkInput.trim()}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors"
+            title="YouTube에서 채널 정보를 확인한 뒤 Cloud 채널 목록에 저장합니다. 영상 수집은 하지 않습니다."
+            aria-label="YouTube 확인 후 채널 일괄 저장"
+          >
             {bulkLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
             {bulkLoading ? 'YouTube 확인 후 저장 중...' : 'YouTube 확인 후 일괄 저장'}
           </button>
@@ -151,7 +221,14 @@ export default function ChannelAddForm({
               {bulkResult.results.filter((r) => !r.success).map((r, i) => (
                 <p key={i} className="text-red-500 truncate">✗ {r.handle}: {r.error}</p>
               ))}
-              <button onClick={resetBulkAdd} className="mt-1 w-full text-center text-indigo-600 hover:text-indigo-800 font-semibold">닫기</button>
+              <button
+                type="button"
+                onClick={resetBulkAdd}
+                className="mt-1 w-full text-center text-indigo-600 hover:text-indigo-800 font-semibold"
+                title="일괄 저장 결과 닫기"
+              >
+                닫기
+              </button>
             </div>
           )}
         </div>
@@ -166,7 +243,14 @@ export default function ChannelAddForm({
               className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none"
               onKeyDown={(e) => e.key === 'Enter' && handlePreviewChannel()}
             />
-            <button onClick={handlePreviewChannel} disabled={previewLoading} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
+            <button
+              type="button"
+              onClick={handlePreviewChannel}
+              disabled={previewLoading}
+              className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap"
+              title="YouTube에서 채널 정보만 확인합니다. Cloud 저장과 영상 수집은 하지 않습니다."
+              aria-label="YouTube에서 채널 정보 확인"
+            >
               {previewLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
               YouTube에서 확인
             </button>
@@ -181,7 +265,15 @@ export default function ChannelAddForm({
               <p className="text-sm font-bold text-slate-800 truncate">{channelPreview.title}</p>
               <p className="text-[10px] text-emerald-600 font-semibold">✓ 채널 확인됨</p>
             </div>
-            <button onClick={cancelChannelPreview} className="text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>
+            <button
+              type="button"
+              onClick={cancelChannelPreview}
+              className="text-slate-400 hover:text-slate-600"
+              title="채널 확인 결과 닫기"
+              aria-label="채널 확인 결과 닫기"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
           <div>
@@ -193,6 +285,8 @@ export default function ChannelAddForm({
                   type="button"
                   onClick={() => toggleNewChannelTag(cat)}
                   className={`px-2 py-1 rounded-full text-[11px] font-semibold border transition-colors ${newChannelTags.includes(cat) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
+                  title={`${cat} 태그 ${newChannelTags.includes(cat) ? '선택 해제' : '선택'}`}
+                  aria-label={`${cat} 태그 ${newChannelTags.includes(cat) ? '선택 해제' : '선택'}`}
                 >
                   {cat}
                 </button>
@@ -213,8 +307,24 @@ export default function ChannelAddForm({
           />
 
           <div className="flex gap-2">
-            <button onClick={cancelChannelPreview} className="flex-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-semibold transition-colors">취소</button>
-            <button onClick={handleSaveChannel} disabled={loading} className="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">채널 저장</button>
+            <button
+              type="button"
+              onClick={cancelChannelPreview}
+              className="flex-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-semibold transition-colors"
+              title="채널 저장을 취소하고 입력 화면으로 돌아가기"
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveChannel}
+              disabled={loading}
+              className="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors"
+              title="채널을 Cloud 목록에 저장합니다. 새 영상 수집은 하지 않습니다."
+              aria-label="채널을 Cloud 목록에 저장"
+            >
+              채널 저장
+            </button>
           </div>
           <p className="text-[10px] text-slate-500">채널을 클라우드 목록에 저장합니다. 새 영상 수집은 별도의 수집 버튼을 눌렀을 때만 진행됩니다.</p>
         </div>
