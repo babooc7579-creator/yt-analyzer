@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AlertCircle, CalendarDays, CheckCircle2, Clock, Copy, ExternalLink, Link as LinkIcon, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
 import {
-  DISCOVERY_RIGHTS_LABELS,
   DISCOVERY_RIGHTS_TONES,
   DISCOVERY_RIGHTS_WARNINGS,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
   getDiscoveryPlatformLabel,
+  getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 
@@ -310,7 +310,7 @@ export default function ProductionKanban({
             출처 {sourceHost}
           </span>
           <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${(DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown).compactBadge}`}>
-            {DISCOVERY_RIGHTS_LABELS[link.rightsStatus] || DISCOVERY_RIGHTS_LABELS.unknown}
+            {getDiscoveryRightsStatusLabel(link.rightsStatus)}
           </span>
         </div>
         <h4 className="mt-3 line-clamp-2 text-sm font-extrabold text-slate-900">

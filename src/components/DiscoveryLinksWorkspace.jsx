@@ -22,8 +22,10 @@ import {
   DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
+  getDiscoveryLinkStatusLabel,
   getDiscoveryPlatformFromUrl,
   getDiscoveryPlatformLabel,
+  getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 
 const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
@@ -217,10 +219,10 @@ function DiscoveryLinkRow({
               출처 {sourceHost}
             </span>
             <span className="rounded-full bg-indigo-50 px-2 py-1 text-[10px] font-extrabold text-indigo-700">
-              {LINK_STATUS_OPTIONS.find((option) => option.value === currentStatus)?.label || currentStatus}
+              {getDiscoveryLinkStatusLabel(currentStatus)}
             </span>
             <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${rightsTone.badge}`}>
-              {RIGHTS_STATUS_OPTIONS.find((option) => option.value === currentRightsStatus)?.label || currentRightsStatus}
+              {getDiscoveryRightsStatusLabel(currentRightsStatus)}
             </span>
           </div>
 

@@ -6,9 +6,9 @@ import {
   updateDiscoveryLink,
 } from '../services/functionApi';
 import {
-  DISCOVERY_LINK_STATUS_OPTIONS,
-  DISCOVERY_RIGHTS_STATUS_OPTIONS,
   getDiscoveryLinkHost,
+  getDiscoveryLinkStatusLabel,
+  getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 
 const getDiscoveryLinksFromResponse = (data) => {
@@ -20,10 +20,6 @@ const getDiscoveryLinksFromResponse = (data) => {
 const getDiscoveryLinkFromResponse = (data) => {
   return data?.link || data?.item || data?.discoveryLink || null;
 };
-
-const getOptionLabel = (options, value) => (
-  options.find((option) => option.value === value)?.label || value || '미지정'
-);
 
 const getDiscoveryLinkName = (link) => {
   if (link?.title) return link.title;
@@ -46,12 +42,12 @@ const getUpdateNotice = (updates, link) => {
   const linkName = getDiscoveryLinkName(link);
 
   if (updateKeys.length === 1 && updates.status !== undefined) {
-    const statusLabel = getOptionLabel(DISCOVERY_LINK_STATUS_OPTIONS, updates.status);
+    const statusLabel = getDiscoveryLinkStatusLabel(updates.status);
     return `${linkName}의 검토 상태를 '${statusLabel}'로 저장했습니다.`;
   }
 
   if (updateKeys.length === 1 && updates.rightsStatus !== undefined) {
-    const rightsLabel = getOptionLabel(DISCOVERY_RIGHTS_STATUS_OPTIONS, updates.rightsStatus);
+    const rightsLabel = getDiscoveryRightsStatusLabel(updates.rightsStatus);
     return `${linkName}의 권리 확인 상태를 '${rightsLabel}'로 저장했습니다.`;
   }
 
