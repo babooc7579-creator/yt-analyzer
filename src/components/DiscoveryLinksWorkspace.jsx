@@ -4,8 +4,10 @@ import {
   Copy,
   ExternalLink,
   Link as LinkIcon,
+  Pencil,
   Plus,
   RefreshCw,
+  Save,
   Search,
   ShieldCheck,
   Trash2,
@@ -109,6 +111,9 @@ function DiscoveryLinkRow({
   saving,
 }) {
   const [copyState, setCopyState] = useState('idle');
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(link.title || '');
+  const [draftMemo, setDraftMemo] = useState(link.memo || '');
   const title = link.title || getHostName(link.url);
   const platformLabel = PLATFORM_LABELS[link.platform] || 'Web';
   const currentStatus = link.status || 'inbox';
@@ -141,6 +146,37 @@ function DiscoveryLinkRow({
         ? '복사 실패'
         : '복사';
 
+  const openEdit = () => {
+    setDraftTitle(link.title || '');
+    setDraftMemo(link.memo || '');
+    setIsEditing(true);
+  };
+
+  const cancelEdit = () => {
+    setDraftTitle(link.title || '');
+    setDraftMemo(link.memo || '');
+    setIsEditing(false);
+  };
+
+  const handleSaveEdit = async () => {
+    const nextTitle = draftTitle.trim();
+    const nextMemo = draftMemo.trim();
+
+    if (nextTitle === (link.title || '') && nextMemo === (link.memo || '')) {
+      setIsEditing(false);
+      return;
+    }
+
+    const didSave = await onUpdate(link.id, {
+      title: nextTitle,
+      memo: nextMemo,
+    });
+
+    if (didSave) {
+      setIsEditing(false);
+    }
+  };
+
   return (
     <article className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
@@ -157,21 +193,82 @@ function DiscoveryLinkRow({
             </span>
           </div>
 
-          <h3 className="mt-3 line-clamp-2 text-base font-extrabold text-slate-950">
-            {title}
-          </h3>
-          <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
-          {link.memo ? (
-            <p className="mt-3 rounded-lg bg-slate-50 p-3 text-sm leading-relaxed text-slate-700">
-              {link.memo}
-            </p>
-          ) : null}
+          {isEditing ? (
+            <div className="mt-3 space-y-3">
+              <div>
+                <label
+                  className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500"
+                  htmlFor={`discovery-title-${link.id}`}
+                >
+                  제목
+                </label>
+                <input
+                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-400"
+                  disabled={saving}
+                  id={`discovery-title-${link.id}`}
+                  onChange={(event) => setDraftTitle(event.target.value)}
+                  placeholder="나중에 알아볼 수 있는 이름"
+                  value={draftTitle}
+                />
+              </div>
+
+              <div>
+                <label
+                  className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500"
+                  htmlFor={`discovery-memo-${link.id}`}
+                >
+                  메모
+                </label>
+                <textarea
+                  className="mt-1 min-h-24 w-full resize-y rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-relaxed text-slate-800 outline-none transition focus:border-indigo-400"
+                  disabled={saving}
+                  id={`discovery-memo-${link.id}`}
+                  onChange={(event) => setDraftMemo(event.target.value)}
+                  placeholder="왜 저장했는지, 어떤 포인트를 봐야 하는지 적어두세요."
+                  value={draftMemo}
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 text-xs font-extrabold text-white transition hover:bg-indigo-500 disabled:bg-slate-300"
+                  disabled={saving}
+                  onClick={handleSaveEdit}
+                  type="button"
+                >
+                  <Save className="h-4 w-4" />
+                  저장
+                </button>
+                <button
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+                  disabled={saving}
+                  onClick={cancelEdit}
+                  type="button"
+                >
+                  <X className="h-4 w-4" />
+                  취소
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h3 className="mt-3 line-clamp-2 text-base font-extrabold text-slate-950">
+                {title}
+              </h3>
+              <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
+              {link.memo ? (
+                <p className="mt-3 rounded-lg bg-slate-50 p-3 text-sm leading-relaxed text-slate-700">
+                  {link.memo}
+                </p>
+              ) : null}
+            </>
+          )}
           <p className="mt-3 text-[11px] font-semibold text-slate-400">
             마지막 저장: {formatDateTime(link.updatedAt || link.createdAt)}
           </p>
         </div>
 
-        <div className="grid min-w-[260px] grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto_auto_auto] xl:grid-cols-1">
+        <div className="grid min-w-[260px] grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto_auto_auto_auto] xl:grid-cols-1">
           <select
             className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
             disabled={saving}
@@ -225,6 +322,22 @@ function DiscoveryLinkRow({
               <Copy className="h-4 w-4" />
             )}
             {copyButtonLabel}
+          </button>
+
+          <button
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+            aria-label="발견 링크 제목과 메모 수정"
+            disabled={saving}
+            onClick={isEditing ? cancelEdit : openEdit}
+            title="제목과 메모 수정"
+            type="button"
+          >
+            {isEditing ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <Pencil className="h-4 w-4" />
+            )}
+            {isEditing ? '닫기' : '수정'}
           </button>
 
           <button

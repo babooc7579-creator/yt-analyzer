@@ -107,10 +107,10 @@ export function useDiscoveryLinks() {
         await loadDiscoveryLinks();
       }
 
-      setNotice('Cloud에 링크 상태를 저장했습니다.');
+      setNotice('Cloud에 링크 변경 사항을 저장했습니다.');
       return true;
     } catch (saveError) {
-      setError(saveError.message || 'Cloud에 링크 상태를 저장하지 못했습니다.');
+      setError(saveError.message || 'Cloud에 링크 변경 사항을 저장하지 못했습니다.');
       return false;
     } finally {
       setSaving(false);
@@ -144,7 +144,7 @@ export function useDiscoveryLinks() {
 
   const savingMessages = {
     create: 'Cloud에 발견 링크를 저장하는 중입니다.',
-    update: 'Cloud에 링크 상태를 저장하는 중입니다.',
+    update: 'Cloud에 링크 변경 사항을 저장하는 중입니다.',
     delete: 'Cloud에서 발견 링크를 삭제하는 중입니다.',
   };
 
