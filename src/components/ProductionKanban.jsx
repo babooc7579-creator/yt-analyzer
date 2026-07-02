@@ -37,6 +37,7 @@ const getDiscoveryLinkTitle = (link) => {
   if (link.title) return link.title;
   return getDiscoveryLinkHost(link.url, '발견 링크');
 };
+const getDiscoveryLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
 const copyTextToClipboard = async (text) => {
   if (navigator.clipboard?.writeText) {
@@ -175,7 +176,9 @@ export default function ProductionKanban({
       uploadedCount: groupedVideos[PRODUCTION_STATUS.DONE].length,
       nextScheduled: scheduledVideos.find(item => item.date >= today) || scheduledVideos[0],
       overdueCount: scheduledVideos.filter(item => item.date < today).length,
-      discoveryRightsWarningCount: discoveryLinkCandidates.filter(link => DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus]).length,
+      discoveryRightsWarningCount: discoveryLinkCandidates.filter(link => (
+        DISCOVERY_RIGHTS_WARNINGS[getDiscoveryLinkRightsStatusValue(link)]
+      )).length,
       activeWithoutDate: groupedVideos[PRODUCTION_STATUS.ACTIVE].filter((video) => {
         const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
         return !record.targetPublishDate;
@@ -295,7 +298,8 @@ export default function ProductionKanban({
         : copyState === 'error'
           ? '복사 실패'
           : '링크 복사';
-    const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus];
+    const rightsStatus = getDiscoveryLinkRightsStatusValue(link);
+    const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[rightsStatus];
     const sourceHost = getDiscoveryLinkHost(link.url);
     const platformLabel = getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link));
 
@@ -309,8 +313,8 @@ export default function ProductionKanban({
           <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-extrabold text-slate-600">
             출처 {sourceHost}
           </span>
-          <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${(DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown).compactBadge}`}>
-            {getDiscoveryRightsStatusLabel(link.rightsStatus)}
+          <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${(DISCOVERY_RIGHTS_TONES[rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown).compactBadge}`}>
+            {getDiscoveryRightsStatusLabel(rightsStatus)}
           </span>
         </div>
         <h4 className="mt-3 line-clamp-2 text-sm font-extrabold text-slate-900">
