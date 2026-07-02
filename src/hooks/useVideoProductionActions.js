@@ -15,10 +15,11 @@ export function useVideoProductionActions({
 
   const promoteVideoToProduction = async (video) => {
     if (!isVideoSaved(video.videoId)) {
-      await toggleScrapVideo(video);
+      const savedToScrapbook = await toggleScrapVideo(video);
+      if (!savedToScrapbook) return false;
     }
 
-    await markVideoStatus(video.videoId, PRODUCTION_STATUS.CANDIDATE);
+    return markVideoStatus(video.videoId, PRODUCTION_STATUS.CANDIDATE);
   };
 
   return {

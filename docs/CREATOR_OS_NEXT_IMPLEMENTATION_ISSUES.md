@@ -23,6 +23,7 @@
 - `/scrapbook`은 별도 container가 아니라 `videos` container 안의 `docType: scrapbook` 구조입니다.
 - `scan_logs`, `api_quota_logs`, `production_candidates`, `discovery_links`, `local_assets`는 아직 별도 저장소가 없습니다.
 - 카테고리 화면 목록은 localStorage 중심이고, 실제 채널 태그는 Cloud DB `channels.tags` 중심입니다.
+- Cloud/localStorage 동기화는 선택지 B로 결정됐습니다. Cloud 조회 성공 시 Cloud가 기준이고, localStorage는 Cloud 실패 시 명시적 fallback으로만 사용합니다.
 
 ---
 
@@ -57,7 +58,6 @@
 다만 아래 작업을 구현하기 직전에는 사용자 결정을 받아야 합니다.
 
 - `status`, `statusIds`를 장기적으로 `lifecycleStatus`, `usagePurposeTags`, `productionStatus`로 분리할지
-- Cloud DB와 localStorage가 충돌할 때 어떤 기준으로 복구할지
 - 카테고리 목록을 Cloud 태그 기준으로 바꿀지
 - `production_candidates`를 별도 DB로 만들지
 - `discovery_links`, `local_assets` API를 만들지
@@ -127,17 +127,17 @@
 - 완료 기준: 1차 완성까지 현재 구조를 유지할지, 별도 상태 모델 분리를 언제 검토할지 기준이 정리됩니다.
 - 사용자 판단 필요 여부: 필요.
 
-### Issue 6. Cloud/localStorage sync 정책 확정
+### Issue 6. Cloud/localStorage sync 정책 적용 완료
 
 - 목적: Cloud DB와 localStorage가 다를 때 어느 쪽을 기준으로 볼지 확정합니다.
-- 현재 상태: 문서상 Codex 추천은 Cloud-first + 명시적 local fallback입니다.
+- 현재 상태: 선택지 B가 승인되어 적용됐습니다. Cloud-first + 명시적 local fallback입니다.
 - 왜 필요한가: 몇 달 모은 스크랩북이나 영상 판단 기록이 사라져 보이는 상황을 막아야 합니다.
-- 작업 범위: 선택지 확정. 구현은 별도 Issue로 분리합니다.
+- 작업 범위: Cloud 조회 성공 시 Cloud 기준, Cloud 실패 시 localStorage 임시 fallback, Cloud 저장 성공 후에만 localStorage 캐시 갱신.
 - 건드릴 파일 예상: `src/App.jsx`, `src/services/storage.js`, scrapbook/videoUserRecords 관련 코드.
-- 건드리면 안 되는 것: localStorage key 제거, 자동 마이그레이션, Cloud 데이터 덮어쓰기.
-- 위험도: 높음.
-- 완료 기준: Cloud 실패 시 localStorage를 어떻게 보여줄지 기준이 확정됩니다.
-- 사용자 판단 필요 여부: 필요.
+- 건드리면 안 되는 것: localStorage key 제거, 자동 마이그레이션, 자동 업로드, Cloud/localStorage 자동 병합.
+- 위험도: 중간.
+- 완료 기준: Cloud 실패 시 localStorage fallback이 임시 기록으로 표시되고, Cloud 성공 데이터가 기준으로 유지됩니다.
+- 사용자 판단 필요 여부: 완료됨. 수동 복구/마이그레이션 기능은 별도 판단 필요.
 
 ### Issue 7. 저장 영상 조회 페이지네이션 필요성 평가
 
