@@ -151,14 +151,22 @@ export function useVideoUserRecords() {
   };
 
   const clearRadarDecisions = async () => {
+    const confirmed = window.confirm(
+      'Cloud 영상 판단 기록을 전체 초기화할까요?\n\n봤음, 나중에 보기, 제외, 제작 후보 같은 판단 기록이 지워지고 숨겨졌던 후보가 다시 보일 수 있습니다.'
+    );
+
+    if (!confirmed) return false;
+
     setVideoUserRecords({});
     try {
       const data = await clearVideoUserRecords();
       if (!data.success) throw new Error(data.error || '영상 판단 기록을 초기화하지 못했습니다.');
       cacheCloudRecords({});
       setVideoRecordsSyncWarning('');
+      return true;
     } catch {
       setVideoRecordsSyncWarning(VIDEO_RECORDS_CLEAR_WARNING);
+      return false;
     }
   };
 
