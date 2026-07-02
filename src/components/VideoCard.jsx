@@ -14,6 +14,7 @@ export default function VideoCard({
   onPromoteToProduction,
   onFetchComments,
 }) {
+  const videoTitle = video.title || '제목 없는 영상';
   const isStrongReaction = hasStrongReaction(video);
   const isCandidate = isStrongReaction || isTtoTtoCandidate(video);
   const thumbnailHeightClass = showWorkPanel ? 'min-h-[360px]' : 'min-h-[420px]';
@@ -26,7 +27,7 @@ export default function VideoCard({
   return (
     <div className={`group overflow-hidden rounded-lg border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${isChecked ? 'border-indigo-300 bg-indigo-50' : isCandidate ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
       <div className={`relative overflow-hidden bg-slate-100 ${thumbnailHeightClass}`}>
-        <img src={video.thumbnail} alt="" className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${thumbnailHeightClass}`} />
+        <img src={video.thumbnail} alt={`${videoTitle} 썸네일`} className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${thumbnailHeightClass}`} />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
         <div className="absolute left-3 top-3 flex flex-wrap gap-2">
@@ -43,17 +44,29 @@ export default function VideoCard({
           )}
         </div>
         <div className="absolute right-3 top-3 flex gap-2">
-          <button onClick={() => onToggleCheck(video.videoId)} title="AI 리메이크 요청문에 포함할 영상으로 선택" className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-indigo-50">
+          <button
+            type="button"
+            onClick={() => onToggleCheck(video.videoId)}
+            title="AI 리메이크 요청문에 포함할 영상으로 선택"
+            aria-label={`${videoTitle} AI 리메이크 요청문 선택 ${isChecked ? '해제' : '추가'}`}
+            className="rounded-full bg-white/90 p-2 shadow-sm transition-colors hover:bg-indigo-50"
+          >
             {isChecked ? <CheckSquare className="w-5 h-5 text-indigo-600" /> : <Square className="w-5 h-5 text-slate-400 hover:text-indigo-500" />}
           </button>
-          <button onClick={() => onToggleScrap(video)} title="소재 보관함에 저장하거나 해제" className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-extrabold shadow-sm transition-colors ${isSaved ? 'bg-yellow-400 text-yellow-950 hover:bg-yellow-300' : 'bg-white/90 text-slate-600 hover:bg-yellow-50 hover:text-yellow-700'}`}>
+          <button
+            type="button"
+            onClick={() => onToggleScrap(video)}
+            title={isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
+            aria-label={`${videoTitle} ${isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
+            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-extrabold shadow-sm transition-colors ${isSaved ? 'bg-yellow-400 text-yellow-950 hover:bg-yellow-300' : 'bg-white/90 text-slate-600 hover:bg-yellow-50 hover:text-yellow-700'}`}
+          >
             <Star className={`w-4 h-4 ${isSaved ? 'fill-yellow-950 text-yellow-950' : 'text-slate-400 group-hover:text-yellow-500'}`} />
             {isSaved ? '보관됨' : '소재 보관'}
           </button>
         </div>
       </div>
       <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
-        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600">{video.title}</a>
+        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle}>{videoTitle}</a>
         {candidateReasons.length > 0 && (
           <div className="mt-3 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2">
             <p className="text-[10px] font-extrabold text-rose-500">후보 이유</p>
@@ -72,22 +85,34 @@ export default function VideoCard({
           ) : (
             <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600"><Clock className="w-3 h-3" /> {video.duration}</span>
           )}
-          <button onClick={() => onFetchComments(video.videoId, video.title)} title="YouTube API로 댓글 Top 10을 조회합니다" className="flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-1 text-[11px] font-bold text-indigo-600 transition-colors hover:bg-indigo-100">
+          <button
+            type="button"
+            onClick={() => onFetchComments(video.videoId, video.title)}
+            title="YouTube API로 댓글 Top 10을 조회합니다"
+            aria-label={`${videoTitle} 댓글 Top 10 조회 - YouTube API 호출`}
+            className="flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-1 text-[11px] font-bold text-indigo-600 transition-colors hover:bg-indigo-100"
+          >
             <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
           </button>
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
           <button
+            type="button"
             onClick={() => onToggleScrap(video)}
+            title={isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
+            aria-label={`${videoTitle} ${isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
             className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isSaved ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' : 'bg-yellow-500 text-white hover:bg-yellow-600'}`}
           >
             <Star className={`h-3.5 w-3.5 ${isSaved ? 'fill-yellow-800' : ''}`} />
             {isSaved ? '보관 해제' : '소재 보관'}
           </button>
           <button
+            type="button"
             onClick={() => onPromoteToProduction(video)}
             disabled={isProductionCandidate}
+            title={isProductionCandidate ? '이미 제작 후보로 저장됨' : '제작 후보 상태로 저장'}
+            aria-label={`${videoTitle} ${isProductionCandidate ? '이미 제작 후보로 저장됨' : '제작 후보로 저장'}`}
             className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isProductionCandidate ? 'cursor-not-allowed bg-indigo-100 text-indigo-400' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
           >
             <Rocket className="h-3.5 w-3.5" />
