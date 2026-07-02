@@ -424,6 +424,7 @@ export default function App() {
               ttoTtoAssetCount={ttoTtoAssetCount}
               ttoTtoMode={ttoTtoMode}
               updateChannelMetadata={updateChannelMetadata}
+              updateDiscoveryLink={changeDiscoveryLink}
               updateVideoUserRecord={updateVideoUserRecord}
               updatingChannelId={updatingChannelId}
               videoUserRecords={videoUserRecords}
