@@ -30,6 +30,7 @@ export default function HomeRadarSummary({
   latestScanText,
   ttoTtoAssetCount,
   openRadarCandidateCount,
+  discoveryCandidateCount,
   productionCandidateCount,
 }) {
   return (
@@ -111,8 +112,8 @@ export default function HomeRadarSummary({
           />
           <WorkflowCard
             title="3. 제작 후보로 넘기기"
-            description="만들 만한 소재는 제작 후보로 보내고, 나머지는 봄/나중/제외로 정리합니다."
-            value={`${productionCandidateCount}개 후보`}
+            description="만들 만한 영상과 외부 발견 링크를 제작 후보로 모으고, 나머지는 봄/나중/제외로 정리합니다."
+            value={`영상 ${productionCandidateCount}개 · 링크 ${discoveryCandidateCount}개`}
             icon={Rocket}
             className="border-emerald-400/20 bg-emerald-500/10"
             titleClassName="text-emerald-100"

@@ -248,6 +248,7 @@ export default function App() {
   const {
     activeSelectedChannelCount,
     cloudOnlyTags,
+    discoveryCandidateCount,
     getScannableChannelCount,
     latestScanText,
     openRadarCandidateCount,
@@ -257,6 +258,7 @@ export default function App() {
     visibleScrapCount,
   } = useCreatorOsMetrics({
     categories,
+    discoveryLinks,
     savedChannels,
     savedVideos,
     selectedChannelIds,
@@ -307,6 +309,7 @@ export default function App() {
               latestScanText={latestScanText}
               markRadarVideoStatus={markRadarVideoStatus}
               openRadarCandidateCount={openRadarCandidateCount}
+              discoveryCandidateCount={discoveryCandidateCount}
               onOpenView={openCreatorView}
               productionCandidateCount={productionCandidateCount}
               promoteVideoToProduction={promoteVideoToProduction}
