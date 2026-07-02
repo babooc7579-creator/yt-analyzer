@@ -147,6 +147,7 @@ function DiscoveryLinkRow({
   const [draftTitle, setDraftTitle] = useState(link.title || '');
   const [draftMemo, setDraftMemo] = useState(link.memo || '');
   const title = link.title || getHostName(link.url);
+  const sourceHost = getHostName(link.url);
   const platformLabel = PLATFORM_LABELS[link.platform] || 'Web';
   const currentStatus = link.status || 'inbox';
   const currentRightsStatus = link.rightsStatus || 'unknown';
@@ -228,6 +229,9 @@ function DiscoveryLinkRow({
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-slate-900 px-2 py-1 text-[10px] font-extrabold text-white">
               {platformLabel}
+            </span>
+            <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-extrabold text-slate-600">
+              출처 {sourceHost}
             </span>
             <span className="rounded-full bg-indigo-50 px-2 py-1 text-[10px] font-extrabold text-indigo-700">
               {LINK_STATUS_OPTIONS.find((option) => option.value === currentStatus)?.label || currentStatus}
