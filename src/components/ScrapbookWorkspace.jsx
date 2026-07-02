@@ -5,11 +5,13 @@ import ScrapbookVideoCard from './ScrapbookVideoCard';
 
 export default function ScrapbookWorkspace({
   creatorView,
+  discoveryLinks,
   savedVideos,
   videoUserRecords,
   onCopyPrompt,
   onFetchComments,
   onMoveVideo,
+  onOpenDiscoveryLinks,
   onOpenReferenceVault,
   onRemoveScrap,
   onUpdateVideoRecord,
@@ -23,9 +25,11 @@ export default function ScrapbookWorkspace({
 
       {creatorView === 'studio-candidates' ? (
         <ProductionKanban
+          discoveryLinks={discoveryLinks}
           videos={savedVideos}
           videoUserRecords={videoUserRecords}
           onMoveVideo={onMoveVideo}
+          onOpenDiscoveryLinks={onOpenDiscoveryLinks}
           onUpdateVideoRecord={onUpdateVideoRecord}
           onOpenReferenceVault={onOpenReferenceVault}
         />

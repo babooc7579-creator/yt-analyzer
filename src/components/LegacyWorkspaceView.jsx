@@ -26,6 +26,7 @@ export default function LegacyWorkspaceView({
   copyPromptForVideos,
   creatorView,
   deleteChannel,
+  discoveryLinks,
   error,
   fetchTopComments,
   filteredAndSortedVideos,
@@ -226,11 +227,13 @@ export default function LegacyWorkspaceView({
         ) : (
           <ScrapbookWorkspace
             creatorView={creatorView}
+            discoveryLinks={discoveryLinks}
             savedVideos={savedVideos}
             videoUserRecords={videoUserRecords}
             onCopyPrompt={() => copyPromptForVideos(savedVideos)}
             onFetchComments={fetchTopComments}
             onMoveVideo={markRadarVideoStatus}
+            onOpenDiscoveryLinks={() => openCreatorView({ id: 'vault-sources' })}
             onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
             onRemoveScrap={toggleScrapVideo}
             onUpdateVideoRecord={updateVideoUserRecord}

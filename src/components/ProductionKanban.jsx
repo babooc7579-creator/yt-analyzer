@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, CalendarDays, CheckCircle2, Clock, ExternalLink, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
+import { AlertCircle, CalendarDays, CheckCircle2, Clock, ExternalLink, Link as LinkIcon, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 
 const COLUMNS = [
@@ -23,8 +23,31 @@ const COLUMNS = [
   },
 ];
 
+const DISCOVERY_RIGHTS_LABELS = {
+  unknown: '권리 미확인',
+  needs_check: '권리 확인 필요',
+  cleared: '사용 가능 확인',
+  do_not_use: '사용 금지',
+};
+
+const DISCOVERY_RIGHTS_TONES = {
+  unknown: 'bg-slate-100 text-slate-600',
+  needs_check: 'bg-rose-50 text-rose-600',
+  cleared: 'bg-emerald-50 text-emerald-700',
+  do_not_use: 'bg-red-50 text-red-700',
+};
+
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 const formatDate = (date) => date ? date.split('-').join('.') : '';
+const getDiscoveryLinkTitle = (link) => {
+  if (link.title) return link.title;
+  try {
+    return new URL(link.url).hostname.replace(/^www\./, '');
+  } catch {
+    return '발견 링크';
+  }
+};
+
 const getDateDistance = (date) => {
   if (!date) return null;
   const today = new Date(`${getTodayDate()}T00:00:00`);
@@ -65,9 +88,11 @@ const getScheduleSignal = (record) => {
 };
 
 export default function ProductionKanban({
+  discoveryLinks = [],
   videos,
   videoUserRecords,
   onMoveVideo,
+  onOpenDiscoveryLinks,
   onUpdateVideoRecord,
   onOpenReferenceVault,
 }) {
@@ -78,6 +103,15 @@ export default function ProductionKanban({
   useEffect(() => {
     setDraftRecords(videoUserRecords);
   }, [videoUserRecords]);
+
+  const discoveryLinkCandidates = useMemo(() => (
+    discoveryLinks
+      .filter((link) => (link.status || '') === 'candidate')
+      .sort((left, right) => (
+        new Date(right.updatedAt || right.createdAt || 0).getTime()
+        - new Date(left.updatedAt || left.createdAt || 0).getTime()
+      ))
+  ), [discoveryLinks]);
 
   const groupedVideos = useMemo(() => {
     const grouped = videos.reduce((acc, video) => {
@@ -195,15 +229,20 @@ export default function ProductionKanban({
     }
   };
 
-  if (videos.length === 0) {
+  if (videos.length === 0 && discoveryLinkCandidates.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
         <Star className="mx-auto h-12 w-12 text-slate-300" />
         <h3 className="mt-4 text-lg font-extrabold text-slate-800">제작 칸반에 후보가 없습니다</h3>
-        <p className="mt-2 text-sm text-slate-500">레이더나 레퍼런스 금고에서 제작 후보로 보내면 이곳에 모입니다.</p>
-        <button onClick={onOpenReferenceVault} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-700">
-          <Rocket className="h-4 w-4" /> 레퍼런스 금고 열기
-        </button>
+        <p className="mt-2 text-sm text-slate-500">레이더, 레퍼런스 금고, 발견함에서 제작 후보로 보내면 이곳에 모입니다.</p>
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <button onClick={onOpenReferenceVault} className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-700">
+            <Rocket className="h-4 w-4" /> 레퍼런스 금고 열기
+          </button>
+          <button onClick={onOpenDiscoveryLinks} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">
+            <LinkIcon className="h-4 w-4" /> 발견함 열기
+          </button>
+        </div>
       </div>
     );
   }
@@ -217,9 +256,9 @@ export default function ProductionKanban({
             <h3 className="mt-1 text-xl font-extrabold text-slate-900">후보를 제작 흐름으로 옮깁니다</h3>
             <p className="mt-1 text-xs text-slate-500">스크랩한 소재를 제작 후보, 제작 중, 업로드 완료로 관리합니다.</p>
           </div>
-          <p className="text-xs font-semibold text-slate-500">총 {videos.length}개 소재</p>
+          <p className="text-xs font-semibold text-slate-500">영상 {videos.length}개 · 링크 {discoveryLinkCandidates.length}개 후보</p>
         </div>
-        <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-4">
+        <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-5">
           <div className="rounded-xl border border-indigo-100 bg-indigo-50 px-3 py-3">
             <p className="text-[10px] font-extrabold uppercase text-indigo-500">제작 후보</p>
             <p className="mt-1 text-lg font-black text-indigo-900">{productionSummary.candidateCount}개</p>
@@ -231,6 +270,12 @@ export default function ProductionKanban({
           <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
             <p className="text-[10px] font-extrabold uppercase text-slate-500">업로드 완료</p>
             <p className="mt-1 text-lg font-black text-slate-900">{productionSummary.uploadedCount}개</p>
+          </div>
+          <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
+            <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
+              <LinkIcon className="h-3 w-3" /> 링크 후보
+            </p>
+            <p className="mt-1 text-lg font-black text-amber-950">{discoveryLinkCandidates.length}개</p>
           </div>
           <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
             <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
@@ -253,6 +298,71 @@ export default function ProductionKanban({
           </div>
         </div>
       </div>
+
+      {discoveryLinkCandidates.length > 0 && (
+        <section className="rounded-2xl border border-amber-100 bg-white p-5">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="inline-flex items-center gap-2 text-sm font-extrabold text-amber-700">
+                <LinkIcon className="h-4 w-4" />
+                발견함 링크 후보
+              </p>
+              <h3 className="mt-1 text-lg font-extrabold text-slate-900">외부에서 저장한 제작 후보 링크</h3>
+              <p className="mt-1 text-xs text-slate-500">
+                발견함에서 상태를 제작 후보로 바꾼 링크입니다. 아직 별도 제작 DB로 옮긴 것은 아니며, 후보 참고 목록으로 보여줍니다.
+              </p>
+            </div>
+            <button
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100"
+              onClick={onOpenDiscoveryLinks}
+              type="button"
+            >
+              <LinkIcon className="h-4 w-4" />
+              발견함 열기
+            </button>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
+            {discoveryLinkCandidates.map((link) => (
+              <article key={link.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-extrabold text-amber-800">링크 후보</span>
+                  <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown}`}>
+                    {DISCOVERY_RIGHTS_LABELS[link.rightsStatus] || DISCOVERY_RIGHTS_LABELS.unknown}
+                  </span>
+                </div>
+                <h4 className="mt-3 line-clamp-2 text-sm font-extrabold text-slate-900">
+                  {getDiscoveryLinkTitle(link)}
+                </h4>
+                <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
+                {link.memo ? (
+                  <p className="mt-3 line-clamp-3 rounded-lg bg-white p-3 text-xs leading-relaxed text-slate-600">
+                    {link.memo}
+                  </p>
+                ) : null}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <a
+                    className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-extrabold text-white transition hover:bg-slate-800"
+                    href={link.url}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    원본 열기
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                  <button
+                    className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50"
+                    onClick={onOpenDiscoveryLinks}
+                    type="button"
+                  >
+                    발견함에서 수정
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         {COLUMNS.map((column) => (
