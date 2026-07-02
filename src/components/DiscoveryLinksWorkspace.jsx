@@ -62,6 +62,14 @@ const getLinkStatusValue = (link) => link.status || 'inbox';
 
 const getLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
+const needsRiskyCandidateConfirmation = (status, rightsStatus) => (
+  status === 'candidate' && rightsStatus === 'do_not_use'
+);
+
+const confirmRiskyCandidate = () => window.confirm(
+  '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 보내시겠어요?\n나중에 제작 후보함에서 강한 경고로 표시됩니다.'
+);
+
 const copyTextToClipboard = async (text) => {
   if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(text);
@@ -122,6 +130,17 @@ function DiscoveryLinkRow({
   const handleDelete = () => {
     const confirmed = window.confirm('이 발견 링크를 Cloud에서 삭제할까요?');
     if (confirmed) onDelete(link.id);
+  };
+
+  const handleStatusChange = (event) => {
+    const nextStatus = event.target.value;
+
+    if (needsRiskyCandidateConfirmation(nextStatus, currentRightsStatus) && !confirmRiskyCandidate()) {
+      event.target.value = currentStatus;
+      return;
+    }
+
+    onUpdate(link.id, { status: nextStatus });
   };
 
   const handleCopy = async () => {
@@ -273,7 +292,7 @@ function DiscoveryLinkRow({
             className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
             disabled={saving}
             value={currentStatus}
-            onChange={(event) => onUpdate(link.id, { status: event.target.value })}
+            onChange={handleStatusChange}
           >
             {LINK_STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -441,6 +460,10 @@ export default function DiscoveryLinksWorkspace({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (needsRiskyCandidateConfirmation(form.status, form.rightsStatus) && !confirmRiskyCandidate()) {
+      return;
+    }
 
     const success = await onCreateLink({
       url: form.url.trim(),
