@@ -25,6 +25,15 @@ export const getDiscoveryLinkHost = (url, fallback = '링크') => {
   }
 };
 
+export const getDiscoveryPlatformFromUrl = (url) => {
+  const host = getDiscoveryLinkHost(url, '').toLowerCase();
+
+  if (host.includes('instagram.com')) return 'instagram';
+  if (host.includes('youtube.com') || host.includes('youtu.be')) return 'youtube';
+  if (host.includes('tiktok.com')) return 'tiktok';
+  return 'web';
+};
+
 export const ALL_DISCOVERY_LINK_STATUS_OPTION = { value: 'all', label: '전체' };
 
 export const DISCOVERY_RIGHTS_STATUS_OPTIONS = [
