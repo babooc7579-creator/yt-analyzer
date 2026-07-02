@@ -118,7 +118,7 @@ export default function ChannelAddForm({
             rows={5}
             disabled={bulkLoading}
           />
-          <p className="text-[10px] text-slate-500">{bulkInput.split('\n').map((l) => l.trim()).filter(Boolean).length}개 줄 인식됨. 채널 정보를 YouTube에서 확인한 뒤 클라우드 목록에 저장합니다.</p>
+          <p className="text-[10px] text-slate-500">{bulkInput.split('\n').map((l) => l.trim()).filter(Boolean).length}개 줄 인식됨. YouTube에서 채널 정보를 확인한 뒤 클라우드 목록에 저장합니다. 영상 수집은 하지 않습니다.</p>
 
           <div>
             <p className="text-[10px] text-slate-500 mb-1">태그 선택 (전체 일괄 적용, 여러 개 가능)</p>
@@ -142,7 +142,7 @@ export default function ChannelAddForm({
 
           <button onClick={handleBulkAdd} disabled={bulkLoading || !bulkInput.trim()} className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">
             {bulkLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-            {bulkLoading ? '일괄 등록 중...' : '일괄 등록'}
+            {bulkLoading ? 'YouTube 확인 후 저장 중...' : 'YouTube 확인 후 일괄 저장'}
           </button>
 
           {bulkResult && (
@@ -168,10 +168,10 @@ export default function ChannelAddForm({
             />
             <button onClick={handlePreviewChannel} disabled={previewLoading} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap">
               {previewLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-              채널 미리보기
+              YouTube에서 확인
             </button>
           </div>
-          <p className="text-[10px] text-slate-500">아직 클라우드에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다.</p>
+          <p className="text-[10px] text-slate-500">아직 클라우드에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다. 영상 수집은 하지 않습니다.</p>
         </div>
       ) : (
         <div className="space-y-2 animate-in fade-in duration-200">
@@ -216,7 +216,7 @@ export default function ChannelAddForm({
             <button onClick={cancelChannelPreview} className="flex-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-semibold transition-colors">취소</button>
             <button onClick={handleSaveChannel} disabled={loading} className="flex-1 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors">채널 저장</button>
           </div>
-          <p className="text-[10px] text-slate-500">채널을 클라우드 목록에 저장합니다. 영상 수집은 스캔 시 진행됩니다.</p>
+          <p className="text-[10px] text-slate-500">채널을 클라우드 목록에 저장합니다. 새 영상 수집은 별도의 수집 버튼을 눌렀을 때만 진행됩니다.</p>
         </div>
       )}
     </div>
