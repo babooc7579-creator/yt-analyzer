@@ -136,6 +136,7 @@ export default function App() {
   } = useChannelNotesModal({ saveChannelNote, onError: setError });
   const {
     savedVideos,
+    scrapbookSyncWarning,
     isVideoSaved,
     toggleScrapVideo,
   } = useScrapbook();
@@ -247,6 +248,10 @@ export default function App() {
     videoUserRecords,
     videos,
   });
+  const syncWarnings = [
+    videoRecordsSyncWarning,
+    scrapbookSyncWarning,
+  ].filter(Boolean);
 
   return (
     <div className="min-h-screen bg-slate-950 p-4 md:p-6 font-sans text-slate-100">
@@ -278,7 +283,7 @@ export default function App() {
             savedVideoCount={savedVideos.length}
           />
 
-          <SyncWarningBanner message={videoRecordsSyncWarning} />
+          <SyncWarningBanner messages={syncWarnings} />
 
           {isHomeView ? (
             <CreatorHomeView

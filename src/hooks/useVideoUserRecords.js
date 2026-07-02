@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { clearVideoUserRecords, fetchVideoUserRecords, saveVideoUserRecord } from '../services/functionApi';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import {
@@ -9,19 +9,27 @@ import {
   withRecordStatus,
 } from '../constants/status';
 
-const VIDEO_RECORDS_LOAD_WARNING = 'Cloud의 영상 판단 기록을 불러오지 못해 이 브라우저에 남아 있던 기록을 임시로 사용합니다.';
-const VIDEO_RECORDS_SAVE_WARNING = '영상 판단 기록이 Cloud에 저장되지 않았을 수 있습니다. 화면에는 임시로 남아 있지만 새로고침 후 달라질 수 있습니다.';
-const VIDEO_RECORDS_CLEAR_WARNING = '판단 기록 초기화가 Cloud에 반영되지 않았을 수 있습니다. 나중에 다시 나타나면 한 번 더 초기화해 주세요.';
+const VIDEO_RECORDS_LOAD_WARNING = 'Cloud 연결 실패로 이 브라우저에 남아 있던 영상 판단 기록을 임시로 표시 중입니다. 이 기록은 Cloud 기준 데이터가 아닙니다.';
+const VIDEO_RECORDS_SAVE_WARNING = '영상 판단 기록이 Cloud에 저장되지 않았습니다. 화면에는 임시로 반영됐지만 Cloud 동기화가 필요합니다.';
+const VIDEO_RECORDS_CLEAR_WARNING = '판단 기록 초기화가 Cloud에 반영되지 않았습니다. 화면에는 임시로 초기화됐지만 새로고침 후 다시 나타날 수 있습니다.';
 
 export function useVideoUserRecords() {
-  const [videoUserRecords, setVideoUserRecords] = useState(() => (
-    normalizeVideoUserRecords(readJsonStorage(STORAGE_KEYS.videoUserRecords, {}) || {})
-  ));
+  const cloudRecordsCacheRef = useRef({});
+  const [videoUserRecords, setVideoUserRecords] = useState({});
   const [videoRecordsSyncWarning, setVideoRecordsSyncWarning] = useState('');
 
-  useEffect(() => {
-    writeJsonStorage(STORAGE_KEYS.videoUserRecords, videoUserRecords);
-  }, [videoUserRecords]);
+  const cacheCloudRecords = (records) => {
+    cloudRecordsCacheRef.current = records;
+    writeJsonStorage(STORAGE_KEYS.videoUserRecords, records);
+  };
+
+  const cacheCloudRecord = (record) => {
+    const nextRecords = {
+      ...cloudRecordsCacheRef.current,
+      [record.videoId]: record,
+    };
+    cacheCloudRecords(nextRecords);
+  };
 
   useEffect(() => {
     let isCancelled = false;
@@ -31,10 +39,16 @@ export function useVideoUserRecords() {
         const data = await fetchVideoUserRecords();
         if (!data.success) throw new Error(data.error || '영상 판단 기록을 불러오지 못했습니다.');
         if (isCancelled) return;
-        setVideoUserRecords(normalizeVideoUserRecords(data.records || {}));
+        const cloudRecords = normalizeVideoUserRecords(data.records || {});
+        setVideoUserRecords(cloudRecords);
+        cacheCloudRecords(cloudRecords);
         setVideoRecordsSyncWarning('');
       } catch {
-        if (!isCancelled) setVideoRecordsSyncWarning(VIDEO_RECORDS_LOAD_WARNING);
+        if (!isCancelled) {
+          const fallbackRecords = normalizeVideoUserRecords(readJsonStorage(STORAGE_KEYS.videoUserRecords, {}) || {});
+          setVideoUserRecords(fallbackRecords);
+          setVideoRecordsSyncWarning(VIDEO_RECORDS_LOAD_WARNING);
+        }
       }
     };
 
@@ -45,8 +59,10 @@ export function useVideoUserRecords() {
   const saveRecordToCloud = async (record) => {
     const data = await saveVideoUserRecord(record);
     if (!data.success) throw new Error(data.error || '영상 판단 기록을 저장하지 못했습니다.');
+    const cloudRecord = normalizeVideoUserRecord(data.record || record);
+    cacheCloudRecord(cloudRecord);
     setVideoRecordsSyncWarning('');
-    return true;
+    return cloudRecord;
   };
 
   const markVideoStatus = async (videoId, status, extraUpdates = {}) => {
@@ -64,7 +80,12 @@ export function useVideoUserRecords() {
     }));
 
     try {
-      return await saveRecordToCloud(record);
+      const cloudRecord = await saveRecordToCloud(record);
+      setVideoUserRecords(prev => ({
+        ...prev,
+        [videoId]: cloudRecord,
+      }));
+      return true;
     } catch {
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SAVE_WARNING);
       return false;
@@ -85,7 +106,12 @@ export function useVideoUserRecords() {
     }));
 
     try {
-      return await saveRecordToCloud(record);
+      const cloudRecord = await saveRecordToCloud(record);
+      setVideoUserRecords(prev => ({
+        ...prev,
+        [videoId]: cloudRecord,
+      }));
+      return true;
     } catch {
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SAVE_WARNING);
       return false;
@@ -112,7 +138,12 @@ export function useVideoUserRecords() {
     }));
 
     try {
-      return await saveRecordToCloud(record);
+      const cloudRecord = await saveRecordToCloud(record);
+      setVideoUserRecords(prev => ({
+        ...prev,
+        [videoId]: cloudRecord,
+      }));
+      return true;
     } catch {
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SAVE_WARNING);
       return false;
@@ -124,6 +155,7 @@ export function useVideoUserRecords() {
     try {
       const data = await clearVideoUserRecords();
       if (!data.success) throw new Error(data.error || '영상 판단 기록을 초기화하지 못했습니다.');
+      cacheCloudRecords({});
       setVideoRecordsSyncWarning('');
     } catch {
       setVideoRecordsSyncWarning(VIDEO_RECORDS_CLEAR_WARNING);
