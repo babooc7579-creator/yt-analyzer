@@ -48,7 +48,7 @@
 
 ### P4: 1차 안정화 이후 작업
 
-대규모 UI 개편, 제작 칸반 확장, discovery links/local assets 실제 구현, 자동화, AI 연동입니다.
+대규모 UI 개편, 제작 칸반 확장, discovery links 후속 확장, local assets 실제 구현, 자동화, AI 연동입니다.
 
 ---
 
@@ -196,16 +196,16 @@
 
 바로 다음 작업은 아래 순서를 추천합니다.
 
-1. discovery links API 경계와 첫 화면 흐름에 대한 사용자 결정 확인
-2. 결정되면 discovery links 백엔드 최소 API를 작은 Issue로 구현
-3. 이후 프론트 API client와 최소 발견함 화면을 분리 구현
+1. 발견함 1차 MVP의 문서/화면 문구를 현재 구현 상태에 맞게 정리
+2. 발견 링크 저장/수정/삭제 흐름을 실제 사용 기준으로 작게 점검
+3. local assets, 발견 링크의 제작 후보 연결, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정
 
 이 순서가 안전한 이유:
 
 - 문서 기준, 저장 영상 페이지네이션 감사, scan/API 사용 기록 모델, discovery MVP 범위 검토, 제작 후보 MVP 범위 검토는 완료됐습니다.
-- API endpoint 이름, `/videos` 조회 분리 방식, 첫 화면 버튼 흐름 선택지 보고는 완료했습니다.
-- 이후에는 사용자 결정 확인 후 백엔드 최소 API부터 작게 구현합니다.
-- DB/API 변경은 마지막에 별도 판단을 받고 진행합니다.
+- discovery links 1차 MVP는 `/discovery-links`와 `docType: discovery_link` 방식으로 부분 구현되었습니다.
+- 이후에는 이미 구현된 발견함을 안정화한 뒤, local assets와 제작 후보 연결처럼 데이터 의미가 커지는 작업을 별도 판단으로 넘깁니다.
+- DB/API 변경은 계속 별도 판단을 받고 진행합니다.
 
 ---
 
