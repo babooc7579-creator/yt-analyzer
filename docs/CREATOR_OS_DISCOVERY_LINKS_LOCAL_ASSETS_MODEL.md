@@ -6,6 +6,8 @@
 
 중요: 이 문서는 구현 문서가 아닙니다. 현재 앱에 해당 기능이 존재한다고 가정하지 않습니다. API, DB schema, localStorage key, UI 흐름은 변경하지 않습니다.
 
+1차 MVP 범위와 선택지는 `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`를 기준으로 확인합니다.
+
 ---
 
 ## 1. 현재 기준 사실
