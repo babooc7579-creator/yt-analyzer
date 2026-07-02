@@ -21,6 +21,8 @@ export function useDiscoveryLinks() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [savingAction, setSavingAction] = useState('');
 
   const sortedLinks = useMemo(() => {
     return [...links].sort((left, right) => {
@@ -53,7 +55,9 @@ export function useDiscoveryLinks() {
 
   const addDiscoveryLink = async (payload) => {
     setSaving(true);
+    setSavingAction('create');
     setError('');
+    setNotice('');
 
     try {
       const data = await createDiscoveryLink(payload);
@@ -71,18 +75,22 @@ export function useDiscoveryLinks() {
         await loadDiscoveryLinks();
       }
 
+      setNotice('Cloud에 발견 링크를 저장했습니다.');
       return true;
     } catch (saveError) {
       setError(saveError.message || 'Cloud에 링크를 저장하지 못했습니다.');
       return false;
     } finally {
       setSaving(false);
+      setSavingAction('');
     }
   };
 
   const changeDiscoveryLink = async (id, updates) => {
     setSaving(true);
+    setSavingAction('update');
     setError('');
+    setNotice('');
 
     try {
       const data = await updateDiscoveryLink({ id, updates });
@@ -99,18 +107,22 @@ export function useDiscoveryLinks() {
         await loadDiscoveryLinks();
       }
 
+      setNotice('Cloud에 링크 상태를 저장했습니다.');
       return true;
     } catch (saveError) {
       setError(saveError.message || 'Cloud에 링크 상태를 저장하지 못했습니다.');
       return false;
     } finally {
       setSaving(false);
+      setSavingAction('');
     }
   };
 
   const removeDiscoveryLink = async (id) => {
     setSaving(true);
+    setSavingAction('delete');
     setError('');
+    setNotice('');
 
     try {
       const data = await deleteDiscoveryLink(id);
@@ -119,20 +131,30 @@ export function useDiscoveryLinks() {
       }
 
       setLinks((currentLinks) => currentLinks.filter((link) => link.id !== id));
+      setNotice('Cloud에서 발견 링크를 삭제했습니다.');
       return true;
     } catch (deleteError) {
       setError(deleteError.message || 'Cloud에서 링크를 삭제하지 못했습니다.');
       return false;
     } finally {
       setSaving(false);
+      setSavingAction('');
     }
+  };
+
+  const savingMessages = {
+    create: 'Cloud에 발견 링크를 저장하는 중입니다.',
+    update: 'Cloud에 링크 상태를 저장하는 중입니다.',
+    delete: 'Cloud에서 발견 링크를 삭제하는 중입니다.',
   };
 
   return {
     discoveryLinks: sortedLinks,
     discoveryLinksError: error,
     discoveryLinksLoading: loading,
+    discoveryLinksNotice: notice,
     discoveryLinksSaving: saving,
+    discoveryLinksSavingMessage: saving ? savingMessages[savingAction] || '' : '',
     addDiscoveryLink,
     changeDiscoveryLink,
     loadDiscoveryLinks,
