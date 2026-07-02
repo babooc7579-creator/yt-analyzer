@@ -18,7 +18,7 @@
 - 프론트 state가 바뀔 때마다 localStorage에도 다시 기록합니다.
 - 프론트는 `status`와 `statusIds`를 함께 다루는 호환 구조입니다.
 - 백엔드 `/video-records`는 단일 `status` 중심으로 저장합니다.
-- 이 감사 시점에는 백엔드가 `statusIds`를 저장 문서에 포함하지 않았습니다. 이후 선택지 B가 승인되어 `status` 유지 + `statusIds` 보존 방향으로 전환 중이며, 최종 근거는 backend repo의 `/video-records` handler 기준으로 확인해야 합니다.
+- 이 감사 시점에는 백엔드가 `statusIds`를 저장 문서에 포함하지 않았습니다. 이후 선택지 B가 승인되어 `status` 유지 + `statusIds` 보존이 반영됐고, 2026-07-02 배포 smoke test에서 저장/조회/삭제 흐름을 확인했습니다.
 - 백엔드 기본 status는 `new`입니다.
 - 프론트 상태 상수에는 `new`가 정의되어 있지 않습니다.
 - `/video-records`는 별도 container가 아니라 Cosmos `videos` container 안의 `docType: video_user_record` 문서로 저장됩니다.
@@ -60,7 +60,7 @@
 | `uploadedAt` | 예 | 업로드 완료일 | 제작 칸반에서 사용 |
 | `createdAt` | 예 | 생성일 | 기존 값 유지 가능 |
 | `updatedAt` | 예 | 갱신일 | 저장 시 갱신 |
-| `statusIds` | 전환 중 | 복수 상태 후보 | 선택지 B 승인 이후 보존 대상으로 정리 중. backend repo 기준 확인 필요 |
+| `statusIds` | 예 | 복수 상태 후보 | 선택지 B 승인 이후 보존 대상으로 추가. 기존 `status`는 유지 |
 
 중요:
 
@@ -116,7 +116,7 @@ localStorage 읽기
 위험:
 
 - Cloud 저장 실패 시 다음 Cloud 동기화에서 판단 기록이 사라질 수 있습니다.
-- 선택지 B 구현 전에는 `statusIds`가 백엔드에 저장되지 않아 복수 상태 정보가 사라질 수 있었습니다. 현재는 `statusIds` 보존 전환이 누락되지 않았는지 backend repo 기준 확인이 필요합니다.
+- 선택지 B 구현 전에는 `statusIds`가 백엔드에 저장되지 않아 복수 상태 정보가 사라질 수 있었습니다. 현재는 `statusIds` 저장/조회가 가능하지만, Cloud 저장 실패 시 다음 동기화에서 local 임시 기록이 사라질 수 있습니다.
 
 ### 5.2 제작 칸반 메모/일정 저장
 
@@ -229,7 +229,7 @@ status가 있고 statusIds에 없으면 status도 추가해서 해석
 
 | 위험 | 현재 영향 | 심각도 | 설명 | 당장 조치 |
 |---|---|---:|---|---|
-| `statusIds` 보존 전환 누락 | 복수 상태 유실 | 높음 | 선택지 B가 프론트와 백엔드에 모두 반영되지 않으면 Cloud가 단일 상태만 보존할 수 있음 | backend repo 기준 handler/응답 확인 |
+| `statusIds` 보존 회귀 | 복수 상태 유실 | 중간 | 향후 수정에서 `statusIds` 응답/저장이 빠지면 Cloud가 단일 상태만 보존할 수 있음 | `/video-records` 회귀 테스트 후보 |
 | `status: new` 미정의 | 상태 해석 혼란 | 중간 | 백엔드 기본값이 프론트 상태 사전에 없음 | 상태값 사전에서 결정 필요 |
 | Cloud/localStorage 충돌 | 판단 기록 되돌아감/사라짐 | 높음 | Cloud 성공 응답이 local 최신값을 덮을 수 있음 | 마이그레이션/동기화 정책 별도 Issue |
 | 저장 실패 후 local만 유지 | 다음 실행 시 유실 가능 | 중간 | 사용자에게는 저장된 것처럼 보일 수 있음 | 저장 실패 UI 강화 후보 |
