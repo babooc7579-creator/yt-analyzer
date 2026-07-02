@@ -154,6 +154,17 @@ function DiscoveryLinkRow({
     onUpdate(link.id, { status: nextStatus });
   };
 
+  const handleRightsStatusChange = (event) => {
+    const nextRightsStatus = event.target.value;
+
+    if (needsRiskyCandidateConfirmation(currentStatus, nextRightsStatus) && !confirmRiskyCandidate()) {
+      event.target.value = currentRightsStatus;
+      return;
+    }
+
+    onUpdate(link.id, { rightsStatus: nextRightsStatus });
+  };
+
   const handleCopy = async () => {
     if (!link.url || copyState === 'copying') return;
 
@@ -317,7 +328,7 @@ function DiscoveryLinkRow({
             className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
             disabled={saving}
             value={currentRightsStatus}
-            onChange={(event) => onUpdate(link.id, { rightsStatus: event.target.value })}
+            onChange={handleRightsStatusChange}
           >
             {RIGHTS_STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
