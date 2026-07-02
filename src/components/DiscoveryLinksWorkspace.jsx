@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
   CheckCircle2,
+  Copy,
   ExternalLink,
   Link as LinkIcon,
   Plus,
@@ -59,6 +60,27 @@ const getLinkStatusValue = (link) => link.status || 'inbox';
 
 const getLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
+const copyTextToClipboard = async (text) => {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  const didCopy = document.execCommand('copy');
+  document.body.removeChild(textarea);
+
+  if (!didCopy) {
+    throw new Error('copy_failed');
+  }
+};
+
 const getSearchableLinkText = (link) => (
   [
     link.title,
@@ -86,6 +108,7 @@ function DiscoveryLinkRow({
   onUpdate,
   saving,
 }) {
+  const [copyState, setCopyState] = useState('idle');
   const title = link.title || getHostName(link.url);
   const platformLabel = PLATFORM_LABELS[link.platform] || 'Web';
   const currentStatus = link.status || 'inbox';
@@ -95,6 +118,28 @@ function DiscoveryLinkRow({
     const confirmed = window.confirm('이 발견 링크를 Cloud에서 삭제할까요?');
     if (confirmed) onDelete(link.id);
   };
+
+  const handleCopy = async () => {
+    if (!link.url || copyState === 'copying') return;
+
+    setCopyState('copying');
+    try {
+      await copyTextToClipboard(link.url);
+      setCopyState('copied');
+    } catch {
+      setCopyState('error');
+    }
+
+    window.setTimeout(() => setCopyState('idle'), 1800);
+  };
+
+  const copyButtonLabel = copyState === 'copied'
+    ? '복사 완료'
+    : copyState === 'copying'
+      ? '복사 중'
+      : copyState === 'error'
+        ? '복사 실패'
+        : '복사';
 
   return (
     <article className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -126,7 +171,7 @@ function DiscoveryLinkRow({
           </p>
         </div>
 
-        <div className="grid min-w-[260px] grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto_auto] xl:grid-cols-1">
+        <div className="grid min-w-[260px] grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto_auto_auto] xl:grid-cols-1">
           <select
             className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
             disabled={saving}
@@ -159,6 +204,28 @@ function DiscoveryLinkRow({
             <ExternalLink className="h-4 w-4" />
             열기
           </a>
+
+          <button
+            className={`inline-flex h-9 items-center justify-center gap-2 rounded-lg border px-3 text-xs font-extrabold transition disabled:opacity-50 ${
+              copyState === 'copied'
+                ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
+                : copyState === 'error'
+                  ? 'border-red-100 bg-red-50 text-red-600'
+                  : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
+            }`}
+            aria-label="원본 링크 복사"
+            disabled={copyState === 'copying'}
+            onClick={handleCopy}
+            title="원본 링크 복사"
+            type="button"
+          >
+            {copyState === 'copied' ? (
+              <CheckCircle2 className="h-4 w-4" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
+            {copyButtonLabel}
+          </button>
 
           <button
             className="inline-flex h-9 items-center justify-center rounded-lg border border-red-100 bg-red-50 px-3 text-red-600 transition hover:bg-red-100 disabled:opacity-50"
