@@ -53,6 +53,35 @@ const getHostName = (url) => {
   }
 };
 
+const getUrlPreview = (url) => {
+  const trimmedUrl = url.trim();
+  if (!trimmedUrl) return null;
+
+  try {
+    const parsedUrl = new URL(trimmedUrl);
+    const host = parsedUrl.hostname.replace(/^www\./, '');
+    const platform = host.includes('instagram.com')
+      ? 'Instagram'
+      : host.includes('youtube.com') || host.includes('youtu.be')
+        ? 'YouTube'
+        : host.includes('tiktok.com')
+          ? 'TikTok'
+          : 'Web';
+
+    return {
+      host,
+      label: `${platform} 링크로 보입니다`,
+      isValid: true,
+    };
+  } catch {
+    return {
+      host: '',
+      label: '올바른 URL 형식이 아닙니다',
+      isValid: false,
+    };
+  }
+};
+
 const getLinkStatusValue = (link) => link.status || 'inbox';
 
 const getLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
@@ -464,6 +493,7 @@ export default function DiscoveryLinksWorkspace({
     setSearchQuery('');
   };
 
+  const urlPreview = getUrlPreview(form.url);
   const showRiskyCandidateHint = needsRiskyCandidateConfirmation(form.status, form.rightsStatus);
 
   const handleSubmit = async (event) => {
@@ -518,6 +548,21 @@ export default function DiscoveryLinksWorkspace({
               type="url"
               value={form.url}
             />
+            {urlPreview && (
+              <div className={`rounded-lg border px-3 py-2 text-xs leading-relaxed ${
+                urlPreview.isValid
+                  ? 'border-indigo-400/20 bg-indigo-500/10 text-indigo-100'
+                  : 'border-red-400/30 bg-red-500/10 text-red-100'
+              }`}
+              >
+                <p className="font-extrabold">{urlPreview.label}</p>
+                {urlPreview.host ? (
+                  <p className="mt-0.5 text-[11px] opacity-80">
+                    출처 도메인: {urlPreview.host}
+                  </p>
+                ) : null}
+              </div>
+            )}
           </div>
 
           <div className="space-y-1.5">
