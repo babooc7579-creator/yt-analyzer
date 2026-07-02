@@ -37,6 +37,21 @@ const DISCOVERY_RIGHTS_TONES = {
   do_not_use: 'bg-red-50 text-red-700',
 };
 
+const DISCOVERY_RIGHTS_WARNINGS = {
+  needs_check: {
+    title: '권리 확인 후 사용',
+    description: '원본과 출처를 확인하기 전에는 제작에 바로 쓰지 마세요.',
+    cardClass: 'border-rose-200 bg-rose-50',
+    panelClass: 'border-rose-200 bg-white text-rose-700',
+  },
+  do_not_use: {
+    title: '사용 금지 표시',
+    description: '제작에 쓰면 위험한 링크입니다. 후보 제외 또는 발견함에서 상태를 수정하세요.',
+    cardClass: 'border-red-300 bg-red-50',
+    panelClass: 'border-red-200 bg-white text-red-700',
+  },
+};
+
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 const formatDate = (date) => date ? date.split('-').join('.') : '';
 const getDiscoveryLinkTitle = (link) => {
@@ -163,12 +178,13 @@ export default function ProductionKanban({
       uploadedCount: groupedVideos[PRODUCTION_STATUS.DONE].length,
       nextScheduled: scheduledVideos.find(item => item.date >= today) || scheduledVideos[0],
       overdueCount: scheduledVideos.filter(item => item.date < today).length,
+      discoveryRightsWarningCount: discoveryLinkCandidates.filter(link => DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus]).length,
       activeWithoutDate: groupedVideos[PRODUCTION_STATUS.ACTIVE].filter((video) => {
         const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
         return !record.targetPublishDate;
       }).length,
     };
-  }, [draftRecords, groupedVideos, videoUserRecords, videos]);
+  }, [discoveryLinkCandidates, draftRecords, groupedVideos, videoUserRecords, videos]);
 
   const updateDraftRecord = (videoId, updates) => {
     setDraftRecords(prev => ({
@@ -253,9 +269,10 @@ export default function ProductionKanban({
   const renderDiscoveryLinkCandidate = (link) => {
     const linkMoveState = linkMoveStates[link.id];
     const isMovingLink = linkMoveState === 'saving';
+    const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus];
 
     return (
-      <article key={link.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <article key={link.id} className={`rounded-xl border p-4 ${rightsWarning ? rightsWarning.cardClass : 'border-slate-200 bg-slate-50'}`}>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-extrabold text-amber-800">링크 후보</span>
           <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown}`}>
@@ -266,6 +283,15 @@ export default function ProductionKanban({
           {getDiscoveryLinkTitle(link)}
         </h4>
         <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
+        {rightsWarning && (
+          <div className={`mt-3 flex gap-2 rounded-lg border p-3 text-xs ${rightsWarning.panelClass}`}>
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <div>
+              <p className="font-extrabold">{rightsWarning.title}</p>
+              <p className="mt-1 leading-relaxed">{rightsWarning.description}</p>
+            </div>
+          </div>
+        )}
         {link.memo ? (
           <p className="mt-3 line-clamp-3 rounded-lg bg-white p-3 text-xs leading-relaxed text-slate-600">
             {link.memo}
@@ -362,6 +388,9 @@ export default function ProductionKanban({
               <LinkIcon className="h-3 w-3" /> 링크 후보
             </p>
             <p className="mt-1 text-lg font-black text-amber-950">{discoveryLinkCandidates.length}개</p>
+            {productionSummary.discoveryRightsWarningCount > 0 && (
+              <p className="mt-1 text-[10px] font-bold text-rose-600">권리 확인 필요 {productionSummary.discoveryRightsWarningCount}개</p>
+            )}
           </div>
           <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
             <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
