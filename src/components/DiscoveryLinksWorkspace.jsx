@@ -13,44 +13,19 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
+import {
+  ALL_DISCOVERY_LINK_STATUS_OPTION,
+  ALL_DISCOVERY_RIGHTS_STATUS_OPTION,
+  DISCOVERY_LINK_STATUS_OPTIONS,
+  DISCOVERY_RIGHTS_STATUS_OPTIONS,
+  DISCOVERY_RIGHTS_TONES,
+} from '../constants/discoveryLinks';
 
-const LINK_STATUS_OPTIONS = [
-  { value: 'inbox', label: '수집함' },
-  { value: 'reviewing', label: '검토중' },
-  { value: 'saved', label: '저장' },
-  { value: 'candidate', label: '제작 후보' },
-  { value: 'discarded', label: '제외' },
-];
-
-const ALL_LINK_STATUS_OPTION = { value: 'all', label: '전체' };
-
-const RIGHTS_STATUS_OPTIONS = [
-  { value: 'unknown', label: '미확인' },
-  { value: 'needs_check', label: '권리 확인 필요' },
-  { value: 'cleared', label: '사용 가능 확인' },
-  { value: 'do_not_use', label: '사용 금지' },
-];
-
-const ALL_RIGHTS_STATUS_OPTION = { value: 'all', label: '권리 전체' };
-
-const RIGHTS_STATUS_TONES = {
-  unknown: {
-    card: 'border-slate-200 bg-white',
-    badge: 'border border-slate-200 bg-slate-100 text-slate-600',
-  },
-  needs_check: {
-    card: 'border-rose-200 bg-rose-50/40',
-    badge: 'border border-rose-100 bg-rose-50 text-rose-700',
-  },
-  cleared: {
-    card: 'border-emerald-100 bg-white',
-    badge: 'border border-emerald-100 bg-emerald-50 text-emerald-700',
-  },
-  do_not_use: {
-    card: 'border-red-300 bg-red-50/60',
-    badge: 'border border-red-200 bg-red-50 text-red-700',
-  },
-};
+const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
+const ALL_LINK_STATUS_OPTION = ALL_DISCOVERY_LINK_STATUS_OPTION;
+const RIGHTS_STATUS_OPTIONS = DISCOVERY_RIGHTS_STATUS_OPTIONS;
+const ALL_RIGHTS_STATUS_OPTION = ALL_DISCOVERY_RIGHTS_STATUS_OPTION;
+const RIGHTS_STATUS_TONES = DISCOVERY_RIGHTS_TONES;
 
 const PLATFORM_LABELS = {
   instagram: 'Instagram',
