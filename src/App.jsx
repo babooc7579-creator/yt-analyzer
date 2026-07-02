@@ -295,6 +295,7 @@ export default function App() {
           <CreatorWorkspaceHeader
             item={activeCreatorItem}
             channelCount={savedChannels.length}
+            discoveryCandidateCount={discoveryCandidateCount}
             videoCount={videos.length}
             selectedChannelCount={selectedChannelIds.length}
             savedVideoCount={savedVideos.length}
