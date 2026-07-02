@@ -302,6 +302,7 @@ export default function ProductionKanban({
     const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[rightsStatus];
     const sourceHost = getDiscoveryLinkHost(link.url);
     const platformLabel = getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link));
+    const linkTitle = getDiscoveryLinkTitle(link);
 
     return (
       <article key={link.id} className={`rounded-xl border p-4 ${rightsWarning ? rightsWarning.cardClass : 'border-slate-200 bg-slate-50'}`}>
@@ -317,8 +318,8 @@ export default function ProductionKanban({
             {getDiscoveryRightsStatusLabel(rightsStatus)}
           </span>
         </div>
-        <h4 className="mt-3 line-clamp-2 text-sm font-extrabold text-slate-900">
-          {getDiscoveryLinkTitle(link)}
+        <h4 className="mt-3 line-clamp-2 text-sm font-extrabold text-slate-900" title={linkTitle}>
+          {linkTitle}
         </h4>
         <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
         {rightsWarning && (
@@ -341,6 +342,8 @@ export default function ProductionKanban({
             href={link.url}
             rel="noreferrer"
             target="_blank"
+            title="원본 링크를 새 탭에서 열기"
+            aria-label={`${linkTitle} 원본 링크 열기`}
           >
             원본 열기
             <ExternalLink className="h-3.5 w-3.5" />
@@ -368,24 +371,30 @@ export default function ProductionKanban({
           </button>
           <button
             className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50"
+            aria-label={`${linkTitle} 발견함에서 수정`}
             disabled={isMovingLink}
             onClick={onOpenDiscoveryLinks}
+            title="발견함 화면에서 링크 상태와 메모 수정"
             type="button"
           >
             발견함에서 수정
           </button>
           <button
             className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-indigo-100 bg-indigo-50 px-3 text-[11px] font-extrabold text-indigo-700 transition hover:bg-indigo-100 disabled:opacity-50"
+            aria-label={`${linkTitle} 발견함으로 되돌리기`}
             disabled={isMovingLink}
             onClick={() => moveDiscoveryLink(link.id, 'inbox')}
+            title="제작 후보에서 빼고 발견함 받은 링크 상태로 저장"
             type="button"
           >
             {isMovingLink ? '저장 중...' : '발견함으로 되돌리기'}
           </button>
           <button
             className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 text-[11px] font-extrabold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
+            aria-label={`${linkTitle} 후보 제외`}
             disabled={isMovingLink}
             onClick={() => moveDiscoveryLink(link.id, 'discarded')}
+            title="발견 링크를 후보 제외 상태로 저장"
             type="button"
           >
             {isMovingLink ? '저장 중...' : '후보 제외'}
@@ -407,10 +416,20 @@ export default function ProductionKanban({
         <h3 className="mt-4 text-lg font-extrabold text-slate-800">제작 칸반에 후보가 없습니다</h3>
         <p className="mt-2 text-sm text-slate-500">레이더, 레퍼런스 금고, 발견함에서 제작 후보로 보내면 이곳에 모입니다.</p>
         <div className="mt-5 flex flex-wrap justify-center gap-2">
-          <button onClick={onOpenReferenceVault} className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-700">
+          <button
+            type="button"
+            onClick={onOpenReferenceVault}
+            className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-700"
+            title="저장된 영상 후보를 볼 수 있는 레퍼런스 금고 열기"
+          >
             <Rocket className="h-4 w-4" /> 레퍼런스 금고 열기
           </button>
-          <button onClick={onOpenDiscoveryLinks} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">
+          <button
+            type="button"
+            onClick={onOpenDiscoveryLinks}
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50"
+            title="외부 링크 후보를 저장하고 관리하는 발견함 열기"
+          >
             <LinkIcon className="h-4 w-4" /> 발견함 열기
           </button>
         </div>
@@ -488,7 +507,9 @@ export default function ProductionKanban({
             </div>
             <button
               className="inline-flex h-9 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100"
+              aria-label="발견함 링크 관리 화면 열기"
               onClick={onOpenDiscoveryLinks}
+              title="발견함 화면에서 링크 후보를 수정"
               type="button"
             >
               <LinkIcon className="h-4 w-4" />
@@ -518,6 +539,7 @@ export default function ProductionKanban({
                 <div className="rounded-xl border border-dashed border-slate-300 bg-white/70 p-5 text-center text-xs font-semibold text-slate-400">비어 있음</div>
               ) : (
                 groupedVideos[column.id].map((video) => {
+                  const videoTitle = video.title || '제목 없는 영상';
                   const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
                   const isDirty = hasUnsavedChanges(video.videoId);
                   const saveState = saveStates[video.videoId];
@@ -528,10 +550,10 @@ export default function ProductionKanban({
 
                   return (
                     <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                      <img src={video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`} alt="" className="aspect-video w-full object-cover bg-slate-100" />
+                      <img src={video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`} alt={`${videoTitle} 썸네일`} className="aspect-video w-full object-cover bg-slate-100" />
                       <div className="p-3">
-                        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600">
-                          {video.title}
+                        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle}>
+                          {videoTitle}
                         </a>
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">{video.channel_title || video.channelTitle || '채널 정보 없음'}</span>
@@ -574,9 +596,12 @@ export default function ProductionKanban({
                             />
                           </label>
                           <button
+                            type="button"
                             onClick={() => saveDraftRecord(video.videoId)}
                             disabled={!isDirty || isSaving}
                             className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isDirty && !isSaving ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+                            title={isDirty ? '제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장' : 'Cloud에 저장된 상태'}
+                            aria-label={`${videoTitle} 제작 메모 저장`}
                           >
                             {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
                             {isSaving ? '저장 중...' : isDirty ? '변경 내용 저장' : '저장됨'}
@@ -595,17 +620,38 @@ export default function ProductionKanban({
 
                         <div className="mt-3 grid grid-cols-1 gap-2">
                           {column.id !== PRODUCTION_STATUS.CANDIDATE && (
-                            <button onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.CANDIDATE)} disabled={isMoving} className={`rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}>
+                            <button
+                              type="button"
+                              onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.CANDIDATE)}
+                              disabled={isMoving}
+                              className={`rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}
+                              title="제작 상태를 후보로 되돌려 저장"
+                              aria-label={`${videoTitle} 제작 후보로 이동`}
+                            >
                               {isMoving ? '이동 중...' : '제작 후보로'}
                             </button>
                           )}
                           {column.id !== PRODUCTION_STATUS.ACTIVE && (
-                            <button onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.ACTIVE)} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}>
+                            <button
+                              type="button"
+                              onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.ACTIVE)}
+                              disabled={isMoving}
+                              className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
+                              title="제작 중 상태로 저장"
+                              aria-label={`${videoTitle} 제작 중으로 이동`}
+                            >
                               {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Clock className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '제작 중으로'}
                             </button>
                           )}
                           {column.id !== PRODUCTION_STATUS.DONE && (
-                            <button onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.DONE, { uploadedAt: record.uploadedAt || getTodayDate() })} disabled={isMoving} className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
+                            <button
+                              type="button"
+                              onClick={() => moveVideo(video.videoId, PRODUCTION_STATUS.DONE, { uploadedAt: record.uploadedAt || getTodayDate() })}
+                              disabled={isMoving}
+                              className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
+                              title="업로드 완료 상태로 저장하고 완료일을 기록"
+                              aria-label={`${videoTitle} 업로드 완료로 이동`}
+                            >
                               {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '업로드 완료'}
                             </button>
                           )}
@@ -619,7 +665,7 @@ export default function ProductionKanban({
                               업로드 완료일 {record.uploadedAt || '기록 없음'}
                             </div>
                           )}
-                          <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50">
+                          <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50" title="YouTube 원본 영상 열기" aria-label={`${videoTitle} YouTube 원본 보기`}>
                             <Play className="h-3.5 w-3.5" /> 원본 보기 <ExternalLink className="h-3 w-3" />
                           </a>
                         </div>
