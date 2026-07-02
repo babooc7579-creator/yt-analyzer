@@ -434,6 +434,10 @@ export default function DiscoveryLinksWorkspace({
     ));
   }, [normalizedSearchQuery, rightsMatchedLinks]);
 
+  const hasActiveDiscoveryFilters = statusFilter !== ALL_LINK_STATUS_OPTION.value
+    || rightsFilter !== ALL_RIGHTS_STATUS_OPTION.value
+    || Boolean(normalizedSearchQuery);
+
   const statusFilterOptions = useMemo(() => ([
     { ...ALL_LINK_STATUS_OPTION, count: links.length },
     ...LINK_STATUS_OPTIONS.map((option) => ({
@@ -452,6 +456,12 @@ export default function DiscoveryLinksWorkspace({
 
   const updateForm = (field, value) => {
     setForm((currentForm) => ({ ...currentForm, [field]: value }));
+  };
+
+  const clearDiscoveryFilters = () => {
+    setStatusFilter(ALL_LINK_STATUS_OPTION.value);
+    setRightsFilter(ALL_RIGHTS_STATUS_OPTION.value);
+    setSearchQuery('');
   };
 
   const showRiskyCandidateHint = needsRiskyCandidateConfirmation(form.status, form.rightsStatus);
@@ -697,9 +707,7 @@ export default function DiscoveryLinksWorkspace({
             </div>
           </div>
 
-          {statusFilter !== ALL_LINK_STATUS_OPTION.value
-            || rightsFilter !== ALL_RIGHTS_STATUS_OPTION.value
-            || normalizedSearchQuery ? (
+          {hasActiveDiscoveryFilters ? (
             <p className="mt-2 text-[11px] font-semibold text-slate-500">
               현재 조건에 맞는 링크 {filteredLinks.length}개를 보고 있습니다.
             </p>
@@ -741,8 +749,16 @@ export default function DiscoveryLinksWorkspace({
           <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
             <p className="text-sm font-extrabold text-slate-700">조건에 맞는 링크가 없습니다.</p>
             <p className="mt-2 text-xs leading-relaxed text-slate-500">
-              검색어를 지우거나 다른 상태를 선택해보세요.
+              Cloud에는 링크 {links.length}개가 저장되어 있지만, 현재 검색어나 필터 조건 때문에 보이지 않습니다.
             </p>
+            <button
+              className="mt-4 inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-4 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100"
+              onClick={clearDiscoveryFilters}
+              type="button"
+            >
+              <X className="h-4 w-4" />
+              필터 초기화
+            </button>
           </div>
         ) : (
           <div className="mt-5 grid grid-cols-1 gap-3">
