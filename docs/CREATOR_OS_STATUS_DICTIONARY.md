@@ -16,7 +16,7 @@
 
 - `/video-records` 백엔드는 단일 `status` 중심입니다.
 - 프론트는 `statusIds`를 일부 사용하고, `status`를 `statusIds`처럼 해석하는 호환 함수를 가지고 있습니다.
-- 현재 프론트가 `statusIds`를 저장해도 백엔드가 장기적으로 보존한다는 보장은 없습니다.
+- 2026-07-02 선택지 B 승인 이후, 현재 단계에서는 기존 `status`를 대표 상태로 유지하고 `statusIds`를 복수 판단 보존용으로 함께 저장/조회하는 방향으로 정리 중입니다.
 - `production_candidates` 별도 저장소는 없습니다.
 - 제작 후보와 제작 칸반은 현재 `videoUserRecords` 상태값 위에서 표현됩니다.
 - `scan_logs` 별도 저장소는 없습니다.
@@ -126,7 +126,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 운영 원칙:
 
 - 지금은 `status`와 `statusIds`를 함께 읽는 호환 구조를 유지합니다.
-- 백엔드 변경 전에는 `statusIds`를 기준 데이터라고 말하지 않습니다.
+- 현재 단계에서는 `status`를 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용 보조 필드로 봅니다.
 - 레이더에서 숨겨지는 상태는 별도 목록으로 관리합니다.
 - `later`는 기존 데이터 호환용 값으로 보고, 새 표시명은 `watch_later` 중심으로 정리합니다.
 
@@ -291,7 +291,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 
 아래 항목은 이 문서에서 결정하지 않습니다.
 
-- 백엔드 `/video-records`에 `statusIds`를 추가할지 여부
+- `status`와 `statusIds`를 `lifecycleStatus`, `usagePurposeTags`, `productionStatus`로 분리할지 여부
 - 기존 `status`를 언제 제거할지 여부
 - `production_candidates` 별도 DB 도입 여부
 - `uploaded`를 `done`으로 바꿀지 여부
