@@ -47,7 +47,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 |---|---|---|---|---|---|---|---|---|
 | `channels` | Cloud DB | Cloud DB | Cosmos `channels` container | Cosmos `channels` container | 원칙상 기준 아님 | 채널 목록, 태그, 언어, 등급, 상태, 마지막 수집 요약 저장 | 구현됨 | 낮음. 기존 데이터에 필드가 없어도 기본값 보정 필요 |
 | `videos` | Cloud DB | Cloud DB | Cosmos `videos` container | Cosmos `videos` container | 원칙상 기준 아님 | YouTube에서 수집한 영상 목록과 통계 저장 | 구현됨 | 중간. 페이지네이션 없이 전체 조회 구조 |
-| `videoUserRecords` | Cloud DB + localStorage 보조 | Cloud DB | Cosmos `videos` container 안의 `docType: video_user_record` | 장기적으로 Cloud DB 기준. schema는 별도 결정 필요 | 현재 캐시/복구/호환 역할 | 영상별 사용자 판단 상태, 노트, 제작 관련 필드 저장 | 부분 구현 | 높음. 프론트 `statusIds`와 백엔드 단일 `status` 불일치 |
+| `videoUserRecords` | Cloud DB + localStorage 보조 | Cloud DB | Cosmos `videos` container 안의 `docType: video_user_record` | 장기적으로 Cloud DB 기준. 현재 단계는 `status` 유지 + `statusIds` 보존 전환 | 현재 캐시/복구/호환 역할 | 영상별 사용자 판단 상태, 노트, 제작 관련 필드 저장 | 부분 구현 | 중간. `statusIds` 보존이 프론트/백엔드 모두 반영됐는지 확인 필요 |
 | `scrapbook` | Cloud DB + localStorage 보조 | Cloud DB | Cosmos `videos` container 안의 `docType: scrapbook` | Cloud DB. 별도 container 여부는 나중에 판단 | 기존 스크랩 복구/호환 역할 | 별표/스크랩 저장 영상 목록 저장 | 부분 구현 | 중간. 별도 컨테이너가 아니라 `videos`와 섞여 있음 |
 | `production candidates` | `videoUserRecords`에 얹힌 상태 | 미정 | 별도 저장소 없음. 프론트는 `videoUserRecords` 상태로 표현 | v1에서는 `videoUserRecords` 유지 가능. 장기적으로 별도 모델 검토 | 기준 아님 | 현재는 `/video-records`가 사실상 후보 상태를 저장 | 별도 저장소 미구현 | 높음. 영상 상태와 제작 프로젝트 상태가 섞일 수 있음 |
 | `discovery links` | 없음 | Cloud DB | 없음 | 별도 `discovery_links` 모델 후보 | 아직 없음 | 아직 없음 | 미구현 | 높음. 외부 링크와 영상/제작 후보 연결 기준 필요 |
