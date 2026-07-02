@@ -21,6 +21,7 @@ import {
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
+  getDiscoveryPlatformFromUrl,
   getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
 
@@ -45,15 +46,9 @@ const getUrlPreview = (url) => {
   if (!trimmedUrl) return null;
 
   try {
-    const parsedUrl = new URL(trimmedUrl);
-    const host = parsedUrl.hostname.replace(/^www\./, '');
-    const platform = host.includes('instagram.com')
-      ? 'Instagram'
-      : host.includes('youtube.com') || host.includes('youtu.be')
-        ? 'YouTube'
-        : host.includes('tiktok.com')
-          ? 'TikTok'
-          : 'Web';
+    new URL(trimmedUrl);
+    const host = getDiscoveryLinkHost(trimmedUrl);
+    const platform = getDiscoveryPlatformLabel(getDiscoveryPlatformFromUrl(trimmedUrl));
 
     return {
       host,
