@@ -1,6 +1,13 @@
 import React, { useMemo } from 'react';
 import { Bookmark, CheckCircle2, Clock, ExternalLink, Play, RotateCcw, Rocket, Star, TrendingUp, XCircle } from 'lucide-react';
-import { hasAnyVideoStatus, hasVideoStatus, PRODUCTION_STATUS, RADAR_HIDDEN_VIDEO_STATUSES, VIDEO_STATUS } from '../constants/status';
+import {
+  PRODUCTION_STATUS,
+  VIDEO_STATUS,
+  hasAnyVideoReviewStatus,
+  hasProductionStatus,
+  hasVideoReviewStatus,
+  isRadarHiddenRecord,
+} from '../constants/status';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 
 const getRadarScore = (video) => {
@@ -44,10 +51,10 @@ export default function RadarCandidateStrip({
   const decisionBuckets = useMemo(() => (
     videos.reduce((buckets, video) => {
       const record = videoUserRecords[video.videoId];
-      if (hasVideoStatus(record, VIDEO_STATUS.REVIEWED)) buckets.reviewed.push(video);
-      if (hasAnyVideoStatus(record, [VIDEO_STATUS.LEGACY_LATER, VIDEO_STATUS.WATCH_LATER])) buckets.later.push(video);
-      if (hasVideoStatus(record, VIDEO_STATUS.EXCLUDED)) buckets.excluded.push(video);
-      if (hasAnyVideoStatus(record, [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])) buckets.production.push(video);
+      if (hasVideoReviewStatus(record, VIDEO_STATUS.REVIEWED)) buckets.reviewed.push(video);
+      if (hasAnyVideoReviewStatus(record, [VIDEO_STATUS.LEGACY_LATER, VIDEO_STATUS.WATCH_LATER])) buckets.later.push(video);
+      if (hasVideoReviewStatus(record, VIDEO_STATUS.EXCLUDED)) buckets.excluded.push(video);
+      if (hasProductionStatus(record, PRODUCTION_STATUS.CANDIDATE)) buckets.production.push(video);
       return buckets;
     }, { reviewed: [], later: [], excluded: [], production: [] })
   ), [videos, videoUserRecords]);
@@ -62,14 +69,14 @@ export default function RadarCandidateStrip({
   const loadedDecisionCount = decisionSummary.reviewed + decisionSummary.later + decisionSummary.excluded + decisionSummary.production;
 
   const allDecisionCount = useMemo(() => (
-    Object.values(videoUserRecords).filter((record) => hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES)).length
+    Object.values(videoUserRecords).filter(isRadarHiddenRecord).length
   ), [videoUserRecords]);
 
   const candidates = useMemo(() => (
     [...videos]
       .filter((video) => {
         const record = videoUserRecords[video.videoId];
-        return !hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES);
+        return !isRadarHiddenRecord(record);
       })
       .sort((a, b) => getRadarScore(b) - getRadarScore(a))
       .slice(0, 3)

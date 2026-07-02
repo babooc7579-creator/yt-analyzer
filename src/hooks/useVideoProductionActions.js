@@ -1,4 +1,4 @@
-import { PRODUCTION_STATUS, VIDEO_STATUS, hasAnyVideoStatus } from '../constants/status';
+import { PRODUCTION_STATUS, hasProductionStatus } from '../constants/status';
 
 export function useVideoProductionActions({
   isVideoSaved,
@@ -7,10 +7,7 @@ export function useVideoProductionActions({
   videoUserRecords,
 }) {
   const isProductionCandidate = (videoId) => (
-    hasAnyVideoStatus(videoUserRecords[videoId], [
-      VIDEO_STATUS.PRODUCTION_CANDIDATE,
-      PRODUCTION_STATUS.CANDIDATE,
-    ])
+    hasProductionStatus(videoUserRecords[videoId], PRODUCTION_STATUS.CANDIDATE)
   );
 
   const promoteVideoToProduction = async (video) => {

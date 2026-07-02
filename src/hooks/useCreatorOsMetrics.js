@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { RADAR_HIDDEN_VIDEO_STATUSES, PRODUCTION_STATUS, VIDEO_STATUS, hasAnyVideoStatus, isChannelScannable } from '../constants/status';
+import { PRODUCTION_STATUS, hasProductionStatus, isChannelScannable, isRadarHiddenRecord } from '../constants/status';
 import { formatRelativeTime } from '../utils/channelScanDisplay';
 import { getCloudOnlyTags, getLatestChannelScanDate } from '../utils/channels';
 import { isTtoTtoCandidate } from '../utils/video';
@@ -51,7 +51,7 @@ export function useCreatorOsMetrics({
 
   const loadedDecisionCount = useMemo(() => (
     videos.filter(video => (
-      hasAnyVideoStatus(videoUserRecords[video.videoId], RADAR_HIDDEN_VIDEO_STATUSES)
+      isRadarHiddenRecord(videoUserRecords[video.videoId])
     )).length
   ), [videoUserRecords, videos]);
 
@@ -59,7 +59,7 @@ export function useCreatorOsMetrics({
 
   const productionCandidateCount = useMemo(() => (
     videos.filter(video => (
-      hasAnyVideoStatus(videoUserRecords[video.videoId], [VIDEO_STATUS.PRODUCTION_CANDIDATE, PRODUCTION_STATUS.CANDIDATE])
+      hasProductionStatus(videoUserRecords[video.videoId], PRODUCTION_STATUS.CANDIDATE)
     )).length
   ), [videoUserRecords, videos]);
 

@@ -17,6 +17,7 @@
 - `/video-records` 백엔드는 단일 `status` 중심입니다.
 - 프론트는 `statusIds`를 일부 사용하고, `status`를 `statusIds`처럼 해석하는 호환 함수를 가지고 있습니다.
 - 2026-07-02 선택지 B 승인 이후, 현재 단계에서는 기존 `status`를 대표 상태로 유지하고 `statusIds`를 복수 판단 보존용으로 함께 저장/조회합니다.
+- 프론트는 영상 검토 상태와 제작 진행 상태를 구분하는 helper를 사용해 같은 record 안의 상태 역할을 분리합니다.
 - `production_candidates` 별도 저장소는 없습니다.
 - 제작 후보와 제작 칸반은 현재 `videoUserRecords` 상태값 위에서 표현됩니다.
 - `scan_logs` 별도 저장소는 없습니다.
