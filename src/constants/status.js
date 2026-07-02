@@ -123,10 +123,13 @@ export const normalizeVideoUserRecord = (record = {}) => {
   const statusIds = hasOwn(record, 'statusIds')
     ? normalizeStatusIds(record.statusIds)
     : normalizeStatusIds(record.status ? [record.status] : []);
+  const normalizedStatusIds = record.status && !statusIds.includes(record.status)
+    ? [...statusIds, record.status]
+    : statusIds;
 
   return {
     ...record,
-    statusIds,
+    statusIds: normalizedStatusIds,
   };
 };
 
