@@ -16,6 +16,8 @@ function ShortcutButton({
     <button
       onClick={onClick}
       className={`group rounded-2xl border p-4 text-left transition-all hover:-translate-y-0.5 ${className}`}
+      title={`${title} - ${description} ${hint}`}
+      aria-label={`${title}: ${description}`}
       type="button"
     >
       <div className="flex items-center justify-between gap-3">
