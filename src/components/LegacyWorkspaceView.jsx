@@ -96,6 +96,7 @@ export default function LegacyWorkspaceView({
   ttoTtoAssetCount,
   ttoTtoMode,
   updateChannelMetadata,
+  updateDiscoveryLink,
   updateVideoUserRecord,
   updatingChannelId,
   videoUserRecords,
@@ -236,6 +237,7 @@ export default function LegacyWorkspaceView({
             onOpenDiscoveryLinks={() => openCreatorView({ id: 'vault-sources' })}
             onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
             onRemoveScrap={toggleScrapVideo}
+            onUpdateDiscoveryLink={updateDiscoveryLink}
             onUpdateVideoRecord={updateVideoUserRecord}
           />
         )}

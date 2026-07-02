@@ -93,12 +93,14 @@ export default function ProductionKanban({
   videoUserRecords,
   onMoveVideo,
   onOpenDiscoveryLinks,
+  onUpdateDiscoveryLink,
   onUpdateVideoRecord,
   onOpenReferenceVault,
 }) {
   const [draftRecords, setDraftRecords] = useState({});
   const [saveStates, setSaveStates] = useState({});
   const [moveStates, setMoveStates] = useState({});
+  const [linkMoveStates, setLinkMoveStates] = useState({});
 
   useEffect(() => {
     setDraftRecords(videoUserRecords);
@@ -229,6 +231,90 @@ export default function ProductionKanban({
     }
   };
 
+  const moveDiscoveryLink = async (linkId, status) => {
+    if (!onUpdateDiscoveryLink) return;
+
+    setLinkMoveStates(prev => ({ ...prev, [linkId]: 'saving' }));
+    const didMove = await onUpdateDiscoveryLink(linkId, { status });
+    setLinkMoveStates(prev => ({ ...prev, [linkId]: didMove ? 'saved' : 'error' }));
+
+    if (didMove) {
+      setTimeout(() => {
+        setLinkMoveStates(prev => {
+          if (prev[linkId] !== 'saved') return prev;
+          const next = { ...prev };
+          delete next[linkId];
+          return next;
+        });
+      }, 1600);
+    }
+  };
+
+  const renderDiscoveryLinkCandidate = (link) => {
+    const linkMoveState = linkMoveStates[link.id];
+    const isMovingLink = linkMoveState === 'saving';
+
+    return (
+      <article key={link.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-extrabold text-amber-800">링크 후보</span>
+          <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown}`}>
+            {DISCOVERY_RIGHTS_LABELS[link.rightsStatus] || DISCOVERY_RIGHTS_LABELS.unknown}
+          </span>
+        </div>
+        <h4 className="mt-3 line-clamp-2 text-sm font-extrabold text-slate-900">
+          {getDiscoveryLinkTitle(link)}
+        </h4>
+        <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
+        {link.memo ? (
+          <p className="mt-3 line-clamp-3 rounded-lg bg-white p-3 text-xs leading-relaxed text-slate-600">
+            {link.memo}
+          </p>
+        ) : null}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a
+            className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-extrabold text-white transition hover:bg-slate-800"
+            href={link.url}
+            rel="noreferrer"
+            target="_blank"
+          >
+            원본 열기
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+          <button
+            className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50"
+            disabled={isMovingLink}
+            onClick={onOpenDiscoveryLinks}
+            type="button"
+          >
+            발견함에서 수정
+          </button>
+          <button
+            className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-indigo-100 bg-indigo-50 px-3 text-[11px] font-extrabold text-indigo-700 transition hover:bg-indigo-100 disabled:opacity-50"
+            disabled={isMovingLink}
+            onClick={() => moveDiscoveryLink(link.id, 'inbox')}
+            type="button"
+          >
+            {isMovingLink ? '저장 중...' : '발견함으로 되돌리기'}
+          </button>
+          <button
+            className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 text-[11px] font-extrabold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
+            disabled={isMovingLink}
+            onClick={() => moveDiscoveryLink(link.id, 'discarded')}
+            type="button"
+          >
+            {isMovingLink ? '저장 중...' : '후보 제외'}
+          </button>
+        </div>
+        {linkMoveState === 'error' && (
+          <p className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-red-600">
+            <AlertCircle className="h-3 w-3" /> 상태 저장 실패. 다시 눌러 주세요.
+          </p>
+        )}
+      </article>
+    );
+  };
+
   if (videos.length === 0 && discoveryLinkCandidates.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
@@ -323,43 +409,7 @@ export default function ProductionKanban({
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
-            {discoveryLinkCandidates.map((link) => (
-              <article key={link.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-extrabold text-amber-800">링크 후보</span>
-                  <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${DISCOVERY_RIGHTS_TONES[link.rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown}`}>
-                    {DISCOVERY_RIGHTS_LABELS[link.rightsStatus] || DISCOVERY_RIGHTS_LABELS.unknown}
-                  </span>
-                </div>
-                <h4 className="mt-3 line-clamp-2 text-sm font-extrabold text-slate-900">
-                  {getDiscoveryLinkTitle(link)}
-                </h4>
-                <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
-                {link.memo ? (
-                  <p className="mt-3 line-clamp-3 rounded-lg bg-white p-3 text-xs leading-relaxed text-slate-600">
-                    {link.memo}
-                  </p>
-                ) : null}
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <a
-                    className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-extrabold text-white transition hover:bg-slate-800"
-                    href={link.url}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    원본 열기
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </a>
-                  <button
-                    className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50"
-                    onClick={onOpenDiscoveryLinks}
-                    type="button"
-                  >
-                    발견함에서 수정
-                  </button>
-                </div>
-              </article>
-            ))}
+            {discoveryLinkCandidates.map(renderDiscoveryLinkCandidate)}
           </div>
         </section>
       )}

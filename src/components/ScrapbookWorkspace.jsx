@@ -14,6 +14,7 @@ export default function ScrapbookWorkspace({
   onOpenDiscoveryLinks,
   onOpenReferenceVault,
   onRemoveScrap,
+  onUpdateDiscoveryLink,
   onUpdateVideoRecord,
 }) {
   return (
@@ -30,6 +31,7 @@ export default function ScrapbookWorkspace({
           videoUserRecords={videoUserRecords}
           onMoveVideo={onMoveVideo}
           onOpenDiscoveryLinks={onOpenDiscoveryLinks}
+          onUpdateDiscoveryLink={onUpdateDiscoveryLink}
           onUpdateVideoRecord={onUpdateVideoRecord}
           onOpenReferenceVault={onOpenReferenceVault}
         />
