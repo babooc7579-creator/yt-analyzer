@@ -15,7 +15,7 @@ export default function SelectedVideosActionBar({
           {copiedPrompt ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
           {copiedPrompt ? '복사 완료! AI에게 붙여넣으세요' : 'AI 리메이크 프롬프트 복사'}
         </button>
-        <p className="text-[10px] text-indigo-100">선택한 영상으로 리메이크 요청문을 만들어 클립보드에 복사합니다.</p>
+        <p className="text-[10px] text-indigo-100">AI API를 호출하지 않고, 선택 영상으로 만든 요청문만 클립보드에 복사합니다.</p>
       </div>
     </div>
   );
