@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   CheckCircle2,
   ExternalLink,
@@ -16,6 +16,8 @@ const LINK_STATUS_OPTIONS = [
   { value: 'candidate', label: '제작 후보' },
   { value: 'discarded', label: '제외' },
 ];
+
+const ALL_LINK_STATUS_OPTION = { value: 'all', label: '전체' };
 
 const RIGHTS_STATUS_OPTIONS = [
   { value: 'unknown', label: '미확인' },
@@ -48,6 +50,8 @@ const getHostName = (url) => {
     return '링크';
   }
 };
+
+const getLinkStatusValue = (link) => link.status || 'inbox';
 
 function FieldLabel({ children }) {
   return (
@@ -172,6 +176,30 @@ export default function DiscoveryLinksWorkspace({
     status: 'inbox',
     rightsStatus: 'unknown',
   });
+  const [statusFilter, setStatusFilter] = useState(ALL_LINK_STATUS_OPTION.value);
+
+  const statusCounts = useMemo(() => (
+    links.reduce((counts, link) => {
+      const status = getLinkStatusValue(link);
+      return {
+        ...counts,
+        [status]: (counts[status] || 0) + 1,
+      };
+    }, {})
+  ), [links]);
+
+  const filteredLinks = useMemo(() => {
+    if (statusFilter === ALL_LINK_STATUS_OPTION.value) return links;
+    return links.filter((link) => getLinkStatusValue(link) === statusFilter);
+  }, [links, statusFilter]);
+
+  const statusFilterOptions = useMemo(() => ([
+    { ...ALL_LINK_STATUS_OPTION, count: links.length },
+    ...LINK_STATUS_OPTIONS.map((option) => ({
+      ...option,
+      count: statusCounts[option.value] || 0,
+    })),
+  ]), [links.length, statusCounts]);
 
   const updateForm = (field, value) => {
     setForm((currentForm) => ({ ...currentForm, [field]: value }));
@@ -322,6 +350,39 @@ export default function DiscoveryLinksWorkspace({
           </button>
         </div>
 
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3">
+          <p className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
+            검토 상태별 보기
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {statusFilterOptions.map((option) => {
+              const isActive = statusFilter === option.value;
+              return (
+                <button
+                  className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-extrabold transition ${
+                    isActive
+                      ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                      : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+                  }`}
+                  key={option.value}
+                  onClick={() => setStatusFilter(option.value)}
+                  type="button"
+                >
+                  <span>{option.label}</span>
+                  <span className={isActive ? 'text-indigo-500' : 'text-slate-400'}>
+                    {option.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {statusFilter !== ALL_LINK_STATUS_OPTION.value ? (
+            <p className="mt-2 text-[11px] font-semibold text-slate-500">
+              현재 조건에 맞는 링크 {filteredLinks.length}개를 보고 있습니다.
+            </p>
+          ) : null}
+        </div>
+
         {error ? (
           <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
             {error}
@@ -353,9 +414,16 @@ export default function DiscoveryLinksWorkspace({
               왼쪽에서 링크를 하나 저장하면 이곳에 검토 목록이 생깁니다.
             </p>
           </div>
+        ) : filteredLinks.length === 0 ? (
+          <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
+            <p className="text-sm font-extrabold text-slate-700">이 상태에 해당하는 링크가 없습니다.</p>
+            <p className="mt-2 text-xs leading-relaxed text-slate-500">
+              다른 상태를 선택하거나 새 링크를 저장해보세요.
+            </p>
+          </div>
         ) : (
           <div className="mt-5 grid grid-cols-1 gap-3">
-            {links.map((link) => (
+            {filteredLinks.map((link) => (
               <DiscoveryLinkRow
                 key={link.id}
                 link={link}
