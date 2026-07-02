@@ -27,7 +27,7 @@
 | channels | Cosmos `channels` container | Cloud 기준 |
 | videos | Cosmos `videos` container | Cloud 기준 |
 | scrapbook | Cosmos `videos` container 안의 `docType: scrapbook` | Cloud 기준으로 이전 중 |
-| videoUserRecords | Cosmos `videos` container 안의 `docType: video_user_record` | Cloud 기준으로 이전 중 |
+| videoUserRecords | Cosmos `videos` container 안의 `docType: video_user_record` | Cloud 기준. `status` 유지 + `statusIds` 저장/조회 확인됨 |
 
 ---
 
@@ -51,6 +51,7 @@
 - Cloud 조회가 성공하면 Cloud가 화면 기준이 됩니다.
 - Cloud 조회가 실패하면 localStorage가 임시 복구 역할을 합니다.
 - Cloud 저장 실패 후 localStorage에만 남은 최신 판단은 다음 Cloud 조회 성공 시 덮일 수 있습니다.
+- `statusIds` 자체는 이제 Cloud에 저장/조회되지만, Cloud 저장 실패 시에는 여전히 브라우저 임시 기록과 Cloud 기준 기록이 달라질 수 있습니다.
 
 ### 2.2 scrapbook
 
@@ -280,7 +281,7 @@ localStorage 저장을 제거하거나 key를 바꿉니다.
 
 | 데이터 | 현재 상태 | 권장 정책 | 이유 |
 |---|---|---|---|
-| `videoUserRecords` | Cloud + localStorage 보조 | B 우선 | 판단 기록은 Cloud 기준이어야 하지만 저장 실패 fallback 필요 |
+| `videoUserRecords` | Cloud + localStorage 보조. `statusIds` Cloud 보존 확인됨 | B 우선 | 판단 기록은 Cloud 기준이어야 하지만 저장 실패 fallback 필요 |
 | `scrapbook` | Cloud + localStorage 보조 | B 우선, 초기 1회 업로드 보존 | 기존 스크랩 손실 방지가 중요 |
 | `categories` | localStorage 중심 | 별도 audit 필요 | Cloud 채널 태그와 중복/불일치 가능 |
 | `channels` | Cloud 기준 | localStorage 사용 금지 | 채널 운영 데이터는 Cloud 기준 |
@@ -304,10 +305,15 @@ localStorage 저장을 제거하거나 key를 바꿉니다.
 
 선행되어야 할 것:
 
-- `/video-records` schema에서 `statusIds` 보존 여부 결정
 - 저장 실패 UI 기준 정리
 - 스크랩북 초기 local → Cloud 업로드를 언제까지 유지할지 결정
 - 카테고리 localStorage와 Cloud 태그의 관계 audit
+
+이미 완료된 전제:
+
+- `/video-records`는 기존 대표 상태 `status`를 유지합니다.
+- `statusIds`는 복수 판단 보존용으로 Cloud 저장/조회되며, 2026-07-02 배포 smoke로 확인됐습니다.
+- localStorage key는 변경하지 않았습니다.
 
 ---
 
@@ -320,6 +326,14 @@ localStorage 저장을 제거하거나 key를 바꿉니다.
 3. localStorage에만 있는 videoUserRecords를 Cloud로 자동 업로드할까요, 아니면 사용자가 직접 선택하게 할까요?
 4. 스크랩북의 local → Cloud 자동 업로드는 계속 유지할까요?
 5. `yt_crm_categories`는 계속 localStorage 기준으로 둘까요, Cloud 채널 태그에서 파생할까요?
+
+Codex의 현재 추천 답변:
+
+1. 예. Cloud 조회 성공 시 Cloud를 기준으로 삼습니다.
+2. 예. 저장 실패는 "브라우저 임시 기록"으로 명확히 표시합니다.
+3. 지금은 자동 업로드하지 않습니다. 별도 복구/동기화 Issue에서 다룹니다.
+4. 당장은 유지합니다. 스크랩북 손실 방지가 더 중요합니다.
+5. 당장은 localStorage 목록을 유지하되, Cloud에만 있는 태그를 계속 안내합니다. Cloud 태그 파생 구조는 별도 결정으로 미룹니다.
 
 ---
 
