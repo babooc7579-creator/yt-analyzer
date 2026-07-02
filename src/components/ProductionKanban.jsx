@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, CalendarDays, CheckCircle2, Clock, ExternalLink, Link as LinkIcon, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
+import { AlertCircle, CalendarDays, CheckCircle2, Clock, Copy, ExternalLink, Link as LinkIcon, Loader2, Play, Rocket, Save, Star } from 'lucide-react';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 
 const COLUMNS = [
@@ -63,6 +63,27 @@ const getDiscoveryLinkTitle = (link) => {
   }
 };
 
+const copyTextToClipboard = async (text) => {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  const didCopy = document.execCommand('copy');
+  document.body.removeChild(textarea);
+
+  if (!didCopy) {
+    throw new Error('copy_failed');
+  }
+};
+
 const getDateDistance = (date) => {
   if (!date) return null;
   const today = new Date(`${getTodayDate()}T00:00:00`);
@@ -116,6 +137,7 @@ export default function ProductionKanban({
   const [saveStates, setSaveStates] = useState({});
   const [moveStates, setMoveStates] = useState({});
   const [linkMoveStates, setLinkMoveStates] = useState({});
+  const [linkCopyStates, setLinkCopyStates] = useState({});
 
   useEffect(() => {
     setDraftRecords(videoUserRecords);
@@ -266,9 +288,38 @@ export default function ProductionKanban({
     }
   };
 
+  const copyDiscoveryLink = async (linkId, url) => {
+    if (!url || linkCopyStates[linkId] === 'copying') return;
+
+    setLinkCopyStates(prev => ({ ...prev, [linkId]: 'copying' }));
+    try {
+      await copyTextToClipboard(url);
+      setLinkCopyStates(prev => ({ ...prev, [linkId]: 'copied' }));
+    } catch {
+      setLinkCopyStates(prev => ({ ...prev, [linkId]: 'error' }));
+    }
+
+    setTimeout(() => {
+      setLinkCopyStates(prev => {
+        const next = { ...prev };
+        delete next[linkId];
+        return next;
+      });
+    }, 1800);
+  };
+
   const renderDiscoveryLinkCandidate = (link) => {
     const linkMoveState = linkMoveStates[link.id];
     const isMovingLink = linkMoveState === 'saving';
+    const copyState = linkCopyStates[link.id];
+    const isCopyingLink = copyState === 'copying';
+    const copyButtonLabel = copyState === 'copied'
+      ? '복사 완료'
+      : copyState === 'copying'
+        ? '복사 중'
+        : copyState === 'error'
+          ? '복사 실패'
+          : '링크 복사';
     const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus];
 
     return (
@@ -307,6 +358,27 @@ export default function ProductionKanban({
             원본 열기
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
+          <button
+            className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border px-3 text-[11px] font-extrabold transition disabled:opacity-50 ${
+              copyState === 'copied'
+                ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
+                : copyState === 'error'
+                  ? 'border-red-100 bg-red-50 text-red-600'
+                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+            aria-label="원본 링크 복사"
+            disabled={isCopyingLink}
+            onClick={() => copyDiscoveryLink(link.id, link.url)}
+            title="원본 링크 복사"
+            type="button"
+          >
+            {copyState === 'copied' ? (
+              <CheckCircle2 className="h-3.5 w-3.5" />
+            ) : (
+              <Copy className="h-3.5 w-3.5" />
+            )}
+            {copyButtonLabel}
+          </button>
           <button
             className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50"
             disabled={isMovingLink}
