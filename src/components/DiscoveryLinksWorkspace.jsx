@@ -28,6 +28,8 @@ const RIGHTS_STATUS_OPTIONS = [
   { value: 'do_not_use', label: '사용 금지' },
 ];
 
+const ALL_RIGHTS_STATUS_OPTION = { value: 'all', label: '권리 전체' };
+
 const PLATFORM_LABELS = {
   instagram: 'Instagram',
   youtube: 'YouTube',
@@ -54,6 +56,8 @@ const getHostName = (url) => {
 };
 
 const getLinkStatusValue = (link) => link.status || 'inbox';
+
+const getLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
 const getSearchableLinkText = (link) => (
   [
@@ -192,6 +196,7 @@ export default function DiscoveryLinksWorkspace({
     rightsStatus: 'unknown',
   });
   const [statusFilter, setStatusFilter] = useState(ALL_LINK_STATUS_OPTION.value);
+  const [rightsFilter, setRightsFilter] = useState(ALL_RIGHTS_STATUS_OPTION.value);
   const [searchQuery, setSearchQuery] = useState('');
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
@@ -205,17 +210,34 @@ export default function DiscoveryLinksWorkspace({
     }, {})
   ), [links]);
 
+  const rightsCounts = useMemo(() => (
+    links.reduce((counts, link) => {
+      const rightsStatus = getLinkRightsStatusValue(link);
+      return {
+        ...counts,
+        [rightsStatus]: (counts[rightsStatus] || 0) + 1,
+      };
+    }, {})
+  ), [links]);
+
   const statusMatchedLinks = useMemo(() => {
     if (statusFilter === ALL_LINK_STATUS_OPTION.value) return links;
     return links.filter((link) => getLinkStatusValue(link) === statusFilter);
   }, [links, statusFilter]);
 
-  const filteredLinks = useMemo(() => {
-    if (!normalizedSearchQuery) return statusMatchedLinks;
+  const rightsMatchedLinks = useMemo(() => {
+    if (rightsFilter === ALL_RIGHTS_STATUS_OPTION.value) return statusMatchedLinks;
     return statusMatchedLinks.filter((link) => (
+      getLinkRightsStatusValue(link) === rightsFilter
+    ));
+  }, [rightsFilter, statusMatchedLinks]);
+
+  const filteredLinks = useMemo(() => {
+    if (!normalizedSearchQuery) return rightsMatchedLinks;
+    return rightsMatchedLinks.filter((link) => (
       getSearchableLinkText(link).includes(normalizedSearchQuery)
     ));
-  }, [normalizedSearchQuery, statusMatchedLinks]);
+  }, [normalizedSearchQuery, rightsMatchedLinks]);
 
   const statusFilterOptions = useMemo(() => ([
     { ...ALL_LINK_STATUS_OPTION, count: links.length },
@@ -224,6 +246,14 @@ export default function DiscoveryLinksWorkspace({
       count: statusCounts[option.value] || 0,
     })),
   ]), [links.length, statusCounts]);
+
+  const rightsFilterOptions = useMemo(() => ([
+    { ...ALL_RIGHTS_STATUS_OPTION, count: links.length },
+    ...RIGHTS_STATUS_OPTIONS.map((option) => ({
+      ...option,
+      count: rightsCounts[option.value] || 0,
+    })),
+  ]), [links.length, rightsCounts]);
 
   const updateForm = (field, value) => {
     setForm((currentForm) => ({ ...currentForm, [field]: value }));
@@ -400,6 +430,31 @@ export default function DiscoveryLinksWorkspace({
               );
             })}
           </div>
+          <p className="mt-4 text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
+            권리 확인 상태별 보기
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {rightsFilterOptions.map((option) => {
+              const isActive = rightsFilter === option.value;
+              return (
+                <button
+                  className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-extrabold transition ${
+                    isActive
+                      ? 'border-amber-500 bg-amber-50 text-amber-700'
+                      : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+                  }`}
+                  key={option.value}
+                  onClick={() => setRightsFilter(option.value)}
+                  type="button"
+                >
+                  <span>{option.label}</span>
+                  <span className={isActive ? 'text-amber-500' : 'text-slate-400'}>
+                    {option.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
           <div className="mt-3">
             <label className="sr-only" htmlFor="discovery-link-search">
               발견 링크 검색
@@ -427,7 +482,9 @@ export default function DiscoveryLinksWorkspace({
             </div>
           </div>
 
-          {statusFilter !== ALL_LINK_STATUS_OPTION.value || normalizedSearchQuery ? (
+          {statusFilter !== ALL_LINK_STATUS_OPTION.value
+            || rightsFilter !== ALL_RIGHTS_STATUS_OPTION.value
+            || normalizedSearchQuery ? (
             <p className="mt-2 text-[11px] font-semibold text-slate-500">
               현재 조건에 맞는 링크 {filteredLinks.length}개를 보고 있습니다.
             </p>
