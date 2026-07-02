@@ -70,7 +70,7 @@ YouTube API 호출이 발생하는 새 영상 수집, 채널 확인, 댓글 조�
 
 인스타/외부 링크, 로컬 파일, 출처 확인, 제작 후보 연결의 목표 모델을 정리합니다.
 
-아직 구현된 기능이 아니므로 실제 기능처럼 표현하면 안 됩니다.
+discovery links는 1차 MVP가 부분 구현되었고, local assets와 제작 후보 연결은 아직 목표 모델 단계입니다. 구현된 것과 목표 설계를 구분해서 봅니다.
 
 10. `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`
 
@@ -184,7 +184,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 - `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 명시 필드를 도입할지
 - 카테고리 목록을 Cloud 태그 기준으로 바꿀지
 - `production_candidates` 별도 저장소를 만들지
-- `discovery_links` API를 만들지
+- `discovery_links`를 별도 container로 분리할지 또는 API를 확장할지
 - `local_assets` API를 만들지
 - `scan_logs`, `api_quota_logs` container를 만들지
 - `/videos` pagination을 어떤 방식으로 구현할지
@@ -210,9 +210,9 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 ## 7. 다음 추천 순서
 
-1. discovery links API 경계와 첫 화면 흐름을 사용자에게 선택지로 보고합니다.
+1. 발견함 1차 MVP를 기준으로 문서와 화면 문구가 현재 구현 상태를 정확히 말하는지 점검합니다.
 2. `scan_logs`와 `api_quota_logs` 실제 구현 여부는 별도 선택지 보고 후 결정합니다.
-3. 제작 칸반 확장은 1차 MVP 이후 별도 판단합니다.
+3. local assets, 발견 링크의 제작 후보 연결, 제작 칸반 확장은 1차 MVP 안정화 이후 별도 판단합니다.
 
 페이지네이션 감사는 2026-07-02에 완료됐고, 현재는 전체 조회 유지가 권장됩니다.
 scan/API 사용 기록 모델 검토도 2026-07-02에 완료됐고, 현재는 구현 없이 목표 모델만 문서화했습니다.

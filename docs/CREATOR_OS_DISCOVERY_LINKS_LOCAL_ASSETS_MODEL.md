@@ -6,7 +6,7 @@
 
 중요: 이 문서는 목표 모델 문서입니다. 구현된 것과 목표 설계를 구분합니다. API, DB schema, localStorage key, UI 흐름 변경은 별도 작업에서 판단합니다.
 
-이 문서는 발견함 구현 전 확인할 `DISCOVERY_LINKS_MODEL` 기준 문서 역할도 합니다. 1차 MVP는 local assets보다 `수동 링크 저장 발견함`을 먼저 다룹니다.
+이 문서는 발견함 확장 전 확인할 `DISCOVERY_LINKS_MODEL` 기준 문서 역할도 합니다. 1차 MVP는 local assets보다 `수동 링크 저장 발견함`을 먼저 다루며, 현재 수동 링크 저장은 부분 구현되어 있습니다.
 
 1차 MVP 범위와 선택지는 `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`를 기준으로 확인합니다.
 
@@ -14,7 +14,7 @@
 
 ## 1. 현재 기준 사실
 
-아래 내용은 2026-07-02 기준입니다.
+아래 내용은 2026-07-03 기준입니다.
 
 - `discovery_links` 별도 Cosmos container는 없습니다.
 - `/discovery-links` API는 존재하며, 기존 `videos` container 안의 `docType: discovery_link` 문서로 저장합니다.
@@ -22,14 +22,16 @@
 - discovery links 관련 API는 1차 MVP 범위로 구현되었습니다.
 - local assets 관련 API는 없습니다.
 - 인스타/외부 링크 수동 저장 기능은 1차 MVP 범위로 부분 구현되어 있습니다.
+- 새 discovery link 저장 시 `platform`은 URL 문자열 기준으로 추정해 Cloud에 저장합니다.
+- 백엔드는 `youtube`, `instagram`, `tiktok`, `web`, `unknown` 플랫폼 값을 허용하고, 없거나 잘못된 값은 URL 기준으로 다시 추정합니다.
 - 로컬 파일과 원본 링크를 연결하는 기능은 아직 구현되어 있지 않습니다.
 - 현재 제작 후보는 별도 `production_candidates` 저장소 없이 `videoUserRecords` 상태값 위에서 표현됩니다.
 - 현재 스크랩북은 YouTube 영상 중심이며, Cloud DB `videos` container 안의 `docType: scrapbook`으로 저장됩니다.
 - MVP에서는 새 `discovery_links` Cosmos container를 바로 만들지 않습니다.
-- MVP 저장 위치는 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 우선 검토합니다.
+- MVP 저장 위치는 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식입니다.
 - 단, 저장 영상 조회인 `/videos` 응답에 `docType: discovery_link` 문서가 섞이면 안 됩니다.
 
-따라서 이 문서는 "지금 있는 기능 설명"이 아니라 "나중에 만들 때 지켜야 할 기준"입니다.
+따라서 이 문서는 "현재 구현된 발견함 MVP"와 "아직 목표 설계 단계인 local assets/후속 연결"을 분리해서 봐야 합니다.
 
 ---
 
@@ -134,7 +136,7 @@
 | `docType` | discovery link 문서 타입 | 예 | MVP 후보값: `discovery_link` |
 | `url` | 사용자가 저장한 링크 | 예 | 정규화 필요 |
 | `normalizedUrl` | 중복 판단용 URL | 후보 | 쿼리 제거 기준 별도 결정 |
-| `platform` | `youtube`, `instagram`, `web`, `tiktok`, `unknown` 등 | 후보 | 자동 판별 가능하나 수동 수정 필요 |
+| `platform` | `youtube`, `instagram`, `web`, `tiktok`, `unknown` 등 | 예 | 현재 새 링크 저장 시 URL 기준 추정값을 저장. 기존 문서는 일괄 마이그레이션하지 않음 |
 | `title` | 사용자가 적은 제목 또는 가져온 제목 | 후보 | 자동 메타데이터 수집은 나중에 판단 |
 | `memo` | 사용자의 메모 | 후보 | 소재 포인트 |
 | `status` | 발견함 안에서의 작업 상태 | 예 | MVP 후보값: `inbox`, `reviewing`, `saved`, `candidate`, `discarded` |
@@ -366,20 +368,21 @@ discovery link 또는 local asset 검토
 
 ---
 
-## 11. 첫 구현 전 확인해야 할 질문
+## 11. 후속 확장 전 확인해야 할 질문
 
 현재 확인된 기준:
 
 1. 외부 링크 저장은 1차에 수동 입력 중심으로 시작합니다.
 2. 인스타 링크는 1차에 메타데이터 없이 URL, 제목, 메모, 상태 중심으로 저장합니다.
 3. 로컬 파일은 1차 구현에서 제외하고, 필요하면 2차에서 "파일 메모 카드"로 검토합니다.
-4. discovery link는 스크랩북에 섞지 않고 `docType: discovery_link` 문서 타입으로 분리하는 방향을 우선 검토합니다.
+4. discovery link는 스크랩북에 섞지 않고 `docType: discovery_link` 문서 타입으로 분리합니다.
+5. `platform`은 자동 크롤링 결과가 아니라 사용자가 입력한 URL 문자열에서 추정한 표시/분류 보조값입니다.
 
-구현 직전 남은 질문:
+후속 확장 전 남은 질문:
 
-1. API endpoint 이름은 `/discovery-links`로 사용합니다.
-2. 첫 화면 버튼 이름을 `링크 저장` 또는 `발견 링크 추가` 중 무엇으로 둘까요?
-3. 제작 후보로 보내기 버튼은 1차에서 준비중으로 둘까요, 아니면 상태만 `candidate`로 바꾸게 할까요?
+1. local assets를 파일 메모 카드로 시작할까요, 아니면 아직 보류할까요?
+2. 발견 링크를 제작 후보와 연결할 때 `videoUserRecords` 기반으로 충분할까요, 별도 `production_candidates` 검토가 필요할까요?
+3. 기존 discovery link 문서 중 `platform`이 없는 문서를 수동 복구/마이그레이션할 필요가 있을까요?
 
 ---
 
@@ -401,8 +404,8 @@ discovery link 또는 local asset 검토
 
 현재 판정:
 
-- 외부 링크 저장: 1차 MVP 설계 기준 확정 단계
-- 인스타 링크 관리: 수동 링크 저장 MVP 부분 구현
+- 외부 링크 저장: 1차 MVP 부분 구현
+- 인스타 링크 관리: 수동 링크 저장과 플랫폼 표시 MVP 부분 구현
 - 로컬 파일 연결: 목표 설계 단계
 - 자동 크롤링/다운로드: 구현 금지에 가까운 고위험 영역
 - 제작 후보 연결: `production_candidates` 모델 결정 이후 검토
@@ -411,7 +414,7 @@ MVP 기준:
 
 - 수동 링크 저장 중심으로 시작합니다.
 - 새 `discovery_links` container는 바로 만들지 않습니다.
-- 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 우선 검토합니다.
+- 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 저장합니다.
 - `/videos` 조회에는 discovery link 문서가 섞이면 안 됩니다.
 - 메인 상태는 `inbox`, `reviewing`, `saved`, `candidate`, `discarded`입니다.
 - 권리 상태는 `rightsStatus`로 분리하고 `unknown`, `needs_check`, `cleared`, `do_not_use`를 우선 후보로 봅니다.

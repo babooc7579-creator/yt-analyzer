@@ -10,7 +10,7 @@
 
 ## 1. 현재 기준 사실
 
-아래 내용은 2026-07-02 현재 repo 기준입니다. 이후 1차 MVP로 수동 링크 저장 발견함이 부분 구현되었습니다.
+아래 내용은 2026-07-03 현재 repo 기준입니다. 이후 1차 MVP로 수동 링크 저장 발견함이 부분 구현되었습니다.
 
 - `discovery_links` 별도 Cosmos container는 없습니다.
 - `/discovery-links` API는 존재하며, 기존 `videos` container 안의 `docType: discovery_link` 문서로 저장합니다.
@@ -18,6 +18,8 @@
 - discovery links 관련 API는 1차 MVP 범위로 구현되었습니다.
 - local assets 관련 API는 없습니다.
 - 인스타/외부 링크 수동 저장 기능은 1차 MVP 범위로 부분 구현되어 있습니다.
+- 새 discovery link 저장 시 URL 기준 `platform` 추정값을 Cloud에 저장합니다.
+- 백엔드는 허용된 `platform` 값을 보존하고, 누락되거나 잘못된 값은 URL 기준으로 재추정합니다.
 - 로컬 파일과 원본 링크를 연결하는 기능은 아직 구현되어 있지 않습니다.
 - 현재 스크랩북은 YouTube 영상 중심이며, Cloud DB `videos` container 안의 `docType: scrapbook`으로 저장됩니다.
 - 현재 제작 후보는 별도 `production_candidates` 저장소 없이 `videoUserRecords` 상태값 위에서 표현됩니다.
@@ -29,15 +31,16 @@
 - YouTube 영상 스크랩북 저장
 - YouTube 영상별 사용자 판단 기록 저장
 - 제작 후보 상태 표시
+- 인스타/유튜브/틱톡/웹 링크 수동 저장
+- 발견 링크 제목, 메모, 작업 상태, 권리 상태 관리
+- 발견 링크 플랫폼 표시. 새 링크는 Cloud에 `platform` 저장, 기존 링크는 URL 기준 표시 fallback
 
 현재 앱에서 할 수 없는 일:
 
-- 인스타 링크 저장
-- 웹 링크 보관
-- 발견 링크 상태 관리
 - 다운로드 파일과 원본 링크 연결
 - 로컬 파일 출처 상태 관리
 - 발견 링크를 제작 후보로 직접 보내기
+- 링크 메타데이터, 썸네일, 본문 자동 수집
 
 ---
 
@@ -107,8 +110,7 @@ discovery_link = {
   platform,
   title,
   memo,
-  reviewStatus,
-  sourceStatus,
+  status,
   rightsStatus,
   createdAt,
   updatedAt
@@ -134,7 +136,7 @@ discovery_link = {
 
 사용자 판단 필요:
 
-- 실제 구현 전 API endpoint 이름, `/videos` 조회 분리 방식, 첫 화면 버튼 흐름 결정 필요.
+- 현재 1차 MVP 구현에는 추가 판단이 필요 없습니다. 후속으로 local assets, 제작 후보 연결, 별도 container 분리를 할 때는 별도 판단이 필요합니다.
 
 ### 선택지 B: 수동 링크 + 파일 메모 카드
 
@@ -264,10 +266,10 @@ local_asset_note = {
 - URL 수동 입력
 - 제목 수동 입력
 - 메모 수동 입력
-- 플랫폼 자동 추정 또는 수동 선택
+- 플랫폼 URL 기준 자동 추정 및 표시
 - 검토 상태
-- 출처 상태
 - 권리 확인 상태
+- 원본/리포스트 의심은 메모 또는 후속 `sourceStatus` 검토
 - 링크 열기
 - 링크 삭제 또는 제외
 - 간단한 필터
@@ -289,16 +291,19 @@ MVP에서 제외:
 
 1차 MVP에서는 상태값을 너무 많이 늘리지 않습니다.
 
-### 7.1 검토 상태 후보
+### 7.1 검토 상태
 
-| 저장값 후보 | 화면 표시 | 의미 |
+| 저장값 | 화면 표시 | 의미 |
 |---|---|---|
-| `new` | 새 링크 | 아직 확인하지 않음 |
+| `inbox` | 받은 링크 | 새로 저장했고 아직 검토하지 않은 링크 |
 | `reviewing` | 확인 중 | 소재성/출처 확인 중 |
 | `saved` | 보관 | 나중에 다시 볼 링크 |
+| `candidate` | 제작 후보 | 제작 후보로 검토할 수 있는 링크 |
 | `discarded` | 제외 | 더 이상 보지 않음 |
 
 ### 7.2 출처 상태 후보
+
+MVP에서는 원본 후보/리포스트 의심을 메인 `status`에 섞지 않습니다. 필요하면 메모로 남기고, 후속 작업에서 `sourceStatus` 별도 필드를 검토합니다.
 
 | 저장값 후보 | 화면 표시 | 의미 |
 |---|---|---|
@@ -306,19 +311,19 @@ MVP에서 제외:
 | `source_candidate` | 원본 후보 | 원본일 가능성 있음 |
 | `repost_suspected` | 리포스트 의심 | 원본이 아닐 수 있음 |
 
-### 7.3 권리 상태 후보
+### 7.3 권리 상태
 
-| 저장값 후보 | 화면 표시 | 의미 |
+| 저장값 | 화면 표시 | 의미 |
 |---|---|---|
-| `unchecked` | 권리 미확인 | 아직 확인하지 않음 |
-| `rights_check_needed` | 권리 확인 필요 | 제작 전 확인 필요 |
-| `reference_only` | 참고용 | 직접 사용보다 참고용 |
+| `unknown` | 권리 미확인 | 아직 확인하지 않음 |
+| `needs_check` | 확인 필요 | 제작 사용 전 확인 필요 |
+| `cleared` | 확인 완료 | 사용자가 확인 완료로 표시함 |
+| `do_not_use` | 사용 금지 | 제작에 쓰면 안 되는 자료로 판단함 |
 
 주의:
 
-- 이 상태값은 후보입니다.
-- 실제 코드 상수에 추가하지 않습니다.
-- 구현 전 `CREATOR_OS_STATUS_DICTIONARY.md` 업데이트와 사용자 판단이 필요합니다.
+- `status`와 `rightsStatus`는 1차 MVP 구현 기준입니다.
+- `sourceStatus`는 아직 후속 후보입니다.
 
 ---
 
@@ -355,14 +360,14 @@ Codex 추천 메뉴명:
 
 ---
 
-## 9. 저장 위치 결정 후보
+## 9. 저장 위치 기준과 후속 후보
 
-실제 구현 전에는 저장 위치를 결정해야 합니다.
+1차 MVP 저장 위치는 이미 결정되어 적용되었습니다. 아래 선택지는 후속 확장 때 다시 볼 기준입니다.
 
-2026-07-02 추가 기준:
+2026-07-03 현재 기준:
 
 - 1차 MVP에서는 새 `discovery_links` Cosmos container를 바로 만들지 않습니다.
-- 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 작게 시작하는 방향을 우선 검토합니다.
+- 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 작게 시작했습니다.
 - 단, `/videos` 저장 영상 조회에 `docType: discovery_link` 문서가 섞이면 안 됩니다.
 - 링크 수와 기능이 커지면 별도 `discovery_links` container 분리를 다시 검토합니다.
 
@@ -416,7 +421,7 @@ Codex 추천 메뉴명:
 
 Codex 추천:
 
-- 현재 MVP에는 **저장 후보 B: 기존 `videos` container에 `docType: discovery_link`**를 우선 검토합니다.
+- 현재 MVP에는 **저장 후보 B: 기존 `videos` container에 `docType: discovery_link`** 방식이 적용되어 있습니다.
 - 다만 저장 영상 조회 `/videos`에 discovery link 문서가 섞이지 않는 API 경계가 반드시 필요합니다.
 - localStorage만 사용하는 MVP는 추천하지 않습니다.
 - scrapbook 확장은 빠르지만 장기 구조상 추천하지 않습니다.
