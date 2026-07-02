@@ -13,12 +13,14 @@ v2.2 문서는 제품 목표 설계도입니다. 이 문서는 현재 repo와 Ba
 아래 내용은 2026-07-02 기준으로 프론트 repo와 백엔드 Functions repo에서 확인한 사실입니다.
 
 - `/video-records`는 기존 대표 상태 `status`를 유지합니다.
-- `statusIds`는 복수 판단 보존용 보조 필드로 Cloud 저장/조회되며, 2026-07-02 배포 smoke로 확인됐습니다.
+- `statusIds`는 최종 상태 설계가 아니라, 현재 프론트의 복수 판단값을 Cloud에 보존하기 위한 호환성 확장입니다.
+- 기존 `status`는 대표 상태로 유지하며, `statusIds`는 복수 판단 보존용 보조 필드로 Cloud 저장/조회됩니다.
 - `/scrapbook`은 별도 Cosmos container가 아니라 `videos` container 안에 `docType: scrapbook` 형태로 저장됩니다.
 - `scan_logs` 별도 저장소는 없습니다.
 - `api_quota_logs` 별도 저장소는 없습니다.
 - `production_candidates` 별도 저장소는 없습니다.
-- `discovery_links` 별도 저장소는 없습니다.
+- `discovery_links` 별도 Cosmos container는 없습니다.
+- `/discovery-links` API는 존재하며, 기존 `videos` container 안에 `docType: discovery_link` 문서로 저장합니다.
 - `local_assets` 별도 저장소는 없습니다.
 - `GET /videos?channelIds=...`는 저장된 영상 데이터를 읽는 DB 조회입니다.
 - `POST /scan/selected`, `GET /scan`, `GET /scan?tag=...`는 YouTube API 호출과 DB 갱신이 발생할 수 있습니다.
@@ -47,10 +49,10 @@ Creator OS에서는 다음 원칙을 우선합니다.
 |---|---|---|---|---|---|---|---|---|
 | `channels` | Cloud DB | Cloud DB | Cosmos `channels` container | Cosmos `channels` container | 원칙상 기준 아님 | 채널 목록, 태그, 언어, 등급, 상태, 마지막 수집 요약 저장 | 구현됨 | 낮음. 기존 데이터에 필드가 없어도 기본값 보정 필요 |
 | `videos` | Cloud DB | Cloud DB | Cosmos `videos` container | Cosmos `videos` container | 원칙상 기준 아님 | YouTube에서 수집한 영상 목록과 통계 저장 | 구현됨 | 중간. 페이지네이션 없이 전체 조회 구조 |
-| `videoUserRecords` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: video_user_record` | 장기적으로 Cloud DB 기준. 현재 단계는 `status` 유지 + `statusIds` 보존 | Cloud 성공 캐시/장애 시 임시 fallback | 영상별 사용자 판단 상태, 노트, 제작 관련 필드 저장 | 부분 구현 | 중간. Cloud 저장 실패 시 화면 임시 기록과 Cloud 기준이 달라질 수 있음 |
+| `videoUserRecords` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: video_user_record` | 장기적으로 Cloud DB 기준. 현재 단계는 대표 `status` 유지 + 호환용 `statusIds` 보존 | Cloud 성공 캐시/장애 시 임시 fallback | 영상별 사용자 판단 상태, 노트, 제작 관련 필드 저장 | 부분 구현 | 중간. Cloud 저장 실패 시 화면 임시 기록과 Cloud 기준이 달라질 수 있음 |
 | `scrapbook` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: scrapbook` | Cloud DB. 별도 container 여부는 나중에 판단 | Cloud 성공 캐시/장애 시 임시 fallback | 별표/스크랩 저장 영상 목록 저장 | 부분 구현 | 중간. 별도 컨테이너가 아니라 `videos`와 섞여 있음 |
 | `production candidates` | `videoUserRecords`에 얹힌 상태 | 미정 | 별도 저장소 없음. 프론트는 `videoUserRecords` 상태로 표현 | v1에서는 `videoUserRecords` 유지 가능. 장기적으로 별도 모델 검토 | 기준 아님 | 현재는 `/video-records`가 사실상 후보 상태를 저장 | 별도 저장소 미구현 | 높음. 영상 상태와 제작 프로젝트 상태가 섞일 수 있음 |
-| `discovery links` | 없음 | Cloud DB | 없음 | 별도 `discovery_links` 모델 후보 | 아직 없음 | 아직 없음 | 미구현 | 높음. 외부 링크와 영상/제작 후보 연결 기준 필요 |
+| `discovery links` | Cloud DB | Cloud DB | Cosmos `videos` container 안의 `docType: discovery_link` | MVP는 기존 Cloud DB에 `docType: discovery_link` 방식 유지. 장기적으로 별도 container 재검토 | 기준 아님 | 수동 저장 링크, 메모, 발견함 상태, 권리 상태 저장 | 부분 구현 | 중간. `/videos` 조회에 discovery link 문서가 섞이지 않도록 API 경계 유지 필요 |
 | `local assets` | 없음 | 로컬 파일 메타데이터 + Cloud DB 인덱스 후보 | 없음 | 별도 `local_assets` 모델 후보 | 로컬 파일 자체는 브라우저 localStorage로 다루면 안 됨 | 파일 경로/출처/연결 메타데이터만 저장 후보 | 미구현 | 높음. 브라우저 보안, 파일 위치 변경, 출처 추적 이슈 |
 | `scan logs` | 없음 | Cloud DB | 없음. 채널 문서의 `lastScanSummary`만 있음 | 별도 `scan_logs` 모델 후보 | 기준 아님 | 수집 실행 이력, 성공/실패, 새 영상 수, 오류 기록 | 미구현 | 중간. 현재는 마지막 요약만 남아 과거 이력 추적 불가 |
 | `api quota logs` | 없음 | Cloud DB | 없음 | 별도 `api_quota_logs` 모델 후보 | 기준 아님 | YouTube API 호출량과 비용 위험 기록 | 미구현 | 높음. 비용성 작업 추적 불가 |
@@ -135,8 +137,9 @@ Creator OS에서는 다음 원칙을 우선합니다.
 목표 방향:
 
 - 장기 기준은 Cloud DB입니다.
-- 현재 단계에서는 `status`를 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용으로 유지합니다.
-- 장기적으로 상태 모델을 더 분리할지는 별도 설계로 검토합니다.
+- 현재 단계에서는 `status`를 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용 호환 필드로 유지합니다.
+- `statusIds`는 최종 상태 설계가 아닙니다.
+- 장기적으로는 `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 분리를 별도 설계로 검토할 수 있습니다.
 
 충돌 위험:
 
@@ -188,13 +191,17 @@ Creator OS에서는 다음 원칙을 우선합니다.
 
 ### 4.6 discovery links
 
-현재 구현되어 있지 않습니다.
+현재 1차 MVP가 부분 구현되어 있습니다.
 
 목표 방향:
 
-- 외부에서 발견한 링크를 저장하는 별도 모델 후보입니다.
+- 외부에서 발견한 링크를 저장하는 별도 문서 타입입니다.
 - YouTube 영상, 인스타 링크, 웹 링크, 메모, 출처 확인 상태를 연결할 수 있어야 합니다.
-- 1차 MVP는 수동 링크 저장 중심의 발견함을 우선 검토합니다.
+- 1차 MVP는 수동 링크 저장 중심의 발견함으로 시작했습니다.
+- MVP에서는 새 `discovery_links` Cosmos container를 바로 만들지 않습니다.
+- MVP 저장 위치는 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 작게 시작했습니다.
+- 단, 기존 저장 영상 조회인 `/videos` 응답에 `docType: discovery_link` 문서가 섞이면 안 됩니다.
+- 링크 수와 기능이 커지면 `discovery_links` 별도 container 분리를 다시 검토합니다.
 - 자세한 범위 선택지는 `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`를 기준으로 봅니다.
 - 무단 크롤링이나 자동 다운로드를 전제로 하지 않습니다.
 
@@ -295,8 +302,9 @@ localStorage는 지금 당장 제거하지 않습니다.
 
 - `status/statusIds`를 장기 상태 모델로 분리할지 여부
 - `production_candidates` 별도 DB를 도입할지 여부
-- `discovery_links` API를 구현할지 여부
+- `discovery_links` 별도 Cosmos container를 도입할지 여부
 - `local_assets` API를 구현할지 여부
+- `discovery_links` 별도 Cosmos container를 도입할지 여부
 - localStorage 제거 또는 key 변경
 - DB schema 변경
 - 새 Cosmos container 추가
@@ -340,7 +348,9 @@ localStorage는 지금 당장 제거하지 않습니다.
 - 원본 링크와 로컬 파일 연결 방식
 - 링크만 있는 경우
 - 파일만 있는 경우
-- 원본 후보, 리포스트 의심, 권리 확인 필요, 제작 후보 상태
+- 발견함 MVP 상태값: `inbox`, `reviewing`, `saved`, `candidate`, `discarded`
+- 권리 확인 상태값: `rightsStatus`의 `unknown`, `needs_check`, `cleared`, `do_not_use`
+- 원본 후보/리포스트 의심은 MVP status에 섞지 않고 별도 메모 또는 후속 `sourceStatus` 검토 항목으로 둠
 - 무단 크롤링 없이 안전하게 설계하는 방법
 
 ---
@@ -354,9 +364,10 @@ localStorage는 지금 당장 제거하지 않습니다.
 3. 스크랩북은 Cloud DB 기준으로 옮겨가는 중인 데이터로 본다.
 4. localStorage는 삭제하지 않고 보조 저장소로만 본다.
 5. 제작 후보는 아직 별도 DB가 없으므로 `videoUserRecords` 기반 MVP로 본다.
-6. 발견 링크와 로컬 파일 관리는 아직 목표 설계 단계로 본다.
-7. 수집 로그와 API 사용량 로그는 아직 구현되지 않은 운영 데이터로 본다.
-8. API 호출 가능성이 있는 작업은 화면/문서에서 반드시 DB 조회와 분리한다.
+6. 발견 링크는 1차 MVP가 구현되었고, 수동 링크 저장 중심의 `docType: discovery_link` 문서 타입으로 작게 시작한다.
+7. 로컬 파일 관리는 아직 목표 설계 단계로 본다.
+8. 수집 로그와 API 사용량 로그는 아직 구현되지 않은 운영 데이터로 본다.
+9. API 호출 가능성이 있는 작업은 화면/문서에서 반드시 DB 조회와 분리한다.
 ---
 
 ## 2026-07-02 결정 기록: videoUserRecords statusIds Cloud 보존
@@ -367,7 +378,7 @@ localStorage는 지금 당장 제거하지 않습니다.
 
 - 기존 `status` 필드는 삭제하지 않습니다.
 - 기존 `status` 의미와 UI 동작은 바꾸지 않습니다.
-- `statusIds`는 복수 판단 보존용으로 Cloud DB에도 함께 저장합니다.
+- `statusIds`는 최종 상태 설계가 아니라 복수 판단 보존용 호환 필드로 Cloud DB에도 함께 저장합니다.
 - `statusIds`는 string 배열이며, 저장 시 중복 값은 제거합니다.
 - 기존 record에 `statusIds`가 없어도 조회 응답에서 프론트가 깨지지 않도록 `status` 기반 fallback을 제공합니다.
 - `production_candidates` 별도 DB는 아직 만들지 않습니다.
@@ -375,6 +386,27 @@ localStorage는 지금 당장 제거하지 않습니다.
 - 전체 상태 모델 재설계는 하지 않습니다.
 
 장기적으로는 `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 분리를 별도 설계로 검토할 수 있습니다.
+
+---
+
+## 2026-07-02 결정 기록: discovery links MVP 저장/상태 기준
+
+현재 단계에서는 발견함을 수동 링크 저장 중심으로 작게 시작했습니다.
+
+추가 결정:
+
+- MVP에서는 새 `discovery_links` Cosmos container를 바로 만들지 않습니다.
+- MVP 저장 위치는 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식입니다.
+- `/videos` 저장 영상 조회에 `docType: discovery_link` 문서가 섞이면 안 됩니다.
+- 링크 수, 검색/필터, 로컬 파일 연결, 제작 후보 연결이 커지면 별도 `discovery_links` container 분리를 다시 검토합니다.
+- 발견함의 메인 `status`는 작게 시작합니다: `inbox`, `reviewing`, `saved`, `candidate`, `discarded`.
+- 권리 확인은 메인 `status`에 섞지 않고 `rightsStatus`로 분리합니다: `unknown`, `needs_check`, `cleared`, `do_not_use`.
+- 무단 크롤링, 자동 다운로드, 메타데이터 자동 수집은 MVP에서 제외합니다.
+
+주의:
+
+- 이 결정은 문서 기준입니다.
+- 아직 API, DB schema, UI 구현은 변경하지 않았습니다.
 
 ---
 

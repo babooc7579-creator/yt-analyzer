@@ -2,9 +2,11 @@
 
 작성일: 2026-07-02
 
-이 문서는 Creator OS v2.2 목표 중 아직 구현되지 않은 `discovery_links`와 `local_assets`의 목표 모델을 정리합니다.
+이 문서는 Creator OS v2.2 목표 중 `discovery_links`와 `local_assets`의 목표 모델을 정리합니다. `discovery_links`는 1차 MVP가 부분 구현되었고, `local_assets`는 아직 구현되지 않았습니다.
 
-중요: 이 문서는 구현 문서가 아닙니다. 현재 앱에 해당 기능이 존재한다고 가정하지 않습니다. API, DB schema, localStorage key, UI 흐름은 변경하지 않습니다.
+중요: 이 문서는 목표 모델 문서입니다. 구현된 것과 목표 설계를 구분합니다. API, DB schema, localStorage key, UI 흐름 변경은 별도 작업에서 판단합니다.
+
+이 문서는 발견함 구현 전 확인할 `DISCOVERY_LINKS_MODEL` 기준 문서 역할도 합니다. 1차 MVP는 local assets보다 `수동 링크 저장 발견함`을 먼저 다룹니다.
 
 1차 MVP 범위와 선택지는 `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`를 기준으로 확인합니다.
 
@@ -14,14 +16,18 @@
 
 아래 내용은 2026-07-02 기준입니다.
 
-- `discovery_links` 저장소는 없습니다.
+- `discovery_links` 별도 Cosmos container는 없습니다.
+- `/discovery-links` API는 존재하며, 기존 `videos` container 안의 `docType: discovery_link` 문서로 저장합니다.
 - `local_assets` 저장소는 없습니다.
-- discovery links 관련 API는 없습니다.
+- discovery links 관련 API는 1차 MVP 범위로 구현되었습니다.
 - local assets 관련 API는 없습니다.
-- 인스타/외부 링크 저장 기능은 아직 구현되어 있지 않습니다.
+- 인스타/외부 링크 수동 저장 기능은 1차 MVP 범위로 부분 구현되어 있습니다.
 - 로컬 파일과 원본 링크를 연결하는 기능은 아직 구현되어 있지 않습니다.
 - 현재 제작 후보는 별도 `production_candidates` 저장소 없이 `videoUserRecords` 상태값 위에서 표현됩니다.
 - 현재 스크랩북은 YouTube 영상 중심이며, Cloud DB `videos` container 안의 `docType: scrapbook`으로 저장됩니다.
+- MVP에서는 새 `discovery_links` Cosmos container를 바로 만들지 않습니다.
+- MVP 저장 위치는 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 우선 검토합니다.
+- 단, 저장 영상 조회인 `/videos` 응답에 `docType: discovery_link` 문서가 섞이면 안 됩니다.
 
 따라서 이 문서는 "지금 있는 기능 설명"이 아니라 "나중에 만들 때 지켜야 할 기준"입니다.
 
@@ -58,7 +64,7 @@
 
 | 용어 | 의미 | 현재 구현 |
 |---|---|---|
-| Discovery link | 사용자가 외부에서 발견한 링크 | 미구현 |
+| Discovery link | 사용자가 외부에서 발견한 링크 | 부분 구현 |
 | Local asset | 사용자가 가진 로컬 파일의 메타데이터 | 미구현 |
 | Source URL | 소재의 원본 또는 출처로 추정되는 URL | 미구현 |
 | Repost suspected | 원본이 아니라 재업로드일 가능성이 있는 상태 | 미구현 |
@@ -125,13 +131,15 @@
 | 필드 후보 | 의미 | 필수 후보 | 비고 |
 |---|---|---:|---|
 | `id` | discovery link 문서 ID | 예 | 생성 방식 미정 |
+| `docType` | discovery link 문서 타입 | 예 | MVP 후보값: `discovery_link` |
 | `url` | 사용자가 저장한 링크 | 예 | 정규화 필요 |
 | `normalizedUrl` | 중복 판단용 URL | 후보 | 쿼리 제거 기준 별도 결정 |
 | `platform` | `youtube`, `instagram`, `web`, `tiktok`, `unknown` 등 | 후보 | 자동 판별 가능하나 수동 수정 필요 |
 | `title` | 사용자가 적은 제목 또는 가져온 제목 | 후보 | 자동 메타데이터 수집은 나중에 판단 |
 | `memo` | 사용자의 메모 | 후보 | 소재 포인트 |
-| `status` | 링크 검토 상태 | 예 | 상태값 사전 기준 |
-| `sourceStatus` | 원본/리포스트/권리 확인 상태 | 후보 | `status`와 분리 가능 |
+| `status` | 발견함 안에서의 작업 상태 | 예 | MVP 후보값: `inbox`, `reviewing`, `saved`, `candidate`, `discarded` |
+| `rightsStatus` | 권리 확인 상태 | 후보 | MVP 후보값: `unknown`, `needs_check`, `cleared`, `do_not_use` |
+| `sourceStatus` | 원본/리포스트 판단 상태 | 후속 후보 | MVP에서는 메인 `status`에 섞지 않고 메모 또는 후속 필드로 검토 |
 | `linkedVideoId` | YouTube 영상과 연결될 경우 | 후보 | 기존 `videos`와 연결 |
 | `linkedAssetIds` | 관련 local asset 목록 | 후보 | 파일 여러 개 가능 |
 | `productionCandidateId` | 제작 후보와 연결될 경우 | 후보 | 현재는 별도 저장소 없음 |
@@ -161,19 +169,28 @@
 
 ## 6. 상태값 후보
 
-### 6.1 discovery link 상태
+### 6.1 discovery link 메인 상태
 
 | 저장값 후보 | 화면 표시 | 의미 |
 |---|---|---|
-| `new` | 새 링크 | 아직 확인하지 않은 링크 |
+| `inbox` | 받은 링크 | 새로 저장했고 아직 검토하지 않은 링크 |
 | `reviewing` | 확인 중 | 출처와 소재성을 검토 중 |
-| `source_candidate` | 원본 후보 | 원본일 가능성이 있는 링크 |
-| `repost_suspected` | 리포스트 의심 | 원본이 아닐 가능성이 있음 |
-| `rights_check_needed` | 권리 확인 필요 | 제작 전 확인 필요 |
-| `production_candidate` | 제작 후보 | 제작 후보로 보낼 수 있음 |
+| `saved` | 보관 | 나중에 다시 볼 가치가 있어 보관한 링크 |
+| `candidate` | 제작 후보 | 제작 후보로 검토할 수 있는 링크 |
 | `discarded` | 제외 | 더 이상 보지 않음 |
 
-### 6.2 local asset 출처 상태
+### 6.2 discovery link 권리 상태
+
+권리 확인은 메인 `status`에 섞지 않고 `rightsStatus`로 분리합니다.
+
+| 저장값 후보 | 화면 표시 | 의미 |
+|---|---|---|
+| `unknown` | 권리 미확인 | 아직 권리 확인을 하지 않음 |
+| `needs_check` | 확인 필요 | 제작 사용 전 확인이 필요함 |
+| `cleared` | 확인 완료 | 사용자가 확인 완료로 표시함 |
+| `do_not_use` | 사용 금지 | 제작에 쓰면 안 되는 자료로 판단함 |
+
+### 6.3 local asset 출처 상태
 
 | 저장값 후보 | 화면 표시 | 의미 |
 |---|---|---|
@@ -188,7 +205,9 @@
 
 - 위 상태값은 목표 후보입니다.
 - 현재 코드 상수에 추가하지 않습니다.
-- 실제 저장값 확정은 상태값 사전 후속 Issue에서 결정합니다.
+- discovery link MVP의 메인 상태와 `rightsStatus`는 위 값을 우선 기준으로 봅니다.
+- 원본 후보/리포스트 의심은 MVP 메인 `status`에 섞지 않습니다.
+- 실제 저장 schema와 API 구현은 후속 Issue에서 결정합니다.
 
 ---
 
@@ -199,7 +218,7 @@
 ```txt
 사용자가 외부 링크 저장
 → discovery link 생성
-→ 상태: new
+→ 상태: inbox
 → 사용자가 원본/리포스트/권리 확인 여부 판단
 → 필요하면 제작 후보 또는 스크랩북으로 보냄
 ```
@@ -257,7 +276,7 @@ discovery link 생성
 
 ```txt
 discovery link 또는 local asset 검토
-→ sourceStatus 확인
+→ status 확인
 → rightsStatus 확인
 → production candidate 후보로 연결
 ```
@@ -307,15 +326,14 @@ discovery link 또는 local asset 검토
 - 이미지 파일 자체
 - 로컬 전체 경로를 영구 기준으로 삼는 것
 
-### 8.3 출처 상태를 먼저 표시
+### 8.3 발견함 상태와 권리 상태를 분리해서 표시
 
-제작 후보로 보내기 전에 다음 상태를 명확히 보여야 합니다.
+제작 후보로 보내기 전에 발견함 메인 상태와 권리 상태를 따로 보여야 합니다.
 
-- 원본 후보
-- 리포스트 의심
-- 권리 확인 필요
-- 출처 불명
-- 출처 확인
+- `status`: 받은 링크, 확인 중, 보관, 제작 후보, 제외
+- `rightsStatus`: 권리 미확인, 확인 필요, 확인 완료, 사용 금지
+
+원본 후보/리포스트 의심은 중요한 판단이지만, MVP에서는 메인 `status`에 섞지 않습니다. 필요하면 메모로 남기고, 나중에 `sourceStatus`를 별도 필드로 검토합니다.
 
 ---
 
@@ -323,7 +341,7 @@ discovery link 또는 local asset 검토
 
 | 현재 데이터 | discovery links와의 관계 | local assets와의 관계 | 주의 |
 |---|---|---|---|
-| `videos` | YouTube URL이면 연결 가능 | 영상에서 파생된 파일이 있으면 연결 가능 | 원본 영상 데이터와 발견 링크를 섞지 않음 |
+| `videos` | YouTube URL이면 연결 가능. MVP 저장 후보도 같은 Cloud DB의 `docType: discovery_link` 방식 | 영상에서 파생된 파일이 있으면 연결 가능 | 저장 영상 조회 `/videos` 응답에 discovery link 문서가 섞이면 안 됨 |
 | `videoUserRecords` | 사용자의 판단 기록과 연결 가능 | 제작 메모와 연결 가능 | 상태를 직접 섞으면 위험 |
 | `scrapbook` | 좋은 링크를 보관함으로 보낼 수 있음 | 좋은 파일 메타데이터를 보관함과 연결 가능 | 현재 스크랩북은 영상 중심 |
 | `production candidates` | 장기적으로 후보 출처가 될 수 있음 | 장기적으로 후보 자료가 될 수 있음 | 별도 저장소 없음 |
@@ -334,7 +352,7 @@ discovery link 또는 local asset 검토
 
 아래 항목은 이 문서에서 결정하지 않습니다.
 
-- `discovery_links` DB container를 만들지 여부
+- 장기적으로 `discovery_links` 별도 DB container로 분리할지 여부
 - `local_assets` DB container를 만들지 여부
 - API endpoint 이름
 - 실제 schema 확정
@@ -342,7 +360,7 @@ discovery link 또는 local asset 검토
 - 로컬 파일을 브라우저에서 어떻게 참조할지
 - 파일 업로드 기능을 만들지 여부
 - `production_candidates` 별도 저장소 도입 여부
-- 스크랩북과 discovery links를 통합할지 분리할지
+- `sourceStatus`를 별도 필드로 도입할지 여부
 
 위 항목들은 데이터 구조와 사용자 작업 흐름에 큰 영향을 주므로 별도 선택지 보고 후 결정합니다.
 
@@ -350,13 +368,18 @@ discovery link 또는 local asset 검토
 
 ## 11. 첫 구현 전 확인해야 할 질문
 
-구현 전에 사용자가 선택해야 할 질문입니다.
+현재 확인된 기준:
 
-1. 외부 링크 저장은 처음에 수동 입력만 지원할까요?
-2. 인스타 링크는 메타데이터 없이 URL과 메모만 저장해도 충분할까요?
-3. 로컬 파일은 파일 본문 없이 "파일 메모 카드"로 시작해도 될까요?
-4. discovery link와 scrapbook은 처음부터 분리할까요, 아니면 스크랩북 안에 링크 타입을 추가할까요?
-5. 제작 후보가 YouTube 영상, 외부 링크, 로컬 파일을 함께 묶어야 하는 시점은 언제일까요?
+1. 외부 링크 저장은 1차에 수동 입력 중심으로 시작합니다.
+2. 인스타 링크는 1차에 메타데이터 없이 URL, 제목, 메모, 상태 중심으로 저장합니다.
+3. 로컬 파일은 1차 구현에서 제외하고, 필요하면 2차에서 "파일 메모 카드"로 검토합니다.
+4. discovery link는 스크랩북에 섞지 않고 `docType: discovery_link` 문서 타입으로 분리하는 방향을 우선 검토합니다.
+
+구현 직전 남은 질문:
+
+1. API endpoint 이름은 `/discovery-links`로 사용합니다.
+2. 첫 화면 버튼 이름을 `링크 저장` 또는 `발견 링크 추가` 중 무엇으로 둘까요?
+3. 제작 후보로 보내기 버튼은 1차에서 준비중으로 둘까요, 아니면 상태만 `candidate`로 바꾸게 할까요?
 
 ---
 
@@ -365,20 +388,30 @@ discovery link 또는 local asset 검토
 현재 단계에서 권장하는 순서입니다.
 
 1. 이 문서를 기준으로 "외부 링크 수동 저장"의 최소 범위를 정합니다.
-2. `discovery_links`를 별도 모델로 둘지, scrapbook 확장으로 시작할지 선택지 보고서를 만듭니다.
-3. local assets는 바로 구현하지 않고, "파일 메모 카드" 수준으로 시작 가능한지 검토합니다.
-4. production candidate와 연결하기 전에 `videoUserRecords` schema 문제를 먼저 정리합니다.
+2. MVP 저장은 기존 Cloud DB 구조 안의 `docType: discovery_link` 방식으로 시작했습니다.
+3. `/videos` 저장 영상 조회에 discovery link 문서가 섞이지 않도록 API 쿼리 경계를 먼저 확인합니다.
+4. local assets는 바로 구현하지 않고, "파일 메모 카드" 수준으로 시작 가능한지 2차에서 검토합니다.
+5. production candidate와 연결하기 전에는 별도 `production_candidates` 모델이 필요한지 다시 판단합니다.
 
 ---
 
 ## 13. 최종 판정
 
-`discovery_links`와 `local_assets`는 Creator OS v2.2에서 중요한 목표 영역입니다. 다만 현재 repo에는 구현되어 있지 않으므로, 지금 바로 API나 DB를 만들기보다 모델과 경계를 먼저 정하는 것이 안전합니다.
+`discovery_links`와 `local_assets`는 Creator OS v2.2에서 중요한 목표 영역입니다. 현재 repo에는 discovery links 1차 MVP가 들어갔고, local assets는 아직 목표 모델 단계입니다. 다음 확장은 모델과 경계를 유지하면서 작은 단위로 진행하는 것이 안전합니다.
 
 현재 판정:
 
-- 외부 링크 저장: 목표 설계 단계
-- 인스타 링크 관리: 목표 설계 단계
+- 외부 링크 저장: 1차 MVP 설계 기준 확정 단계
+- 인스타 링크 관리: 수동 링크 저장 MVP 부분 구현
 - 로컬 파일 연결: 목표 설계 단계
 - 자동 크롤링/다운로드: 구현 금지에 가까운 고위험 영역
 - 제작 후보 연결: `production_candidates` 모델 결정 이후 검토
+
+MVP 기준:
+
+- 수동 링크 저장 중심으로 시작합니다.
+- 새 `discovery_links` container는 바로 만들지 않습니다.
+- 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식으로 우선 검토합니다.
+- `/videos` 조회에는 discovery link 문서가 섞이면 안 됩니다.
+- 메인 상태는 `inbox`, `reviewing`, `saved`, `candidate`, `discarded`입니다.
+- 권리 상태는 `rightsStatus`로 분리하고 `unknown`, `needs_check`, `cleared`, `do_not_use`를 우선 후보로 봅니다.

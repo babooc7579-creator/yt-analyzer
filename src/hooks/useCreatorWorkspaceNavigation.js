@@ -15,6 +15,7 @@ export function useCreatorWorkspaceNavigation() {
   const activeCreatorItem = getCreatorOsItem(creatorView);
   const isHomeView = creatorView === 'home';
   const isComingSoonView = activeCreatorItem?.status === 'soon';
+  const isDiscoveryLinksView = creatorView === 'vault-sources';
   const isLegacyWorkspaceView = READY_CREATOR_VIEWS.includes(creatorView);
   const isReferenceVaultView = REFERENCE_VAULT_VIEWS.includes(creatorView);
 
@@ -44,6 +45,7 @@ export function useCreatorWorkspaceNavigation() {
     activeTab,
     creatorView,
     isComingSoonView,
+    isDiscoveryLinksView,
     isHomeView,
     isLegacyWorkspaceView,
     isReferenceVaultView,

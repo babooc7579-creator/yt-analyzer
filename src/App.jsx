@@ -4,6 +4,7 @@ import ComingSoonView from './components/ComingSoonView';
 import CreatorSidebar from './components/CreatorSidebar';
 import CreatorHomeView from './components/CreatorHomeView';
 import CreatorWorkspaceHeader from './components/CreatorWorkspaceHeader';
+import DiscoveryLinksWorkspace from './components/DiscoveryLinksWorkspace';
 import LegacyWorkspaceView from './components/LegacyWorkspaceView';
 import SyncWarningBanner from './components/SyncWarningBanner';
 import TopCommentsModal from './components/TopCommentsModal';
@@ -16,6 +17,7 @@ import { useChannelSelection } from './hooks/useChannelSelection';
 import { useCloudChannels } from './hooks/useCloudChannels';
 import { useCreatorOsMetrics } from './hooks/useCreatorOsMetrics';
 import { useCreatorWorkspaceNavigation } from './hooks/useCreatorWorkspaceNavigation';
+import { useDiscoveryLinks } from './hooks/useDiscoveryLinks';
 import { useScrapbook } from './hooks/useScrapbook';
 import { useTagRenameActions } from './hooks/useTagRenameActions';
 import { useTopComments } from './hooks/useTopComments';
@@ -189,6 +191,7 @@ export default function App() {
     activeTab,
     creatorView,
     isComingSoonView,
+    isDiscoveryLinksView,
     isHomeView,
     isLegacyWorkspaceView,
     isReferenceVaultView,
@@ -197,6 +200,16 @@ export default function App() {
     setShowWorkPanel,
     showWorkPanel,
   } = useCreatorWorkspaceNavigation();
+  const {
+    discoveryLinks,
+    discoveryLinksError,
+    discoveryLinksLoading,
+    discoveryLinksSaving,
+    addDiscoveryLink,
+    changeDiscoveryLink,
+    loadDiscoveryLinks,
+    removeDiscoveryLink,
+  } = useDiscoveryLinks();
   const {
     handleManualScan,
     handleTagScan,
@@ -305,6 +318,17 @@ export default function App() {
             />
           ) : isComingSoonView ? (
             <ComingSoonView item={activeCreatorItem} />
+          ) : isDiscoveryLinksView ? (
+            <DiscoveryLinksWorkspace
+              error={discoveryLinksError}
+              links={discoveryLinks}
+              loading={discoveryLinksLoading}
+              saving={discoveryLinksSaving}
+              onCreateLink={addDiscoveryLink}
+              onDeleteLink={removeDiscoveryLink}
+              onRefresh={loadDiscoveryLinks}
+              onUpdateLink={changeDiscoveryLink}
+            />
           ) : isLegacyWorkspaceView ? (
             <LegacyWorkspaceView
               activeSelectedChannelCount={activeSelectedChannelCount}
