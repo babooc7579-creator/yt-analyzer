@@ -10,6 +10,7 @@ function StatCard({ value, label }) {
 export default function CreatorWorkspaceHeader({
   item,
   channelCount,
+  discoveryCandidateCount,
   videoCount,
   selectedChannelCount,
   savedVideoCount,
@@ -22,11 +23,12 @@ export default function CreatorWorkspaceHeader({
           <h2 className="mt-1 text-2xl font-extrabold text-white">{item?.label}</h2>
           <p className="mt-1 text-sm text-slate-400">{item?.summary}</p>
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
           <StatCard value={channelCount} label="채널" />
           <StatCard value={videoCount} label="영상" />
           <StatCard value={selectedChannelCount} label="선택 채널" />
-          <StatCard value={savedVideoCount} label="제작 후보" />
+          <StatCard value={savedVideoCount} label="영상 후보" />
+          <StatCard value={discoveryCandidateCount} label="링크 후보" />
         </div>
       </div>
     </div>
