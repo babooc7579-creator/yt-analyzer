@@ -1,4 +1,4 @@
-import { Bookmark, Plus, RefreshCw } from 'lucide-react';
+import { Bookmark, Link as LinkIcon, Plus, RefreshCw } from 'lucide-react';
 
 function ShortcutButton({
   title,
@@ -30,11 +30,12 @@ function ShortcutButton({
 
 export default function HomeActionShortcuts({
   onOpenAddChannel,
+  onOpenDiscoveryLinks,
   onOpenSelectedScan,
   onOpenVault,
 }) {
   return (
-    <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
+    <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
       <ShortcutButton
         title="1. 새 채널 등록"
         description="소재를 모을 채널을 먼저 클라우드 목록에 저장합니다."
@@ -69,6 +70,18 @@ export default function HomeActionShortcuts({
         titleClassName="text-blue-200"
         hintClassName="text-blue-300"
         iconClassName="text-blue-300"
+        iconHoverClassName="group-hover:scale-110"
+      />
+      <ShortcutButton
+        title="4. 발견함 저장"
+        description="외부에서 본 링크를 Cloud 발견함에 남기고 나중에 검토합니다."
+        hint="API 호출 없이 링크만 저장"
+        icon={LinkIcon}
+        onClick={onOpenDiscoveryLinks}
+        className="border-amber-400/20 bg-amber-500/10 hover:border-amber-300/50 hover:bg-amber-500/15"
+        titleClassName="text-amber-200"
+        hintClassName="text-amber-300"
+        iconClassName="text-amber-300"
         iconHoverClassName="group-hover:scale-110"
       />
     </div>
