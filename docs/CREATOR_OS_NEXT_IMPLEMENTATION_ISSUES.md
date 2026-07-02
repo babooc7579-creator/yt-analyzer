@@ -118,14 +118,14 @@
 ### Issue 5. `/video-records` 장기 상태 모델 검토
 
 - 목적: 지금은 `status`와 `statusIds`를 함께 쓰되, 장기적으로 영상 상태/용도 태그/제작 진행 상태를 분리할 필요가 있는지 검토합니다.
-- 현재 상태: `status`는 기존 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용으로 Cloud에 저장/조회됩니다. 2026-07-02에 `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`로 장기 선택지를 정리했습니다.
+- 현재 상태: `status`는 기존 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용으로 Cloud에 저장/조회됩니다. 2026-07-02에 `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`로 장기 선택지를 정리했고, 선택지 B가 승인되어 상태 역할 helper를 1차 적용했습니다.
 - 왜 필요한가: "제작 후보", "자료 참고", "사용함" 같은 값이 많아질수록 단일 상태와 복수 태그의 역할이 흐려질 수 있습니다.
 - 작업 범위: 장기 모델 선택지 검토. 당장 재설계하지 않습니다.
 - 건드릴 파일 예상: 문서 우선. 이후 필요 시 상태 상수, 제작 후보 화면, 백엔드 `videoUserRecords` endpoint.
 - 건드리면 안 되는 것: 기존 `status` 제거, 기존 `statusIds` 의미 변경, 기존 데이터 마이그레이션.
 - 위험도: 높음.
-- 완료 기준: 선택지 정리 완료. 다음 코드 작업 전 선택지 B 또는 다른 방향에 대한 사용자 결정이 필요합니다.
-- 사용자 판단 필요 여부: 필요. 추천은 "현재 DB 유지 + 상태 역할을 코드/문서에서 엄격히 분리"입니다.
+- 완료 기준: 1차 완료. DB/API 변경 없이 영상 검토 상태와 제작 상태를 구분하는 helper가 추가됐습니다.
+- 사용자 판단 필요 여부: 현재 없음. `status: new` 처리, 명시 필드 분리, production_candidates DB 도입은 별도 판단 필요.
 
 ### Issue 6. Cloud/localStorage sync 정책 적용 완료
 
@@ -194,10 +194,10 @@
 바로 다음 작업은 아래 순서를 추천합니다.
 
 1. Issue 1: 문서 인덱스와 작업 기준 문서 정리
-2. Issue 5: `/video-records` 장기 상태 모델 검토
-3. Issue 7: 저장 영상 조회 페이지네이션 필요성 평가
-4. Issue 8: scan/API 사용 기록 모델 검토
-5. Issue 9: discovery links/local assets MVP 범위 결정
+2. Issue 7: 저장 영상 조회 페이지네이션 필요성 평가
+3. Issue 8: scan/API 사용 기록 모델 검토
+4. Issue 9: discovery links/local assets MVP 범위 결정
+5. Issue 10: 제작 후보와 제작 칸반의 데이터 기준 결정
 
 이 순서가 안전한 이유:
 

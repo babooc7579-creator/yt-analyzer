@@ -20,6 +20,9 @@ export const PRODUCTION_STATUS = {
   ON_HOLD: 'production_on_hold',
 };
 
+export const VIDEO_REVIEW_STATUSES = Object.values(VIDEO_STATUS);
+export const PRODUCTION_STATUSES = Object.values(PRODUCTION_STATUS);
+
 export const CHANNEL_GRADE = {
   S: 'S',
   A: 'A',
@@ -113,6 +116,10 @@ export const RADAR_HIDDEN_VIDEO_STATUSES = [
 
 const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object || {}, key);
 
+export const isVideoReviewStatus = (status) => VIDEO_REVIEW_STATUSES.includes(status);
+
+export const isProductionStatus = (status) => PRODUCTION_STATUSES.includes(status);
+
 export const normalizeStatusIds = (statusIds) => (
   Array.isArray(statusIds)
     ? [...new Set(statusIds.map(status => (typeof status === 'string' ? status.trim() : '')).filter(Boolean))]
@@ -152,14 +159,36 @@ export const getVideoStatusIds = (record = {}) => {
   return statusIds;
 };
 
+export const getVideoReviewStatusIds = (record = {}) => (
+  getVideoStatusIds(record).filter(isVideoReviewStatus)
+);
+
+export const getProductionStatusIds = (record = {}) => (
+  getVideoStatusIds(record).filter(isProductionStatus)
+);
+
 export const hasVideoStatus = (record, status) => getVideoStatusIds(record).includes(status);
 
 export const hasAnyVideoStatus = (record, statuses) => (
   getVideoStatusIds(record).some(status => statuses.includes(status))
 );
 
+export const hasVideoReviewStatus = (record, status) => getVideoReviewStatusIds(record).includes(status);
+
+export const hasAnyVideoReviewStatus = (record, statuses) => (
+  getVideoReviewStatusIds(record).some(status => statuses.includes(status))
+);
+
+export const hasProductionStatus = (record, status) => getProductionStatusIds(record).includes(status);
+
+export const hasAnyProductionStatus = (record, statuses) => (
+  getProductionStatusIds(record).some(status => statuses.includes(status))
+);
+
+export const isRadarHiddenRecord = (record = {}) => hasAnyVideoStatus(record, RADAR_HIDDEN_VIDEO_STATUSES);
+
 export const getProductionStatusFromRecord = (record = {}) => {
-  const statusIds = getVideoStatusIds(record);
+  const statusIds = getProductionStatusIds(record);
   if (statusIds.includes(PRODUCTION_STATUS.DONE)) return PRODUCTION_STATUS.DONE;
   if (statusIds.includes(PRODUCTION_STATUS.ACTIVE)) return PRODUCTION_STATUS.ACTIVE;
   if (statusIds.includes(PRODUCTION_STATUS.DECIDED)) return PRODUCTION_STATUS.DECIDED;
@@ -169,10 +198,9 @@ export const getProductionStatusFromRecord = (record = {}) => {
 };
 
 export const withRecordStatus = (record = {}, status, extraUpdates = {}) => {
-  const productionStatuses = Object.values(PRODUCTION_STATUS);
   const currentStatusIds = getVideoStatusIds(record);
-  const statusIds = productionStatuses.includes(status)
-    ? currentStatusIds.filter(currentStatus => !productionStatuses.includes(currentStatus))
+  const statusIds = isProductionStatus(status)
+    ? currentStatusIds.filter(currentStatus => !isProductionStatus(currentStatus))
     : currentStatusIds;
 
   return {

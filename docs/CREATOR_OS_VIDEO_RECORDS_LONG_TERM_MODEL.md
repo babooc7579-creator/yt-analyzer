@@ -265,6 +265,28 @@ production_candidates:
 
 ---
 
+## 9.1 2026-07-02 결정 기록
+
+사용자는 선택지 B 진행을 승인했습니다.
+
+결정 내용:
+
+- 1차 완성까지 `production_candidates` 별도 DB를 만들지 않습니다.
+- 현재 `videoUserRecords` 기반 제작 후보 구조를 유지합니다.
+- DB schema는 바꾸지 않습니다.
+- 기존 `status`는 대표/호환 필드로 유지합니다.
+- `statusIds`는 복수 판단 보존용으로 계속 사용합니다.
+- `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 명시 필드 분리는 1차 완성 이후 다시 검토합니다.
+
+1차 적용 내용:
+
+- `src/constants/status.js`에 영상 검토 상태와 제작 상태를 구분하는 helper를 추가합니다.
+- 제작 후보 판정은 production helper를 사용합니다.
+- 레이더의 봤음/나중에 보기/제외 판정은 video review helper를 사용합니다.
+- 레이더 숨김 여부는 별도 helper로 중앙화합니다.
+
+---
+
 ## 10. 지금 하면 안 되는 작업
 
 현재 단계에서 아래 작업은 하지 않습니다.
@@ -281,12 +303,17 @@ production_candidates:
 
 ## 11. 다음 작은 작업 후보
 
-사용자가 선택지 B를 승인하면 다음 작업은 작게 진행합니다.
+선택지 B 승인 후 1차 적용된 항목:
 
 1. `src/constants/status.js`에 상태 분류 helper를 추가합니다.
 2. 제작 상태와 영상 검토 상태를 판별하는 함수를 명시합니다.
-3. `ProductionKanban`은 제작 상태 helper만 사용하게 합니다.
-4. 레이더/영상 목록은 영상 검토 상태 helper만 사용하게 합니다.
-5. `status: new` 처리 정책을 문서와 코드에서 정리합니다.
+3. 제작 후보 판정은 제작 상태 helper를 사용합니다.
+4. 레이더 판단 일부는 영상 검토 상태 helper를 사용합니다.
+
+남은 작은 작업 후보:
+
+1. `status: new` 처리 정책을 문서와 코드에서 정리합니다.
+2. `ProductionKanban` 내부의 3단계 칼럼과 장기 제작 상태 후보를 별도 문서로 연결합니다.
+3. 레이더/보관함/제작 칸반에서 상태 표시명이 같은 의미로 쓰이는지 추가 audit합니다.
 
 이 작업은 DB schema, endpoint, localStorage key를 바꾸지 않는 작은 프론트 리팩터링입니다.
