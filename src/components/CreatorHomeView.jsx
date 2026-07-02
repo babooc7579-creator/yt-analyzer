@@ -49,6 +49,7 @@ export default function CreatorHomeView({
 
         <HomeActionShortcuts
           onOpenAddChannel={() => onOpenView({ id: 'ops-add-channel' })}
+          onOpenDiscoveryLinks={() => onOpenView({ id: 'vault-sources' })}
           onOpenSelectedScan={() => onOpenView({ id: 'ops-selected-scan' })}
           onOpenVault={() => onOpenView({ id: 'vault-all' })}
         />
