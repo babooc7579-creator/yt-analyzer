@@ -1,7 +1,7 @@
 import React from 'react';
-import { CalendarDays, Link as LinkIcon } from 'lucide-react';
+import { Link as LinkIcon } from 'lucide-react';
 
-import { formatDateWithDots } from '../utils/dates';
+import ProductionKanbanScheduleSummary from './ProductionKanbanScheduleSummary';
 import ProductionKanbanSummaryCard from './ProductionKanbanSummaryCard';
 
 export default function ProductionKanbanSummary({
@@ -52,25 +52,7 @@ export default function ProductionKanbanSummary({
             <p className="mt-1 text-[10px] font-bold text-rose-600">권리 확인 필요 {productionSummary.discoveryRightsWarningCount}개</p>
           )}
         </ProductionKanbanSummaryCard>
-        <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
-          <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
-            <CalendarDays className="h-3 w-3" /> 다음 일정
-          </p>
-          <p className="mt-1 truncate text-sm font-black text-amber-950">
-            {productionSummary.nextScheduled ? formatDateWithDots(productionSummary.nextScheduled.date) : '일정 없음'}
-          </p>
-          {productionSummary.nextScheduled && (
-            <p className="mt-1 line-clamp-1 text-[10px] font-bold text-amber-800">
-              {productionSummary.nextScheduled.video.title}
-            </p>
-          )}
-          {productionSummary.overdueCount > 0 && (
-            <p className="mt-1 text-[10px] font-bold text-rose-600">지난 일정 {productionSummary.overdueCount}개 확인 필요</p>
-          )}
-          {productionSummary.activeWithoutDate > 0 && (
-            <p className="mt-1 text-[10px] font-bold text-amber-700">제작 중 {productionSummary.activeWithoutDate}개 일정 미정</p>
-          )}
-        </div>
+        <ProductionKanbanScheduleSummary productionSummary={productionSummary} />
       </div>
       <div className="mt-3 flex flex-wrap gap-2 border-t border-indigo-50 pt-3 text-[11px] font-bold text-slate-500">
         <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-indigo-700">영상 기준: 스크랩북/제작 상태 기록</span>
