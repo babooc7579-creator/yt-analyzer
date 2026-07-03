@@ -1,7 +1,7 @@
 import HiddenLegacyAside from './HiddenLegacyAside';
 import LegacyChannelPanel from './LegacyChannelPanel';
 import LegacyDashboardTab from './LegacyDashboardTab';
-import ScrapbookWorkspace from './ScrapbookWorkspace';
+import LegacyVaultTab from './LegacyVaultTab';
 import WorkspaceTabs from './WorkspaceTabs';
 
 export default function LegacyWorkspaceView({
@@ -211,21 +211,20 @@ export default function LegacyWorkspaceView({
             visibleScrapCount={visibleScrapCount}
           />
         ) : (
-          <ScrapbookWorkspace
+          <LegacyVaultTab
             creatorView={creatorView}
             discoveryLinks={discoveryLinks}
             copiedPrompt={copiedPrompt}
+            copyPromptForVideos={copyPromptForVideos}
+            fetchTopComments={fetchTopComments}
+            markRadarVideoStatus={markRadarVideoStatus}
+            openCreatorView={openCreatorView}
             promptCopyError={promptCopyError}
             savedVideos={savedVideos}
+            toggleScrapVideo={toggleScrapVideo}
+            updateDiscoveryLink={updateDiscoveryLink}
+            updateVideoUserRecord={updateVideoUserRecord}
             videoUserRecords={videoUserRecords}
-            onCopyPrompt={() => copyPromptForVideos(savedVideos)}
-            onFetchComments={fetchTopComments}
-            onMoveVideo={markRadarVideoStatus}
-            onOpenDiscoveryLinks={() => openCreatorView({ id: 'vault-sources' })}
-            onOpenReferenceVault={() => openCreatorView({ id: 'vault-all' })}
-            onRemoveScrap={toggleScrapVideo}
-            onUpdateDiscoveryLink={updateDiscoveryLink}
-            onUpdateVideoRecord={updateVideoUserRecord}
           />
         )}
       </div>
