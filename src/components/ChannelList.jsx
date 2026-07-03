@@ -65,6 +65,7 @@ function ChannelListItem({
               onChange={(event) => onUpdateMetadata(channel, { grade: event.target.value })}
               className="w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[10px] font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
               title="채널 등급"
+              aria-label={`${channel.title} 채널 등급 선택`}
             >
               {Object.values(CHANNEL_GRADE).map((value) => (
                 <option key={value} value={value}>등급 {CHANNEL_GRADE_LABELS[value]}</option>
@@ -79,6 +80,7 @@ function ChannelListItem({
               onChange={(event) => onUpdateMetadata(channel, { status: event.target.value })}
               className="w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-[10px] font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400"
               title="채널 상태"
+              aria-label={`${channel.title} 채널 상태 선택`}
             >
               {Object.values(CHANNEL_STATUS).map((value) => (
                 <option key={value} value={value}>{CHANNEL_STATUS_LABELS[value]}</option>

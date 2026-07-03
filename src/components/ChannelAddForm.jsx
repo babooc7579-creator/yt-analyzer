@@ -90,7 +90,7 @@ export default function ChannelAddForm({
       {isEditingCategory && (
         <div className="mb-3 p-2 bg-white rounded border border-indigo-200 shadow-inner">
           <div className="flex gap-1 mb-2">
-            <input type="text" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="새 카테고리명" className="w-full text-xs px-2 py-1.5 border border-slate-200 rounded" />
+            <input type="text" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="새 카테고리명" className="w-full text-xs px-2 py-1.5 border border-slate-200 rounded" aria-label="새 화면 카테고리 이름" />
             <button
               type="button"
               onClick={() => { if (newCategoryName && !categories.includes(newCategoryName)) { setCategories([...categories, newCategoryName]); setNewCategoryName(''); } }}
@@ -180,6 +180,7 @@ export default function ChannelAddForm({
             className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none resize-none font-mono text-xs"
             rows={5}
             disabled={bulkLoading}
+            aria-label="일괄 추가할 채널 목록"
           />
           <p className="text-[10px] text-slate-500">{bulkInput.split('\n').map((l) => l.trim()).filter(Boolean).length}개 줄 인식됨. YouTube에서 채널 정보를 확인한 뒤 클라우드 목록에 저장합니다. 영상 수집은 하지 않습니다.</p>
 
@@ -250,6 +251,7 @@ export default function ChannelAddForm({
               onChange={(e) => setNewChannelInput(e.target.value)}
               placeholder="핸들 / 채널링크 / 영상링크"
               className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none"
+              aria-label="확인할 채널 핸들, 채널 링크 또는 영상 링크"
               onKeyDown={(e) => e.key === 'Enter' && handlePreviewChannel()}
             />
             <button
@@ -319,6 +321,7 @@ export default function ChannelAddForm({
             placeholder="첫 기록 메모 (선택) - 예) 시니어롱폼 소재용, 톤 비슷함"
             className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none resize-none"
             rows={2}
+            aria-label="새 채널 첫 기록 메모"
           />
 
           <div className="flex gap-2">

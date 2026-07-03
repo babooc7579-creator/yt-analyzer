@@ -267,6 +267,7 @@ function DiscoveryLinkRow({
                   onChange={(event) => setDraftTitle(event.target.value)}
                   placeholder="나중에 알아볼 수 있는 이름"
                   value={draftTitle}
+                  aria-label={`${title} 발견 링크 제목 수정`}
                 />
               </div>
 
@@ -284,6 +285,7 @@ function DiscoveryLinkRow({
                   onChange={(event) => setDraftMemo(event.target.value)}
                   placeholder="왜 저장했는지, 어떤 포인트를 봐야 하는지 적어두세요."
                   value={draftMemo}
+                  aria-label={`${title} 발견 링크 메모 수정`}
                 />
               </div>
 
@@ -584,6 +586,7 @@ export default function DiscoveryLinksWorkspace({
               required
               type="url"
               value={form.url}
+              aria-label="저장할 원본 링크 URL"
             />
             {urlPreview && (
               <div className={`rounded-lg border px-3 py-2 text-xs leading-relaxed ${
@@ -618,6 +621,7 @@ export default function DiscoveryLinksWorkspace({
               placeholder="나중에 알아볼 수 있는 이름"
               type="text"
               value={form.title}
+              aria-label="발견 링크 제목 또는 기억할 이름"
             />
           </div>
 
@@ -672,6 +676,7 @@ export default function DiscoveryLinksWorkspace({
               onChange={(event) => updateForm('memo', event.target.value)}
               placeholder="왜 저장했는지, 어떤 포인트를 봐야 하는지 적어두세요."
               value={form.memo}
+              aria-label="발견 링크 메모"
             />
           </div>
 
@@ -795,6 +800,7 @@ export default function DiscoveryLinksWorkspace({
                 placeholder="제목, 메모, URL 검색"
                 type="search"
                 value={searchQuery}
+                aria-label="발견 링크 검색어"
               />
               {searchQuery ? (
                 <button

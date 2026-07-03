@@ -37,6 +37,7 @@ export default function LegacyWorkPanelIntro({ apiKey, onChangeApiKey }) {
           onChange={(e) => onChangeApiKey(e.target.value)}
           placeholder="YouTube API Key (댓글 스캔에만 필요)"
           className="w-full text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+          aria-label="댓글 Top 10 조회용 YouTube API Key"
         />
       </div>
     </>
