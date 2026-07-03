@@ -3,6 +3,7 @@ import ChannelList from './ChannelList';
 import ChannelTagTabs from './ChannelTagTabs';
 import LegacyWorkPanelIntro from './LegacyWorkPanelIntro';
 import LoadStoredVideosButton from './LoadStoredVideosButton';
+import { getChannelScanDisplay } from '../utils/channelScanDisplay';
 
 export default function LegacyChannelPanel({
   addMode,
@@ -18,7 +19,6 @@ export default function LegacyChannelPanel({
   cloudOnlyTags,
   confirmRenameCategory,
   error,
-  getChannelScanDisplay,
   getScannableChannelCount,
   handleBulkAdd,
   handlePreviewChannel,

@@ -1,4 +1,3 @@
-import { getChannelScanDisplay } from '../utils/channelScanDisplay';
 import HiddenLegacyAside from './HiddenLegacyAside';
 import LegacyChannelPanel from './LegacyChannelPanel';
 import ScrapbookWorkspace from './ScrapbookWorkspace';
@@ -122,7 +121,6 @@ export default function LegacyWorkspaceView({
         cloudOnlyTags={cloudOnlyTags}
         confirmRenameCategory={confirmRenameCategory}
         error={error}
-        getChannelScanDisplay={getChannelScanDisplay}
         getScannableChannelCount={getScannableChannelCount}
         handleBulkAdd={handleBulkAdd}
         handlePreviewChannel={handlePreviewChannel}
