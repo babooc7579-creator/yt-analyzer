@@ -398,7 +398,7 @@ localStorage는 지금 당장 제거하지 않습니다.
 - MVP에서는 새 `discovery_links` Cosmos container를 바로 만들지 않습니다.
 - MVP 저장 위치는 기존 Cloud DB 구조 안에서 `docType: discovery_link` 방식입니다.
 - `/videos` 저장 영상 조회에 `docType: discovery_link` 문서가 섞이면 안 됩니다.
-- 링크 수, 검색/필터, 로컬 파일 연결, 제작 후보 연결이 커지면 별도 `discovery_links` container 분리를 다시 검토합니다.
+- 링크 수, 검색/필터, 로컬 파일 연결, 별도 제작 프로젝트 모델이 커지면 별도 `discovery_links` container 분리를 다시 검토합니다.
 - 발견함의 메인 `status`는 작게 시작합니다: `inbox`, `reviewing`, `saved`, `candidate`, `discarded`.
 - 권리 확인은 메인 `status`에 섞지 않고 `rightsStatus`로 분리합니다: `unknown`, `needs_check`, `cleared`, `do_not_use`.
 - 무단 크롤링, 자동 다운로드, 메타데이터 자동 수집은 MVP에서 제외합니다.

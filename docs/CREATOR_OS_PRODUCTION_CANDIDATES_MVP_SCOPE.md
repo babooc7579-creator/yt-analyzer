@@ -396,8 +396,8 @@ production_candidate = {
 
 사용자 결정이 필요한 다음 작업:
 
-1. discovery links 실제 구현 전 API 경계와 `/videos` 조회 분리 방식 결정
-2. discovery link 첫 화면 흐름과 제작 후보 연결 범위 결정
+1. discovery links 후속 확장 전 API 경계와 `/videos` 조회 분리 방식 재확인
+2. discovery link 후보를 별도 제작 프로젝트 모델로 분리할지 여부
 3. `production_candidates` 별도 DB 도입 여부
 4. 제작 칸반을 3단계에서 더 확장할지 여부
 5. `productionStatus` 명시 필드 도입 여부
