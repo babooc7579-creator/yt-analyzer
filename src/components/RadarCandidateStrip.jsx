@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Bookmark, CheckCircle2, Clock, ExternalLink, Play, RotateCcw, Rocket, Star, TrendingUp, XCircle } from 'lucide-react';
+import CopyUrlButton from './CopyUrlButton';
 import {
   PRODUCTION_STATUS,
   VIDEO_STATUS,
@@ -8,6 +9,7 @@ import {
   hasVideoReviewStatus,
   isRadarHiddenRecord,
 } from '../constants/status';
+import { getYouTubeVideoUrl } from '../utils/urls';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 
 const getRadarScore = (video) => {
@@ -124,29 +126,32 @@ export default function RadarCandidateStrip({
               <p className="mt-2 text-[10px] text-slate-500">아직 없음</p>
             ) : (
               <div className="mt-2 space-y-1.5">
-                {group.videos.slice(0, 3).map((video) => (
-                  <div key={`${group.key}-${video.videoId}`} className="rounded-lg bg-slate-950/70 p-1.5">
-                    <a
-                      href={`https://youtube.com/watch?v=${video.videoId}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="block truncate text-[10px] font-bold text-slate-200 hover:text-white"
-                      title={video.title}
-                      aria-label={`${video.title} YouTube 원본 영상 열기`}
-                    >
-                      {video.title}
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() => onRestoreVideo(video.videoId)}
-                      className="mt-1 inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-200 hover:text-white"
-                      title="이 영상을 오늘 레이더 후보로 다시 표시"
-                      aria-label={`${video.title} 레이더로 되돌리기`}
-                    >
-                      <RotateCcw className="h-3 w-3" /> 레이더로 되돌리기
-                    </button>
-                  </div>
-                ))}
+                {group.videos.slice(0, 3).map((video) => {
+                  const videoUrl = getYouTubeVideoUrl(video.videoId);
+                  return (
+                    <div key={`${group.key}-${video.videoId}`} className="rounded-lg bg-slate-950/70 p-1.5">
+                      <a
+                        href={videoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block truncate text-[10px] font-bold text-slate-200 hover:text-white"
+                        title={video.title}
+                        aria-label={`${video.title} YouTube 원본 영상 열기`}
+                      >
+                        {video.title}
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => onRestoreVideo(video.videoId)}
+                        className="mt-1 inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-200 hover:text-white"
+                        title="이 영상을 오늘 레이더 후보로 다시 표시"
+                        aria-label={`${video.title} 레이더로 되돌리기`}
+                      >
+                        <RotateCcw className="h-3 w-3" /> 레이더로 되돌리기
+                      </button>
+                    </div>
+                  );
+                })}
                 {group.videos.length > 3 && (
                   <p className="text-[10px] font-bold text-slate-500">외 {group.videos.length - 3}개</p>
                 )}
@@ -250,6 +255,7 @@ export default function RadarCandidateStrip({
           const radarScore = Math.round(getRadarScore(video));
           const priorityLabel = getPriorityLabel(radarScore);
           const reasons = getRadarReasons(video);
+          const videoUrl = getYouTubeVideoUrl(video.videoId);
 
           return (
             <article key={video.videoId} className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80">
@@ -271,7 +277,7 @@ export default function RadarCandidateStrip({
                     </span>
                   )}
                 </div>
-                <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
+                <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
                   {video.title}
                 </a>
                 <div className="mt-3 rounded-xl border border-rose-400/20 bg-rose-500/10 px-3 py-2">
@@ -301,16 +307,27 @@ export default function RadarCandidateStrip({
                     <p className="text-sm font-extrabold text-white">{video.like_ratio}%</p>
                   </div>
                 </div>
-                <a
-                  href={`https://youtube.com/watch?v=${video.videoId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-extrabold text-slate-900 hover:bg-rose-50"
-                  title="YouTube에서 원본 영상 열기"
-                  aria-label={`${videoTitle} YouTube에서 열기`}
-                >
-                  <Play className="h-4 w-4" /> 1. 영상 열고 판단 <ExternalLink className="h-3 w-3" />
-                </a>
+                <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+                  <a
+                    href={videoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-extrabold text-slate-900 hover:bg-rose-50"
+                    title="YouTube에서 원본 영상 열기"
+                    aria-label={`${videoTitle} YouTube에서 열기`}
+                  >
+                    <Play className="h-4 w-4" /> 1. 영상 열고 판단 <ExternalLink className="h-3 w-3" />
+                  </a>
+                  <CopyUrlButton
+                    url={videoUrl}
+                    label="URL 복사"
+                    copiedLabel="복사 완료"
+                    ariaLabel={`${videoTitle} YouTube 원본 URL 복사`}
+                    title="YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다."
+                    className="inline-flex items-center justify-center gap-1 rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-extrabold text-white transition hover:bg-white/15 disabled:text-white/40"
+                    iconClassName="h-3.5 w-3.5"
+                  />
+                </div>
                 <p className="mt-3 text-[10px] font-bold text-slate-400">2. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.</p>
                 <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <button
