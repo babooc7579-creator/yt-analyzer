@@ -32,12 +32,6 @@ export function useCreatorOsMetrics({
     )).length
   ), [savedChannels, selectedChannelIds]);
 
-  const getScannableChannelCount = (category) => (
-    savedChannels.filter(channel => (
-      channel.tags?.includes(category) && isChannelScannable(channel)
-    )).length
-  );
-
   const cloudOnlyTags = useMemo(() => (
     getCloudOnlyTags(savedChannels, categories)
   ), [savedChannels, categories]);
@@ -81,7 +75,6 @@ export function useCreatorOsMetrics({
     cloudOnlyTags,
     discoveryCandidateCount,
     discoveryRightsWarningCount,
-    getScannableChannelCount,
     latestScanText,
     openRadarCandidateCount,
     productionCandidateCount,

@@ -30,7 +30,6 @@ export default function LegacyWorkspaceView({
   error,
   fetchTopComments,
   filteredAndSortedVideos,
-  getScannableChannelCount,
   handleBulkAdd,
   handleManualScan,
   handlePreviewChannel,
@@ -121,7 +120,6 @@ export default function LegacyWorkspaceView({
         cloudOnlyTags={cloudOnlyTags}
         confirmRenameCategory={confirmRenameCategory}
         error={error}
-        getScannableChannelCount={getScannableChannelCount}
         handleBulkAdd={handleBulkAdd}
         handlePreviewChannel={handlePreviewChannel}
         handleSaveChannel={handleSaveChannel}
