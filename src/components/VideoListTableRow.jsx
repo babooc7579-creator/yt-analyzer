@@ -4,6 +4,7 @@ import { LANGUAGES } from '../constants/languages';
 import { hasStrongReaction, isTtoTtoCandidate, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from '../utils/video';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import CopyUrlButton from './CopyUrlButton';
+import VideoListRowBadges from './VideoListRowBadges';
 
 export default function VideoListTableRow({
   fetchTopComments,
@@ -48,33 +49,13 @@ export default function VideoListTableRow({
         <div className="flex gap-5">
           <img src={video.thumbnail} alt={`${videoTitle} 썸네일`} className="w-36 h-20 object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 bg-slate-100" />
           <div className="flex flex-col justify-center min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              {isSaved && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-1 text-[10px] font-bold text-yellow-700">
-                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-500" /> 소재 보관됨
-                </span>
-              )}
-              {isProductionCandidate && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold text-indigo-700">
-                  <Rocket className="w-3 h-3" /> 제작 후보
-                </span>
-              )}
-              {isChecked && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold text-indigo-700">
-                  <CheckSquare className="w-3 h-3" /> AI 리메이크 선택
-                </span>
-              )}
-              {(isStrongReaction || isTtoTto) && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-sm">
-                  <Rocket className="w-3 h-3" /> 또터또 후보
-                </span>
-              )}
-              {isStrongReaction && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[10px] font-bold text-orange-700">
-                  <TrendingUp className="w-3 h-3" /> 강한 반응
-                </span>
-              )}
-            </div>
+            <VideoListRowBadges
+              isChecked={isChecked}
+              isProductionCandidate={isProductionCandidate}
+              isSaved={isSaved}
+              isStrongReaction={isStrongReaction}
+              isTtoTto={isTtoTto}
+            />
             <a href={videoUrl} target="_blank" rel="noreferrer" className="text-base font-extrabold text-slate-900 hover:text-indigo-600 line-clamp-2 leading-snug mb-2" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
             <div className="flex flex-wrap items-center gap-2 mt-1">
               <span className="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded-full border border-slate-200 font-semibold">{LANGUAGES.find((language) => language.code === video.language)?.label || '언어 미상'}</span>
