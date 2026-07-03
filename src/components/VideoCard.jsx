@@ -1,9 +1,8 @@
-import { Clock, MessageSquareText, Rocket, Star } from 'lucide-react';
-import { getLanguageLabel } from '../constants/languages';
 import { hasStrongReaction, isTtoTtoCandidate, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from '../utils/video';
-import CopyUrlButton from './CopyUrlButton';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import VideoCardCandidateReasons from './VideoCardCandidateReasons';
+import VideoCardMetaActions from './VideoCardMetaActions';
+import VideoCardPrimaryActions from './VideoCardPrimaryActions';
 import VideoCardStatsGrid from './VideoCardStatsGrid';
 import VideoCardThumbnail from './VideoCardThumbnail';
 
@@ -52,55 +51,21 @@ export default function VideoCard({
           {isProductionCandidate && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">제작 후보</span>}
           {isChecked && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">AI 리메이크 선택</span>}
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600">{getLanguageLabel(video.language) || '언어 미상'}</span>
-          {video.isShorts ? (
-            <span className="rounded-full bg-pink-100 px-2 py-1 text-[11px] font-bold text-pink-700">Shorts ({video.duration})</span>
-          ) : (
-            <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600"><Clock className="w-3 h-3" /> {video.duration}</span>
-          )}
-          <button
-            type="button"
-            onClick={() => onFetchComments(video.videoId, video.title)}
-            title="YouTube API로 댓글 Top 10을 조회합니다"
-            aria-label={`${videoTitle} 댓글 Top 10 조회 - YouTube API 호출`}
-            className="flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-1 text-[11px] font-bold text-indigo-600 transition-colors hover:bg-indigo-100"
-          >
-            <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
-          </button>
-          <CopyUrlButton
-            url={videoUrl}
-            label="URL 복사"
-            copiedLabel="복사 완료"
-            ariaLabel={`${videoTitle} YouTube 원본 URL 복사`}
-            title="YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다."
-            className="flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] font-bold text-slate-600 transition-colors hover:bg-slate-100 disabled:text-slate-300"
-          />
-        </div>
+        <VideoCardMetaActions
+          onFetchComments={onFetchComments}
+          video={video}
+          videoTitle={videoTitle}
+          videoUrl={videoUrl}
+        />
 
-        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={() => onToggleScrap(video)}
-            title={isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
-            aria-label={`${videoTitle} ${isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isSaved ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' : 'bg-yellow-500 text-white hover:bg-yellow-600'}`}
-          >
-            <Star className={`h-3.5 w-3.5 ${isSaved ? 'fill-yellow-800' : ''}`} />
-            {isSaved ? '보관 해제' : '소재 보관'}
-          </button>
-          <button
-            type="button"
-            onClick={() => onPromoteToProduction(video)}
-            disabled={isProductionCandidate}
-            title={isProductionCandidate ? '이미 Cloud 판단 기록에 제작 후보로 저장됨' : 'Cloud 판단 기록에 제작 후보로 저장합니다. YouTube API를 새로 호출하지 않습니다.'}
-            aria-label={`${videoTitle} ${isProductionCandidate ? '이미 Cloud 판단 기록에 제작 후보로 저장됨' : 'Cloud 판단 기록에 제작 후보로 저장, YouTube API 호출 없음'}`}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isProductionCandidate ? 'cursor-not-allowed bg-indigo-100 text-indigo-400' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
-          >
-            <Rocket className="h-3.5 w-3.5" />
-            {isProductionCandidate ? '제작 후보 등록됨' : '제작 후보로'}
-          </button>
-        </div>
+        <VideoCardPrimaryActions
+          isProductionCandidate={isProductionCandidate}
+          isSaved={isSaved}
+          onPromoteToProduction={onPromoteToProduction}
+          onToggleScrap={onToggleScrap}
+          video={video}
+          videoTitle={videoTitle}
+        />
 
         <VideoCardStatsGrid isStrongReaction={isStrongReaction} showWorkPanel={showWorkPanel} video={video} />
       </div>
