@@ -5,7 +5,7 @@ import {
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 import { formatDateWithDots, getDateDistanceFromToday, getIsoTodayDate } from '../utils/dates';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
-import ProductionKanbanColumn from './ProductionKanbanColumn';
+import ProductionKanbanBoard from './ProductionKanbanBoard';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
 import ProductionKanbanSummary from './ProductionKanbanSummary';
 
@@ -254,24 +254,19 @@ export default function ProductionKanban({
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
       />
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-        {COLUMNS.map((column) => (
-          <ProductionKanbanColumn
-            key={column.id}
-            column={column}
-            draftRecords={draftRecords}
-            getScheduleSignal={getScheduleSignal}
-            hasUnsavedChanges={hasUnsavedChanges}
-            moveStates={moveStates}
-            onMove={moveVideo}
-            onSave={saveDraftRecord}
-            onUpdateDraft={updateDraftRecord}
-            saveStates={saveStates}
-            videoUserRecords={videoUserRecords}
-            videos={groupedVideos[column.id]}
-          />
-        ))}
-      </div>
+      <ProductionKanbanBoard
+        columns={COLUMNS}
+        draftRecords={draftRecords}
+        getScheduleSignal={getScheduleSignal}
+        groupedVideos={groupedVideos}
+        hasUnsavedChanges={hasUnsavedChanges}
+        moveStates={moveStates}
+        onMove={moveVideo}
+        onSave={saveDraftRecord}
+        onUpdateDraft={updateDraftRecord}
+        saveStates={saveStates}
+        videoUserRecords={videoUserRecords}
+      />
     </div>
   );
 }
