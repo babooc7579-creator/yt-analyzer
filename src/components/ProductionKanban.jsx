@@ -595,6 +595,8 @@ export default function ProductionKanban({
                               value={record.targetPublishDate || ''}
                               onChange={(event) => updateDraftRecord(video.videoId, { targetPublishDate: event.target.value })}
                               className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200"
+                              title="업로드 예정일 선택"
+                              aria-label={`${videoTitle} 업로드 예정일 선택`}
                             />
                           </label>
                           <button

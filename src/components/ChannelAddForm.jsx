@@ -112,6 +112,8 @@ export default function ChannelAddForm({
                     onChange={(e) => setRenameValue(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') confirmRenameCategory(); if (e.key === 'Escape') cancelRenameCategory(); }}
                     className="text-[10px] px-1 py-0.5 w-16 border border-slate-200 rounded outline-none"
+                    title="변경할 Cloud 태그 이름 입력"
+                    aria-label={`${cat} Cloud 태그 새 이름`}
                   />
                   <button
                     type="button"
@@ -199,7 +201,13 @@ export default function ChannelAddForm({
             </div>
           </div>
 
-          <select value={newChannelLang} onChange={(e) => setNewChannelLang(e.target.value)} className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium">
+          <select
+            value={newChannelLang}
+            onChange={(e) => setNewChannelLang(e.target.value)}
+            className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium"
+            title="채널 기본 언어 선택"
+            aria-label="채널 기본 언어 선택"
+          >
             {LANGUAGES.map((lang) => <option key={lang.code} value={lang.code}>{lang.label}</option>)}
           </select>
 
@@ -295,7 +303,13 @@ export default function ChannelAddForm({
             </div>
           </div>
 
-          <select value={newChannelLang} onChange={(e) => setNewChannelLang(e.target.value)} className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium">
+          <select
+            value={newChannelLang}
+            onChange={(e) => setNewChannelLang(e.target.value)}
+            className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium"
+            title="채널 기본 언어 선택"
+            aria-label="채널 기본 언어 선택"
+          >
             {LANGUAGES.map((lang) => <option key={lang.code} value={lang.code}>{lang.label}</option>)}
           </select>
 
