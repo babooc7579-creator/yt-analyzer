@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react';
 import VideoToolbarSortControl from './VideoToolbarSortControl';
+import VideoToolbarViewModeControl from './VideoToolbarViewModeControl';
 
 export default function VideoToolbarFilters({
   lengthFilter,
@@ -57,10 +58,7 @@ export default function VideoToolbarFilters({
 
       <VideoToolbarSortControl setSortType={setSortType} sortType={sortType} />
 
-      <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-        <button type="button" onClick={() => setViewMode('card')} title="영상 후보를 카드 형태로 보기" aria-label="카드 보기로 전환" className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'card' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>카드 보기</button>
-        <button type="button" onClick={() => setViewMode('list')} title="영상 후보를 표 형태로 보기" aria-label="리스트 보기로 전환" className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>리스트 보기</button>
-      </div>
+      <VideoToolbarViewModeControl setViewMode={setViewMode} viewMode={viewMode} />
 
       <button
         type="button"
