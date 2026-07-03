@@ -385,7 +385,7 @@ discovery link 또는 local asset 검토
 후속 확장 전 남은 질문:
 
 1. local assets를 파일 메모 카드로 시작할까요, 아니면 아직 보류할까요?
-2. 발견 링크를 제작 후보와 연결할 때 `videoUserRecords` 기반으로 충분할까요, 별도 `production_candidates` 검토가 필요할까요?
+2. 발견 링크 후보를 별도 제작 프로젝트 모델로 분리할 때 `discovery_link.status` 기반으로 충분할까요, 별도 `production_candidates` 검토가 필요할까요?
 3. 기존 discovery link 문서 중 `platform`이 없는 문서를 수동 복구/마이그레이션할 필요가 있을까요?
 
 ---
@@ -398,7 +398,7 @@ discovery link 또는 local asset 검토
 2. MVP 저장은 기존 Cloud DB 구조 안의 `docType: discovery_link` 방식으로 시작했습니다.
 3. `/videos` 저장 영상 조회에 discovery link 문서가 섞이지 않도록 API 쿼리 경계를 먼저 확인합니다.
 4. local assets는 바로 구현하지 않고, "파일 메모 카드" 수준으로 시작 가능한지 2차에서 검토합니다.
-5. production candidate와 연결하기 전에는 별도 `production_candidates` 모델이 필요한지 다시 판단합니다.
+5. 별도 제작 프로젝트 모델로 확장하기 전에는 별도 `production_candidates` 모델이 필요한지 다시 판단합니다.
 
 ---
 
@@ -412,7 +412,7 @@ discovery link 또는 local asset 검토
 - 인스타 링크 관리: 수동 링크 저장과 플랫폼 표시 MVP 부분 구현
 - 로컬 파일 연결: 목표 설계 단계
 - 자동 크롤링/다운로드: 구현 금지에 가까운 고위험 영역
-- 제작 후보 연결: `production_candidates` 모델 결정 이후 검토
+- 별도 제작 프로젝트 연결: `production_candidates` 모델 결정 이후 검토
 
 MVP 기준:
 
