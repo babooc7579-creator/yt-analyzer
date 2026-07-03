@@ -3,11 +3,10 @@ import {
   DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
-  getDiscoveryLinkStatusLabel,
   getDiscoveryPlatformLabel,
-  getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 import DiscoveryLinkActions from './DiscoveryLinkActions';
+import DiscoveryLinkBadges from './DiscoveryLinkBadges';
 import DiscoveryLinkEditForm from './DiscoveryLinkEditForm';
 
 const formatDateTime = (value) => {
@@ -118,20 +117,13 @@ export default function DiscoveryLinkRow({
     <article className={`rounded-xl border p-4 shadow-sm ${rightsTone.card}`}>
       <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-slate-900 px-2 py-1 text-[10px] font-extrabold text-white">
-              {platformLabel}
-            </span>
-            <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-extrabold text-slate-600">
-              출처 {sourceHost}
-            </span>
-            <span className="rounded-full bg-indigo-50 px-2 py-1 text-[10px] font-extrabold text-indigo-700">
-              {getDiscoveryLinkStatusLabel(currentStatus)}
-            </span>
-            <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${rightsTone.badge}`}>
-              {getDiscoveryRightsStatusLabel(currentRightsStatus)}
-            </span>
-          </div>
+          <DiscoveryLinkBadges
+            currentRightsStatus={currentRightsStatus}
+            currentStatus={currentStatus}
+            platformLabel={platformLabel}
+            rightsTone={rightsTone}
+            sourceHost={sourceHost}
+          />
 
           {isEditing ? (
             <DiscoveryLinkEditForm
