@@ -78,13 +78,13 @@ YouTube API 호출이 발생하는 새 영상 수집, 채널 확인, 댓글 조�
 
 인스타/외부 링크, 로컬 파일, 출처 확인, 제작 후보 연결의 목표 모델을 정리합니다.
 
-discovery links는 1차 MVP가 부분 구현되었고, local assets와 제작 후보 연결은 아직 목표 모델 단계입니다. 구현된 것과 목표 설계를 구분해서 봅니다.
+discovery links는 1차 MVP가 부분 구현되었습니다. 수동 링크 저장과 `status: candidate` 기반 제작 후보함 연결은 구현됐고, local assets와 별도 제작 프로젝트 모델은 아직 목표 모델 단계입니다. 구현된 것과 목표 설계를 구분해서 봅니다.
 
 10. `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`
 
-discovery links / local assets의 1차 MVP 범위와 현재 반영된 수동 링크 저장 기준을 정리합니다.
+discovery links / local assets의 1차 MVP 범위와 현재 반영된 수동 링크 저장, URL 복사, 제작 후보함 연결 기준을 정리합니다.
 
-수동 링크 저장, 파일 메모 카드, 스크랩북 확장, 로컬 파일 참조 중 어디까지 할지 구현 전 확인해야 합니다.
+수동 링크 저장 이후 파일 메모 카드, 별도 제작 프로젝트 모델, 스크랩북 확장, 로컬 파일 참조 중 어디까지 할지 구현 전 확인해야 합니다.
 
 11. `CREATOR_OS_DISCOVERY_LINKS_API_BOUNDARY_OPTIONS.md`
 
@@ -230,11 +230,11 @@ GitHub Actions와 Azure Static Web Apps 배포 경고를 어떻게 정리할지 
 
 1. 발견함 1차 MVP를 기준으로 문서와 화면 문구가 현재 구현 상태를 정확히 말하는지 점검합니다.
 2. `scan_logs`와 `api_quota_logs` 실제 구현 여부는 별도 선택지 보고 후 결정합니다.
-3. local assets, 발견 링크의 제작 후보 연결, 제작 칸반 확장은 1차 MVP 안정화 이후 별도 판단합니다.
+3. local assets, 별도 제작 프로젝트 모델, 제작 칸반 확장은 1차 MVP 안정화 이후 별도 판단합니다.
 
 페이지네이션 감사는 2026-07-02에 완료됐고, 현재는 전체 조회 유지가 권장됩니다.
 scan/API 사용 기록 모델 검토도 2026-07-02에 완료됐고, 현재는 구현 없이 목표 모델만 문서화했습니다.
-discovery links/local assets MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 수동 링크 저장 중심의 발견함이 1차 MVP로 부분 구현되었습니다.
+discovery links/local assets MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 수동 링크 저장, URL 복사, 제작 후보함 연결 중심의 발견함이 1차 MVP로 부분 구현되었습니다.
 발견함 MVP 저장/상태 기준도 2026-07-02에 갱신됐고, 현재는 새 container 없이 `docType: discovery_link` 방식과 `rightsStatus` 분리가 구현 기준입니다.
 제작 후보/칸반 MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 `videoUserRecords` 기반 유지가 권장됩니다.
 
