@@ -32,6 +32,7 @@
 - 2026-07-03 배포 환경 읽기 전용 확인에서 `GET /videos`는 `channelIds` 없이 호출하면 400으로 거절됩니다. 저장 영상 조회는 `channelIds`가 있는 DB 조회 흐름으로 사용합니다.
 - `GET /tags/rename`은 메서드는 GET이지만 실제로 채널 태그를 수정하는 DB 변경 작업입니다.
 - 댓글 Top 10 조회는 프론트에서 YouTube API를 직접 호출합니다.
+- 프론트의 Cloud Function 호출은 `functionApi.js` 공통 helper를 거치며, 2026-07-03 기준 비정상 HTTP 응답이나 JSON이 아닌 응답은 사용자용 오류 메시지로 정리됩니다.
 - localStorage는 기준 데이터가 아니라 캐시/복구/기존 호환 역할입니다.
 
 ---
