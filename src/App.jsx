@@ -1,13 +1,9 @@
 ﻿import React, { useState } from 'react';
-import ChannelNotesModal from './components/ChannelNotesModal';
 import ComingSoonView from './components/ComingSoonView';
-import CreatorSidebar from './components/CreatorSidebar';
+import CreatorAppLayout from './components/CreatorAppLayout';
 import CreatorHomeView from './components/CreatorHomeView';
-import CreatorWorkspaceHeader from './components/CreatorWorkspaceHeader';
 import DiscoveryLinksWorkspace from './components/DiscoveryLinksWorkspace';
 import LegacyWorkspaceView from './components/LegacyWorkspaceView';
-import SyncWarningBanner from './components/SyncWarningBanner';
-import TopCommentsModal from './components/TopCommentsModal';
 import { useCategories } from './hooks/useCategories';
 import { useChannelAddActions } from './hooks/useChannelAddActions';
 import { useChannelActions } from './hooks/useChannelActions';
@@ -272,38 +268,23 @@ export default function App() {
   ].filter(Boolean);
 
   return (
-    <div className="min-h-screen bg-slate-950 p-4 md:p-6 font-sans text-slate-100">
-      
-      <TopCommentsModal
-        modal={commentModal}
-        onClose={closeTopCommentsModal}
-      />
-
-      <ChannelNotesModal
-        modal={notesModal}
-        onChangeText={changeNoteText}
-        onAddNote={addChannelNote}
-        onClose={closeNotesModal}
-      />
-
-      <div className="mx-auto flex w-full max-w-[2600px] flex-col gap-4 xl:flex-row">
-        <CreatorSidebar
-          activeView={creatorView}
-          onOpenView={openCreatorView}
-        />
-
-        <div className="min-w-0 flex-1 space-y-4">
-          <CreatorWorkspaceHeader
-            item={activeCreatorItem}
-            channelCount={savedChannels.length}
-            discoveryCandidateCount={discoveryCandidateCount}
-            videoCount={videos.length}
-            selectedChannelCount={selectedChannelIds.length}
-            savedVideoCount={savedVideos.length}
-          />
-
-          <SyncWarningBanner messages={syncWarnings} />
-
+    <CreatorAppLayout
+      activeCreatorItem={activeCreatorItem}
+      channelCount={savedChannels.length}
+      commentModal={commentModal}
+      creatorView={creatorView}
+      discoveryCandidateCount={discoveryCandidateCount}
+      notesModal={notesModal}
+      onAddNote={addChannelNote}
+      onChangeNoteText={changeNoteText}
+      onCloseNotes={closeNotesModal}
+      onCloseTopComments={closeTopCommentsModal}
+      onOpenCreatorView={openCreatorView}
+      savedVideoCount={savedVideos.length}
+      selectedChannelCount={selectedChannelIds.length}
+      syncWarnings={syncWarnings}
+      videoCount={videos.length}
+    >
           {isHomeView ? (
             <CreatorHomeView
               clearRadarDecisions={clearRadarDecisions}
@@ -440,8 +421,6 @@ export default function App() {
               visibleScrapCount={visibleScrapCount}
             />
           ) : null}
-        </div>
-      </div>
-    </div>
+    </CreatorAppLayout>
   );
 }
