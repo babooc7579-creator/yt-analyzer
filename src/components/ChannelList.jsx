@@ -113,8 +113,8 @@ function ChannelListItem({
       <button
         onClick={() => onDelete(channel.id, channel.category, channel.title)}
         className="p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0 mt-1"
-        title="Cloud 채널 목록에서 삭제"
-        aria-label={`${channel.title} Cloud 채널 목록에서 삭제`}
+        title="Cloud 채널 목록에서 삭제합니다. 저장 영상 조회와 새 영상 수집 대상에서 빠집니다."
+        aria-label={`${channel.title} Cloud 채널 목록에서 삭제하고 조회/수집 대상에서 제외`}
       >
         <Trash2 className="w-4 h-4" />
       </button>
