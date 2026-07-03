@@ -13,7 +13,14 @@ export default function ScrapbookHeader({
         <p className="text-sm text-slate-500 mt-1">별표로 모아둔 나만의 영감 보관소입니다. Cloud 기준으로 보관하고, 연결 실패 시에만 브라우저 임시 기록을 안내합니다.</p>
       </div>
       <div className="flex flex-col items-end gap-1">
-        <button onClick={onCopyPrompt} disabled={savedVideoCount === 0} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideoCount > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`} type="button">
+        <button
+          onClick={onCopyPrompt}
+          disabled={savedVideoCount === 0}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideoCount > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+          title={savedVideoCount > 0 ? 'AI API를 호출하지 않고 스크랩 영상 기반 요청문만 클립보드에 복사' : '스크랩북에 보관한 영상이 있어야 복사할 수 있습니다'}
+          aria-label={`스크랩 영상 ${savedVideoCount}개로 AI 리메이크 프롬프트 복사`}
+          type="button"
+        >
           <Lightbulb className="w-5 h-5" /> AI 리메이크 프롬프트 복사
         </button>
         <p className="max-w-[260px] text-right text-[10px] text-slate-500">AI API를 호출하지 않고, 스크랩 영상으로 만든 요청문만 클립보드에 복사합니다.</p>
