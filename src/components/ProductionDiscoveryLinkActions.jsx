@@ -1,0 +1,76 @@
+import { AlertCircle, ExternalLink } from 'lucide-react';
+import CopyUrlButton from './CopyUrlButton';
+
+export default function ProductionDiscoveryLinkActions({
+  isMoving,
+  link,
+  linkTitle,
+  moveState,
+  onEditInDiscoveryLinks,
+  onMove,
+}) {
+  return (
+    <>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <a
+          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-extrabold text-white transition hover:bg-slate-800"
+          href={link.url}
+          rel="noreferrer"
+          target="_blank"
+          title="원본 링크를 새 탭에서 열기"
+          aria-label={`${linkTitle} 원본 링크 열기`}
+        >
+          원본 열기
+          <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+        <CopyUrlButton
+          url={link.url}
+          label="링크 복사"
+          copiedLabel="복사 완료"
+          copyingLabel="복사 중"
+          errorLabel="복사 실패"
+          disabled={isMoving}
+          ariaLabel={`${linkTitle} 원본 링크 URL 복사`}
+          title="원본 링크 URL을 클립보드에 복사합니다. 외부 사이트 수집이나 저장 작업은 없습니다."
+          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
+          iconClassName="h-3.5 w-3.5"
+        />
+        <button
+          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50"
+          aria-label={`${linkTitle} 발견함에서 수정`}
+          disabled={isMoving}
+          onClick={onEditInDiscoveryLinks}
+          title="발견함 화면에서 링크 상태와 메모 수정"
+          type="button"
+        >
+          발견함에서 수정
+        </button>
+        <button
+          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-indigo-100 bg-indigo-50 px-3 text-[11px] font-extrabold text-indigo-700 transition hover:bg-indigo-100 disabled:opacity-50"
+          aria-label={`${linkTitle} 발견함으로 되돌리기`}
+          disabled={isMoving}
+          onClick={() => onMove(link.id, 'inbox')}
+          title="제작 후보에서 빼고 발견함 받은 링크 상태로 저장"
+          type="button"
+        >
+          {isMoving ? '저장 중...' : '발견함으로 되돌리기'}
+        </button>
+        <button
+          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 text-[11px] font-extrabold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
+          aria-label={`${linkTitle} 제작 후보에서 제외 상태로 저장`}
+          disabled={isMoving}
+          onClick={() => onMove(link.id, 'discarded')}
+          title="링크를 삭제하지 않고 발견함의 후보 제외 상태로 저장합니다"
+          type="button"
+        >
+          {isMoving ? '저장 중...' : '후보 제외'}
+        </button>
+      </div>
+      {moveState === 'error' && (
+        <p className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-red-600">
+          <AlertCircle className="h-3 w-3" /> 상태 저장 실패. 다시 눌러 주세요.
+        </p>
+      )}
+    </>
+  );
+}
