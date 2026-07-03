@@ -201,7 +201,7 @@
 바로 다음 작업은 아래 순서를 추천합니다.
 
 1. 발견 링크 저장/수정/삭제 흐름을 실제 사용 기준으로 수동 smoke test. 단, Cloud 테스트 링크를 만들고 지우는 데이터 변경 작업이므로 사용자 승인 후 진행
-2. GitHub Actions와 Azure Static Web Apps 경고를 별도 배포 설정 이슈로 검토
+2. GitHub Actions와 Azure Static Web Apps 경고를 별도 배포 설정 이슈로 검토. 2026-07-03 기준 `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md`에 선택지를 정리했으며, 추천은 선택지 B인 배포 token 방식 단순화입니다.
 3. local assets, 발견 링크의 제작 후보 연결, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정
 
 이 순서가 안전한 이유:
