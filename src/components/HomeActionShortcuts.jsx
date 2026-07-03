@@ -76,7 +76,7 @@ export default function HomeActionShortcuts({
       />
       <ShortcutButton
         title="4. 발견함 저장"
-        description="외부에서 본 링크를 Cloud 발견함에 남기고 나중에 검토합니다."
+        description="외부에서 본 링크를 Cloud 발견함에 남기고 제작 후보로 보낼 수 있습니다."
         hint="API 호출 없이 링크만 저장"
         icon={LinkIcon}
         onClick={onOpenDiscoveryLinks}
