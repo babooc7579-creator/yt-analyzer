@@ -180,7 +180,7 @@ export default function RadarCandidateStrip({
     return (
       <div className="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-5">
         <p className="text-sm font-extrabold text-emerald-100">오늘 볼 후보를 모두 처리했습니다</p>
-        <p className="mt-2 text-xs leading-relaxed text-emerald-100/70">봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있습니다.</p>
+        <p className="mt-2 text-xs leading-relaxed text-emerald-100/70">봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 Cloud 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있습니다.</p>
         <div className="mt-4 flex flex-wrap gap-2">
           <button
             type="button"
@@ -311,7 +311,7 @@ export default function RadarCandidateStrip({
                 >
                   <Play className="h-4 w-4" /> 1. 영상 열고 판단 <ExternalLink className="h-3 w-3" />
                 </a>
-                <p className="mt-3 text-[10px] font-bold text-slate-400">2. 판단 결과를 남기면 오늘 레이더에서 숨겨집니다.</p>
+                <p className="mt-3 text-[10px] font-bold text-slate-400">2. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.</p>
                 <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <button
                     type="button"
@@ -326,8 +326,8 @@ export default function RadarCandidateStrip({
                     type="button"
                     onClick={() => onPromoteToProduction(video)}
                     className="inline-flex items-center justify-center gap-1 rounded-xl bg-indigo-500/15 px-3 py-2 text-[11px] font-extrabold text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/20"
-                    title="이 영상을 제작 후보 상태로 저장하고 오늘 레이더에서 숨김"
-                    aria-label={`${videoTitle} 제작 후보로 저장`}
+                    title="Cloud 판단 기록에 제작 후보 상태로 저장하고 오늘 레이더에서 숨김. YouTube API를 새로 호출하지 않습니다."
+                    aria-label={`${videoTitle} Cloud 판단 기록에 제작 후보로 저장, YouTube API 호출 없음`}
                   >
                     <Rocket className="h-3.5 w-3.5" /> 제작 후보로
                   </button>
@@ -335,8 +335,8 @@ export default function RadarCandidateStrip({
                     type="button"
                     onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.REVIEWED)}
                     className="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-500/10 px-3 py-2 text-[11px] font-extrabold text-emerald-100 ring-1 ring-emerald-400/20 hover:bg-emerald-500/15"
-                    title="봤음으로 저장하고 오늘 레이더에서 숨김"
-                    aria-label={`${videoTitle} 봤음으로 저장`}
+                    title="Cloud 판단 기록에 봤음으로 저장하고 오늘 레이더에서 숨김"
+                    aria-label={`${videoTitle} Cloud 판단 기록에 봤음으로 저장`}
                   >
                     <CheckCircle2 className="h-3.5 w-3.5" /> 봤음
                   </button>
@@ -344,8 +344,8 @@ export default function RadarCandidateStrip({
                     type="button"
                     onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.LEGACY_LATER)}
                     className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-800 px-3 py-2 text-[11px] font-extrabold text-slate-200 hover:bg-slate-700"
-                    title="나중에 보기로 저장하고 오늘 레이더에서 숨김"
-                    aria-label={`${videoTitle} 나중에 보기로 저장`}
+                    title="Cloud 판단 기록에 나중에 보기로 저장하고 오늘 레이더에서 숨김"
+                    aria-label={`${videoTitle} Cloud 판단 기록에 나중에 보기로 저장`}
                   >
                     <Clock className="h-3.5 w-3.5" /> 나중에 보기
                   </button>
@@ -353,8 +353,8 @@ export default function RadarCandidateStrip({
                     type="button"
                     onClick={() => onMarkVideoStatus(video.videoId, VIDEO_STATUS.EXCLUDED)}
                     className="inline-flex items-center justify-center gap-1 rounded-xl bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-800 sm:col-span-2"
-                    title="후보에서 제외로 저장하고 오늘 레이더에서 숨김"
-                    aria-label={`${videoTitle} 후보에서 제외로 저장`}
+                    title="Cloud 판단 기록에 후보 제외로 저장하고 오늘 레이더에서 숨김"
+                    aria-label={`${videoTitle} Cloud 판단 기록에 후보에서 제외로 저장`}
                   >
                     <XCircle className="h-3.5 w-3.5" /> 후보에서 제외
                   </button>
