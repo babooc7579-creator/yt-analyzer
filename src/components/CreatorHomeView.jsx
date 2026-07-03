@@ -34,6 +34,8 @@ export default function CreatorHomeView({
           openRadarCandidateCount={openRadarCandidateCount}
           discoveryCandidateCount={discoveryCandidateCount}
           discoveryRightsWarningCount={discoveryRightsWarningCount}
+          onOpenDiscoveryLinks={() => onOpenView({ id: 'vault-sources' })}
+          onOpenProductionCandidates={() => onOpenView({ id: 'studio-candidates' })}
           productionCandidateCount={productionCandidateCount}
         />
 
