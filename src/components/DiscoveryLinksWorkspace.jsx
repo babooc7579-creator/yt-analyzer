@@ -824,27 +824,27 @@ export default function DiscoveryLinksWorkspace({
         </div>
 
         {error ? (
-          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+          <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
             {error}
           </div>
         ) : null}
 
         {savingMessage ? (
-          <div className="mt-4 flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-sm font-semibold text-indigo-700">
+          <div role="status" aria-live="polite" className="mt-4 flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-sm font-semibold text-indigo-700">
             <RefreshCw className="h-4 w-4 shrink-0 animate-spin" />
             {savingMessage}
           </div>
         ) : null}
 
         {notice && !savingMessage ? (
-          <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700">
+          <div role="status" aria-live="polite" className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700">
             <CheckCircle2 className="h-4 w-4 shrink-0" />
             {notice}
           </div>
         ) : null}
 
         {loading ? (
-          <div className="mt-5 rounded-xl border border-slate-200 bg-white p-8 text-center text-sm font-bold text-slate-500">
+          <div role="status" aria-live="polite" className="mt-5 rounded-xl border border-slate-200 bg-white p-8 text-center text-sm font-bold text-slate-500">
             Cloud 발견함을 불러오는 중입니다.
           </div>
         ) : links.length === 0 ? (
