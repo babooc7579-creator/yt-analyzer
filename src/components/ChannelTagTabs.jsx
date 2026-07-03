@@ -39,8 +39,8 @@ export default function ChannelTagTabs({
                 type="button"
                 onClick={() => onScanTag(category)}
                 disabled={isScanning || scannableCount === 0}
-                title={`'${category}' 태그의 운영중 채널 ${scannableCount}개만 새 영상 수집합니다. YouTube API 호출이 발생합니다.`}
-                aria-label={`'${category}' 태그 새 영상 수집`}
+                title={`'${category}' 태그의 운영중 채널 ${scannableCount}개만 새 영상 수집합니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.`}
+                aria-label={`'${category}' 태그 새 영상 수집, YouTube API 호출`}
                 className="p-2 text-slate-400 hover:text-emerald-600 disabled:text-slate-200 disabled:cursor-not-allowed transition-colors shrink-0"
               >
                 {scanningTag === category ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <RefreshCw className="w-4 h-4" />}
