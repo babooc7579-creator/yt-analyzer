@@ -421,6 +421,7 @@ export default function ProductionKanban({
             onClick={onOpenReferenceVault}
             className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-700"
             title="저장된 영상 후보를 볼 수 있는 레퍼런스 금고 열기"
+            aria-label="저장된 영상 후보를 볼 수 있는 레퍼런스 금고 열기"
           >
             <Rocket className="h-4 w-4" /> 레퍼런스 금고 열기
           </button>
@@ -429,6 +430,7 @@ export default function ProductionKanban({
             onClick={onOpenDiscoveryLinks}
             className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50"
             title="외부 링크 후보를 저장하고 관리하는 발견함 열기"
+            aria-label="외부 링크 후보를 저장하고 관리하는 발견함 열기"
           >
             <LinkIcon className="h-4 w-4" /> 발견함 열기
           </button>
