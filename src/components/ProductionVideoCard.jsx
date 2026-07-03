@@ -2,6 +2,7 @@ import { AlertCircle, CheckCircle2, Clock, ExternalLink, Loader2, Play, Save } f
 import { PRODUCTION_STATUS } from '../constants/status';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import CopyUrlButton from './CopyUrlButton';
+import ProductionVideoMetaBadges from './ProductionVideoMetaBadges';
 
 const getTodayDate = () => new Date().toISOString().slice(0, 10);
 
@@ -29,15 +30,7 @@ export default function ProductionVideoCard({
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
           {videoTitle}
         </a>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">{video.channel_title || video.channelTitle || '채널 정보 없음'}</span>
-          {columnId !== PRODUCTION_STATUS.CANDIDATE && (
-            <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${scheduleSignal.tone}`}>{scheduleSignal.label}</span>
-          )}
-          {video.multiplier !== undefined && (
-            <span className="rounded-full bg-rose-50 px-2 py-1 text-[10px] font-bold text-rose-600">대박 지수 {Number(video.multiplier || 0).toFixed(1)}x</span>
-          )}
-        </div>
+        <ProductionVideoMetaBadges columnId={columnId} scheduleSignal={scheduleSignal} video={video} />
 
         <div className="mt-3 space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3">
           <label className="block">
