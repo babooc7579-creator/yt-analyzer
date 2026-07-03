@@ -12,7 +12,7 @@ import {
 } from '../constants/status';
 import CopyUrlButton from './CopyUrlButton';
 import { formatCompactKo } from '../utils/formatters';
-import { getYouTubeChannelUrl } from '../utils/urls';
+import { formatNumberedUrlList, getYouTubeChannelUrl } from '../utils/urls';
 
 function ChannelListItem({
   channel,
@@ -147,13 +147,12 @@ export default function ChannelList({
   onDelete,
 }) {
   const visibleChannels = channels.filter((channel) => channel.tags?.includes(selectedCategory));
-  const visibleChannelUrlList = visibleChannels
-    .map((channel, index) => {
+  const visibleChannelUrlList = formatNumberedUrlList(
+    visibleChannels.map((channel) => {
       const channelUrl = getYouTubeChannelUrl(channel);
-      return channelUrl ? `${index + 1}. ${channel.title || '제목 없는 채널'}\n${channelUrl}` : null;
+      return channelUrl ? [channel.title || '제목 없는 채널', channelUrl] : null;
     })
-    .filter(Boolean)
-    .join('\n\n');
+  );
 
   return (
     <div className="space-y-3">

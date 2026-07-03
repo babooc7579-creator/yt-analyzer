@@ -2,7 +2,7 @@ import ReferenceVaultSummary from './ReferenceVaultSummary';
 import SelectedVideosActionBar from './SelectedVideosActionBar';
 import StoredVideoGuide from './StoredVideoGuide';
 import VideoToolbar from './VideoToolbar';
-import { getYouTubeVideoUrl } from '../utils/urls';
+import { formatNumberedUrlList, getYouTubeVideoUrl } from '../utils/urls';
 
 export default function VideoDashboardControls({
   activeSelectedChannelCount,
@@ -36,10 +36,11 @@ export default function VideoDashboardControls({
   viewMode,
   visibleScrapCount,
 }) {
-  const filteredVideoUrlList = filteredVideos
-    .filter((video) => video.videoId)
-    .map((video, index) => `${index + 1}. ${video.title || '제목 없는 영상'}\n${getYouTubeVideoUrl(video.videoId)}`)
-    .join('\n\n');
+  const filteredVideoUrlList = formatNumberedUrlList(
+    filteredVideos
+      .filter((video) => video.videoId)
+      .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
+  );
 
   return (
     <>

@@ -2,7 +2,7 @@ import ProductionKanban from './ProductionKanban';
 import ScrapbookEmptyState from './ScrapbookEmptyState';
 import ScrapbookHeader from './ScrapbookHeader';
 import ScrapbookVideoCard from './ScrapbookVideoCard';
-import { getYouTubeVideoUrl } from '../utils/urls';
+import { formatNumberedUrlList, getYouTubeVideoUrl } from '../utils/urls';
 
 export default function ScrapbookWorkspace({
   creatorView,
@@ -18,10 +18,11 @@ export default function ScrapbookWorkspace({
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
 }) {
-  const videoUrlList = savedVideos
-    .filter((video) => video.videoId)
-    .map((video, index) => `${index + 1}. ${video.title || '제목 없는 영상'}\n${getYouTubeVideoUrl(video.videoId)}`)
-    .join('\n\n');
+  const videoUrlList = formatNumberedUrlList(
+    savedVideos
+      .filter((video) => video.videoId)
+      .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
+  );
 
   return (
     <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
