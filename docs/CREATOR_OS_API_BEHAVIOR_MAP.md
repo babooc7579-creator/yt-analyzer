@@ -75,7 +75,7 @@
 | 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 제목, 메모 변경. 2026-07-03 smoke 성공 |
 | 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음. 2026-07-03 smoke 성공, 임시 링크 잔여 0개 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용 |
-| URL 복사 / URL 목록 복사 | `CopyUrlButton`, `formatNumberedUrlList` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 채널/영상/스크랩북/발견 링크 URL을 클립보드에 복사합니다. API 호출, DB 변경, localStorage 변경 없음 |
+| URL 복사 / URL 목록 복사 | `CopyUrlButton`, `formatNumberedUrlList` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 채널/영상/오늘 레이더/스크랩북/발견 링크 URL을 클립보드에 복사합니다. API 호출, DB 변경, localStorage 변경 없음 |
 | AI 리메이크 프롬프트 복사 | `copyAI_RemakePrompt` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 클립보드 복사만 |
 | 준비중 메뉴 | `ComingSoonView` | 없음 | 준비중 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 실제 기능처럼 보이면 안 됨 |
 
@@ -243,7 +243,7 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 
 | 화면/영역 | 기본 동작 | API 호출 가능성 | DB 변경 가능성 | 원칙 |
 |---|---|---|---|---|
-| 오늘의 레이더 | 저장된 데이터 기반 추천/요약 | 기본 없음 | 판단 저장 시 있음 | 새 수집과 분리 |
+| 오늘의 레이더 | 저장된 데이터 기반 추천/요약, 원본 URL 복사 | 기본 없음 | 판단 저장 시 있음 | 새 수집과 분리. URL 복사는 로컬 클립보드 동작 |
 | 채널 관리 | 채널 조회/저장/상태 변경 | 미리보기/저장 시 YouTube API 가능 | 있음 | 저장과 스캔을 분리 |
 | 영상 찾기/보관함 | 저장 영상 조회, 필터, 정렬 | 댓글 조회 제외 기본 없음 | 스크랩/상태 저장 시 있음 | 조회와 저장을 분리 |
 | 제작 후보/칸반 | `videoUserRecords` 기반 상태 관리 | 없음 | 있음 | 제작 상태와 영상 상태 혼동 주의 |
