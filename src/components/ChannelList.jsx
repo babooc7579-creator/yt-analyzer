@@ -118,6 +118,7 @@ function ChannelListItem({
         label="채널 URL 복사"
         copiedLabel="복사됨"
         ariaLabel={`${channel.title} YouTube 채널 URL 복사`}
+        title="YouTube 채널 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다."
         showLabel={false}
         className="inline-flex items-center justify-center p-1 text-slate-400 hover:text-blue-600 transition-colors shrink-0 mt-1 disabled:text-slate-200"
         iconClassName="w-4 h-4"
