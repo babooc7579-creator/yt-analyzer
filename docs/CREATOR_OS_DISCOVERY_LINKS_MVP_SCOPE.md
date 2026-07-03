@@ -466,6 +466,8 @@ Codex 추천:
 
 1차 MVP 범위는 **수동 링크 저장 중심의 발견함**이 가장 안전합니다. 로컬 파일은 실제 파일을 다루지 않고, 필요하면 2차에서 "파일 메모 카드" 수준으로 검토합니다.
 
-2026-07-03 배포 환경에서 읽기 전용 확인을 했습니다. `GET /discovery-links`는 성공했고 현재 Cloud 발견함 링크는 0개입니다. `GET /videos`는 `channelIds` 없이 호출하면 400으로 거절되어, 저장 영상 조회와 discovery link 조회가 API 경계상 분리되어 있음을 다시 확인했습니다. 단, 발견 링크 저장/수정/삭제 smoke test는 Cloud 테스트 데이터를 만들고 지우는 작업이므로 별도 승인 후 진행합니다.
+2026-07-03 배포 환경에서 읽기 전용 확인을 했습니다. `GET /discovery-links`는 성공했고 현재 Cloud 발견함 링크는 0개입니다. `GET /videos`는 `channelIds` 없이 호출하면 400으로 거절되어, 저장 영상 조회와 discovery link 조회가 API 경계상 분리되어 있음을 다시 확인했습니다.
+
+2026-07-03 사용자 승인 후 발견 링크 저장/수정/삭제 smoke test를 완료했습니다. 임시 링크를 Cloud에 저장하고, `status: candidate`, `rightsStatus: needs_check`, 제목·메모 수정, 삭제를 확인했습니다. 최종 재조회에서 Cloud 발견함 링크 0개와 임시 smoke 링크 0개를 확인했습니다.
 
 다음 확장으로 넘어가기 전에는 local assets, 제작 후보 연결, 별도 container 분리 여부를 작은 Issue로 나누어 확인해야 합니다.
