@@ -132,8 +132,8 @@ npm run build
 
 반드시 작은 단위로 진행합니다.
 
-1. `App.jsx`에서 `src/config.js` import 적용
-2. `constants` 분리
+1. `src/config.js` 기반 API Base URL 분리 상태 유지
+2. `constants` 분리 상태 유지
    - 기본 카테고리
    - 언어 목록
    - 정렬 옵션
@@ -142,7 +142,7 @@ npm run build
    - 숫자 포맷
    - 영상 길이 파싱
    - AI 프롬프트 생성
-4. `services` 분리
+4. `services` 분리 상태 유지
    - Azure Function API 호출
    - YouTube API 호출
    - localStorage 접근
@@ -233,28 +233,18 @@ babooc7579-creator/yt-analyzer-functions
 
 ## 9. 다음에 바로 할 작업
 
-가장 안전한 다음 작업:
+가장 안전한 다음 작업은 이미 작동하는 기능을 보존하면서 작은 단위로 정리하는 것입니다.
 
-```txt
-App.jsx에서 config.js import 적용
-```
+추천 순서:
 
-예상 변경:
-
-```js
-import { FUNCTION_API_BASE, YOUTUBE_API_BASE } from './config';
-```
-
-그리고 기존 하드코딩 제거:
-
-```js
-const FUNCTION_API_BASE = '...';
-const API_BASE = 'https://www.googleapis.com/youtube/v3';
-```
+1. 현재 문서와 실제 구현이 어긋나는 오래된 표현을 계속 정리합니다.
+2. 공통 UI, 작은 hook, helper처럼 기능 동작을 바꾸지 않는 단위를 먼저 정리합니다.
+3. 버튼 문구에서 DB 조회, Cloud 저장, YouTube API 호출, 로컬 클립보드 동작이 명확히 구분되는지 확인합니다.
+4. `App.jsx`를 크게 갈아엎지 않고 이미 분리된 컴포넌트와 hook을 기준으로 조금씩 얇게 만듭니다.
 
 주의:
 
-`App.jsx`가 크기 때문에 수정 전 전체 내용을 정확히 확보하고, 작은 변경만 반영해야 합니다.
+DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있는 작업은 별도 선택지 보고 후 진행해야 합니다.
 
 ---
 
