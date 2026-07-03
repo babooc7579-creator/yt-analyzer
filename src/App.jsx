@@ -179,6 +179,7 @@ export default function App() {
     clearCheckedVideos,
     copiedPrompt,
     copyPromptForVideos,
+    promptCopyError,
     toggleCheckVideo,
   } = useVideoSelection();
   const {
@@ -358,6 +359,7 @@ export default function App() {
               confirmRenameCategory={confirmRenameCategory}
               copiedPrompt={copiedPrompt}
               copyPromptForVideos={copyPromptForVideos}
+              promptCopyError={promptCopyError}
               creatorView={creatorView}
               discoveryLinks={discoveryLinks}
               deleteChannel={deleteChannel}

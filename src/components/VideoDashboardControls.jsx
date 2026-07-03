@@ -8,6 +8,7 @@ export default function VideoDashboardControls({
   activeSelectedChannelCount,
   checkedVideos,
   copiedPrompt,
+  promptCopyError,
   filteredCount,
   filteredVideos = [],
   isReferenceVaultView,
@@ -85,6 +86,7 @@ export default function VideoDashboardControls({
       <SelectedVideosActionBar
         selectedCount={checkedVideos.length}
         copiedPrompt={copiedPrompt}
+        promptCopyError={promptCopyError}
         onCopyPrompt={onCopyPrompt}
       />
     </>

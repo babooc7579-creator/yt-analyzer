@@ -1,8 +1,10 @@
-import { Bookmark, Lightbulb, Rocket } from 'lucide-react';
+import { AlertTriangle, Bookmark, CheckCircle2, Lightbulb, Rocket } from 'lucide-react';
 import CopyUrlButton from './CopyUrlButton';
 
 export default function ScrapbookHeader({
   savedVideoCount,
+  copiedPrompt,
+  promptCopyError,
   onCopyPrompt,
   videoUrlList,
   variant = 'scrapbook',
@@ -16,6 +18,12 @@ export default function ScrapbookHeader({
   const iconClassName = isProductionMode
     ? 'w-6 h-6 text-indigo-600'
     : 'w-6 h-6 text-yellow-500 fill-yellow-500';
+  const promptButtonLabel = promptCopyError
+    ? '복사 실패 - 다시 시도'
+    : copiedPrompt
+      ? '복사 완료! AI에게 붙여넣으세요'
+      : 'AI 리메이크 프롬프트 복사';
+  const PromptButtonIcon = promptCopyError ? AlertTriangle : copiedPrompt ? CheckCircle2 : Lightbulb;
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -45,10 +53,12 @@ export default function ScrapbookHeader({
             aria-label={`스크랩 영상 ${savedVideoCount}개로 AI 리메이크 프롬프트 복사`}
             type="button"
           >
-            <Lightbulb className="w-5 h-5" /> AI 리메이크 프롬프트 복사
+            <PromptButtonIcon className="w-5 h-5" /> {promptButtonLabel}
           </button>
         </div>
-        <p className="max-w-[320px] text-right text-[10px] text-slate-500">URL 목록은 제목과 원본 링크만, AI 프롬프트는 요청문 형태로 복사합니다. 둘 다 API를 새로 호출하지 않습니다.</p>
+        <p className="max-w-[320px] text-right text-[10px] text-slate-500">
+          {promptCopyError ? '브라우저가 클립보드 복사를 막았습니다. 다시 누르거나 브라우저 권한을 확인해 주세요.' : 'URL 목록은 제목과 원본 링크만, AI 프롬프트는 요청문 형태로 복사합니다. 둘 다 API를 새로 호출하지 않습니다.'}
+        </p>
       </div>
     </div>
   );

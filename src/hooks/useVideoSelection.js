@@ -5,13 +5,24 @@ import { buildAIRemakePrompt } from '../utils/prompts';
 export function useVideoSelection() {
   const [checkedVideos, setCheckedVideos] = useState([]);
   const [copiedPrompt, setCopiedPrompt] = useState(false);
-  const copiedPromptTimerRef = useRef(null);
+  const [promptCopyError, setPromptCopyError] = useState(false);
+  const promptCopyTimerRef = useRef(null);
 
   useEffect(() => () => {
-    if (copiedPromptTimerRef.current) {
-      window.clearTimeout(copiedPromptTimerRef.current);
+    if (promptCopyTimerRef.current) {
+      window.clearTimeout(promptCopyTimerRef.current);
     }
   }, []);
+
+  const resetPromptCopyFeedback = () => {
+    if (promptCopyTimerRef.current) {
+      window.clearTimeout(promptCopyTimerRef.current);
+    }
+    promptCopyTimerRef.current = window.setTimeout(() => {
+      setCopiedPrompt(false);
+      setPromptCopyError(false);
+    }, 3000);
+  };
 
   const clearCheckedVideos = () => {
     setCheckedVideos([]);
@@ -30,14 +41,14 @@ export function useVideoSelection() {
 
     try {
       await copyTextToClipboard(buildAIRemakePrompt(targetVideos));
-      if (copiedPromptTimerRef.current) {
-        window.clearTimeout(copiedPromptTimerRef.current);
-      }
       setCopiedPrompt(true);
-      copiedPromptTimerRef.current = window.setTimeout(() => setCopiedPrompt(false), 3000);
+      setPromptCopyError(false);
+      resetPromptCopyFeedback();
       return true;
     } catch {
       setCopiedPrompt(false);
+      setPromptCopyError(true);
+      resetPromptCopyFeedback();
       return false;
     }
   };
@@ -47,6 +58,7 @@ export function useVideoSelection() {
     clearCheckedVideos,
     copiedPrompt,
     copyPromptForVideos,
+    promptCopyError,
     toggleCheckVideo,
   };
 }
