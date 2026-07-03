@@ -344,6 +344,9 @@ function DiscoveryLinkRow({
         </div>
 
         <div className="grid min-w-[260px] grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto_auto_auto_auto] xl:grid-cols-1">
+          <p className="rounded-lg border border-indigo-100 bg-indigo-50 px-3 py-2 text-[11px] font-semibold leading-relaxed text-indigo-700 sm:col-span-2 lg:col-span-7 xl:col-span-1">
+            상태와 권리 선택은 바꾸는 즉시 Cloud 발견함에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다.
+          </p>
           <select
             className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
             disabled={saving}
