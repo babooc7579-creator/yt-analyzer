@@ -27,6 +27,7 @@ import {
   getDiscoveryPlatformLabel,
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
+import { formatNumberedUrlList } from '../utils/urls';
 import CopyUrlButton from './CopyUrlButton';
 
 const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
@@ -480,16 +481,19 @@ export default function DiscoveryLinksWorkspace({
     || rightsFilter !== ALL_RIGHTS_STATUS_OPTION.value
     || Boolean(normalizedSearchQuery);
   const filteredDiscoveryLinkUrlList = useMemo(() => (
-    filteredLinks
-      .filter((link) => link.url)
-      .map((link, index) => {
+    formatNumberedUrlList(
+      filteredLinks.map((link) => {
         const title = link.title || getDiscoveryLinkHost(link.url);
         const statusLabel = getDiscoveryLinkStatusLabel(getLinkStatusValue(link));
         const rightsLabel = getDiscoveryRightsStatusLabel(getLinkRightsStatusValue(link));
 
-        return `${index + 1}. ${title}\n${link.url}\n상태: ${statusLabel} · 권리: ${rightsLabel}`;
+        return link.url ? [
+          title,
+          link.url,
+          `상태: ${statusLabel} · 권리: ${rightsLabel}`,
+        ] : null;
       })
-      .join('\n\n')
+    )
   ), [filteredLinks]);
 
   const statusFilterOptions = useMemo(() => ([

@@ -15,3 +15,19 @@ export const getYouTubeChannelUrl = (channel) => {
 
   return channel.id ? `https://www.youtube.com/channel/${encodeURIComponent(channel.id)}` : '';
 };
+
+export const formatNumberedUrlList = (rows) => (
+  rows
+    .map((row) => {
+      if (!row) return null;
+      const lines = Array.isArray(row) ? row : [row];
+      const cleanedLines = lines
+        .map((line) => String(line || '').trim())
+        .filter(Boolean);
+
+      return cleanedLines.length ? cleanedLines : null;
+    })
+    .filter(Boolean)
+    .map((lines, index) => `${index + 1}. ${lines.join('\n')}`)
+    .join('\n\n')
+);
