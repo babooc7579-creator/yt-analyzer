@@ -92,7 +92,7 @@ export default function VideoListTable({
                           </span>
                         )}
                       </div>
-                      <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="text-base font-extrabold text-slate-900 hover:text-indigo-600 line-clamp-2 leading-snug mb-2" title={videoTitle}>{videoTitle}</a>
+                      <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="text-base font-extrabold text-slate-900 hover:text-indigo-600 line-clamp-2 leading-snug mb-2" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
                       <div className="flex flex-wrap items-center gap-2 mt-1">
                         <span className="text-[11px] bg-slate-100 text-slate-600 px-2 py-1 rounded-full border border-slate-200 font-semibold">{LANGUAGES.find((language) => language.code === video.language)?.label || '언어 미상'}</span>
                         {video.isShorts ? (
