@@ -181,6 +181,7 @@ export default function LegacyWorkspaceView({
               checkedVideos={checkedVideos}
               copiedPrompt={copiedPrompt}
               filteredCount={filteredAndSortedVideos.length}
+              filteredVideos={filteredAndSortedVideos}
               isReferenceVaultView={isReferenceVaultView}
               isScanning={isScanning}
               lengthFilter={lengthFilter}
