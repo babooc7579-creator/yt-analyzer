@@ -1,4 +1,6 @@
 import { MessageSquareText, Trash2 } from 'lucide-react';
+import CopyUrlButton from './CopyUrlButton';
+import { getYouTubeVideoUrl } from '../utils/urls';
 
 export default function ScrapbookVideoCard({
   video,
@@ -6,6 +8,7 @@ export default function ScrapbookVideoCard({
   onRemoveScrap,
 }) {
   const videoTitle = video.title || '이 영상';
+  const videoUrl = getYouTubeVideoUrl(video.videoId);
 
   const confirmRemoveScrap = () => {
     const confirmed = window.confirm(
@@ -28,7 +31,7 @@ export default function ScrapbookVideoCard({
       </div>
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>
-          <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="font-bold text-slate-800 line-clamp-2 text-sm hover:text-indigo-600 mb-2 leading-snug" title={video.title} aria-label={`${video.title} YouTube 원본 영상 열기`}>{video.title}</a>
+          <a href={videoUrl} target="_blank" rel="noreferrer" className="font-bold text-slate-800 line-clamp-2 text-sm hover:text-indigo-600 mb-2 leading-snug" title={video.title} aria-label={`${video.title} YouTube 원본 영상 열기`}>{video.title}</a>
           <div className="flex flex-wrap gap-1 mb-3">
             <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">{video.channel_title}</span>
           </div>
@@ -39,6 +42,13 @@ export default function ScrapbookVideoCard({
             <p className="font-bold text-slate-800 text-sm">{video.view_count.toLocaleString()} <span className="text-xs text-rose-500 ml-1">({video.like_ratio}%)</span></p>
           </div>
           <div className="flex gap-2">
+            <CopyUrlButton
+              url={videoUrl}
+              label="URL 복사"
+              copiedLabel="복사 완료"
+              ariaLabel={`${videoTitle} YouTube 원본 URL 복사`}
+              className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1.5 text-[11px] font-bold text-slate-600 transition-colors hover:bg-slate-100 disabled:text-slate-300"
+            />
             <button
               onClick={() => onFetchComments(video.videoId, video.title)}
               className="p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"

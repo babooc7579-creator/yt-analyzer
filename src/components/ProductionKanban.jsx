@@ -9,6 +9,8 @@ import {
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
+import CopyUrlButton from './CopyUrlButton';
+import { getYouTubeVideoUrl } from '../utils/urls';
 
 const COLUMNS = [
   {
@@ -547,6 +549,7 @@ export default function ProductionKanban({
               ) : (
                 groupedVideos[column.id].map((video) => {
                   const videoTitle = video.title || '제목 없는 영상';
+                  const videoUrl = getYouTubeVideoUrl(video.videoId);
                   const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
                   const isDirty = hasUnsavedChanges(video.videoId);
                   const saveState = saveStates[video.videoId];
@@ -559,7 +562,7 @@ export default function ProductionKanban({
                     <article key={video.videoId} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                       <img src={video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`} alt={`${videoTitle} 썸네일`} className="aspect-video w-full object-cover bg-slate-100" />
                       <div className="p-3">
-                        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
+                        <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
                           {videoTitle}
                         </a>
                         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -679,7 +682,14 @@ export default function ProductionKanban({
                               업로드 완료일 {record.uploadedAt || '기록 없음'}
                             </div>
                           )}
-                          <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50" title="YouTube 원본 영상 열기" aria-label={`${videoTitle} YouTube 원본 보기`}>
+                          <CopyUrlButton
+                            url={videoUrl}
+                            label="URL 복사"
+                            copiedLabel="복사 완료"
+                            ariaLabel={`${videoTitle} YouTube 원본 URL 복사`}
+                            className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 transition-colors hover:bg-slate-50 disabled:text-slate-300"
+                          />
+                          <a href={videoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 hover:bg-slate-50" title="YouTube 원본 영상 열기" aria-label={`${videoTitle} YouTube 원본 보기`}>
                             <Play className="h-3.5 w-3.5" /> 원본 보기 <ExternalLink className="h-3 w-3" />
                           </a>
                         </div>
