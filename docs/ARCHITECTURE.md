@@ -226,8 +226,12 @@ VideoCard → services/youtubeApi.js → YouTube Data API → CommentModal
 ### 스크랩북 데이터
 
 ```txt
-ScrapbookPage → useScrapbook → services/storage.js → localStorage
+ScrapbookPage → useScrapbook → services/functionApi.js → Azure Function → Cosmos DB
 ```
+
+현재 스크랩북은 Cloud DB를 기준 데이터로 봅니다. 백엔드에서는 별도 `scrapbook` container가 아니라 `videos` container 안의 `docType: scrapbook` 문서로 저장합니다.
+
+`localStorage`는 기준 저장소가 아니라 Cloud 연결 실패 시 임시 fallback과 기존 데이터 보호 용도로만 유지합니다. Cloud 조회가 성공하면 Cloud 응답이 기준이며, localStorage와 자동 병합하지 않습니다.
 
 ---
 
