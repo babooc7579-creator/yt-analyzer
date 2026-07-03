@@ -376,7 +376,11 @@ function DiscoveryLinkRow({
                 ? 'border border-indigo-100 bg-indigo-50 text-indigo-500'
                 : 'bg-indigo-600 text-white hover:bg-indigo-500 disabled:bg-slate-300'
             }`}
-            aria-label={`${title} 제작 후보로 저장`}
+            aria-label={
+              currentStatus === 'candidate'
+                ? `${title} 이미 제작 후보로 저장됨`
+                : `${title} 제작 후보로 저장`
+            }
             disabled={saving || currentStatus === 'candidate'}
             onClick={handleSendToCandidate}
             title={
