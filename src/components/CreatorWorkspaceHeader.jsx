@@ -27,7 +27,7 @@ export default function CreatorWorkspaceHeader({
           <StatCard value={channelCount} label="채널" />
           <StatCard value={videoCount} label="영상" />
           <StatCard value={selectedChannelCount} label="선택 채널" />
-          <StatCard value={savedVideoCount} label="영상 후보" />
+          <StatCard value={savedVideoCount} label="스크랩 영상" />
           <StatCard value={discoveryCandidateCount} label="링크 후보" />
         </div>
       </div>
