@@ -1,8 +1,9 @@
-import { CheckCircle2, Clock, ExternalLink, Play, Rocket, Star, TrendingUp, XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, ExternalLink, Play, Rocket, Star, XCircle } from 'lucide-react';
 import { VIDEO_STATUS } from '../constants/status';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 import CopyUrlButton from './CopyUrlButton';
+import RadarCandidateBadges from './RadarCandidateBadges';
 import RadarCandidateMetrics from './RadarCandidateMetrics';
 import RadarCandidateScorePanel from './RadarCandidateScorePanel';
 
@@ -55,18 +56,7 @@ export default function RadarCandidateCard({
         <span className="absolute right-2 top-2 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">{priorityLabel}</span>
       </div>
       <div className="p-4">
-        <div className="mb-2 flex flex-wrap gap-1.5">
-          {isTtoTto && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">
-              <Rocket className="h-3 w-3" /> 또터또
-            </span>
-          )}
-          {isStrong && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2 py-1 text-[10px] font-bold text-orange-700">
-              <TrendingUp className="h-3 w-3" /> 강한 반응
-            </span>
-          )}
-        </div>
+        <RadarCandidateBadges isStrong={isStrong} isTtoTto={isTtoTto} />
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
           {video.title}
         </a>
