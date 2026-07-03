@@ -77,7 +77,7 @@ export default function HomeActionShortcuts({
       <ShortcutButton
         title="4. 발견함 저장"
         description="외부에서 본 링크를 Cloud 발견함에 남기고 제작 후보로 보낼 수 있습니다."
-        hint="API 호출 없이 링크만 저장"
+        hint="외부 수집 없이 링크만 저장"
         icon={LinkIcon}
         onClick={onOpenDiscoveryLinks}
         className="border-amber-400/20 bg-amber-500/10 hover:border-amber-300/50 hover:bg-amber-500/15"
