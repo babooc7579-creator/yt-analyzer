@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CheckCircle2, Copy } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Copy } from 'lucide-react';
 import { copyTextToClipboard } from '../utils/clipboard';
 
 export default function CopyUrlButton({
@@ -55,13 +55,18 @@ export default function CopyUrlButton({
       className={className}
       title={buttonTitle}
       aria-label={ariaLabel || buttonLabel}
+      aria-live="polite"
+      aria-busy={isCopying}
     >
-      {isCopied ? (
+      {isError ? (
+        <AlertCircle className={iconClassName} />
+      ) : isCopied ? (
         <CheckCircle2 className={iconClassName} />
       ) : (
         <Copy className={iconClassName} />
       )}
       {showLabel ? buttonLabel : null}
+      {ariaLabel ? <span className="sr-only">{buttonLabel}</span> : null}
     </button>
   );
 }
