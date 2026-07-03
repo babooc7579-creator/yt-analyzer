@@ -24,6 +24,9 @@ export default function ScrapbookHeader({
       ? '복사 완료! AI에게 붙여넣으세요'
       : 'AI 리메이크 프롬프트 복사';
   const PromptButtonIcon = promptCopyError ? AlertTriangle : copiedPrompt ? CheckCircle2 : Lightbulb;
+  const promptHelpText = promptCopyError
+    ? '브라우저가 클립보드 복사를 막았습니다. 다시 누르거나 브라우저 권한을 확인해 주세요.'
+    : 'URL 목록은 제목과 원본 링크만, AI 프롬프트는 요청문 형태로 복사합니다. 둘 다 API를 새로 호출하지 않습니다.';
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -50,14 +53,14 @@ export default function ScrapbookHeader({
             disabled={savedVideoCount === 0}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideoCount > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
             title={savedVideoCount > 0 ? 'AI API를 호출하지 않고 스크랩 영상 기반 요청문만 클립보드에 복사' : '스크랩북에 보관한 영상이 있어야 복사할 수 있습니다'}
-            aria-label={`스크랩 영상 ${savedVideoCount}개로 AI 리메이크 프롬프트 복사`}
+            aria-label={`스크랩 영상 ${savedVideoCount}개: ${promptButtonLabel}`}
             type="button"
           >
             <PromptButtonIcon className="w-5 h-5" /> {promptButtonLabel}
           </button>
         </div>
-        <p className="max-w-[320px] text-right text-[10px] text-slate-500">
-          {promptCopyError ? '브라우저가 클립보드 복사를 막았습니다. 다시 누르거나 브라우저 권한을 확인해 주세요.' : 'URL 목록은 제목과 원본 링크만, AI 프롬프트는 요청문 형태로 복사합니다. 둘 다 API를 새로 호출하지 않습니다.'}
+        <p className="max-w-[320px] text-right text-[10px] text-slate-500" aria-live="polite">
+          {promptHelpText}
         </p>
       </div>
     </div>
