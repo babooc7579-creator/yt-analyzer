@@ -10,7 +10,9 @@ import {
   getChannelGrade,
   getChannelStatus,
 } from '../constants/status';
+import CopyUrlButton from './CopyUrlButton';
 import { formatCompactKo } from '../utils/formatters';
+import { getYouTubeChannelUrl } from '../utils/urls';
 
 function ChannelListItem({
   channel,
@@ -25,6 +27,7 @@ function ChannelListItem({
   const grade = getChannelGrade(channel);
   const status = getChannelStatus(channel);
   const selectionLabel = `${channel.title} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 대상에 포함`;
+  const channelUrl = getYouTubeChannelUrl(channel);
 
   return (
     <div className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
@@ -110,6 +113,15 @@ function ChannelListItem({
         <History className="w-4 h-4" />
         {channel.notes?.length > 0 && <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center">{channel.notes.length}</span>}
       </button>
+      <CopyUrlButton
+        url={channelUrl}
+        label="채널 URL 복사"
+        copiedLabel="복사됨"
+        ariaLabel={`${channel.title} YouTube 채널 URL 복사`}
+        showLabel={false}
+        className="inline-flex items-center justify-center p-1 text-slate-400 hover:text-blue-600 transition-colors shrink-0 mt-1 disabled:text-slate-200"
+        iconClassName="w-4 h-4"
+      />
       <button
         onClick={() => onDelete(channel.id, channel.category, channel.title)}
         className="p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0 mt-1"
