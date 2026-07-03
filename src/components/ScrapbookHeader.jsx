@@ -1,8 +1,10 @@
 import { Bookmark, Lightbulb, Rocket } from 'lucide-react';
+import CopyUrlButton from './CopyUrlButton';
 
 export default function ScrapbookHeader({
   savedVideoCount,
   onCopyPrompt,
+  videoUrlList,
   variant = 'scrapbook',
 }) {
   const isProductionMode = variant === 'production';
@@ -23,18 +25,30 @@ export default function ScrapbookHeader({
         </h2>
         <p className="text-sm text-slate-500 mt-1">{description}</p>
       </div>
-      <div className="flex flex-col items-end gap-1">
-        <button
-          onClick={onCopyPrompt}
-          disabled={savedVideoCount === 0}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideoCount > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
-          title={savedVideoCount > 0 ? 'AI API를 호출하지 않고 스크랩 영상 기반 요청문만 클립보드에 복사' : '스크랩북에 보관한 영상이 있어야 복사할 수 있습니다'}
-          aria-label={`스크랩 영상 ${savedVideoCount}개로 AI 리메이크 프롬프트 복사`}
-          type="button"
-        >
-          <Lightbulb className="w-5 h-5" /> AI 리메이크 프롬프트 복사
-        </button>
-        <p className="max-w-[260px] text-right text-[10px] text-slate-500">AI API를 호출하지 않고, 스크랩 영상으로 만든 요청문만 클립보드에 복사합니다.</p>
+      <div className="flex flex-col items-end gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <CopyUrlButton
+            url={videoUrlList}
+            label="URL 목록 복사"
+            copiedLabel="목록 복사 완료"
+            disabled={savedVideoCount === 0 || !videoUrlList}
+            ariaLabel={`스크랩 영상 ${savedVideoCount}개 URL 목록 복사`}
+            title={savedVideoCount > 0 ? '스크랩 영상 제목과 YouTube URL 목록을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.' : '스크랩북에 보관한 영상이 있어야 URL 목록을 복사할 수 있습니다'}
+            className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold shadow-sm transition-all ${savedVideoCount > 0 && videoUrlList ? 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50' : 'cursor-not-allowed bg-slate-100 text-slate-400'}`}
+            iconClassName="w-4 h-4"
+          />
+          <button
+            onClick={onCopyPrompt}
+            disabled={savedVideoCount === 0}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm ${savedVideoCount > 0 ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:shadow-md hover:scale-105' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}
+            title={savedVideoCount > 0 ? 'AI API를 호출하지 않고 스크랩 영상 기반 요청문만 클립보드에 복사' : '스크랩북에 보관한 영상이 있어야 복사할 수 있습니다'}
+            aria-label={`스크랩 영상 ${savedVideoCount}개로 AI 리메이크 프롬프트 복사`}
+            type="button"
+          >
+            <Lightbulb className="w-5 h-5" /> AI 리메이크 프롬프트 복사
+          </button>
+        </div>
+        <p className="max-w-[320px] text-right text-[10px] text-slate-500">URL 목록은 제목과 원본 링크만, AI 프롬프트는 요청문 형태로 복사합니다. 둘 다 API를 새로 호출하지 않습니다.</p>
       </div>
     </div>
   );
