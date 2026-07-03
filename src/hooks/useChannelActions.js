@@ -25,7 +25,7 @@ export function useChannelActions({
   const deleteChannel = useCallback(async (id, category, title) => {
     const channelName = title || '이 채널';
     const confirmed = window.confirm(
-      `'${channelName}' 채널을 Cloud 채널 목록에서 삭제할까요?\n\n이 작업은 Cloud 채널 목록을 바꾸며, 나중에 다시 보려면 채널을 다시 추가해야 합니다.`
+      `'${channelName}' 채널을 Cloud 채널 목록에서 삭제할까요?\n\n삭제하면 저장 영상 조회와 새 영상 수집 대상에서 빠집니다. 나중에 다시 보려면 채널을 다시 추가해야 합니다.`
     );
 
     if (!confirmed) return;
