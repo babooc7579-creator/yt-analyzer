@@ -1,11 +1,12 @@
 import React from 'react';
-import { CheckSquare, Clock, MessageSquareText, Square, Star } from 'lucide-react';
+import { Clock, MessageSquareText } from 'lucide-react';
 import { LANGUAGES } from '../constants/languages';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import CopyUrlButton from './CopyUrlButton';
 import VideoListRowCandidateAction from './VideoListRowCandidateAction';
 import VideoListRowBadges from './VideoListRowBadges';
+import VideoListRowMarkerCells from './VideoListRowMarkerCells';
 import VideoListRowStatsCells from './VideoListRowStatsCells';
 
 export default function VideoListTableRow({
@@ -25,28 +26,13 @@ export default function VideoListTableRow({
 
   return (
     <tr className={`group transition-all ${isChecked ? 'bg-indigo-50 ring-1 ring-indigo-200' : isStrongReaction || isTtoTto ? 'bg-rose-50/70 ring-1 ring-rose-100 hover:ring-rose-200' : 'bg-white hover:bg-slate-50 ring-1 ring-slate-100 hover:ring-slate-200'}`}>
-      <td className="px-4 py-5 text-center rounded-l-2xl">
-        <button
-          type="button"
-          onClick={() => toggleCheckVideo(video.videoId)}
-          title="AI 리메이크 요청문에 포함할 영상으로 선택"
-          aria-label={`${videoTitle} AI 리메이크 요청문 선택 ${isChecked ? '해제' : '추가'}`}
-          className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors"
-        >
-          {isChecked ? <CheckSquare className="w-6 h-6 text-indigo-600" /> : <Square className="w-6 h-6 text-slate-300 hover:text-indigo-400" />}
-        </button>
-      </td>
-      <td className="px-2 py-5 text-center">
-        <button
-          type="button"
-          onClick={() => toggleScrapVideo(video)}
-          title={isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
-          aria-label={`${videoTitle} ${isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
-          className="p-2 rounded-full hover:bg-yellow-100 transition-colors"
-        >
-          <Star className={`w-6 h-6 ${isSaved ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
-        </button>
-      </td>
+      <VideoListRowMarkerCells
+        isChecked={isChecked}
+        isSaved={isSaved}
+        onToggleCheck={() => toggleCheckVideo(video.videoId)}
+        onToggleScrap={() => toggleScrapVideo(video)}
+        videoTitle={videoTitle}
+      />
       <td className="px-4 py-5 min-w-[520px]">
         <div className="flex gap-5">
           <img src={video.thumbnail} alt={`${videoTitle} 썸네일`} className="w-36 h-20 object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 bg-slate-100" />
