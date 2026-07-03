@@ -2,6 +2,7 @@ import React from 'react';
 import { CalendarDays, Link as LinkIcon } from 'lucide-react';
 
 import { formatDateWithDots } from '../utils/dates';
+import ProductionKanbanSummaryCard from './ProductionKanbanSummaryCard';
 
 export default function ProductionKanbanSummary({
   discoveryLinkCandidateCount,
@@ -19,18 +20,27 @@ export default function ProductionKanbanSummary({
         <p className="text-xs font-semibold text-slate-500">영상 {videoCount}개 관리 · 링크 {discoveryLinkCandidateCount}개 후보</p>
       </div>
       <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-5">
-        <div className="rounded-xl border border-indigo-100 bg-indigo-50 px-3 py-3">
-          <p className="text-[10px] font-extrabold uppercase text-indigo-500">제작 후보</p>
-          <p className="mt-1 text-lg font-black text-indigo-900">{productionSummary.candidateCount}개</p>
-        </div>
-        <div className="rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-3">
-          <p className="text-[10px] font-extrabold uppercase text-emerald-600">제작 중</p>
-          <p className="mt-1 text-lg font-black text-emerald-900">{productionSummary.activeCount}개</p>
-        </div>
-        <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
-          <p className="text-[10px] font-extrabold uppercase text-slate-500">업로드 완료</p>
-          <p className="mt-1 text-lg font-black text-slate-900">{productionSummary.uploadedCount}개</p>
-        </div>
+        <ProductionKanbanSummaryCard
+          label="제작 후보"
+          labelClassName="text-indigo-500"
+          value={`${productionSummary.candidateCount}개`}
+          valueClassName="text-lg text-indigo-900"
+          wrapperClassName="border-indigo-100 bg-indigo-50"
+        />
+        <ProductionKanbanSummaryCard
+          label="제작 중"
+          labelClassName="text-emerald-600"
+          value={`${productionSummary.activeCount}개`}
+          valueClassName="text-lg text-emerald-900"
+          wrapperClassName="border-emerald-100 bg-emerald-50"
+        />
+        <ProductionKanbanSummaryCard
+          label="업로드 완료"
+          labelClassName="text-slate-500"
+          value={`${productionSummary.uploadedCount}개`}
+          valueClassName="text-lg text-slate-900"
+          wrapperClassName="border-slate-200 bg-slate-50"
+        />
         <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
           <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
             <LinkIcon className="h-3 w-3" /> 링크 후보
