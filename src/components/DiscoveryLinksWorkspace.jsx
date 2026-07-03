@@ -1,27 +1,15 @@
 import { useMemo, useState } from 'react';
 import {
-  ALL_DISCOVERY_LINK_STATUS_OPTION,
-  ALL_DISCOVERY_RIGHTS_STATUS_OPTION,
-  DISCOVERY_LINK_STATUS_OPTIONS,
-  DISCOVERY_RIGHTS_STATUS_OPTIONS,
   getDiscoveryLinkHost,
-  getDiscoveryLinkPlatform,
-  getDiscoveryLinkStatusLabel,
   getDiscoveryPlatformFromUrl,
   getDiscoveryPlatformLabel,
-  getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
-import { formatNumberedUrlList } from '../utils/urls';
+import { useDiscoveryLinkFilters } from '../hooks/useDiscoveryLinkFilters';
 import DiscoveryLinkForm from './DiscoveryLinkForm';
 import DiscoveryLinksFilters from './DiscoveryLinksFilters';
 import DiscoveryLinksHeader from './DiscoveryLinksHeader';
 import DiscoveryLinksList from './DiscoveryLinksList';
 import DiscoveryLinksNotices from './DiscoveryLinksNotices';
-
-const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
-const ALL_LINK_STATUS_OPTION = ALL_DISCOVERY_LINK_STATUS_OPTION;
-const RIGHTS_STATUS_OPTIONS = DISCOVERY_RIGHTS_STATUS_OPTIONS;
-const ALL_RIGHTS_STATUS_OPTION = ALL_DISCOVERY_RIGHTS_STATUS_OPTION;
 
 const getUrlPreview = (url) => {
   const trimmedUrl = url.trim();
@@ -60,29 +48,12 @@ const normalizeDiscoveryLinkUrl = (url) => {
   }
 };
 
-const getLinkStatusValue = (link) => link.status || 'inbox';
-
-const getLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
-
 const needsRiskyCandidateConfirmation = (status, rightsStatus) => (
   status === 'candidate' && rightsStatus === 'do_not_use'
 );
 
 const confirmRiskyCandidate = () => window.confirm(
   '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 보내시겠어요?\n나중에 제작 후보함에서 강한 경고로 표시됩니다.'
-);
-
-const getSearchableLinkText = (link) => (
-  [
-    link.title,
-    link.url,
-    link.memo,
-    getDiscoveryLinkPlatform(link),
-    getDiscoveryLinkHost(link.url),
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase()
 );
 
 export default function DiscoveryLinksWorkspace({
@@ -104,94 +75,24 @@ export default function DiscoveryLinksWorkspace({
     status: 'inbox',
     rightsStatus: 'unknown',
   });
-  const [statusFilter, setStatusFilter] = useState(ALL_LINK_STATUS_OPTION.value);
-  const [rightsFilter, setRightsFilter] = useState(ALL_RIGHTS_STATUS_OPTION.value);
-  const [searchQuery, setSearchQuery] = useState('');
-  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
   const trimmedFormUrl = form.url.trim();
-
-  const statusCounts = useMemo(() => (
-    links.reduce((counts, link) => {
-      const status = getLinkStatusValue(link);
-      return {
-        ...counts,
-        [status]: (counts[status] || 0) + 1,
-      };
-    }, {})
-  ), [links]);
-
-  const rightsCounts = useMemo(() => (
-    links.reduce((counts, link) => {
-      const rightsStatus = getLinkRightsStatusValue(link);
-      return {
-        ...counts,
-        [rightsStatus]: (counts[rightsStatus] || 0) + 1,
-      };
-    }, {})
-  ), [links]);
-
-  const statusMatchedLinks = useMemo(() => {
-    if (statusFilter === ALL_LINK_STATUS_OPTION.value) return links;
-    return links.filter((link) => getLinkStatusValue(link) === statusFilter);
-  }, [links, statusFilter]);
-
-  const rightsMatchedLinks = useMemo(() => {
-    if (rightsFilter === ALL_RIGHTS_STATUS_OPTION.value) return statusMatchedLinks;
-    return statusMatchedLinks.filter((link) => (
-      getLinkRightsStatusValue(link) === rightsFilter
-    ));
-  }, [rightsFilter, statusMatchedLinks]);
-
-  const filteredLinks = useMemo(() => {
-    if (!normalizedSearchQuery) return rightsMatchedLinks;
-    return rightsMatchedLinks.filter((link) => (
-      getSearchableLinkText(link).includes(normalizedSearchQuery)
-    ));
-  }, [normalizedSearchQuery, rightsMatchedLinks]);
-
-  const hasActiveDiscoveryFilters = statusFilter !== ALL_LINK_STATUS_OPTION.value
-    || rightsFilter !== ALL_RIGHTS_STATUS_OPTION.value
-    || Boolean(normalizedSearchQuery);
-  const filteredDiscoveryLinkUrlList = useMemo(() => (
-    formatNumberedUrlList(
-      filteredLinks.map((link) => {
-        const title = link.title || getDiscoveryLinkHost(link.url);
-        const statusLabel = getDiscoveryLinkStatusLabel(getLinkStatusValue(link));
-        const rightsLabel = getDiscoveryRightsStatusLabel(getLinkRightsStatusValue(link));
-
-        return link.url ? [
-          title,
-          link.url,
-          `상태: ${statusLabel} · 권리: ${rightsLabel}`,
-        ] : null;
-      })
-    )
-  ), [filteredLinks]);
-
-  const statusFilterOptions = useMemo(() => ([
-    { ...ALL_LINK_STATUS_OPTION, count: links.length },
-    ...LINK_STATUS_OPTIONS.map((option) => ({
-      ...option,
-      count: statusCounts[option.value] || 0,
-    })),
-  ]), [links.length, statusCounts]);
-
-  const rightsFilterOptions = useMemo(() => ([
-    { ...ALL_RIGHTS_STATUS_OPTION, count: links.length },
-    ...RIGHTS_STATUS_OPTIONS.map((option) => ({
-      ...option,
-      count: rightsCounts[option.value] || 0,
-    })),
-  ]), [links.length, rightsCounts]);
+  const {
+    clearDiscoveryFilters,
+    filteredDiscoveryLinkUrlList,
+    filteredLinks,
+    hasActiveDiscoveryFilters,
+    rightsFilter,
+    rightsFilterOptions,
+    searchQuery,
+    setRightsFilter,
+    setSearchQuery,
+    setStatusFilter,
+    statusFilter,
+    statusFilterOptions,
+  } = useDiscoveryLinkFilters(links);
 
   const updateForm = (field, value) => {
     setForm((currentForm) => ({ ...currentForm, [field]: value }));
-  };
-
-  const clearDiscoveryFilters = () => {
-    setStatusFilter(ALL_LINK_STATUS_OPTION.value);
-    setRightsFilter(ALL_RIGHTS_STATUS_OPTION.value);
-    setSearchQuery('');
   };
 
   const urlPreview = getUrlPreview(form.url);
