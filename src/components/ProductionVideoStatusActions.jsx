@@ -1,9 +1,8 @@
 import { AlertCircle, CheckCircle2, Clock, ExternalLink, Loader2, Play } from 'lucide-react';
 
 import { PRODUCTION_STATUS } from '../constants/status';
+import { getIsoTodayDate } from '../utils/dates';
 import CopyUrlButton from './CopyUrlButton';
-
-const getTodayDate = () => new Date().toISOString().slice(0, 10);
 
 export default function ProductionVideoStatusActions({
   columnId,
@@ -47,7 +46,7 @@ export default function ProductionVideoStatusActions({
       {columnId !== PRODUCTION_STATUS.DONE && (
         <button
           type="button"
-          onClick={() => onMove(video.videoId, PRODUCTION_STATUS.DONE, { uploadedAt: record.uploadedAt || getTodayDate() })}
+          onClick={() => onMove(video.videoId, PRODUCTION_STATUS.DONE, { uploadedAt: record.uploadedAt || getIsoTodayDate() })}
           disabled={isMoving}
           className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
           title="업로드 완료 상태로 저장하고 완료일을 기록"

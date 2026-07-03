@@ -12,3 +12,16 @@ export const getDaysDiff = (uploadDate) => {
 export const isOlderThanDays = (dateValue, days) => {
   return getDaysDiff(dateValue) >= days;
 };
+
+export const getIsoTodayDate = () => new Date().toISOString().slice(0, 10);
+
+export const formatDateWithDots = (date) => date ? date.split('-').join('.') : '';
+
+export const getDateDistanceFromToday = (date) => {
+  if (!date) return null;
+
+  const today = new Date(`${getIsoTodayDate()}T00:00:00`);
+  const target = new Date(`${date}T00:00:00`);
+
+  return Math.round((target - today) / 86400000);
+};
