@@ -3,6 +3,7 @@ import {
   DISCOVERY_RIGHTS_WARNINGS,
 } from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
+import { formatDateWithDots, getDateDistanceFromToday, getIsoTodayDate } from '../utils/dates';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
 import ProductionKanbanColumn from './ProductionKanbanColumn';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
@@ -29,19 +30,10 @@ const COLUMNS = [
   },
 ];
 
-const getTodayDate = () => new Date().toISOString().slice(0, 10);
-const formatDate = (date) => date ? date.split('-').join('.') : '';
 const getDiscoveryLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
-const getDateDistance = (date) => {
-  if (!date) return null;
-  const today = new Date(`${getTodayDate()}T00:00:00`);
-  const target = new Date(`${date}T00:00:00`);
-  return Math.round((target - today) / 86400000);
-};
-
 const getScheduleSignal = (record) => {
-  const distance = getDateDistance(record?.targetPublishDate);
+  const distance = getDateDistanceFromToday(record?.targetPublishDate);
   if (distance === null) {
     return {
       label: '일정 미정',
@@ -67,7 +59,7 @@ const getScheduleSignal = (record) => {
     };
   }
   return {
-    label: formatDate(record.targetPublishDate),
+    label: formatDateWithDots(record.targetPublishDate),
     tone: 'bg-slate-100 text-slate-600',
   };
 };
@@ -130,7 +122,7 @@ export default function ProductionKanban({
   }, [videos, videoUserRecords]);
 
   const productionSummary = useMemo(() => {
-    const today = getTodayDate();
+    const today = getIsoTodayDate();
     const scheduledVideos = videos
       .map(video => {
         const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};

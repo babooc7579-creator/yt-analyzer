@@ -1,7 +1,7 @@
 import React from 'react';
 import { CalendarDays, Link as LinkIcon } from 'lucide-react';
 
-const formatDate = (date) => date ? date.split('-').join('.') : '';
+import { formatDateWithDots } from '../utils/dates';
 
 export default function ProductionKanbanSummary({
   discoveryLinkCandidateCount,
@@ -45,7 +45,7 @@ export default function ProductionKanbanSummary({
             <CalendarDays className="h-3 w-3" /> 다음 일정
           </p>
           <p className="mt-1 truncate text-sm font-black text-amber-950">
-            {productionSummary.nextScheduled ? formatDate(productionSummary.nextScheduled.date) : '일정 없음'}
+            {productionSummary.nextScheduled ? formatDateWithDots(productionSummary.nextScheduled.date) : '일정 없음'}
           </p>
           {productionSummary.nextScheduled && (
             <p className="mt-1 line-clamp-1 text-[10px] font-bold text-amber-800">
