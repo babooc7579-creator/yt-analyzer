@@ -75,6 +75,7 @@
 | 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 제목, 메모 변경. 2026-07-03 smoke 성공 |
 | 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음. 2026-07-03 smoke 성공, 임시 링크 잔여 0개 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용 |
+| URL 복사 / URL 목록 복사 | `CopyUrlButton`, `formatNumberedUrlList` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 채널/영상/스크랩북/발견 링크 URL을 클립보드에 복사합니다. API 호출, DB 변경, localStorage 변경 없음 |
 | AI 리메이크 프롬프트 복사 | `copyAI_RemakePrompt` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 클립보드 복사만 |
 | 준비중 메뉴 | `ComingSoonView` | 없음 | 준비중 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 실제 기능처럼 보이면 안 됨 |
 
@@ -153,6 +154,23 @@ localStorage 관련 표현은 조심해야 합니다.
 - localStorage를 사용자에게 기준 저장소처럼 설명하지 않습니다.
 - "임시 보관", "복구용", "기존 데이터 보호" 정도로만 설명합니다.
 - localStorage 삭제/초기화 버튼은 만들기 전에 별도 판단이 필요합니다.
+
+### 4.5 클립보드 복사 버튼
+
+URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API 작업이 아닙니다.
+
+권장 표현:
+
+- 클립보드에 복사합니다
+- YouTube API 호출이나 저장 작업은 없습니다
+- 외부 사이트 수집이나 다운로드는 하지 않습니다
+
+피해야 할 표현:
+
+- 저장
+- 수집
+- 가져오기
+- 동기화
 
 ---
 
