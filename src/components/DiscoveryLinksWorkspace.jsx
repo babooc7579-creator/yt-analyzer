@@ -154,7 +154,9 @@ function DiscoveryLinkRow({
   const rightsTone = RIGHTS_STATUS_TONES[currentRightsStatus] || RIGHTS_STATUS_TONES.unknown;
 
   const handleDelete = () => {
-    const confirmed = window.confirm('이 발견 링크를 Cloud에서 삭제할까요?');
+    const confirmed = window.confirm(
+      '이 발견 링크를 Cloud 발견함에서 삭제할까요?\n\n원본 사이트 게시물이나 외부 링크 자체는 삭제되지 않습니다. Creator OS 안의 발견함 기록만 삭제됩니다.'
+    );
     if (confirmed) onDelete(link.id);
   };
 
@@ -449,10 +451,10 @@ function DiscoveryLinkRow({
 
           <button
             className="inline-flex h-9 items-center justify-center rounded-lg border border-red-100 bg-red-50 px-3 text-red-600 transition hover:bg-red-100 disabled:opacity-50"
-            aria-label="발견 링크 삭제"
+            aria-label="Cloud 발견함에서 링크 기록 삭제"
             disabled={saving}
             onClick={handleDelete}
-            title="발견 링크 삭제"
+            title="Cloud 발견함에서 링크 기록만 삭제합니다. 원본 사이트는 삭제되지 않습니다."
             type="button"
           >
             <Trash2 className="h-4 w-4" />
