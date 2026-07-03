@@ -26,6 +26,10 @@ Unexpected input(s) 'github_id_token'
   - `actions/github-script@v8`로 ID token 생성
 - 동시에 `azure_static_web_apps_api_token` secret도 사용합니다.
 - 즉, 현재 배포는 성공하지만 인증 방식과 action 입력이 다소 섞여 있고, 경고가 노출됩니다.
+- 2026-07-03에 선택지 B를 작은 PR로 실제 적용해 보았지만, main 배포에서 실패했습니다.
+  - 실패 메시지: `No matching Static Web App was found or the api key was invalid.`
+  - 뜻: 현재 `azure_static_web_apps_api_token`만으로는 배포가 되지 않고, 기존 OIDC token 흐름이 실제 배포 성공에 필요합니다.
+  - 따라서 우선 기존 OIDC 흐름으로 복구하고, 경고 제거는 Azure token/인증 설정을 다시 확인한 뒤 진행해야 합니다.
 
 ---
 
@@ -109,9 +113,17 @@ Unexpected input(s) 'github_id_token'
 - 확장성: 보통
 - 유지보수: 좋아짐
 
+### 2026-07-03 실제 검증 결과
+
+이 선택지는 현재 repo 설정에서는 실패했습니다.
+
+- Build workflow는 통과했습니다.
+- Azure 배포 workflow는 실패했습니다.
+- 실패 이유는 deployment token만으로 Static Web App을 찾거나 인증하지 못했기 때문입니다.
+
 ### Codex 판단
 
-현재 상황에서는 가장 현실적인 추천입니다. 단, 배포 설정 변경이므로 별도 PR에서 적용하고 Azure 배포 성공까지 확인해야 합니다.
+현재 상태에서는 더 이상 추천하지 않습니다. 이 선택지를 다시 시도하려면 먼저 Azure Static Web Apps deployment token secret을 재발급하거나, Azure Portal의 배포 인증 설정을 확인해야 합니다.
 
 ---
 
@@ -176,34 +188,35 @@ Azure `github_id_token` 경고와 분리해서 다루는 것이 좋습니다.
 
 추천 순서:
 
-1. 선택지 B를 작은 PR로 진행
-2. PR에서 Build와 Azure 배포 성공 확인
-3. 경고가 사라졌는지 확인
-4. Node 버전 경고가 남아 있으면 선택지 D를 별도 PR로 검토
+1. 우선 기존 OIDC 흐름으로 복구해 배포 성공 상태를 되돌립니다.
+2. Azure Portal 또는 GitHub secret에서 deployment token이 올바른지 확인합니다.
+3. token을 재발급하거나 인증 방식을 확정한 뒤 다시 선택지 B 또는 C를 검토합니다.
+4. Node 버전 경고가 남아 있으면 선택지 D를 별도 PR로 검토합니다.
 
 추천 이유:
 
 - 현재 앱은 개인용 실사용 안정화 단계입니다.
-- 배포는 이미 성공 중이므로 큰 보안/인증 구조 변경보다 경고 제거와 workflow 단순화가 우선입니다.
-- OIDC를 본격 도입하는 것은 지금 MVP 범위보다 큽니다.
+- 배포 성공이 경고 제거보다 우선입니다.
+- 선택지 B는 실제 배포에서 실패했으므로, 경고가 있더라도 먼저 성공하는 OIDC 흐름을 유지합니다.
+- OIDC를 깔끔하게 정리하는 것은 Azure 설정 확인 이후에 다시 판단합니다.
 
 ---
 
 ## 8. 결정이 필요한 질문
 
-배포 workflow 경고 정리를 진행할까요?
+배포 workflow 경고 정리를 다시 진행할까요?
 
-추천 결정:
+현재 추천 결정:
 
-- **선택지 B: 배포 token 방식으로 단순화**
+- **기존 OIDC 흐름 복구 후 보류**
 
 진행한다면 Codex는 아래 원칙으로 작업합니다.
 
 - 앱 코드 수정 없음
 - API/DB/localStorage 수정 없음
-- Azure workflow만 최소 수정
+- Azure workflow 복구만 최소 수정
 - PR에서 배포 성공 확인
-- 실패하면 즉시 원인 확인 후 되돌리기 쉬운 작은 변경으로 유지
+- 경고 제거는 deployment token 또는 Azure 인증 설정을 확인한 뒤 별도 Issue로 진행
 
 ---
 
