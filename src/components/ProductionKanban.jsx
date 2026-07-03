@@ -630,6 +630,9 @@ export default function ProductionKanban({
                         </div>
 
                         <div className="mt-3 grid grid-cols-1 gap-2">
+                          <p className="rounded-lg bg-slate-50 px-3 py-2 text-[10px] font-bold leading-relaxed text-slate-500">
+                            아래 상태 버튼은 이 영상의 제작 진행 상태를 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.
+                          </p>
                           {column.id !== PRODUCTION_STATUS.CANDIDATE && (
                             <button
                               type="button"
