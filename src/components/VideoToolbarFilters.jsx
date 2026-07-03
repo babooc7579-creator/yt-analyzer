@@ -1,4 +1,5 @@
 import { Search } from 'lucide-react';
+import VideoToolbarSortControl from './VideoToolbarSortControl';
 
 export default function VideoToolbarFilters({
   lengthFilter,
@@ -54,12 +55,7 @@ export default function VideoToolbarFilters({
         <option value="long">🎞️ 롱폼만</option>
       </select>
 
-      <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-        <button type="button" onClick={() => setSortType('multiplier')} title="대박 지수 높은 순으로 정렬" aria-label="대박 지수 높은 순 정렬" className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${sortType === 'multiplier' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>대박지수</button>
-        <button type="button" onClick={() => setSortType('viral')} title="일평균 조회 반응이 높은 순으로 정렬" aria-label="화제성 높은 순 정렬" className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'viral' ? 'bg-white shadow text-orange-600' : 'text-slate-500 hover:text-slate-800'}`}>화제성(일평균)</button>
-        <button type="button" onClick={() => setSortType('date')} title="업로드 최신순으로 정렬" aria-label="최신순 정렬" className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'date' ? 'bg-white shadow text-slate-800' : 'text-slate-500 hover:text-slate-800'}`}>최신순</button>
-        <button type="button" onClick={() => setSortType('likes')} title="참여율 높은 순으로 정렬" aria-label="참여율 높은 순 정렬" className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${sortType === 'likes' ? 'bg-white shadow text-rose-600' : 'text-slate-500 hover:text-slate-800'}`}>참여율(좋아요)</button>
-      </div>
+      <VideoToolbarSortControl setSortType={setSortType} sortType={sortType} />
 
       <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
         <button type="button" onClick={() => setViewMode('card')} title="영상 후보를 카드 형태로 보기" aria-label="카드 보기로 전환" className={`px-3 py-1 text-sm font-bold rounded-md transition-all ${viewMode === 'card' ? 'bg-white shadow text-indigo-700' : 'text-slate-500 hover:text-slate-800'}`}>카드 보기</button>
