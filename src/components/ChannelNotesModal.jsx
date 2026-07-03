@@ -16,7 +16,13 @@ export default function ChannelNotesModal({
             <History className="w-5 h-5 text-indigo-500" />
             {modal.channel.title} - 분석 기록
           </h3>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors" type="button">
+          <button
+            onClick={onClose}
+            className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors"
+            title="분석 기록 창 닫기"
+            aria-label={`${modal.channel.title} 분석 기록 창 닫기`}
+            type="button"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -33,6 +39,8 @@ export default function ChannelNotesModal({
             onClick={onAddNote}
             disabled={modal.saving || !modal.newNoteText.trim()}
             className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 text-white rounded-lg text-sm font-semibold transition-colors"
+            title="채널 분석 기록을 Cloud 채널 메모에 저장"
+            aria-label={`${modal.channel.title} 분석 기록 추가`}
             type="button"
           >
             {modal.saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}

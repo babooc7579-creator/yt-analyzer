@@ -11,7 +11,13 @@ export default function TopCommentsModal({ modal, onClose }) {
             <MessageSquareText className="w-5 h-5 text-indigo-500" />
             찐팬 반응 분석 (Top 10)
           </h3>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors" type="button">
+          <button
+            onClick={onClose}
+            className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors"
+            title="댓글 Top 10 창 닫기"
+            aria-label="댓글 Top 10 창 닫기"
+            type="button"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
