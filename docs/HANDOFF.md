@@ -210,13 +210,14 @@ npm run build
 
 현재:
 
-- 채널/영상 데이터: Azure Function + Cosmos DB 추정
-- 스크랩북: 브라우저 localStorage
+- 채널/영상 데이터: Azure Function + Cosmos DB
+- 스크랩북: Cloud DB 기준. 백엔드에서는 `videos` container 안의 `docType: scrapbook` 문서로 저장
+- localStorage: 기준 저장소가 아니라 Cloud 실패 시 임시 fallback과 기존 데이터 보호 용도
 
 장기 의사결정:
 
-- 스크랩북도 클라우드에 저장할지
 - 사용자 계정 기반 저장이 필요한지
+- 스크랩북을 장기적으로 별도 container로 분리할지
 
 ### 8.4 백엔드 저장소 역할
 
