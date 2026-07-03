@@ -132,6 +132,7 @@ export default function RadarCandidateStrip({
                       rel="noreferrer"
                       className="block truncate text-[10px] font-bold text-slate-200 hover:text-white"
                       title={video.title}
+                      aria-label={`${video.title} YouTube 원본 영상 열기`}
                     >
                       {video.title}
                     </a>
@@ -270,7 +271,7 @@ export default function RadarCandidateStrip({
                     </span>
                   )}
                 </div>
-                <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle}>
+                <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
                   {video.title}
                 </a>
                 <div className="mt-3 rounded-xl border border-rose-400/20 bg-rose-500/10 px-3 py-2">

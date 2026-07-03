@@ -66,7 +66,7 @@ export default function VideoCard({
         </div>
       </div>
       <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
-        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle}>{videoTitle}</a>
+        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
         {candidateReasons.length > 0 && (
           <div className="mt-3 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2">
             <p className="text-[10px] font-extrabold text-rose-500">후보 이유</p>
