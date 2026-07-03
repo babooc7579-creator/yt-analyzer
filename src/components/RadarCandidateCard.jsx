@@ -3,6 +3,7 @@ import { VIDEO_STATUS } from '../constants/status';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 import CopyUrlButton from './CopyUrlButton';
+import RadarCandidateMetrics from './RadarCandidateMetrics';
 
 export const getRadarScore = (video) => {
   const ttoTtoBonus = isTtoTtoCandidate(video) ? 100 : 0;
@@ -81,20 +82,7 @@ export default function RadarCandidateCard({
             ))}
           </div>
         </div>
-        <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-          <div className="rounded-xl bg-slate-900 px-2 py-2">
-            <p className="text-[9px] font-bold text-slate-500">대박 지수</p>
-            <p className="text-sm font-extrabold text-white">{Number(video.multiplier || 0).toFixed(1)}x</p>
-          </div>
-          <div className="rounded-xl bg-slate-900 px-2 py-2">
-            <p className="text-[9px] font-bold text-slate-500">경과</p>
-            <p className="text-sm font-extrabold text-white">{video.daysOld}일</p>
-          </div>
-          <div className="rounded-xl bg-slate-900 px-2 py-2">
-            <p className="text-[9px] font-bold text-slate-500">참여율</p>
-            <p className="text-sm font-extrabold text-white">{video.like_ratio}%</p>
-          </div>
-        </div>
+        <RadarCandidateMetrics video={video} />
         <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
           <a
             href={videoUrl}
