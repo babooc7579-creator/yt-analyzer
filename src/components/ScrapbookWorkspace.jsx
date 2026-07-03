@@ -22,6 +22,7 @@ export default function ScrapbookWorkspace({
       <ScrapbookHeader
         savedVideoCount={savedVideos.length}
         onCopyPrompt={onCopyPrompt}
+        variant={creatorView === 'studio-candidates' ? 'production' : 'scrapbook'}
       />
 
       {creatorView === 'studio-candidates' ? (
