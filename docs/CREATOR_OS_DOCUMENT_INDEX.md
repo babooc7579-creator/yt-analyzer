@@ -40,6 +40,14 @@ Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
 
 버튼 문구, 비용성 작업, scan 관련 UI를 수정하기 전에 확인해야 합니다.
 
+추가 확인 문서:
+
+- `CREATOR_OS_UI_WORDING_AUDIT.md`
+
+화면 문구와 버튼/입력/링크 설명이 실제 동작과 맞는지 정리합니다.
+
+버튼 이름, tooltip, `aria-label`, 발견함 피드백 메시지를 수정하기 전에 확인합니다.
+
 5. `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md`
 
 저장 영상 조회가 현재 전체 조회 구조로 유지 가능한지, 언제 페이지네이션을 다시 검토해야 하는지 정리합니다.
@@ -128,6 +136,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 | `CREATOR_OS_DATA_OWNERSHIP.md` | 데이터 소유권 기준 | 예 | 예 | 필수 |
 | `CREATOR_OS_STATUS_DICTIONARY.md` | 상태값 사전 | 예 | 예 | 필수 |
 | `CREATOR_OS_API_BEHAVIOR_MAP.md` | API 동작 구분 | 예 | 예 | 필수 |
+| `CREATOR_OS_UI_WORDING_AUDIT.md` | 화면 문구/버튼/입력 설명 감사 | 예 | 일부 | UI 문구 작업 전 필수 |
 | `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md` | 저장 영상 조회 성능/페이지네이션 판단 | 예 | 일부 | `/videos` 수정 전 필수 |
 | `CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md` | 영상 판단 기록 저장 흐름 | 예 | 일부 | 필수 |
 | `CREATOR_OS_CATEGORY_TAGS_AUDIT.md` | 카테고리/태그 구조 감사 | 예 | 일부 | 필수 |
@@ -147,7 +156,7 @@ localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해�
 
 | 하려는 작업 | 먼저 볼 문서 |
 |---|---|
-| 버튼 문구 수정 | `CREATOR_OS_API_BEHAVIOR_MAP.md` |
+| 버튼 문구 수정 | `CREATOR_OS_API_BEHAVIOR_MAP.md`, `CREATOR_OS_UI_WORDING_AUDIT.md` |
 | 스캔 버튼 또는 영상 수집 흐름 수정 | `CREATOR_OS_API_BEHAVIOR_MAP.md`, `CREATOR_OS_DATA_OWNERSHIP.md` |
 | 저장 영상 불러오기 수정 | `CREATOR_OS_API_BEHAVIOR_MAP.md`, `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md` |
 | 영상 상태 저장 수정 | `CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md`, `CREATOR_OS_STATUS_DICTIONARY.md` |
@@ -219,3 +228,17 @@ scan/API 사용 기록 모델 검토도 2026-07-02에 완료됐고, 현재는 �
 discovery links/local assets MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 수동 링크 저장 중심의 발견함이 1차 MVP로 부분 구현되었습니다.
 발견함 MVP 저장/상태 기준도 2026-07-02에 갱신됐고, 현재는 새 container 없이 `docType: discovery_link` 방식과 `rightsStatus` 분리가 구현 기준입니다.
 제작 후보/칸반 MVP 범위 검토도 2026-07-02에 완료됐고, 현재는 `videoUserRecords` 기반 유지가 권장됩니다.
+
+---
+
+## 8. 참고/히스토리 문서
+
+아래 문서는 현재 작업 기준 문서라기보다 이전 구조, 작업 기록, 장기 방향을 확인할 때 참고합니다.
+
+| 문서 | 용도 |
+|---|---|
+| `APP_BLUEPRINT.md` | 초기 앱 구조와 화면 방향 참고 |
+| `ARCHITECTURE.md` | 이전 구조 분석과 리팩터링 배경 참고 |
+| `V22_STATE_AND_MODEL_MAP.md` | v2.2 목표 상태/모델 초안 참고 |
+| `HANDOFF.md` | 과거 인수인계 및 작업 맥락 참고 |
+| `WORK_LOG.md` | 진행 기록 참고 |
