@@ -354,8 +354,8 @@ function DiscoveryLinkRow({
             disabled={saving}
             value={currentStatus}
             onChange={handleStatusChange}
-            title="검토 상태 변경 - Cloud 발견함에 저장됩니다"
-            aria-label={`${title} 검토 상태`}
+            title="검토 상태 변경 - Cloud 발견함 기록에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다."
+            aria-label={`${title} 검토 상태 변경, Cloud 발견함 기록 저장`}
           >
             {LINK_STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -367,8 +367,8 @@ function DiscoveryLinkRow({
             disabled={saving}
             value={currentRightsStatus}
             onChange={handleRightsStatusChange}
-            title="권리 확인 상태 변경 - Cloud 발견함에 저장됩니다"
-            aria-label={`${title} 권리 확인 상태`}
+            title="권리 확인 상태 변경 - Cloud 발견함 기록에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다."
+            aria-label={`${title} 권리 확인 상태 변경, Cloud 발견함 기록 저장`}
           >
             {RIGHTS_STATUS_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -383,15 +383,15 @@ function DiscoveryLinkRow({
             }`}
             aria-label={
               currentStatus === 'candidate'
-                ? `${title} 이미 제작 후보로 저장됨`
-                : `${title} 제작 후보로 저장`
+                ? `${title} 이미 Cloud 발견함 기록에 제작 후보로 저장됨`
+                : `${title} Cloud 발견함 기록에 제작 후보로 저장`
             }
             disabled={saving || currentStatus === 'candidate'}
             onClick={handleSendToCandidate}
             title={
               currentStatus === 'candidate'
-                ? '이미 제작 후보로 저장되어 제작실에 표시됩니다'
-                : '검토 상태를 제작 후보로 저장하고 제작실에 표시합니다'
+                ? '이미 Cloud 발견함 기록에 제작 후보로 저장되어 제작실에 표시됩니다'
+                : '검토 상태를 제작 후보로 저장하고 제작실에 표시합니다. 외부 사이트를 새로 수집하지 않습니다.'
             }
             type="button"
           >
@@ -761,8 +761,8 @@ export default function DiscoveryLinksWorkspace({
             className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-extrabold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-50"
             disabled={loading || saving}
             onClick={onRefresh}
-            title="Cloud 발견함 목록 다시 불러오기"
-            aria-label="Cloud 발견함 새로고침"
+            title="Cloud 발견함 목록을 다시 조회합니다. 외부 사이트를 새로 수집하지 않습니다."
+            aria-label="Cloud 발견함 목록 다시 조회, 외부 수집 없음"
             type="button"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
