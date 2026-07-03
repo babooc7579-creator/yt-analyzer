@@ -1,6 +1,8 @@
 import { CheckSquare, Clock, MessageSquareText, Rocket, Square, Star, TrendingUp } from 'lucide-react';
 import { getLanguageLabel } from '../constants/languages';
 import { hasStrongReaction, isTtoTtoCandidate, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from '../utils/video';
+import CopyUrlButton from './CopyUrlButton';
+import { getYouTubeVideoUrl } from '../utils/urls';
 
 export default function VideoCard({
   video,
@@ -18,6 +20,7 @@ export default function VideoCard({
   const isStrongReaction = hasStrongReaction(video);
   const isCandidate = isStrongReaction || isTtoTtoCandidate(video);
   const thumbnailHeightClass = showWorkPanel ? 'min-h-[360px]' : 'min-h-[420px]';
+  const videoUrl = getYouTubeVideoUrl(video.videoId);
   const candidateReasons = [
     video.multiplier >= TTOTTO_MIN_MULTIPLIER ? `평균 대비 ${video.multiplier.toFixed(1)}배` : null,
     video.daysOld >= TTOTTO_MIN_DAYS_OLD ? `${video.daysOld}일 지난 소재` : null,
@@ -66,7 +69,7 @@ export default function VideoCard({
         </div>
       </div>
       <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
-        <a href={`https://youtube.com/watch?v=${video.videoId}`} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
+        <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
         {candidateReasons.length > 0 && (
           <div className="mt-3 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2">
             <p className="text-[10px] font-extrabold text-rose-500">후보 이유</p>
@@ -94,6 +97,13 @@ export default function VideoCard({
           >
             <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
           </button>
+          <CopyUrlButton
+            url={videoUrl}
+            label="URL 복사"
+            copiedLabel="복사 완료"
+            ariaLabel={`${videoTitle} YouTube 원본 URL 복사`}
+            className="flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] font-bold text-slate-600 transition-colors hover:bg-slate-100 disabled:text-slate-300"
+          />
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
