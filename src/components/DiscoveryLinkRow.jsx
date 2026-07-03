@@ -8,16 +8,8 @@ import {
 import DiscoveryLinkActions from './DiscoveryLinkActions';
 import DiscoveryLinkBadges from './DiscoveryLinkBadges';
 import DiscoveryLinkEditForm from './DiscoveryLinkEditForm';
-
-const formatDateTime = (value) => {
-  if (!value) return '기록 없음';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '기록 없음';
-  return new Intl.DateTimeFormat('ko-KR', {
-    dateStyle: 'short',
-    timeStyle: 'short',
-  }).format(date);
-};
+import DiscoveryLinkUpdatedAt from './DiscoveryLinkUpdatedAt';
+import DiscoveryLinkViewDetails from './DiscoveryLinkViewDetails';
 
 const needsRiskyCandidateConfirmation = (status, rightsStatus) => (
   status === 'candidate' && rightsStatus === 'do_not_use'
@@ -138,21 +130,9 @@ export default function DiscoveryLinkRow({
               title={title}
             />
           ) : (
-            <>
-              <h3 className="mt-3 line-clamp-2 text-base font-extrabold text-slate-950" title={title}>
-                {title}
-              </h3>
-              <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
-              {link.memo ? (
-                <p className="mt-3 rounded-lg bg-slate-50 p-3 text-sm leading-relaxed text-slate-700">
-                  {link.memo}
-                </p>
-              ) : null}
-            </>
+            <DiscoveryLinkViewDetails link={link} title={title} />
           )}
-          <p className="mt-3 text-[11px] font-semibold text-slate-400">
-            마지막 저장: {formatDateTime(link.updatedAt || link.createdAt)}
-          </p>
+          <DiscoveryLinkUpdatedAt link={link} />
         </div>
 
         <DiscoveryLinkActions
