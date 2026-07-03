@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import {
   AlertTriangle,
   CheckCircle2,
-  Copy,
   ExternalLink,
   Link as LinkIcon,
   Pencil,
@@ -95,27 +94,6 @@ const confirmRiskyCandidate = () => window.confirm(
   '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 보내시겠어요?\n나중에 제작 후보함에서 강한 경고로 표시됩니다.'
 );
 
-const copyTextToClipboard = async (text) => {
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text);
-    return;
-  }
-
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  textarea.setAttribute('readonly', '');
-  textarea.style.position = 'fixed';
-  textarea.style.opacity = '0';
-  document.body.appendChild(textarea);
-  textarea.select();
-  const didCopy = document.execCommand('copy');
-  document.body.removeChild(textarea);
-
-  if (!didCopy) {
-    throw new Error('copy_failed');
-  }
-};
-
 const getSearchableLinkText = (link) => (
   [
     link.title,
@@ -143,7 +121,6 @@ function DiscoveryLinkRow({
   onUpdate,
   saving,
 }) {
-  const [copyState, setCopyState] = useState('idle');
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(link.title || '');
   const [draftMemo, setDraftMemo] = useState(link.memo || '');
@@ -192,28 +169,6 @@ function DiscoveryLinkRow({
 
     onUpdate(link.id, { status: 'candidate' });
   };
-
-  const handleCopy = async () => {
-    if (!link.url || copyState === 'copying') return;
-
-    setCopyState('copying');
-    try {
-      await copyTextToClipboard(link.url);
-      setCopyState('copied');
-    } catch {
-      setCopyState('error');
-    }
-
-    window.setTimeout(() => setCopyState('idle'), 1800);
-  };
-
-  const copyButtonLabel = copyState === 'copied'
-    ? '복사 완료'
-    : copyState === 'copying'
-      ? '복사 중'
-      : copyState === 'error'
-        ? '복사 실패'
-        : '복사';
 
   const openEdit = () => {
     setDraftTitle(link.title || '');
@@ -412,27 +367,18 @@ function DiscoveryLinkRow({
             열기
           </a>
 
-          <button
-            className={`inline-flex h-9 items-center justify-center gap-2 rounded-lg border px-3 text-xs font-extrabold transition disabled:opacity-50 ${
-              copyState === 'copied'
-                ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
-                : copyState === 'error'
-                  ? 'border-red-100 bg-red-50 text-red-600'
-                  : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
-            }`}
-            aria-label="원본 링크 복사"
-            disabled={copyState === 'copying'}
-            onClick={handleCopy}
-            title="원본 링크 복사"
-            type="button"
-          >
-            {copyState === 'copied' ? (
-              <CheckCircle2 className="h-4 w-4" />
-            ) : (
-              <Copy className="h-4 w-4" />
-            )}
-            {copyButtonLabel}
-          </button>
+          <CopyUrlButton
+            url={link.url}
+            label="복사"
+            copiedLabel="복사 완료"
+            copyingLabel="복사 중"
+            errorLabel="복사 실패"
+            disabled={saving}
+            ariaLabel={`${title} 원본 링크 URL 복사`}
+            title="원본 링크 URL을 클립보드에 복사합니다. 외부 사이트 수집이나 저장 작업은 없습니다."
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+            iconClassName="h-4 w-4"
+          />
 
           <button
             className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
