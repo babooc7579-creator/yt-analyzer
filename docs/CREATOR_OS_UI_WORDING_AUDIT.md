@@ -350,6 +350,12 @@ Cloud 저장은 하지 않습니다. 채널 확인을 위해 YouTube API 조회�
    - 오류 메시지는 `alert`로 표시합니다.
    - 저장 중, 저장 완료, 불러오는 중 메시지는 상태 변경으로 안내합니다.
 
+5. 발견함에서 제작 후보로 보내는 빠른 버튼 추가
+   - 발견 링크 카드에 `제작 후보로` 버튼을 추가했습니다.
+   - 이 버튼은 새 DB나 새 endpoint를 만들지 않고 기존 발견 링크의 `status`를 `candidate`로 저장합니다.
+   - 이미 후보인 링크는 `후보 등록됨`으로 표시해 제작실에 보이는 상태임을 알 수 있게 했습니다.
+   - `rightsStatus: do_not_use` 상태에서 제작 후보로 보내려면 기존과 동일하게 확인 문구를 거칩니다.
+
 확인한 자동 점검:
 
 - 버튼 설명 누락: 0개
@@ -360,4 +366,4 @@ Cloud 저장은 하지 않습니다. 채널 확인을 위해 YouTube API 조회�
 
 - 이 작업은 UI 설명 보강입니다.
 - YouTube API 호출 횟수, Cloud DB 저장 구조, localStorage key, endpoint 동작은 변경하지 않았습니다.
-- GitHub Actions의 Node.js 20 경고와 Azure Static Web Apps `github_id_token` 경고는 별도 배포 설정 이슈로 남아 있습니다.
+- GitHub Actions의 Node.js 20 경고와 Azure Static Web Apps `github_id_token` 경고는 별도 배포 설정 이슈로 남아 있습니다. 2026-07-03에 배포 token 방식 단순화를 시도했지만 현재 Azure 설정에서는 실패해 기존 OIDC 배포 흐름으로 복구했습니다.
