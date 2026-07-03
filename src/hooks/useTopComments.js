@@ -8,6 +8,12 @@ const EMPTY_COMMENT_MODAL = {
   videoTitle: '',
 };
 
+const getYoutubeErrorMessage = (error) => {
+  const reason = error?.errors?.[0]?.reason;
+  if (reason === 'commentsDisabled') return '이 영상은 댓글이 사용 중지되었습니다.';
+  return error?.message || '댓글을 불러오지 못했습니다.';
+};
+
 export function useTopComments({ apiKey, onError }) {
   const [commentModal, setCommentModal] = useState(EMPTY_COMMENT_MODAL);
 
@@ -17,7 +23,7 @@ export function useTopComments({ apiKey, onError }) {
 
   const fetchTopComments = async (videoId, videoTitle) => {
     if (!apiKey) {
-      onError('API Key가 필요합니다.');
+      onError('댓글 Top 10 조회에는 YouTube API Key가 필요합니다. 이 기능은 YouTube API를 호출합니다.');
       return;
     }
 
@@ -26,8 +32,7 @@ export function useTopComments({ apiKey, onError }) {
     try {
       const data = await fetchTopCommentsFromYoutube({ videoId, apiKey });
       if (data.error) {
-        if (data.error.errors[0].reason === 'commentsDisabled') throw new Error('이 영상은 댓글이 사용 중지되었습니다.');
-        throw new Error(data.error.message);
+        throw new Error(getYoutubeErrorMessage(data.error));
       }
 
       const comments = data.items ? data.items.map(item => ({
