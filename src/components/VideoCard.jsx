@@ -3,6 +3,7 @@ import { getLanguageLabel } from '../constants/languages';
 import { hasStrongReaction, isTtoTtoCandidate, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from '../utils/video';
 import CopyUrlButton from './CopyUrlButton';
 import { getYouTubeVideoUrl } from '../utils/urls';
+import VideoCardCandidateReasons from './VideoCardCandidateReasons';
 import VideoCardStatsGrid from './VideoCardStatsGrid';
 
 export default function VideoCard({
@@ -71,12 +72,7 @@ export default function VideoCard({
       </div>
       <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
-        {candidateReasons.length > 0 && (
-          <div className="mt-3 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2">
-            <p className="text-[10px] font-extrabold text-rose-500">후보 이유</p>
-            <p className="mt-0.5 text-xs font-bold text-rose-800">{candidateReasons.join(' · ')}</p>
-          </div>
-        )}
+        <VideoCardCandidateReasons candidateReasons={candidateReasons} />
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
           {isSaved && <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700">소재 보관됨</span>}
           {isProductionCandidate && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">제작 후보</span>}
