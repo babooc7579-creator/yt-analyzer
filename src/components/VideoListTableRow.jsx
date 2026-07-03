@@ -1,9 +1,10 @@
 import React from 'react';
-import { CheckSquare, Clock, MessageSquareText, Rocket, Square, Star } from 'lucide-react';
+import { CheckSquare, Clock, MessageSquareText, Square, Star } from 'lucide-react';
 import { LANGUAGES } from '../constants/languages';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import CopyUrlButton from './CopyUrlButton';
+import VideoListRowCandidateAction from './VideoListRowCandidateAction';
 import VideoListRowBadges from './VideoListRowBadges';
 import VideoListRowStatsCells from './VideoListRowStatsCells';
 
@@ -87,17 +88,11 @@ export default function VideoListTableRow({
         </div>
       </td>
       <td className="px-3 py-5 text-center">
-        <button
-          type="button"
-          onClick={() => promoteVideoToProduction(video)}
-          disabled={isProductionCandidate}
-          title={isProductionCandidate ? '이미 Cloud 판단 기록에 제작 후보로 저장됨' : 'Cloud 판단 기록에 제작 후보로 저장합니다. YouTube API를 새로 호출하지 않습니다.'}
-          aria-label={`${videoTitle} ${isProductionCandidate ? '이미 Cloud 판단 기록에 제작 후보로 저장됨' : 'Cloud 판단 기록에 제작 후보로 저장, YouTube API 호출 없음'}`}
-          className={`inline-flex min-w-[104px] items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isProductionCandidate ? 'cursor-not-allowed bg-indigo-100 text-indigo-400' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
-        >
-          <Rocket className="h-3.5 w-3.5" />
-          {isProductionCandidate ? '등록됨' : '제작 후보로'}
-        </button>
+        <VideoListRowCandidateAction
+          isProductionCandidate={isProductionCandidate}
+          onPromote={() => promoteVideoToProduction(video)}
+          videoTitle={videoTitle}
+        />
       </td>
       <VideoListRowStatsCells isStrongReaction={isStrongReaction} video={video} />
     </tr>
