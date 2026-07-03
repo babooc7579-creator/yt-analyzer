@@ -1,8 +1,7 @@
 import HiddenLegacyAside from './HiddenLegacyAside';
 import LegacyChannelPanel from './LegacyChannelPanel';
+import LegacyDashboardTab from './LegacyDashboardTab';
 import ScrapbookWorkspace from './ScrapbookWorkspace';
-import VideoDashboardControls from './VideoDashboardControls';
-import VideoResultsPanel from './VideoResultsPanel';
 import WorkspaceTabs from './WorkspaceTabs';
 
 export default function LegacyWorkspaceView({
@@ -172,58 +171,45 @@ export default function LegacyWorkspaceView({
         />
 
         {activeTab === 'dashboard' ? (
-          <>
-            <VideoDashboardControls
-              activeSelectedChannelCount={activeSelectedChannelCount}
-              checkedVideos={checkedVideos}
-              copiedPrompt={copiedPrompt}
-              promptCopyError={promptCopyError}
-              filteredCount={filteredAndSortedVideos.length}
-              filteredVideos={filteredAndSortedVideos}
-              isReferenceVaultView={isReferenceVaultView}
-              isScanning={isScanning}
-              lengthFilter={lengthFilter}
-              onCopyPrompt={() => copyPromptForVideos(videos.filter(video => checkedVideos.includes(video.videoId)))}
-              onManualScan={handleManualScan}
-              savedChannelCount={savedChannels.length}
-              savedVideoCount={savedVideos.length}
-              scannableChannelCount={scannableChannelCount}
-              searchKeyword={searchKeyword}
-              selectedChannelCount={selectedChannelIds.length}
-              setLengthFilter={setLengthFilter}
-              setSearchKeyword={setSearchKeyword}
-              setShowWorkPanel={setShowWorkPanel}
-              setSortType={setSortType}
-              setTtoTtoMode={setTtoTtoMode}
-              setViewFilter={setViewFilter}
-              setViewMode={setViewMode}
-              showWorkPanel={showWorkPanel}
-              sortType={sortType}
-              totalVideoCount={totalVideoCount}
-              ttoTtoAssetCount={ttoTtoAssetCount}
-              ttoTtoMode={ttoTtoMode}
-              viewFilter={viewFilter}
-              viewMode={viewMode}
-              visibleScrapCount={visibleScrapCount}
-            />
-
-            <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 overflow-hidden flex-1 relative flex flex-col min-h-[600px]">
-              <p className="px-4 pt-3 text-[10px] text-slate-500">댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.</p>
-              <VideoResultsPanel
-                checkedVideos={checkedVideos}
-                filteredVideos={filteredAndSortedVideos}
-                isProductionCandidate={isProductionCandidate}
-                isVideoSaved={isVideoSaved}
-                onFetchComments={fetchTopComments}
-                onPromoteToProduction={promoteVideoToProduction}
-                onToggleCheck={toggleCheckVideo}
-                onToggleScrap={toggleScrapVideo}
-                showWorkPanel={showWorkPanel}
-                videos={videos}
-                viewMode={viewMode}
-              />
-            </div>
-          </>
+          <LegacyDashboardTab
+            activeSelectedChannelCount={activeSelectedChannelCount}
+            checkedVideos={checkedVideos}
+            copiedPrompt={copiedPrompt}
+            copyPromptForVideos={copyPromptForVideos}
+            fetchTopComments={fetchTopComments}
+            filteredAndSortedVideos={filteredAndSortedVideos}
+            handleManualScan={handleManualScan}
+            isProductionCandidate={isProductionCandidate}
+            isReferenceVaultView={isReferenceVaultView}
+            isScanning={isScanning}
+            isVideoSaved={isVideoSaved}
+            lengthFilter={lengthFilter}
+            promoteVideoToProduction={promoteVideoToProduction}
+            promptCopyError={promptCopyError}
+            savedChannels={savedChannels}
+            savedVideos={savedVideos}
+            scannableChannelCount={scannableChannelCount}
+            searchKeyword={searchKeyword}
+            selectedChannelIds={selectedChannelIds}
+            setLengthFilter={setLengthFilter}
+            setSearchKeyword={setSearchKeyword}
+            setShowWorkPanel={setShowWorkPanel}
+            setSortType={setSortType}
+            setTtoTtoMode={setTtoTtoMode}
+            setViewFilter={setViewFilter}
+            setViewMode={setViewMode}
+            showWorkPanel={showWorkPanel}
+            sortType={sortType}
+            toggleCheckVideo={toggleCheckVideo}
+            toggleScrapVideo={toggleScrapVideo}
+            totalVideoCount={totalVideoCount}
+            ttoTtoAssetCount={ttoTtoAssetCount}
+            ttoTtoMode={ttoTtoMode}
+            videos={videos}
+            viewFilter={viewFilter}
+            viewMode={viewMode}
+            visibleScrapCount={visibleScrapCount}
+          />
         ) : (
           <ScrapbookWorkspace
             creatorView={creatorView}
