@@ -1,16 +1,48 @@
 import { FUNCTION_API_BASE } from '../config';
 
+const getResponseErrorMessage = (response, data) => (
+  data?.error || data?.message || `Cloud API 요청에 실패했습니다. (${response.status})`
+);
+
+const readJsonResponse = async (response) => {
+  let data = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  if (!response.ok) {
+    return {
+      ...(data && typeof data === 'object' ? data : {}),
+      success: false,
+      error: getResponseErrorMessage(response, data),
+    };
+  }
+
+  if (!data || typeof data !== 'object') {
+    return {
+      success: false,
+      error: 'Cloud API 응답을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.',
+    };
+  }
+
+  return data;
+};
+
 const getJson = async (path) => {
   const response = await fetch(`${FUNCTION_API_BASE}${path}`);
-  return response.json();
+  return readJsonResponse(response);
 };
 
 const sendJson = async (path, options = {}) => {
+  const { headers, ...fetchOptions } = options;
   const response = await fetch(`${FUNCTION_API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-    ...options,
+    ...fetchOptions,
+    headers: { 'Content-Type': 'application/json', ...(headers || {}) },
   });
-  return response.json();
+  return readJsonResponse(response);
 };
 
 export const fetchChannels = () => getJson('/channels');
