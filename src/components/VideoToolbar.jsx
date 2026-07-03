@@ -108,8 +108,8 @@ export default function VideoToolbar({
           onClick={handleManualScan}
           disabled={isScanning}
           className={`shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm ${isScanning ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
-          title="YouTube API로 운영중 채널의 새 영상 여부를 확인합니다"
-          aria-label="선택 범위 새 영상 수집"
+          title="YouTube API로 운영중 채널의 새 영상 여부를 확인합니다. 저장된 영상 불러오기와 다른 작업입니다."
+          aria-label="선택 범위 새 영상 수집, YouTube API 호출"
         >
           {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCw className="w-5 h-5" />}
           {isScanning ? '새 영상 수집 중...' : selectedChannelCount > 0 ? `선택 채널 새 영상 수집 (${scanTargetCount}/${selectedChannelCount}개)` : `전체 운영중 채널 새 영상 수집 (${scanTargetCount}개)`}
