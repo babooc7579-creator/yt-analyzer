@@ -1,6 +1,5 @@
-import { MessageSquareText, Trash2 } from 'lucide-react';
-import CopyUrlButton from './CopyUrlButton';
 import { getYouTubeVideoUrl } from '../utils/urls';
+import ScrapbookVideoCardFooter from './ScrapbookVideoCardFooter';
 
 export default function ScrapbookVideoCard({
   video,
@@ -9,14 +8,6 @@ export default function ScrapbookVideoCard({
 }) {
   const videoTitle = video.title || '이 영상';
   const videoUrl = getYouTubeVideoUrl(video.videoId);
-
-  const confirmRemoveScrap = () => {
-    const confirmed = window.confirm(
-      `'${videoTitle}' 영상을 Cloud 스크랩북에서 해제할까요?\n\n영상 원본이나 저장된 영상 데이터는 삭제되지 않고, 스크랩북 보관 표시만 해제됩니다.`
-    );
-
-    if (confirmed) onRemoveScrap(video);
-  };
 
   return (
     <div className="border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition-all group bg-white flex flex-col">
@@ -36,40 +27,13 @@ export default function ScrapbookVideoCard({
             <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">{video.channel_title}</span>
           </div>
         </div>
-        <div className="flex justify-between items-end pt-3 border-t border-slate-100">
-          <div>
-            <p className="text-xs text-slate-500 mb-0.5">조회수 / 참여율</p>
-            <p className="font-bold text-slate-800 text-sm">{video.view_count.toLocaleString()} <span className="text-xs text-rose-500 ml-1">({video.like_ratio}%)</span></p>
-          </div>
-          <div className="flex gap-2">
-            <CopyUrlButton
-              url={videoUrl}
-              label="URL 복사"
-              copiedLabel="복사 완료"
-              ariaLabel={`${videoTitle} YouTube 원본 URL 복사`}
-              title="YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다."
-              className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1.5 text-[11px] font-bold text-slate-600 transition-colors hover:bg-slate-100 disabled:text-slate-300"
-            />
-            <button
-              onClick={() => onFetchComments(video.videoId, video.title)}
-              className="p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
-              title="댓글 Top 10 보기 - YouTube API로 댓글을 조회합니다"
-              aria-label={`${videoTitle} 댓글 Top 10 보기 - YouTube API로 댓글 조회`}
-              type="button"
-            >
-              <MessageSquareText className="w-4 h-4" />
-            </button>
-            <button
-              onClick={confirmRemoveScrap}
-              className="p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-              title="Cloud 스크랩북에서 해제"
-              aria-label={`${videoTitle} Cloud 스크랩북에서 해제`}
-              type="button"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <ScrapbookVideoCardFooter
+          onFetchComments={onFetchComments}
+          onRemoveScrap={onRemoveScrap}
+          video={video}
+          videoTitle={videoTitle}
+          videoUrl={videoUrl}
+        />
       </div>
     </div>
   );
