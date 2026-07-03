@@ -23,6 +23,8 @@
 - `/scrapbook`은 별도 container가 아니라 `videos` container 안의 `docType: scrapbook` 구조입니다.
 - `scan_logs`, `api_quota_logs`, `production_candidates`, `discovery_links`, `local_assets`는 아직 별도 저장소가 없습니다.
 - discovery links 1차 MVP는 별도 저장소 없이 기존 `videos` container의 `docType: discovery_link` 방식으로 부분 구현되었습니다.
+- 2026-07-03 읽기 전용 확인에서 `GET /discovery-links`는 배포 환경에서 성공했고, 현재 Cloud 발견함 링크는 0개였습니다. 저장/수정/삭제 smoke test는 Cloud 데이터를 변경하므로 별도 승인 후 진행합니다.
+- 2026-07-03 읽기 전용 확인에서 `GET /videos`는 `channelIds` 없이 호출하면 400으로 거절되어, 저장 영상 조회가 채널 기준 DB 조회로 제한되는 것을 확인했습니다.
 - 카테고리 화면 목록은 localStorage 중심이고, 실제 채널 태그는 Cloud DB `channels.tags` 중심입니다.
 - Cloud/localStorage 동기화는 선택지 B로 결정됐습니다. Cloud 조회 성공 시 Cloud가 기준이고, localStorage는 Cloud 실패 시 명시적 fallback으로만 사용합니다.
 
@@ -171,6 +173,7 @@
 
 - 목적: 인스타/외부 링크와 다운로드한 로컬 파일을 안전하게 연결하는 최소 범위를 정합니다.
 - 현재 상태: 2026-07-02 기준 MVP 범위 검토 완료. discovery links 수동 저장 1차 MVP는 부분 구현되었고, local assets는 아직 목표 모델 단계입니다.
+- 추가 확인: 2026-07-03 기준 배포 환경에서 `GET /discovery-links` 읽기 호출은 성공했습니다. 현재 링크가 0개라 목록 표시와 빈 상태를 확인할 수 있는 상태이며, 저장/수정/삭제 확인은 테스트 링크를 Cloud에 만들었다 지워야 하므로 사용자 승인 후 진행합니다.
 - 왜 필요한가: Creator OS가 "소재 발굴"에서 "제작 준비"로 넘어가려면 외부 링크와 파일 출처가 연결되어야 합니다.
 - 작업 범위: 수동 링크 저장 MVP는 구현 기준으로 반영했고, 로컬 파일 메타데이터와 권리 확인 상태의 확장 범위를 선택지로 정리했습니다.
 - 건드릴 파일 예상: 문서 우선. 이후 프론트 화면, 백엔드 API, DB 모델.
@@ -197,7 +200,7 @@
 
 바로 다음 작업은 아래 순서를 추천합니다.
 
-1. 발견 링크 저장/수정/삭제 흐름을 실제 사용 기준으로 수동 smoke test
+1. 발견 링크 저장/수정/삭제 흐름을 실제 사용 기준으로 수동 smoke test. 단, Cloud 테스트 링크를 만들고 지우는 데이터 변경 작업이므로 사용자 승인 후 진행
 2. GitHub Actions와 Azure Static Web Apps 경고를 별도 배포 설정 이슈로 검토
 3. local assets, 발견 링크의 제작 후보 연결, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정
 
