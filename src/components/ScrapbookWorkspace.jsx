@@ -7,6 +7,8 @@ import { formatNumberedUrlList, getYouTubeVideoUrl } from '../utils/urls';
 export default function ScrapbookWorkspace({
   creatorView,
   discoveryLinks,
+  copiedPrompt,
+  promptCopyError,
   savedVideos,
   videoUserRecords,
   onCopyPrompt,
@@ -28,6 +30,8 @@ export default function ScrapbookWorkspace({
     <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
       <ScrapbookHeader
         savedVideoCount={savedVideos.length}
+        copiedPrompt={copiedPrompt}
+        promptCopyError={promptCopyError}
         onCopyPrompt={onCopyPrompt}
         videoUrlList={videoUrlList}
         variant={creatorView === 'studio-candidates' ? 'production' : 'scrapbook'}

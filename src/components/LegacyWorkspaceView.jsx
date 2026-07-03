@@ -24,6 +24,7 @@ export default function LegacyWorkspaceView({
   confirmRenameCategory,
   copiedPrompt,
   copyPromptForVideos,
+  promptCopyError,
   creatorView,
   deleteChannel,
   discoveryLinks,
@@ -180,6 +181,7 @@ export default function LegacyWorkspaceView({
               activeSelectedChannelCount={activeSelectedChannelCount}
               checkedVideos={checkedVideos}
               copiedPrompt={copiedPrompt}
+              promptCopyError={promptCopyError}
               filteredCount={filteredAndSortedVideos.length}
               filteredVideos={filteredAndSortedVideos}
               isReferenceVaultView={isReferenceVaultView}
@@ -230,6 +232,8 @@ export default function LegacyWorkspaceView({
           <ScrapbookWorkspace
             creatorView={creatorView}
             discoveryLinks={discoveryLinks}
+            copiedPrompt={copiedPrompt}
+            promptCopyError={promptCopyError}
             savedVideos={savedVideos}
             videoUserRecords={videoUserRecords}
             onCopyPrompt={() => copyPromptForVideos(savedVideos)}
