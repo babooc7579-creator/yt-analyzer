@@ -3,15 +3,9 @@ import {
   DISCOVERY_LINK_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
 } from '../constants/discoveryLinks';
+import DiscoveryLinkFieldLabel from './DiscoveryLinkFieldLabel';
 import DiscoveryLinkFormHeader from './DiscoveryLinkFormHeader';
-
-function FieldLabel({ children }) {
-  return (
-    <label className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
-      {children}
-    </label>
-  );
-}
+import DiscoveryLinkUrlField from './DiscoveryLinkUrlField';
 
 export default function DiscoveryLinkForm({
   duplicateLink,
@@ -28,44 +22,15 @@ export default function DiscoveryLinkForm({
       <DiscoveryLinkFormHeader />
 
       <form className="mt-5 space-y-4" onSubmit={onSubmit}>
-        <div className="space-y-1.5">
-          <FieldLabel>원본 링크</FieldLabel>
-          <input
-            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-indigo-400"
-            onChange={(event) => onChange('url', event.target.value)}
-            placeholder="https://..."
-            required
-            type="url"
-            value={form.url}
-            aria-label="저장할 원본 링크 URL"
-          />
-          {urlPreview && (
-            <div className={`rounded-lg border px-3 py-2 text-xs leading-relaxed ${
-              urlPreview.isValid
-                ? 'border-indigo-400/20 bg-indigo-500/10 text-indigo-100'
-                : 'border-red-400/30 bg-red-500/10 text-red-100'
-            }`}
-            >
-              <p className="font-extrabold">{urlPreview.label}</p>
-              {urlPreview.host ? (
-                <p className="mt-0.5 text-[11px] opacity-80">
-                  출처 도메인: {urlPreview.host}
-                </p>
-              ) : null}
-            </div>
-          )}
-          {duplicateLink ? (
-            <div className="rounded-lg border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-100">
-              <p className="font-extrabold">이미 Cloud 발견함에 저장된 링크입니다.</p>
-              <p className="mt-0.5">
-                새로 저장하지 말고 오른쪽 목록에서 기존 항목을 수정하세요.
-              </p>
-            </div>
-          ) : null}
-        </div>
+        <DiscoveryLinkUrlField
+          duplicateLink={duplicateLink}
+          onChange={onChange}
+          url={form.url}
+          urlPreview={urlPreview}
+        />
 
         <div className="space-y-1.5">
-          <FieldLabel>제목 또는 기억할 이름</FieldLabel>
+          <DiscoveryLinkFieldLabel>제목 또는 기억할 이름</DiscoveryLinkFieldLabel>
           <input
             className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-indigo-400"
             onChange={(event) => onChange('title', event.target.value)}
@@ -78,7 +43,7 @@ export default function DiscoveryLinkForm({
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-1">
           <div className="space-y-1.5">
-            <FieldLabel>검토 상태</FieldLabel>
+            <DiscoveryLinkFieldLabel>검토 상태</DiscoveryLinkFieldLabel>
             <select
               className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm font-bold text-white outline-none transition focus:border-indigo-400"
               onChange={(event) => onChange('status', event.target.value)}
@@ -93,7 +58,7 @@ export default function DiscoveryLinkForm({
           </div>
 
           <div className="space-y-1.5">
-            <FieldLabel>권리 확인</FieldLabel>
+            <DiscoveryLinkFieldLabel>권리 확인</DiscoveryLinkFieldLabel>
             <select
               className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm font-bold text-white outline-none transition focus:border-indigo-400"
               onChange={(event) => onChange('rightsStatus', event.target.value)}
@@ -121,7 +86,7 @@ export default function DiscoveryLinkForm({
         )}
 
         <div className="space-y-1.5">
-          <FieldLabel>메모</FieldLabel>
+          <DiscoveryLinkFieldLabel>메모</DiscoveryLinkFieldLabel>
           <textarea
             className="min-h-28 w-full resize-y rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm leading-relaxed text-white outline-none transition placeholder:text-slate-600 focus:border-indigo-400"
             onChange={(event) => onChange('memo', event.target.value)}
