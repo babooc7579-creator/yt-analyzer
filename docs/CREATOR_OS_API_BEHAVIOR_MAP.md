@@ -76,7 +76,7 @@
 | 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음. 2026-07-03 smoke 성공, 임시 링크 잔여 0개 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용 |
 | URL 복사 / URL 목록 복사 | `CopyUrlButton`, `formatNumberedUrlList` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 채널/영상/오늘 레이더/스크랩북/발견 링크 URL을 클립보드에 복사합니다. API 호출, DB 변경, localStorage 변경 없음 |
-| AI 리메이크 프롬프트 복사 | `copyAI_RemakePrompt` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 클립보드 복사만 |
+| AI 리메이크 프롬프트 복사 | `copyPromptForVideos`, `copyTextToClipboard` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 선택/스크랩 영상 기반 요청문을 클립보드에 복사하고, 브라우저가 막으면 실패 안내를 표시 |
 | 준비중 메뉴 | `ComingSoonView` | 없음 | 준비중 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 실제 기능처럼 보이면 안 됨 |
 
 ---
@@ -164,6 +164,7 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - 클립보드에 복사합니다
 - YouTube API 호출이나 저장 작업은 없습니다
 - 외부 사이트 수집이나 다운로드는 하지 않습니다
+- AI 프롬프트 복사는 외부 AI API를 호출하지 않고, 복사 성공/실패 상태만 화면에 표시합니다
 
 피해야 할 표현:
 
