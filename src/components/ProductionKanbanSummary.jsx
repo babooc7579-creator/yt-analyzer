@@ -41,15 +41,17 @@ export default function ProductionKanbanSummary({
           valueClassName="text-lg text-slate-900"
           wrapperClassName="border-slate-200 bg-slate-50"
         />
-        <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
-          <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
-            <LinkIcon className="h-3 w-3" /> 링크 후보
-          </p>
-          <p className="mt-1 text-lg font-black text-amber-950">{discoveryLinkCandidateCount}개</p>
+        <ProductionKanbanSummaryCard
+          label={<><LinkIcon className="h-3 w-3" /> 링크 후보</>}
+          labelClassName="inline-flex items-center gap-1 text-amber-700"
+          value={`${discoveryLinkCandidateCount}개`}
+          valueClassName="text-lg text-amber-950"
+          wrapperClassName="border-amber-100 bg-amber-50"
+        >
           {productionSummary.discoveryRightsWarningCount > 0 && (
             <p className="mt-1 text-[10px] font-bold text-rose-600">권리 확인 필요 {productionSummary.discoveryRightsWarningCount}개</p>
           )}
-        </div>
+        </ProductionKanbanSummaryCard>
         <div className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-3">
           <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
             <CalendarDays className="h-3 w-3" /> 다음 일정
