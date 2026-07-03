@@ -201,7 +201,7 @@
 
 바로 다음 작업은 아래 순서를 추천합니다.
 
-1. GitHub Actions와 Azure Static Web Apps 경고를 별도 배포 설정 이슈로 검토. 2026-07-03 기준 `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md`에 선택지를 정리했으며, 추천은 선택지 B인 배포 token 방식 단순화입니다.
+1. GitHub Actions와 Azure Static Web Apps 경고를 별도 배포 설정 이슈로 검토. 2026-07-03 기준 선택지 B인 배포 token 방식 단순화는 실제 main 배포에서 실패했습니다. 우선 기존 OIDC 흐름을 복구하고, deployment token 또는 Azure 인증 설정 확인 후 다시 검토합니다.
 2. local assets, 발견 링크의 제작 후보 연결, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정
 3. 발견 링크 저장/수정/삭제 smoke test는 완료됐으므로, 다음 discovery 작업은 실제 사용 중 발견한 UI 불편이나 local assets 연결 판단이 생길 때 진행
 
