@@ -182,13 +182,14 @@
 - 목적: 인스타/외부 링크와 다운로드한 로컬 파일을 안전하게 연결하는 최소 범위를 정합니다.
 - 현재 상태: 2026-07-02 기준 MVP 범위 검토 완료. discovery links 수동 저장 1차 MVP는 부분 구현되었고, local assets는 아직 목표 모델 단계입니다.
 - 추가 확인: 2026-07-03 기준 배포 환경에서 `GET /discovery-links` 읽기 호출은 성공했습니다. 사용자 승인 후 임시 링크를 Cloud에 만들고, `status: candidate`, `rightsStatus: needs_check`, 제목·메모 수정, 삭제까지 확인했습니다. 최종 재조회에서 Cloud 발견함 링크 0개와 임시 smoke 링크 0개를 확인했습니다.
+- 추가 상태: 발견 링크는 `status: candidate`로 저장해 제작 후보함에서 링크 후보로 볼 수 있습니다. 이 연결은 별도 `production_candidates` DB 없이 discovery link 상태값만 사용합니다.
 - 왜 필요한가: Creator OS가 "소재 발굴"에서 "제작 준비"로 넘어가려면 외부 링크와 파일 출처가 연결되어야 합니다.
 - 작업 범위: 수동 링크 저장 MVP는 구현 기준으로 반영했고, 로컬 파일 메타데이터와 권리 확인 상태의 확장 범위를 선택지로 정리했습니다.
 - 건드릴 파일 예상: 문서 우선. 이후 프론트 화면, 백엔드 API, DB 모델.
 - 건드리면 안 되는 것: 인스타 자동 크롤링, 자동 다운로드, 무단 수집, 새 API 구현.
 - 위험도: 높음.
-- 완료 기준: `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md` 작성 완료. 1차 MVP는 수동 링크 저장 중심의 발견함으로 부분 구현되었습니다.
-- 사용자 판단 필요 여부: 현재 문서화와 1차 MVP 연결은 완료. MVP 저장 위치는 `docType: discovery_link`, 상태값은 `inbox/reviewing/saved/candidate/discarded`와 `rightsStatus` 분리로 정리됨. 다음 판단은 local assets, 제작 후보 연결, 별도 `discovery_links` container 분리 여부입니다.
+- 완료 기준: `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md` 작성 완료. 1차 MVP는 수동 링크 저장 중심의 발견함으로 부분 구현되었고, 제작 후보함 연결까지 상태값 기반으로 동작합니다.
+- 사용자 판단 필요 여부: 현재 문서화와 1차 MVP 연결은 완료. MVP 저장 위치는 `docType: discovery_link`, 상태값은 `inbox/reviewing/saved/candidate/discarded`와 `rightsStatus` 분리로 정리됨. 다음 판단은 local assets, 별도 제작 프로젝트 모델, 별도 `discovery_links` container 분리 여부입니다.
 
 ### Issue 10. 제작 후보와 제작 칸반의 데이터 기준 결정
 
@@ -209,7 +210,7 @@
 바로 다음 작업은 아래 순서를 추천합니다.
 
 1. 배포된 앱에서 핵심 화면을 짧게 확인했습니다. 홈, 채널 목록, 발견함, 제작 후보함에서 새 문구가 의도대로 보이는지 화면 기준으로 확인했고, 저장/삭제/수집 같은 데이터 변경 버튼은 누르지 않았습니다.
-2. 실제 기능 확장 전에는 선택지가 필요한 항목을 먼저 분리합니다. local assets, 발견 링크의 제작 후보 연결, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정합니다.
+2. 실제 기능 확장 전에는 선택지가 필요한 항목을 먼저 분리합니다. local assets, 별도 제작 프로젝트 모델, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정합니다.
 3. GitHub Actions와 Azure Static Web Apps 경고는 별도 배포 설정 이슈로 남깁니다. 현재 main 배포는 성공하므로, deployment token 또는 Azure OIDC 설정 변경은 사용자가 배포 설정 작업을 승인한 뒤 진행합니다.
 
 이 순서가 안전한 이유:
