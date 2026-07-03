@@ -167,6 +167,7 @@ export default function RadarCandidateStrip({
           onClick={onOpenVault}
           className="mt-4 inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-200 hover:bg-blue-500/15"
           title="저장된 영상 조회 화면으로 이동"
+          aria-label="저장된 영상 조회 화면으로 이동"
         >
           <Bookmark className="h-4 w-4" /> 레퍼런스 금고 열기
         </button>
@@ -185,6 +186,7 @@ export default function RadarCandidateStrip({
             onClick={onOpenVault}
             className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-500/10 px-4 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/15"
             title="저장된 영상 조회 화면으로 이동"
+            aria-label="저장된 영상 조회 화면으로 이동"
           >
             <Bookmark className="h-4 w-4" /> 레퍼런스 금고 열기
           </button>
@@ -193,6 +195,7 @@ export default function RadarCandidateStrip({
             onClick={onClearDecisions}
             className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-100 hover:bg-emerald-500/15"
             title="Cloud에 저장된 판단 기록을 초기화"
+            aria-label="Cloud에 저장된 오늘 레이더 판단 기록 초기화"
           >
             <CheckCircle2 className="h-4 w-4" /> 판단 기록 초기화
           </button>
@@ -217,6 +220,7 @@ export default function RadarCandidateStrip({
               onClick={onClearDecisions}
               className="inline-flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-900"
               title="Cloud에 저장된 판단 기록을 초기화"
+              aria-label="Cloud에 저장된 오늘 레이더 판단 기록 초기화"
             >
               판단 초기화
             </button>
@@ -226,6 +230,7 @@ export default function RadarCandidateStrip({
             onClick={onOpenScrapbook}
             className="inline-flex items-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-500/10 px-3 py-2 text-xs font-bold text-yellow-100 hover:bg-yellow-500/15"
             title="Cloud 스크랩북 화면으로 이동"
+            aria-label={`Cloud 스크랩북 화면으로 이동, 스크랩 ${savedVideos.length}개`}
           >
             <Star className="h-4 w-4" /> 스크랩 {savedVideos.length}개
           </button>

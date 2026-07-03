@@ -226,6 +226,7 @@ export default function ChannelAddForm({
                 onClick={resetBulkAdd}
                 className="mt-1 w-full text-center text-indigo-600 hover:text-indigo-800 font-semibold"
                 title="일괄 저장 결과 닫기"
+                aria-label="채널 일괄 저장 결과 닫기"
               >
                 닫기
               </button>
@@ -312,6 +313,7 @@ export default function ChannelAddForm({
               onClick={cancelChannelPreview}
               className="flex-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-semibold transition-colors"
               title="채널 저장을 취소하고 입력 화면으로 돌아가기"
+              aria-label="채널 저장 취소"
             >
               취소
             </button>
