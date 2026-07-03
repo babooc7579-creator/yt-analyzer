@@ -6,11 +6,8 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import {
-  DISCOVERY_LINK_STATUS_OPTIONS,
-  DISCOVERY_RIGHTS_STATUS_OPTIONS,
-} from '../constants/discoveryLinks';
 import CopyUrlButton from './CopyUrlButton';
+import DiscoveryLinkStatusControls from './DiscoveryLinkStatusControls';
 
 export default function DiscoveryLinkActions({
   currentRightsStatus,
@@ -30,31 +27,14 @@ export default function DiscoveryLinkActions({
       <p className="rounded-lg border border-indigo-100 bg-indigo-50 px-3 py-2 text-[11px] font-semibold leading-relaxed text-indigo-700 sm:col-span-2 lg:col-span-7 xl:col-span-1">
         상태와 권리 선택은 바꾸는 즉시 Cloud 발견함에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다.
       </p>
-      <select
-        className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
-        disabled={saving}
-        value={currentStatus}
-        onChange={onStatusChange}
-        title="검토 상태 변경 - Cloud 발견함 기록에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다."
-        aria-label={`${title} 검토 상태 변경, Cloud 발견함 기록 저장`}
-      >
-        {DISCOVERY_LINK_STATUS_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
-        ))}
-      </select>
-
-      <select
-        className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
-        disabled={saving}
-        value={currentRightsStatus}
-        onChange={onRightsStatusChange}
-        title="권리 확인 상태 변경 - Cloud 발견함 기록에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다."
-        aria-label={`${title} 권리 확인 상태 변경, Cloud 발견함 기록 저장`}
-      >
-        {DISCOVERY_RIGHTS_STATUS_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
-        ))}
-      </select>
+      <DiscoveryLinkStatusControls
+        currentRightsStatus={currentRightsStatus}
+        currentStatus={currentStatus}
+        onRightsStatusChange={onRightsStatusChange}
+        onStatusChange={onStatusChange}
+        saving={saving}
+        title={title}
+      />
 
       <button
         className={`inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3 text-xs font-extrabold transition disabled:cursor-not-allowed ${
