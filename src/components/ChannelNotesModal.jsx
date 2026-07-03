@@ -34,6 +34,7 @@ export default function ChannelNotesModal({
             placeholder="예) 또 떡상함, 패턴인듯 / 시니어롱폼 소재로 쓰기 좋음 / 톤이 우리 채널이랑 비슷함..."
             className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg outline-none resize-none focus:ring-2 focus:ring-indigo-500"
             rows={2}
+            aria-label={`${modal.channel.title} 채널 분석 기록 입력`}
           />
           <button
             onClick={onAddNote}
