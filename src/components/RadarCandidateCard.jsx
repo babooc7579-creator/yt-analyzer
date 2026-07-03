@@ -4,6 +4,7 @@ import { getYouTubeVideoUrl } from '../utils/urls';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 import CopyUrlButton from './CopyUrlButton';
 import RadarCandidateMetrics from './RadarCandidateMetrics';
+import RadarCandidateScorePanel from './RadarCandidateScorePanel';
 
 export const getRadarScore = (video) => {
   const ttoTtoBonus = isTtoTtoCandidate(video) ? 100 : 0;
@@ -69,19 +70,7 @@ export default function RadarCandidateCard({
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
           {video.title}
         </a>
-        <div className="mt-3 rounded-xl border border-rose-400/20 bg-rose-500/10 px-3 py-2">
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-[10px] font-extrabold text-rose-100">후보 판단 점수</p>
-            <p className="text-sm font-black text-white">{radarScore}</p>
-          </div>
-          <div className="mt-2 flex flex-wrap gap-1">
-            {reasons.map((reason) => (
-              <span key={reason} className="rounded-full border border-rose-300/20 bg-white/10 px-2 py-1 text-[10px] font-bold text-rose-50">
-                {reason}
-              </span>
-            ))}
-          </div>
-        </div>
+        <RadarCandidateScorePanel radarScore={radarScore} reasons={reasons} />
         <RadarCandidateMetrics video={video} />
         <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
           <a
