@@ -4,9 +4,9 @@ import {
 } from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
+import ProductionKanbanColumn from './ProductionKanbanColumn';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
 import ProductionKanbanSummary from './ProductionKanbanSummary';
-import ProductionVideoCard from './ProductionVideoCard';
 
 const COLUMNS = [
   {
@@ -264,45 +264,20 @@ export default function ProductionKanban({
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         {COLUMNS.map((column) => (
-          <section key={column.id} className={`rounded-2xl border p-4 ${column.tone}`}>
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <div>
-                <h4 className="text-sm font-extrabold text-slate-900">{column.title}</h4>
-                <p className="mt-1 text-xs text-slate-500">{column.description}</p>
-              </div>
-              <span className="rounded-full bg-white px-2.5 py-1 text-xs font-extrabold text-slate-700 shadow-sm">{groupedVideos[column.id].length}</span>
-            </div>
-
-            <div className="space-y-3">
-              {groupedVideos[column.id].length === 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-300 bg-white/70 p-5 text-center text-xs font-semibold text-slate-400">비어 있음</div>
-              ) : (
-                groupedVideos[column.id].map((video) => {
-                  const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
-                  const isDirty = hasUnsavedChanges(video.videoId);
-                  const saveState = saveStates[video.videoId];
-                  const moveState = moveStates[video.videoId];
-                  const scheduleSignal = getScheduleSignal(record);
-
-                  return (
-                    <ProductionVideoCard
-                      key={video.videoId}
-                      columnId={column.id}
-                      isDirty={isDirty}
-                      moveState={moveState}
-                      onMove={moveVideo}
-                      onSave={saveDraftRecord}
-                      onUpdateDraft={updateDraftRecord}
-                      record={record}
-                      saveState={saveState}
-                      scheduleSignal={scheduleSignal}
-                      video={video}
-                    />
-                  );
-                })
-              )}
-            </div>
-          </section>
+          <ProductionKanbanColumn
+            key={column.id}
+            column={column}
+            draftRecords={draftRecords}
+            getScheduleSignal={getScheduleSignal}
+            hasUnsavedChanges={hasUnsavedChanges}
+            moveStates={moveStates}
+            onMove={moveVideo}
+            onSave={saveDraftRecord}
+            onUpdateDraft={updateDraftRecord}
+            saveStates={saveStates}
+            videoUserRecords={videoUserRecords}
+            videos={groupedVideos[column.id]}
+          />
         ))}
       </div>
     </div>
