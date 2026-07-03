@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import {
-  Save,
-  X,
-} from 'lucide-react';
-import {
   DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
@@ -12,6 +8,7 @@ import {
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 import DiscoveryLinkActions from './DiscoveryLinkActions';
+import DiscoveryLinkEditForm from './DiscoveryLinkEditForm';
 
 const formatDateTime = (value) => {
   if (!value) return '기록 없음';
@@ -137,68 +134,17 @@ export default function DiscoveryLinkRow({
           </div>
 
           {isEditing ? (
-            <div className="mt-3 space-y-3">
-              <div>
-                <label
-                  className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500"
-                  htmlFor={`discovery-title-${link.id}`}
-                >
-                  제목
-                </label>
-                <input
-                  className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 outline-none transition focus:border-indigo-400"
-                  disabled={saving}
-                  id={`discovery-title-${link.id}`}
-                  onChange={(event) => setDraftTitle(event.target.value)}
-                  placeholder="나중에 알아볼 수 있는 이름"
-                  value={draftTitle}
-                  aria-label={`${title} 발견 링크 제목 수정`}
-                />
-              </div>
-
-              <div>
-                <label
-                  className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500"
-                  htmlFor={`discovery-memo-${link.id}`}
-                >
-                  메모
-                </label>
-                <textarea
-                  className="mt-1 min-h-24 w-full resize-y rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm leading-relaxed text-slate-800 outline-none transition focus:border-indigo-400"
-                  disabled={saving}
-                  id={`discovery-memo-${link.id}`}
-                  onChange={(event) => setDraftMemo(event.target.value)}
-                  placeholder="왜 저장했는지, 어떤 포인트를 봐야 하는지 적어두세요."
-                  value={draftMemo}
-                  aria-label={`${title} 발견 링크 메모 수정`}
-                />
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                <button
-                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 text-xs font-extrabold text-white transition hover:bg-indigo-500 disabled:bg-slate-300"
-                  disabled={saving}
-                  onClick={handleSaveEdit}
-                  title="제목과 메모를 Cloud 발견함에 저장"
-                  aria-label={`${title} 제목과 메모 저장`}
-                  type="button"
-                >
-                  <Save className="h-4 w-4" />
-                  저장
-                </button>
-                <button
-                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
-                  disabled={saving}
-                  onClick={cancelEdit}
-                  title="수정 취소"
-                  aria-label={`${title} 수정 취소`}
-                  type="button"
-                >
-                  <X className="h-4 w-4" />
-                  취소
-                </button>
-              </div>
-            </div>
+            <DiscoveryLinkEditForm
+              draftMemo={draftMemo}
+              draftTitle={draftTitle}
+              linkId={link.id}
+              onCancel={cancelEdit}
+              onSave={handleSaveEdit}
+              saving={saving}
+              setDraftMemo={setDraftMemo}
+              setDraftTitle={setDraftTitle}
+              title={title}
+            />
           ) : (
             <>
               <h3 className="mt-3 line-clamp-2 text-base font-extrabold text-slate-950" title={title}>
