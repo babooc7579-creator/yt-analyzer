@@ -27,7 +27,8 @@
 - `/scrapbook`은 Cloud DB에 저장되지만 별도 container가 아니라 `videos` container 안의 `docType: scrapbook`입니다.
 - `/video-records`는 Cloud DB에 저장되며 기존 `status`를 대표 상태로 유지합니다. 선택지 B 승인 이후 `statusIds`는 복수 판단 보존용 보조 필드로 저장/조회됩니다.
 - `/discovery-links`는 Cloud DB에 저장되며 기존 `videos` container 안의 `docType: discovery_link` 문서를 조회/저장/수정/삭제합니다.
-- 2026-07-03 배포 환경 읽기 전용 확인에서 `GET /discovery-links`는 200으로 성공했고 현재 링크 목록은 0개였습니다. 저장/수정/삭제 확인은 Cloud 데이터 변경이므로 별도 승인 후 진행합니다.
+- 2026-07-03 배포 환경 읽기 전용 확인에서 `GET /discovery-links`는 200으로 성공했고 현재 링크 목록은 0개였습니다.
+- 2026-07-03 사용자 승인 후 `POST /discovery-links`, `PATCH /discovery-links/{id}`, `DELETE /discovery-links/{id}` smoke test를 완료했습니다. 임시 링크 생성, 상태/권리 상태 수정, 제목/메모 수정, 삭제가 모두 200으로 성공했고, 재조회에서 임시 링크가 남지 않았습니다.
 - 2026-07-03 배포 환경 읽기 전용 확인에서 `GET /videos`는 `channelIds` 없이 호출하면 400으로 거절됩니다. 저장 영상 조회는 `channelIds`가 있는 DB 조회 흐름으로 사용합니다.
 - `GET /tags/rename`은 메서드는 GET이지만 실제로 채널 태그를 수정하는 DB 변경 작업입니다.
 - 댓글 Top 10 조회는 프론트에서 YouTube API를 직접 호출합니다.
@@ -69,10 +70,10 @@
 | 영상 판단 기록 불러오기 | `fetchVideoUserRecords` | `GET /video-records` | DB 조회 | 아니오 | 예 | 아니오 | localStorage 보조 | 가능 | localStorage와 Cloud 차이 가능 |
 | 영상 판단 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 기존 `status` 유지 + `statusIds` 보존. 2026-07-02 배포 smoke 확인 |
 | 영상 판단 기록 전체 삭제 | `clearVideoUserRecords` | `DELETE /video-records` | DB 변경 | 아니오 | 아니오 | 예 | 예 | 가능 | 큰 변경. 사용자 확인 필요 |
-| 발견 링크 불러오기 | `fetchDiscoveryLinks` | `GET /discovery-links` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 기존 `videos` container의 `docType: discovery_link` 조회. 2026-07-03 배포 읽기 확인 성공, 현재 0개 |
-| 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태와 URL 추정 `platform` 저장. 백엔드도 허용 `platform`을 보존하며, 없거나 잘못되면 URL로 재추정. 자동 크롤링 없음 |
-| 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 메모 등 변경 |
-| 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음 |
+| 발견 링크 불러오기 | `fetchDiscoveryLinks` | `GET /discovery-links` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 기존 `videos` container의 `docType: discovery_link` 조회. 2026-07-03 배포 읽기 확인 성공 |
+| 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태와 URL 추정 `platform` 저장. 백엔드도 허용 `platform`을 보존하며, 없거나 잘못되면 URL로 재추정. 자동 크롤링 없음. 2026-07-03 smoke 성공 |
+| 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 제목, 메모 변경. 2026-07-03 smoke 성공 |
+| 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음. 2026-07-03 smoke 성공, 임시 링크 잔여 0개 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용 |
 | AI 리메이크 프롬프트 복사 | `copyAI_RemakePrompt` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 클립보드 복사만 |
 | 준비중 메뉴 | `ComingSoonView` | 없음 | 준비중 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 실제 기능처럼 보이면 안 됨 |
