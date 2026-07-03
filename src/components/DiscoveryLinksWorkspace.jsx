@@ -1,9 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  CheckCircle2,
-  RefreshCw,
-} from 'lucide-react';
-import {
   ALL_DISCOVERY_LINK_STATUS_OPTION,
   ALL_DISCOVERY_RIGHTS_STATUS_OPTION,
   DISCOVERY_LINK_STATUS_OPTIONS,
@@ -20,6 +16,7 @@ import DiscoveryLinkForm from './DiscoveryLinkForm';
 import DiscoveryLinksFilters from './DiscoveryLinksFilters';
 import DiscoveryLinksHeader from './DiscoveryLinksHeader';
 import DiscoveryLinksList from './DiscoveryLinksList';
+import DiscoveryLinksNotices from './DiscoveryLinksNotices';
 
 const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
 const ALL_LINK_STATUS_OPTION = ALL_DISCOVERY_LINK_STATUS_OPTION;
@@ -275,25 +272,11 @@ export default function DiscoveryLinksWorkspace({
           statusFilterOptions={statusFilterOptions}
         />
 
-        {error ? (
-          <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
-            {error}
-          </div>
-        ) : null}
-
-        {savingMessage ? (
-          <div role="status" aria-live="polite" className="mt-4 flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-sm font-semibold text-indigo-700">
-            <RefreshCw className="h-4 w-4 shrink-0 animate-spin" />
-            {savingMessage}
-          </div>
-        ) : null}
-
-        {notice && !savingMessage ? (
-          <div role="status" aria-live="polite" className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700">
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
-            {notice}
-          </div>
-        ) : null}
+        <DiscoveryLinksNotices
+          error={error}
+          notice={notice}
+          savingMessage={savingMessage}
+        />
 
         <DiscoveryLinksList
           allLinkCount={links.length}
