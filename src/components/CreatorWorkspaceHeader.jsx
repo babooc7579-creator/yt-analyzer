@@ -25,7 +25,7 @@ export default function CreatorWorkspaceHeader({
         </div>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
           <StatCard value={channelCount} label="채널" />
-          <StatCard value={videoCount} label="영상" />
+          <StatCard value={videoCount} label="불러온 영상" />
           <StatCard value={selectedChannelCount} label="선택 채널" />
           <StatCard value={savedVideoCount} label="스크랩 영상" />
           <StatCard value={discoveryCandidateCount} label="링크 후보" />
