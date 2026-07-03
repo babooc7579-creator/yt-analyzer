@@ -183,10 +183,10 @@ export function useDiscoveryLinks() {
       }
 
       setLinks((currentLinks) => currentLinks.filter((link) => link.id !== id));
-      setNotice(`${getDiscoveryLinkName(currentLink)} 링크를 Cloud 발견함에서 삭제했습니다.`);
+      setNotice(`${getDiscoveryLinkName(currentLink)} 링크 기록을 Cloud 발견함에서 삭제했습니다.`);
       return true;
     } catch (deleteError) {
-      setError(deleteError.message || 'Cloud에서 링크를 삭제하지 못했습니다.');
+      setError(deleteError.message || 'Cloud에서 링크 기록을 삭제하지 못했습니다.');
       return false;
     } finally {
       setSaving(false);
@@ -200,7 +200,7 @@ export function useDiscoveryLinks() {
     update_status: '검토 상태를 Cloud에 저장하는 중입니다.',
     update_rights: '권리 확인 상태를 Cloud에 저장하는 중입니다.',
     update_text: '제목과 메모를 Cloud에 저장하는 중입니다.',
-    delete: 'Cloud 발견함에서 링크를 삭제하는 중입니다.',
+    delete: 'Cloud 발견함에서 링크 기록을 삭제하는 중입니다.',
   };
 
   return {
