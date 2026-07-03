@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   DISCOVERY_RIGHTS_WARNINGS,
 } from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from '../constants/status';
+import { useProductionKanbanActions } from '../hooks/useProductionKanbanActions';
 import { formatDateWithDots, getDateDistanceFromToday, getIsoTodayDate } from '../utils/dates';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
 import ProductionKanbanBoard from './ProductionKanbanBoard';
@@ -74,14 +75,22 @@ export default function ProductionKanban({
   onUpdateVideoRecord,
   onOpenReferenceVault,
 }) {
-  const [draftRecords, setDraftRecords] = useState({});
-  const [saveStates, setSaveStates] = useState({});
-  const [moveStates, setMoveStates] = useState({});
-  const [linkMoveStates, setLinkMoveStates] = useState({});
-
-  useEffect(() => {
-    setDraftRecords(videoUserRecords);
-  }, [videoUserRecords]);
+  const {
+    draftRecords,
+    hasUnsavedChanges,
+    linkMoveStates,
+    moveDiscoveryLink,
+    moveStates,
+    moveVideo,
+    saveDraftRecord,
+    saveStates,
+    updateDraftRecord,
+  } = useProductionKanbanActions({
+    onMoveVideo,
+    onUpdateDiscoveryLink,
+    onUpdateVideoRecord,
+    videoUserRecords,
+  });
 
   const discoveryLinkCandidates = useMemo(() => (
     discoveryLinks
@@ -149,86 +158,6 @@ export default function ProductionKanban({
       }).length,
     };
   }, [discoveryLinkCandidates, draftRecords, groupedVideos, videoUserRecords, videos]);
-
-  const updateDraftRecord = (videoId, updates) => {
-    setDraftRecords(prev => ({
-      ...prev,
-      [videoId]: {
-        ...(prev[videoId] || videoUserRecords[videoId] || {}),
-        videoId,
-        ...updates,
-      },
-    }));
-  };
-
-  const hasUnsavedChanges = (videoId) => {
-    const saved = videoUserRecords[videoId] || {};
-    const draft = draftRecords[videoId] || {};
-
-    return (saved.draftTitle || '') !== (draft.draftTitle || '')
-      || (saved.note || '') !== (draft.note || '')
-      || (saved.targetPublishDate || '') !== (draft.targetPublishDate || '');
-  };
-
-  const saveDraftRecord = async (videoId) => {
-    const draft = draftRecords[videoId] || {};
-    setSaveStates(prev => ({ ...prev, [videoId]: 'saving' }));
-
-    const didSave = await onUpdateVideoRecord(videoId, {
-      draftTitle: draft.draftTitle || '',
-      note: draft.note || '',
-      targetPublishDate: draft.targetPublishDate || '',
-    });
-
-    setSaveStates(prev => ({ ...prev, [videoId]: didSave ? 'saved' : 'error' }));
-
-    if (didSave) {
-      setTimeout(() => {
-        setSaveStates(prev => {
-          if (prev[videoId] !== 'saved') return prev;
-          const next = { ...prev };
-          delete next[videoId];
-          return next;
-        });
-      }, 2200);
-    }
-  };
-
-  const moveVideo = async (videoId, status, extraUpdates = {}) => {
-    setMoveStates(prev => ({ ...prev, [videoId]: 'saving' }));
-    const didMove = await onMoveVideo(videoId, status, extraUpdates);
-    setMoveStates(prev => ({ ...prev, [videoId]: didMove ? 'saved' : 'error' }));
-
-    if (didMove) {
-      setTimeout(() => {
-        setMoveStates(prev => {
-          if (prev[videoId] !== 'saved') return prev;
-          const next = { ...prev };
-          delete next[videoId];
-          return next;
-        });
-      }, 1600);
-    }
-  };
-
-  const moveDiscoveryLink = async (linkId, status) => {
-    if (!onUpdateDiscoveryLink) return;
-
-    setLinkMoveStates(prev => ({ ...prev, [linkId]: 'saving' }));
-    const didMove = await onUpdateDiscoveryLink(linkId, { status });
-    setLinkMoveStates(prev => ({ ...prev, [linkId]: didMove ? 'saved' : 'error' }));
-
-    if (didMove) {
-      setTimeout(() => {
-        setLinkMoveStates(prev => {
-          if (prev[linkId] !== 'saved') return prev;
-          const next = { ...prev };
-          delete next[linkId];
-          return next;
-        });
-      }, 1600);
-    }
-  };
 
   if (videos.length === 0 && discoveryLinkCandidates.length === 0) {
     return (
