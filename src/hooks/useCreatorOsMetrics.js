@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { DISCOVERY_RIGHTS_WARNINGS } from '../constants/discoveryLinks';
-import { PRODUCTION_STATUS, hasProductionStatus, isChannelScannable, isRadarHiddenRecord } from '../constants/status';
+import { PRODUCTION_STATUS, getProductionStatusFromRecord, isChannelScannable, isRadarHiddenRecord } from '../constants/status';
 import { formatRelativeTime } from '../utils/channelScanDisplay';
 import { getCloudOnlyTags, getLatestChannelScanDate } from '../utils/channels';
 import { isTtoTtoCandidate } from '../utils/video';
@@ -60,10 +60,10 @@ export function useCreatorOsMetrics({
   const openRadarCandidateCount = Math.max(videos.length - loadedDecisionCount, 0);
 
   const productionCandidateCount = useMemo(() => (
-    videos.filter(video => (
-      hasProductionStatus(videoUserRecords[video.videoId], PRODUCTION_STATUS.CANDIDATE)
+    savedVideos.filter(video => (
+      getProductionStatusFromRecord(videoUserRecords[video.videoId]) === PRODUCTION_STATUS.CANDIDATE
     )).length
-  ), [videoUserRecords, videos]);
+  ), [savedVideos, videoUserRecords]);
 
   const discoveryCandidateCount = useMemo(() => (
     discoveryLinks.filter((link) => (link.status || '') === 'candidate').length
