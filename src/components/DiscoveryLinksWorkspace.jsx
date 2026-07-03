@@ -8,6 +8,7 @@ import {
   Pencil,
   Plus,
   RefreshCw,
+  Rocket,
   Save,
   Search,
   ShieldCheck,
@@ -179,6 +180,16 @@ function DiscoveryLinkRow({
     onUpdate(link.id, { rightsStatus: nextRightsStatus });
   };
 
+  const handleSendToCandidate = () => {
+    if (currentStatus === 'candidate') return;
+
+    if (needsRiskyCandidateConfirmation('candidate', currentRightsStatus) && !confirmRiskyCandidate()) {
+      return;
+    }
+
+    onUpdate(link.id, { status: 'candidate' });
+  };
+
   const handleCopy = async () => {
     if (!link.url || copyState === 'copying') return;
 
@@ -332,7 +343,7 @@ function DiscoveryLinkRow({
           </p>
         </div>
 
-        <div className="grid min-w-[260px] grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto_auto_auto_auto] xl:grid-cols-1">
+        <div className="grid min-w-[260px] grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto_auto_auto_auto] xl:grid-cols-1">
           <select
             className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-indigo-400"
             disabled={saving}
@@ -358,6 +369,26 @@ function DiscoveryLinkRow({
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
+
+          <button
+            className={`inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3 text-xs font-extrabold transition disabled:cursor-not-allowed ${
+              currentStatus === 'candidate'
+                ? 'border border-indigo-100 bg-indigo-50 text-indigo-500'
+                : 'bg-indigo-600 text-white hover:bg-indigo-500 disabled:bg-slate-300'
+            }`}
+            aria-label={`${title} 제작 후보로 저장`}
+            disabled={saving || currentStatus === 'candidate'}
+            onClick={handleSendToCandidate}
+            title={
+              currentStatus === 'candidate'
+                ? '이미 제작 후보로 저장되어 제작실에 표시됩니다'
+                : '검토 상태를 제작 후보로 저장하고 제작실에 표시합니다'
+            }
+            type="button"
+          >
+            <Rocket className="h-4 w-4" />
+            {currentStatus === 'candidate' ? '후보 등록됨' : '제작 후보로'}
+          </button>
 
           <a
             className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100"
