@@ -35,7 +35,7 @@
 - 2026-07-03 사용자 결정 기준으로 원본 파일 자동 다운로드/업로드는 MVP에서 제외하고, 채널/영상/발견 링크의 URL 보존과 복사 편의를 우선합니다. URL 복사는 클립보드 편의 기능이며 YouTube API 호출, DB schema 변경, localStorage key 변경을 만들지 않습니다.
 - 2026-07-03 오늘 레이더 후보 카드에도 원본 URL 복사를 추가했습니다. 이 동작은 로컬 클립보드 복사이며 YouTube API 호출, Cloud DB 변경, localStorage 변경을 만들지 않습니다.
 - 2026-07-03 AI 리메이크 프롬프트 복사는 공통 클립보드 helper를 사용하도록 정리했고, 선택 영상/스크랩북/제작 후보함 버튼에 복사 성공/실패 피드백을 표시합니다. 이 동작은 외부 AI API를 호출하지 않습니다.
-- 2026-07-03 댓글 Top 10 조회의 YouTube API 요청 URL 인코딩과 오류 응답 처리를 보강했습니다. 댓글 조회는 여전히 사용자 API Key 기반의 YouTube API 호출이며 Cloud DB나 localStorage를 변경하지 않습니다.
+- 2026-07-03 댓글 Top 10 조회의 YouTube API 요청 URL 인코딩과 오류/비JSON 응답 처리를 보강했습니다. 댓글 조회는 여전히 사용자 API Key 기반의 YouTube API 호출이며 Cloud DB나 localStorage를 변경하지 않습니다.
 - 2026-07-03 프론트 Cloud Function API helper의 응답 처리를 보강했습니다. 비정상 HTTP 응답이나 JSON이 아닌 응답은 사용자용 오류 메시지로 정리되며 endpoint, DB schema, localStorage key는 변경하지 않았습니다.
 
 ---
