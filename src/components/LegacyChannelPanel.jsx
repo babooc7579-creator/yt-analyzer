@@ -3,6 +3,7 @@ import ChannelList from './ChannelList';
 import ChannelTagTabs from './ChannelTagTabs';
 import LegacyWorkPanelIntro from './LegacyWorkPanelIntro';
 import LoadStoredVideosButton from './LoadStoredVideosButton';
+import { isChannelScannable } from '../constants/status';
 import { getChannelScanDisplay } from '../utils/channelScanDisplay';
 
 export default function LegacyChannelPanel({
@@ -19,7 +20,6 @@ export default function LegacyChannelPanel({
   cloudOnlyTags,
   confirmRenameCategory,
   error,
-  getScannableChannelCount,
   handleBulkAdd,
   handlePreviewChannel,
   handleSaveChannel,
@@ -63,6 +63,12 @@ export default function LegacyChannelPanel({
   toggleNewChannelTag,
   updatingChannelId,
 }) {
+  const getScannableChannelCount = (category) => (
+    savedChannels.filter(channel => (
+      channel.tags?.includes(category) && isChannelScannable(channel)
+    )).length
+  );
+
   return (
     <div className={`space-y-4 ${showWorkPanel ? '' : 'hidden'}`}>
       <div className="bg-slate-100 rounded-xl shadow-sm border border-slate-300 p-4">

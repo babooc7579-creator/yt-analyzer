@@ -251,7 +251,6 @@ export default function App() {
     cloudOnlyTags,
     discoveryCandidateCount,
     discoveryRightsWarningCount,
-    getScannableChannelCount,
     latestScanText,
     openRadarCandidateCount,
     productionCandidateCount,
@@ -366,7 +365,6 @@ export default function App() {
               error={error}
               fetchTopComments={fetchTopComments}
               filteredAndSortedVideos={filteredAndSortedVideos}
-              getScannableChannelCount={getScannableChannelCount}
               handleBulkAdd={handleBulkAdd}
               handleManualScan={handleManualScan}
               handlePreviewChannel={handlePreviewChannel}
