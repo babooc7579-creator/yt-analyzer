@@ -391,10 +391,10 @@ export default function ProductionKanban({
           </button>
           <button
             className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 text-[11px] font-extrabold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
-            aria-label={`${linkTitle} 후보 제외`}
+            aria-label={`${linkTitle} 제작 후보에서 제외 상태로 저장`}
             disabled={isMovingLink}
             onClick={() => moveDiscoveryLink(link.id, 'discarded')}
-            title="발견 링크를 후보 제외 상태로 저장"
+            title="링크를 삭제하지 않고 발견함의 후보 제외 상태로 저장합니다"
             type="button"
           >
             {isMovingLink ? '저장 중...' : '후보 제외'}
