@@ -5,6 +5,7 @@ import RadarCandidateDecisionActions from './RadarCandidateDecisionActions';
 import RadarCandidateMetrics from './RadarCandidateMetrics';
 import RadarCandidatePrimaryActions from './RadarCandidatePrimaryActions';
 import RadarCandidateScorePanel from './RadarCandidateScorePanel';
+import RadarCandidateThumbnail from './RadarCandidateThumbnail';
 
 export const getRadarScore = (video) => {
   const ttoTtoBonus = isTtoTtoCandidate(video) ? 100 : 0;
@@ -49,11 +50,12 @@ export default function RadarCandidateCard({
 
   return (
     <article className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80">
-      <div className="relative">
-        <img src={video.thumbnail} alt={`${videoTitle} 썸네일`} className="aspect-video w-full object-cover" />
-        <span className="absolute left-2 top-2 rounded-full bg-black/80 px-2 py-1 text-[10px] font-extrabold text-white">#{index + 1}</span>
-        <span className="absolute right-2 top-2 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">{priorityLabel}</span>
-      </div>
+      <RadarCandidateThumbnail
+        index={index}
+        priorityLabel={priorityLabel}
+        video={video}
+        videoTitle={videoTitle}
+      />
       <div className="p-4">
         <RadarCandidateBadges isStrong={isStrong} isTtoTto={isTtoTto} />
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
