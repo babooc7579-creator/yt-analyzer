@@ -1,9 +1,9 @@
-﻿import React, { useState } from 'react';
 import ComingSoonView from './components/ComingSoonView';
 import CreatorAppLayout from './components/CreatorAppLayout';
 import CreatorHomeView from './components/CreatorHomeView';
 import DiscoveryLinksWorkspace from './components/DiscoveryLinksWorkspace';
 import LegacyWorkspaceView from './components/LegacyWorkspaceView';
+import { useAppRuntimeState } from './hooks/useAppRuntimeState';
 import { useCategories } from './hooks/useCategories';
 import { useChannelAddActions } from './hooks/useChannelAddActions';
 import { useChannelActions } from './hooks/useChannelActions';
@@ -24,21 +24,27 @@ import { useVideoSelection } from './hooks/useVideoSelection';
 import { useVideoUserRecords } from './hooks/useVideoUserRecords';
 
 export default function App() {
-  const [apiKey, setApiKey] = useState('');
-  
   // 상태 관리
   const { categories, setCategories } = useCategories();
 
-  const [updatingChannelId, setUpdatingChannelId] = useState(null);
-  const [isScanning, setIsScanning] = useState(false);
-
-  // 결(태그) 단위 일괄 스캔 - 현재 스캔 중인 태그 ('ALL'이면 전체 스캔)
-  const [scanningTag, setScanningTag] = useState(null);
-
-  const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [progressMsg, setProgressMsg] = useState('');
-  const [error, setError] = useState('');
+  const {
+    apiKey,
+    error,
+    isScanning,
+    loading,
+    progressMsg,
+    scanningTag,
+    setApiKey,
+    setError,
+    setIsScanning,
+    setLoading,
+    setProgressMsg,
+    setScanningTag,
+    setUpdatingChannelId,
+    setVideos,
+    updatingChannelId,
+    videos,
+  } = useAppRuntimeState();
   
   const {
     selectedCategoryTab,
