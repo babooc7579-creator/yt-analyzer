@@ -19,6 +19,33 @@ export default function ProductionVideoCard({
   const videoUrl = getYouTubeVideoUrl(video.videoId);
   const isSaving = saveState === 'saving';
   const isMoving = moveState === 'saving';
+  const metaBadgesProps = {
+    columnId,
+    scheduleSignal,
+    video,
+  };
+
+  const draftFormProps = {
+    isDirty,
+    isSaving,
+    onSave,
+    onUpdateDraft,
+    record,
+    saveState,
+    video,
+    videoTitle,
+  };
+
+  const statusActionsProps = {
+    columnId,
+    isMoving,
+    moveState,
+    onMove,
+    record,
+    video,
+    videoTitle,
+    videoUrl,
+  };
 
   return (
     <article className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -27,29 +54,11 @@ export default function ProductionVideoCard({
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
           {videoTitle}
         </a>
-        <ProductionVideoMetaBadges columnId={columnId} scheduleSignal={scheduleSignal} video={video} />
+        <ProductionVideoMetaBadges {...metaBadgesProps} />
 
-        <ProductionVideoDraftForm
-          isDirty={isDirty}
-          isSaving={isSaving}
-          onSave={onSave}
-          onUpdateDraft={onUpdateDraft}
-          record={record}
-          saveState={saveState}
-          video={video}
-          videoTitle={videoTitle}
-        />
+        <ProductionVideoDraftForm {...draftFormProps} />
 
-        <ProductionVideoStatusActions
-          columnId={columnId}
-          isMoving={isMoving}
-          moveState={moveState}
-          onMove={onMove}
-          record={record}
-          video={video}
-          videoTitle={videoTitle}
-          videoUrl={videoUrl}
-        />
+        <ProductionVideoStatusActions {...statusActionsProps} />
       </div>
     </article>
   );

@@ -21,34 +21,40 @@ export default function ProductionKanbanContent({
   videoCount,
   videoUserRecords,
 }) {
+  const summaryProps = {
+    discoveryLinkCandidateCount: discoveryLinkCandidates.length,
+    productionSummary,
+    videoCount,
+  };
+
+  const discoveryLinksSectionProps = {
+    linkMoveStates,
+    links: discoveryLinkCandidates,
+    onMoveLink: moveDiscoveryLink,
+    onOpenDiscoveryLinks,
+  };
+
+  const boardProps = {
+    columns: PRODUCTION_KANBAN_COLUMNS,
+    draftRecords,
+    getScheduleSignal: getProductionScheduleSignal,
+    groupedVideos,
+    hasUnsavedChanges,
+    moveStates,
+    onMove: moveVideo,
+    onSave: saveDraftRecord,
+    onUpdateDraft: updateDraftRecord,
+    saveStates,
+    videoUserRecords,
+  };
+
   return (
     <div className="space-y-4">
-      <ProductionKanbanSummary
-        discoveryLinkCandidateCount={discoveryLinkCandidates.length}
-        productionSummary={productionSummary}
-        videoCount={videoCount}
-      />
+      <ProductionKanbanSummary {...summaryProps} />
 
-      <ProductionDiscoveryLinksSection
-        linkMoveStates={linkMoveStates}
-        links={discoveryLinkCandidates}
-        onMoveLink={moveDiscoveryLink}
-        onOpenDiscoveryLinks={onOpenDiscoveryLinks}
-      />
+      <ProductionDiscoveryLinksSection {...discoveryLinksSectionProps} />
 
-      <ProductionKanbanBoard
-        columns={PRODUCTION_KANBAN_COLUMNS}
-        draftRecords={draftRecords}
-        getScheduleSignal={getProductionScheduleSignal}
-        groupedVideos={groupedVideos}
-        hasUnsavedChanges={hasUnsavedChanges}
-        moveStates={moveStates}
-        onMove={moveVideo}
-        onSave={saveDraftRecord}
-        onUpdateDraft={updateDraftRecord}
-        saveStates={saveStates}
-        videoUserRecords={videoUserRecords}
-      />
+      <ProductionKanbanBoard {...boardProps} />
     </div>
   );
 }
