@@ -1,4 +1,3 @@
-import { AlertCircle } from 'lucide-react';
 import {
   DISCOVERY_RIGHTS_TONES,
   DISCOVERY_RIGHTS_WARNINGS,
@@ -8,6 +7,7 @@ import {
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 import ProductionDiscoveryLinkActions from './ProductionDiscoveryLinkActions';
+import ProductionDiscoveryLinkRightsWarning from './ProductionDiscoveryLinkRightsWarning';
 
 const getDiscoveryLinkTitle = (link) => {
   if (link.title) return link.title;
@@ -48,15 +48,7 @@ export default function ProductionDiscoveryLinkCard({
         {linkTitle}
       </h4>
       <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
-      {rightsWarning && (
-        <div className={`mt-3 flex gap-2 rounded-lg border p-3 text-xs ${rightsWarning.panelClass}`}>
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-          <div>
-            <p className="font-extrabold">{rightsWarning.title}</p>
-            <p className="mt-1 leading-relaxed">{rightsWarning.description}</p>
-          </div>
-        </div>
-      )}
+      <ProductionDiscoveryLinkRightsWarning rightsWarning={rightsWarning} />
       {link.memo ? (
         <p className="mt-3 line-clamp-3 rounded-lg bg-white p-3 text-xs leading-relaxed text-slate-600">
           {link.memo}
