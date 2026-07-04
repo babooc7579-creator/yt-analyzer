@@ -3,157 +3,19 @@ import LegacyChannelPanel from './LegacyChannelPanel';
 import LegacyWorkspaceMainPanel from './LegacyWorkspaceMainPanel';
 
 export default function LegacyWorkspaceView({
-  activeSelectedChannelCount,
-  activeTab,
   channelPanelProps,
-  addMode,
-  apiKey,
-  bulkInput,
-  bulkLoading,
-  bulkResult,
-  cancelChannelPreview,
-  cancelRenameCategory,
-  categories,
-  channelPreview,
-  channelsLoading,
   checkedVideos,
-  cloudOnlyTags,
-  confirmRenameCategory,
-  copiedPrompt,
-  copyPromptForVideos,
-  promptCopyError,
-  creatorView,
-  deleteChannel,
-  discoveryLinks,
-  error,
-  fetchTopComments,
-  filteredAndSortedVideos,
-  handleBulkAdd,
-  handleManualScan,
-  handlePreviewChannel,
-  handleSaveChannel,
-  handleTagScan,
-  isEditingCategory,
-  isProductionCandidate,
-  isReferenceVaultView,
-  isScanning,
-  isVideoSaved,
-  lengthFilter,
-  loadStoredVideosForSelectedChannels,
-  loading,
-  markRadarVideoStatus,
-  newCategoryName,
-  newChannelInput,
-  newChannelLang,
-  newChannelNote,
-  newChannelTags,
-  openCreatorView,
-  openNotesModal,
-  previewLoading,
-  progressMsg,
-  promoteVideoToProduction,
-  renameLoading,
-  renameValue,
-  renamingCategory,
-  resetBulkAdd,
-  savedChannels,
+  mainPanelProps,
   savedVideos,
-  scannableChannelCount,
-  scanningTag,
-  searchKeyword,
-  selectedCategoryTab,
   selectedChannelIds,
-  setActiveTab,
-  setAddMode,
-  setApiKey,
-  setBulkInput,
-  setCategories,
-  setIsEditingCategory,
-  setLengthFilter,
-  setNewCategoryName,
-  setNewChannelInput,
-  setNewChannelLang,
-  setNewChannelNote,
-  setRenameValue,
-  setSearchKeyword,
-  setSelectedCategoryTab,
-  setShowWorkPanel,
-  setSortType,
-  setTtoTtoMode,
-  setViewFilter,
-  setViewMode,
   showWorkPanel,
-  sortType,
-  startRenameCategory,
-  toggleCheckVideo,
-  toggleChannelSelection,
-  toggleNewChannelTag,
-  toggleScrapVideo,
   totalVideoCount,
-  ttoTtoAssetCount,
-  ttoTtoMode,
-  updateChannelMetadata,
-  updateDiscoveryLink,
-  updateVideoUserRecord,
-  updatingChannelId,
-  videoUserRecords,
-  videos,
-  viewFilter,
-  viewMode,
-  visibleScrapCount,
 }) {
   return (
     <div className={`w-full mx-auto grid grid-cols-1 gap-5 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 ${showWorkPanel ? 'max-w-[2400px] xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
       <LegacyChannelPanel {...channelPanelProps} />
 
-      <LegacyWorkspaceMainPanel
-        activeSelectedChannelCount={activeSelectedChannelCount}
-        activeTab={activeTab}
-        checkedVideos={checkedVideos}
-        copiedPrompt={copiedPrompt}
-        copyPromptForVideos={copyPromptForVideos}
-        creatorView={creatorView}
-        discoveryLinks={discoveryLinks}
-        fetchTopComments={fetchTopComments}
-        filteredAndSortedVideos={filteredAndSortedVideos}
-        handleManualScan={handleManualScan}
-        isProductionCandidate={isProductionCandidate}
-        isReferenceVaultView={isReferenceVaultView}
-        isScanning={isScanning}
-        isVideoSaved={isVideoSaved}
-        lengthFilter={lengthFilter}
-        markRadarVideoStatus={markRadarVideoStatus}
-        openCreatorView={openCreatorView}
-        promoteVideoToProduction={promoteVideoToProduction}
-        promptCopyError={promptCopyError}
-        savedChannels={savedChannels}
-        savedVideos={savedVideos}
-        scannableChannelCount={scannableChannelCount}
-        searchKeyword={searchKeyword}
-        selectedChannelIds={selectedChannelIds}
-        setActiveTab={setActiveTab}
-        setLengthFilter={setLengthFilter}
-        setSearchKeyword={setSearchKeyword}
-        setShowWorkPanel={setShowWorkPanel}
-        setSortType={setSortType}
-        setTtoTtoMode={setTtoTtoMode}
-        setViewFilter={setViewFilter}
-        setViewMode={setViewMode}
-        showWorkPanel={showWorkPanel}
-        sortType={sortType}
-        toggleCheckVideo={toggleCheckVideo}
-        toggleScrapVideo={toggleScrapVideo}
-        totalVideoCount={totalVideoCount}
-        ttoTtoAssetCount={ttoTtoAssetCount}
-        ttoTtoMode={ttoTtoMode}
-        updateDiscoveryLink={updateDiscoveryLink}
-        updateVideoUserRecord={updateVideoUserRecord}
-        videoUserRecords={videoUserRecords}
-        videos={videos}
-        viewFilter={viewFilter}
-        viewMode={viewMode}
-        visibleScrapCount={visibleScrapCount}
-      />
+      <LegacyWorkspaceMainPanel {...mainPanelProps} />
 
       <HiddenLegacyAside
         checkedVideoCount={checkedVideos.length}
