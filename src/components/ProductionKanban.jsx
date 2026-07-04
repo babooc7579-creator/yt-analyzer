@@ -50,23 +50,25 @@ export default function ProductionKanban({
     );
   }
 
+  const contentProps = {
+    discoveryLinkCandidates,
+    draftRecords,
+    groupedVideos,
+    hasUnsavedChanges,
+    linkMoveStates,
+    moveDiscoveryLink,
+    moveStates,
+    moveVideo,
+    onOpenDiscoveryLinks,
+    productionSummary,
+    saveDraftRecord,
+    saveStates,
+    updateDraftRecord,
+    videoCount: videos.length,
+    videoUserRecords,
+  };
+
   return (
-    <ProductionKanbanContent
-      discoveryLinkCandidates={discoveryLinkCandidates}
-      draftRecords={draftRecords}
-      groupedVideos={groupedVideos}
-      hasUnsavedChanges={hasUnsavedChanges}
-      linkMoveStates={linkMoveStates}
-      moveDiscoveryLink={moveDiscoveryLink}
-      moveStates={moveStates}
-      moveVideo={moveVideo}
-      onOpenDiscoveryLinks={onOpenDiscoveryLinks}
-      productionSummary={productionSummary}
-      saveDraftRecord={saveDraftRecord}
-      saveStates={saveStates}
-      updateDraftRecord={updateDraftRecord}
-      videoCount={videos.length}
-      videoUserRecords={videoUserRecords}
-    />
+    <ProductionKanbanContent {...contentProps} />
   );
 }

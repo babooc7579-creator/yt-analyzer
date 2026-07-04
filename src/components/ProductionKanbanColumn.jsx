@@ -34,21 +34,21 @@ export default function ProductionKanbanColumn({
             const saveState = saveStates[video.videoId];
             const moveState = moveStates[video.videoId];
             const scheduleSignal = getScheduleSignal(record);
+            const cardProps = {
+              columnId: column.id,
+              isDirty,
+              moveState,
+              onMove,
+              onSave,
+              onUpdateDraft,
+              record,
+              saveState,
+              scheduleSignal,
+              video,
+            };
 
             return (
-              <ProductionVideoCard
-                key={video.videoId}
-                columnId={column.id}
-                isDirty={isDirty}
-                moveState={moveState}
-                onMove={onMove}
-                onSave={onSave}
-                onUpdateDraft={onUpdateDraft}
-                record={record}
-                saveState={saveState}
-                scheduleSignal={scheduleSignal}
-                video={video}
-              />
+              <ProductionVideoCard key={video.videoId} {...cardProps} />
             );
           })
         )}

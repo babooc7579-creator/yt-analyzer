@@ -38,15 +38,18 @@ export default function ProductionDiscoveryLinksSection({
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
-        {links.map((link) => (
-          <ProductionDiscoveryLinkCard
-            key={link.id}
-            link={link}
-            moveState={linkMoveStates[link.id]}
-            onEditInDiscoveryLinks={onOpenDiscoveryLinks}
-            onMove={onMoveLink}
-          />
-        ))}
+        {links.map((link) => {
+          const cardProps = {
+            link,
+            moveState: linkMoveStates[link.id],
+            onEditInDiscoveryLinks: onOpenDiscoveryLinks,
+            onMove: onMoveLink,
+          };
+
+          return (
+            <ProductionDiscoveryLinkCard key={link.id} {...cardProps} />
+          );
+        })}
       </div>
     </section>
   );

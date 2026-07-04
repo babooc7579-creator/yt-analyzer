@@ -13,23 +13,24 @@ export default function ProductionKanbanBoard({
   saveStates,
   videoUserRecords,
 }) {
+  const getColumnProps = (column) => ({
+    column,
+    draftRecords,
+    getScheduleSignal,
+    hasUnsavedChanges,
+    moveStates,
+    onMove,
+    onSave,
+    onUpdateDraft,
+    saveStates,
+    videoUserRecords,
+    videos: groupedVideos[column.id],
+  });
+
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
       {columns.map((column) => (
-        <ProductionKanbanColumn
-          key={column.id}
-          column={column}
-          draftRecords={draftRecords}
-          getScheduleSignal={getScheduleSignal}
-          hasUnsavedChanges={hasUnsavedChanges}
-          moveStates={moveStates}
-          onMove={onMove}
-          onSave={onSave}
-          onUpdateDraft={onUpdateDraft}
-          saveStates={saveStates}
-          videoUserRecords={videoUserRecords}
-          videos={groupedVideos[column.id]}
-        />
+        <ProductionKanbanColumn key={column.id} {...getColumnProps(column)} />
       ))}
     </div>
   );
