@@ -23,7 +23,7 @@ export default function CreatorHomeView({
   videos,
 }) {
   return (
-    <div className="grid grid-cols-1 gap-4 2xl:grid-cols-[1.2fr_0.8fr]">
+    <div data-testid="creator-route-home" className="grid grid-cols-1 gap-4 2xl:grid-cols-[1.2fr_0.8fr]">
       <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl shadow-slate-950/30">
         <HomeRadarSummary
           savedChannelCount={savedChannels.length}
