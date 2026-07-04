@@ -1,4 +1,4 @@
-import CopyUrlButton from './CopyUrlButton';
+import ProductionDiscoveryLinkCopyButton from './ProductionDiscoveryLinkCopyButton';
 import ProductionDiscoveryLinkEditButton from './ProductionDiscoveryLinkEditButton';
 import ProductionDiscoveryLinkOpenButton from './ProductionDiscoveryLinkOpenButton';
 import ProductionDiscoveryLinkMoveButton from './ProductionDiscoveryLinkMoveButton';
@@ -16,17 +16,10 @@ export default function ProductionDiscoveryLinkActions({
     <>
       <div className="mt-3 flex flex-wrap gap-2">
         <ProductionDiscoveryLinkOpenButton link={link} linkTitle={linkTitle} />
-        <CopyUrlButton
-          url={link.url}
-          label="링크 복사"
-          copiedLabel="복사 완료"
-          copyingLabel="복사 중"
-          errorLabel="복사 실패"
+        <ProductionDiscoveryLinkCopyButton
           disabled={isMoving}
-          ariaLabel={`${linkTitle} 원본 링크 URL 복사`}
-          title="원본 링크 URL을 클립보드에 복사합니다. 외부 사이트 수집이나 저장 작업은 없습니다."
-          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
-          iconClassName="h-3.5 w-3.5"
+          link={link}
+          linkTitle={linkTitle}
         />
         <ProductionDiscoveryLinkEditButton
           disabled={isMoving}
