@@ -1,4 +1,3 @@
-import React from 'react';
 import VideoToolbarFilters from './VideoToolbarFilters';
 import VideoToolbarReferenceHeader from './VideoToolbarReferenceHeader';
 import VideoToolbarScanAction from './VideoToolbarScanAction';

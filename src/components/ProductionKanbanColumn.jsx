@@ -1,4 +1,3 @@
-import React from 'react';
 import ProductionVideoCard from './ProductionVideoCard';
 
 export default function ProductionKanbanColumn({

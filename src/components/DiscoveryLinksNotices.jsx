@@ -1,4 +1,3 @@
-import React from 'react';
 import { CheckCircle2, RefreshCw } from 'lucide-react';
 
 export default function DiscoveryLinksNotices({

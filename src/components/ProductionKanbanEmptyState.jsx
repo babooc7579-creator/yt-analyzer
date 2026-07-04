@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as LinkIcon, Rocket, Star } from 'lucide-react';
 
 export default function ProductionKanbanEmptyState({
