@@ -68,87 +68,96 @@ export default function LegacyChannelPanel({
       channel.tags?.includes(category) && isChannelScannable(channel)
     )).length
   );
+  const introProps = {
+    apiKey,
+    onChangeApiKey,
+  };
+
+  const channelAddFormProps = {
+    addMode,
+    bulkInput,
+    bulkLoading,
+    bulkResult,
+    cancelChannelPreview,
+    cancelRenameCategory,
+    categories,
+    channelPreview,
+    cloudOnlyTags,
+    confirmRenameCategory,
+    handleBulkAdd,
+    handlePreviewChannel,
+    handleSaveChannel,
+    isEditingCategory,
+    loading,
+    newCategoryName,
+    newChannelInput,
+    newChannelLang,
+    newChannelNote,
+    newChannelTags,
+    previewLoading,
+    renameLoading,
+    renameValue,
+    renamingCategory,
+    resetBulkAdd,
+    setAddMode,
+    setBulkInput,
+    setCategories,
+    setIsEditingCategory,
+    setNewCategoryName,
+    setNewChannelInput,
+    setNewChannelLang,
+    setNewChannelNote,
+    setRenameValue,
+    startRenameCategory,
+    toggleNewChannelTag,
+  };
+
+  const tagTabsProps = {
+    categories,
+    channels: savedChannels,
+    getScannableChannelCount,
+    isScanning,
+    onScanTag: handleTagScan,
+    onSelectCategory: setSelectedCategoryTab,
+    scanningTag,
+    selectedCategory: selectedCategoryTab,
+  };
+
+  const channelListProps = {
+    channels: savedChannels,
+    channelsLoading,
+    getScanDisplay: getChannelScanDisplay,
+    onDelete: onDeleteChannel,
+    onOpenNotes,
+    onToggleSelection: onToggleChannelSelection,
+    onUpdateMetadata: onUpdateChannelMetadata,
+    selectedCategory: selectedCategoryTab,
+    selectedChannelIds,
+    updatingChannelId,
+  };
+
+  const footerProps = {
+    error,
+    loading,
+    onLoadStoredVideos,
+    progressMsg,
+    selectedChannelCount: selectedChannelIds.length,
+  };
 
   return (
     <div className={`space-y-4 ${showWorkPanel ? '' : 'hidden'}`}>
       <div className="bg-slate-100 rounded-xl shadow-sm border border-slate-300 p-4">
-        <LegacyWorkPanelIntro
-          apiKey={apiKey}
-          onChangeApiKey={onChangeApiKey}
-        />
+        <LegacyWorkPanelIntro {...introProps} />
 
-        <ChannelAddForm
-          addMode={addMode}
-          setAddMode={setAddMode}
-          bulkInput={bulkInput}
-          setBulkInput={setBulkInput}
-          bulkLoading={bulkLoading}
-          bulkResult={bulkResult}
-          resetBulkAdd={resetBulkAdd}
-          handleBulkAdd={handleBulkAdd}
-          categories={categories}
-          cloudOnlyTags={cloudOnlyTags}
-          setCategories={setCategories}
-          newCategoryName={newCategoryName}
-          setNewCategoryName={setNewCategoryName}
-          isEditingCategory={isEditingCategory}
-          setIsEditingCategory={setIsEditingCategory}
-          renamingCategory={renamingCategory}
-          renameValue={renameValue}
-          setRenameValue={setRenameValue}
-          renameLoading={renameLoading}
-          startRenameCategory={startRenameCategory}
-          confirmRenameCategory={confirmRenameCategory}
-          cancelRenameCategory={cancelRenameCategory}
-          newChannelInput={newChannelInput}
-          setNewChannelInput={setNewChannelInput}
-          newChannelTags={newChannelTags}
-          toggleNewChannelTag={toggleNewChannelTag}
-          newChannelLang={newChannelLang}
-          setNewChannelLang={setNewChannelLang}
-          newChannelNote={newChannelNote}
-          setNewChannelNote={setNewChannelNote}
-          channelPreview={channelPreview}
-          previewLoading={previewLoading}
-          handlePreviewChannel={handlePreviewChannel}
-          cancelChannelPreview={cancelChannelPreview}
-          handleSaveChannel={handleSaveChannel}
-          loading={loading}
-        />
+        <ChannelAddForm {...channelAddFormProps} />
 
-        <ChannelTagTabs
-          categories={categories}
-          channels={savedChannels}
-          selectedCategory={selectedCategoryTab}
-          getScannableChannelCount={getScannableChannelCount}
-          scanningTag={scanningTag}
-          isScanning={isScanning}
-          onSelectCategory={setSelectedCategoryTab}
-          onScanTag={handleTagScan}
-        />
+        <ChannelTagTabs {...tagTabsProps} />
 
         <hr className="my-4 border-slate-100" />
 
-        <ChannelList
-          channels={savedChannels}
-          selectedCategory={selectedCategoryTab}
-          selectedChannelIds={selectedChannelIds}
-          channelsLoading={channelsLoading}
-          getScanDisplay={getChannelScanDisplay}
-          onToggleSelection={onToggleChannelSelection}
-          onOpenNotes={onOpenNotes}
-          onUpdateMetadata={onUpdateChannelMetadata}
-          updatingChannelId={updatingChannelId}
-          onDelete={onDeleteChannel}
-        />
+        <ChannelList {...channelListProps} />
 
-        <LegacyChannelPanelFooter
-          error={error}
-          loading={loading}
-          onLoadStoredVideos={onLoadStoredVideos}
-          progressMsg={progressMsg}
-          selectedChannelCount={selectedChannelIds.length}
-        />
+        <LegacyChannelPanelFooter {...footerProps} />
       </div>
     </div>
   );
