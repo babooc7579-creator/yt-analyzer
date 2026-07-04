@@ -1,4 +1,6 @@
-import { CheckSquare, Rocket, Square, Star, TrendingUp } from 'lucide-react';
+import { CheckSquare, Square, Star } from 'lucide-react';
+
+import VideoCardThumbnailBadges from './VideoCardThumbnailBadges';
 
 export default function VideoCardThumbnail({
   isCandidate,
@@ -17,19 +19,11 @@ export default function VideoCardThumbnail({
       <img src={video.thumbnail} alt={`${videoTitle} 썸네일`} className={`h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02] ${thumbnailHeightClass}`} />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
-      <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-        <span className="rounded-full bg-black/75 px-2.5 py-1 text-xs font-extrabold text-white">#{rank}</span>
-        {isCandidate && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-xs font-extrabold text-white shadow-sm">
-            <Rocket className="w-3 h-3" /> 또터또 후보
-          </span>
-        )}
-        {isStrongReaction && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-bold text-orange-700">
-            <TrendingUp className="w-3 h-3" /> 강한 반응
-          </span>
-        )}
-      </div>
+      <VideoCardThumbnailBadges
+        isCandidate={isCandidate}
+        isStrongReaction={isStrongReaction}
+        rank={rank}
+      />
       <div className="absolute right-3 top-3 flex gap-2">
         <button
           type="button"
