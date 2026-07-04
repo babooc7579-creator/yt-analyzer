@@ -8,10 +8,10 @@ import {
   normalizeVideoUserRecords,
   withRecordStatus,
 } from '../constants/status';
-
-const VIDEO_RECORDS_LOAD_WARNING = 'Cloud 연결 실패로 이 브라우저에 남아 있던 영상 판단 기록을 임시로 표시 중입니다. 이 기록은 Cloud 기준 데이터가 아닙니다.';
-const VIDEO_RECORDS_SAVE_WARNING = '영상 판단 기록이 Cloud에 저장되지 않았습니다. 화면에는 임시로 반영됐지만 Cloud 동기화가 필요합니다.';
-const VIDEO_RECORDS_CLEAR_WARNING = '판단 기록 초기화가 Cloud에 반영되지 않았습니다. 화면에는 임시로 초기화됐지만 새로고침 후 다시 나타날 수 있습니다.';
+import {
+  VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE,
+  VIDEO_RECORDS_SYNC_WARNINGS,
+} from '../constants/syncWarnings';
 
 export function useVideoUserRecords() {
   const cloudRecordsCacheRef = useRef({});
@@ -47,7 +47,7 @@ export function useVideoUserRecords() {
         if (!isCancelled) {
           const fallbackRecords = normalizeVideoUserRecords(readJsonStorage(STORAGE_KEYS.videoUserRecords, {}) || {});
           setVideoUserRecords(fallbackRecords);
-          setVideoRecordsSyncWarning(VIDEO_RECORDS_LOAD_WARNING);
+          setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback);
         }
       }
     };
@@ -87,7 +87,7 @@ export function useVideoUserRecords() {
       }));
       return true;
     } catch {
-      setVideoRecordsSyncWarning(VIDEO_RECORDS_SAVE_WARNING);
+      setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
       return false;
     }
   };
@@ -113,7 +113,7 @@ export function useVideoUserRecords() {
       }));
       return true;
     } catch {
-      setVideoRecordsSyncWarning(VIDEO_RECORDS_SAVE_WARNING);
+      setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
       return false;
     }
   };
@@ -145,15 +145,13 @@ export function useVideoUserRecords() {
       }));
       return true;
     } catch {
-      setVideoRecordsSyncWarning(VIDEO_RECORDS_SAVE_WARNING);
+      setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
       return false;
     }
   };
 
   const clearRadarDecisions = async () => {
-    const confirmed = window.confirm(
-      'Cloud 영상 판단 기록을 전체 초기화할까요?\n\n봤음, 나중에 보기, 제외, 제작 후보 같은 판단 기록이 지워지고 숨겨졌던 후보가 다시 보일 수 있습니다.'
-    );
+    const confirmed = window.confirm(VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE);
 
     if (!confirmed) return false;
 
@@ -165,7 +163,7 @@ export function useVideoUserRecords() {
       setVideoRecordsSyncWarning('');
       return true;
     } catch {
-      setVideoRecordsSyncWarning(VIDEO_RECORDS_CLEAR_WARNING);
+      setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.clearFailed);
       return false;
     }
   };
