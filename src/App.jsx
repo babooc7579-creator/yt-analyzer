@@ -1,18 +1,11 @@
 import CreatorAppLayout from './components/CreatorAppLayout';
 import CreatorAppRoutes from './components/CreatorAppRoutes';
 import { useAppRuntimeState } from './hooks/useAppRuntimeState';
-import { useCategories } from './hooks/useCategories';
-import { useChannelAddActions } from './hooks/useChannelAddActions';
-import { useChannelActions } from './hooks/useChannelActions';
-import { useChannelFormState } from './hooks/useChannelFormState';
-import { useChannelNotesModal } from './hooks/useChannelNotesModal';
-import { useChannelSelection } from './hooks/useChannelSelection';
-import { useCloudChannels } from './hooks/useCloudChannels';
+import { useCreatorAppChannelWorkflow } from './hooks/useCreatorAppChannelWorkflow';
 import { useCreatorAppDerivedState } from './hooks/useCreatorAppDerivedState';
 import { useCreatorWorkspaceNavigation } from './hooks/useCreatorWorkspaceNavigation';
 import { useDiscoveryLinks } from './hooks/useDiscoveryLinks';
 import { useScrapbook } from './hooks/useScrapbook';
-import { useTagRenameActions } from './hooks/useTagRenameActions';
 import { useTopComments } from './hooks/useTopComments';
 import { useVideoCollectionActions } from './hooks/useVideoCollectionActions';
 import { useVideoExplorerState } from './hooks/useVideoExplorerState';
@@ -23,8 +16,6 @@ import { useCreatorAppViewProps } from './hooks/useCreatorAppViewProps';
 
 export default function App() {
   // 상태 관리
-  const { categories, setCategories } = useCategories();
-
   const {
     apiKey,
     error,
@@ -43,15 +34,14 @@ export default function App() {
     updatingChannelId,
     videos,
   } = useAppRuntimeState();
-  
+
   const {
+    categories,
+    setCategories,
     selectedCategoryTab,
     selectedChannelIds,
     setSelectedCategoryTab,
-    setSelectedChannelIds,
     toggleChannelSelection,
-  } = useChannelSelection(categories[0]);
-  const {
     addMode,
     bulkInput,
     bulkLoading,
@@ -72,70 +62,34 @@ export default function App() {
     resetBulkAdd,
     setAddMode,
     setBulkInput,
-    setBulkLoading,
-    setBulkResult,
-    setChannelPreview,
     setIsEditingCategory,
     setNewCategoryName,
     setNewChannelInput,
     setNewChannelLang,
     setNewChannelNote,
-    setPreviewLoading,
-    setRenameLoading,
     setRenameValue,
     startRenameCategory,
     toggleNewChannelTag,
-  } = useChannelFormState();
-  const {
     savedChannels,
-    setSavedChannels,
     channelsLoading,
     loadChannelsFromCloud,
-  } = useCloudChannels({ onError: setError });
-  const {
-    saveChannel,
-    bulkCreateChannels,
     deleteChannel,
     updateChannelMetadata,
-    saveChannelNote,
-  } = useChannelActions({
-    setSavedChannels,
-    setSelectedChannelIds,
-    setUpdatingChannelId,
-    setError,
-  });
-  const {
     handleBulkAdd,
     handlePreviewChannel,
     handleSaveChannel,
-  } = useChannelAddActions({
-    bulkCreateChannels,
-    bulkInput,
-    cancelChannelPreview,
-    channelPreview,
-    loadChannelsFromCloud,
-    newChannelInput,
-    newChannelLang,
-    newChannelNote,
-    newChannelTags,
-    savedChannels,
-    saveChannel,
-    setBulkLoading,
-    setBulkResult,
-    setChannelPreview,
-    setError,
-    setLoading,
-    setPreviewLoading,
-    setProgressMsg,
-    setSelectedCategoryTab,
-  });
-  const {
     addChannelNote,
     changeNoteText,
     closeNotesModal,
     notesModal,
     openNotesModal,
-  } = useChannelNotesModal({ saveChannelNote, onError: setError });
+    confirmRenameCategory,
+  } = useCreatorAppChannelWorkflow({
+    setError,
+    setLoading,
+    setProgressMsg,
+    setUpdatingChannelId,
+  });
   const {
     savedVideos,
     scrapbookSyncWarning,
@@ -230,22 +184,6 @@ export default function App() {
     setScanningTag,
     setVideos,
   });
-  const {
-    confirmRenameCategory,
-  } = useTagRenameActions({
-    cancelRenameCategory,
-    categories,
-    loadChannelsFromCloud,
-    renameValue,
-    renamingCategory,
-    selectedCategoryTab,
-    setCategories,
-    setError,
-    setProgressMsg,
-    setRenameLoading,
-    setSelectedCategoryTab,
-  });
-
   const {
     activeSelectedChannelCount,
     cloudOnlyTags,
