@@ -273,161 +273,168 @@ export default function App() {
     scrapbookSyncWarning,
     videoRecordsSyncWarning,
   });
+  const layoutProps = {
+    activeCreatorItem,
+    channelCount: savedChannels.length,
+    commentModal,
+    creatorView,
+    discoveryCandidateCount,
+    notesModal,
+    onAddNote: addChannelNote,
+    onChangeNoteText: changeNoteText,
+    onCloseNotes: closeNotesModal,
+    onCloseTopComments: closeTopCommentsModal,
+    onOpenCreatorView: openCreatorView,
+    savedVideoCount: savedVideos.length,
+    selectedChannelCount: selectedChannelIds.length,
+    syncWarnings,
+    videoCount: videos.length,
+  };
+
+  const homeRouteProps = {
+    clearRadarDecisions,
+    discoveryCandidateCount,
+    discoveryRightsWarningCount,
+    isVideoSaved,
+    latestScanText,
+    markRadarVideoStatus,
+    onOpenView: openCreatorView,
+    openRadarCandidateCount,
+    productionCandidateCount,
+    promoteVideoToProduction,
+    restoreVideoToRadar,
+    savedChannels,
+    savedVideos,
+    toggleScrapVideo,
+    ttoTtoAssetCount,
+    videoUserRecords,
+    videos,
+  };
+
+  const discoveryLinksRouteProps = {
+    addDiscoveryLink,
+    changeDiscoveryLink,
+    discoveryLinks,
+    discoveryLinksError,
+    discoveryLinksLoading,
+    discoveryLinksNotice,
+    discoveryLinksSaving,
+    discoveryLinksSavingMessage,
+    loadDiscoveryLinks,
+    removeDiscoveryLink,
+  };
+
+  const legacyWorkspaceRouteProps = {
+    activeSelectedChannelCount,
+    activeTab,
+    addMode,
+    apiKey,
+    bulkInput,
+    bulkLoading,
+    bulkResult,
+    cancelChannelPreview,
+    cancelRenameCategory,
+    categories,
+    channelPreview,
+    channelsLoading,
+    checkedVideos,
+    cloudOnlyTags,
+    confirmRenameCategory,
+    copiedPrompt,
+    copyPromptForVideos,
+    creatorView,
+    deleteChannel,
+    discoveryLinks,
+    error,
+    fetchTopComments,
+    filteredAndSortedVideos,
+    handleBulkAdd,
+    handleManualScan,
+    handlePreviewChannel,
+    handleSaveChannel,
+    handleTagScan,
+    isEditingCategory,
+    isProductionCandidate,
+    isReferenceVaultView,
+    isScanning,
+    isVideoSaved,
+    lengthFilter,
+    loadStoredVideosForSelectedChannels,
+    loading,
+    markRadarVideoStatus,
+    newCategoryName,
+    newChannelInput,
+    newChannelLang,
+    newChannelNote,
+    newChannelTags,
+    openCreatorView,
+    openNotesModal,
+    previewLoading,
+    progressMsg,
+    promoteVideoToProduction,
+    promptCopyError,
+    renameLoading,
+    renameValue,
+    renamingCategory,
+    resetBulkAdd,
+    savedChannels,
+    savedVideos,
+    scannableChannelCount,
+    scanningTag,
+    searchKeyword,
+    selectedCategoryTab,
+    selectedChannelIds,
+    setActiveTab,
+    setAddMode,
+    setApiKey,
+    setBulkInput,
+    setCategories,
+    setIsEditingCategory,
+    setLengthFilter,
+    setNewCategoryName,
+    setNewChannelInput,
+    setNewChannelLang,
+    setNewChannelNote,
+    setRenameValue,
+    setSearchKeyword,
+    setSelectedCategoryTab,
+    setShowWorkPanel,
+    setSortType,
+    setTtoTtoMode,
+    setViewFilter,
+    setViewMode,
+    showWorkPanel,
+    sortType,
+    startRenameCategory,
+    toggleChannelSelection,
+    toggleCheckVideo,
+    toggleNewChannelTag,
+    toggleScrapVideo,
+    totalVideoCount: videos.length,
+    ttoTtoAssetCount,
+    ttoTtoMode,
+    updateChannelMetadata,
+    updateDiscoveryLink: changeDiscoveryLink,
+    updateVideoUserRecord,
+    updatingChannelId,
+    videoUserRecords,
+    videos,
+    viewFilter,
+    viewMode,
+    visibleScrapCount,
+  };
 
   return (
-    <CreatorAppLayout
-      activeCreatorItem={activeCreatorItem}
-      channelCount={savedChannels.length}
-      commentModal={commentModal}
-      creatorView={creatorView}
-      discoveryCandidateCount={discoveryCandidateCount}
-      notesModal={notesModal}
-      onAddNote={addChannelNote}
-      onChangeNoteText={changeNoteText}
-      onCloseNotes={closeNotesModal}
-      onCloseTopComments={closeTopCommentsModal}
-      onOpenCreatorView={openCreatorView}
-      savedVideoCount={savedVideos.length}
-      selectedChannelCount={selectedChannelIds.length}
-      syncWarnings={syncWarnings}
-      videoCount={videos.length}
-    >
-          {isHomeView ? (
-            <CreatorHomeRoute
-              clearRadarDecisions={clearRadarDecisions}
-              isVideoSaved={isVideoSaved}
-              latestScanText={latestScanText}
-              markRadarVideoStatus={markRadarVideoStatus}
-              openRadarCandidateCount={openRadarCandidateCount}
-              discoveryCandidateCount={discoveryCandidateCount}
-              discoveryRightsWarningCount={discoveryRightsWarningCount}
-              onOpenView={openCreatorView}
-              productionCandidateCount={productionCandidateCount}
-              promoteVideoToProduction={promoteVideoToProduction}
-              restoreVideoToRadar={restoreVideoToRadar}
-              savedChannels={savedChannels}
-              savedVideos={savedVideos}
-              toggleScrapVideo={toggleScrapVideo}
-              ttoTtoAssetCount={ttoTtoAssetCount}
-              videoUserRecords={videoUserRecords}
-              videos={videos}
-            />
-          ) : isComingSoonView ? (
-            <CreatorComingSoonRoute item={activeCreatorItem} />
-          ) : isDiscoveryLinksView ? (
-            <CreatorDiscoveryLinksRoute
-              addDiscoveryLink={addDiscoveryLink}
-              changeDiscoveryLink={changeDiscoveryLink}
-              discoveryLinks={discoveryLinks}
-              discoveryLinksError={discoveryLinksError}
-              discoveryLinksLoading={discoveryLinksLoading}
-              discoveryLinksNotice={discoveryLinksNotice}
-              discoveryLinksSaving={discoveryLinksSaving}
-              discoveryLinksSavingMessage={discoveryLinksSavingMessage}
-              loadDiscoveryLinks={loadDiscoveryLinks}
-              removeDiscoveryLink={removeDiscoveryLink}
-            />
-          ) : isLegacyWorkspaceView ? (
-            <CreatorLegacyWorkspaceRoute
-              activeSelectedChannelCount={activeSelectedChannelCount}
-              activeTab={activeTab}
-              addMode={addMode}
-              apiKey={apiKey}
-              bulkInput={bulkInput}
-              bulkLoading={bulkLoading}
-              bulkResult={bulkResult}
-              cancelChannelPreview={cancelChannelPreview}
-              cancelRenameCategory={cancelRenameCategory}
-              categories={categories}
-              channelPreview={channelPreview}
-              channelsLoading={channelsLoading}
-              checkedVideos={checkedVideos}
-              cloudOnlyTags={cloudOnlyTags}
-              confirmRenameCategory={confirmRenameCategory}
-              copiedPrompt={copiedPrompt}
-              copyPromptForVideos={copyPromptForVideos}
-              promptCopyError={promptCopyError}
-              creatorView={creatorView}
-              discoveryLinks={discoveryLinks}
-              deleteChannel={deleteChannel}
-              error={error}
-              fetchTopComments={fetchTopComments}
-              filteredAndSortedVideos={filteredAndSortedVideos}
-              handleBulkAdd={handleBulkAdd}
-              handleManualScan={handleManualScan}
-              handlePreviewChannel={handlePreviewChannel}
-              handleSaveChannel={handleSaveChannel}
-              handleTagScan={handleTagScan}
-              isEditingCategory={isEditingCategory}
-              isProductionCandidate={isProductionCandidate}
-              isReferenceVaultView={isReferenceVaultView}
-              isScanning={isScanning}
-              isVideoSaved={isVideoSaved}
-              lengthFilter={lengthFilter}
-              loadStoredVideosForSelectedChannels={loadStoredVideosForSelectedChannels}
-              loading={loading}
-              markRadarVideoStatus={markRadarVideoStatus}
-              newCategoryName={newCategoryName}
-              newChannelInput={newChannelInput}
-              newChannelLang={newChannelLang}
-              newChannelNote={newChannelNote}
-              newChannelTags={newChannelTags}
-              openCreatorView={openCreatorView}
-              openNotesModal={openNotesModal}
-              previewLoading={previewLoading}
-              progressMsg={progressMsg}
-              promoteVideoToProduction={promoteVideoToProduction}
-              renameLoading={renameLoading}
-              renameValue={renameValue}
-              renamingCategory={renamingCategory}
-              resetBulkAdd={resetBulkAdd}
-              savedChannels={savedChannels}
-              savedVideos={savedVideos}
-              scannableChannelCount={scannableChannelCount}
-              scanningTag={scanningTag}
-              searchKeyword={searchKeyword}
-              selectedCategoryTab={selectedCategoryTab}
-              selectedChannelIds={selectedChannelIds}
-              setActiveTab={setActiveTab}
-              setAddMode={setAddMode}
-              setApiKey={setApiKey}
-              setBulkInput={setBulkInput}
-              setCategories={setCategories}
-              setIsEditingCategory={setIsEditingCategory}
-              setLengthFilter={setLengthFilter}
-              setNewCategoryName={setNewCategoryName}
-              setNewChannelInput={setNewChannelInput}
-              setNewChannelLang={setNewChannelLang}
-              setNewChannelNote={setNewChannelNote}
-              setRenameValue={setRenameValue}
-              setSearchKeyword={setSearchKeyword}
-              setSelectedCategoryTab={setSelectedCategoryTab}
-              setShowWorkPanel={setShowWorkPanel}
-              setSortType={setSortType}
-              setTtoTtoMode={setTtoTtoMode}
-              setViewFilter={setViewFilter}
-              setViewMode={setViewMode}
-              showWorkPanel={showWorkPanel}
-              sortType={sortType}
-              startRenameCategory={startRenameCategory}
-              toggleCheckVideo={toggleCheckVideo}
-              toggleChannelSelection={toggleChannelSelection}
-              toggleNewChannelTag={toggleNewChannelTag}
-              toggleScrapVideo={toggleScrapVideo}
-              totalVideoCount={videos.length}
-              ttoTtoAssetCount={ttoTtoAssetCount}
-              ttoTtoMode={ttoTtoMode}
-              updateChannelMetadata={updateChannelMetadata}
-              updateDiscoveryLink={changeDiscoveryLink}
-              updateVideoUserRecord={updateVideoUserRecord}
-              updatingChannelId={updatingChannelId}
-              videoUserRecords={videoUserRecords}
-              videos={videos}
-              viewFilter={viewFilter}
-              viewMode={viewMode}
-              visibleScrapCount={visibleScrapCount}
-            />
-          ) : null}
+    <CreatorAppLayout {...layoutProps}>
+      {isHomeView ? (
+        <CreatorHomeRoute {...homeRouteProps} />
+      ) : isComingSoonView ? (
+        <CreatorComingSoonRoute item={activeCreatorItem} />
+      ) : isDiscoveryLinksView ? (
+        <CreatorDiscoveryLinksRoute {...discoveryLinksRouteProps} />
+      ) : isLegacyWorkspaceView ? (
+        <CreatorLegacyWorkspaceRoute {...legacyWorkspaceRouteProps} />
+      ) : null}
     </CreatorAppLayout>
   );
 }
