@@ -1,3 +1,5 @@
+import VideoToolbarToggleButton from './VideoToolbarToggleButton';
+
 const SORT_OPTIONS = [
   {
     value: 'multiplier',
@@ -40,25 +42,19 @@ const SORT_OPTIONS = [
 export default function VideoToolbarSortControl({ setSortType, sortType }) {
   return (
     <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-      {SORT_OPTIONS.map((option) => {
-        const isActive = sortType === option.value;
-        return (
-          <button
-            key={option.value}
-            type="button"
-            onClick={() => setSortType(option.value)}
-            title={option.title}
-            aria-label={option.ariaLabel}
-            className={`px-3 py-1 text-sm ${option.fontClassName} rounded-md transition-all ${
-              isActive
-                ? `bg-white shadow ${option.activeClassName}`
-                : option.inactiveClassName
-            }`}
-          >
-            {option.label}
-          </button>
-        );
-      })}
+      {SORT_OPTIONS.map((option) => (
+        <VideoToolbarToggleButton
+          key={option.value}
+          activeClassName={option.activeClassName}
+          ariaLabel={option.ariaLabel}
+          fontClassName={option.fontClassName}
+          inactiveClassName={option.inactiveClassName}
+          isActive={sortType === option.value}
+          label={option.label}
+          onClick={() => setSortType(option.value)}
+          title={option.title}
+        />
+      ))}
     </div>
   );
 }
