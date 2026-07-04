@@ -5,6 +5,7 @@ import LegacyWorkspaceMainPanel from './LegacyWorkspaceMainPanel';
 export default function LegacyWorkspaceView({
   activeSelectedChannelCount,
   activeTab,
+  channelPanelProps,
   addMode,
   apiKey,
   bulkInput,
@@ -103,63 +104,7 @@ export default function LegacyWorkspaceView({
 }) {
   return (
     <div className={`w-full mx-auto grid grid-cols-1 gap-5 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 ${showWorkPanel ? 'max-w-[2400px] xl:grid-cols-[340px_minmax(0,1fr)] 2xl:grid-cols-[360px_minmax(0,1fr)]' : 'max-w-[2400px]'}`}>
-      <LegacyChannelPanel
-        addMode={addMode}
-        apiKey={apiKey}
-        bulkInput={bulkInput}
-        bulkLoading={bulkLoading}
-        bulkResult={bulkResult}
-        cancelChannelPreview={cancelChannelPreview}
-        cancelRenameCategory={cancelRenameCategory}
-        categories={categories}
-        channelPreview={channelPreview}
-        channelsLoading={channelsLoading}
-        cloudOnlyTags={cloudOnlyTags}
-        confirmRenameCategory={confirmRenameCategory}
-        error={error}
-        handleBulkAdd={handleBulkAdd}
-        handlePreviewChannel={handlePreviewChannel}
-        handleSaveChannel={handleSaveChannel}
-        handleTagScan={handleTagScan}
-        isEditingCategory={isEditingCategory}
-        isScanning={isScanning}
-        loading={loading}
-        newCategoryName={newCategoryName}
-        newChannelInput={newChannelInput}
-        newChannelLang={newChannelLang}
-        newChannelNote={newChannelNote}
-        newChannelTags={newChannelTags}
-        onChangeApiKey={setApiKey}
-        onDeleteChannel={deleteChannel}
-        onLoadStoredVideos={loadStoredVideosForSelectedChannels}
-        onOpenNotes={openNotesModal}
-        onToggleChannelSelection={toggleChannelSelection}
-        onUpdateChannelMetadata={updateChannelMetadata}
-        previewLoading={previewLoading}
-        progressMsg={progressMsg}
-        renameLoading={renameLoading}
-        renameValue={renameValue}
-        renamingCategory={renamingCategory}
-        resetBulkAdd={resetBulkAdd}
-        savedChannels={savedChannels}
-        scanningTag={scanningTag}
-        selectedCategoryTab={selectedCategoryTab}
-        selectedChannelIds={selectedChannelIds}
-        setAddMode={setAddMode}
-        setBulkInput={setBulkInput}
-        setCategories={setCategories}
-        setIsEditingCategory={setIsEditingCategory}
-        setNewCategoryName={setNewCategoryName}
-        setNewChannelInput={setNewChannelInput}
-        setNewChannelLang={setNewChannelLang}
-        setNewChannelNote={setNewChannelNote}
-        setRenameValue={setRenameValue}
-        setSelectedCategoryTab={setSelectedCategoryTab}
-        showWorkPanel={showWorkPanel}
-        startRenameCategory={startRenameCategory}
-        toggleNewChannelTag={toggleNewChannelTag}
-        updatingChannelId={updatingChannelId}
-      />
+      <LegacyChannelPanel {...channelPanelProps} />
 
       <LegacyWorkspaceMainPanel
         activeSelectedChannelCount={activeSelectedChannelCount}
