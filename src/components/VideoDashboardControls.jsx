@@ -42,49 +42,55 @@ export default function VideoDashboardControls({
       .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
   );
 
+  const sourceSummaryProps = {
+    isReferenceVaultView,
+    savedChannelCount,
+    savedVideoCount,
+    totalVideoCount,
+    ttoTtoAssetCount,
+    visibleScrapCount,
+  };
+
+  const toolbarProps = {
+    isReferenceVaultView,
+    filteredCount,
+    filteredVideoUrlList,
+    totalCount: totalVideoCount,
+    searchKeyword,
+    setSearchKeyword,
+    viewFilter,
+    setViewFilter,
+    lengthFilter,
+    setLengthFilter,
+    sortType,
+    setSortType,
+    viewMode,
+    setViewMode,
+    showWorkPanel,
+    setShowWorkPanel,
+    isScanning,
+    selectedChannelCount,
+    activeSelectedChannelCount,
+    scannableChannelCount,
+    handleManualScan: onManualScan,
+    ttoTtoMode,
+    setTtoTtoMode,
+  };
+
+  const selectedVideosActionProps = {
+    selectedCount: checkedVideos.length,
+    copiedPrompt,
+    promptCopyError,
+    onCopyPrompt,
+  };
+
   return (
     <>
-      <VideoDashboardSourceSummary
-        isReferenceVaultView={isReferenceVaultView}
-        savedChannelCount={savedChannelCount}
-        savedVideoCount={savedVideoCount}
-        totalVideoCount={totalVideoCount}
-        ttoTtoAssetCount={ttoTtoAssetCount}
-        visibleScrapCount={visibleScrapCount}
-      />
+      <VideoDashboardSourceSummary {...sourceSummaryProps} />
 
-      <VideoToolbar
-        isReferenceVaultView={isReferenceVaultView}
-        filteredCount={filteredCount}
-        filteredVideoUrlList={filteredVideoUrlList}
-        totalCount={totalVideoCount}
-        searchKeyword={searchKeyword}
-        setSearchKeyword={setSearchKeyword}
-        viewFilter={viewFilter}
-        setViewFilter={setViewFilter}
-        lengthFilter={lengthFilter}
-        setLengthFilter={setLengthFilter}
-        sortType={sortType}
-        setSortType={setSortType}
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-        showWorkPanel={showWorkPanel}
-        setShowWorkPanel={setShowWorkPanel}
-        isScanning={isScanning}
-        selectedChannelCount={selectedChannelCount}
-        activeSelectedChannelCount={activeSelectedChannelCount}
-        scannableChannelCount={scannableChannelCount}
-        handleManualScan={onManualScan}
-        ttoTtoMode={ttoTtoMode}
-        setTtoTtoMode={setTtoTtoMode}
-      />
+      <VideoToolbar {...toolbarProps} />
 
-      <SelectedVideosActionBar
-        selectedCount={checkedVideos.length}
-        copiedPrompt={copiedPrompt}
-        promptCopyError={promptCopyError}
-        onCopyPrompt={onCopyPrompt}
-      />
+      <SelectedVideosActionBar {...selectedVideosActionProps} />
     </>
   );
 }
