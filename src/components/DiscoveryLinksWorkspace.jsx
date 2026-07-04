@@ -45,58 +45,67 @@ export default function DiscoveryLinksWorkspace({
     statusFilter,
     statusFilterOptions,
   } = useDiscoveryLinkFilters(links);
+  const formProps = {
+    duplicateLink,
+    form,
+    isCreateDisabled,
+    saving,
+    showRiskyCandidateHint,
+    urlPreview,
+    onChange: updateForm,
+    onSubmit: handleSubmit,
+  };
+
+  const headerProps = {
+    filteredLinkCount: filteredLinks.length,
+    loading,
+    onRefresh,
+    saving,
+    totalLinkCount: links.length,
+    urlList: filteredDiscoveryLinkUrlList,
+  };
+
+  const filtersProps = {
+    filteredLinkCount: filteredLinks.length,
+    hasActiveFilters: hasActiveDiscoveryFilters,
+    rightsFilter,
+    rightsFilterOptions,
+    searchQuery,
+    setRightsFilter,
+    setSearchQuery,
+    setStatusFilter,
+    statusFilter,
+    statusFilterOptions,
+  };
+
+  const noticesProps = {
+    error,
+    notice,
+    savingMessage,
+  };
+
+  const listProps = {
+    allLinkCount: links.length,
+    clearFilters: clearDiscoveryFilters,
+    filteredLinks,
+    loading,
+    onDeleteLink,
+    onUpdateLink,
+    saving,
+  };
 
   return (
     <div className="grid grid-cols-1 gap-4 2xl:grid-cols-[420px_minmax(0,1fr)]">
-      <DiscoveryLinkForm
-        duplicateLink={duplicateLink}
-        form={form}
-        isCreateDisabled={isCreateDisabled}
-        saving={saving}
-        showRiskyCandidateHint={showRiskyCandidateHint}
-        urlPreview={urlPreview}
-        onChange={updateForm}
-        onSubmit={handleSubmit}
-      />
+      <DiscoveryLinkForm {...formProps} />
 
       <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-100 p-5 shadow-xl shadow-slate-950/20">
-        <DiscoveryLinksHeader
-          filteredLinkCount={filteredLinks.length}
-          loading={loading}
-          onRefresh={onRefresh}
-          saving={saving}
-          totalLinkCount={links.length}
-          urlList={filteredDiscoveryLinkUrlList}
-        />
+        <DiscoveryLinksHeader {...headerProps} />
 
-        <DiscoveryLinksFilters
-          filteredLinkCount={filteredLinks.length}
-          hasActiveFilters={hasActiveDiscoveryFilters}
-          rightsFilter={rightsFilter}
-          rightsFilterOptions={rightsFilterOptions}
-          searchQuery={searchQuery}
-          setRightsFilter={setRightsFilter}
-          setSearchQuery={setSearchQuery}
-          setStatusFilter={setStatusFilter}
-          statusFilter={statusFilter}
-          statusFilterOptions={statusFilterOptions}
-        />
+        <DiscoveryLinksFilters {...filtersProps} />
 
-        <DiscoveryLinksNotices
-          error={error}
-          notice={notice}
-          savingMessage={savingMessage}
-        />
+        <DiscoveryLinksNotices {...noticesProps} />
 
-        <DiscoveryLinksList
-          allLinkCount={links.length}
-          clearFilters={clearDiscoveryFilters}
-          filteredLinks={filteredLinks}
-          loading={loading}
-          onDeleteLink={onDeleteLink}
-          onUpdateLink={onUpdateLink}
-          saving={saving}
-        />
+        <DiscoveryLinksList {...listProps} />
       </section>
     </div>
   );
