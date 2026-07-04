@@ -2,7 +2,7 @@ import CreatorAppLayout from './components/CreatorAppLayout';
 import CreatorComingSoonRoute from './components/CreatorComingSoonRoute';
 import CreatorDiscoveryLinksRoute from './components/CreatorDiscoveryLinksRoute';
 import CreatorHomeRoute from './components/CreatorHomeRoute';
-import LegacyWorkspaceView from './components/LegacyWorkspaceView';
+import CreatorLegacyWorkspaceRoute from './components/CreatorLegacyWorkspaceRoute';
 import { useAppRuntimeState } from './hooks/useAppRuntimeState';
 import { useCategories } from './hooks/useCategories';
 import { useChannelAddActions } from './hooks/useChannelAddActions';
@@ -328,7 +328,7 @@ export default function App() {
               removeDiscoveryLink={removeDiscoveryLink}
             />
           ) : isLegacyWorkspaceView ? (
-            <LegacyWorkspaceView
+            <CreatorLegacyWorkspaceRoute
               activeSelectedChannelCount={activeSelectedChannelCount}
               activeTab={activeTab}
               addMode={addMode}
