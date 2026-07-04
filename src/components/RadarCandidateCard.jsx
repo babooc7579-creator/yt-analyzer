@@ -6,6 +6,7 @@ import RadarCandidateMetrics from './RadarCandidateMetrics';
 import RadarCandidatePrimaryActions from './RadarCandidatePrimaryActions';
 import RadarCandidateScorePanel from './RadarCandidateScorePanel';
 import RadarCandidateThumbnail from './RadarCandidateThumbnail';
+import RadarCandidateTitleLink from './RadarCandidateTitleLink';
 
 export const getRadarScore = (video) => {
   const ttoTtoBonus = isTtoTtoCandidate(video) ? 100 : 0;
@@ -58,9 +59,7 @@ export default function RadarCandidateCard({
       />
       <div className="p-4">
         <RadarCandidateBadges isStrong={isStrong} isTtoTto={isTtoTto} />
-        <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>
-          {video.title}
-        </a>
+        <RadarCandidateTitleLink videoTitle={videoTitle} videoUrl={videoUrl} />
         <RadarCandidateScorePanel radarScore={radarScore} reasons={reasons} />
         <RadarCandidateMetrics video={video} />
         <RadarCandidatePrimaryActions videoTitle={videoTitle} videoUrl={videoUrl} />
