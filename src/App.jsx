@@ -1,6 +1,6 @@
 import ComingSoonView from './components/ComingSoonView';
 import CreatorAppLayout from './components/CreatorAppLayout';
-import CreatorHomeView from './components/CreatorHomeView';
+import CreatorHomeRoute from './components/CreatorHomeRoute';
 import DiscoveryLinksWorkspace from './components/DiscoveryLinksWorkspace';
 import LegacyWorkspaceView from './components/LegacyWorkspaceView';
 import { useAppRuntimeState } from './hooks/useAppRuntimeState';
@@ -293,7 +293,7 @@ export default function App() {
       videoCount={videos.length}
     >
           {isHomeView ? (
-            <CreatorHomeView
+            <CreatorHomeRoute
               clearRadarDecisions={clearRadarDecisions}
               isVideoSaved={isVideoSaved}
               latestScanText={latestScanText}
