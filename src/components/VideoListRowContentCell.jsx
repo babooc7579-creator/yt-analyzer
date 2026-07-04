@@ -1,5 +1,6 @@
 import VideoListRowBadges from './VideoListRowBadges';
 import VideoListRowMetaActions from './VideoListRowMetaActions';
+import VideoListRowThumbnail from './VideoListRowThumbnail';
 
 export default function VideoListRowContentCell({
   fetchTopComments,
@@ -15,7 +16,7 @@ export default function VideoListRowContentCell({
   return (
     <td className="px-4 py-5 min-w-[520px]">
       <div className="flex gap-5">
-        <img src={video.thumbnail} alt={`${videoTitle} 썸네일`} className="w-36 h-20 object-cover rounded-xl shadow-sm border border-slate-200 shrink-0 bg-slate-100" />
+        <VideoListRowThumbnail video={video} videoTitle={videoTitle} />
         <div className="flex flex-col justify-center min-w-0">
           <VideoListRowBadges
             isChecked={isChecked}
