@@ -6,6 +6,7 @@ import VideoCardPrimaryActions from './VideoCardPrimaryActions';
 import VideoCardStatsGrid from './VideoCardStatsGrid';
 import VideoCardStatusBadges from './VideoCardStatusBadges';
 import VideoCardThumbnail from './VideoCardThumbnail';
+import VideoCardTitleLink from './VideoCardTitleLink';
 
 export default function VideoCard({
   video,
@@ -45,7 +46,7 @@ export default function VideoCard({
         videoTitle={videoTitle}
       />
       <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
-        <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
+        <VideoCardTitleLink videoTitle={videoTitle} videoUrl={videoUrl} />
         <VideoCardCandidateReasons candidateReasons={candidateReasons} />
         <VideoCardStatusBadges
           isChecked={isChecked}
