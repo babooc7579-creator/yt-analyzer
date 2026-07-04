@@ -17,6 +17,19 @@ export const getIsoTodayDate = () => new Date().toISOString().slice(0, 10);
 
 export const formatDateWithDots = (date) => date ? date.split('-').join('.') : '';
 
+export const formatKoreanDateTime = (value, fallback = '') => {
+  if (!value) return fallback;
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  return new Intl.DateTimeFormat('ko-KR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(date);
+};
+
 export const getDateDistanceFromToday = (date) => {
   if (!date) return null;
 
