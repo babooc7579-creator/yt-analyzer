@@ -31,45 +31,59 @@ export default function VideoCard({
     isStrongReaction ? '강한 참여 반응' : null,
   ].filter(Boolean);
 
+  const thumbnailProps = {
+    isCandidate,
+    isChecked,
+    isSaved,
+    isStrongReaction,
+    onToggleCheck,
+    onToggleScrap,
+    rank,
+    thumbnailHeightClass,
+    video,
+    videoTitle,
+  };
+
+  const statusBadgeProps = {
+    isChecked,
+    isProductionCandidate,
+    isSaved,
+  };
+
+  const metaActionsProps = {
+    onFetchComments,
+    video,
+    videoTitle,
+    videoUrl,
+  };
+
+  const primaryActionsProps = {
+    isProductionCandidate,
+    isSaved,
+    onPromoteToProduction,
+    onToggleScrap,
+    video,
+    videoTitle,
+  };
+
+  const statsGridProps = {
+    isStrongReaction,
+    showWorkPanel,
+    video,
+  };
+
   return (
     <div className={`group overflow-hidden rounded-lg border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${isChecked ? 'border-indigo-300 bg-indigo-50' : isCandidate ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
-      <VideoCardThumbnail
-        isCandidate={isCandidate}
-        isChecked={isChecked}
-        isSaved={isSaved}
-        isStrongReaction={isStrongReaction}
-        onToggleCheck={onToggleCheck}
-        onToggleScrap={onToggleScrap}
-        rank={rank}
-        thumbnailHeightClass={thumbnailHeightClass}
-        video={video}
-        videoTitle={videoTitle}
-      />
+      <VideoCardThumbnail {...thumbnailProps} />
       <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
         <VideoCardTitleLink videoTitle={videoTitle} videoUrl={videoUrl} />
         <VideoCardCandidateReasons candidateReasons={candidateReasons} />
-        <VideoCardStatusBadges
-          isChecked={isChecked}
-          isProductionCandidate={isProductionCandidate}
-          isSaved={isSaved}
-        />
-        <VideoCardMetaActions
-          onFetchComments={onFetchComments}
-          video={video}
-          videoTitle={videoTitle}
-          videoUrl={videoUrl}
-        />
+        <VideoCardStatusBadges {...statusBadgeProps} />
+        <VideoCardMetaActions {...metaActionsProps} />
 
-        <VideoCardPrimaryActions
-          isProductionCandidate={isProductionCandidate}
-          isSaved={isSaved}
-          onPromoteToProduction={onPromoteToProduction}
-          onToggleScrap={onToggleScrap}
-          video={video}
-          videoTitle={videoTitle}
-        />
+        <VideoCardPrimaryActions {...primaryActionsProps} />
 
-        <VideoCardStatsGrid isStrongReaction={isStrongReaction} showWorkPanel={showWorkPanel} video={video} />
+        <VideoCardStatsGrid {...statsGridProps} />
       </div>
     </div>
   );

@@ -11,6 +11,17 @@ export default function VideoListTable({
   promoteVideoToProduction,
   fetchTopComments,
 }) {
+  const getRowProps = (video) => ({
+    fetchTopComments,
+    isChecked: checkedVideos.includes(video.videoId),
+    isProductionCandidate: isProductionCandidate(video.videoId),
+    isSaved: isVideoSaved(video.videoId),
+    promoteVideoToProduction,
+    toggleCheckVideo,
+    toggleScrapVideo,
+    video,
+  });
+
   return (
     <div className="overflow-x-auto overflow-y-auto flex-1">
       <table className="w-full text-sm text-left border-separate border-spacing-y-3">
@@ -28,17 +39,7 @@ export default function VideoListTable({
         </thead>
         <tbody>
           {videos.map((video) => (
-            <VideoListTableRow
-              key={video.videoId}
-              fetchTopComments={fetchTopComments}
-              isChecked={checkedVideos.includes(video.videoId)}
-              isProductionCandidate={isProductionCandidate(video.videoId)}
-              isSaved={isVideoSaved(video.videoId)}
-              promoteVideoToProduction={promoteVideoToProduction}
-              toggleCheckVideo={toggleCheckVideo}
-              toggleScrapVideo={toggleScrapVideo}
-              video={video}
-            />
+            <VideoListTableRow key={video.videoId} {...getRowProps(video)} />
           ))}
         </tbody>
       </table>
