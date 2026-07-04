@@ -117,10 +117,10 @@ export default function CreatorLegacyWorkspaceRoute(props) {
 
   return (
     <LegacyWorkspaceView
-      {...props}
       asideProps={asideProps}
       channelPanelProps={channelPanelProps}
       mainPanelProps={mainPanelProps}
+      showWorkPanel={props.showWorkPanel}
     />
   );
 }
