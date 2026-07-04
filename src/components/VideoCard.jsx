@@ -4,6 +4,7 @@ import VideoCardCandidateReasons from './VideoCardCandidateReasons';
 import VideoCardMetaActions from './VideoCardMetaActions';
 import VideoCardPrimaryActions from './VideoCardPrimaryActions';
 import VideoCardStatsGrid from './VideoCardStatsGrid';
+import VideoCardStatusBadges from './VideoCardStatusBadges';
 import VideoCardThumbnail from './VideoCardThumbnail';
 
 export default function VideoCard({
@@ -46,11 +47,11 @@ export default function VideoCard({
       <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={`${videoTitle} YouTube 원본 영상 열기`}>{videoTitle}</a>
         <VideoCardCandidateReasons candidateReasons={candidateReasons} />
-        <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          {isSaved && <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700">소재 보관됨</span>}
-          {isProductionCandidate && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">제작 후보</span>}
-          {isChecked && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">AI 리메이크 선택</span>}
-        </div>
+        <VideoCardStatusBadges
+          isChecked={isChecked}
+          isProductionCandidate={isProductionCandidate}
+          isSaved={isSaved}
+        />
         <VideoCardMetaActions
           onFetchComments={onFetchComments}
           video={video}
