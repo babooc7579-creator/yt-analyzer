@@ -108,9 +108,17 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     visibleScrapCount: props.visibleScrapCount,
   };
 
+  const asideProps = {
+    checkedVideoCount: props.checkedVideos.length,
+    savedVideoCount: props.savedVideos.length,
+    selectedChannelCount: props.selectedChannelIds.length,
+    videoCount: props.totalVideoCount,
+  };
+
   return (
     <LegacyWorkspaceView
       {...props}
+      asideProps={asideProps}
       channelPanelProps={channelPanelProps}
       mainPanelProps={mainPanelProps}
     />
