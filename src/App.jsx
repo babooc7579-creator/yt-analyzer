@@ -8,11 +8,10 @@ import { useChannelFormState } from './hooks/useChannelFormState';
 import { useChannelNotesModal } from './hooks/useChannelNotesModal';
 import { useChannelSelection } from './hooks/useChannelSelection';
 import { useCloudChannels } from './hooks/useCloudChannels';
-import { useCreatorOsMetrics } from './hooks/useCreatorOsMetrics';
+import { useCreatorAppDerivedState } from './hooks/useCreatorAppDerivedState';
 import { useCreatorWorkspaceNavigation } from './hooks/useCreatorWorkspaceNavigation';
 import { useDiscoveryLinks } from './hooks/useDiscoveryLinks';
 import { useScrapbook } from './hooks/useScrapbook';
-import { useAppSyncWarnings } from './hooks/useAppSyncWarnings';
 import { useTagRenameActions } from './hooks/useTagRenameActions';
 import { useTopComments } from './hooks/useTopComments';
 import { useVideoCollectionActions } from './hooks/useVideoCollectionActions';
@@ -262,20 +261,19 @@ export default function App() {
     openRadarCandidateCount,
     productionCandidateCount,
     scannableChannelCount,
+    syncWarnings,
     ttoTtoAssetCount,
     visibleScrapCount,
-  } = useCreatorOsMetrics({
+  } = useCreatorAppDerivedState({
     categories,
     discoveryLinks,
     savedChannels,
     savedVideos,
+    scrapbookSyncWarning,
     selectedChannelIds,
+    videoRecordsSyncWarning,
     videoUserRecords,
     videos,
-  });
-  const syncWarnings = useAppSyncWarnings({
-    scrapbookSyncWarning,
-    videoRecordsSyncWarning,
   });
   const layoutProps = buildLayoutProps({
     activeCreatorItem,
