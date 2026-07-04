@@ -3,6 +3,7 @@ import {
   DISCOVERY_RIGHTS_WARNINGS,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
+  getDiscoveryLinkRightsStatusValue,
   getDiscoveryPlatformLabel,
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
@@ -13,8 +14,6 @@ const getDiscoveryLinkTitle = (link) => {
   if (link.title) return link.title;
   return getDiscoveryLinkHost(link.url, '발견 링크');
 };
-
-const getDiscoveryLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
 export default function ProductionDiscoveryLinkCard({
   link,

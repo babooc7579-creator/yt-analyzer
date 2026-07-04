@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
-import { DISCOVERY_RIGHTS_WARNINGS } from '../constants/discoveryLinks';
+import {
+  DISCOVERY_RIGHTS_WARNINGS,
+  getDiscoveryLinkRightsStatusValue,
+  getDiscoveryLinkStatusValue,
+} from '../constants/discoveryLinks';
 import { PRODUCTION_STATUS, getProductionStatusFromRecord, isChannelScannable, isRadarHiddenRecord } from '../constants/status';
 import { formatRelativeTime } from '../utils/channelScanDisplay';
 import { getCloudOnlyTags, getLatestChannelScanDate } from '../utils/channels';
@@ -60,13 +64,13 @@ export function useCreatorOsMetrics({
   ), [savedVideos, videoUserRecords]);
 
   const discoveryCandidateCount = useMemo(() => (
-    discoveryLinks.filter((link) => (link.status || '') === 'candidate').length
+    discoveryLinks.filter((link) => getDiscoveryLinkStatusValue(link) === 'candidate').length
   ), [discoveryLinks]);
 
   const discoveryRightsWarningCount = useMemo(() => (
     discoveryLinks.filter((link) => (
-      (link.status || '') === 'candidate'
-      && DISCOVERY_RIGHTS_WARNINGS[link.rightsStatus || 'unknown']
+      getDiscoveryLinkStatusValue(link) === 'candidate'
+      && DISCOVERY_RIGHTS_WARNINGS[getDiscoveryLinkRightsStatusValue(link)]
     )).length
   ), [discoveryLinks]);
 

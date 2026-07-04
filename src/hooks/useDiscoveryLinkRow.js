@@ -4,6 +4,8 @@ import {
   DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
+  getDiscoveryLinkRightsStatusValue,
+  getDiscoveryLinkStatusValue,
   getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
 
@@ -26,8 +28,8 @@ export function useDiscoveryLinkRow({
   const title = link.title || getDiscoveryLinkHost(link.url);
   const sourceHost = getDiscoveryLinkHost(link.url);
   const platformLabel = getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link));
-  const currentStatus = link.status || 'inbox';
-  const currentRightsStatus = link.rightsStatus || 'unknown';
+  const currentStatus = getDiscoveryLinkStatusValue(link);
+  const currentRightsStatus = getDiscoveryLinkRightsStatusValue(link);
   const rightsTone = DISCOVERY_RIGHTS_TONES[currentRightsStatus] || DISCOVERY_RIGHTS_TONES.unknown;
 
   const handleDelete = () => {
