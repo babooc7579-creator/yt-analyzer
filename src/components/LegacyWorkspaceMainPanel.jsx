@@ -50,6 +50,62 @@ export default function LegacyWorkspaceMainPanel({
   viewMode,
   visibleScrapCount,
 }) {
+  const dashboardTabProps = {
+    activeSelectedChannelCount,
+    checkedVideos,
+    copiedPrompt,
+    copyPromptForVideos,
+    fetchTopComments,
+    filteredAndSortedVideos,
+    handleManualScan,
+    isProductionCandidate,
+    isReferenceVaultView,
+    isScanning,
+    isVideoSaved,
+    lengthFilter,
+    promoteVideoToProduction,
+    promptCopyError,
+    savedChannels,
+    savedVideos,
+    scannableChannelCount,
+    searchKeyword,
+    selectedChannelIds,
+    setLengthFilter,
+    setSearchKeyword,
+    setShowWorkPanel,
+    setSortType,
+    setTtoTtoMode,
+    setViewFilter,
+    setViewMode,
+    showWorkPanel,
+    sortType,
+    toggleCheckVideo,
+    toggleScrapVideo,
+    totalVideoCount,
+    ttoTtoAssetCount,
+    ttoTtoMode,
+    videos,
+    viewFilter,
+    viewMode,
+    visibleScrapCount,
+  };
+
+  const vaultTabProps = {
+    creatorView,
+    discoveryLinks,
+    copiedPrompt,
+    copyPromptForVideos,
+    fetchTopComments,
+    markRadarVideoStatus,
+    openCreatorView,
+    promptCopyError,
+    savedVideos,
+    toggleScrapVideo,
+    updateDiscoveryLink,
+    updateVideoUserRecord,
+    videoUserRecords,
+  };
+
   return (
     <div className="flex flex-col h-full space-y-4 min-w-0">
       <WorkspaceTabs
@@ -59,61 +115,9 @@ export default function LegacyWorkspaceMainPanel({
       />
 
       {activeTab === 'dashboard' ? (
-        <LegacyDashboardTab
-          activeSelectedChannelCount={activeSelectedChannelCount}
-          checkedVideos={checkedVideos}
-          copiedPrompt={copiedPrompt}
-          copyPromptForVideos={copyPromptForVideos}
-          fetchTopComments={fetchTopComments}
-          filteredAndSortedVideos={filteredAndSortedVideos}
-          handleManualScan={handleManualScan}
-          isProductionCandidate={isProductionCandidate}
-          isReferenceVaultView={isReferenceVaultView}
-          isScanning={isScanning}
-          isVideoSaved={isVideoSaved}
-          lengthFilter={lengthFilter}
-          promoteVideoToProduction={promoteVideoToProduction}
-          promptCopyError={promptCopyError}
-          savedChannels={savedChannels}
-          savedVideos={savedVideos}
-          scannableChannelCount={scannableChannelCount}
-          searchKeyword={searchKeyword}
-          selectedChannelIds={selectedChannelIds}
-          setLengthFilter={setLengthFilter}
-          setSearchKeyword={setSearchKeyword}
-          setShowWorkPanel={setShowWorkPanel}
-          setSortType={setSortType}
-          setTtoTtoMode={setTtoTtoMode}
-          setViewFilter={setViewFilter}
-          setViewMode={setViewMode}
-          showWorkPanel={showWorkPanel}
-          sortType={sortType}
-          toggleCheckVideo={toggleCheckVideo}
-          toggleScrapVideo={toggleScrapVideo}
-          totalVideoCount={totalVideoCount}
-          ttoTtoAssetCount={ttoTtoAssetCount}
-          ttoTtoMode={ttoTtoMode}
-          videos={videos}
-          viewFilter={viewFilter}
-          viewMode={viewMode}
-          visibleScrapCount={visibleScrapCount}
-        />
+        <LegacyDashboardTab {...dashboardTabProps} />
       ) : (
-        <LegacyVaultTab
-          creatorView={creatorView}
-          discoveryLinks={discoveryLinks}
-          copiedPrompt={copiedPrompt}
-          copyPromptForVideos={copyPromptForVideos}
-          fetchTopComments={fetchTopComments}
-          markRadarVideoStatus={markRadarVideoStatus}
-          openCreatorView={openCreatorView}
-          promptCopyError={promptCopyError}
-          savedVideos={savedVideos}
-          toggleScrapVideo={toggleScrapVideo}
-          updateDiscoveryLink={updateDiscoveryLink}
-          updateVideoUserRecord={updateVideoUserRecord}
-          videoUserRecords={videoUserRecords}
-        />
+        <LegacyVaultTab {...vaultTabProps} />
       )}
     </div>
   );
