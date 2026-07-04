@@ -2,7 +2,7 @@ import { Settings } from 'lucide-react';
 
 export default function ComingSoonView({ item }) {
   return (
-    <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/90 p-10 text-center shadow-xl shadow-slate-950/30">
+    <div data-testid="creator-route-coming-soon" className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/90 p-10 text-center shadow-xl shadow-slate-950/30">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-800">
         <Settings className="h-8 w-8 text-slate-400" />
       </div>
