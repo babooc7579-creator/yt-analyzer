@@ -1,5 +1,6 @@
-import { AlertCircle, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import CopyUrlButton from './CopyUrlButton';
+import ProductionDiscoveryLinkMoveStatus from './ProductionDiscoveryLinkMoveStatus';
 
 export default function ProductionDiscoveryLinkActions({
   isMoving,
@@ -66,11 +67,7 @@ export default function ProductionDiscoveryLinkActions({
           {isMoving ? '저장 중...' : '후보 제외'}
         </button>
       </div>
-      {moveState === 'error' && (
-        <p className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-red-600">
-          <AlertCircle className="h-3 w-3" /> 상태 저장 실패. 다시 눌러 주세요.
-        </p>
-      )}
+      <ProductionDiscoveryLinkMoveStatus moveState={moveState} />
     </>
   );
 }
