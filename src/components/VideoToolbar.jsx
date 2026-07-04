@@ -30,41 +30,51 @@ export default function VideoToolbar({
   setTtoTtoMode,
 }) {
   const scanTargetCount = selectedChannelCount > 0 ? activeSelectedChannelCount : scannableChannelCount;
+  const referenceHeaderProps = {
+    filteredCount,
+    filteredVideoUrlList,
+    totalCount,
+  };
+
+  const filtersProps = {
+    lengthFilter,
+    searchKeyword,
+    setLengthFilter,
+    setSearchKeyword,
+    setShowWorkPanel,
+    setSortType,
+    setViewFilter,
+    setViewMode,
+    showWorkPanel,
+    sortType,
+    viewFilter,
+    viewMode,
+  };
+
+  const scanActionProps = {
+    handleManualScan,
+    isScanning,
+    scanTargetCount,
+    selectedChannelCount,
+  };
+
+  const ttoTtoButtonProps = {
+    setTtoTtoMode,
+    ttoTtoMode,
+  };
 
   return (
     <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-4 flex flex-col 2xl:flex-row gap-4 justify-between items-stretch z-20">
       <div className="flex flex-col gap-3 min-w-0 flex-1">
         {isReferenceVaultView && (
-          <VideoToolbarReferenceHeader
-            filteredCount={filteredCount}
-            filteredVideoUrlList={filteredVideoUrlList}
-            totalCount={totalCount}
-          />
+          <VideoToolbarReferenceHeader {...referenceHeaderProps} />
         )}
-        <VideoToolbarFilters
-          lengthFilter={lengthFilter}
-          searchKeyword={searchKeyword}
-          setLengthFilter={setLengthFilter}
-          setSearchKeyword={setSearchKeyword}
-          setShowWorkPanel={setShowWorkPanel}
-          setSortType={setSortType}
-          setViewFilter={setViewFilter}
-          setViewMode={setViewMode}
-          showWorkPanel={showWorkPanel}
-          sortType={sortType}
-          viewFilter={viewFilter}
-          viewMode={viewMode}
-        />
+        <VideoToolbarFilters {...filtersProps} />
       </div>
 
-      <VideoToolbarScanAction
-        handleManualScan={handleManualScan}
-        isScanning={isScanning}
-        scanTargetCount={scanTargetCount}
-        selectedChannelCount={selectedChannelCount}
-      />
+      <VideoToolbarScanAction {...scanActionProps} />
 
-      <VideoToolbarTtoTtoButton setTtoTtoMode={setTtoTtoMode} ttoTtoMode={ttoTtoMode} />
+      <VideoToolbarTtoTtoButton {...ttoTtoButtonProps} />
     </div>
   );
 }
