@@ -1,0 +1,120 @@
+import LegacyDashboardTab from './LegacyDashboardTab';
+import LegacyVaultTab from './LegacyVaultTab';
+import WorkspaceTabs from './WorkspaceTabs';
+
+export default function LegacyWorkspaceMainPanel({
+  activeSelectedChannelCount,
+  activeTab,
+  checkedVideos,
+  copiedPrompt,
+  copyPromptForVideos,
+  creatorView,
+  discoveryLinks,
+  fetchTopComments,
+  filteredAndSortedVideos,
+  handleManualScan,
+  isProductionCandidate,
+  isReferenceVaultView,
+  isScanning,
+  isVideoSaved,
+  lengthFilter,
+  markRadarVideoStatus,
+  openCreatorView,
+  promoteVideoToProduction,
+  promptCopyError,
+  savedChannels,
+  savedVideos,
+  scannableChannelCount,
+  searchKeyword,
+  selectedChannelIds,
+  setActiveTab,
+  setLengthFilter,
+  setSearchKeyword,
+  setShowWorkPanel,
+  setSortType,
+  setTtoTtoMode,
+  setViewFilter,
+  setViewMode,
+  showWorkPanel,
+  sortType,
+  toggleCheckVideo,
+  toggleScrapVideo,
+  totalVideoCount,
+  ttoTtoAssetCount,
+  ttoTtoMode,
+  updateDiscoveryLink,
+  updateVideoUserRecord,
+  videoUserRecords,
+  videos,
+  viewFilter,
+  viewMode,
+  visibleScrapCount,
+}) {
+  return (
+    <div className="flex flex-col h-full space-y-4 min-w-0">
+      <WorkspaceTabs
+        activeTab={activeTab}
+        savedVideoCount={savedVideos.length}
+        onSelectTab={setActiveTab}
+      />
+
+      {activeTab === 'dashboard' ? (
+        <LegacyDashboardTab
+          activeSelectedChannelCount={activeSelectedChannelCount}
+          checkedVideos={checkedVideos}
+          copiedPrompt={copiedPrompt}
+          copyPromptForVideos={copyPromptForVideos}
+          fetchTopComments={fetchTopComments}
+          filteredAndSortedVideos={filteredAndSortedVideos}
+          handleManualScan={handleManualScan}
+          isProductionCandidate={isProductionCandidate}
+          isReferenceVaultView={isReferenceVaultView}
+          isScanning={isScanning}
+          isVideoSaved={isVideoSaved}
+          lengthFilter={lengthFilter}
+          promoteVideoToProduction={promoteVideoToProduction}
+          promptCopyError={promptCopyError}
+          savedChannels={savedChannels}
+          savedVideos={savedVideos}
+          scannableChannelCount={scannableChannelCount}
+          searchKeyword={searchKeyword}
+          selectedChannelIds={selectedChannelIds}
+          setLengthFilter={setLengthFilter}
+          setSearchKeyword={setSearchKeyword}
+          setShowWorkPanel={setShowWorkPanel}
+          setSortType={setSortType}
+          setTtoTtoMode={setTtoTtoMode}
+          setViewFilter={setViewFilter}
+          setViewMode={setViewMode}
+          showWorkPanel={showWorkPanel}
+          sortType={sortType}
+          toggleCheckVideo={toggleCheckVideo}
+          toggleScrapVideo={toggleScrapVideo}
+          totalVideoCount={totalVideoCount}
+          ttoTtoAssetCount={ttoTtoAssetCount}
+          ttoTtoMode={ttoTtoMode}
+          videos={videos}
+          viewFilter={viewFilter}
+          viewMode={viewMode}
+          visibleScrapCount={visibleScrapCount}
+        />
+      ) : (
+        <LegacyVaultTab
+          creatorView={creatorView}
+          discoveryLinks={discoveryLinks}
+          copiedPrompt={copiedPrompt}
+          copyPromptForVideos={copyPromptForVideos}
+          fetchTopComments={fetchTopComments}
+          markRadarVideoStatus={markRadarVideoStatus}
+          openCreatorView={openCreatorView}
+          promptCopyError={promptCopyError}
+          savedVideos={savedVideos}
+          toggleScrapVideo={toggleScrapVideo}
+          updateDiscoveryLink={updateDiscoveryLink}
+          updateVideoUserRecord={updateVideoUserRecord}
+          videoUserRecords={videoUserRecords}
+        />
+      )}
+    </div>
+  );
+}
