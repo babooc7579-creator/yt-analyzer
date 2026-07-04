@@ -1,6 +1,7 @@
-import React from 'react';
 import { Loader2, Plus } from 'lucide-react';
 import { LANGUAGES } from '../constants/languages';
+import ChannelBulkInputBox from './ChannelBulkInputBox';
+import ChannelBulkResultPanel from './ChannelBulkResultPanel';
 
 export default function ChannelBulkAddForm({
   bulkInput,
@@ -19,16 +20,12 @@ export default function ChannelBulkAddForm({
 
   return (
     <div className="space-y-2 animate-in fade-in duration-200">
-      <textarea
-        value={bulkInput}
-        onChange={(event) => setBulkInput(event.target.value)}
-        placeholder={'핸들 / 채널링크 / 영상링크를 한 줄에 하나씩 붙여넣으세요\n예)\n@channel1\nhttps://youtube.com/@channel2\nhttps://youtu.be/xxxxxxxxxxx'}
-        className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none resize-none font-mono text-xs"
-        rows={5}
-        disabled={bulkLoading}
-        aria-label="일괄 추가할 채널 목록"
+      <ChannelBulkInputBox
+        bulkInput={bulkInput}
+        bulkLoading={bulkLoading}
+        recognizedLineCount={recognizedLineCount}
+        setBulkInput={setBulkInput}
       />
-      <p className="text-[10px] text-slate-500">{recognizedLineCount}개 줄 인식됨. YouTube에서 채널 정보를 확인한 뒤 클라우드 목록에 저장합니다. 영상 수집은 하지 않습니다.</p>
 
       <div>
         <p className="text-[10px] text-slate-500 mb-1">태그 선택 (전체 일괄 적용, 여러 개 가능)</p>
@@ -70,23 +67,7 @@ export default function ChannelBulkAddForm({
         {bulkLoading ? 'YouTube 확인 후 저장 중...' : 'YouTube 확인 후 일괄 저장'}
       </button>
 
-      {bulkResult && (
-        <div className="p-2 bg-white rounded-lg border border-indigo-200 text-xs space-y-1 max-h-32 overflow-y-auto">
-          <p className="font-bold text-slate-700">총 {bulkResult.total}개 중 {bulkResult.added}개 성공</p>
-          {bulkResult.results.filter((result) => !result.success).map((result, index) => (
-            <p key={index} className="text-red-500 truncate">✗ {result.handle}: {result.error}</p>
-          ))}
-          <button
-            type="button"
-            onClick={resetBulkAdd}
-            className="mt-1 w-full text-center text-indigo-600 hover:text-indigo-800 font-semibold"
-            title="일괄 저장 결과 닫기"
-            aria-label="채널 일괄 저장 결과 닫기"
-          >
-            닫기
-          </button>
-        </div>
-      )}
+      <ChannelBulkResultPanel bulkResult={bulkResult} resetBulkAdd={resetBulkAdd} />
     </div>
   );
 }
