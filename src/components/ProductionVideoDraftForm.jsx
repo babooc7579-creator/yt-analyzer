@@ -1,4 +1,5 @@
-import { AlertCircle, CheckCircle2, Loader2, Save } from 'lucide-react';
+import { Loader2, Save } from 'lucide-react';
+import ProductionVideoSaveStatus from './ProductionVideoSaveStatus';
 
 export default function ProductionVideoDraftForm({
   isDirty,
@@ -56,16 +57,7 @@ export default function ProductionVideoDraftForm({
         {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
         {isSaving ? '저장 중...' : isDirty ? '변경 내용 저장' : '저장됨'}
       </button>
-      {saveState === 'saved' && (
-        <p className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600">
-          <CheckCircle2 className="h-3 w-3" /> 클라우드에 저장됐습니다.
-        </p>
-      )}
-      {saveState === 'error' && (
-        <p className="inline-flex items-center gap-1 text-[10px] font-bold text-red-600">
-          <AlertCircle className="h-3 w-3" /> 저장 실패. 다시 저장해 주세요.
-        </p>
-      )}
+      <ProductionVideoSaveStatus saveState={saveState} />
     </div>
   );
 }
