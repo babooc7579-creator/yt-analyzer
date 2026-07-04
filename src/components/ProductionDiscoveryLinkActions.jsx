@@ -1,4 +1,5 @@
 import CopyUrlButton from './CopyUrlButton';
+import ProductionDiscoveryLinkEditButton from './ProductionDiscoveryLinkEditButton';
 import ProductionDiscoveryLinkOpenButton from './ProductionDiscoveryLinkOpenButton';
 import ProductionDiscoveryLinkMoveButton from './ProductionDiscoveryLinkMoveButton';
 import ProductionDiscoveryLinkMoveStatus from './ProductionDiscoveryLinkMoveStatus';
@@ -27,16 +28,11 @@ export default function ProductionDiscoveryLinkActions({
           className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
           iconClassName="h-3.5 w-3.5"
         />
-        <button
-          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-extrabold text-slate-700 transition hover:bg-slate-50"
-          aria-label={`${linkTitle} 발견함에서 수정`}
+        <ProductionDiscoveryLinkEditButton
           disabled={isMoving}
+          linkTitle={linkTitle}
           onClick={onEditInDiscoveryLinks}
-          title="발견함 화면에서 링크 상태와 메모 수정"
-          type="button"
-        >
-          발견함에서 수정
-        </button>
+        />
         <ProductionDiscoveryLinkMoveButton
           ariaLabel={`${linkTitle} 발견함으로 되돌리기`}
           disabled={isMoving}
