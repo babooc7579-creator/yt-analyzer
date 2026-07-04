@@ -1,4 +1,3 @@
-import React from 'react';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import VideoListRowCandidateAction from './VideoListRowCandidateAction';

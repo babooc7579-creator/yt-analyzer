@@ -1,4 +1,3 @@
-import React from 'react';
 import VideoListTableRow from './VideoListTableRow';
 
 export default function VideoListTable({

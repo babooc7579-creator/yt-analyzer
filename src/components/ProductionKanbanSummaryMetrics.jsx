@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as LinkIcon } from 'lucide-react';
 
 import ProductionKanbanScheduleSummary from './ProductionKanbanScheduleSummary';
