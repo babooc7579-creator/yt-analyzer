@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { deleteScrapbookVideo, fetchScrapbook, saveScrapbookVideos } from '../services/functionApi';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
-
-const SCRAPBOOK_LOAD_WARNING = 'Cloud 연결 실패로 이 브라우저에 남아 있던 스크랩북을 임시로 표시 중입니다. 이 목록은 Cloud 기준 데이터가 아닙니다.';
-const SCRAPBOOK_SAVE_WARNING = '스크랩북 변경이 Cloud에 저장되지 않았습니다. 브라우저 임시 기록으로 저장 완료 처리하지 않습니다.';
-const SCRAPBOOK_CLOUD_REQUIRED_WARNING = 'Cloud 스크랩북을 확인하지 못해 지금은 보관 상태를 바꿀 수 없습니다. 잠시 뒤 새로고침 후 다시 시도해 주세요.';
+import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
 
 export function useScrapbook() {
   const cloudScrapbookCacheRef = useRef([]);
@@ -36,7 +33,7 @@ export function useScrapbook() {
           const fallbackVideos = readJsonStorage(STORAGE_KEYS.savedVideos, []) || [];
           setSavedVideos(fallbackVideos);
           setScrapbookCloudReady(false);
-          setScrapbookSyncWarning(SCRAPBOOK_LOAD_WARNING);
+          setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.loadFallback);
         }
       }
     };
@@ -51,7 +48,7 @@ export function useScrapbook() {
     const isSaved = isVideoSaved(video.videoId);
 
     if (!scrapbookCloudReady) {
-      setScrapbookSyncWarning(SCRAPBOOK_CLOUD_REQUIRED_WARNING);
+      setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.cloudRequired);
       return false;
     }
 
@@ -76,7 +73,7 @@ export function useScrapbook() {
       return true;
     } catch {
       setScrapbookCloudReady(false);
-      setScrapbookSyncWarning(SCRAPBOOK_SAVE_WARNING);
+      setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.saveFailed);
       return false;
     }
   };
