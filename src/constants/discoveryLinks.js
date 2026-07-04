@@ -12,6 +12,8 @@ export const getDiscoveryLinkStatusLabel = (status) => (
     || '미지정'
 );
 
+export const getDiscoveryLinkStatusValue = (link) => link?.status || 'inbox';
+
 export const DISCOVERY_PLATFORM_LABELS = {
   instagram: 'Instagram',
   youtube: 'YouTube',
@@ -60,6 +62,8 @@ export const getDiscoveryRightsStatusLabel = (rightsStatus) => (
     || rightsStatus
     || '미지정'
 );
+
+export const getDiscoveryLinkRightsStatusValue = (link) => link?.rightsStatus || 'unknown';
 
 export const ALL_DISCOVERY_RIGHTS_STATUS_OPTION = { value: 'all', label: '권리 전체' };
 

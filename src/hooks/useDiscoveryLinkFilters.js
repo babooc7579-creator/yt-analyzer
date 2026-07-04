@@ -7,7 +7,9 @@ import {
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
+  getDiscoveryLinkRightsStatusValue,
   getDiscoveryLinkStatusLabel,
+  getDiscoveryLinkStatusValue,
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 import { formatNumberedUrlList } from '../utils/urls';
@@ -16,10 +18,6 @@ const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
 const ALL_LINK_STATUS_OPTION = ALL_DISCOVERY_LINK_STATUS_OPTION;
 const RIGHTS_STATUS_OPTIONS = DISCOVERY_RIGHTS_STATUS_OPTIONS;
 const ALL_RIGHTS_STATUS_OPTION = ALL_DISCOVERY_RIGHTS_STATUS_OPTION;
-
-const getLinkStatusValue = (link) => link.status || 'inbox';
-
-const getLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
 const getSearchableLinkText = (link) => (
   [
@@ -42,7 +40,7 @@ export function useDiscoveryLinkFilters(links) {
 
   const statusCounts = useMemo(() => (
     links.reduce((counts, link) => {
-      const status = getLinkStatusValue(link);
+      const status = getDiscoveryLinkStatusValue(link);
       return {
         ...counts,
         [status]: (counts[status] || 0) + 1,
@@ -52,7 +50,7 @@ export function useDiscoveryLinkFilters(links) {
 
   const rightsCounts = useMemo(() => (
     links.reduce((counts, link) => {
-      const rightsStatus = getLinkRightsStatusValue(link);
+      const rightsStatus = getDiscoveryLinkRightsStatusValue(link);
       return {
         ...counts,
         [rightsStatus]: (counts[rightsStatus] || 0) + 1,
@@ -62,13 +60,13 @@ export function useDiscoveryLinkFilters(links) {
 
   const statusMatchedLinks = useMemo(() => {
     if (statusFilter === ALL_LINK_STATUS_OPTION.value) return links;
-    return links.filter((link) => getLinkStatusValue(link) === statusFilter);
+    return links.filter((link) => getDiscoveryLinkStatusValue(link) === statusFilter);
   }, [links, statusFilter]);
 
   const rightsMatchedLinks = useMemo(() => {
     if (rightsFilter === ALL_RIGHTS_STATUS_OPTION.value) return statusMatchedLinks;
     return statusMatchedLinks.filter((link) => (
-      getLinkRightsStatusValue(link) === rightsFilter
+      getDiscoveryLinkRightsStatusValue(link) === rightsFilter
     ));
   }, [rightsFilter, statusMatchedLinks]);
 
@@ -87,8 +85,8 @@ export function useDiscoveryLinkFilters(links) {
     formatNumberedUrlList(
       filteredLinks.map((link) => {
         const title = link.title || getDiscoveryLinkHost(link.url);
-        const statusLabel = getDiscoveryLinkStatusLabel(getLinkStatusValue(link));
-        const rightsLabel = getDiscoveryRightsStatusLabel(getLinkRightsStatusValue(link));
+        const statusLabel = getDiscoveryLinkStatusLabel(getDiscoveryLinkStatusValue(link));
+        const rightsLabel = getDiscoveryRightsStatusLabel(getDiscoveryLinkRightsStatusValue(link));
 
         return link.url ? [
           title,

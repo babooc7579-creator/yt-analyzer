@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 
-import { DISCOVERY_RIGHTS_WARNINGS } from '../constants/discoveryLinks';
+import {
+  DISCOVERY_RIGHTS_WARNINGS,
+  getDiscoveryLinkRightsStatusValue,
+  getDiscoveryLinkStatusValue,
+} from '../constants/discoveryLinks';
 import { getProductionStatusFromRecord, PRODUCTION_STATUS } from '../constants/status';
 import { getIsoTodayDate } from '../utils/dates';
-
-const getDiscoveryLinkRightsStatusValue = (link) => link.rightsStatus || 'unknown';
 
 export function useProductionKanbanData({
   discoveryLinks,
@@ -14,7 +16,7 @@ export function useProductionKanbanData({
 }) {
   const discoveryLinkCandidates = useMemo(() => (
     discoveryLinks
-      .filter((link) => (link.status || '') === 'candidate')
+      .filter((link) => getDiscoveryLinkStatusValue(link) === 'candidate')
       .sort((left, right) => (
         new Date(right.updatedAt || right.createdAt || 0).getTime()
         - new Date(left.updatedAt || left.createdAt || 0).getTime()
