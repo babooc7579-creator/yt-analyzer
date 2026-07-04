@@ -17,17 +17,36 @@ export default function DiscoveryLinkForm({
   onChange,
   onSubmit,
 }) {
+  const urlFieldProps = {
+    duplicateLink,
+    onChange,
+    url: form.url,
+    urlPreview,
+  };
+
+  const statusFieldsProps = {
+    onChange,
+    rightsStatus: form.rightsStatus,
+    status: form.status,
+  };
+
+  const memoFieldProps = {
+    onChange: (value) => onChange('memo', value),
+    value: form.memo,
+  };
+
+  const submitButtonProps = {
+    duplicateLink,
+    isCreateDisabled,
+    saving,
+  };
+
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-xl shadow-slate-950/30">
       <DiscoveryLinkFormHeader />
 
       <form className="mt-5 space-y-4" onSubmit={onSubmit}>
-        <DiscoveryLinkUrlField
-          duplicateLink={duplicateLink}
-          onChange={onChange}
-          url={form.url}
-          urlPreview={urlPreview}
-        />
+        <DiscoveryLinkUrlField {...urlFieldProps} />
 
         <DiscoveryLinkTextField
           ariaLabel="발견 링크 제목 또는 기억할 이름"
@@ -37,24 +56,13 @@ export default function DiscoveryLinkForm({
           value={form.title}
         />
 
-        <DiscoveryLinkStatusFields
-          onChange={onChange}
-          rightsStatus={form.rightsStatus}
-          status={form.status}
-        />
+        <DiscoveryLinkStatusFields {...statusFieldsProps} />
 
         <DiscoveryLinkRiskyCandidateHint show={showRiskyCandidateHint} />
 
-        <DiscoveryLinkMemoField
-          onChange={(value) => onChange('memo', value)}
-          value={form.memo}
-        />
+        <DiscoveryLinkMemoField {...memoFieldProps} />
 
-        <DiscoveryLinkSubmitButton
-          duplicateLink={duplicateLink}
-          isCreateDisabled={isCreateDisabled}
-          saving={saving}
-        />
+        <DiscoveryLinkSubmitButton {...submitButtonProps} />
       </form>
 
       <DiscoveryLinkSafetyNotice />
