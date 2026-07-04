@@ -106,13 +106,15 @@ export default function LegacyWorkspaceMainPanel({
     videoUserRecords,
   };
 
+  const workspaceTabsProps = {
+    activeTab,
+    onSelectTab: setActiveTab,
+    savedVideoCount: savedVideos.length,
+  };
+
   return (
     <div className="flex flex-col h-full space-y-4 min-w-0">
-      <WorkspaceTabs
-        activeTab={activeTab}
-        savedVideoCount={savedVideos.length}
-        onSelectTab={setActiveTab}
-      />
+      <WorkspaceTabs {...workspaceTabsProps} />
 
       {activeTab === 'dashboard' ? (
         <LegacyDashboardTab {...dashboardTabProps} />

@@ -1,13 +1,15 @@
 import LegacyWorkspaceView from './LegacyWorkspaceView';
 
 export default function CreatorLegacyWorkspaceRoute(props) {
+  const legacyWorkspaceViewProps = {
+    asideProps: getLegacyAsideProps(props),
+    channelPanelProps: getLegacyChannelPanelProps(props),
+    mainPanelProps: getLegacyMainPanelProps(props),
+    showWorkPanel: props.showWorkPanel,
+  };
+
   return (
-    <LegacyWorkspaceView
-      asideProps={getLegacyAsideProps(props)}
-      channelPanelProps={getLegacyChannelPanelProps(props)}
-      mainPanelProps={getLegacyMainPanelProps(props)}
-      showWorkPanel={props.showWorkPanel}
-    />
+    <LegacyWorkspaceView {...legacyWorkspaceViewProps} />
   );
 }
 
