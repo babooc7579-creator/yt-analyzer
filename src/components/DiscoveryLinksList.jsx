@@ -21,20 +21,24 @@ export default function DiscoveryLinksList({
   }
 
   if (filteredLinks.length === 0) {
+    const filteredEmptyStateProps = {
+      allLinkCount,
+      clearFilters,
+    };
+
     return (
-      <DiscoveryLinksFilteredEmptyState
-        allLinkCount={allLinkCount}
-        clearFilters={clearFilters}
-      />
+      <DiscoveryLinksFilteredEmptyState {...filteredEmptyStateProps} />
     );
   }
 
+  const gridProps = {
+    filteredLinks,
+    onDeleteLink,
+    onUpdateLink,
+    saving,
+  };
+
   return (
-    <DiscoveryLinksGrid
-      filteredLinks={filteredLinks}
-      onDeleteLink={onDeleteLink}
-      onUpdateLink={onUpdateLink}
-      saving={saving}
-    />
+    <DiscoveryLinksGrid {...gridProps} />
   );
 }

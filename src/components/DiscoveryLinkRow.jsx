@@ -32,41 +32,44 @@ export default function DiscoveryLinkRow({
     onDelete,
     onUpdate,
   });
+  const rowContentProps = {
+    cancelEdit,
+    currentRightsStatus,
+    currentStatus,
+    draftMemo,
+    draftTitle,
+    handleSaveEdit,
+    isEditing,
+    link,
+    platformLabel,
+    rightsTone,
+    saving,
+    setDraftMemo,
+    setDraftTitle,
+    sourceHost,
+    title,
+  };
+
+  const actionsProps = {
+    currentRightsStatus,
+    currentStatus,
+    isEditing,
+    link,
+    onDelete: handleDelete,
+    onRightsStatusChange: handleRightsStatusChange,
+    onSendToCandidate: handleSendToCandidate,
+    onStatusChange: handleStatusChange,
+    onToggleEdit: isEditing ? cancelEdit : openEdit,
+    saving,
+    title,
+  };
 
   return (
     <article className={`rounded-xl border p-4 shadow-sm ${rightsTone.card}`}>
       <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
-        <DiscoveryLinkRowContent
-          cancelEdit={cancelEdit}
-          currentRightsStatus={currentRightsStatus}
-          currentStatus={currentStatus}
-          draftMemo={draftMemo}
-          draftTitle={draftTitle}
-          handleSaveEdit={handleSaveEdit}
-          isEditing={isEditing}
-          link={link}
-          platformLabel={platformLabel}
-          rightsTone={rightsTone}
-          saving={saving}
-          setDraftMemo={setDraftMemo}
-          setDraftTitle={setDraftTitle}
-          sourceHost={sourceHost}
-          title={title}
-        />
+        <DiscoveryLinkRowContent {...rowContentProps} />
 
-        <DiscoveryLinkActions
-          currentRightsStatus={currentRightsStatus}
-          currentStatus={currentStatus}
-          isEditing={isEditing}
-          link={link}
-          onDelete={handleDelete}
-          onRightsStatusChange={handleRightsStatusChange}
-          onSendToCandidate={handleSendToCandidate}
-          onStatusChange={handleStatusChange}
-          onToggleEdit={isEditing ? cancelEdit : openEdit}
-          saving={saving}
-          title={title}
-        />
+        <DiscoveryLinkActions {...actionsProps} />
       </div>
     </article>
   );

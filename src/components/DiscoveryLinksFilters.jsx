@@ -15,22 +15,28 @@ export default function DiscoveryLinksFilters({
   statusFilter,
   statusFilterOptions,
 }) {
+  const statusFilterProps = {
+    setStatusFilter,
+    statusFilter,
+    statusFilterOptions,
+  };
+
+  const rightsFilterProps = {
+    rightsFilter,
+    rightsFilterOptions,
+    setRightsFilter,
+  };
+
+  const searchBoxProps = {
+    searchQuery,
+    setSearchQuery,
+  };
+
   return (
     <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3">
-      <DiscoveryStatusFilterGroup
-        setStatusFilter={setStatusFilter}
-        statusFilter={statusFilter}
-        statusFilterOptions={statusFilterOptions}
-      />
-      <DiscoveryRightsFilterGroup
-        rightsFilter={rightsFilter}
-        rightsFilterOptions={rightsFilterOptions}
-        setRightsFilter={setRightsFilter}
-      />
-      <DiscoveryLinkSearchBox
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-      />
+      <DiscoveryStatusFilterGroup {...statusFilterProps} />
+      <DiscoveryRightsFilterGroup {...rightsFilterProps} />
+      <DiscoveryLinkSearchBox {...searchBoxProps} />
 
       {hasActiveFilters ? (
         <DiscoveryLinksActiveFilterSummary filteredLinkCount={filteredLinkCount} />
