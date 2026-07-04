@@ -1,4 +1,5 @@
 import { History, Loader2, Plus, X } from 'lucide-react';
+import ChannelNoteItem from './ChannelNoteItem';
 
 export default function ChannelNotesModal({
   modal,
@@ -54,10 +55,7 @@ export default function ChannelNotesModal({
             <div className="text-center py-10 text-slate-400 text-sm">아직 기록이 없어요. 위에서 첫 기록을 남겨보세요!</div>
           ) : (
             modal.channel.notes.map((note, idx) => (
-              <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                <p className="text-[10px] text-slate-400 mb-1">{new Date(note.date).toLocaleString('ko-KR')}</p>
-                <p className="text-sm text-slate-700 whitespace-pre-wrap">{note.text}</p>
-              </div>
+              <ChannelNoteItem key={idx} note={note} />
             ))
           )}
         </div>
