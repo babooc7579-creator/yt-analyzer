@@ -1,8 +1,9 @@
-import { AlertCircle, CheckCircle2, Clock, Loader2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Clock } from 'lucide-react';
 
 import { PRODUCTION_STATUS } from '../constants/status';
 import { getIsoTodayDate } from '../utils/dates';
 import ProductionVideoExternalActions from './ProductionVideoExternalActions';
+import ProductionVideoMoveButton from './ProductionVideoMoveButton';
 
 export default function ProductionVideoStatusActions({
   columnId,
@@ -20,40 +21,37 @@ export default function ProductionVideoStatusActions({
         아래 상태 버튼은 이 영상의 제작 진행 상태를 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.
       </p>
       {columnId !== PRODUCTION_STATUS.CANDIDATE && (
-        <button
-          type="button"
+        <ProductionVideoMoveButton
+          activeClassName="bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+          ariaLabel={`${videoTitle} 제작 후보로 이동`}
+          baseClassName="block text-center"
+          isMoving={isMoving}
+          label="제작 후보로"
           onClick={() => onMove(video.videoId, PRODUCTION_STATUS.CANDIDATE)}
-          disabled={isMoving}
-          className={`rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}
           title="제작 상태를 후보로 되돌려 저장"
-          aria-label={`${videoTitle} 제작 후보로 이동`}
-        >
-          {isMoving ? '이동 중...' : '제작 후보로'}
-        </button>
+        />
       )}
       {columnId !== PRODUCTION_STATUS.ACTIVE && (
-        <button
-          type="button"
+        <ProductionVideoMoveButton
+          activeClassName="bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+          ariaLabel={`${videoTitle} 제작 중으로 이동`}
+          icon={Clock}
+          isMoving={isMoving}
+          label="제작 중으로"
           onClick={() => onMove(video.videoId, PRODUCTION_STATUS.ACTIVE)}
-          disabled={isMoving}
-          className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}
           title="제작 중 상태로 저장"
-          aria-label={`${videoTitle} 제작 중으로 이동`}
-        >
-          {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Clock className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '제작 중으로'}
-        </button>
+        />
       )}
       {columnId !== PRODUCTION_STATUS.DONE && (
-        <button
-          type="button"
+        <ProductionVideoMoveButton
+          activeClassName="bg-slate-900 text-white hover:bg-slate-800"
+          ariaLabel={`${videoTitle} 업로드 완료로 이동`}
+          icon={CheckCircle2}
+          isMoving={isMoving}
+          label="업로드 완료"
           onClick={() => onMove(video.videoId, PRODUCTION_STATUS.DONE, { uploadedAt: record.uploadedAt || getIsoTodayDate() })}
-          disabled={isMoving}
-          className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
           title="업로드 완료 상태로 저장하고 완료일을 기록"
-          aria-label={`${videoTitle} 업로드 완료로 이동`}
-        >
-          {isMoving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />} {isMoving ? '이동 중...' : '업로드 완료'}
-        </button>
+        />
       )}
       {moveState === 'error' && (
         <p className="inline-flex items-center justify-center gap-1 text-[10px] font-bold text-red-600">
