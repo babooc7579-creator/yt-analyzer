@@ -23,6 +23,12 @@ import { useVideoExplorerState } from './hooks/useVideoExplorerState';
 import { useVideoProductionActions } from './hooks/useVideoProductionActions';
 import { useVideoSelection } from './hooks/useVideoSelection';
 import { useVideoUserRecords } from './hooks/useVideoUserRecords';
+import {
+  buildDiscoveryLinksRouteProps,
+  buildHomeRouteProps,
+  buildLayoutProps,
+  buildLegacyWorkspaceRouteProps,
+} from './utils/appRouteProps';
 
 export default function App() {
   // 상태 관리
@@ -273,32 +279,32 @@ export default function App() {
     scrapbookSyncWarning,
     videoRecordsSyncWarning,
   });
-  const layoutProps = {
+  const layoutProps = buildLayoutProps({
     activeCreatorItem,
-    channelCount: savedChannels.length,
+    addChannelNote,
+    changeNoteText,
+    closeNotesModal,
+    closeTopCommentsModal,
     commentModal,
     creatorView,
     discoveryCandidateCount,
     notesModal,
-    onAddNote: addChannelNote,
-    onChangeNoteText: changeNoteText,
-    onCloseNotes: closeNotesModal,
-    onCloseTopComments: closeTopCommentsModal,
-    onOpenCreatorView: openCreatorView,
-    savedVideoCount: savedVideos.length,
-    selectedChannelCount: selectedChannelIds.length,
+    openCreatorView,
+    savedChannels,
+    savedVideos,
+    selectedChannelIds,
     syncWarnings,
-    videoCount: videos.length,
-  };
+    videos,
+  });
 
-  const homeRouteProps = {
+  const homeRouteProps = buildHomeRouteProps({
     clearRadarDecisions,
     discoveryCandidateCount,
     discoveryRightsWarningCount,
     isVideoSaved,
     latestScanText,
     markRadarVideoStatus,
-    onOpenView: openCreatorView,
+    openCreatorView,
     openRadarCandidateCount,
     productionCandidateCount,
     promoteVideoToProduction,
@@ -309,9 +315,9 @@ export default function App() {
     ttoTtoAssetCount,
     videoUserRecords,
     videos,
-  };
+  });
 
-  const discoveryLinksRouteProps = {
+  const discoveryLinksRouteProps = buildDiscoveryLinksRouteProps({
     addDiscoveryLink,
     changeDiscoveryLink,
     discoveryLinks,
@@ -322,9 +328,9 @@ export default function App() {
     discoveryLinksSavingMessage,
     loadDiscoveryLinks,
     removeDiscoveryLink,
-  };
+  });
 
-  const legacyWorkspaceRouteProps = {
+  const legacyWorkspaceRouteProps = buildLegacyWorkspaceRouteProps({
     activeSelectedChannelCount,
     activeTab,
     addMode,
@@ -342,6 +348,7 @@ export default function App() {
     confirmRenameCategory,
     copiedPrompt,
     copyPromptForVideos,
+    changeDiscoveryLink,
     creatorView,
     deleteChannel,
     discoveryLinks,
@@ -410,11 +417,9 @@ export default function App() {
     toggleCheckVideo,
     toggleNewChannelTag,
     toggleScrapVideo,
-    totalVideoCount: videos.length,
     ttoTtoAssetCount,
     ttoTtoMode,
     updateChannelMetadata,
-    updateDiscoveryLink: changeDiscoveryLink,
     updateVideoUserRecord,
     updatingChannelId,
     videoUserRecords,
@@ -422,7 +427,7 @@ export default function App() {
     viewFilter,
     viewMode,
     visibleScrapCount,
-  };
+  });
 
   return (
     <CreatorAppLayout {...layoutProps}>
