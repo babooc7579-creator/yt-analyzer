@@ -4,9 +4,7 @@ import { useAppRuntimeState } from './hooks/useAppRuntimeState';
 import { useCreatorAppChannelWorkflow } from './hooks/useCreatorAppChannelWorkflow';
 import { useCreatorAppDerivedState } from './hooks/useCreatorAppDerivedState';
 import { useCreatorAppVideoWorkflow } from './hooks/useCreatorAppVideoWorkflow';
-import { useCreatorWorkspaceNavigation } from './hooks/useCreatorWorkspaceNavigation';
-import { useDiscoveryLinks } from './hooks/useDiscoveryLinks';
-import { useTopComments } from './hooks/useTopComments';
+import { useCreatorAppWorkspaceWorkflow } from './hooks/useCreatorAppWorkspaceWorkflow';
 import { useVideoCollectionActions } from './hooks/useVideoCollectionActions';
 import { useCreatorAppViewProps } from './hooks/useCreatorAppViewProps';
 
@@ -125,8 +123,6 @@ export default function App() {
     closeTopCommentsModal,
     commentModal,
     fetchTopComments,
-  } = useTopComments({ apiKey, onError: setError });
-  const {
     activeCreatorItem,
     activeTab,
     creatorView,
@@ -139,8 +135,6 @@ export default function App() {
     setActiveTab,
     setShowWorkPanel,
     showWorkPanel,
-  } = useCreatorWorkspaceNavigation();
-  const {
     discoveryLinks,
     discoveryLinksError,
     discoveryLinksLoading,
@@ -151,7 +145,7 @@ export default function App() {
     changeDiscoveryLink,
     loadDiscoveryLinks,
     removeDiscoveryLink,
-  } = useDiscoveryLinks();
+  } = useCreatorAppWorkspaceWorkflow({ apiKey, setError });
   const {
     handleManualScan,
     handleTagScan,

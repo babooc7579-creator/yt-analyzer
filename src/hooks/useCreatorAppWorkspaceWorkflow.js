@@ -1,0 +1,65 @@
+import { useCreatorWorkspaceNavigation } from './useCreatorWorkspaceNavigation';
+import { useDiscoveryLinks } from './useDiscoveryLinks';
+import { useTopComments } from './useTopComments';
+
+export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
+  const {
+    closeTopCommentsModal,
+    commentModal,
+    fetchTopComments,
+  } = useTopComments({ apiKey, onError: setError });
+  const {
+    activeCreatorItem,
+    activeTab,
+    creatorView,
+    isComingSoonView,
+    isDiscoveryLinksView,
+    isHomeView,
+    isLegacyWorkspaceView,
+    isReferenceVaultView,
+    openCreatorView,
+    setActiveTab,
+    setShowWorkPanel,
+    showWorkPanel,
+  } = useCreatorWorkspaceNavigation();
+  const {
+    discoveryLinks,
+    discoveryLinksError,
+    discoveryLinksLoading,
+    discoveryLinksNotice,
+    discoveryLinksSaving,
+    discoveryLinksSavingMessage,
+    addDiscoveryLink,
+    changeDiscoveryLink,
+    loadDiscoveryLinks,
+    removeDiscoveryLink,
+  } = useDiscoveryLinks();
+
+  return {
+    activeCreatorItem,
+    activeTab,
+    addDiscoveryLink,
+    changeDiscoveryLink,
+    closeTopCommentsModal,
+    commentModal,
+    creatorView,
+    discoveryLinks,
+    discoveryLinksError,
+    discoveryLinksLoading,
+    discoveryLinksNotice,
+    discoveryLinksSaving,
+    discoveryLinksSavingMessage,
+    fetchTopComments,
+    isComingSoonView,
+    isDiscoveryLinksView,
+    isHomeView,
+    isLegacyWorkspaceView,
+    isReferenceVaultView,
+    loadDiscoveryLinks,
+    openCreatorView,
+    removeDiscoveryLink,
+    setActiveTab,
+    setShowWorkPanel,
+    showWorkPanel,
+  };
+}
