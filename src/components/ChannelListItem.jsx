@@ -19,6 +19,30 @@ export default function ChannelListItem({
   const status = getChannelStatus(channel);
   const selectionLabel = `${channel.title} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 대상에 포함`;
 
+  const metaProps = {
+    channel,
+    grade,
+    status,
+  };
+
+  const metadataControlsProps = {
+    channel,
+    grade,
+    isUpdating,
+    onUpdateMetadata,
+    status,
+  };
+
+  const scanSummaryProps = {
+    scanDisplay,
+  };
+
+  const actionsProps = {
+    channel,
+    onDelete,
+    onOpenNotes,
+  };
+
   return (
     <div className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
       <button
@@ -33,17 +57,11 @@ export default function ChannelListItem({
       <img src={channel.thumbnail} alt="" className="w-9 h-9 rounded-full border border-slate-200 shrink-0 mt-1" />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2" title={channel.title}>{channel.title}</p>
-        <ChannelListItemMeta channel={channel} grade={grade} status={status} />
-        <ChannelMetadataControls
-          channel={channel}
-          grade={grade}
-          isUpdating={isUpdating}
-          onUpdateMetadata={onUpdateMetadata}
-          status={status}
-        />
-        <ChannelScanSummaryBox scanDisplay={scanDisplay} />
+        <ChannelListItemMeta {...metaProps} />
+        <ChannelMetadataControls {...metadataControlsProps} />
+        <ChannelScanSummaryBox {...scanSummaryProps} />
       </div>
-      <ChannelListItemActions channel={channel} onDelete={onDelete} onOpenNotes={onOpenNotes} />
+      <ChannelListItemActions {...actionsProps} />
     </div>
   );
 }

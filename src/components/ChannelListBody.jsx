@@ -21,16 +21,18 @@ export default function ChannelListBody({
     return <ChannelListEmptyState />;
   }
 
+  const itemsProps = {
+    getScanDisplay,
+    onDelete,
+    onOpenNotes,
+    onToggleSelection,
+    onUpdateMetadata,
+    selectedChannelIds,
+    updatingChannelId,
+    visibleChannels,
+  };
+
   return (
-    <ChannelListItems
-      getScanDisplay={getScanDisplay}
-      onDelete={onDelete}
-      onOpenNotes={onOpenNotes}
-      onToggleSelection={onToggleSelection}
-      onUpdateMetadata={onUpdateMetadata}
-      selectedChannelIds={selectedChannelIds}
-      updatingChannelId={updatingChannelId}
-      visibleChannels={visibleChannels}
-    />
+    <ChannelListItems {...itemsProps} />
   );
 }
