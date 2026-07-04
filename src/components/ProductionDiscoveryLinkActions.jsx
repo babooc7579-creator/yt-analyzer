@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import CopyUrlButton from './CopyUrlButton';
+import ProductionDiscoveryLinkMoveButton from './ProductionDiscoveryLinkMoveButton';
 import ProductionDiscoveryLinkMoveStatus from './ProductionDiscoveryLinkMoveStatus';
 
 export default function ProductionDiscoveryLinkActions({
@@ -46,26 +47,23 @@ export default function ProductionDiscoveryLinkActions({
         >
           발견함에서 수정
         </button>
-        <button
-          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-indigo-100 bg-indigo-50 px-3 text-[11px] font-extrabold text-indigo-700 transition hover:bg-indigo-100 disabled:opacity-50"
-          aria-label={`${linkTitle} 발견함으로 되돌리기`}
+        <ProductionDiscoveryLinkMoveButton
+          ariaLabel={`${linkTitle} 발견함으로 되돌리기`}
           disabled={isMoving}
           onClick={() => onMove(link.id, 'inbox')}
           title="제작 후보에서 빼고 발견함 받은 링크 상태로 저장"
-          type="button"
-        >
-          {isMoving ? '저장 중...' : '발견함으로 되돌리기'}
-        </button>
-        <button
-          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 text-[11px] font-extrabold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
-          aria-label={`${linkTitle} 제작 후보에서 제외 상태로 저장`}
+          isMoving={isMoving}
+          label="발견함으로 되돌리기"
+        />
+        <ProductionDiscoveryLinkMoveButton
+          ariaLabel={`${linkTitle} 제작 후보에서 제외 상태로 저장`}
           disabled={isMoving}
           onClick={() => onMove(link.id, 'discarded')}
           title="링크를 삭제하지 않고 발견함의 후보 제외 상태로 저장합니다"
-          type="button"
-        >
-          {isMoving ? '저장 중...' : '후보 제외'}
-        </button>
+          isMoving={isMoving}
+          label="후보 제외"
+          tone="danger"
+        />
       </div>
       <ProductionDiscoveryLinkMoveStatus moveState={moveState} />
     </>
