@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 
-import { LANGUAGES } from '../constants/languages';
+import ChannelLanguageSelect from './ChannelLanguageSelect';
 import ChannelTagSelector from './ChannelTagSelector';
 
 export default function ChannelPreviewEditor({
@@ -42,15 +42,7 @@ export default function ChannelPreviewEditor({
         toggleTag={toggleNewChannelTag}
       />
 
-      <select
-        value={newChannelLang}
-        onChange={(event) => setNewChannelLang(event.target.value)}
-        className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium"
-        title="채널 기본 언어 선택"
-        aria-label="채널 기본 언어 선택"
-      >
-        {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{language.label}</option>)}
-      </select>
+      <ChannelLanguageSelect language={newChannelLang} setLanguage={setNewChannelLang} />
 
       <textarea
         value={newChannelNote}
