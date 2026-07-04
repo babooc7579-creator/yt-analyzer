@@ -1,7 +1,18 @@
 import LegacyWorkspaceView from './LegacyWorkspaceView';
 
 export default function CreatorLegacyWorkspaceRoute(props) {
-  const channelPanelProps = {
+  return (
+    <LegacyWorkspaceView
+      asideProps={getLegacyAsideProps(props)}
+      channelPanelProps={getLegacyChannelPanelProps(props)}
+      mainPanelProps={getLegacyMainPanelProps(props)}
+      showWorkPanel={props.showWorkPanel}
+    />
+  );
+}
+
+function getLegacyChannelPanelProps(props) {
+  return {
     addMode: props.addMode,
     apiKey: props.apiKey,
     bulkInput: props.bulkInput,
@@ -58,8 +69,10 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     toggleNewChannelTag: props.toggleNewChannelTag,
     updatingChannelId: props.updatingChannelId,
   };
+}
 
-  const mainPanelProps = {
+function getLegacyMainPanelProps(props) {
+  return {
     activeSelectedChannelCount: props.activeSelectedChannelCount,
     activeTab: props.activeTab,
     checkedVideos: props.checkedVideos,
@@ -107,20 +120,13 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     viewMode: props.viewMode,
     visibleScrapCount: props.visibleScrapCount,
   };
+}
 
-  const asideProps = {
+function getLegacyAsideProps(props) {
+  return {
     checkedVideoCount: props.checkedVideos.length,
     savedVideoCount: props.savedVideos.length,
     selectedChannelCount: props.selectedChannelIds.length,
     videoCount: props.totalVideoCount,
   };
-
-  return (
-    <LegacyWorkspaceView
-      asideProps={asideProps}
-      channelPanelProps={channelPanelProps}
-      mainPanelProps={mainPanelProps}
-      showWorkPanel={props.showWorkPanel}
-    />
-  );
 }
