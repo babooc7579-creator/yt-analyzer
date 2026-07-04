@@ -1,9 +1,6 @@
 import { useDiscoveryLinkRow } from '../hooks/useDiscoveryLinkRow';
 import DiscoveryLinkActions from './DiscoveryLinkActions';
-import DiscoveryLinkBadges from './DiscoveryLinkBadges';
-import DiscoveryLinkEditForm from './DiscoveryLinkEditForm';
-import DiscoveryLinkUpdatedAt from './DiscoveryLinkUpdatedAt';
-import DiscoveryLinkViewDetails from './DiscoveryLinkViewDetails';
+import DiscoveryLinkRowContent from './DiscoveryLinkRowContent';
 
 export default function DiscoveryLinkRow({
   link,
@@ -39,32 +36,23 @@ export default function DiscoveryLinkRow({
   return (
     <article className={`rounded-xl border p-4 shadow-sm ${rightsTone.card}`}>
       <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
-        <div className="min-w-0">
-          <DiscoveryLinkBadges
-            currentRightsStatus={currentRightsStatus}
-            currentStatus={currentStatus}
-            platformLabel={platformLabel}
-            rightsTone={rightsTone}
-            sourceHost={sourceHost}
-          />
-
-          {isEditing ? (
-            <DiscoveryLinkEditForm
-              draftMemo={draftMemo}
-              draftTitle={draftTitle}
-              linkId={link.id}
-              onCancel={cancelEdit}
-              onSave={handleSaveEdit}
-              saving={saving}
-              setDraftMemo={setDraftMemo}
-              setDraftTitle={setDraftTitle}
-              title={title}
-            />
-          ) : (
-            <DiscoveryLinkViewDetails link={link} title={title} />
-          )}
-          <DiscoveryLinkUpdatedAt link={link} />
-        </div>
+        <DiscoveryLinkRowContent
+          cancelEdit={cancelEdit}
+          currentRightsStatus={currentRightsStatus}
+          currentStatus={currentStatus}
+          draftMemo={draftMemo}
+          draftTitle={draftTitle}
+          handleSaveEdit={handleSaveEdit}
+          isEditing={isEditing}
+          link={link}
+          platformLabel={platformLabel}
+          rightsTone={rightsTone}
+          saving={saving}
+          setDraftMemo={setDraftMemo}
+          setDraftTitle={setDraftTitle}
+          sourceHost={sourceHost}
+          title={title}
+        />
 
         <DiscoveryLinkActions
           currentRightsStatus={currentRightsStatus}
