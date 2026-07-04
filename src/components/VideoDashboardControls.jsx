@@ -1,6 +1,5 @@
-import ReferenceVaultSummary from './ReferenceVaultSummary';
 import SelectedVideosActionBar from './SelectedVideosActionBar';
-import StoredVideoGuide from './StoredVideoGuide';
+import VideoDashboardSourceSummary from './VideoDashboardSourceSummary';
 import VideoToolbar from './VideoToolbar';
 import { formatNumberedUrlList, getYouTubeVideoUrl } from '../utils/urls';
 
@@ -45,17 +44,14 @@ export default function VideoDashboardControls({
 
   return (
     <>
-      {isReferenceVaultView ? (
-        <ReferenceVaultSummary
-          videoCount={totalVideoCount}
-          channelCount={savedChannelCount}
-          scrapCount={savedVideoCount}
-          visibleScrapCount={visibleScrapCount}
-          ttoTtoCount={ttoTtoAssetCount}
-        />
-      ) : (
-        <StoredVideoGuide />
-      )}
+      <VideoDashboardSourceSummary
+        isReferenceVaultView={isReferenceVaultView}
+        savedChannelCount={savedChannelCount}
+        savedVideoCount={savedVideoCount}
+        totalVideoCount={totalVideoCount}
+        ttoTtoAssetCount={ttoTtoAssetCount}
+        visibleScrapCount={visibleScrapCount}
+      />
 
       <VideoToolbar
         isReferenceVaultView={isReferenceVaultView}

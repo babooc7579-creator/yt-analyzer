@@ -1,5 +1,6 @@
 import ChannelCategoryAddInput from './ChannelCategoryAddInput';
-import ChannelCategoryChip from './ChannelCategoryChip';
+import ChannelCategoryChipList from './ChannelCategoryChipList';
+import ChannelCategoryHelpText from './ChannelCategoryHelpText';
 import ChannelCloudOnlyTagsNotice from './ChannelCloudOnlyTagsNotice';
 
 export default function ChannelCategorySettings({
@@ -37,23 +38,18 @@ export default function ChannelCategorySettings({
         onAddCategory={addCategoryToLocalList}
         setNewCategoryName={setNewCategoryName}
       />
-      <div className="flex flex-wrap gap-1">
-        {categories.map((cat) => (
-          <ChannelCategoryChip
-            cancelRenameCategory={cancelRenameCategory}
-            category={cat}
-            confirmRenameCategory={confirmRenameCategory}
-            hideCategoryFromLocalList={hideCategoryFromLocalList}
-            isRenaming={renamingCategory === cat}
-            key={cat}
-            renameLoading={renameLoading}
-            renameValue={renameValue}
-            setRenameValue={setRenameValue}
-            startRenameCategory={startRenameCategory}
-          />
-        ))}
-      </div>
-      <p className="text-[9px] text-slate-400 mt-1.5">⚙️ 이름 변경은 Cloud 태그를 바꿉니다. 휴지통은 화면 목록에서만 숨기며, 이미 채널에 붙은 Cloud 태그는 삭제하지 않습니다.</p>
+      <ChannelCategoryChipList
+        cancelRenameCategory={cancelRenameCategory}
+        categories={categories}
+        confirmRenameCategory={confirmRenameCategory}
+        hideCategoryFromLocalList={hideCategoryFromLocalList}
+        renameLoading={renameLoading}
+        renameValue={renameValue}
+        renamingCategory={renamingCategory}
+        setRenameValue={setRenameValue}
+        startRenameCategory={startRenameCategory}
+      />
+      <ChannelCategoryHelpText />
       <ChannelCloudOnlyTagsNotice cloudOnlyTags={cloudOnlyTags} />
     </div>
   );
