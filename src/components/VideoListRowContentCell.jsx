@@ -1,6 +1,7 @@
 import VideoListRowBadges from './VideoListRowBadges';
 import VideoListRowMetaActions from './VideoListRowMetaActions';
 import VideoListRowThumbnail from './VideoListRowThumbnail';
+import VideoListRowTitleLink from './VideoListRowTitleLink';
 
 export default function VideoListRowContentCell({
   fetchTopComments,
@@ -25,16 +26,7 @@ export default function VideoListRowContentCell({
             isStrongReaction={isStrongReaction}
             isTtoTto={isTtoTto}
           />
-          <a
-            href={videoUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="text-base font-extrabold text-slate-900 hover:text-indigo-600 line-clamp-2 leading-snug mb-2"
-            title={videoTitle}
-            aria-label={`${videoTitle} YouTube 원본 영상 열기`}
-          >
-            {videoTitle}
-          </a>
+          <VideoListRowTitleLink videoTitle={videoTitle} videoUrl={videoUrl} />
           <VideoListRowMetaActions
             fetchTopComments={fetchTopComments}
             video={video}
