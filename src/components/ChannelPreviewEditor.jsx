@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 
 import { LANGUAGES } from '../constants/languages';
+import ChannelTagSelector from './ChannelTagSelector';
 
 export default function ChannelPreviewEditor({
   cancelChannelPreview,
@@ -34,23 +35,12 @@ export default function ChannelPreviewEditor({
         </button>
       </div>
 
-      <div>
-        <p className="text-[10px] text-slate-500 mb-1">태그 선택 (여러 개 가능, 안 골라도 OK)</p>
-        <div className="flex flex-wrap gap-1">
-          {categories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => toggleNewChannelTag(category)}
-              className={`px-2 py-1 rounded-full text-[11px] font-semibold border transition-colors ${newChannelTags.includes(category) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}
-              title={`${category} 태그 ${newChannelTags.includes(category) ? '선택 해제' : '선택'}`}
-              aria-label={`${category} 태그 ${newChannelTags.includes(category) ? '선택 해제' : '선택'}`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-      </div>
+      <ChannelTagSelector
+        categories={categories}
+        label="태그 선택 (여러 개 가능, 안 골라도 OK)"
+        selectedTags={newChannelTags}
+        toggleTag={toggleNewChannelTag}
+      />
 
       <select
         value={newChannelLang}
