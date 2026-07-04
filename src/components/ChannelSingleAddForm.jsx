@@ -18,30 +18,34 @@ export default function ChannelSingleAddForm({
   handleSaveChannel,
   loading,
 }) {
+  const previewInputProps = {
+    handlePreviewChannel,
+    newChannelInput,
+    previewLoading,
+    setNewChannelInput,
+  };
+
+  const previewEditorProps = {
+    cancelChannelPreview,
+    categories,
+    channelPreview,
+    handleSaveChannel,
+    loading,
+    newChannelLang,
+    newChannelNote,
+    newChannelTags,
+    setNewChannelLang,
+    setNewChannelNote,
+    toggleNewChannelTag,
+  };
+
   if (!channelPreview) {
     return (
-      <ChannelPreviewInput
-        handlePreviewChannel={handlePreviewChannel}
-        newChannelInput={newChannelInput}
-        previewLoading={previewLoading}
-        setNewChannelInput={setNewChannelInput}
-      />
+      <ChannelPreviewInput {...previewInputProps} />
     );
   }
 
   return (
-    <ChannelPreviewEditor
-      cancelChannelPreview={cancelChannelPreview}
-      categories={categories}
-      channelPreview={channelPreview}
-      handleSaveChannel={handleSaveChannel}
-      loading={loading}
-      newChannelLang={newChannelLang}
-      newChannelNote={newChannelNote}
-      newChannelTags={newChannelTags}
-      setNewChannelLang={setNewChannelLang}
-      setNewChannelNote={setNewChannelNote}
-      toggleNewChannelTag={toggleNewChannelTag}
-    />
+    <ChannelPreviewEditor {...previewEditorProps} />
   );
 }

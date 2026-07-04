@@ -19,14 +19,32 @@ export default function ChannelBulkAddForm({
 }) {
   const recognizedLineCount = bulkInput.split('\n').map((line) => line.trim()).filter(Boolean).length;
 
+  const inputBoxProps = {
+    bulkInput,
+    bulkLoading,
+    recognizedLineCount,
+    setBulkInput,
+  };
+
+  const languageSelectProps = {
+    language: newChannelLang,
+    setLanguage: setNewChannelLang,
+  };
+
+  const submitButtonProps = {
+    bulkInput,
+    bulkLoading,
+    handleBulkAdd,
+  };
+
+  const resultPanelProps = {
+    bulkResult,
+    resetBulkAdd,
+  };
+
   return (
     <div className="space-y-2 animate-in fade-in duration-200">
-      <ChannelBulkInputBox
-        bulkInput={bulkInput}
-        bulkLoading={bulkLoading}
-        recognizedLineCount={recognizedLineCount}
-        setBulkInput={setBulkInput}
-      />
+      <ChannelBulkInputBox {...inputBoxProps} />
 
       <ChannelTagSelector
         categories={categories}
@@ -35,15 +53,11 @@ export default function ChannelBulkAddForm({
         toggleTag={toggleNewChannelTag}
       />
 
-      <ChannelLanguageSelect language={newChannelLang} setLanguage={setNewChannelLang} />
+      <ChannelLanguageSelect {...languageSelectProps} />
 
-      <ChannelBulkSubmitButton
-        bulkInput={bulkInput}
-        bulkLoading={bulkLoading}
-        handleBulkAdd={handleBulkAdd}
-      />
+      <ChannelBulkSubmitButton {...submitButtonProps} />
 
-      <ChannelBulkResultPanel bulkResult={bulkResult} resetBulkAdd={resetBulkAdd} />
+      <ChannelBulkResultPanel {...resultPanelProps} />
     </div>
   );
 }
