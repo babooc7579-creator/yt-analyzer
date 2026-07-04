@@ -1,6 +1,7 @@
-import { CheckCircle2, Clock, Rocket, Star, XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, Rocket, XCircle } from 'lucide-react';
 
 import { VIDEO_STATUS } from '../constants/status';
+import RadarCandidateScrapButton from './RadarCandidateScrapButton';
 import RadarCandidateStatusButton from './RadarCandidateStatusButton';
 
 export default function RadarCandidateDecisionActions({
@@ -15,15 +16,12 @@ export default function RadarCandidateDecisionActions({
     <>
       <p className="mt-3 text-[10px] font-bold text-slate-400">2. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.</p>
       <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <button
-          type="button"
-          onClick={() => onToggleScrap(video)}
-          className={`inline-flex items-center justify-center gap-1 rounded-xl px-3 py-2 text-[11px] font-extrabold ${isSaved ? 'bg-yellow-400 text-slate-950 hover:bg-yellow-300' : 'bg-yellow-500/10 text-yellow-100 ring-1 ring-yellow-400/20 hover:bg-yellow-500/15'}`}
-          title={isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
-          aria-label={`${videoTitle} ${isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
-        >
-          <Star className={`h-3.5 w-3.5 ${isSaved ? 'fill-slate-950' : ''}`} /> {isSaved ? '보관됨' : '소재 보관'}
-        </button>
+        <RadarCandidateScrapButton
+          isSaved={isSaved}
+          onToggleScrap={onToggleScrap}
+          video={video}
+          videoTitle={videoTitle}
+        />
         <button
           type="button"
           onClick={() => onPromoteToProduction(video)}
