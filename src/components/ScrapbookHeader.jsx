@@ -19,6 +19,13 @@ export default function ScrapbookHeader({
   const iconClassName = isProductionMode
     ? 'w-6 h-6 text-indigo-600'
     : 'w-6 h-6 text-yellow-500 fill-yellow-500';
+  const headerActionsProps = {
+    copiedPrompt,
+    onCopyPrompt,
+    promptCopyError,
+    savedVideoCount,
+    videoUrlList,
+  };
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -28,13 +35,7 @@ export default function ScrapbookHeader({
         </h2>
         <p className="text-sm text-slate-500 mt-1">{description}</p>
       </div>
-      <ScrapbookHeaderActions
-        copiedPrompt={copiedPrompt}
-        onCopyPrompt={onCopyPrompt}
-        promptCopyError={promptCopyError}
-        savedVideoCount={savedVideoCount}
-        videoUrlList={videoUrlList}
-      />
+      <ScrapbookHeaderActions {...headerActionsProps} />
     </div>
   );
 }

@@ -11,18 +11,20 @@ export default function ScrapbookVideoCard({
   const videoTitle = video.title || '이 영상';
   const videoUrl = getYouTubeVideoUrl(video.videoId);
 
+  const footerProps = {
+    onFetchComments,
+    onRemoveScrap,
+    video,
+    videoTitle,
+    videoUrl,
+  };
+
   return (
     <div className="border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition-all group bg-white flex flex-col">
       <ScrapbookVideoThumbnail video={video} videoTitle={videoTitle} />
       <div className="p-4 flex-1 flex flex-col justify-between">
         <ScrapbookVideoInfo video={video} videoUrl={videoUrl} />
-        <ScrapbookVideoCardFooter
-          onFetchComments={onFetchComments}
-          onRemoveScrap={onRemoveScrap}
-          video={video}
-          videoTitle={videoTitle}
-          videoUrl={videoUrl}
-        />
+        <ScrapbookVideoCardFooter {...footerProps} />
       </div>
     </div>
   );
