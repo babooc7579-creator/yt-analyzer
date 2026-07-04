@@ -13,20 +13,23 @@ export default function ChannelCategoryChipList({
 }) {
   return (
     <div className="flex flex-wrap gap-1">
-      {categories.map((cat) => (
-        <ChannelCategoryChip
-          cancelRenameCategory={cancelRenameCategory}
-          category={cat}
-          confirmRenameCategory={confirmRenameCategory}
-          hideCategoryFromLocalList={hideCategoryFromLocalList}
-          isRenaming={renamingCategory === cat}
-          key={cat}
-          renameLoading={renameLoading}
-          renameValue={renameValue}
-          setRenameValue={setRenameValue}
-          startRenameCategory={startRenameCategory}
-        />
-      ))}
+      {categories.map((cat) => {
+        const chipProps = {
+          cancelRenameCategory,
+          category: cat,
+          confirmRenameCategory,
+          hideCategoryFromLocalList,
+          isRenaming: renamingCategory === cat,
+          renameLoading,
+          renameValue,
+          setRenameValue,
+          startRenameCategory,
+        };
+
+        return (
+          <ChannelCategoryChip key={cat} {...chipProps} />
+        );
+      })}
     </div>
   );
 }
