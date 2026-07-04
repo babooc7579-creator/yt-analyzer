@@ -1,9 +1,6 @@
-import { CheckCircle2, Clock } from 'lucide-react';
-
 import { PRODUCTION_STATUS } from '../constants/status';
-import { getIsoTodayDate } from '../utils/dates';
 import ProductionVideoExternalActions from './ProductionVideoExternalActions';
-import ProductionVideoMoveButton from './ProductionVideoMoveButton';
+import ProductionVideoMoveActions from './ProductionVideoMoveActions';
 import ProductionVideoMoveStatus from './ProductionVideoMoveStatus';
 
 export default function ProductionVideoStatusActions({
@@ -21,39 +18,14 @@ export default function ProductionVideoStatusActions({
       <p className="rounded-lg bg-slate-50 px-3 py-2 text-[10px] font-bold leading-relaxed text-slate-500">
         아래 상태 버튼은 이 영상의 제작 진행 상태를 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.
       </p>
-      {columnId !== PRODUCTION_STATUS.CANDIDATE && (
-        <ProductionVideoMoveButton
-          activeClassName="bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
-          ariaLabel={`${videoTitle} 제작 후보로 이동`}
-          baseClassName="block text-center"
-          isMoving={isMoving}
-          label="제작 후보로"
-          onClick={() => onMove(video.videoId, PRODUCTION_STATUS.CANDIDATE)}
-          title="제작 상태를 후보로 되돌려 저장"
-        />
-      )}
-      {columnId !== PRODUCTION_STATUS.ACTIVE && (
-        <ProductionVideoMoveButton
-          activeClassName="bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-          ariaLabel={`${videoTitle} 제작 중으로 이동`}
-          icon={Clock}
-          isMoving={isMoving}
-          label="제작 중으로"
-          onClick={() => onMove(video.videoId, PRODUCTION_STATUS.ACTIVE)}
-          title="제작 중 상태로 저장"
-        />
-      )}
-      {columnId !== PRODUCTION_STATUS.DONE && (
-        <ProductionVideoMoveButton
-          activeClassName="bg-slate-900 text-white hover:bg-slate-800"
-          ariaLabel={`${videoTitle} 업로드 완료로 이동`}
-          icon={CheckCircle2}
-          isMoving={isMoving}
-          label="업로드 완료"
-          onClick={() => onMove(video.videoId, PRODUCTION_STATUS.DONE, { uploadedAt: record.uploadedAt || getIsoTodayDate() })}
-          title="업로드 완료 상태로 저장하고 완료일을 기록"
-        />
-      )}
+      <ProductionVideoMoveActions
+        columnId={columnId}
+        isMoving={isMoving}
+        onMove={onMove}
+        record={record}
+        video={video}
+        videoTitle={videoTitle}
+      />
       <ProductionVideoMoveStatus columnId={columnId} moveState={moveState} uploadedAt={record.uploadedAt} />
       <ProductionVideoExternalActions videoTitle={videoTitle} videoUrl={videoUrl} />
     </div>
