@@ -2,10 +2,10 @@ import CreatorAppLayout from './components/CreatorAppLayout';
 import CreatorAppRoutes from './components/CreatorAppRoutes';
 import { useAppRuntimeState } from './hooks/useAppRuntimeState';
 import { useCreatorAppChannelWorkflow } from './hooks/useCreatorAppChannelWorkflow';
+import { useCreatorAppCollectionWorkflow } from './hooks/useCreatorAppCollectionWorkflow';
 import { useCreatorAppDerivedState } from './hooks/useCreatorAppDerivedState';
 import { useCreatorAppVideoWorkflow } from './hooks/useCreatorAppVideoWorkflow';
 import { useCreatorAppWorkspaceWorkflow } from './hooks/useCreatorAppWorkspaceWorkflow';
-import { useVideoCollectionActions } from './hooks/useVideoCollectionActions';
 import { useCreatorAppViewProps } from './hooks/useCreatorAppViewProps';
 
 export default function App() {
@@ -150,7 +150,7 @@ export default function App() {
     handleManualScan,
     handleTagScan,
     loadStoredVideosForSelectedChannels,
-  } = useVideoCollectionActions({
+  } = useCreatorAppCollectionWorkflow({
     clearCheckedVideos,
     loadChannelsFromCloud,
     savedChannels,
