@@ -25,6 +25,7 @@ import {
   buildHomeRouteProps,
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
+  buildRoutesProps,
 } from './utils/appRouteProps';
 
 export default function App() {
@@ -425,7 +426,7 @@ export default function App() {
     viewMode,
     visibleScrapCount,
   });
-  const routesProps = {
+  const routesProps = buildRoutesProps({
     activeCreatorItem,
     discoveryLinksRouteProps,
     homeRouteProps,
@@ -434,7 +435,7 @@ export default function App() {
     isHomeView,
     isLegacyWorkspaceView,
     legacyWorkspaceRouteProps,
-  };
+  });
 
   return (
     <CreatorAppLayout {...layoutProps}>
