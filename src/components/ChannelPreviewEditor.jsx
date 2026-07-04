@@ -18,12 +18,30 @@ export default function ChannelPreviewEditor({
   setNewChannelNote,
   toggleNewChannelTag,
 }) {
+  const summaryProps = {
+    cancelChannelPreview,
+    channelPreview,
+  };
+
+  const languageSelectProps = {
+    language: newChannelLang,
+    setLanguage: setNewChannelLang,
+  };
+
+  const noteFieldProps = {
+    note: newChannelNote,
+    setNote: setNewChannelNote,
+  };
+
+  const actionsProps = {
+    cancelChannelPreview,
+    handleSaveChannel,
+    loading,
+  };
+
   return (
     <div className="space-y-2 animate-in fade-in duration-200">
-      <ChannelPreviewSummary
-        cancelChannelPreview={cancelChannelPreview}
-        channelPreview={channelPreview}
-      />
+      <ChannelPreviewSummary {...summaryProps} />
 
       <ChannelTagSelector
         categories={categories}
@@ -32,15 +50,11 @@ export default function ChannelPreviewEditor({
         toggleTag={toggleNewChannelTag}
       />
 
-      <ChannelLanguageSelect language={newChannelLang} setLanguage={setNewChannelLang} />
+      <ChannelLanguageSelect {...languageSelectProps} />
 
-      <ChannelPreviewNoteField note={newChannelNote} setNote={setNewChannelNote} />
+      <ChannelPreviewNoteField {...noteFieldProps} />
 
-      <ChannelPreviewActions
-        cancelChannelPreview={cancelChannelPreview}
-        handleSaveChannel={handleSaveChannel}
-        loading={loading}
-      />
+      <ChannelPreviewActions {...actionsProps} />
       <ChannelPreviewSaveNotice />
     </div>
   );

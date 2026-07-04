@@ -41,65 +41,73 @@ export default function ChannelAddForm({
   handleSaveChannel,
   loading,
 }) {
+  const headerProps = {
+    addMode,
+    channelPreview,
+    isEditingCategory,
+    setAddMode,
+    setIsEditingCategory,
+  };
+
+  const categorySettingsProps = {
+    cancelRenameCategory,
+    categories,
+    cloudOnlyTags,
+    confirmRenameCategory,
+    newCategoryName,
+    renameLoading,
+    renameValue,
+    renamingCategory,
+    setCategories,
+    setNewCategoryName,
+    setRenameValue,
+    startRenameCategory,
+  };
+
+  const bulkAddFormProps = {
+    bulkInput,
+    bulkLoading,
+    bulkResult,
+    categories,
+    handleBulkAdd,
+    newChannelLang,
+    newChannelTags,
+    resetBulkAdd,
+    setBulkInput,
+    setNewChannelLang,
+    toggleNewChannelTag,
+  };
+
+  const singleAddFormProps = {
+    cancelChannelPreview,
+    categories,
+    channelPreview,
+    handlePreviewChannel,
+    handleSaveChannel,
+    loading,
+    newChannelInput,
+    newChannelLang,
+    newChannelNote,
+    newChannelTags,
+    previewLoading,
+    setNewChannelInput,
+    setNewChannelLang,
+    setNewChannelNote,
+    toggleNewChannelTag,
+  };
+
   return (
     <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-4">
-      <ChannelAddFormHeader
-        addMode={addMode}
-        channelPreview={channelPreview}
-        isEditingCategory={isEditingCategory}
-        setAddMode={setAddMode}
-        setIsEditingCategory={setIsEditingCategory}
-      />
+      <ChannelAddFormHeader {...headerProps} />
 
       {isEditingCategory && (
-        <ChannelCategorySettings
-          cancelRenameCategory={cancelRenameCategory}
-          categories={categories}
-          cloudOnlyTags={cloudOnlyTags}
-          confirmRenameCategory={confirmRenameCategory}
-          newCategoryName={newCategoryName}
-          renameLoading={renameLoading}
-          renameValue={renameValue}
-          renamingCategory={renamingCategory}
-          setCategories={setCategories}
-          setNewCategoryName={setNewCategoryName}
-          setRenameValue={setRenameValue}
-          startRenameCategory={startRenameCategory}
-        />
+        <ChannelCategorySettings {...categorySettingsProps} />
       )}
 
       {addMode === 'bulk' ? (
-        <ChannelBulkAddForm
-          bulkInput={bulkInput}
-          bulkLoading={bulkLoading}
-          bulkResult={bulkResult}
-          categories={categories}
-          handleBulkAdd={handleBulkAdd}
-          newChannelLang={newChannelLang}
-          newChannelTags={newChannelTags}
-          resetBulkAdd={resetBulkAdd}
-          setBulkInput={setBulkInput}
-          setNewChannelLang={setNewChannelLang}
-          toggleNewChannelTag={toggleNewChannelTag}
-        />
+        <ChannelBulkAddForm {...bulkAddFormProps} />
       ) : (
-        <ChannelSingleAddForm
-          cancelChannelPreview={cancelChannelPreview}
-          categories={categories}
-          channelPreview={channelPreview}
-          handlePreviewChannel={handlePreviewChannel}
-          handleSaveChannel={handleSaveChannel}
-          loading={loading}
-          newChannelInput={newChannelInput}
-          newChannelLang={newChannelLang}
-          newChannelNote={newChannelNote}
-          newChannelTags={newChannelTags}
-          previewLoading={previewLoading}
-          setNewChannelInput={setNewChannelInput}
-          setNewChannelLang={setNewChannelLang}
-          setNewChannelNote={setNewChannelNote}
-          toggleNewChannelTag={toggleNewChannelTag}
-        />
+        <ChannelSingleAddForm {...singleAddFormProps} />
       )}
     </div>
   );
