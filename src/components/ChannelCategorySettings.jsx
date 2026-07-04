@@ -30,27 +30,34 @@ export default function ChannelCategorySettings({
     setCategories([...categories, newCategoryName]);
     setNewCategoryName('');
   };
+  const addInputProps = {
+    newCategoryName,
+    onAddCategory: addCategoryToLocalList,
+    setNewCategoryName,
+  };
+
+  const chipListProps = {
+    cancelRenameCategory,
+    categories,
+    confirmRenameCategory,
+    hideCategoryFromLocalList,
+    renameLoading,
+    renameValue,
+    renamingCategory,
+    setRenameValue,
+    startRenameCategory,
+  };
+
+  const cloudOnlyTagsNoticeProps = {
+    cloudOnlyTags,
+  };
 
   return (
     <div className="mb-3 p-2 bg-white rounded border border-indigo-200 shadow-inner">
-      <ChannelCategoryAddInput
-        newCategoryName={newCategoryName}
-        onAddCategory={addCategoryToLocalList}
-        setNewCategoryName={setNewCategoryName}
-      />
-      <ChannelCategoryChipList
-        cancelRenameCategory={cancelRenameCategory}
-        categories={categories}
-        confirmRenameCategory={confirmRenameCategory}
-        hideCategoryFromLocalList={hideCategoryFromLocalList}
-        renameLoading={renameLoading}
-        renameValue={renameValue}
-        renamingCategory={renamingCategory}
-        setRenameValue={setRenameValue}
-        startRenameCategory={startRenameCategory}
-      />
+      <ChannelCategoryAddInput {...addInputProps} />
+      <ChannelCategoryChipList {...chipListProps} />
       <ChannelCategoryHelpText />
-      <ChannelCloudOnlyTagsNotice cloudOnlyTags={cloudOnlyTags} />
+      <ChannelCloudOnlyTagsNotice {...cloudOnlyTagsNoticeProps} />
     </div>
   );
 }
