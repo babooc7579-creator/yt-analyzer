@@ -1,7 +1,7 @@
 import ComingSoonView from './components/ComingSoonView';
 import CreatorAppLayout from './components/CreatorAppLayout';
+import CreatorDiscoveryLinksRoute from './components/CreatorDiscoveryLinksRoute';
 import CreatorHomeRoute from './components/CreatorHomeRoute';
-import DiscoveryLinksWorkspace from './components/DiscoveryLinksWorkspace';
 import LegacyWorkspaceView from './components/LegacyWorkspaceView';
 import { useAppRuntimeState } from './hooks/useAppRuntimeState';
 import { useCategories } from './hooks/useCategories';
@@ -315,17 +315,17 @@ export default function App() {
           ) : isComingSoonView ? (
             <ComingSoonView item={activeCreatorItem} />
           ) : isDiscoveryLinksView ? (
-            <DiscoveryLinksWorkspace
-              error={discoveryLinksError}
-              links={discoveryLinks}
-              loading={discoveryLinksLoading}
-              notice={discoveryLinksNotice}
-              saving={discoveryLinksSaving}
-              savingMessage={discoveryLinksSavingMessage}
-              onCreateLink={addDiscoveryLink}
-              onDeleteLink={removeDiscoveryLink}
-              onRefresh={loadDiscoveryLinks}
-              onUpdateLink={changeDiscoveryLink}
+            <CreatorDiscoveryLinksRoute
+              addDiscoveryLink={addDiscoveryLink}
+              changeDiscoveryLink={changeDiscoveryLink}
+              discoveryLinks={discoveryLinks}
+              discoveryLinksError={discoveryLinksError}
+              discoveryLinksLoading={discoveryLinksLoading}
+              discoveryLinksNotice={discoveryLinksNotice}
+              discoveryLinksSaving={discoveryLinksSaving}
+              discoveryLinksSavingMessage={discoveryLinksSavingMessage}
+              loadDiscoveryLinks={loadDiscoveryLinks}
+              removeDiscoveryLink={removeDiscoveryLink}
             />
           ) : isLegacyWorkspaceView ? (
             <LegacyWorkspaceView
