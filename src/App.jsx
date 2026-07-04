@@ -3,15 +3,11 @@ import CreatorAppRoutes from './components/CreatorAppRoutes';
 import { useAppRuntimeState } from './hooks/useAppRuntimeState';
 import { useCreatorAppChannelWorkflow } from './hooks/useCreatorAppChannelWorkflow';
 import { useCreatorAppDerivedState } from './hooks/useCreatorAppDerivedState';
+import { useCreatorAppVideoWorkflow } from './hooks/useCreatorAppVideoWorkflow';
 import { useCreatorWorkspaceNavigation } from './hooks/useCreatorWorkspaceNavigation';
 import { useDiscoveryLinks } from './hooks/useDiscoveryLinks';
-import { useScrapbook } from './hooks/useScrapbook';
 import { useTopComments } from './hooks/useTopComments';
 import { useVideoCollectionActions } from './hooks/useVideoCollectionActions';
-import { useVideoExplorerState } from './hooks/useVideoExplorerState';
-import { useVideoProductionActions } from './hooks/useVideoProductionActions';
-import { useVideoSelection } from './hooks/useVideoSelection';
-import { useVideoUserRecords } from './hooks/useVideoUserRecords';
 import { useCreatorAppViewProps } from './hooks/useCreatorAppViewProps';
 
 export default function App() {
@@ -91,31 +87,21 @@ export default function App() {
     setUpdatingChannelId,
   });
   const {
+    checkedVideos,
+    clearCheckedVideos,
+    clearRadarDecisions,
+    copiedPrompt,
+    copyPromptForVideos,
+    filteredAndSortedVideos,
+    isProductionCandidate,
+    isVideoSaved,
+    lengthFilter,
+    markRadarVideoStatus,
+    promoteVideoToProduction,
+    promptCopyError,
+    restoreVideoToRadar,
     savedVideos,
     scrapbookSyncWarning,
-    isVideoSaved,
-    toggleScrapVideo,
-  } = useScrapbook();
-  const {
-    videoUserRecords,
-    videoRecordsSyncWarning,
-    markVideoStatus: markRadarVideoStatus,
-    updateVideoUserRecord,
-    restoreVideoToRadar,
-    clearRadarDecisions,
-  } = useVideoUserRecords();
-  const {
-    isProductionCandidate,
-    promoteVideoToProduction,
-  } = useVideoProductionActions({
-    isVideoSaved,
-    markVideoStatus: markRadarVideoStatus,
-    toggleScrapVideo,
-    videoUserRecords,
-  });
-  const {
-    filteredAndSortedVideos,
-    lengthFilter,
     searchKeyword,
     setLengthFilter,
     setSearchKeyword,
@@ -124,18 +110,17 @@ export default function App() {
     setViewFilter,
     setViewMode,
     sortType,
+    toggleCheckVideo,
+    toggleScrapVideo,
     ttoTtoMode,
+    updateVideoUserRecord,
+    videoRecordsSyncWarning,
+    videoUserRecords,
     viewFilter,
     viewMode,
-  } = useVideoExplorerState(videos);
-  const {
-    checkedVideos,
-    clearCheckedVideos,
-    copiedPrompt,
-    copyPromptForVideos,
-    promptCopyError,
-    toggleCheckVideo,
-  } = useVideoSelection();
+  } = useCreatorAppVideoWorkflow({
+    videos,
+  });
   const {
     closeTopCommentsModal,
     commentModal,
