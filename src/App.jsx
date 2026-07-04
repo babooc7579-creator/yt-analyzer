@@ -1,5 +1,5 @@
-import ComingSoonView from './components/ComingSoonView';
 import CreatorAppLayout from './components/CreatorAppLayout';
+import CreatorComingSoonRoute from './components/CreatorComingSoonRoute';
 import CreatorDiscoveryLinksRoute from './components/CreatorDiscoveryLinksRoute';
 import CreatorHomeRoute from './components/CreatorHomeRoute';
 import LegacyWorkspaceView from './components/LegacyWorkspaceView';
@@ -313,7 +313,7 @@ export default function App() {
               videos={videos}
             />
           ) : isComingSoonView ? (
-            <ComingSoonView item={activeCreatorItem} />
+            <CreatorComingSoonRoute item={activeCreatorItem} />
           ) : isDiscoveryLinksView ? (
             <CreatorDiscoveryLinksRoute
               addDiscoveryLink={addDiscoveryLink}
