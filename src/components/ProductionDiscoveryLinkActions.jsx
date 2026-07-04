@@ -1,5 +1,5 @@
-import { ExternalLink } from 'lucide-react';
 import CopyUrlButton from './CopyUrlButton';
+import ProductionDiscoveryLinkOpenButton from './ProductionDiscoveryLinkOpenButton';
 import ProductionDiscoveryLinkMoveButton from './ProductionDiscoveryLinkMoveButton';
 import ProductionDiscoveryLinkMoveStatus from './ProductionDiscoveryLinkMoveStatus';
 
@@ -14,17 +14,7 @@ export default function ProductionDiscoveryLinkActions({
   return (
     <>
       <div className="mt-3 flex flex-wrap gap-2">
-        <a
-          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-extrabold text-white transition hover:bg-slate-800"
-          href={link.url}
-          rel="noreferrer"
-          target="_blank"
-          title="원본 링크를 새 탭에서 열기"
-          aria-label={`${linkTitle} 원본 링크 열기`}
-        >
-          원본 열기
-          <ExternalLink className="h-3.5 w-3.5" />
-        </a>
+        <ProductionDiscoveryLinkOpenButton link={link} linkTitle={linkTitle} />
         <CopyUrlButton
           url={link.url}
           label="링크 복사"
