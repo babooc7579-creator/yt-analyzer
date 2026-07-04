@@ -1,8 +1,8 @@
 import ChannelAddForm from './ChannelAddForm';
 import ChannelList from './ChannelList';
 import ChannelTagTabs from './ChannelTagTabs';
+import LegacyChannelPanelFooter from './LegacyChannelPanelFooter';
 import LegacyWorkPanelIntro from './LegacyWorkPanelIntro';
-import LoadStoredVideosButton from './LoadStoredVideosButton';
 import { isChannelScannable } from '../constants/status';
 import { getChannelScanDisplay } from '../utils/channelScanDisplay';
 
@@ -142,13 +142,13 @@ export default function LegacyChannelPanel({
           onDelete={onDeleteChannel}
         />
 
-        <LoadStoredVideosButton
+        <LegacyChannelPanelFooter
+          error={error}
           loading={loading}
+          onLoadStoredVideos={onLoadStoredVideos}
+          progressMsg={progressMsg}
           selectedChannelCount={selectedChannelIds.length}
-          onLoad={onLoadStoredVideos}
         />
-        {error && <p className="mt-2 text-xs text-red-500 text-center">{error}</p>}
-        {progressMsg && !error && <p className="mt-2 text-xs text-indigo-600 text-center font-medium">{progressMsg}</p>}
       </div>
     </div>
   );
