@@ -15,6 +15,7 @@ import { useCreatorOsMetrics } from './hooks/useCreatorOsMetrics';
 import { useCreatorWorkspaceNavigation } from './hooks/useCreatorWorkspaceNavigation';
 import { useDiscoveryLinks } from './hooks/useDiscoveryLinks';
 import { useScrapbook } from './hooks/useScrapbook';
+import { useAppSyncWarnings } from './hooks/useAppSyncWarnings';
 import { useTagRenameActions } from './hooks/useTagRenameActions';
 import { useTopComments } from './hooks/useTopComments';
 import { useVideoCollectionActions } from './hooks/useVideoCollectionActions';
@@ -268,10 +269,10 @@ export default function App() {
     videoUserRecords,
     videos,
   });
-  const syncWarnings = [
-    videoRecordsSyncWarning,
+  const syncWarnings = useAppSyncWarnings({
     scrapbookSyncWarning,
-  ].filter(Boolean);
+    videoRecordsSyncWarning,
+  });
 
   return (
     <CreatorAppLayout
