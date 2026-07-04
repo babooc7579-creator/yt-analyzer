@@ -1,34 +1,6 @@
 import { Bookmark, Link as LinkIcon, Plus, RefreshCw } from 'lucide-react';
 
-function ShortcutButton({
-  title,
-  description,
-  hint,
-  icon: Icon,
-  onClick,
-  className,
-  titleClassName,
-  hintClassName,
-  iconClassName,
-  iconHoverClassName,
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`group rounded-2xl border p-4 text-left transition-all hover:-translate-y-0.5 ${className}`}
-      title={`${title} - ${description} ${hint}`}
-      aria-label={`${title}: ${description}`}
-      type="button"
-    >
-      <div className="flex items-center justify-between gap-3">
-        <p className={`text-sm font-extrabold ${titleClassName}`}>{title}</p>
-        <Icon className={`h-4 w-4 transition-transform ${iconClassName} ${iconHoverClassName}`} />
-      </div>
-      <p className="mt-2 text-xs leading-relaxed text-slate-400">{description}</p>
-      <p className={`mt-3 text-[10px] font-bold ${hintClassName}`}>{hint}</p>
-    </button>
-  );
-}
+import HomeActionShortcutButton from './HomeActionShortcutButton';
 
 export default function HomeActionShortcuts({
   onOpenAddChannel,
@@ -38,7 +10,7 @@ export default function HomeActionShortcuts({
 }) {
   return (
     <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
-      <ShortcutButton
+      <HomeActionShortcutButton
         title="1. 새 채널 등록"
         description="소재를 모을 채널을 먼저 클라우드 목록에 저장합니다."
         hint="오퍼레이션 관제로 이동"
@@ -50,7 +22,7 @@ export default function HomeActionShortcuts({
         iconClassName="text-indigo-300"
         iconHoverClassName="group-hover:scale-110"
       />
-      <ShortcutButton
+      <HomeActionShortcutButton
         title="2. 선택 채널 수집"
         description="체크한 채널만 YouTube API로 새 영상 여부를 확인합니다."
         hint="수집 범위 직접 통제"
@@ -62,7 +34,7 @@ export default function HomeActionShortcuts({
         iconClassName="text-emerald-300"
         iconHoverClassName="group-hover:rotate-45"
       />
-      <ShortcutButton
+      <HomeActionShortcutButton
         title="3. 보관함 탐색"
         description="저장된 영상 보드에서 카드 보기와 리스트 보기로 후보를 고릅니다."
         hint="레퍼런스 금고 열기"
@@ -74,7 +46,7 @@ export default function HomeActionShortcuts({
         iconClassName="text-blue-300"
         iconHoverClassName="group-hover:scale-110"
       />
-      <ShortcutButton
+      <HomeActionShortcutButton
         title="4. 발견함 저장"
         description="외부에서 본 링크를 Cloud 발견함에 남기고 제작 후보로 보낼 수 있습니다."
         hint="외부 수집 없이 링크만 저장"
