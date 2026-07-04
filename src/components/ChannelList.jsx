@@ -22,28 +22,32 @@ export default function ChannelList({
     })
   );
 
+  const exportPanelProps = {
+    selectedCategory,
+    visibleChannelUrlList,
+    visibleChannels,
+  };
+
+  const bodyProps = {
+    channelsLoading,
+    getScanDisplay,
+    onDelete,
+    onOpenNotes,
+    onToggleSelection,
+    onUpdateMetadata,
+    selectedChannelIds,
+    updatingChannelId,
+    visibleChannels,
+  };
+
   return (
     <div className="space-y-3">
       {!channelsLoading && visibleChannels.length > 0 ? (
-        <ChannelListUrlExportPanel
-          selectedCategory={selectedCategory}
-          visibleChannelUrlList={visibleChannelUrlList}
-          visibleChannels={visibleChannels}
-        />
+        <ChannelListUrlExportPanel {...exportPanelProps} />
       ) : null}
 
       <div className="space-y-3 max-h-[420px] xl:max-h-[520px] overflow-y-auto pr-1.5">
-        <ChannelListBody
-          channelsLoading={channelsLoading}
-          getScanDisplay={getScanDisplay}
-          onDelete={onDelete}
-          onOpenNotes={onOpenNotes}
-          onToggleSelection={onToggleSelection}
-          onUpdateMetadata={onUpdateMetadata}
-          selectedChannelIds={selectedChannelIds}
-          updatingChannelId={updatingChannelId}
-          visibleChannels={visibleChannels}
-        />
+        <ChannelListBody {...bodyProps} />
       </div>
     </div>
   );

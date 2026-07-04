@@ -10,17 +10,20 @@ export default function ChannelListItems({
   updatingChannelId,
   visibleChannels,
 }) {
-  return visibleChannels.map((channel) => (
-    <ChannelListItem
-      key={channel.id}
-      channel={channel}
-      isSelected={selectedChannelIds.includes(channel.id)}
-      scanDisplay={getScanDisplay(channel)}
-      onToggleSelection={onToggleSelection}
-      onOpenNotes={onOpenNotes}
-      onUpdateMetadata={onUpdateMetadata}
-      isUpdating={updatingChannelId === channel.id}
-      onDelete={onDelete}
-    />
-  ));
+  return visibleChannels.map((channel) => {
+    const itemProps = {
+      channel,
+      isSelected: selectedChannelIds.includes(channel.id),
+      isUpdating: updatingChannelId === channel.id,
+      onDelete,
+      onOpenNotes,
+      onToggleSelection,
+      onUpdateMetadata,
+      scanDisplay: getScanDisplay(channel),
+    };
+
+    return (
+      <ChannelListItem key={channel.id} {...itemProps} />
+    );
+  });
 }
