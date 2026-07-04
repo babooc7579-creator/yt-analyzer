@@ -1,8 +1,6 @@
 import HiddenLegacyAside from './HiddenLegacyAside';
 import LegacyChannelPanel from './LegacyChannelPanel';
-import LegacyDashboardTab from './LegacyDashboardTab';
-import LegacyVaultTab from './LegacyVaultTab';
-import WorkspaceTabs from './WorkspaceTabs';
+import LegacyWorkspaceMainPanel from './LegacyWorkspaceMainPanel';
 
 export default function LegacyWorkspaceView({
   activeSelectedChannelCount,
@@ -163,71 +161,54 @@ export default function LegacyWorkspaceView({
         updatingChannelId={updatingChannelId}
       />
 
-      <div className="flex flex-col h-full space-y-4 min-w-0">
-        <WorkspaceTabs
-          activeTab={activeTab}
-          savedVideoCount={savedVideos.length}
-          onSelectTab={setActiveTab}
-        />
-
-        {activeTab === 'dashboard' ? (
-          <LegacyDashboardTab
-            activeSelectedChannelCount={activeSelectedChannelCount}
-            checkedVideos={checkedVideos}
-            copiedPrompt={copiedPrompt}
-            copyPromptForVideos={copyPromptForVideos}
-            fetchTopComments={fetchTopComments}
-            filteredAndSortedVideos={filteredAndSortedVideos}
-            handleManualScan={handleManualScan}
-            isProductionCandidate={isProductionCandidate}
-            isReferenceVaultView={isReferenceVaultView}
-            isScanning={isScanning}
-            isVideoSaved={isVideoSaved}
-            lengthFilter={lengthFilter}
-            promoteVideoToProduction={promoteVideoToProduction}
-            promptCopyError={promptCopyError}
-            savedChannels={savedChannels}
-            savedVideos={savedVideos}
-            scannableChannelCount={scannableChannelCount}
-            searchKeyword={searchKeyword}
-            selectedChannelIds={selectedChannelIds}
-            setLengthFilter={setLengthFilter}
-            setSearchKeyword={setSearchKeyword}
-            setShowWorkPanel={setShowWorkPanel}
-            setSortType={setSortType}
-            setTtoTtoMode={setTtoTtoMode}
-            setViewFilter={setViewFilter}
-            setViewMode={setViewMode}
-            showWorkPanel={showWorkPanel}
-            sortType={sortType}
-            toggleCheckVideo={toggleCheckVideo}
-            toggleScrapVideo={toggleScrapVideo}
-            totalVideoCount={totalVideoCount}
-            ttoTtoAssetCount={ttoTtoAssetCount}
-            ttoTtoMode={ttoTtoMode}
-            videos={videos}
-            viewFilter={viewFilter}
-            viewMode={viewMode}
-            visibleScrapCount={visibleScrapCount}
-          />
-        ) : (
-          <LegacyVaultTab
-            creatorView={creatorView}
-            discoveryLinks={discoveryLinks}
-            copiedPrompt={copiedPrompt}
-            copyPromptForVideos={copyPromptForVideos}
-            fetchTopComments={fetchTopComments}
-            markRadarVideoStatus={markRadarVideoStatus}
-            openCreatorView={openCreatorView}
-            promptCopyError={promptCopyError}
-            savedVideos={savedVideos}
-            toggleScrapVideo={toggleScrapVideo}
-            updateDiscoveryLink={updateDiscoveryLink}
-            updateVideoUserRecord={updateVideoUserRecord}
-            videoUserRecords={videoUserRecords}
-          />
-        )}
-      </div>
+      <LegacyWorkspaceMainPanel
+        activeSelectedChannelCount={activeSelectedChannelCount}
+        activeTab={activeTab}
+        checkedVideos={checkedVideos}
+        copiedPrompt={copiedPrompt}
+        copyPromptForVideos={copyPromptForVideos}
+        creatorView={creatorView}
+        discoveryLinks={discoveryLinks}
+        fetchTopComments={fetchTopComments}
+        filteredAndSortedVideos={filteredAndSortedVideos}
+        handleManualScan={handleManualScan}
+        isProductionCandidate={isProductionCandidate}
+        isReferenceVaultView={isReferenceVaultView}
+        isScanning={isScanning}
+        isVideoSaved={isVideoSaved}
+        lengthFilter={lengthFilter}
+        markRadarVideoStatus={markRadarVideoStatus}
+        openCreatorView={openCreatorView}
+        promoteVideoToProduction={promoteVideoToProduction}
+        promptCopyError={promptCopyError}
+        savedChannels={savedChannels}
+        savedVideos={savedVideos}
+        scannableChannelCount={scannableChannelCount}
+        searchKeyword={searchKeyword}
+        selectedChannelIds={selectedChannelIds}
+        setActiveTab={setActiveTab}
+        setLengthFilter={setLengthFilter}
+        setSearchKeyword={setSearchKeyword}
+        setShowWorkPanel={setShowWorkPanel}
+        setSortType={setSortType}
+        setTtoTtoMode={setTtoTtoMode}
+        setViewFilter={setViewFilter}
+        setViewMode={setViewMode}
+        showWorkPanel={showWorkPanel}
+        sortType={sortType}
+        toggleCheckVideo={toggleCheckVideo}
+        toggleScrapVideo={toggleScrapVideo}
+        totalVideoCount={totalVideoCount}
+        ttoTtoAssetCount={ttoTtoAssetCount}
+        ttoTtoMode={ttoTtoMode}
+        updateDiscoveryLink={updateDiscoveryLink}
+        updateVideoUserRecord={updateVideoUserRecord}
+        videoUserRecords={videoUserRecords}
+        videos={videos}
+        viewFilter={viewFilter}
+        viewMode={viewMode}
+        visibleScrapCount={visibleScrapCount}
+      />
 
       <HiddenLegacyAside
         checkedVideoCount={checkedVideos.length}
