@@ -1,3 +1,5 @@
+import HomeOperatingGuidelineCard from './HomeOperatingGuidelineCard';
+
 const GUIDELINES = [
   {
     title: '수집은 API 호출',
@@ -25,10 +27,7 @@ export default function HomeOperatingGuidelines() {
       <p className="text-sm font-extrabold text-white">운영 기준</p>
       <div className="mt-4 space-y-3 text-sm text-slate-400">
         {GUIDELINES.map(guideline => (
-          <div key={guideline.title} className={`rounded-xl border p-4 ${guideline.className}`}>
-            <p className={`font-bold ${guideline.titleClassName}`}>{guideline.title}</p>
-            <p className="mt-1 text-xs leading-relaxed">{guideline.description}</p>
-          </div>
+          <HomeOperatingGuidelineCard key={guideline.title} guideline={guideline} />
         ))}
       </div>
     </section>
