@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import { clearVideoUserRecords, fetchVideoUserRecords, saveVideoUserRecord } from '../services/functionApi';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import {
-  RADAR_HIDDEN_VIDEO_STATUSES,
-  VIDEO_STATUS,
-  normalizeVideoUserRecord,
-  normalizeVideoUserRecords,
-  withRecordStatus,
-} from '../constants/status';
-import {
   VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE,
   VIDEO_RECORDS_SYNC_WARNINGS,
 } from '../constants/syncWarnings';
+import {
+  createRadarRestoredRecord,
+  createUpdatedVideoUserRecord,
+  createVideoStatusRecord,
+  getCloudVideoUserRecord,
+  getCloudVideoUserRecords,
+  upsertVideoUserRecord,
+} from '../utils/videoUserRecords';
 
 export function useVideoUserRecords() {
   const cloudRecordsCacheRef = useRef({});
@@ -24,11 +25,7 @@ export function useVideoUserRecords() {
   };
 
   const cacheCloudRecord = (record) => {
-    const nextRecords = {
-      ...cloudRecordsCacheRef.current,
-      [record.videoId]: record,
-    };
-    cacheCloudRecords(nextRecords);
+    cacheCloudRecords(upsertVideoUserRecord(cloudRecordsCacheRef.current, record));
   };
 
   useEffect(() => {
@@ -39,13 +36,13 @@ export function useVideoUserRecords() {
         const data = await fetchVideoUserRecords();
         if (!data.success) throw new Error(data.error || '영상 판단 기록을 불러오지 못했습니다.');
         if (isCancelled) return;
-        const cloudRecords = normalizeVideoUserRecords(data.records || {});
+        const cloudRecords = getCloudVideoUserRecords(data.records);
         setVideoUserRecords(cloudRecords);
         cacheCloudRecords(cloudRecords);
         setVideoRecordsSyncWarning('');
       } catch {
         if (!isCancelled) {
-          const fallbackRecords = normalizeVideoUserRecords(readJsonStorage(STORAGE_KEYS.videoUserRecords, {}) || {});
+          const fallbackRecords = getCloudVideoUserRecords(readJsonStorage(STORAGE_KEYS.videoUserRecords, {}));
           setVideoUserRecords(fallbackRecords);
           setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback);
         }
@@ -59,20 +56,14 @@ export function useVideoUserRecords() {
   const saveRecordToCloud = async (record) => {
     const data = await saveVideoUserRecord(record);
     if (!data.success) throw new Error(data.error || '영상 판단 기록을 저장하지 못했습니다.');
-    const cloudRecord = normalizeVideoUserRecord(data.record || record);
+    const cloudRecord = getCloudVideoUserRecord(data.record || record);
     cacheCloudRecord(cloudRecord);
     setVideoRecordsSyncWarning('');
     return cloudRecord;
   };
 
   const markVideoStatus = async (videoId, status, extraUpdates = {}) => {
-    const record = withRecordStatus({
-      ...(videoUserRecords[videoId] || {}),
-      videoId,
-    }, status, {
-      ...extraUpdates,
-      updatedAt: new Date().toISOString(),
-    });
+    const record = createVideoStatusRecord(videoUserRecords, videoId, status, extraUpdates, new Date().toISOString());
 
     setVideoUserRecords(prev => ({
       ...prev,
@@ -93,12 +84,7 @@ export function useVideoUserRecords() {
   };
 
   const updateVideoUserRecord = async (videoId, updates) => {
-    const record = normalizeVideoUserRecord({
-      ...(videoUserRecords[videoId] || {}),
-      videoId,
-      ...updates,
-      updatedAt: new Date().toISOString(),
-    });
+    const record = createUpdatedVideoUserRecord(videoUserRecords, videoId, updates, new Date().toISOString());
 
     setVideoUserRecords(prev => ({
       ...prev,
@@ -119,18 +105,7 @@ export function useVideoUserRecords() {
   };
 
   const restoreVideoToRadar = async (videoId) => {
-    const existingRecord = videoUserRecords[videoId] || {};
-    const keptStatusIds = Array.isArray(existingRecord.statusIds)
-      ? existingRecord.statusIds.filter(status => !RADAR_HIDDEN_VIDEO_STATUSES.includes(status))
-      : [];
-
-    const record = {
-      ...existingRecord,
-      videoId,
-      status: VIDEO_STATUS.UNSEEN,
-      statusIds: [...new Set([...keptStatusIds, VIDEO_STATUS.UNSEEN])],
-      updatedAt: new Date().toISOString(),
-    };
+    const record = createRadarRestoredRecord(videoUserRecords[videoId], videoId, new Date().toISOString());
 
     setVideoUserRecords(prev => ({
       ...prev,
