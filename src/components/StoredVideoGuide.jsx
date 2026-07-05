@@ -7,8 +7,8 @@ export default function StoredVideoGuide() {
         <div className="flex items-start gap-4">
           <RefreshCw className="w-5 h-5 text-emerald-600 mt-0.5" />
           <div>
-            <p className="text-sm font-extrabold text-emerald-800">유튜브 새 영상 수집</p>
-            <p className="text-xs text-slate-600 mt-1">YouTube API를 호출해 신규 영상을 확인합니다. 새 영상이 필요할 때만 실행하세요.</p>
+            <p className="text-sm font-extrabold text-emerald-800">선택 채널 새 영상 수집</p>
+            <p className="text-xs text-slate-600 mt-1">새 데이터가 필요할 때만 실행하세요. YouTube API를 호출할 수 있고, 저장 영상 불러오기와 다른 작업입니다.</p>
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@ export default function StoredVideoGuide() {
           <Play className="w-5 h-5 text-blue-600 mt-0.5" />
           <div>
             <p className="text-sm font-extrabold text-blue-800">저장된 영상 불러오기</p>
-            <p className="text-xs text-slate-600 mt-1">클라우드에 이미 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.</p>
+            <p className="text-xs text-slate-600 mt-1">Cloud DB에 이미 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.</p>
           </div>
         </div>
       </div>

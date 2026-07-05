@@ -11,21 +11,21 @@ export default function LegacyWorkPanelIntro({ apiKey, onChangeApiKey }) {
           <CheckCircle2 className="w-5 h-5 text-indigo-600" />
           <div>
             <p className="text-sm font-extrabold text-slate-900">오늘의 작업 흐름</p>
-            <p className="text-[11px] text-slate-500">채널 저장 → 새 영상 수집 → 저장된 영상 확인</p>
+            <p className="text-[11px] text-slate-500">채널 저장 → 필요할 때만 새 영상 수집 → 저장된 영상 확인</p>
           </div>
         </div>
         <div className="grid gap-2">
           <div className="bg-white border border-indigo-100 rounded-lg p-3">
             <p className="text-xs font-bold text-slate-800">1. 먼저 채널 저장</p>
-            <p className="text-[11px] text-slate-500 mt-1">소재를 모을 유튜브 채널을 클라우드 목록에 추가합니다.</p>
+            <p className="text-[11px] text-slate-500 mt-1">소재를 모을 유튜브 채널을 Cloud 목록에 추가합니다. 채널 저장만으로 새 영상 수집은 실행되지 않습니다.</p>
           </div>
           <div className="bg-white border border-emerald-100 rounded-lg p-3">
-            <p className="text-xs font-bold text-emerald-700">2. 유튜브 새 영상 수집</p>
-            <p className="text-[11px] text-slate-500 mt-1">YouTube API를 호출해 새 영상 여부를 확인합니다.</p>
+            <p className="text-xs font-bold text-emerald-700">2. 선택 채널 새 영상 수집</p>
+            <p className="text-[11px] text-slate-500 mt-1">새 데이터가 필요할 때만 실행합니다. YouTube API를 호출할 수 있습니다.</p>
           </div>
           <div className="bg-white border border-blue-100 rounded-lg p-3">
             <p className="text-xs font-bold text-blue-700">3. 저장된 영상 불러오기</p>
-            <p className="text-[11px] text-slate-500 mt-1">이미 저장된 데이터만 조회합니다. 새 API 호출은 없습니다.</p>
+            <p className="text-[11px] text-slate-500 mt-1">Cloud DB에 이미 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.</p>
           </div>
         </div>
       </div>
