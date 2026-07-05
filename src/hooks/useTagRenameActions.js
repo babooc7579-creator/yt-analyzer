@@ -1,5 +1,10 @@
 import { renameTag } from '../services/functionApi';
 
+const getTagRenameErrorMessage = (error) => {
+  const message = error?.message || '태그 이름 변경에 실패했습니다.';
+  return `${message} Cloud 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+};
+
 export function useTagRenameActions({
   cancelRenameCategory,
   categories,
@@ -34,6 +39,7 @@ export function useTagRenameActions({
 
     setRenameLoading(true);
     setError('');
+    setProgressMsg(`Cloud 태그 '${from}'을 '${to}'로 변경하는 중입니다. 이 태그가 붙은 채널에도 반영됩니다.`);
 
     try {
       const data = await renameTag({ from, to });
@@ -41,11 +47,11 @@ export function useTagRenameActions({
 
       setCategories(prev => prev.map(category => (category === from ? to : category)));
       if (selectedCategoryTab === from) setSelectedCategoryTab(to);
-      setProgressMsg(`'${from}' → '${to}'로 변경 완료 (채널 ${data.channelsAffected}개 영향)`);
+      setProgressMsg(`Cloud 태그 변경 완료: '${from}' → '${to}' (채널 ${data.channelsAffected}개 반영)`);
       await loadChannelsFromCloud();
       cancelRenameCategory();
     } catch (err) {
-      setError(err.message);
+      setError(getTagRenameErrorMessage(err));
     } finally {
       setRenameLoading(false);
       setTimeout(() => setProgressMsg(''), 4000);
