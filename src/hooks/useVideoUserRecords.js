@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { clearVideoUserRecords, fetchVideoUserRecords, saveVideoUserRecord } from '../services/functionApi';
+import { clearVideoUserRecords, fetchVideoUserRecords, saveVideoUserRecord } from '../services/videoRecordsApi';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import {
   VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE,

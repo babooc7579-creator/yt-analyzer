@@ -1,8 +1,10 @@
 import {
   fetchStoredVideosByChannelIds,
+} from '../services/videoRecordsApi';
+import {
   scanChannels,
   scanSelectedChannels as scanSelectedChannelsRequest,
-} from '../services/functionApi';
+} from '../services/scanApi';
 import {
   getScanCompleteMessage,
   getScanErrorMessage,

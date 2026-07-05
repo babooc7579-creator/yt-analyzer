@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { fetchChannels } from '../services/functionApi';
+import { fetchChannels } from '../services/channelApi';
 
 const getChannelLoadErrorMessage = (error) => {
   const message = error?.message || '채널 목록을 불러오지 못했습니다.';

@@ -1,4 +1,4 @@
-import { fetchChannelPreview } from '../services/functionApi';
+import { fetchChannelPreview } from '../services/channelApi';
 import {
   getBulkChannelCreatePayload,
   getBulkChannelHandles,
