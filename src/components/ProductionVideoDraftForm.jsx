@@ -29,7 +29,7 @@ export default function ProductionVideoDraftForm({
         aria-label={`${videoTitle} 제작 메모 저장`}
       >
         {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-        {isSaving ? '저장 중...' : isDirty ? '변경 내용 저장' : '저장됨'}
+        {isSaving ? 'Cloud 저장 중' : isDirty ? 'Cloud에 변경 저장' : 'Cloud 저장됨'}
       </button>
       <ProductionVideoSaveStatus saveState={saveState} />
     </div>

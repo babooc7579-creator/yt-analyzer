@@ -30,7 +30,7 @@ export default function HomeRadarWorkflowSection({
           <p className="text-xs font-extrabold text-indigo-200">오늘 작업 흐름</p>
           <p className="mt-1 text-sm text-slate-400">저장된 데이터를 먼저 보고, 괜찮은 후보만 제작 후보로 넘깁니다.</p>
         </div>
-        <p className="text-[11px] font-bold text-emerald-200">이 영역은 DB 조회 중심입니다. 새 수집은 선택 스캔 버튼에서만 실행됩니다.</p>
+        <p className="text-[11px] font-bold text-emerald-200">이 영역은 DB 조회 중심입니다. 새 수집은 선택 채널 새 영상 수집 버튼에서만 실행됩니다.</p>
       </div>
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
         <HomeWorkflowCard
