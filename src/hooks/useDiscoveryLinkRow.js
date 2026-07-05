@@ -4,9 +4,11 @@ import {
   confirmRiskyDiscoveryCandidate,
   getDiscoveryLinkDraft,
   getDiscoveryLinkDraftUpdates,
-  getDiscoveryLinkRowMeta,
   hasDiscoveryLinkDraftChanges,
   needsRiskyDiscoveryCandidateConfirmation,
+} from '../utils/discoveryLinkForm';
+import {
+  getDiscoveryLinkRowMeta,
 } from '../utils/discoveryLinks';
 
 export function useDiscoveryLinkRow({

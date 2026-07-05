@@ -1,6 +1,6 @@
 import { Save, X } from 'lucide-react';
 
-import { getDiscoveryLinkEditFormViewProps } from '../utils/discoveryLinks';
+import { getDiscoveryLinkEditFormViewProps } from '../utils/discoveryLinkForm';
 
 export default function DiscoveryLinkEditForm({
   draftMemo,
