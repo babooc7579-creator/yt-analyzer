@@ -14,5 +14,5 @@ export const SCRAPBOOK_SYNC_WARNINGS = {
 
 export const SYNC_WARNING_BANNER_COPY = {
   title: 'Cloud 연결/저장 확인 필요',
-  helpText: 'Cloud 조회가 성공하면 Cloud 데이터가 기준입니다. 브라우저 기록은 연결 실패 때만 임시로 표시됩니다.',
+  helpText: 'Cloud 조회가 성공하면 Cloud 응답만 기준으로 사용합니다. 브라우저 기록은 연결 실패 때만 임시로 표시하며, Cloud와 자동 병합하지 않습니다.',
 };
