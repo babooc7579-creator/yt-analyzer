@@ -19,6 +19,31 @@ export const getDiscoveryLinkFromResponse = (data) => (
   data?.link || data?.item || data?.discoveryLink || null
 );
 
+export const getDiscoveryLinkTimestamp = (link) => (
+  new Date(link?.updatedAt || link?.createdAt || 0).getTime()
+);
+
+export const sortDiscoveryLinksByRecentUpdate = (links = []) => (
+  [...links].sort((left, right) => getDiscoveryLinkTimestamp(right) - getDiscoveryLinkTimestamp(left))
+);
+
+export const getDiscoveryLinkById = (links = [], id) => (
+  links.find((link) => link.id === id)
+);
+
+export const upsertDiscoveryLink = (links = [], nextLink) => [
+  nextLink,
+  ...links.filter((link) => link.id !== nextLink.id),
+];
+
+export const replaceDiscoveryLink = (links = [], nextLink) => (
+  links.map((link) => (link.id === nextLink.id ? nextLink : link))
+);
+
+export const removeDiscoveryLinkById = (links = [], id) => (
+  links.filter((link) => link.id !== id)
+);
+
 export const getDiscoveryLinkName = (link) => {
   if (link?.title) return link.title;
   if (link?.url) return getDiscoveryLinkHost(link.url, link.url);
