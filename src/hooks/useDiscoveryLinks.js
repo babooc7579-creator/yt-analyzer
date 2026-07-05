@@ -18,6 +18,11 @@ import {
   upsertDiscoveryLink,
 } from '../utils/discoveryLinks';
 
+const getDiscoveryActionError = (error, fallbackMessage, actionLabel = '저장') => {
+  const message = error?.message || fallbackMessage;
+  return `${message} Cloud ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+};
+
 export function useDiscoveryLinks() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -39,7 +44,7 @@ export function useDiscoveryLinks() {
       }
       setLinks(getDiscoveryLinksFromResponse(data));
     } catch (loadError) {
-      setError(loadError.message || 'Cloud 발견함 연결에 실패했습니다.');
+      setError(loadError.message || 'Cloud 발견함 연결에 실패했습니다. Cloud 조회가 성공할 때까지 발견함 목록을 기준 데이터로 보지 않습니다.');
     } finally {
       setLoading(false);
     }
@@ -71,7 +76,7 @@ export function useDiscoveryLinks() {
       setNotice(`${getDiscoveryLinkName(createdLink || payload)} 링크를 Cloud 발견함에 저장했습니다.`);
       return true;
     } catch (saveError) {
-      setError(saveError.message || 'Cloud에 링크를 저장하지 못했습니다.');
+      setError(getDiscoveryActionError(saveError, 'Cloud에 링크를 저장하지 못했습니다.', '저장'));
       return false;
     } finally {
       setSaving(false);
@@ -102,7 +107,7 @@ export function useDiscoveryLinks() {
       setNotice(getDiscoveryLinkUpdateNotice(updates, updatedLink || { ...currentLink, ...updates }));
       return true;
     } catch (saveError) {
-      setError(saveError.message || 'Cloud에 링크 변경 사항을 저장하지 못했습니다.');
+      setError(getDiscoveryActionError(saveError, 'Cloud에 링크 변경 사항을 저장하지 못했습니다.', '변경 저장'));
       return false;
     } finally {
       setSaving(false);
@@ -127,7 +132,7 @@ export function useDiscoveryLinks() {
       setNotice(`${getDiscoveryLinkName(currentLink)} 링크 기록을 Cloud 발견함에서 삭제했습니다.`);
       return true;
     } catch (deleteError) {
-      setError(deleteError.message || 'Cloud에서 링크 기록을 삭제하지 못했습니다.');
+      setError(getDiscoveryActionError(deleteError, 'Cloud에서 링크 기록을 삭제하지 못했습니다.', '삭제'));
       return false;
     } finally {
       setSaving(false);
