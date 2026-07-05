@@ -38,7 +38,9 @@ export default function ProductionKanbanSummaryMetrics({
         wrapperClassName="border-amber-100 bg-amber-50"
       >
         {productionSummary.discoveryRightsWarningCount > 0 && (
-          <p className="mt-1 text-[10px] font-bold text-rose-600">권리 확인 필요 {productionSummary.discoveryRightsWarningCount}개</p>
+          <p className="mt-1 text-[10px] font-bold text-rose-600">
+            권리 확인 필요 {productionSummary.discoveryRightsWarningCount}개
+          </p>
         )}
       </ProductionKanbanSummaryCard>
       <ProductionKanbanScheduleSummary productionSummary={productionSummary} />

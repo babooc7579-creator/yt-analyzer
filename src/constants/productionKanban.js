@@ -10,13 +10,13 @@ export const PRODUCTION_KANBAN_COLUMNS = [
   {
     id: PRODUCTION_STATUS.ACTIVE,
     title: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.ACTIVE],
-    description: '지금 영상화하는 소재',
+    description: '지금 제작 중인 소재',
     tone: 'border-emerald-200 bg-emerald-50',
   },
   {
     id: PRODUCTION_STATUS.DONE,
     title: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.DONE],
-    description: '완성 후 기록으로 남긴 소재',
+    description: '업로드까지 끝난 소재',
     tone: 'border-slate-200 bg-slate-50',
   },
 ];
