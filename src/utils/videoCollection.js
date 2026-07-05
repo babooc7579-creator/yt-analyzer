@@ -8,8 +8,8 @@ export const mapStoredVideosToViewModels = (videos = []) => (
 
 export const getStoredVideosLoadedMessage = (videoCount) => (
   videoCount === 0
-    ? '아직 저장된 영상이 없습니다. 새 데이터가 필요하면 "유튜브 새 영상 수집"을 실행해 주세요.'
-    : `불러오기 완료! 총 ${videoCount}개의 영상을 가져왔습니다.`
+    ? 'Cloud DB에는 아직 저장된 영상이 없습니다. 새 데이터가 필요할 때만 "선택 채널 새 영상 수집"을 실행해 주세요.'
+    : `Cloud DB 조회 완료: 저장된 영상 ${videoCount}개를 불러왔습니다. 새 YouTube API 호출은 없었습니다.`
 );
 
 export const getSelectedScannableChannelIds = (channels = [], selectedChannelIds = []) => (
@@ -38,7 +38,7 @@ export const getScanStartMessage = ({ scanSelectedChannels, channelIdsForScan, t
       ? `'${tag}' 태그 채널`
       : '전체 채널';
 
-  return `${targetLabel} 새 영상 수집 중... YouTube API 호출이 발생합니다.`;
+  return `${targetLabel} 새 영상 수집 중입니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.`;
 };
 
 export const summarizeScanResults = (results = []) => (
@@ -50,5 +50,5 @@ export const summarizeScanResults = (results = []) => (
 
 export const getScanCompleteMessage = (results = []) => {
   const { totalNew, ttoTtoCount } = summarizeScanResults(results);
-  return `새 영상 수집 완료! 신규 영상 ${totalNew}개 발견${ttoTtoCount > 0 ? `, 터또터 후보 ${ttoTtoCount}개 발견!` : ''}`;
+  return `새 영상 수집 완료: 신규 영상 ${totalNew}개 확인${ttoTtoCount > 0 ? `, 터또터 후보 ${ttoTtoCount}개 확인` : ''}. 이후 저장 영상 불러오기는 Cloud DB 조회입니다.`;
 };

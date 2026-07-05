@@ -11,6 +11,16 @@ import {
   mapStoredVideosToViewModels,
 } from '../utils/videoCollection';
 
+const getStoredVideoLoadErrorMessage = (error) => {
+  const message = error?.message || 'Cloud DB에 저장된 영상을 불러오지 못했습니다.';
+  return `${message} Cloud DB 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+};
+
+const getScanErrorMessage = (error) => {
+  const message = error?.message || '새 영상 수집에 실패했습니다.';
+  return `새 영상 수집 실패: ${message} YouTube API 호출 결과가 정상 저장되었는지 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+};
+
 export function useVideoCollectionActions({
   clearCheckedVideos,
   loadChannelsFromCloud,
@@ -34,7 +44,7 @@ export function useVideoCollectionActions({
     setVideos([]);
     clearCheckedVideos();
     setActiveTab('dashboard');
-    setProgressMsg('클라우드 DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.');
+    setProgressMsg('Cloud DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.');
   };
 
   const finishStoredVideoLoad = (videos) => {
@@ -66,13 +76,13 @@ export function useVideoCollectionActions({
 
     try {
       const data = await fetchStoredVideosByChannelIds(selectedChannelIds);
-      if (!data.success) throw new Error(data.error || '클라우드 DB에 저장된 영상을 불러오지 못했습니다.');
+      if (!data.success) throw new Error(data.error || 'Cloud DB에 저장된 영상을 불러오지 못했습니다.');
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
       finishStoredVideoLoad(mapped);
     } catch (err) {
-      setError(`${err.message} (Function App CORS 설정을 확인해주세요)`);
+      setError(getStoredVideoLoadErrorMessage(err));
       setProgressMsg('');
     } finally {
       setLoading(false);
@@ -100,7 +110,7 @@ export function useVideoCollectionActions({
       await loadChannelsFromCloud();
       if (selectedChannelIds.length > 0) await loadStoredVideosForSelectedChannels();
     } catch (err) {
-      setError(`스캔 실패: ${err.message}`);
+      setError(getScanErrorMessage(err));
     } finally {
       finishScan();
     }
