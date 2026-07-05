@@ -2,7 +2,7 @@ import { renameTag } from '../services/functionApi';
 
 const getTagRenameErrorMessage = (error) => {
   const message = error?.message || '태그 이름 변경에 실패했습니다.';
-  return `${message} Cloud 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+  return `${message} Cloud 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
 export function useTagRenameActions({

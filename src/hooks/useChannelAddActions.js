@@ -10,7 +10,7 @@ import {
 const getChannelSaveFailureMessage = (error, actionLabel = '저장') => {
   const message = error?.message || '채널 정보를 Cloud에 저장하지 못했습니다.';
   if (message.includes('완료 처리하지 않았습니다')) return message;
-  return `${message} Cloud 채널 ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+  return `${message} Cloud 채널 ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
 export function useChannelAddActions({
