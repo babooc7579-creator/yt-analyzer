@@ -1,3 +1,4 @@
+import { getVideoToolbarFiltersViewProps } from '../utils/videoToolbarFiltersProps';
 import VideoToolbarSearchField from './VideoToolbarSearchField';
 import VideoToolbarSelectFilters from './VideoToolbarSelectFilters';
 import VideoToolbarSortControl from './VideoToolbarSortControl';
@@ -18,32 +19,26 @@ export default function VideoToolbarFilters({
   viewFilter,
   viewMode,
 }) {
-  const searchFieldProps = {
-    searchKeyword,
-    setSearchKeyword,
-  };
-
-  const selectFiltersProps = {
+  const {
+    searchFieldProps,
+    selectFiltersProps,
+    sortControlProps,
+    viewModeControlProps,
+    workPanelToggleProps,
+  } = getVideoToolbarFiltersViewProps({
     lengthFilter,
+    searchKeyword,
     setLengthFilter,
-    setViewFilter,
-    viewFilter,
-  };
-
-  const sortControlProps = {
-    setSortType,
-    sortType,
-  };
-
-  const viewModeControlProps = {
-    setViewMode,
-    viewMode,
-  };
-
-  const workPanelToggleProps = {
+    setSearchKeyword,
     setShowWorkPanel,
+    setSortType,
+    setViewFilter,
+    setViewMode,
     showWorkPanel,
-  };
+    sortType,
+    viewFilter,
+    viewMode,
+  });
 
   return (
     <div className="flex flex-wrap items-center gap-3 w-full">
