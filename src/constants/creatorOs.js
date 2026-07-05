@@ -18,7 +18,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
       { id: 'vault-videos', label: '저장한 영상', status: 'live', summary: '저장된 영상 데이터와 영상 보드를 확인합니다.' },
       { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '기존 채널 목록과 수집 상태를 확인합니다.' },
       { id: 'vault-tags', label: '태그별 금고', status: 'soon', summary: '채널의 결과 태그별 보관함을 분리할 예정입니다.' },
-      { id: 'vault-sources', label: '발견함 / 링크 수집', status: 'live', summary: '외부에서 발견한 링크를 수동 저장하고 검토 상태를 관리합니다.' },
+      { id: 'vault-sources', label: '발견 링크 저장', status: 'live', summary: '외부에서 발견한 링크를 Cloud 발견함에 수동 저장하고 검토 상태를 관리합니다.' },
     ],
   },
   {
@@ -51,7 +51,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'ops-channels', label: '채널 목록', status: 'live', summary: '기존 채널 목록과 마지막 수집 상태를 사용합니다.' },
       { id: 'ops-add-channel', label: '새 채널 등록', status: 'live', summary: '기존 채널 미리보기와 저장 영역을 사용합니다.' },
-      { id: 'ops-selected-scan', label: '선택 채널 수집', status: 'live', summary: '체크한 채널만 새 영상 수집을 실행할 수 있습니다.' },
+      { id: 'ops-selected-scan', label: '선택 채널 새 영상 수집', status: 'live', summary: '체크한 채널만 YouTube API로 새 영상 여부를 확인합니다.' },
       { id: 'ops-scan-log', label: '수집 로그', status: 'soon', summary: '수집 이력과 실패 원인을 모아볼 예정입니다.' },
       { id: 'ops-api', label: 'API 사용량', status: 'soon', summary: 'YouTube API 호출량과 비용 위험을 볼 수 있게 할 예정입니다.' },
     ],
