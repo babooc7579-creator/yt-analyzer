@@ -1,3 +1,4 @@
+import { getVideoListRowContentViewProps } from '../utils/videoListRowContentProps';
 import VideoListRowBadges from './VideoListRowBadges';
 import VideoListRowMetaActions from './VideoListRowMetaActions';
 import VideoListRowThumbnail from './VideoListRowThumbnail';
@@ -14,25 +15,31 @@ export default function VideoListRowContentCell({
   videoTitle,
   videoUrl,
 }) {
+  const {
+    badgesProps,
+    metaActionsProps,
+    thumbnailProps,
+    titleLinkProps,
+  } = getVideoListRowContentViewProps({
+    fetchTopComments,
+    isChecked,
+    isProductionCandidate,
+    isSaved,
+    isStrongReaction,
+    isTtoTto,
+    video,
+    videoTitle,
+    videoUrl,
+  });
+
   return (
     <td className="px-4 py-5 min-w-[520px]">
       <div className="flex gap-5">
-        <VideoListRowThumbnail video={video} videoTitle={videoTitle} />
+        <VideoListRowThumbnail {...thumbnailProps} />
         <div className="flex flex-col justify-center min-w-0">
-          <VideoListRowBadges
-            isChecked={isChecked}
-            isProductionCandidate={isProductionCandidate}
-            isSaved={isSaved}
-            isStrongReaction={isStrongReaction}
-            isTtoTto={isTtoTto}
-          />
-          <VideoListRowTitleLink videoTitle={videoTitle} videoUrl={videoUrl} />
-          <VideoListRowMetaActions
-            fetchTopComments={fetchTopComments}
-            video={video}
-            videoTitle={videoTitle}
-            videoUrl={videoUrl}
-          />
+          <VideoListRowBadges {...badgesProps} />
+          <VideoListRowTitleLink {...titleLinkProps} />
+          <VideoListRowMetaActions {...metaActionsProps} />
         </div>
       </div>
     </td>
