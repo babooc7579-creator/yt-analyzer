@@ -28,9 +28,8 @@ export function useProductionKanbanData({
       groupedVideos,
       today: getIsoTodayDate(),
       videoUserRecords,
-      videos,
     });
-  }, [discoveryLinkCandidates, draftRecords, groupedVideos, videoUserRecords, videos]);
+  }, [discoveryLinkCandidates, draftRecords, groupedVideos, videoUserRecords]);
 
   return {
     discoveryLinkCandidates,

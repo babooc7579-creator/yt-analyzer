@@ -5,7 +5,7 @@ import {
 } from '../constants/discoveryLinks';
 import {
   PRODUCTION_STATUS,
-  getProductionStatusFromRecord,
+  hasProductionStatus,
   isChannelScannable,
   isRadarHiddenRecord,
 } from '../constants/status';
@@ -39,8 +39,9 @@ export const countOpenRadarCandidates = (videos = [], videoUserRecords = {}) => 
 );
 
 export const countProductionCandidates = (savedVideos = [], videoUserRecords = {}) => (
-  savedVideos.filter(video => (
-    getProductionStatusFromRecord(videoUserRecords[video.videoId]) === PRODUCTION_STATUS.CANDIDATE
+  savedVideos.filter(video => hasProductionStatus(
+    videoUserRecords[video.videoId],
+    PRODUCTION_STATUS.CANDIDATE,
   )).length
 );
 

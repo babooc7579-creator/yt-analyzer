@@ -45,7 +45,7 @@ export default function ProductionKanban({
     videos,
   });
 
-  if (shouldShowProductionKanbanEmptyState({ discoveryLinkCandidates, videos })) {
+  if (shouldShowProductionKanbanEmptyState({ discoveryLinkCandidates, productionSummary })) {
     return (
       <ProductionKanbanEmptyState
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
@@ -68,7 +68,6 @@ export default function ProductionKanban({
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
-    videos,
     videoUserRecords,
   });
 
