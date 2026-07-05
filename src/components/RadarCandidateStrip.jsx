@@ -1,4 +1,5 @@
 import { useRadarCandidateData } from '../hooks/useRadarCandidateData';
+import { getRadarCandidateStripViewProps } from '../utils/radarCandidates';
 import RadarCandidateCompletedState from './RadarCandidateCompletedState';
 import RadarCandidateEmptyState from './RadarCandidateEmptyState';
 import RadarCandidateGrid from './RadarCandidateGrid';
@@ -28,47 +29,48 @@ export default function RadarCandidateStrip({
     videoUserRecords,
     videos,
   });
+  const {
+    completedStateProps,
+    decisionPanelProps,
+    gridProps,
+    headerProps,
+    isCompleted,
+    isEmpty,
+  } = getRadarCandidateStripViewProps({
+    allDecisionCount,
+    candidates,
+    decisionGroups,
+    decisionSummary,
+    isVideoSaved,
+    loadedDecisionCount,
+    onClearDecisions,
+    onMarkVideoStatus,
+    onOpenScrapbook,
+    onOpenVault,
+    onPromoteToProduction,
+    onRestoreVideo,
+    onToggleScrap,
+    savedVideos,
+    videos,
+  });
 
-  if (videos.length === 0) {
+  if (isEmpty) {
     return <RadarCandidateEmptyState onOpenVault={onOpenVault} />;
   }
 
-  if (candidates.length === 0) {
+  if (isCompleted) {
     return (
-      <RadarCandidateCompletedState
-        decisionGroups={decisionGroups}
-        decisionSummary={decisionSummary}
-        loadedDecisionCount={loadedDecisionCount}
-        onClearDecisions={onClearDecisions}
-        onOpenVault={onOpenVault}
-        onRestoreVideo={onRestoreVideo}
-      />
+      <RadarCandidateCompletedState {...completedStateProps} />
     );
   }
 
   return (
     <div className="mt-6 rounded-2xl border border-rose-400/20 bg-rose-500/10 p-5">
-      <RadarCandidateStripHeader
-        allDecisionCount={allDecisionCount}
-        onClearDecisions={onClearDecisions}
-        onOpenScrapbook={onOpenScrapbook}
-        savedVideoCount={savedVideos.length}
-      />
+      <RadarCandidateStripHeader {...headerProps} />
 
-      <RadarDecisionPanel
-        decisionGroups={decisionGroups}
-        decisionSummary={decisionSummary}
-        loadedDecisionCount={loadedDecisionCount}
-        onRestoreVideo={onRestoreVideo}
-      />
+      <RadarDecisionPanel {...decisionPanelProps} />
 
-      <RadarCandidateGrid
-        candidates={candidates}
-        isVideoSaved={isVideoSaved}
-        onMarkVideoStatus={onMarkVideoStatus}
-        onPromoteToProduction={onPromoteToProduction}
-        onToggleScrap={onToggleScrap}
-      />
+      <RadarCandidateGrid {...gridProps} />
     </div>
   );
 }

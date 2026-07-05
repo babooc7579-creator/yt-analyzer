@@ -7,3 +7,51 @@ export const getRadarScore = (video) => {
 
   return ttoTtoBonus + strongBonus + Number(video.multiplier || 0) * 10 + Number(video.like_ratio || 0) + savedAgeBonus;
 };
+
+export const getRadarCandidateStripViewProps = ({
+  allDecisionCount,
+  candidates,
+  decisionGroups,
+  decisionSummary,
+  isVideoSaved,
+  loadedDecisionCount,
+  onClearDecisions,
+  onMarkVideoStatus,
+  onOpenScrapbook,
+  onOpenVault,
+  onPromoteToProduction,
+  onRestoreVideo,
+  onToggleScrap,
+  savedVideos,
+  videos,
+}) => ({
+  completedStateProps: {
+    decisionGroups,
+    decisionSummary,
+    loadedDecisionCount,
+    onClearDecisions,
+    onOpenVault,
+    onRestoreVideo,
+  },
+  decisionPanelProps: {
+    decisionGroups,
+    decisionSummary,
+    loadedDecisionCount,
+    onRestoreVideo,
+  },
+  gridProps: {
+    candidates,
+    isVideoSaved,
+    onMarkVideoStatus,
+    onPromoteToProduction,
+    onToggleScrap,
+  },
+  headerProps: {
+    allDecisionCount,
+    onClearDecisions,
+    onOpenScrapbook,
+    savedVideoCount: savedVideos.length,
+  },
+  isCompleted: candidates.length === 0,
+  isEmpty: videos.length === 0,
+});
