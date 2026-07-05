@@ -24,6 +24,30 @@ export function useVideoCollectionActions({
   setScanningTag,
   setVideos,
 }) {
+  const clearProgressMessageAfter = (delay) => {
+    setTimeout(() => setProgressMsg(''), delay);
+  };
+
+  const prepareStoredVideoLoad = () => {
+    prepareStoredVideoLoad();
+  };
+
+  const finishStoredVideoLoad = (videos) => {
+    setVideos(videos);
+    setProgressMsg(getStoredVideosLoadedMessage(videos.length));
+    clearProgressMessageAfter(3000);
+  };
+
+  const prepareScan = (scanContext, tag) => {
+    prepareScan(scanContext, tag);
+  };
+
+  const finishScan = () => {
+    setIsScanning(false);
+    setScanningTag(null);
+    clearProgressMessageAfter(5000);
+  };
+
   const loadStoredVideosForSelectedChannels = async () => {
     if (selectedChannelIds.length === 0) {
       setError('저장된 영상을 불러올 채널을 하나 이상 선택해 주세요. 이 작업은 DB 조회이며 새 영상 수집은 실행하지 않습니다.');
@@ -43,9 +67,7 @@ export function useVideoCollectionActions({
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
-      setVideos(mapped);
-      setProgressMsg(getStoredVideosLoadedMessage(mapped.length));
-      setTimeout(() => setProgressMsg(''), 3000);
+      finishStoredVideoLoad(mapped);
     } catch (err) {
       setError(`${err.message} (Function App CORS 설정을 확인해주세요)`);
       setProgressMsg('');
@@ -80,9 +102,7 @@ export function useVideoCollectionActions({
     } catch (err) {
       setError(`스캔 실패: ${err.message}`);
     } finally {
-      setIsScanning(false);
-      setScanningTag(null);
-      setTimeout(() => setProgressMsg(''), 5000);
+      finishScan();
     }
   };
 
