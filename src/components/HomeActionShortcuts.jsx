@@ -1,6 +1,14 @@
 import { Bookmark, Link as LinkIcon, Plus, RefreshCw } from 'lucide-react';
 
+import { getHomeActionShortcutItems } from '../utils/homeActionShortcuts';
 import HomeActionShortcutButton from './HomeActionShortcutButton';
+
+const HOME_ACTION_SHORTCUT_ICONS = {
+  bookmark: Bookmark,
+  link: LinkIcon,
+  plus: Plus,
+  refresh: RefreshCw,
+};
 
 export default function HomeActionShortcuts({
   onOpenAddChannel,
@@ -8,63 +16,20 @@ export default function HomeActionShortcuts({
   onOpenSelectedScan,
   onOpenVault,
 }) {
-  const shortcutItems = [
-    {
-      title: '1. 새 채널 등록',
-      description: '소재를 모을 채널을 먼저 클라우드 목록에 저장합니다.',
-      hint: '오퍼레이션 관제로 이동',
-      icon: Plus,
-      onClick: onOpenAddChannel,
-      className: 'border-indigo-400/20 bg-indigo-500/10 hover:border-indigo-300/50 hover:bg-indigo-500/15',
-      titleClassName: 'text-indigo-200',
-      hintClassName: 'text-indigo-300',
-      iconClassName: 'text-indigo-300',
-      iconHoverClassName: 'group-hover:scale-110',
-    },
-    {
-      title: '2. 선택 채널 수집',
-      description: '체크한 채널만 YouTube API로 새 영상 여부를 확인합니다.',
-      hint: '수집 범위 직접 통제',
-      icon: RefreshCw,
-      onClick: onOpenSelectedScan,
-      className: 'border-emerald-400/20 bg-emerald-500/10 hover:border-emerald-300/50 hover:bg-emerald-500/15',
-      titleClassName: 'text-emerald-200',
-      hintClassName: 'text-emerald-300',
-      iconClassName: 'text-emerald-300',
-      iconHoverClassName: 'group-hover:rotate-45',
-    },
-    {
-      title: '3. 보관함 탐색',
-      description: '저장된 영상 보드에서 카드 보기와 리스트 보기로 후보를 고릅니다.',
-      hint: '레퍼런스 금고 열기',
-      icon: Bookmark,
-      onClick: onOpenVault,
-      className: 'border-blue-400/20 bg-blue-500/10 hover:border-blue-300/50 hover:bg-blue-500/15',
-      titleClassName: 'text-blue-200',
-      hintClassName: 'text-blue-300',
-      iconClassName: 'text-blue-300',
-      iconHoverClassName: 'group-hover:scale-110',
-    },
-    {
-      title: '4. 발견함 저장',
-      description: '외부에서 본 링크를 Cloud 발견함에 남기고 제작 후보로 보낼 수 있습니다.',
-      hint: '외부 수집 없이 링크만 저장',
-      icon: LinkIcon,
-      onClick: onOpenDiscoveryLinks,
-      className: 'border-amber-400/20 bg-amber-500/10 hover:border-amber-300/50 hover:bg-amber-500/15',
-      titleClassName: 'text-amber-200',
-      hintClassName: 'text-amber-300',
-      iconClassName: 'text-amber-300',
-      iconHoverClassName: 'group-hover:scale-110',
-    },
-  ];
+  const shortcutItems = getHomeActionShortcutItems({
+    onOpenAddChannel,
+    onOpenDiscoveryLinks,
+    onOpenSelectedScan,
+    onOpenVault,
+  });
 
   return (
     <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
       {shortcutItems.map((shortcut) => (
         <HomeActionShortcutButton
-          key={shortcut.title}
+          key={shortcut.key}
           {...shortcut}
+          icon={HOME_ACTION_SHORTCUT_ICONS[shortcut.iconName]}
         />
       ))}
     </div>
