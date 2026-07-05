@@ -2,6 +2,8 @@ import ChannelListEmptyState from './ChannelListEmptyState';
 import ChannelListItems from './ChannelListItems';
 import ChannelListLoadingState from './ChannelListLoadingState';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function ChannelListBody({
   channelsLoading,
   getScanDisplay,
@@ -13,11 +15,13 @@ export default function ChannelListBody({
   updatingChannelId,
   visibleChannels,
 }) {
+  const visibleChannelList = toArray(visibleChannels);
+
   if (channelsLoading) {
     return <ChannelListLoadingState />;
   }
 
-  if (visibleChannels.length === 0) {
+  if (visibleChannelList.length === 0) {
     return <ChannelListEmptyState />;
   }
 
@@ -29,7 +33,7 @@ export default function ChannelListBody({
     onUpdateMetadata,
     selectedChannelIds,
     updatingChannelId,
-    visibleChannels,
+    visibleChannels: visibleChannelList,
   };
 
   return (
