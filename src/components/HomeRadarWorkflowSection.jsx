@@ -7,6 +7,7 @@ export default function HomeRadarWorkflowSection({
   discoveryCandidateCount,
   discoveryRightsWarningCount,
   loadedVideoCount,
+  onLoadStoredVideos,
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   openRadarCandidateCount,
@@ -27,6 +28,10 @@ export default function HomeRadarWorkflowSection({
           description="이미 저장된 영상만 화면에 올립니다. YouTube API를 새로 호출하지 않습니다."
           value={`${loadedVideoCount}개`}
           icon={Bookmark}
+          actionLabel="불러오기"
+          actionTitle="DB 조회: 선택 채널의 저장된 영상을 불러옵니다. YouTube API를 새로 호출하지 않습니다."
+          actionAriaLabel="선택 채널 저장 영상 불러오기, DB 조회이며 YouTube API 호출 없음"
+          onAction={onLoadStoredVideos}
           className="border-blue-400/20 bg-blue-500/10"
           titleClassName="text-blue-100"
           iconClassName="text-blue-200"
