@@ -1,22 +1,41 @@
 import { CHANNEL_STATUS } from '../constants/status';
 
-export const appendChannel = (channels, channel) => [...channels, channel];
+const toArray = (items) => (Array.isArray(items) ? items : []);
 
-export const replaceChannel = (channels, nextChannel) => (
-  channels.map(channel => (channel.id === nextChannel.id ? nextChannel : channel))
+const toChannelObject = (channel) => (
+  channel && typeof channel === 'object' ? channel : {}
 );
 
+const getChannelId = (channel) => toChannelObject(channel).id;
+
+export const appendChannel = (channels, channel) => {
+  const nextChannel = toChannelObject(channel);
+  if (!getChannelId(nextChannel)) return toArray(channels);
+  return [...toArray(channels), nextChannel];
+};
+
+export const replaceChannel = (channels, nextChannel) => {
+  const channel = toChannelObject(nextChannel);
+  const channelId = getChannelId(channel);
+  if (!channelId) return toArray(channels);
+
+  return toArray(channels).map(currentChannel => (
+    getChannelId(currentChannel) === channelId ? channel : currentChannel
+  ));
+};
+
 export const removeChannelById = (channels, channelId) => (
-  channels.filter(channel => channel.id !== channelId)
+  toArray(channels).filter(channel => getChannelId(channel) !== channelId)
 );
 
 export const removeSelectedChannelId = (channelIds, channelId) => (
-  channelIds.filter(id => id !== channelId)
+  toArray(channelIds).filter(id => id !== channelId)
 );
 
-export const shouldDeselectChannelAfterUpdate = (updates = {}) => (
-  updates.status && updates.status !== CHANNEL_STATUS.ACTIVE
-);
+export const shouldDeselectChannelAfterUpdate = (updates = {}) => {
+  const updateValues = toChannelObject(updates);
+  return updateValues.status && updateValues.status !== CHANNEL_STATUS.ACTIVE;
+};
 
 export const getChannelDeleteName = (title) => title || '이 채널';
 
