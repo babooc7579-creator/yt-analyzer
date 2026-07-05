@@ -100,6 +100,53 @@ export const getSearchableDiscoveryLinkText = (link) => (
     .toLowerCase()
 );
 
+export const countDiscoveryLinksByStatus = (links = []) => (
+  links.reduce((counts, link) => {
+    const status = getDiscoveryLinkStatusValue(link);
+    return {
+      ...counts,
+      [status]: (counts[status] || 0) + 1,
+    };
+  }, {})
+);
+
+export const countDiscoveryLinksByRightsStatus = (links = []) => (
+  links.reduce((counts, link) => {
+    const rightsStatus = getDiscoveryLinkRightsStatusValue(link);
+    return {
+      ...counts,
+      [rightsStatus]: (counts[rightsStatus] || 0) + 1,
+    };
+  }, {})
+);
+
+export const filterDiscoveryLinksByStatus = (links = [], status, allStatus) => {
+  if (status === allStatus) return links;
+  return links.filter((link) => getDiscoveryLinkStatusValue(link) === status);
+};
+
+export const filterDiscoveryLinksByRightsStatus = (links = [], rightsStatus, allRightsStatus) => {
+  if (rightsStatus === allRightsStatus) return links;
+  return links.filter((link) => getDiscoveryLinkRightsStatusValue(link) === rightsStatus);
+};
+
+export const filterDiscoveryLinksBySearchQuery = (links = [], normalizedSearchQuery) => {
+  if (!normalizedSearchQuery) return links;
+  return links.filter((link) => getSearchableDiscoveryLinkText(link).includes(normalizedSearchQuery));
+};
+
+export const getDiscoveryLinkUrlListItems = (links = []) => (
+  links.map((link) => {
+    const title = link.title || getDiscoveryLinkHost(link.url);
+
+    return link.url ? [
+      title,
+      link.url,
+      getDiscoveryLinkStatusAndRightsLine(link),
+    ] : null;
+  })
+);
+
 export const getDiscoveryLinkUrlPreview = (url) => {
   const trimmedUrl = url.trim();
   if (!trimmedUrl) return null;
