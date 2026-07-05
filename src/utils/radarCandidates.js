@@ -4,13 +4,25 @@ import { getYouTubeVideoUrl } from './urls';
 export const RADAR_TODAY_CANDIDATE_LIMIT = 6;
 export const RADAR_PRIORITY_SCORE_THRESHOLD = 120;
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toVideoObject = (video) => (
+  video && typeof video === 'object' ? video : {}
+);
+
+const toNumber = (value) => {
+  const numericValue = Number(value || 0);
+  return Number.isFinite(numericValue) ? numericValue : 0;
+};
+
 export const getRadarReasons = (video) => {
+  const sourceVideo = toVideoObject(video);
   const reasons = [];
 
-  if (isTtoTtoCandidate(video)) reasons.push('오래됐지만 다시 볼 만함');
-  if (hasStrongReaction(video)) reasons.push('채널 평균보다 강한 반응');
-  if (Number(video.like_ratio || 0) >= 3) reasons.push('참여율 양호');
-  if (Number(video.view_count || 0) >= 1000000) reasons.push('검증된 조회수');
+  if (isTtoTtoCandidate(sourceVideo)) reasons.push('오래됐지만 다시 볼 만함');
+  if (hasStrongReaction(sourceVideo)) reasons.push('채널 평균보다 강한 반응');
+  if (toNumber(sourceVideo.like_ratio) >= 3) reasons.push('참여율 양호');
+  if (toNumber(sourceVideo.view_count) >= 1000000) reasons.push('검증된 조회수');
 
   return reasons.length > 0 ? reasons : ['기본 점수 상위'];
 };
@@ -22,11 +34,12 @@ export const getRadarPriorityLabel = (score) => {
 };
 
 export const getRadarScore = (video) => {
-  const ttoTtoBonus = isTtoTtoCandidate(video) ? 100 : 0;
-  const strongBonus = hasStrongReaction(video) ? 60 : 0;
-  const savedAgeBonus = Math.min(Number(video.daysOld || 0) / 30, 20);
+  const sourceVideo = toVideoObject(video);
+  const ttoTtoBonus = isTtoTtoCandidate(sourceVideo) ? 100 : 0;
+  const strongBonus = hasStrongReaction(sourceVideo) ? 60 : 0;
+  const savedAgeBonus = Math.min(toNumber(sourceVideo.daysOld) / 30, 20);
 
-  return ttoTtoBonus + strongBonus + Number(video.multiplier || 0) * 10 + Number(video.like_ratio || 0) + savedAgeBonus;
+  return ttoTtoBonus + strongBonus + toNumber(sourceVideo.multiplier) * 10 + toNumber(sourceVideo.like_ratio) + savedAgeBonus;
 };
 
 export const getRadarCandidateCardViewProps = ({
@@ -37,13 +50,14 @@ export const getRadarCandidateCardViewProps = ({
   onPromoteToProduction,
   onToggleScrap,
 }) => {
-  const videoTitle = video.title || '제목 없는 영상';
-  const isTtoTto = isTtoTtoCandidate(video);
-  const isStrong = hasStrongReaction(video);
-  const radarScore = Math.round(getRadarScore(video));
+  const sourceVideo = toVideoObject(video);
+  const videoTitle = sourceVideo.title || '제목 없는 영상';
+  const isTtoTto = isTtoTtoCandidate(sourceVideo);
+  const isStrong = hasStrongReaction(sourceVideo);
+  const radarScore = Math.round(getRadarScore(sourceVideo));
   const priorityLabel = getRadarPriorityLabel(radarScore);
-  const reasons = getRadarReasons(video);
-  const videoUrl = getYouTubeVideoUrl(video.videoId);
+  const reasons = getRadarReasons(sourceVideo);
+  const videoUrl = getYouTubeVideoUrl(sourceVideo.videoId);
 
   return {
     badgesProps: {
@@ -55,11 +69,11 @@ export const getRadarCandidateCardViewProps = ({
       onMarkVideoStatus,
       onPromoteToProduction,
       onToggleScrap,
-      video,
+      video: sourceVideo,
       videoTitle,
     },
     metricsProps: {
-      video,
+      video: sourceVideo,
     },
     primaryActionsProps: {
       videoTitle,
@@ -72,7 +86,7 @@ export const getRadarCandidateCardViewProps = ({
     thumbnailProps: {
       index,
       priorityLabel,
-      video,
+      video: sourceVideo,
       videoTitle,
     },
     titleLinkProps: {
@@ -115,7 +129,7 @@ export const getRadarCandidateStripViewProps = ({
     onRestoreVideo,
   },
   gridProps: {
-    candidates,
+    candidates: toArray(candidates),
     isVideoSaved,
     onMarkVideoStatus,
     onPromoteToProduction,
@@ -126,8 +140,8 @@ export const getRadarCandidateStripViewProps = ({
     onClearDecisions,
     onOpenScrapbook,
     queueSummary,
-    savedVideoCount: savedVideos.length,
+    savedVideoCount: toArray(savedVideos).length,
   },
-  isCompleted: candidates.length === 0,
-  isEmpty: videos.length === 0,
+  isCompleted: toArray(candidates).length === 0,
+  isEmpty: toArray(videos).length === 0,
 });

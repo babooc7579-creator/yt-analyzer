@@ -1,7 +1,11 @@
 import { formatNumberedUrlList, getYouTubeVideoUrl } from './urls';
 
+const getVideoList = (videos) => (
+  Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
+);
+
 export const getFilteredVideoUrlList = (filteredVideos = []) => formatNumberedUrlList(
-  filteredVideos
+  getVideoList(filteredVideos)
     .filter((video) => video.videoId)
     .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
 );
@@ -39,11 +43,12 @@ export const getVideoDashboardControlsViewProps = ({
   viewMode,
   visibleScrapCount,
 }) => {
-  const filteredVideoUrlList = getFilteredVideoUrlList(filteredVideos);
+  const filteredVideoList = getVideoList(filteredVideos);
+  const filteredVideoUrlList = getFilteredVideoUrlList(filteredVideoList);
 
   return {
     selectedVideosActionProps: {
-      selectedCount: checkedVideos.length,
+      selectedCount: getVideoList(checkedVideos).length,
       copiedPrompt,
       promptCopyError,
       onCopyPrompt,

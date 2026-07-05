@@ -14,20 +14,31 @@ import {
   getRadarScore,
 } from '../utils/radarCandidates';
 
+const toVideoList = (videos) => (
+  Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
+);
+
+const toRecordMap = (records) => (
+  records && typeof records === 'object' ? records : {}
+);
+
 export function useRadarCandidateData({
   videoUserRecords,
   videos,
 }) {
+  const videoList = useMemo(() => toVideoList(videos), [videos]);
+  const userRecordMap = useMemo(() => toRecordMap(videoUserRecords), [videoUserRecords]);
+
   const decisionBuckets = useMemo(() => (
-    videos.reduce((buckets, video) => {
-      const record = videoUserRecords[video.videoId];
+    videoList.reduce((buckets, video) => {
+      const record = userRecordMap[video.videoId];
       if (hasVideoReviewStatus(record, VIDEO_STATUS.REVIEWED)) buckets.reviewed.push(video);
       if (hasAnyVideoReviewStatus(record, [VIDEO_STATUS.LEGACY_LATER, VIDEO_STATUS.WATCH_LATER])) buckets.later.push(video);
       if (hasVideoReviewStatus(record, VIDEO_STATUS.EXCLUDED)) buckets.excluded.push(video);
       if (hasProductionStatus(record, PRODUCTION_STATUS.CANDIDATE)) buckets.production.push(video);
       return buckets;
     }, { reviewed: [], later: [], excluded: [], production: [] })
-  ), [videos, videoUserRecords]);
+  ), [userRecordMap, videoList]);
 
   const decisionSummary = {
     reviewed: decisionBuckets.reviewed.length,
@@ -42,17 +53,17 @@ export function useRadarCandidateData({
     + decisionSummary.production;
 
   const allDecisionCount = useMemo(() => (
-    Object.values(videoUserRecords).filter(isRadarHiddenRecord).length
-  ), [videoUserRecords]);
+    Object.values(userRecordMap).filter(isRadarHiddenRecord).length
+  ), [userRecordMap]);
 
   const candidatePool = useMemo(() => (
-    [...videos]
+    [...videoList]
       .filter((video) => {
-        const record = videoUserRecords[video.videoId];
+        const record = userRecordMap[video.videoId];
         return !isRadarHiddenRecord(record);
       })
       .sort((a, b) => getRadarScore(b) - getRadarScore(a))
-  ), [videos, videoUserRecords]);
+  ), [userRecordMap, videoList]);
 
   const candidates = useMemo(() => (
     candidatePool.slice(0, RADAR_TODAY_CANDIDATE_LIMIT)
