@@ -176,6 +176,61 @@ export const getDiscoveryLinkRowMeta = (link = {}) => {
   };
 };
 
+export const getDiscoveryLinkRowViewProps = ({
+  cancelEdit,
+  currentRightsStatus,
+  currentStatus,
+  draftMemo,
+  draftTitle,
+  handleDelete,
+  handleRightsStatusChange,
+  handleSaveEdit,
+  handleSendToCandidate,
+  handleStatusChange,
+  isEditing,
+  link,
+  openEdit,
+  platformLabel,
+  rightsTone,
+  saving,
+  setDraftMemo,
+  setDraftTitle,
+  sourceHost,
+  title,
+}) => ({
+  actionsProps: {
+    currentRightsStatus,
+    currentStatus,
+    isEditing,
+    link,
+    onDelete: handleDelete,
+    onRightsStatusChange: handleRightsStatusChange,
+    onSendToCandidate: handleSendToCandidate,
+    onStatusChange: handleStatusChange,
+    onToggleEdit: isEditing ? cancelEdit : openEdit,
+    saving,
+    title,
+  },
+  cardClassName: `rounded-xl border p-4 shadow-sm ${rightsTone.card}`,
+  rowContentProps: {
+    cancelEdit,
+    currentRightsStatus,
+    currentStatus,
+    draftMemo,
+    draftTitle,
+    handleSaveEdit,
+    isEditing,
+    link,
+    platformLabel,
+    rightsTone,
+    saving,
+    setDraftMemo,
+    setDraftTitle,
+    sourceHost,
+    title,
+  },
+});
+
 export const getDiscoveryLinkUrlPreview = (url) => {
   const trimmedUrl = url.trim();
   if (!trimmedUrl) return null;
