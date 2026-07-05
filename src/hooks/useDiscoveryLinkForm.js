@@ -9,7 +9,7 @@ import {
   getInitialDiscoveryLinkForm,
   needsRiskyDiscoveryCandidateConfirmation,
   normalizeDiscoveryLinkUrl,
-} from '../utils/discoveryLinks';
+} from '../utils/discoveryLinkForm';
 
 export function useDiscoveryLinkForm({
   links,
