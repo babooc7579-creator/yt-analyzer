@@ -60,7 +60,13 @@ src/
 │  └─ settings/
 │
 ├─ services/
+│  ├─ channelApi.js
+│  ├─ discoveryLinksApi.js
 │  ├─ functionApi.js
+│  ├─ functionApiClient.js
+│  ├─ scanApi.js
+│  ├─ scrapbookApi.js
+│  ├─ videoRecordsApi.js
 │  ├─ youtubeApi.js
 │  └─ storage.js
 │
@@ -208,13 +214,13 @@ Main Content
 ### 채널 데이터
 
 ```txt
-ChannelsPage → useChannels → services/functionApi.js → Azure Function → Cosmos DB
+ChannelsPage → useCloudChannels / useChannelActions → services/channelApi.js → Azure Function → Cosmos DB
 ```
 
 ### 영상 데이터
 
 ```txt
-VideosPage → useVideos → services/functionApi.js → Azure Function → Cosmos DB
+VideosPage → useVideoCollectionActions / useVideoUserRecords → services/videoRecordsApi.js 또는 services/scanApi.js → Azure Function → Cosmos DB
 ```
 
 ### 댓글 데이터
@@ -226,7 +232,7 @@ VideoCard → services/youtubeApi.js → YouTube Data API → CommentModal
 ### 스크랩북 데이터
 
 ```txt
-ScrapbookPage → useScrapbook → services/functionApi.js → Azure Function → Cosmos DB
+ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function → Cosmos DB
 ```
 
 현재 스크랩북은 Cloud DB를 기준 데이터로 봅니다. 백엔드에서는 별도 `scrapbook` container가 아니라 `videos` container 안의 `docType: scrapbook` 문서로 저장합니다.
