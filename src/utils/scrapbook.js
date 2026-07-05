@@ -1,35 +1,53 @@
 import { PRODUCTION_STATUSES, hasAnyProductionStatus } from '../constants/status';
 import { formatNumberedUrlList, getYouTubeVideoUrl } from './urls';
 
+const toVideoObject = (video) => (
+  video && typeof video === 'object' ? video : {}
+);
+
+const toRecordMap = (records) => (
+  records && typeof records === 'object' ? records : {}
+);
+
+const getVideoId = (video) => toVideoObject(video).videoId;
+
 export const getCloudScrapbookVideos = (videos) => (
-  Array.isArray(videos) ? videos : []
+  Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
 );
 
 export const hasScrapbookVideo = (videos, videoId) => (
-  getCloudScrapbookVideos(videos).some(video => video.videoId === videoId)
+  getCloudScrapbookVideos(videos).some(video => getVideoId(video) === videoId)
 );
 
 export const removeScrapbookVideo = (videos, videoId) => (
-  getCloudScrapbookVideos(videos).filter(video => video.videoId !== videoId)
+  getCloudScrapbookVideos(videos).filter(video => getVideoId(video) !== videoId)
 );
 
-export const upsertScrapbookVideo = (videos, video) => [
-  ...removeScrapbookVideo(videos, video.videoId),
-  video,
-];
+export const upsertScrapbookVideo = (videos, video) => {
+  const nextVideo = toVideoObject(video);
+  const videoId = getVideoId(nextVideo);
+  if (!videoId) return getCloudScrapbookVideos(videos);
+
+  return [
+    ...removeScrapbookVideo(videos, videoId),
+    nextVideo,
+  ];
+};
 
 export const getScrapbookVideoUrlList = (savedVideos = []) => formatNumberedUrlList(
-  savedVideos
-    .filter((video) => video.videoId)
+  getCloudScrapbookVideos(savedVideos)
+    .filter((video) => getVideoId(video))
     .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
 );
 
-export const getProductionScopedVideos = (savedVideos = [], videoUserRecords = {}) => (
-  savedVideos.filter(video => hasAnyProductionStatus(
-    videoUserRecords[video.videoId],
+export const getProductionScopedVideos = (savedVideos = [], videoUserRecords = {}) => {
+  const records = toRecordMap(videoUserRecords);
+
+  return getCloudScrapbookVideos(savedVideos).filter(video => hasAnyProductionStatus(
+    records[getVideoId(video)],
     PRODUCTION_STATUSES,
-  ))
-);
+  ));
+};
 
 export const getScrapbookWorkspaceViewProps = ({
   creatorView,
@@ -47,10 +65,11 @@ export const getScrapbookWorkspaceViewProps = ({
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
 }) => {
+  const savedVideoList = getCloudScrapbookVideos(savedVideos);
   const isProductionView = creatorView === 'studio-candidates';
   const headerVideos = isProductionView
-    ? getProductionScopedVideos(savedVideos, videoUserRecords)
-    : savedVideos;
+    ? getProductionScopedVideos(savedVideoList, videoUserRecords)
+    : savedVideoList;
   const videoUrlList = getScrapbookVideoUrlList(headerVideos);
 
   return {
@@ -68,10 +87,10 @@ export const getScrapbookWorkspaceViewProps = ({
       variant: isProductionView ? 'production' : 'scrapbook',
     },
     isProductionView,
-    isScrapbookEmpty: savedVideos.length === 0,
+    isScrapbookEmpty: savedVideoList.length === 0,
     productionKanbanProps: {
       discoveryLinks,
-      videos: savedVideos,
+      videos: savedVideoList,
       videoUserRecords,
       onMoveVideo,
       onOpenDiscoveryLinks,
