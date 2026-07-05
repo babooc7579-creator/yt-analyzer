@@ -5,13 +5,14 @@ import {
   ALL_DISCOVERY_RIGHTS_STATUS_OPTION,
   DISCOVERY_LINK_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
-  getDiscoveryLinkHost,
-  getDiscoveryLinkRightsStatusValue,
-  getDiscoveryLinkStatusValue,
 } from '../constants/discoveryLinks';
 import {
-  getDiscoveryLinkStatusAndRightsLine,
-  getSearchableDiscoveryLinkText,
+  countDiscoveryLinksByRightsStatus,
+  countDiscoveryLinksByStatus,
+  filterDiscoveryLinksByRightsStatus,
+  filterDiscoveryLinksBySearchQuery,
+  filterDiscoveryLinksByStatus,
+  getDiscoveryLinkUrlListItems,
 } from '../utils/discoveryLinks';
 import { formatNumberedUrlList } from '../utils/urls';
 
@@ -27,43 +28,24 @@ export function useDiscoveryLinkFilters(links) {
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
 
   const statusCounts = useMemo(() => (
-    links.reduce((counts, link) => {
-      const status = getDiscoveryLinkStatusValue(link);
-      return {
-        ...counts,
-        [status]: (counts[status] || 0) + 1,
-      };
-    }, {})
+    countDiscoveryLinksByStatus(links)
   ), [links]);
 
   const rightsCounts = useMemo(() => (
-    links.reduce((counts, link) => {
-      const rightsStatus = getDiscoveryLinkRightsStatusValue(link);
-      return {
-        ...counts,
-        [rightsStatus]: (counts[rightsStatus] || 0) + 1,
-      };
-    }, {})
+    countDiscoveryLinksByRightsStatus(links)
   ), [links]);
 
-  const statusMatchedLinks = useMemo(() => {
-    if (statusFilter === ALL_LINK_STATUS_OPTION.value) return links;
-    return links.filter((link) => getDiscoveryLinkStatusValue(link) === statusFilter);
-  }, [links, statusFilter]);
+  const statusMatchedLinks = useMemo(() => (
+    filterDiscoveryLinksByStatus(links, statusFilter, ALL_LINK_STATUS_OPTION.value)
+  ), [links, statusFilter]);
 
-  const rightsMatchedLinks = useMemo(() => {
-    if (rightsFilter === ALL_RIGHTS_STATUS_OPTION.value) return statusMatchedLinks;
-    return statusMatchedLinks.filter((link) => (
-      getDiscoveryLinkRightsStatusValue(link) === rightsFilter
-    ));
-  }, [rightsFilter, statusMatchedLinks]);
+  const rightsMatchedLinks = useMemo(() => (
+    filterDiscoveryLinksByRightsStatus(statusMatchedLinks, rightsFilter, ALL_RIGHTS_STATUS_OPTION.value)
+  ), [rightsFilter, statusMatchedLinks]);
 
-  const filteredLinks = useMemo(() => {
-    if (!normalizedSearchQuery) return rightsMatchedLinks;
-    return rightsMatchedLinks.filter((link) => (
-      getSearchableDiscoveryLinkText(link).includes(normalizedSearchQuery)
-    ));
-  }, [normalizedSearchQuery, rightsMatchedLinks]);
+  const filteredLinks = useMemo(() => (
+    filterDiscoveryLinksBySearchQuery(rightsMatchedLinks, normalizedSearchQuery)
+  ), [normalizedSearchQuery, rightsMatchedLinks]);
 
   const hasActiveDiscoveryFilters = statusFilter !== ALL_LINK_STATUS_OPTION.value
     || rightsFilter !== ALL_RIGHTS_STATUS_OPTION.value
@@ -71,15 +53,7 @@ export function useDiscoveryLinkFilters(links) {
 
   const filteredDiscoveryLinkUrlList = useMemo(() => (
     formatNumberedUrlList(
-      filteredLinks.map((link) => {
-        const title = link.title || getDiscoveryLinkHost(link.url);
-
-        return link.url ? [
-          title,
-          link.url,
-          getDiscoveryLinkStatusAndRightsLine(link),
-        ] : null;
-      })
+      getDiscoveryLinkUrlListItems(filteredLinks)
     )
   ), [filteredLinks]);
 
