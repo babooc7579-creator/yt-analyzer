@@ -125,7 +125,7 @@
 - 현재 상태: 2026-07-02 기준 1차 적용됨. Cloud-first + localStorage fallback 정책에 맞춰 저장 실패 시 상단 경고 배너로 안내하고, Cloud 저장 성공 기록만 localStorage 캐시에 반영합니다.
 - 왜 필요한가: "검토 완료", "제작 후보" 같은 판단 기록은 앱의 핵심 데이터입니다.
 - 작업 범위: 저장 실패 시 안내 표시, 재시도 후보, Cloud sync 상태 표시를 작게 검토합니다.
-- 건드릴 파일 예상: `src/App.jsx`, `src/services/functionApi.js`, 상태 표시 컴포넌트.
+- 건드릴 파일 예상: `src/hooks/useVideoUserRecords.js`, `src/services/videoRecordsApi.js`, 상태 표시 컴포넌트.
 - 건드리면 안 되는 것: `/video-records` schema, `statusIds` 저장 방식, localStorage key.
 - 위험도: 중간.
 - 완료 기준: 1차 완료. 저장 실패가 조용히 묻히지 않고 사용자가 인지할 수 있습니다.
@@ -149,7 +149,7 @@
 - 현재 상태: 선택지 B가 승인되어 적용됐습니다. Cloud-first + 명시적 local fallback입니다.
 - 왜 필요한가: 몇 달 모은 스크랩북이나 영상 판단 기록이 사라져 보이는 상황을 막아야 합니다.
 - 작업 범위: Cloud 조회 성공 시 Cloud 기준, Cloud 실패 시 localStorage 임시 fallback, Cloud 저장 성공 후에만 localStorage 캐시 갱신.
-- 건드릴 파일 예상: `src/App.jsx`, `src/services/storage.js`, scrapbook/videoUserRecords 관련 코드.
+- 건드릴 파일 예상: `src/services/storage.js`, `src/hooks/useScrapbook.js`, `src/hooks/useVideoUserRecords.js`, scrapbook/videoUserRecords 관련 코드.
 - 건드리면 안 되는 것: localStorage key 제거, 자동 마이그레이션, 자동 업로드, Cloud/localStorage 자동 병합.
 - 위험도: 중간.
 - 완료 기준: Cloud 실패 시 localStorage fallback이 임시 기록으로 표시되고, Cloud 성공 데이터가 기준으로 유지됩니다.
