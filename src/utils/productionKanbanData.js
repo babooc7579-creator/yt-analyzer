@@ -12,11 +12,28 @@ import {
 
 const FALLBACK_TARGET_DATE = '9999-12-31';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toRecordMap = (records) => (
+  records && typeof records === 'object' ? records : {}
+);
+
+const getVideoId = (video) => (
+  video && typeof video === 'object' ? video.videoId : undefined
+);
+
+const getProductionVideoGroup = (grouped, status) => toArray(grouped[status]);
+
 const getItemTimestamp = (item) => new Date(item.updatedAt || item.createdAt || 0).getTime();
 
-const getProductionRecord = (video, draftRecords, videoUserRecords) => (
-  draftRecords[video.videoId] || videoUserRecords[video.videoId] || {}
-);
+const getProductionRecord = (video, draftRecords, videoUserRecords) => {
+  const videoId = getVideoId(video);
+  if (!videoId) return {};
+
+  const drafts = toRecordMap(draftRecords);
+  const records = toRecordMap(videoUserRecords);
+  return drafts[videoId] || records[videoId] || {};
+};
 
 const createEmptyProductionVideoGroups = () => ({
   [PRODUCTION_STATUS.CANDIDATE]: [],
@@ -29,17 +46,19 @@ const getProductionGroupStatus = (recordStatus, grouped) => (
 );
 
 const sortProductionVideoGroups = (grouped, videoUserRecords) => {
+  const records = toRecordMap(videoUserRecords);
+
   grouped[PRODUCTION_STATUS.CANDIDATE].sort((a, b) => Number(b.multiplier || 0) - Number(a.multiplier || 0));
   grouped[PRODUCTION_STATUS.ACTIVE].sort((a, b) => {
-    const aRecord = videoUserRecords[a.videoId] || {};
-    const bRecord = videoUserRecords[b.videoId] || {};
+    const aRecord = records[getVideoId(a)] || {};
+    const bRecord = records[getVideoId(b)] || {};
     const aDate = aRecord.targetPublishDate || FALLBACK_TARGET_DATE;
     const bDate = bRecord.targetPublishDate || FALLBACK_TARGET_DATE;
     return aDate.localeCompare(bDate);
   });
   grouped[PRODUCTION_STATUS.DONE].sort((a, b) => {
-    const aRecord = videoUserRecords[a.videoId] || {};
-    const bRecord = videoUserRecords[b.videoId] || {};
+    const aRecord = records[getVideoId(a)] || {};
+    const bRecord = records[getVideoId(b)] || {};
     return (bRecord.uploadedAt || '').localeCompare(aRecord.uploadedAt || '');
   });
 
@@ -47,18 +66,22 @@ const sortProductionVideoGroups = (grouped, videoUserRecords) => {
 };
 
 export const countGroupedProductionVideos = (groupedVideos = {}) => (
-  Object.values(groupedVideos).reduce((count, group = []) => count + group.length, 0)
+  Object.values(toRecordMap(groupedVideos)).reduce((count, group) => count + toArray(group).length, 0)
 );
 
 export const getDiscoveryLinkCandidates = (discoveryLinks) => (
-  discoveryLinks
+  toArray(discoveryLinks)
     .filter((link) => getDiscoveryLinkStatusValue(link) === 'candidate')
     .sort((left, right) => getItemTimestamp(right) - getItemTimestamp(left))
 );
 
 export const groupProductionVideos = (videos, videoUserRecords) => {
-  const grouped = videos.reduce((acc, video) => {
-    const record = videoUserRecords[video.videoId];
+  const records = toRecordMap(videoUserRecords);
+  const grouped = toArray(videos).reduce((acc, video) => {
+    const videoId = getVideoId(video);
+    if (!videoId) return acc;
+
+    const record = records[videoId];
     if (!hasAnyProductionStatus(record, PRODUCTION_STATUSES)) return acc;
 
     const recordStatus = getProductionStatusFromRecord(record);
@@ -71,7 +94,7 @@ export const groupProductionVideos = (videos, videoUserRecords) => {
 };
 
 export const getScheduledProductionVideos = (videos, draftRecords, videoUserRecords) => (
-  videos
+  toArray(videos)
     .map(video => {
       const record = getProductionRecord(video, draftRecords, videoUserRecords);
       return {
@@ -84,13 +107,13 @@ export const getScheduledProductionVideos = (videos, draftRecords, videoUserReco
 );
 
 export const countDiscoveryRightsWarnings = (discoveryLinkCandidates) => (
-  discoveryLinkCandidates.filter(link => (
+  toArray(discoveryLinkCandidates).filter(link => (
     DISCOVERY_RIGHTS_WARNINGS[getDiscoveryLinkRightsStatusValue(link)]
   )).length
 );
 
 export const countActiveVideosWithoutDate = (activeVideos, draftRecords, videoUserRecords) => (
-  activeVideos.filter((video) => {
+  toArray(activeVideos).filter((video) => {
     const record = getProductionRecord(video, draftRecords, videoUserRecords);
     return !record.targetPublishDate;
   }).length
@@ -103,19 +126,23 @@ export const getProductionSummary = ({
   today,
   videoUserRecords,
 }) => {
-  const productionVideos = Object.values(groupedVideos).flat();
+  const grouped = {
+    ...createEmptyProductionVideoGroups(),
+    ...toRecordMap(groupedVideos),
+  };
+  const productionVideos = Object.values(grouped).flatMap(toArray);
   const scheduledVideos = getScheduledProductionVideos(productionVideos, draftRecords, videoUserRecords);
 
   return {
-    videoCount: countGroupedProductionVideos(groupedVideos),
-    candidateCount: groupedVideos[PRODUCTION_STATUS.CANDIDATE].length,
-    activeCount: groupedVideos[PRODUCTION_STATUS.ACTIVE].length,
-    uploadedCount: groupedVideos[PRODUCTION_STATUS.DONE].length,
+    videoCount: countGroupedProductionVideos(grouped),
+    candidateCount: getProductionVideoGroup(grouped, PRODUCTION_STATUS.CANDIDATE).length,
+    activeCount: getProductionVideoGroup(grouped, PRODUCTION_STATUS.ACTIVE).length,
+    uploadedCount: getProductionVideoGroup(grouped, PRODUCTION_STATUS.DONE).length,
     nextScheduled: scheduledVideos.find(item => item.date >= today) || scheduledVideos[0],
     overdueCount: scheduledVideos.filter(item => item.date < today).length,
     discoveryRightsWarningCount: countDiscoveryRightsWarnings(discoveryLinkCandidates),
     activeWithoutDate: countActiveVideosWithoutDate(
-      groupedVideos[PRODUCTION_STATUS.ACTIVE],
+      grouped[PRODUCTION_STATUS.ACTIVE],
       draftRecords,
       videoUserRecords,
     ),
