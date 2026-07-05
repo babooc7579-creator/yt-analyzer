@@ -2,7 +2,7 @@ import ProductionKanban from './ProductionKanban';
 import ScrapbookEmptyState from './ScrapbookEmptyState';
 import ScrapbookHeader from './ScrapbookHeader';
 import ScrapbookVideoCard from './ScrapbookVideoCard';
-import { formatNumberedUrlList, getYouTubeVideoUrl } from '../utils/urls';
+import { getScrapbookWorkspaceViewProps } from '../utils/scrapbook';
 
 export default function ScrapbookWorkspace({
   creatorView,
@@ -20,45 +20,36 @@ export default function ScrapbookWorkspace({
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
 }) {
-  const videoUrlList = formatNumberedUrlList(
-    savedVideos
-      .filter((video) => video.videoId)
-      .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
-  );
-
-  const headerProps = {
-    savedVideoCount: savedVideos.length,
+  const {
+    getScrapbookVideoCardProps,
+    headerProps,
+    isProductionView,
+    isScrapbookEmpty,
+    productionKanbanProps,
+  } = getScrapbookWorkspaceViewProps({
+    creatorView,
+    discoveryLinks,
     copiedPrompt,
     promptCopyError,
-    onCopyPrompt,
-    videoUrlList,
-    variant: creatorView === 'studio-candidates' ? 'production' : 'scrapbook',
-  };
-
-  const productionKanbanProps = {
-    discoveryLinks,
-    videos: savedVideos,
+    savedVideos,
     videoUserRecords,
+    onCopyPrompt,
+    onFetchComments,
     onMoveVideo,
     onOpenDiscoveryLinks,
+    onOpenReferenceVault,
+    onRemoveScrap,
     onUpdateDiscoveryLink,
     onUpdateVideoRecord,
-    onOpenReferenceVault,
-  };
-
-  const getScrapbookVideoCardProps = (video) => ({
-    video,
-    onFetchComments,
-    onRemoveScrap,
   });
 
   return (
     <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
       <ScrapbookHeader {...headerProps} />
 
-      {creatorView === 'studio-candidates' ? (
+      {isProductionView ? (
         <ProductionKanban {...productionKanbanProps} />
-      ) : savedVideos.length === 0 ? (
+      ) : isScrapbookEmpty ? (
         <ScrapbookEmptyState />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
