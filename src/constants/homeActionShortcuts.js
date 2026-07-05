@@ -2,7 +2,7 @@ export const HOME_ACTION_SHORTCUTS = [
   {
     key: 'add-channel',
     title: '1. 새 채널 등록',
-    description: '소재를 모을 채널을 먼저 클라우드 목록에 저장합니다.',
+    description: '소재를 모을 채널을 먼저 Cloud 목록에 저장합니다.',
     hint: '오퍼레이션 관제로 이동',
     iconName: 'plus',
     actionName: 'openAddChannel',

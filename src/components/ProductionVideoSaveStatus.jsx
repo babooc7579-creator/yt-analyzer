@@ -4,7 +4,7 @@ export default function ProductionVideoSaveStatus({ saveState }) {
   if (saveState === 'saved') {
     return (
       <p className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600">
-        <CheckCircle2 className="h-3 w-3" /> 클라우드에 저장됐습니다.
+        <CheckCircle2 className="h-3 w-3" /> Cloud에 저장됐습니다.
       </p>
     );
   }
