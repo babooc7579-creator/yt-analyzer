@@ -1,5 +1,7 @@
 import ChannelListItem from './ChannelListItem';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function ChannelListItems({
   getScanDisplay,
   onDelete,
@@ -10,10 +12,13 @@ export default function ChannelListItems({
   updatingChannelId,
   visibleChannels,
 }) {
-  return visibleChannels.map((channel) => {
+  const selectedChannels = toArray(selectedChannelIds);
+  const channelList = toArray(visibleChannels);
+
+  return channelList.map((channel) => {
     const itemProps = {
       channel,
-      isSelected: selectedChannelIds.includes(channel.id),
+      isSelected: selectedChannels.includes(channel.id),
       isUpdating: updatingChannelId === channel.id,
       onDelete,
       onOpenNotes,

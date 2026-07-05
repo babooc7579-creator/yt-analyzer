@@ -1,5 +1,11 @@
 import ChannelTagTabRow from './ChannelTagTabRow';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const hasChannelTag = (channel, tag) => (
+  Array.isArray(channel?.tags) && channel.tags.includes(tag)
+);
+
 export default function ChannelTagTabs({
   categories,
   channels,
@@ -10,11 +16,14 @@ export default function ChannelTagTabs({
   onSelectCategory,
   onScanTag,
 }) {
+  const categoryList = toArray(categories);
+  const channelList = toArray(channels);
+
   return (
     <>
       <div className="space-y-1">
-        {categories.map((category) => {
-          const count = channels.filter((channel) => channel.tags?.includes(category)).length;
+        {categoryList.map((category) => {
+          const count = channelList.filter((channel) => hasChannelTag(channel, category)).length;
           const scannableCount = getScannableChannelCount(category);
           const isActive = selectedCategory === category;
 
