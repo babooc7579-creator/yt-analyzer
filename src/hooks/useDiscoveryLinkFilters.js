@@ -6,31 +6,19 @@ import {
   DISCOVERY_LINK_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
   getDiscoveryLinkHost,
-  getDiscoveryLinkPlatform,
   getDiscoveryLinkRightsStatusValue,
-  getDiscoveryLinkStatusLabel,
   getDiscoveryLinkStatusValue,
-  getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
+import {
+  getDiscoveryLinkStatusAndRightsLine,
+  getSearchableDiscoveryLinkText,
+} from '../utils/discoveryLinks';
 import { formatNumberedUrlList } from '../utils/urls';
 
 const LINK_STATUS_OPTIONS = DISCOVERY_LINK_STATUS_OPTIONS;
 const ALL_LINK_STATUS_OPTION = ALL_DISCOVERY_LINK_STATUS_OPTION;
 const RIGHTS_STATUS_OPTIONS = DISCOVERY_RIGHTS_STATUS_OPTIONS;
 const ALL_RIGHTS_STATUS_OPTION = ALL_DISCOVERY_RIGHTS_STATUS_OPTION;
-
-const getSearchableLinkText = (link) => (
-  [
-    link.title,
-    link.url,
-    link.memo,
-    getDiscoveryLinkPlatform(link),
-    getDiscoveryLinkHost(link.url),
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase()
-);
 
 export function useDiscoveryLinkFilters(links) {
   const [statusFilter, setStatusFilter] = useState(ALL_LINK_STATUS_OPTION.value);
@@ -73,7 +61,7 @@ export function useDiscoveryLinkFilters(links) {
   const filteredLinks = useMemo(() => {
     if (!normalizedSearchQuery) return rightsMatchedLinks;
     return rightsMatchedLinks.filter((link) => (
-      getSearchableLinkText(link).includes(normalizedSearchQuery)
+      getSearchableDiscoveryLinkText(link).includes(normalizedSearchQuery)
     ));
   }, [normalizedSearchQuery, rightsMatchedLinks]);
 
@@ -85,13 +73,11 @@ export function useDiscoveryLinkFilters(links) {
     formatNumberedUrlList(
       filteredLinks.map((link) => {
         const title = link.title || getDiscoveryLinkHost(link.url);
-        const statusLabel = getDiscoveryLinkStatusLabel(getDiscoveryLinkStatusValue(link));
-        const rightsLabel = getDiscoveryRightsStatusLabel(getDiscoveryLinkRightsStatusValue(link));
 
         return link.url ? [
           title,
           link.url,
-          `상태: ${statusLabel} · 권리: ${rightsLabel}`,
+          getDiscoveryLinkStatusAndRightsLine(link),
         ] : null;
       })
     )

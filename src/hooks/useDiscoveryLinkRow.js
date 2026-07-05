@@ -8,14 +8,10 @@ import {
   getDiscoveryLinkStatusValue,
   getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
-
-const needsRiskyCandidateConfirmation = (status, rightsStatus) => (
-  status === 'candidate' && rightsStatus === 'do_not_use'
-);
-
-const confirmRiskyCandidate = () => window.confirm(
-  '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 보내시겠어요?\n나중에 제작 후보함에서 강한 경고로 표시됩니다.'
-);
+import {
+  confirmRiskyDiscoveryCandidate,
+  needsRiskyDiscoveryCandidateConfirmation,
+} from '../utils/discoveryLinks';
 
 export function useDiscoveryLinkRow({
   link,
@@ -42,7 +38,7 @@ export function useDiscoveryLinkRow({
   const handleStatusChange = (event) => {
     const nextStatus = event.target.value;
 
-    if (needsRiskyCandidateConfirmation(nextStatus, currentRightsStatus) && !confirmRiskyCandidate()) {
+    if (needsRiskyDiscoveryCandidateConfirmation(nextStatus, currentRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
       event.target.value = currentStatus;
       return;
     }
@@ -53,7 +49,7 @@ export function useDiscoveryLinkRow({
   const handleRightsStatusChange = (event) => {
     const nextRightsStatus = event.target.value;
 
-    if (needsRiskyCandidateConfirmation(currentStatus, nextRightsStatus) && !confirmRiskyCandidate()) {
+    if (needsRiskyDiscoveryCandidateConfirmation(currentStatus, nextRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
       event.target.value = currentRightsStatus;
       return;
     }
@@ -64,7 +60,7 @@ export function useDiscoveryLinkRow({
   const handleSendToCandidate = () => {
     if (currentStatus === 'candidate') return;
 
-    if (needsRiskyCandidateConfirmation('candidate', currentRightsStatus) && !confirmRiskyCandidate()) {
+    if (needsRiskyDiscoveryCandidateConfirmation('candidate', currentRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
       return;
     }
 
