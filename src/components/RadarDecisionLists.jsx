@@ -1,12 +1,16 @@
 import { RotateCcw } from 'lucide-react';
 import { getYouTubeVideoUrl } from '../utils/urls';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function RadarDecisionLists({
   groups,
   loadedDecisionCount,
   onRestoreVideo,
 }) {
   if (loadedDecisionCount === 0) return null;
+
+  const decisionGroups = toArray(groups);
 
   return (
     <div className="mt-3 rounded-2xl border border-slate-700 bg-slate-950/50 p-3">
@@ -15,17 +19,22 @@ export default function RadarDecisionLists({
         <p className="mt-0.5 text-[10px] text-slate-400">현재 불러온 영상에서 이미 판단한 항목입니다. 실수한 항목은 다시 레이더로 돌릴 수 있습니다.</p>
       </div>
       <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
-        {groups.map((group) => (
-          <div key={group.key} className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5">
-            <p className="text-[10px] font-extrabold text-slate-300">{group.label}</p>
-            {group.videos.length === 0 ? (
+        {decisionGroups.map((group, groupIndex) => {
+          const safeGroup = group && typeof group === 'object' ? group : {};
+          const groupVideos = toArray(safeGroup.videos);
+          const groupKey = safeGroup.key || groupIndex;
+
+          return (
+          <div key={groupKey} className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5">
+            <p className="text-[10px] font-extrabold text-slate-300">{safeGroup.label}</p>
+            {groupVideos.length === 0 ? (
               <p className="mt-2 text-[10px] text-slate-500">아직 없음</p>
             ) : (
               <div className="mt-2 space-y-1.5">
-                {group.videos.slice(0, 3).map((video) => {
+                {groupVideos.slice(0, 3).map((video) => {
                   const videoUrl = getYouTubeVideoUrl(video.videoId);
                   return (
-                    <div key={`${group.key}-${video.videoId}`} className="rounded-lg bg-slate-950/70 p-1.5">
+                    <div key={`${groupKey}-${video.videoId}`} className="rounded-lg bg-slate-950/70 p-1.5">
                       <a
                         href={videoUrl}
                         target="_blank"
@@ -48,13 +57,14 @@ export default function RadarDecisionLists({
                     </div>
                   );
                 })}
-                {group.videos.length > 3 && (
-                  <p className="text-[10px] font-bold text-slate-500">외 {group.videos.length - 3}개</p>
+                {groupVideos.length > 3 && (
+                  <p className="text-[10px] font-bold text-slate-500">외 {groupVideos.length - 3}개</p>
                 )}
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
