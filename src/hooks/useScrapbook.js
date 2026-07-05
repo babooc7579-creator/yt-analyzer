@@ -2,6 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { deleteScrapbookVideo, fetchScrapbook, saveScrapbookVideos } from '../services/functionApi';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
+import {
+  getCloudScrapbookVideos,
+  hasScrapbookVideo,
+  removeScrapbookVideo,
+  upsertScrapbookVideo,
+} from '../utils/scrapbook';
 
 export function useScrapbook() {
   const cloudScrapbookCacheRef = useRef([]);
@@ -23,14 +29,14 @@ export function useScrapbook() {
         if (!data.success) throw new Error(data.error || '스크랩북을 불러오지 못했습니다.');
         if (isCancelled) return;
 
-        const cloudVideos = data.videos || [];
+        const cloudVideos = getCloudScrapbookVideos(data.videos);
         setSavedVideos(cloudVideos);
         cacheCloudScrapbook(cloudVideos);
         setScrapbookCloudReady(true);
         setScrapbookSyncWarning('');
       } catch {
         if (!isCancelled) {
-          const fallbackVideos = readJsonStorage(STORAGE_KEYS.savedVideos, []) || [];
+          const fallbackVideos = getCloudScrapbookVideos(readJsonStorage(STORAGE_KEYS.savedVideos, []));
           setSavedVideos(fallbackVideos);
           setScrapbookCloudReady(false);
           setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.loadFallback);
@@ -42,7 +48,7 @@ export function useScrapbook() {
     return () => { isCancelled = true; };
   }, []);
 
-  const isVideoSaved = (videoId) => savedVideos.some(video => video.videoId === videoId);
+  const isVideoSaved = (videoId) => hasScrapbookVideo(savedVideos, videoId);
 
   const toggleScrapVideo = async (video) => {
     const isSaved = isVideoSaved(video.videoId);
@@ -56,16 +62,13 @@ export function useScrapbook() {
       if (isSaved) {
         const data = await deleteScrapbookVideo(video.videoId);
         if (!data.success) throw new Error(data.error || '스크랩북에서 삭제하지 못했습니다.');
-        const nextVideos = cloudScrapbookCacheRef.current.filter(savedVideo => savedVideo.videoId !== video.videoId);
+        const nextVideos = removeScrapbookVideo(cloudScrapbookCacheRef.current, video.videoId);
         setSavedVideos(nextVideos);
         cacheCloudScrapbook(nextVideos);
       } else {
         const data = await saveScrapbookVideos([video]);
         if (!data.success) throw new Error(data.error || '스크랩북에 저장하지 못했습니다.');
-        const nextVideos = [
-          ...cloudScrapbookCacheRef.current.filter(savedVideo => savedVideo.videoId !== video.videoId),
-          video,
-        ];
+        const nextVideos = upsertScrapbookVideo(cloudScrapbookCacheRef.current, video);
         setSavedVideos(nextVideos);
         cacheCloudScrapbook(nextVideos);
       }
