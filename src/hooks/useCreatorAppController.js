@@ -1,10 +1,10 @@
 import { useAppRuntimeState } from './useAppRuntimeState';
 import { useCreatorAppChannelWorkflow } from './useCreatorAppChannelWorkflow';
-import { useCreatorAppCollectionWorkflow } from './useCreatorAppCollectionWorkflow';
 import { useCreatorAppDerivedState } from './useCreatorAppDerivedState';
 import { useCreatorAppVideoWorkflow } from './useCreatorAppVideoWorkflow';
 import { useCreatorAppViewProps } from './useCreatorAppViewProps';
 import { useCreatorAppWorkspaceWorkflow } from './useCreatorAppWorkspaceWorkflow';
+import { useVideoCollectionActions } from './useVideoCollectionActions';
 
 export function useCreatorAppController() {
   const runtime = useAppRuntimeState();
@@ -25,7 +25,7 @@ export function useCreatorAppController() {
     setError: runtime.setError,
   });
 
-  const collectionWorkflow = useCreatorAppCollectionWorkflow({
+  const collectionWorkflow = useVideoCollectionActions({
     clearCheckedVideos: videoWorkflow.clearCheckedVideos,
     loadChannelsFromCloud: channelWorkflow.loadChannelsFromCloud,
     savedChannels: channelWorkflow.savedChannels,
