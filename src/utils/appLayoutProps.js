@@ -1,3 +1,5 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export function buildLayoutProps({
   activeCreatorItem,
   addChannelNote,
@@ -15,9 +17,14 @@ export function buildLayoutProps({
   syncWarnings,
   videos,
 }) {
+  const channelList = toArray(savedChannels);
+  const savedVideoList = toArray(savedVideos);
+  const selectedChannels = toArray(selectedChannelIds);
+  const videoList = toArray(videos);
+
   return {
     activeCreatorItem,
-    channelCount: savedChannels.length,
+    channelCount: channelList.length,
     commentModal,
     creatorView,
     discoveryCandidateCount,
@@ -27,9 +34,9 @@ export function buildLayoutProps({
     onCloseNotes: closeNotesModal,
     onCloseTopComments: closeTopCommentsModal,
     onOpenCreatorView: openCreatorView,
-    savedVideoCount: savedVideos.length,
-    selectedChannelCount: selectedChannelIds.length,
+    savedVideoCount: savedVideoList.length,
+    selectedChannelCount: selectedChannels.length,
     syncWarnings,
-    videoCount: videos.length,
+    videoCount: videoList.length,
   };
 }
