@@ -1,4 +1,5 @@
 import { getYouTubeVideoUrl } from '../utils/urls';
+import { getRadarScore } from '../utils/radarCandidates';
 import { hasStrongReaction, isTtoTtoCandidate } from '../utils/video';
 import RadarCandidateBadges from './RadarCandidateBadges';
 import RadarCandidateDecisionActions from './RadarCandidateDecisionActions';
@@ -7,14 +8,6 @@ import RadarCandidatePrimaryActions from './RadarCandidatePrimaryActions';
 import RadarCandidateScorePanel from './RadarCandidateScorePanel';
 import RadarCandidateThumbnail from './RadarCandidateThumbnail';
 import RadarCandidateTitleLink from './RadarCandidateTitleLink';
-
-export const getRadarScore = (video) => {
-  const ttoTtoBonus = isTtoTtoCandidate(video) ? 100 : 0;
-  const strongBonus = hasStrongReaction(video) ? 60 : 0;
-  const savedAgeBonus = Math.min(Number(video.daysOld || 0) / 30, 20);
-
-  return ttoTtoBonus + strongBonus + Number(video.multiplier || 0) * 10 + Number(video.like_ratio || 0) + savedAgeBonus;
-};
 
 const getRadarReasons = (video) => {
   const reasons = [];
