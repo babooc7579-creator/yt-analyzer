@@ -1,6 +1,9 @@
 import { hasStrongReaction, isTtoTtoCandidate } from './video';
 import { getYouTubeVideoUrl } from './urls';
 
+export const RADAR_TODAY_CANDIDATE_LIMIT = 6;
+export const RADAR_PRIORITY_SCORE_THRESHOLD = 120;
+
 export const getRadarReasons = (video) => {
   const reasons = [];
 
@@ -93,6 +96,7 @@ export const getRadarCandidateStripViewProps = ({
   onPromoteToProduction,
   onRestoreVideo,
   onToggleScrap,
+  queueSummary,
   savedVideos,
   videos,
 }) => ({
@@ -121,6 +125,7 @@ export const getRadarCandidateStripViewProps = ({
     allDecisionCount,
     onClearDecisions,
     onOpenScrapbook,
+    queueSummary,
     savedVideoCount: savedVideos.length,
   },
   isCompleted: candidates.length === 0,
