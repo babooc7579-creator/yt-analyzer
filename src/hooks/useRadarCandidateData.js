@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import { getRadarScore } from '../components/RadarCandidateCard';
 import {
   PRODUCTION_STATUS,
   VIDEO_STATUS,
@@ -9,6 +8,7 @@ import {
   hasVideoReviewStatus,
   isRadarHiddenRecord,
 } from '../constants/status';
+import { getRadarScore } from '../utils/radarCandidates';
 
 export function useRadarCandidateData({
   videoUserRecords,
