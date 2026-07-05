@@ -13,12 +13,12 @@ import {
 
 const getStoredVideoLoadErrorMessage = (error) => {
   const message = error?.message || 'Cloud DB에 저장된 영상을 불러오지 못했습니다.';
-  return `${message} Cloud DB 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+  return `${message} Cloud DB 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
 const getScanErrorMessage = (error) => {
   const message = error?.message || '새 영상 수집에 실패했습니다.';
-  return `새 영상 수집 실패: ${message} YouTube API 호출 결과가 정상 저장되었는지 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+  return `새 영상 수집 실패: ${message} YouTube API 호출 결과가 정상 저장되었는지 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
 export function useVideoCollectionActions({

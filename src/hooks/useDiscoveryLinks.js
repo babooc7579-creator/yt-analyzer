@@ -20,7 +20,7 @@ import {
 
 const getDiscoveryActionError = (error, fallbackMessage, actionLabel = '저장') => {
   const message = error?.message || fallbackMessage;
-  return `${message} Cloud ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+  return `${message} Cloud ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
 export function useDiscoveryLinks() {

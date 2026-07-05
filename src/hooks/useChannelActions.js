@@ -12,7 +12,7 @@ import {
 const getChannelCloudActionError = (message, fallbackMessage, actionLabel = '저장') => {
   const baseMessage = message || fallbackMessage;
   if (baseMessage.includes('완료 처리하지 않았습니다')) return baseMessage;
-  return `${baseMessage} Cloud 채널 ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+  return `${baseMessage} Cloud 채널 ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
 export function useChannelActions({
