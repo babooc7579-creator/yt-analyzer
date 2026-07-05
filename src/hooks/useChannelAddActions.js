@@ -1,4 +1,11 @@
 import { fetchChannelPreview } from '../services/functionApi';
+import {
+  getBulkChannelCreatePayload,
+  getBulkChannelHandles,
+  getChannelCreatePayload,
+  getTrimmedChannelInput,
+  isDuplicateChannel,
+} from '../utils/channelAddActions';
 
 export function useChannelAddActions({
   bulkCreateChannels,
@@ -22,17 +29,18 @@ export function useChannelAddActions({
   setSelectedCategoryTab,
 }) {
   const handlePreviewChannel = async () => {
-    if (!newChannelInput.trim()) return;
+    const channelInput = getTrimmedChannelInput(newChannelInput);
+    if (!channelInput) return;
 
     setPreviewLoading(true);
     setError('');
     setChannelPreview(null);
 
     try {
-      const data = await fetchChannelPreview(newChannelInput.trim());
+      const data = await fetchChannelPreview(channelInput);
       if (!data.success) throw new Error(data.error || '채널을 불러오지 못했습니다.');
 
-      if (savedChannels.some(channel => channel.id === data.channel.id)) {
+      if (isDuplicateChannel(savedChannels, data.channel.id)) {
         setError('이미 등록된 채널입니다.');
       } else {
         setChannelPreview(data.channel);
@@ -52,12 +60,12 @@ export function useChannelAddActions({
     setProgressMsg('채널 저장 중...');
 
     try {
-      await saveChannel({
-        handle: newChannelInput.trim(),
+      await saveChannel(getChannelCreatePayload({
+        handle: newChannelInput,
         tags: newChannelTags,
         language: newChannelLang,
         note: newChannelNote,
-      });
+      }));
 
       if (newChannelTags[0]) setSelectedCategoryTab(newChannelTags[0]);
       setProgressMsg('채널이 클라우드 목록에 추가되었습니다. 새 영상은 스캔 버튼을 눌렀을 때 수집됩니다.');
@@ -71,7 +79,7 @@ export function useChannelAddActions({
   };
 
   const handleBulkAdd = async () => {
-    const handles = bulkInput.split('\n').map(line => line.trim()).filter(Boolean);
+    const handles = getBulkChannelHandles(bulkInput);
     if (handles.length === 0) {
       setError('등록할 채널을 한 줄에 하나씩 입력해주세요.');
       return;
@@ -83,11 +91,11 @@ export function useChannelAddActions({
     setProgressMsg(`${handles.length}개 채널 정보를 YouTube에서 확인한 뒤 클라우드 목록에 저장하는 중...`);
 
     try {
-      const data = await bulkCreateChannels({
+      const data = await bulkCreateChannels(getBulkChannelCreatePayload({
         handles,
         tags: newChannelTags,
         language: newChannelLang,
-      });
+      }));
 
       setBulkResult(data);
       if (newChannelTags[0]) setSelectedCategoryTab(newChannelTags[0]);
