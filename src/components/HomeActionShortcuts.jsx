@@ -10,6 +10,8 @@ const HOME_ACTION_SHORTCUT_ICONS = {
   refresh: RefreshCw,
 };
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function HomeActionShortcuts({
   onOpenAddChannel,
   onOpenDiscoveryLinks,
@@ -22,10 +24,11 @@ export default function HomeActionShortcuts({
     onOpenSelectedScan,
     onOpenVault,
   });
+  const shortcuts = toArray(shortcutItems);
 
   return (
     <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
-      {shortcutItems.map((shortcut) => (
+      {shortcuts.map((shortcut) => (
         <HomeActionShortcutButton
           key={shortcut.key}
           {...shortcut}

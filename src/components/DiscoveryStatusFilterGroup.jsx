@@ -1,15 +1,19 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function DiscoveryStatusFilterGroup({
   setStatusFilter,
   statusFilter,
   statusFilterOptions,
 }) {
+  const filterOptions = toArray(statusFilterOptions);
+
   return (
     <>
       <p className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
         검토 상태별 보기
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
-        {statusFilterOptions.map((option) => {
+        {filterOptions.map((option) => {
           const isActive = statusFilter === option.value;
           return (
             <button
