@@ -12,6 +12,15 @@ export const getStoredVideosLoadedMessage = (videoCount) => (
     : `Cloud DB 조회 완료: 저장된 영상 ${videoCount}개를 불러왔습니다. 새 YouTube API 호출은 없었습니다.`
 );
 
+export const getStoredVideoLoadStartMessage = () => (
+  'Cloud DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.'
+);
+
+export const getStoredVideoLoadErrorMessage = (error) => {
+  const message = error?.message || 'Cloud DB에 저장된 영상을 불러오지 못했습니다.';
+  return `${message} Cloud DB 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
+};
+
 export const getSelectedScannableChannelIds = (channels = [], selectedChannelIds = []) => (
   channels
     .filter(channel => selectedChannelIds.includes(channel.id) && isChannelScannable(channel))
@@ -51,4 +60,9 @@ export const summarizeScanResults = (results = []) => (
 export const getScanCompleteMessage = (results = []) => {
   const { totalNew, ttoTtoCount } = summarizeScanResults(results);
   return `새 영상 수집 완료: 신규 영상 ${totalNew}개 확인${ttoTtoCount > 0 ? `, 터또터 후보 ${ttoTtoCount}개 확인` : ''}. 이후 저장 영상 불러오기는 Cloud DB 조회입니다.`;
+};
+
+export const getScanErrorMessage = (error) => {
+  const message = error?.message || '새 영상 수집에 실패했습니다.';
+  return `새 영상 수집 실패: ${message} YouTube API 호출 결과가 정상 저장되었는지 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
