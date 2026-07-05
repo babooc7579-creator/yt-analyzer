@@ -1,4 +1,4 @@
-import { getYouTubeVideoUrl } from '../utils/urls';
+import { getProductionVideoCardViewProps } from '../utils/productionVideoCard';
 import ProductionVideoDraftForm from './ProductionVideoDraftForm';
 import ProductionVideoMetaBadges from './ProductionVideoMetaBadges';
 import ProductionVideoStatusActions from './ProductionVideoStatusActions';
@@ -15,37 +15,24 @@ export default function ProductionVideoCard({
   scheduleSignal,
   video,
 }) {
-  const videoTitle = video.title || '제목 없는 영상';
-  const videoUrl = getYouTubeVideoUrl(video.videoId);
-  const isSaving = saveState === 'saving';
-  const isMoving = moveState === 'saving';
-  const metaBadgesProps = {
+  const {
+    draftFormProps,
+    metaBadgesProps,
+    statusActionsProps,
+    videoTitle,
+    videoUrl,
+  } = getProductionVideoCardViewProps({
     columnId,
-    scheduleSignal,
-    video,
-  };
-
-  const draftFormProps = {
     isDirty,
-    isSaving,
+    moveState,
+    onMove,
     onSave,
     onUpdateDraft,
     record,
     saveState,
+    scheduleSignal,
     video,
-    videoTitle,
-  };
-
-  const statusActionsProps = {
-    columnId,
-    isMoving,
-    moveState,
-    onMove,
-    record,
-    video,
-    videoTitle,
-    videoUrl,
-  };
+  });
 
   return (
     <article className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
