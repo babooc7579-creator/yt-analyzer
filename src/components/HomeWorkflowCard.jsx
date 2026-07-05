@@ -5,6 +5,7 @@ export default function HomeWorkflowCard({
   icon: Icon,
   iconClassName,
   actionAriaLabel,
+  actionDisabled = false,
   actionLabel,
   actionTitle,
   onAction,
@@ -25,7 +26,12 @@ export default function HomeWorkflowCard({
           <button
             type="button"
             onClick={onAction}
-            className="rounded-lg bg-white/90 px-3 py-1.5 text-[11px] font-extrabold text-slate-900 hover:bg-white"
+            disabled={actionDisabled}
+            className={`rounded-lg px-3 py-1.5 text-[11px] font-extrabold ${
+              actionDisabled
+                ? 'cursor-not-allowed bg-slate-700/70 text-slate-400'
+                : 'bg-white/90 text-slate-900 hover:bg-white'
+            }`}
             title={actionTitle}
             aria-label={actionAriaLabel || actionTitle || actionLabel}
           >

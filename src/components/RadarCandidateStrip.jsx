@@ -19,6 +19,7 @@ export default function RadarCandidateStrip({
   onLoadStoredVideos,
   onOpenVault,
   onOpenScrapbook,
+  selectedChannelCount,
 }) {
   const {
     allDecisionCount,
@@ -62,6 +63,7 @@ export default function RadarCandidateStrip({
       <RadarCandidateEmptyState
         onLoadStoredVideos={onLoadStoredVideos}
         onOpenVault={onOpenVault}
+        selectedChannelCount={selectedChannelCount}
       />
     );
   }
