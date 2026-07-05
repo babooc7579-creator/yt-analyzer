@@ -1,0 +1,38 @@
+export const shouldShowProductionKanbanEmptyState = ({
+  discoveryLinkCandidates,
+  videos,
+}) => videos.length === 0 && discoveryLinkCandidates.length === 0;
+
+export const getProductionKanbanContentProps = ({
+  discoveryLinkCandidates,
+  draftRecords,
+  groupedVideos,
+  hasUnsavedChanges,
+  linkMoveStates,
+  moveDiscoveryLink,
+  moveStates,
+  moveVideo,
+  onOpenDiscoveryLinks,
+  productionSummary,
+  saveDraftRecord,
+  saveStates,
+  updateDraftRecord,
+  videos,
+  videoUserRecords,
+}) => ({
+  discoveryLinkCandidates,
+  draftRecords,
+  groupedVideos,
+  hasUnsavedChanges,
+  linkMoveStates,
+  moveDiscoveryLink,
+  moveStates,
+  moveVideo,
+  onOpenDiscoveryLinks,
+  productionSummary,
+  saveDraftRecord,
+  saveStates,
+  updateDraftRecord,
+  videoCount: videos.length,
+  videoUserRecords,
+});
