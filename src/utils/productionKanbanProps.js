@@ -1,7 +1,7 @@
 export const shouldShowProductionKanbanEmptyState = ({
   discoveryLinkCandidates,
-  videos,
-}) => videos.length === 0 && discoveryLinkCandidates.length === 0;
+  productionSummary,
+}) => productionSummary.videoCount === 0 && discoveryLinkCandidates.length === 0;
 
 export const getProductionKanbanContentProps = ({
   discoveryLinkCandidates,
@@ -17,7 +17,6 @@ export const getProductionKanbanContentProps = ({
   saveDraftRecord,
   saveStates,
   updateDraftRecord,
-  videos,
   videoUserRecords,
 }) => ({
   discoveryLinkCandidates,
@@ -33,6 +32,6 @@ export const getProductionKanbanContentProps = ({
   saveDraftRecord,
   saveStates,
   updateDraftRecord,
-  videoCount: videos.length,
+  videoCount: productionSummary.videoCount,
   videoUserRecords,
 });

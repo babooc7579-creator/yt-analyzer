@@ -3,7 +3,12 @@ import {
   getDiscoveryLinkRightsStatusValue,
   getDiscoveryLinkStatusValue,
 } from '../constants/discoveryLinks';
-import { getProductionStatusFromRecord, PRODUCTION_STATUS } from '../constants/status';
+import {
+  PRODUCTION_STATUS,
+  PRODUCTION_STATUSES,
+  getProductionStatusFromRecord,
+  hasAnyProductionStatus,
+} from '../constants/status';
 
 const FALLBACK_TARGET_DATE = '9999-12-31';
 
@@ -41,6 +46,10 @@ const sortProductionVideoGroups = (grouped, videoUserRecords) => {
   return grouped;
 };
 
+export const countGroupedProductionVideos = (groupedVideos = {}) => (
+  Object.values(groupedVideos).reduce((count, group = []) => count + group.length, 0)
+);
+
 export const getDiscoveryLinkCandidates = (discoveryLinks) => (
   discoveryLinks
     .filter((link) => getDiscoveryLinkStatusValue(link) === 'candidate')
@@ -49,7 +58,10 @@ export const getDiscoveryLinkCandidates = (discoveryLinks) => (
 
 export const groupProductionVideos = (videos, videoUserRecords) => {
   const grouped = videos.reduce((acc, video) => {
-    const recordStatus = getProductionStatusFromRecord(videoUserRecords[video.videoId]);
+    const record = videoUserRecords[video.videoId];
+    if (!hasAnyProductionStatus(record, PRODUCTION_STATUSES)) return acc;
+
+    const recordStatus = getProductionStatusFromRecord(record);
     const status = getProductionGroupStatus(recordStatus, acc);
     acc[status].push(video);
     return acc;
@@ -90,11 +102,12 @@ export const getProductionSummary = ({
   groupedVideos,
   today,
   videoUserRecords,
-  videos,
 }) => {
-  const scheduledVideos = getScheduledProductionVideos(videos, draftRecords, videoUserRecords);
+  const productionVideos = Object.values(groupedVideos).flat();
+  const scheduledVideos = getScheduledProductionVideos(productionVideos, draftRecords, videoUserRecords);
 
   return {
+    videoCount: countGroupedProductionVideos(groupedVideos),
     candidateCount: groupedVideos[PRODUCTION_STATUS.CANDIDATE].length,
     activeCount: groupedVideos[PRODUCTION_STATUS.ACTIVE].length,
     uploadedCount: groupedVideos[PRODUCTION_STATUS.DONE].length,
