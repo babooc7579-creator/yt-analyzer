@@ -1,13 +1,16 @@
 import { useMemo } from 'react';
-import {
-  DISCOVERY_RIGHTS_WARNINGS,
-  getDiscoveryLinkRightsStatusValue,
-  getDiscoveryLinkStatusValue,
-} from '../constants/discoveryLinks';
-import { PRODUCTION_STATUS, getProductionStatusFromRecord, isChannelScannable, isRadarHiddenRecord } from '../constants/status';
 import { formatRelativeTime } from '../utils/channelScanDisplay';
 import { getCloudOnlyTags, getLatestChannelScanDate } from '../utils/channels';
-import { isTtoTtoCandidate } from '../utils/video';
+import {
+  countActiveSelectedChannels,
+  countDiscoveryCandidates,
+  countDiscoveryRightsWarnings,
+  countLoadedRadarDecisions,
+  countProductionCandidates,
+  countScannableChannels,
+  countTtoTtoAssets,
+  countVisibleScraps,
+} from '../utils/creatorOsMetrics';
 
 export function useCreatorOsMetrics({
   categories,
@@ -27,13 +30,11 @@ export function useCreatorOsMetrics({
     : '수집 기록 없음';
 
   const scannableChannelCount = useMemo(() => (
-    savedChannels.filter(isChannelScannable).length
+    countScannableChannels(savedChannels)
   ), [savedChannels]);
 
   const activeSelectedChannelCount = useMemo(() => (
-    savedChannels.filter(channel => (
-      selectedChannelIds.includes(channel.id) && isChannelScannable(channel)
-    )).length
+    countActiveSelectedChannels(savedChannels, selectedChannelIds)
   ), [savedChannels, selectedChannelIds]);
 
   const cloudOnlyTags = useMemo(() => (
@@ -41,37 +42,29 @@ export function useCreatorOsMetrics({
   ), [savedChannels, categories]);
 
   const ttoTtoAssetCount = useMemo(() => (
-    videos.filter(isTtoTtoCandidate).length
+    countTtoTtoAssets(videos)
   ), [videos]);
 
-  const visibleScrapCount = useMemo(() => {
-    const savedVideoIds = new Set(savedVideos.map(video => video.videoId));
-    return videos.filter(video => savedVideoIds.has(video.videoId)).length;
-  }, [savedVideos, videos]);
+  const visibleScrapCount = useMemo(() => (
+    countVisibleScraps(videos, savedVideos)
+  ), [savedVideos, videos]);
 
   const loadedDecisionCount = useMemo(() => (
-    videos.filter(video => (
-      isRadarHiddenRecord(videoUserRecords[video.videoId])
-    )).length
+    countLoadedRadarDecisions(videos, videoUserRecords)
   ), [videoUserRecords, videos]);
 
   const openRadarCandidateCount = Math.max(videos.length - loadedDecisionCount, 0);
 
   const productionCandidateCount = useMemo(() => (
-    savedVideos.filter(video => (
-      getProductionStatusFromRecord(videoUserRecords[video.videoId]) === PRODUCTION_STATUS.CANDIDATE
-    )).length
+    countProductionCandidates(savedVideos, videoUserRecords)
   ), [savedVideos, videoUserRecords]);
 
   const discoveryCandidateCount = useMemo(() => (
-    discoveryLinks.filter((link) => getDiscoveryLinkStatusValue(link) === 'candidate').length
+    countDiscoveryCandidates(discoveryLinks)
   ), [discoveryLinks]);
 
   const discoveryRightsWarningCount = useMemo(() => (
-    discoveryLinks.filter((link) => (
-      getDiscoveryLinkStatusValue(link) === 'candidate'
-      && DISCOVERY_RIGHTS_WARNINGS[getDiscoveryLinkRightsStatusValue(link)]
-    )).length
+    countDiscoveryRightsWarnings(discoveryLinks)
   ), [discoveryLinks]);
 
   return {
