@@ -1,5 +1,8 @@
 import ProductionKanbanColumn from './ProductionKanbanColumn';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+const toRecordMap = (items) => (items && typeof items === 'object' ? items : {});
+
 export default function ProductionKanbanBoard({
   columns,
   draftRecords,
@@ -13,6 +16,9 @@ export default function ProductionKanbanBoard({
   saveStates,
   videoUserRecords,
 }) {
+  const columnList = toArray(columns);
+  const groupedVideoMap = toRecordMap(groupedVideos);
+
   const getColumnProps = (column) => ({
     column,
     draftRecords,
@@ -24,12 +30,12 @@ export default function ProductionKanbanBoard({
     onUpdateDraft,
     saveStates,
     videoUserRecords,
-    videos: groupedVideos[column.id],
+    videos: groupedVideoMap[column.id],
   });
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-      {columns.map((column) => (
+      {columnList.map((column) => (
         <ProductionKanbanColumn key={column.id} {...getColumnProps(column)} />
       ))}
     </div>

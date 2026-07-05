@@ -3,6 +3,8 @@ import DiscoveryLinksFilteredEmptyState from './DiscoveryLinksFilteredEmptyState
 import DiscoveryLinksGrid from './DiscoveryLinksGrid';
 import DiscoveryLinksLoadingState from './DiscoveryLinksLoadingState';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function DiscoveryLinksList({
   allLinkCount,
   clearFilters,
@@ -12,6 +14,8 @@ export default function DiscoveryLinksList({
   onUpdateLink,
   saving,
 }) {
+  const linkList = toArray(filteredLinks);
+
   if (loading) {
     return <DiscoveryLinksLoadingState />;
   }
@@ -20,7 +24,7 @@ export default function DiscoveryLinksList({
     return <DiscoveryLinksEmptyState />;
   }
 
-  if (filteredLinks.length === 0) {
+  if (linkList.length === 0) {
     const filteredEmptyStateProps = {
       allLinkCount,
       clearFilters,
@@ -32,7 +36,7 @@ export default function DiscoveryLinksList({
   }
 
   const gridProps = {
-    filteredLinks,
+    filteredLinks: linkList,
     onDeleteLink,
     onUpdateLink,
     saving,

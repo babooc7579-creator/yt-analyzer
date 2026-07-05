@@ -1,10 +1,14 @@
 import { Lightbulb } from 'lucide-react';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function ProductionVideoCandidateReasons({
   priorityLabel,
   radarScore,
   reasons,
 }) {
+  const reasonList = toArray(reasons);
+
   return (
     <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50 px-3 py-2">
       <div className="flex items-center justify-between gap-2">
@@ -16,7 +20,7 @@ export default function ProductionVideoCandidateReasons({
         </span>
       </div>
       <div className="mt-2 flex flex-wrap gap-1">
-        {reasons.map((reason) => (
+        {reasonList.map((reason) => (
           <span
             key={reason}
             className="rounded-full bg-white px-2 py-1 text-[10px] font-bold text-slate-600"

@@ -1,13 +1,19 @@
 import { Link as LinkIcon } from 'lucide-react';
 import ProductionDiscoveryLinkCard from './ProductionDiscoveryLinkCard';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+const toRecordMap = (items) => (items && typeof items === 'object' ? items : {});
+
 export default function ProductionDiscoveryLinksSection({
   links,
   linkMoveStates,
   onOpenDiscoveryLinks,
   onMoveLink,
 }) {
-  if (links.length === 0) {
+  const linkList = toArray(links);
+  const moveStateMap = toRecordMap(linkMoveStates);
+
+  if (linkList.length === 0) {
     return null;
   }
 
@@ -37,10 +43,10 @@ export default function ProductionDiscoveryLinksSection({
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
-        {links.map((link) => {
+        {linkList.map((link) => {
           const cardProps = {
             link,
-            moveState: linkMoveStates[link.id],
+            moveState: moveStateMap[link.id],
             onEditInDiscoveryLinks: onOpenDiscoveryLinks,
             onMove: onMoveLink,
           };
