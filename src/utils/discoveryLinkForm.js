@@ -4,20 +4,35 @@ import {
   getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
 
-export const getDiscoveryLinkDraft = (link = {}) => ({
-  title: link.title || '',
-  memo: link.memo || '',
-});
+const toLinkObject = (link) => (
+  link && typeof link === 'object' ? link : {}
+);
+
+const toText = (value) => (typeof value === 'string' ? value : '');
+
+export const getDiscoveryLinkDraft = (link = {}) => {
+  const sourceLink = toLinkObject(link);
+
+  return {
+    title: sourceLink.title || '',
+    memo: sourceLink.memo || '',
+  };
+};
 
 export const getDiscoveryLinkDraftUpdates = (draftTitle, draftMemo) => ({
-  title: draftTitle.trim(),
-  memo: draftMemo.trim(),
+  title: toText(draftTitle).trim(),
+  memo: toText(draftMemo).trim(),
 });
 
-export const hasDiscoveryLinkDraftChanges = (link = {}, draftUpdates = {}) => (
-  draftUpdates.title !== (link.title || '')
-  || draftUpdates.memo !== (link.memo || '')
-);
+export const hasDiscoveryLinkDraftChanges = (link = {}, draftUpdates = {}) => {
+  const sourceLink = toLinkObject(link);
+  const updates = toLinkObject(draftUpdates);
+
+  return (
+    updates.title !== (sourceLink.title || '')
+    || updates.memo !== (sourceLink.memo || '')
+  );
+};
 
 export const getDiscoveryLinkEditFormViewProps = ({
   draftMemo,
@@ -73,7 +88,7 @@ export const getDiscoveryLinkEditFormViewProps = ({
 });
 
 export const getDiscoveryLinkUrlPreview = (url) => {
-  const trimmedUrl = url.trim();
+  const trimmedUrl = toText(url).trim();
   if (!trimmedUrl) return null;
 
   try {
@@ -96,7 +111,7 @@ export const getDiscoveryLinkUrlPreview = (url) => {
 };
 
 export const normalizeDiscoveryLinkUrl = (url) => {
-  const trimmedUrl = (url || '').trim();
+  const trimmedUrl = toText(url).trim();
   if (!trimmedUrl) return '';
 
   try {

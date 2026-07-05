@@ -4,6 +4,16 @@ import {
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toLinkObject = (link) => (
+  link && typeof link === 'object' ? link : {}
+);
+
+const isLinkObject = (link) => link && typeof link === 'object';
+
+const toLinkList = (links) => toArray(links).filter(isLinkObject);
+
 export const getDiscoveryLinksFromResponse = (data) => {
   if (Array.isArray(data?.links)) return data.links;
   if (Array.isArray(data?.items)) return data.items;
@@ -19,24 +29,34 @@ export const getDiscoveryLinkTimestamp = (link) => (
 );
 
 export const sortDiscoveryLinksByRecentUpdate = (links = []) => (
-  [...links].sort((left, right) => getDiscoveryLinkTimestamp(right) - getDiscoveryLinkTimestamp(left))
+  [...toLinkList(links)].sort((left, right) => getDiscoveryLinkTimestamp(right) - getDiscoveryLinkTimestamp(left))
 );
 
 export const getDiscoveryLinkById = (links = [], id) => (
-  links.find((link) => link.id === id)
+  toLinkList(links).find((link) => toLinkObject(link).id === id)
 );
 
-export const upsertDiscoveryLink = (links = [], nextLink) => [
-  nextLink,
-  ...links.filter((link) => link.id !== nextLink.id),
-];
+export const upsertDiscoveryLink = (links = [], nextLink) => {
+  const link = toLinkObject(nextLink);
+  if (!link.id) return toLinkList(links);
 
-export const replaceDiscoveryLink = (links = [], nextLink) => (
-  links.map((link) => (link.id === nextLink.id ? nextLink : link))
-);
+  return [
+    link,
+    ...toLinkList(links).filter((currentLink) => toLinkObject(currentLink).id !== link.id),
+  ];
+};
+
+export const replaceDiscoveryLink = (links = [], nextLink) => {
+  const link = toLinkObject(nextLink);
+  if (!link.id) return toLinkList(links);
+
+  return toLinkList(links).map((currentLink) => (
+    toLinkObject(currentLink).id === link.id ? link : currentLink
+  ));
+};
 
 export const removeDiscoveryLinkById = (links = [], id) => (
-  links.filter((link) => link.id !== id)
+  toLinkList(links).filter((link) => toLinkObject(link).id !== id)
 );
 
 export const getDiscoveryLinkName = (link) => {

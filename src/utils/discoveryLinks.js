@@ -9,21 +9,33 @@ import {
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 
-export const getSearchableDiscoveryLinkText = (link) => (
-  [
-    link.title,
-    link.url,
-    link.memo,
-    getDiscoveryLinkPlatform(link),
-    getDiscoveryLinkHost(link.url),
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toLinkObject = (link) => (
+  link && typeof link === 'object' ? link : {}
+);
+
+const isLinkObject = (link) => link && typeof link === 'object';
+
+const toLinkList = (links) => toArray(links).filter(isLinkObject);
+
+export const getSearchableDiscoveryLinkText = (link) => {
+  const sourceLink = toLinkObject(link);
+
+  return [
+    sourceLink.title,
+    sourceLink.url,
+    sourceLink.memo,
+    getDiscoveryLinkPlatform(sourceLink),
+    getDiscoveryLinkHost(sourceLink.url),
   ]
     .filter(Boolean)
     .join(' ')
-    .toLowerCase()
-);
+    .toLowerCase();
+};
 
 export const countDiscoveryLinksByStatus = (links = []) => (
-  links.reduce((counts, link) => {
+  toLinkList(links).reduce((counts, link) => {
     const status = getDiscoveryLinkStatusValue(link);
     return {
       ...counts,
@@ -33,7 +45,7 @@ export const countDiscoveryLinksByStatus = (links = []) => (
 );
 
 export const countDiscoveryLinksByRightsStatus = (links = []) => (
-  links.reduce((counts, link) => {
+  toLinkList(links).reduce((counts, link) => {
     const rightsStatus = getDiscoveryLinkRightsStatusValue(link);
     return {
       ...counts,
@@ -43,42 +55,47 @@ export const countDiscoveryLinksByRightsStatus = (links = []) => (
 );
 
 export const filterDiscoveryLinksByStatus = (links = [], status, allStatus) => {
-  if (status === allStatus) return links;
-  return links.filter((link) => getDiscoveryLinkStatusValue(link) === status);
+  const linkList = toLinkList(links);
+  if (status === allStatus) return linkList;
+  return linkList.filter((link) => getDiscoveryLinkStatusValue(link) === status);
 };
 
 export const filterDiscoveryLinksByRightsStatus = (links = [], rightsStatus, allRightsStatus) => {
-  if (rightsStatus === allRightsStatus) return links;
-  return links.filter((link) => getDiscoveryLinkRightsStatusValue(link) === rightsStatus);
+  const linkList = toLinkList(links);
+  if (rightsStatus === allRightsStatus) return linkList;
+  return linkList.filter((link) => getDiscoveryLinkRightsStatusValue(link) === rightsStatus);
 };
 
 export const filterDiscoveryLinksBySearchQuery = (links = [], normalizedSearchQuery) => {
-  if (!normalizedSearchQuery) return links;
-  return links.filter((link) => getSearchableDiscoveryLinkText(link).includes(normalizedSearchQuery));
+  const linkList = toLinkList(links);
+  if (!normalizedSearchQuery) return linkList;
+  return linkList.filter((link) => getSearchableDiscoveryLinkText(link).includes(normalizedSearchQuery));
 };
 
 export const getDiscoveryLinkUrlListItems = (links = []) => (
-  links.map((link) => {
-    const title = link.title || getDiscoveryLinkHost(link.url);
+  toLinkList(links).map((link) => {
+    const sourceLink = toLinkObject(link);
+    const title = sourceLink.title || getDiscoveryLinkHost(sourceLink.url);
 
-    return link.url ? [
+    return sourceLink.url ? [
       title,
-      link.url,
-      getDiscoveryLinkStatusAndRightsLine(link),
+      sourceLink.url,
+      getDiscoveryLinkStatusAndRightsLine(sourceLink),
     ] : null;
   })
 );
 
 export const getDiscoveryLinkRowMeta = (link = {}) => {
-  const currentRightsStatus = getDiscoveryLinkRightsStatusValue(link);
+  const sourceLink = toLinkObject(link);
+  const currentRightsStatus = getDiscoveryLinkRightsStatusValue(sourceLink);
 
   return {
     currentRightsStatus,
-    currentStatus: getDiscoveryLinkStatusValue(link),
-    platformLabel: getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link)),
+    currentStatus: getDiscoveryLinkStatusValue(sourceLink),
+    platformLabel: getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(sourceLink)),
     rightsTone: DISCOVERY_RIGHTS_TONES[currentRightsStatus] || DISCOVERY_RIGHTS_TONES.unknown,
-    sourceHost: getDiscoveryLinkHost(link.url),
-    title: link.title || getDiscoveryLinkHost(link.url),
+    sourceHost: getDiscoveryLinkHost(sourceLink.url),
+    title: sourceLink.title || getDiscoveryLinkHost(sourceLink.url),
   };
 };
 
