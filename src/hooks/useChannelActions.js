@@ -9,6 +9,12 @@ import {
   shouldDeselectChannelAfterUpdate,
 } from '../utils/channelActions';
 
+const getChannelCloudActionError = (message, fallbackMessage, actionLabel = '저장') => {
+  const baseMessage = message || fallbackMessage;
+  if (baseMessage.includes('완료 처리하지 않았습니다')) return baseMessage;
+  return `${baseMessage} Cloud 채널 ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해주세요.`;
+};
+
 export function useChannelActions({
   setSavedChannels,
   setSelectedChannelIds,
@@ -16,17 +22,25 @@ export function useChannelActions({
   setError,
 } = {}) {
   const saveChannel = useCallback(async ({ handle, tags, language, note }) => {
-    const data = await createChannel({ handle, tags, language, note });
-    if (!data.success) throw new Error(data.error || '채널 추가에 실패했습니다.');
+    try {
+      const data = await createChannel({ handle, tags, language, note });
+      if (!data.success) throw new Error(getChannelCloudActionError(data.error, '채널 추가에 실패했습니다.', '저장'));
 
-    setSavedChannels(prev => appendChannel(prev, data.channel));
-    return data.channel;
+      setSavedChannels(prev => appendChannel(prev, data.channel));
+      return data.channel;
+    } catch (err) {
+      throw new Error(getChannelCloudActionError(err.message, '채널 추가에 실패했습니다.', '저장'));
+    }
   }, [setSavedChannels]);
 
   const bulkCreateChannels = useCallback(async ({ handles, tags, language }) => {
-    const data = await createChannelsBulk({ handles, tags, language });
-    if (!data.success) throw new Error(data.error || '일괄 추가에 실패했습니다.');
-    return data;
+    try {
+      const data = await createChannelsBulk({ handles, tags, language });
+      if (!data.success) throw new Error(getChannelCloudActionError(data.error, '일괄 추가에 실패했습니다.', '일괄 저장'));
+      return data;
+    } catch (err) {
+      throw new Error(getChannelCloudActionError(err.message, '일괄 추가에 실패했습니다.', '일괄 저장'));
+    }
   }, []);
 
   const deleteChannel = useCallback(async (id, category, title) => {
@@ -39,12 +53,12 @@ export function useChannelActions({
 
     try {
       const data = await removeChannel({ id, category });
-      if (!data.success) throw new Error(data.error || '채널 삭제에 실패했습니다.');
+      if (!data.success) throw new Error(getChannelCloudActionError(data.error, '채널 삭제에 실패했습니다.', '삭제'));
 
       setSavedChannels(prev => removeChannelById(prev, id));
       setSelectedChannelIds(prev => removeSelectedChannelId(prev, id));
     } catch (err) {
-      setError?.(err.message);
+      setError?.(getChannelCloudActionError(err.message, '채널 삭제에 실패했습니다.', '삭제'));
     }
   }, [setError, setSavedChannels, setSelectedChannelIds]);
 
@@ -54,25 +68,29 @@ export function useChannelActions({
 
     try {
       const data = await updateChannel({ id: channel.id, category: channel.category, updates });
-      if (!data.success) throw new Error(data.error || '채널 정보를 저장하지 못했습니다.');
+      if (!data.success) throw new Error(getChannelCloudActionError(data.error, '채널 정보를 저장하지 못했습니다.', '정보 저장'));
 
       setSavedChannels(prev => replaceChannel(prev, data.channel));
       if (shouldDeselectChannelAfterUpdate(updates)) {
         setSelectedChannelIds(prev => removeSelectedChannelId(prev, data.channel.id));
       }
     } catch (err) {
-      setError?.(err.message);
+      setError?.(getChannelCloudActionError(err.message, '채널 정보를 저장하지 못했습니다.', '정보 저장'));
     } finally {
       setUpdatingChannelId(null);
     }
   }, [setError, setSavedChannels, setSelectedChannelIds, setUpdatingChannelId]);
 
   const saveChannelNote = useCallback(async ({ id, category, text }) => {
-    const data = await createChannelNote({ id, category, text });
-    if (!data.success) throw new Error(data.error || '기록 저장에 실패했습니다.');
+    try {
+      const data = await createChannelNote({ id, category, text });
+      if (!data.success) throw new Error(getChannelCloudActionError(data.error, '기록 저장에 실패했습니다.', '메모 저장'));
 
-    setSavedChannels(prev => replaceChannel(prev, data.channel));
-    return data.channel;
+      setSavedChannels(prev => replaceChannel(prev, data.channel));
+      return data.channel;
+    } catch (err) {
+      throw new Error(getChannelCloudActionError(err.message, '기록 저장에 실패했습니다.', '메모 저장'));
+    }
   }, [setSavedChannels]);
 
   return {
