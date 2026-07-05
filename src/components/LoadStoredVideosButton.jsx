@@ -7,7 +7,7 @@ export default function LoadStoredVideosButton({
 }) {
   const hasSelectedChannels = selectedChannelCount > 0;
   const buttonLabel = loading
-    ? '저장된 영상 불러오는 중...'
+    ? 'Cloud DB에서 저장 영상 불러오는 중'
     : hasSelectedChannels
       ? `선택 채널 저장 영상 불러오기 (${selectedChannelCount}개)`
       : '채널 선택 후 저장 영상 불러오기';
