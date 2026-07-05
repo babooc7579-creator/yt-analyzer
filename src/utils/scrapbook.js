@@ -1,14 +1,16 @@
 import { PRODUCTION_STATUSES, hasAnyProductionStatus } from '../constants/status';
 import { formatNumberedUrlList, getYouTubeVideoUrl } from './urls';
 
-export const getCloudScrapbookVideos = (videos) => videos || [];
+export const getCloudScrapbookVideos = (videos) => (
+  Array.isArray(videos) ? videos : []
+);
 
 export const hasScrapbookVideo = (videos, videoId) => (
-  videos.some(video => video.videoId === videoId)
+  getCloudScrapbookVideos(videos).some(video => video.videoId === videoId)
 );
 
 export const removeScrapbookVideo = (videos, videoId) => (
-  videos.filter(video => video.videoId !== videoId)
+  getCloudScrapbookVideos(videos).filter(video => video.videoId !== videoId)
 );
 
 export const upsertScrapbookVideo = (videos, video) => [
