@@ -38,7 +38,7 @@ export const getScanStartMessage = ({ scanSelectedChannels, channelIdsForScan, t
       ? `'${tag}' 태그 채널`
       : '전체 채널';
 
-  return `${targetLabel} 새 영상 수집 중... (YouTube API 호출이 발생합니다)`;
+  return `${targetLabel} 새 영상 수집 중... YouTube API 호출이 발생합니다.`;
 };
 
 export const summarizeScanResults = (results = []) => (

@@ -29,7 +29,12 @@ export function useVideoCollectionActions({
   };
 
   const prepareStoredVideoLoad = () => {
-    prepareStoredVideoLoad();
+    setLoading(true);
+    setError('');
+    setVideos([]);
+    clearCheckedVideos();
+    setActiveTab('dashboard');
+    setProgressMsg('클라우드 DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.');
   };
 
   const finishStoredVideoLoad = (videos) => {
@@ -39,7 +44,10 @@ export function useVideoCollectionActions({
   };
 
   const prepareScan = (scanContext, tag) => {
-    prepareScan(scanContext, tag);
+    setIsScanning(true);
+    setScanningTag(scanContext.scanningTag);
+    setError('');
+    setProgressMsg(getScanStartMessage({ ...scanContext, tag }));
   };
 
   const finishScan = () => {
@@ -54,16 +62,11 @@ export function useVideoCollectionActions({
       return;
     }
 
-    setLoading(true);
-    setError('');
-    setVideos([]);
-    clearCheckedVideos();
-    setActiveTab('dashboard');
-    setProgressMsg('클라우드 DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.');
+    prepareStoredVideoLoad();
 
     try {
       const data = await fetchStoredVideosByChannelIds(selectedChannelIds);
-      if (!data.success) throw new Error(data.error || '클라우드 DB의 저장 영상을 불러오지 못했습니다.');
+      if (!data.success) throw new Error(data.error || '클라우드 DB에 저장된 영상을 불러오지 못했습니다.');
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
@@ -84,10 +87,7 @@ export function useVideoCollectionActions({
       return;
     }
 
-    setIsScanning(true);
-    setScanningTag(scanContext.scanningTag);
-    setError('');
-    setProgressMsg(getScanStartMessage({ ...scanContext, tag }));
+    prepareScan(scanContext, tag);
 
     try {
       const data = scanContext.scanSelectedChannels
