@@ -1,8 +1,12 @@
 import { AlertTriangle } from 'lucide-react';
 import { SYNC_WARNING_BANNER_COPY } from '../constants/syncWarnings';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function SyncWarningBanner({ message, messages }) {
-  const warningMessages = messages || (message ? [message] : []);
+  const messageList = toArray(messages);
+  const warningMessages = messageList.length > 0 ? messageList : (message ? [message] : []);
+
   if (warningMessages.length === 0) return null;
 
   return (
