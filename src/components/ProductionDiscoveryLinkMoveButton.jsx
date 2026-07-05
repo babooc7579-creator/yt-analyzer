@@ -3,7 +3,7 @@ export default function ProductionDiscoveryLinkMoveButton({
   disabled,
   isMoving,
   label,
-  movingLabel = '저장 중...',
+  movingLabel = 'Cloud 저장 중',
   onClick,
   title,
   tone = 'indigo',

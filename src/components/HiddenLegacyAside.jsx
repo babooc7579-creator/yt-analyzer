@@ -49,7 +49,7 @@ export default function HiddenLegacyAside({
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
         <p className="text-sm font-extrabold text-slate-900 mb-3">수집과 조회 차이</p>
         <div className="space-y-3 text-[11px] text-slate-600 leading-relaxed">
-          <p><span className="font-bold text-emerald-700">유튜브 새 영상 수집</span>은 YouTube API를 호출해 새 영상 여부를 확인합니다.</p>
+          <p><span className="font-bold text-emerald-700">선택 채널 새 영상 수집</span>은 YouTube API를 호출해 새 영상 여부를 확인합니다.</p>
           <p><span className="font-bold text-blue-700">저장된 영상 불러오기</span>는 이미 저장된 데이터만 조회합니다.</p>
           <p className="rounded-lg bg-amber-50 border border-amber-100 p-3 text-amber-800">API 호출이 필요한 작업은 필요한 때만 실행하세요.</p>
         </div>
