@@ -1,3 +1,5 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export const getDiscoveryLinksWorkspaceViewProps = ({
   clearDiscoveryFilters,
   duplicateLink,
@@ -27,49 +29,54 @@ export const getDiscoveryLinksWorkspaceViewProps = ({
   statusFilterOptions,
   updateForm,
   urlPreview,
-}) => ({
-  filtersProps: {
-    filteredLinkCount: filteredLinks.length,
-    hasActiveFilters: hasActiveDiscoveryFilters,
-    rightsFilter,
-    rightsFilterOptions,
-    searchQuery,
-    setRightsFilter,
-    setSearchQuery,
-    setStatusFilter,
-    statusFilter,
-    statusFilterOptions,
-  },
-  formProps: {
-    duplicateLink,
-    form,
-    isCreateDisabled,
-    saving,
-    showRiskyCandidateHint,
-    urlPreview,
-    onChange: updateForm,
-    onSubmit: handleSubmit,
-  },
-  headerProps: {
-    filteredLinkCount: filteredLinks.length,
-    loading,
-    onRefresh,
-    saving,
-    totalLinkCount: links.length,
-    urlList: filteredDiscoveryLinkUrlList,
-  },
-  listProps: {
-    allLinkCount: links.length,
-    clearFilters: clearDiscoveryFilters,
-    filteredLinks,
-    loading,
-    onDeleteLink,
-    onUpdateLink,
-    saving,
-  },
-  noticesProps: {
-    error,
-    notice,
-    savingMessage,
-  },
-});
+}) => {
+  const linkList = toArray(links);
+  const filteredLinkList = toArray(filteredLinks);
+
+  return {
+    filtersProps: {
+      filteredLinkCount: filteredLinkList.length,
+      hasActiveFilters: hasActiveDiscoveryFilters,
+      rightsFilter,
+      rightsFilterOptions,
+      searchQuery,
+      setRightsFilter,
+      setSearchQuery,
+      setStatusFilter,
+      statusFilter,
+      statusFilterOptions,
+    },
+    formProps: {
+      duplicateLink,
+      form,
+      isCreateDisabled,
+      saving,
+      showRiskyCandidateHint,
+      urlPreview,
+      onChange: updateForm,
+      onSubmit: handleSubmit,
+    },
+    headerProps: {
+      filteredLinkCount: filteredLinkList.length,
+      loading,
+      onRefresh,
+      saving,
+      totalLinkCount: linkList.length,
+      urlList: filteredDiscoveryLinkUrlList,
+    },
+    listProps: {
+      allLinkCount: linkList.length,
+      clearFilters: clearDiscoveryFilters,
+      filteredLinks: filteredLinkList,
+      loading,
+      onDeleteLink,
+      onUpdateLink,
+      saving,
+    },
+    noticesProps: {
+      error,
+      notice,
+      savingMessage,
+    },
+  };
+};
