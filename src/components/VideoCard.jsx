@@ -1,5 +1,4 @@
-import { hasStrongReaction, isTtoTtoCandidate, TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from '../utils/video';
-import { getYouTubeVideoUrl } from '../utils/urls';
+import { getVideoCardViewProps } from '../utils/videoCard';
 import VideoCardCandidateReasons from './VideoCardCandidateReasons';
 import VideoCardMetaActions from './VideoCardMetaActions';
 import VideoCardPrimaryActions from './VideoCardPrimaryActions';
@@ -20,62 +19,34 @@ export default function VideoCard({
   onPromoteToProduction,
   onFetchComments,
 }) {
-  const videoTitle = video.title || '제목 없는 영상';
-  const isStrongReaction = hasStrongReaction(video);
-  const isCandidate = isStrongReaction || isTtoTtoCandidate(video);
-  const thumbnailHeightClass = showWorkPanel ? 'min-h-[360px]' : 'min-h-[420px]';
-  const videoUrl = getYouTubeVideoUrl(video.videoId);
-  const candidateReasons = [
-    video.multiplier >= TTOTTO_MIN_MULTIPLIER ? `평균 대비 ${video.multiplier.toFixed(1)}배` : null,
-    video.daysOld >= TTOTTO_MIN_DAYS_OLD ? `${video.daysOld}일 지난 소재` : null,
-    isStrongReaction ? '강한 참여 반응' : null,
-  ].filter(Boolean);
-
-  const thumbnailProps = {
-    isCandidate,
-    isChecked,
-    isSaved,
-    isStrongReaction,
-    onToggleCheck,
-    onToggleScrap,
-    rank,
-    thumbnailHeightClass,
-    video,
-    videoTitle,
-  };
-
-  const statusBadgeProps = {
-    isChecked,
-    isProductionCandidate,
-    isSaved,
-  };
-
-  const metaActionsProps = {
-    onFetchComments,
-    video,
+  const {
+    cardClassName,
+    candidateReasons,
+    contentClassName,
+    metaActionsProps,
+    primaryActionsProps,
+    statsGridProps,
+    statusBadgeProps,
+    thumbnailProps,
     videoTitle,
     videoUrl,
-  };
-
-  const primaryActionsProps = {
-    isProductionCandidate,
+  } = getVideoCardViewProps({
+    video,
+    rank,
+    isChecked,
     isSaved,
-    onPromoteToProduction,
-    onToggleScrap,
-    video,
-    videoTitle,
-  };
-
-  const statsGridProps = {
-    isStrongReaction,
+    isProductionCandidate,
     showWorkPanel,
-    video,
-  };
+    onToggleCheck,
+    onToggleScrap,
+    onPromoteToProduction,
+    onFetchComments,
+  });
 
   return (
-    <div className={`group overflow-hidden rounded-lg border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${isChecked ? 'border-indigo-300 bg-indigo-50' : isCandidate ? 'border-rose-100 bg-white' : 'border-slate-200 bg-white'}`}>
+    <div className={cardClassName}>
       <VideoCardThumbnail {...thumbnailProps} />
-      <div className={`${showWorkPanel ? 'p-5' : 'p-4'}`}>
+      <div className={contentClassName}>
         <VideoCardTitleLink videoTitle={videoTitle} videoUrl={videoUrl} />
         <VideoCardCandidateReasons candidateReasons={candidateReasons} />
         <VideoCardStatusBadges {...statusBadgeProps} />
