@@ -77,10 +77,7 @@ export function useVideoUserRecords() {
     return cloudRecord;
   };
 
-  const markVideoStatus = async (videoId, status, extraUpdates = {}) => {
-    const previousRecord = videoUserRecords[videoId];
-    const record = createVideoStatusRecord(videoUserRecords, videoId, status, extraUpdates, new Date().toISOString());
-
+  const saveOptimisticVideoRecord = async (videoId, record, previousRecord) => {
     setVideoUserRecords(prev => ({
       ...prev,
       [videoId]: record,
@@ -98,52 +95,27 @@ export function useVideoUserRecords() {
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
       return false;
     }
+  };
+
+  const markVideoStatus = async (videoId, status, extraUpdates = {}) => {
+    const previousRecord = videoUserRecords[videoId];
+    const record = createVideoStatusRecord(videoUserRecords, videoId, status, extraUpdates, new Date().toISOString());
+
+    return saveOptimisticVideoRecord(videoId, record, previousRecord);
   };
 
   const updateVideoUserRecord = async (videoId, updates) => {
     const previousRecord = videoUserRecords[videoId];
     const record = createUpdatedVideoUserRecord(videoUserRecords, videoId, updates, new Date().toISOString());
 
-    setVideoUserRecords(prev => ({
-      ...prev,
-      [videoId]: record,
-    }));
-
-    try {
-      const cloudRecord = await saveRecordToCloud(record);
-      setVideoUserRecords(prev => ({
-        ...prev,
-        [videoId]: cloudRecord,
-      }));
-      return true;
-    } catch {
-      restorePreviousRecord(videoId, previousRecord);
-      setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
-      return false;
-    }
+    return saveOptimisticVideoRecord(videoId, record, previousRecord);
   };
 
   const restoreVideoToRadar = async (videoId) => {
     const previousRecord = videoUserRecords[videoId];
     const record = createRadarRestoredRecord(videoUserRecords[videoId], videoId, new Date().toISOString());
 
-    setVideoUserRecords(prev => ({
-      ...prev,
-      [videoId]: record,
-    }));
-
-    try {
-      const cloudRecord = await saveRecordToCloud(record);
-      setVideoUserRecords(prev => ({
-        ...prev,
-        [videoId]: cloudRecord,
-      }));
-      return true;
-    } catch {
-      restorePreviousRecord(videoId, previousRecord);
-      setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
-      return false;
-    }
+    return saveOptimisticVideoRecord(videoId, record, previousRecord);
   };
 
   const clearRadarDecisions = async () => {
