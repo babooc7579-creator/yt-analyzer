@@ -28,6 +28,21 @@ export function useVideoUserRecords() {
     cacheCloudRecords(upsertVideoUserRecord(cloudRecordsCacheRef.current, record));
   };
 
+  const restorePreviousRecord = (videoId, previousRecord) => {
+    setVideoUserRecords(prev => {
+      if (previousRecord) {
+        return {
+          ...prev,
+          [videoId]: previousRecord,
+        };
+      }
+
+      const next = { ...prev };
+      delete next[videoId];
+      return next;
+    });
+  };
+
   useEffect(() => {
     let isCancelled = false;
 
@@ -63,6 +78,7 @@ export function useVideoUserRecords() {
   };
 
   const markVideoStatus = async (videoId, status, extraUpdates = {}) => {
+    const previousRecord = videoUserRecords[videoId];
     const record = createVideoStatusRecord(videoUserRecords, videoId, status, extraUpdates, new Date().toISOString());
 
     setVideoUserRecords(prev => ({
@@ -78,12 +94,14 @@ export function useVideoUserRecords() {
       }));
       return true;
     } catch {
+      restorePreviousRecord(videoId, previousRecord);
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
       return false;
     }
   };
 
   const updateVideoUserRecord = async (videoId, updates) => {
+    const previousRecord = videoUserRecords[videoId];
     const record = createUpdatedVideoUserRecord(videoUserRecords, videoId, updates, new Date().toISOString());
 
     setVideoUserRecords(prev => ({
@@ -99,12 +117,14 @@ export function useVideoUserRecords() {
       }));
       return true;
     } catch {
+      restorePreviousRecord(videoId, previousRecord);
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
       return false;
     }
   };
 
   const restoreVideoToRadar = async (videoId) => {
+    const previousRecord = videoUserRecords[videoId];
     const record = createRadarRestoredRecord(videoUserRecords[videoId], videoId, new Date().toISOString());
 
     setVideoUserRecords(prev => ({
@@ -120,6 +140,7 @@ export function useVideoUserRecords() {
       }));
       return true;
     } catch {
+      restorePreviousRecord(videoId, previousRecord);
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed);
       return false;
     }
@@ -130,6 +151,7 @@ export function useVideoUserRecords() {
 
     if (!confirmed) return false;
 
+    const previousRecords = videoUserRecords;
     setVideoUserRecords({});
     try {
       const data = await clearVideoUserRecords();
@@ -138,6 +160,7 @@ export function useVideoUserRecords() {
       setVideoRecordsSyncWarning('');
       return true;
     } catch {
+      setVideoUserRecords(previousRecords);
       setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.clearFailed);
       return false;
     }
