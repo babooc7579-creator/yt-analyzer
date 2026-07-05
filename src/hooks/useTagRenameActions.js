@@ -1,4 +1,4 @@
-import { renameTag } from '../services/functionApi';
+import { renameTag } from '../services/channelApi';
 
 const getTagRenameErrorMessage = (error) => {
   const message = error?.message || '태그 이름 변경에 실패했습니다.';

@@ -4,7 +4,7 @@ import {
   deleteDiscoveryLink,
   fetchDiscoveryLinks,
   updateDiscoveryLink,
-} from '../services/functionApi';
+} from '../services/discoveryLinksApi';
 import {
   getDiscoveryLinkFromResponse,
   getDiscoveryLinkById,

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { deleteScrapbookVideo, fetchScrapbook, saveScrapbookVideos } from '../services/functionApi';
+import { deleteScrapbookVideo, fetchScrapbook, saveScrapbookVideos } from '../services/scrapbookApi';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
 import {

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { createChannel, createChannelNote, createChannelsBulk, removeChannel, updateChannel } from '../services/functionApi';
+import { createChannel, createChannelNote, createChannelsBulk, removeChannel, updateChannel } from '../services/channelApi';
 import {
   appendChannel,
   getChannelCloudActionError,
