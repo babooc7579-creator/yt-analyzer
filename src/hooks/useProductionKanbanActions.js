@@ -1,4 +1,9 @@
 import { useEffect, useState } from 'react';
+import {
+  getNextDraftRecords,
+  getProductionDraftUpdates,
+  hasProductionDraftChanges,
+} from '../utils/productionKanbanActions';
 
 export function useProductionKanbanActions({
   onMoveVideo,
@@ -11,51 +16,42 @@ export function useProductionKanbanActions({
   const [moveStates, setMoveStates] = useState({});
   const [linkMoveStates, setLinkMoveStates] = useState({});
 
+  const clearSavedStateAfterDelay = (setStates, itemId, delay) => {
+    setTimeout(() => {
+      setStates(prev => {
+        if (prev[itemId] !== 'saved') return prev;
+        const next = { ...prev };
+        delete next[itemId];
+        return next;
+      });
+    }, delay);
+  };
+
   useEffect(() => {
     setDraftRecords(videoUserRecords);
   }, [videoUserRecords]);
 
   const updateDraftRecord = (videoId, updates) => {
-    setDraftRecords(prev => ({
-      ...prev,
-      [videoId]: {
-        ...(prev[videoId] || videoUserRecords[videoId] || {}),
-        videoId,
-        ...updates,
-      },
-    }));
+    setDraftRecords(prev => getNextDraftRecords(prev, videoUserRecords, videoId, updates));
   };
 
   const hasUnsavedChanges = (videoId) => {
     const saved = videoUserRecords[videoId] || {};
     const draft = draftRecords[videoId] || {};
 
-    return (saved.draftTitle || '') !== (draft.draftTitle || '')
-      || (saved.note || '') !== (draft.note || '')
-      || (saved.targetPublishDate || '') !== (draft.targetPublishDate || '');
+    return hasProductionDraftChanges(saved, draft);
   };
 
   const saveDraftRecord = async (videoId) => {
     const draft = draftRecords[videoId] || {};
     setSaveStates(prev => ({ ...prev, [videoId]: 'saving' }));
 
-    const didSave = await onUpdateVideoRecord(videoId, {
-      draftTitle: draft.draftTitle || '',
-      note: draft.note || '',
-      targetPublishDate: draft.targetPublishDate || '',
-    });
+    const didSave = await onUpdateVideoRecord(videoId, getProductionDraftUpdates(draft));
 
     setSaveStates(prev => ({ ...prev, [videoId]: didSave ? 'saved' : 'error' }));
 
     if (didSave) {
-      setTimeout(() => {
-        setSaveStates(prev => {
-          if (prev[videoId] !== 'saved') return prev;
-          const next = { ...prev };
-          delete next[videoId];
-          return next;
-        });
-      }, 2200);
+      clearSavedStateAfterDelay(setSaveStates, videoId, 2200);
     }
   };
 
@@ -65,14 +61,7 @@ export function useProductionKanbanActions({
     setMoveStates(prev => ({ ...prev, [videoId]: didMove ? 'saved' : 'error' }));
 
     if (didMove) {
-      setTimeout(() => {
-        setMoveStates(prev => {
-          if (prev[videoId] !== 'saved') return prev;
-          const next = { ...prev };
-          delete next[videoId];
-          return next;
-        });
-      }, 1600);
+      clearSavedStateAfterDelay(setMoveStates, videoId, 1600);
     }
   };
 
@@ -84,14 +73,7 @@ export function useProductionKanbanActions({
     setLinkMoveStates(prev => ({ ...prev, [linkId]: didMove ? 'saved' : 'error' }));
 
     if (didMove) {
-      setTimeout(() => {
-        setLinkMoveStates(prev => {
-          if (prev[linkId] !== 'saved') return prev;
-          const next = { ...prev };
-          delete next[linkId];
-          return next;
-        });
-      }, 1600);
+      clearSavedStateAfterDelay(setLinkMoveStates, linkId, 1600);
     }
   };
 
