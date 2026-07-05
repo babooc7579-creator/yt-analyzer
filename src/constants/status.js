@@ -114,7 +114,21 @@ export const RADAR_HIDDEN_VIDEO_STATUSES = [
   VIDEO_STATUS.USED,
 ];
 
+const PRODUCTION_STATUS_PRIORITY = [
+  PRODUCTION_STATUS.DONE,
+  PRODUCTION_STATUS.ACTIVE,
+  PRODUCTION_STATUS.DECIDED,
+  PRODUCTION_STATUS.REVIEWING,
+  PRODUCTION_STATUS.ON_HOLD,
+];
+
 const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object || {}, key);
+
+const appendStatusId = (statusIds, status) => (
+  status && !statusIds.includes(status) ? [...statusIds, status] : statusIds
+);
+
+const uniqueStatusIds = (statusIds) => [...new Set(statusIds)];
 
 export const isVideoReviewStatus = (status) => VIDEO_REVIEW_STATUSES.includes(status);
 
@@ -130,13 +144,10 @@ export const normalizeVideoUserRecord = (record = {}) => {
   const statusIds = hasOwn(record, 'statusIds')
     ? normalizeStatusIds(record.statusIds)
     : normalizeStatusIds(record.status ? [record.status] : []);
-  const normalizedStatusIds = record.status && !statusIds.includes(record.status)
-    ? [...statusIds, record.status]
-    : statusIds;
 
   return {
     ...record,
-    statusIds: normalizedStatusIds,
+    statusIds: appendStatusId(statusIds, record.status),
   };
 };
 
@@ -155,8 +166,7 @@ export const normalizeVideoUserRecords = (records = {}) => {
 
 export const getVideoStatusIds = (record = {}) => {
   const statusIds = Array.isArray(record.statusIds) ? record.statusIds.filter(Boolean) : [];
-  if (record.status && !statusIds.includes(record.status)) return [...statusIds, record.status];
-  return statusIds;
+  return appendStatusId(statusIds, record.status);
 };
 
 export const getVideoReviewStatusIds = (record = {}) => (
@@ -189,12 +199,7 @@ export const isRadarHiddenRecord = (record = {}) => hasAnyVideoStatus(record, RA
 
 export const getProductionStatusFromRecord = (record = {}) => {
   const statusIds = getProductionStatusIds(record);
-  if (statusIds.includes(PRODUCTION_STATUS.DONE)) return PRODUCTION_STATUS.DONE;
-  if (statusIds.includes(PRODUCTION_STATUS.ACTIVE)) return PRODUCTION_STATUS.ACTIVE;
-  if (statusIds.includes(PRODUCTION_STATUS.DECIDED)) return PRODUCTION_STATUS.DECIDED;
-  if (statusIds.includes(PRODUCTION_STATUS.REVIEWING)) return PRODUCTION_STATUS.REVIEWING;
-  if (statusIds.includes(PRODUCTION_STATUS.ON_HOLD)) return PRODUCTION_STATUS.ON_HOLD;
-  return PRODUCTION_STATUS.CANDIDATE;
+  return PRODUCTION_STATUS_PRIORITY.find(status => statusIds.includes(status)) || PRODUCTION_STATUS.CANDIDATE;
 };
 
 export const withRecordStatus = (record = {}, status, extraUpdates = {}) => {
@@ -206,7 +211,7 @@ export const withRecordStatus = (record = {}, status, extraUpdates = {}) => {
   return {
     ...record,
     status,
-    statusIds: [...new Set([...statusIds, status])],
+    statusIds: uniqueStatusIds(appendStatusId(statusIds, status)),
     ...extraUpdates,
   };
 };
