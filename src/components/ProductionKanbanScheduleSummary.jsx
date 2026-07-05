@@ -17,10 +17,14 @@ export default function ProductionKanbanScheduleSummary({ productionSummary }) {
         </p>
       )}
       {productionSummary.overdueCount > 0 && (
-        <p className="mt-1 text-[10px] font-bold text-rose-600">지난 일정 {productionSummary.overdueCount}개 확인 필요</p>
+        <p className="mt-1 text-[10px] font-bold text-rose-600">
+          지난 일정 {productionSummary.overdueCount}개 확인 필요
+        </p>
       )}
       {productionSummary.activeWithoutDate > 0 && (
-        <p className="mt-1 text-[10px] font-bold text-amber-700">제작 중 {productionSummary.activeWithoutDate}개 일정 미정</p>
+        <p className="mt-1 text-[10px] font-bold text-amber-700">
+          제작 중 {productionSummary.activeWithoutDate}개 일정 미정
+        </p>
       )}
     </div>
   );
