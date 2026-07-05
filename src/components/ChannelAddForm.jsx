@@ -1,3 +1,4 @@
+import { getChannelAddFormViewProps } from '../utils/channelAddFormProps';
 import ChannelAddFormHeader from './ChannelAddFormHeader';
 import ChannelBulkAddForm from './ChannelBulkAddForm';
 import ChannelCategorySettings from './ChannelCategorySettings';
@@ -41,60 +42,49 @@ export default function ChannelAddForm({
   handleSaveChannel,
   loading,
 }) {
-  const headerProps = {
+  const {
+    bulkAddFormProps,
+    categorySettingsProps,
+    headerProps,
+    singleAddFormProps,
+  } = getChannelAddFormViewProps({
     addMode,
-    channelPreview,
-    isEditingCategory,
     setAddMode,
-    setIsEditingCategory,
-  };
-
-  const categorySettingsProps = {
-    cancelRenameCategory,
-    categories,
-    cloudOnlyTags,
-    confirmRenameCategory,
-    newCategoryName,
-    renameLoading,
-    renameValue,
-    renamingCategory,
-    setCategories,
-    setNewCategoryName,
-    setRenameValue,
-    startRenameCategory,
-  };
-
-  const bulkAddFormProps = {
     bulkInput,
+    setBulkInput,
     bulkLoading,
     bulkResult,
-    categories,
-    handleBulkAdd,
-    newChannelLang,
-    newChannelTags,
     resetBulkAdd,
-    setBulkInput,
-    setNewChannelLang,
-    toggleNewChannelTag,
-  };
-
-  const singleAddFormProps = {
-    cancelChannelPreview,
+    handleBulkAdd,
     categories,
+    cloudOnlyTags,
+    setCategories,
+    newCategoryName,
+    setNewCategoryName,
+    isEditingCategory,
+    setIsEditingCategory,
+    renamingCategory,
+    renameValue,
+    setRenameValue,
+    renameLoading,
+    startRenameCategory,
+    confirmRenameCategory,
+    cancelRenameCategory,
+    newChannelInput,
+    setNewChannelInput,
+    newChannelTags,
+    toggleNewChannelTag,
+    newChannelLang,
+    setNewChannelLang,
+    newChannelNote,
+    setNewChannelNote,
     channelPreview,
+    previewLoading,
     handlePreviewChannel,
+    cancelChannelPreview,
     handleSaveChannel,
     loading,
-    newChannelInput,
-    newChannelLang,
-    newChannelNote,
-    newChannelTags,
-    previewLoading,
-    setNewChannelInput,
-    setNewChannelLang,
-    setNewChannelNote,
-    toggleNewChannelTag,
-  };
+  });
 
   return (
     <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-4">
