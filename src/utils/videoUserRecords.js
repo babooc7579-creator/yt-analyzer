@@ -6,41 +6,57 @@ import {
   withRecordStatus,
 } from '../constants/status';
 
+const toRecordMap = (records) => (
+  records && typeof records === 'object' ? records : {}
+);
+
+const toRecordObject = (record) => (
+  record && typeof record === 'object' ? record : {}
+);
+
 export const getCloudVideoUserRecords = (records = {}) => normalizeVideoUserRecords(records || {});
 
 export const getCloudVideoUserRecord = (record = {}) => normalizeVideoUserRecord(record);
 
-export const upsertVideoUserRecord = (records, record) => ({
-  ...records,
-  [record.videoId]: record,
-});
+export const upsertVideoUserRecord = (records, record) => {
+  const recordMap = toRecordMap(records);
+  const nextRecord = toRecordObject(record);
+
+  if (!nextRecord.videoId) return recordMap;
+
+  return {
+    ...recordMap,
+    [nextRecord.videoId]: nextRecord,
+  };
+};
 
 export const createVideoStatusRecord = (records, videoId, status, extraUpdates = {}, updatedAt) => (
   withRecordStatus({
-    ...(records[videoId] || {}),
+    ...(toRecordMap(records)[videoId] || {}),
     videoId,
   }, status, {
-    ...extraUpdates,
+    ...toRecordObject(extraUpdates),
     updatedAt,
   })
 );
 
 export const createUpdatedVideoUserRecord = (records, videoId, updates, updatedAt) => (
   normalizeVideoUserRecord({
-    ...(records[videoId] || {}),
+    ...(toRecordMap(records)[videoId] || {}),
     videoId,
-    ...updates,
+    ...toRecordObject(updates),
     updatedAt,
   })
 );
 
 export const createRadarRestoredRecord = (record = {}, videoId, updatedAt) => {
-  const keptStatusIds = Array.isArray(record.statusIds)
-    ? record.statusIds.filter(status => !RADAR_HIDDEN_VIDEO_STATUSES.includes(status))
+  const sourceRecord = toRecordObject(record);
+  const keptStatusIds = Array.isArray(sourceRecord.statusIds)
+    ? sourceRecord.statusIds.filter(status => !RADAR_HIDDEN_VIDEO_STATUSES.includes(status))
     : [];
 
   return {
-    ...record,
+    ...sourceRecord,
     videoId,
     status: VIDEO_STATUS.UNSEEN,
     statusIds: [...new Set([...keptStatusIds, VIDEO_STATUS.UNSEEN])],
