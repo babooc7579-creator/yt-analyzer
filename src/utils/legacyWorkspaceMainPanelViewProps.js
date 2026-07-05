@@ -1,3 +1,9 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toVideoList = (videos) => (
+  toArray(videos).filter(video => video && typeof video === 'object')
+);
+
 export function getLegacyWorkspaceMainPanelViewProps({
   activeSelectedChannelCount,
   activeTab,
@@ -46,15 +52,22 @@ export function getLegacyWorkspaceMainPanelViewProps({
   viewMode,
   visibleScrapCount,
 }) {
+  const checkedVideoIds = toArray(checkedVideos);
+  const filteredVideos = toVideoList(filteredAndSortedVideos);
+  const savedChannelList = toArray(savedChannels);
+  const savedVideoList = toVideoList(savedVideos);
+  const selectedChannels = toArray(selectedChannelIds);
+  const videoList = toVideoList(videos);
+
   return {
     activeTab,
     dashboardTabProps: {
       activeSelectedChannelCount,
-      checkedVideos,
+      checkedVideos: checkedVideoIds,
       copiedPrompt,
       copyPromptForVideos,
       fetchTopComments,
-      filteredAndSortedVideos,
+      filteredAndSortedVideos: filteredVideos,
       handleManualScan,
       isProductionCandidate,
       isReferenceVaultView,
@@ -63,11 +76,11 @@ export function getLegacyWorkspaceMainPanelViewProps({
       lengthFilter,
       promoteVideoToProduction,
       promptCopyError,
-      savedChannels,
-      savedVideos,
+      savedChannels: savedChannelList,
+      savedVideos: savedVideoList,
       scannableChannelCount,
       searchKeyword,
-      selectedChannelIds,
+      selectedChannelIds: selectedChannels,
       setLengthFilter,
       setSearchKeyword,
       setShowWorkPanel,
@@ -82,7 +95,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
       totalVideoCount,
       ttoTtoAssetCount,
       ttoTtoMode,
-      videos,
+      videos: videoList,
       viewFilter,
       viewMode,
       visibleScrapCount,
@@ -96,7 +109,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
       markRadarVideoStatus,
       openCreatorView,
       promptCopyError,
-      savedVideos,
+      savedVideos: savedVideoList,
       toggleScrapVideo,
       updateDiscoveryLink,
       updateVideoUserRecord,
@@ -105,7 +118,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
     workspaceTabsProps: {
       activeTab,
       onSelectTab: setActiveTab,
-      savedVideoCount: savedVideos.length,
+      savedVideoCount: savedVideoList.length,
     },
   };
 }

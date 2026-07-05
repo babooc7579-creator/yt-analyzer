@@ -1,8 +1,14 @@
 import { isChannelScannable } from '../constants/status';
 import { getChannelScanDisplay } from './channelScanDisplay';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toChannelList = (channels) => (
+  toArray(channels).filter(channel => channel && typeof channel === 'object')
+);
+
 const getScannableChannelCountForCategory = (channels, category) => (
-  channels.filter(channel => (
+  toChannelList(channels).filter(channel => (
     channel.tags?.includes(category) && isChannelScannable(channel)
   )).length
 );
@@ -64,6 +70,10 @@ export function getLegacyChannelPanelViewProps({
   toggleNewChannelTag,
   updatingChannelId,
 }) {
+  const categoryList = toArray(categories);
+  const channelList = toChannelList(savedChannels);
+  const selectedChannels = toArray(selectedChannelIds);
+
   return {
     channelAddFormProps: {
       addMode,
@@ -72,7 +82,7 @@ export function getLegacyChannelPanelViewProps({
       bulkResult,
       cancelChannelPreview,
       cancelRenameCategory,
-      categories,
+      categories: categoryList,
       channelPreview,
       cloudOnlyTags,
       confirmRenameCategory,
@@ -104,7 +114,7 @@ export function getLegacyChannelPanelViewProps({
       toggleNewChannelTag,
     },
     channelListProps: {
-      channels: savedChannels,
+      channels: channelList,
       channelsLoading,
       getScanDisplay: getChannelScanDisplay,
       onDelete: onDeleteChannel,
@@ -112,7 +122,7 @@ export function getLegacyChannelPanelViewProps({
       onToggleSelection: onToggleChannelSelection,
       onUpdateMetadata: onUpdateChannelMetadata,
       selectedCategory: selectedCategoryTab,
-      selectedChannelIds,
+      selectedChannelIds: selectedChannels,
       updatingChannelId,
     },
     footerProps: {
@@ -120,7 +130,7 @@ export function getLegacyChannelPanelViewProps({
       loading,
       onLoadStoredVideos,
       progressMsg,
-      selectedChannelCount: selectedChannelIds.length,
+      selectedChannelCount: selectedChannels.length,
     },
     introProps: {
       apiKey,
@@ -128,9 +138,9 @@ export function getLegacyChannelPanelViewProps({
     },
     showWorkPanel,
     tagTabsProps: {
-      categories,
-      channels: savedChannels,
-      getScannableChannelCount: (category) => getScannableChannelCountForCategory(savedChannels, category),
+      categories: categoryList,
+      channels: channelList,
+      getScannableChannelCount: (category) => getScannableChannelCountForCategory(channelList, category),
       isScanning,
       onScanTag: handleTagScan,
       onSelectCategory: setSelectedCategoryTab,

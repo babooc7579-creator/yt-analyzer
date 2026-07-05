@@ -1,3 +1,5 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export function getLegacyVaultTabViewProps({
   copiedPrompt,
   copyPromptForVideos,
@@ -13,15 +15,17 @@ export function getLegacyVaultTabViewProps({
   updateVideoUserRecord,
   videoUserRecords,
 }) {
+  const savedVideoList = toArray(savedVideos);
+
   return {
     scrapbookWorkspaceProps: {
       creatorView,
       discoveryLinks,
       copiedPrompt,
       promptCopyError,
-      savedVideos,
+      savedVideos: savedVideoList,
       videoUserRecords,
-      onCopyPrompt: () => copyPromptForVideos(savedVideos),
+      onCopyPrompt: () => copyPromptForVideos(savedVideoList),
       onFetchComments: fetchTopComments,
       onMoveVideo: markRadarVideoStatus,
       onOpenDiscoveryLinks: () => openCreatorView({ id: 'vault-sources' }),
