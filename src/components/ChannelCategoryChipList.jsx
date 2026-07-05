@@ -1,5 +1,7 @@
 import ChannelCategoryChip from './ChannelCategoryChip';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function ChannelCategoryChipList({
   cancelRenameCategory,
   categories,
@@ -11,9 +13,11 @@ export default function ChannelCategoryChipList({
   setRenameValue,
   startRenameCategory,
 }) {
+  const categoryList = toArray(categories);
+
   return (
     <div className="flex flex-wrap gap-1">
-      {categories.map((cat) => {
+      {categoryList.map((cat) => {
         const chipProps = {
           cancelRenameCategory,
           category: cat,

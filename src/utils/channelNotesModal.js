@@ -1,10 +1,12 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export const getChannelNotesModalViewProps = (modal) => {
   if (!modal.isOpen || !modal.channel) {
     return { shouldRender: false };
   }
 
   const channelTitle = modal.channel.title;
-  const notes = modal.channel.notes || [];
+  const notes = toArray(modal.channel.notes);
 
   return {
     shouldRender: true,
