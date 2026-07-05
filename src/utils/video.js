@@ -2,8 +2,23 @@ export const TTOTTO_MIN_DAYS_OLD = 180;
 export const TTOTTO_MIN_MULTIPLIER = 1.5;
 export const STRONG_REACTION_MULTIPLIER = 3;
 
+const toVideoObject = (video) => (
+  video && typeof video === 'object' ? video : {}
+);
+
+const toVideoList = (videos) => (
+  Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
+);
+
+const toText = (value) => (typeof value === 'string' ? value : '');
+
+const toNumber = (value) => {
+  const numericValue = Number(value || 0);
+  return Number.isFinite(numericValue) ? numericValue : 0;
+};
+
 export const parseDuration = (durationString) => {
-  const match = durationString?.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+  const match = toText(durationString).match(/PT(\d+H)?(\d+M)?(\d+S)?/);
 
   if (!match) {
     return { isShorts: false, formatted: '00:00', totalSeconds: 0 };
@@ -27,24 +42,26 @@ export const parseDuration = (durationString) => {
 };
 
 export const mapCloudVideoToViewModel = (video, daysOld) => {
-  const viewCount = video.viewCount || 0;
+  const sourceVideo = toVideoObject(video);
+  const viewCount = toNumber(sourceVideo.viewCount);
+  const daysOldValue = toNumber(daysOld);
 
   return {
-    videoId: video.id,
-    title: video.title,
-    thumbnail: video.thumbnail,
-    upload_date: video.uploadDate,
-    channel_title: video.channelTitle,
-    channel_id: video.channelId,
-    language: video.language,
-    daysOld,
+    videoId: sourceVideo.id,
+    title: sourceVideo.title,
+    thumbnail: sourceVideo.thumbnail,
+    upload_date: sourceVideo.uploadDate,
+    channel_title: sourceVideo.channelTitle,
+    channel_id: sourceVideo.channelId,
+    language: sourceVideo.language,
+    daysOld: daysOldValue,
     view_count: viewCount,
-    like_count: video.likeCount || 0,
-    like_ratio: video.likeRatio || 0,
-    duration: video.duration || '00:00',
-    isShorts: video.isShorts || false,
-    multiplier: video.multiplier || 0,
-    views_per_day: Math.round(viewCount / Math.max(1, daysOld)),
+    like_count: toNumber(sourceVideo.likeCount),
+    like_ratio: toNumber(sourceVideo.likeRatio),
+    duration: sourceVideo.duration || '00:00',
+    isShorts: Boolean(sourceVideo.isShorts),
+    multiplier: toNumber(sourceVideo.multiplier),
+    views_per_day: Math.round(viewCount / Math.max(1, daysOldValue)),
   };
 };
 
@@ -65,23 +82,24 @@ export const filterAndSortVideos = ({
   ttoTtoMode,
   sortType,
 }) => {
-  let result = [...videos];
+  let result = toVideoList(videos);
+  const minimumViews = toNumber(viewFilter);
 
   if (searchKeyword) {
-    const loweredKeyword = searchKeyword.toLowerCase();
-    result = result.filter((video) => video.title.toLowerCase().includes(loweredKeyword));
+    const loweredKeyword = toText(searchKeyword).toLowerCase();
+    result = result.filter((video) => toText(video.title).toLowerCase().includes(loweredKeyword));
   }
 
-  if (viewFilter > 0) result = result.filter((video) => video.view_count >= viewFilter);
+  if (minimumViews > 0) result = result.filter((video) => toNumber(video.view_count) >= minimumViews);
   if (lengthFilter === 'shorts') result = result.filter((video) => video.isShorts);
   else if (lengthFilter === 'long') result = result.filter((video) => !video.isShorts);
-  if (ttoTtoMode) result = result.filter((video) => video.daysOld >= TTOTTO_MIN_DAYS_OLD);
+  if (ttoTtoMode) result = result.filter((video) => toNumber(video.daysOld) >= TTOTTO_MIN_DAYS_OLD);
 
-  if (sortType === 'date') result.sort((a, b) => a.daysOld - b.daysOld);
-  else if (sortType === 'views') result.sort((a, b) => b.view_count - a.view_count);
-  else if (sortType === 'multiplier') result.sort((a, b) => b.multiplier - a.multiplier);
-  else if (sortType === 'viral') result.sort((a, b) => b.views_per_day - a.views_per_day);
-  else if (sortType === 'likes') result.sort((a, b) => b.like_ratio - a.like_ratio);
+  if (sortType === 'date') result.sort((a, b) => toNumber(a.daysOld) - toNumber(b.daysOld));
+  else if (sortType === 'views') result.sort((a, b) => toNumber(b.view_count) - toNumber(a.view_count));
+  else if (sortType === 'multiplier') result.sort((a, b) => toNumber(b.multiplier) - toNumber(a.multiplier));
+  else if (sortType === 'viral') result.sort((a, b) => toNumber(b.views_per_day) - toNumber(a.views_per_day));
+  else if (sortType === 'likes') result.sort((a, b) => toNumber(b.like_ratio) - toNumber(a.like_ratio));
 
   return result;
 };
