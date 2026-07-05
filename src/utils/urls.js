@@ -8,8 +8,9 @@ export const getYouTubeChannelUrl = (channel) => {
 
   const handle = channel.handle || channel.customUrl || channel.username;
   if (handle) {
-    if (/^https?:\/\//i.test(handle)) return handle;
-    const normalizedHandle = handle.startsWith('@') ? handle : `@${handle}`;
+    const handleText = String(handle);
+    if (/^https?:\/\//i.test(handleText)) return handleText;
+    const normalizedHandle = handleText.startsWith('@') ? handleText : `@${handleText}`;
     return `https://youtube.com/${normalizedHandle}`;
   }
 
@@ -17,7 +18,7 @@ export const getYouTubeChannelUrl = (channel) => {
 };
 
 export const formatNumberedUrlList = (rows) => (
-  rows
+  (Array.isArray(rows) ? rows : [])
     .map((row) => {
       if (!row) return null;
       const lines = Array.isArray(row) ? row : [row];
