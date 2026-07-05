@@ -1,3 +1,9 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toVideoList = (videos) => (
+  toArray(videos).filter(video => video && typeof video === 'object')
+);
+
 export function getLegacyDashboardTabViewProps({
   activeSelectedChannelCount,
   checkedVideos,
@@ -37,26 +43,32 @@ export function getLegacyDashboardTabViewProps({
   viewMode,
   visibleScrapCount,
 }) {
-  const selectedVideos = videos.filter(video => checkedVideos.includes(video.videoId));
+  const checkedVideoIds = toArray(checkedVideos);
+  const filteredVideos = toVideoList(filteredAndSortedVideos);
+  const savedChannelList = toArray(savedChannels);
+  const savedVideoList = toVideoList(savedVideos);
+  const selectedChannels = toArray(selectedChannelIds);
+  const videoList = toVideoList(videos);
+  const selectedVideos = videoList.filter(video => checkedVideoIds.includes(video.videoId));
 
   return {
     controlsProps: {
       activeSelectedChannelCount,
-      checkedVideos,
+      checkedVideos: checkedVideoIds,
       copiedPrompt,
       promptCopyError,
-      filteredCount: filteredAndSortedVideos.length,
-      filteredVideos: filteredAndSortedVideos,
+      filteredCount: filteredVideos.length,
+      filteredVideos,
       isReferenceVaultView,
       isScanning,
       lengthFilter,
       onCopyPrompt: () => copyPromptForVideos(selectedVideos),
       onManualScan: handleManualScan,
-      savedChannelCount: savedChannels.length,
-      savedVideoCount: savedVideos.length,
+      savedChannelCount: savedChannelList.length,
+      savedVideoCount: savedVideoList.length,
       scannableChannelCount,
       searchKeyword,
-      selectedChannelCount: selectedChannelIds.length,
+      selectedChannelCount: selectedChannels.length,
       setLengthFilter,
       setSearchKeyword,
       setShowWorkPanel,
@@ -74,8 +86,8 @@ export function getLegacyDashboardTabViewProps({
       visibleScrapCount,
     },
     resultsPanelProps: {
-      checkedVideos,
-      filteredVideos: filteredAndSortedVideos,
+      checkedVideos: checkedVideoIds,
+      filteredVideos,
       isProductionCandidate,
       isVideoSaved,
       onFetchComments: fetchTopComments,
@@ -83,7 +95,7 @@ export function getLegacyDashboardTabViewProps({
       onToggleCheck: toggleCheckVideo,
       onToggleScrap: toggleScrapVideo,
       showWorkPanel,
-      videos,
+      videos: videoList,
       viewMode,
     },
   };

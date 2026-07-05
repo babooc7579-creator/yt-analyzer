@@ -1,7 +1,9 @@
-export function buildLegacyWorkspaceRouteProps(props) {
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+export function buildLegacyWorkspaceRouteProps(props = {}) {
   return {
     ...props,
-    totalVideoCount: props.videos.length,
+    totalVideoCount: toArray(props.videos).length,
     updateDiscoveryLink: props.changeDiscoveryLink,
   };
 }
