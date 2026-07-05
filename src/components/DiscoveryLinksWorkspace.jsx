@@ -1,5 +1,6 @@
 import { useDiscoveryLinkForm } from '../hooks/useDiscoveryLinkForm';
 import { useDiscoveryLinkFilters } from '../hooks/useDiscoveryLinkFilters';
+import { getDiscoveryLinksWorkspaceViewProps } from '../utils/discoveryLinksWorkspaceProps';
 import DiscoveryLinkForm from './DiscoveryLinkForm';
 import DiscoveryLinksFilters from './DiscoveryLinksFilters';
 import DiscoveryLinksHeader from './DiscoveryLinksHeader';
@@ -45,54 +46,42 @@ export default function DiscoveryLinksWorkspace({
     statusFilter,
     statusFilterOptions,
   } = useDiscoveryLinkFilters(links);
-  const formProps = {
+  const {
+    filtersProps,
+    formProps,
+    headerProps,
+    listProps,
+    noticesProps,
+  } = getDiscoveryLinksWorkspaceViewProps({
+    clearDiscoveryFilters,
     duplicateLink,
+    error,
+    filteredDiscoveryLinkUrlList,
+    filteredLinks,
     form,
+    handleSubmit,
+    hasActiveDiscoveryFilters,
     isCreateDisabled,
-    saving,
-    showRiskyCandidateHint,
-    urlPreview,
-    onChange: updateForm,
-    onSubmit: handleSubmit,
-  };
-
-  const headerProps = {
-    filteredLinkCount: filteredLinks.length,
+    links,
     loading,
+    notice,
+    onDeleteLink,
     onRefresh,
-    saving,
-    totalLinkCount: links.length,
-    urlList: filteredDiscoveryLinkUrlList,
-  };
-
-  const filtersProps = {
-    filteredLinkCount: filteredLinks.length,
-    hasActiveFilters: hasActiveDiscoveryFilters,
+    onUpdateLink,
     rightsFilter,
     rightsFilterOptions,
+    saving,
+    savingMessage,
     searchQuery,
     setRightsFilter,
     setSearchQuery,
     setStatusFilter,
+    showRiskyCandidateHint,
     statusFilter,
     statusFilterOptions,
-  };
-
-  const noticesProps = {
-    error,
-    notice,
-    savingMessage,
-  };
-
-  const listProps = {
-    allLinkCount: links.length,
-    clearFilters: clearDiscoveryFilters,
-    filteredLinks,
-    loading,
-    onDeleteLink,
-    onUpdateLink,
-    saving,
-  };
+    updateForm,
+    urlPreview,
+  });
 
   return (
     <div data-testid="creator-route-discovery-links" className="grid grid-cols-1 gap-4 2xl:grid-cols-[420px_minmax(0,1fr)]">
