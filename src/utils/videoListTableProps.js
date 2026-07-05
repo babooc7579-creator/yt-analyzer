@@ -9,6 +9,8 @@ export const VIDEO_LIST_TABLE_HEADERS = [
   { key: 'days-old', label: '경과일', className: 'px-3 py-3 text-right' },
 ];
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export const getVideoListTableViewProps = ({
   checkedVideos,
   isProductionCandidate,
@@ -17,16 +19,20 @@ export const getVideoListTableViewProps = ({
   promoteVideoToProduction,
   toggleCheckVideo,
   toggleScrapVideo,
-}) => ({
-  headers: VIDEO_LIST_TABLE_HEADERS,
-  getRowProps: (video) => ({
-    fetchTopComments,
-    isChecked: checkedVideos.includes(video.videoId),
-    isProductionCandidate: isProductionCandidate(video.videoId),
-    isSaved: isVideoSaved(video.videoId),
-    promoteVideoToProduction,
-    toggleCheckVideo,
-    toggleScrapVideo,
-    video,
-  }),
-});
+}) => {
+  const checkedVideoList = toArray(checkedVideos);
+
+  return {
+    headers: VIDEO_LIST_TABLE_HEADERS,
+    getRowProps: (video) => ({
+      fetchTopComments,
+      isChecked: checkedVideoList.includes(video.videoId),
+      isProductionCandidate: isProductionCandidate(video.videoId),
+      isSaved: isVideoSaved(video.videoId),
+      promoteVideoToProduction,
+      toggleCheckVideo,
+      toggleScrapVideo,
+      video,
+    }),
+  };
+};
