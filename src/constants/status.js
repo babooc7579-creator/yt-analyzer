@@ -124,6 +124,10 @@ const PRODUCTION_STATUS_PRIORITY = [
 
 const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object || {}, key);
 
+const toRecordObject = (record) => (
+  record && typeof record === 'object' ? record : {}
+);
+
 const appendStatusId = (statusIds, status) => (
   status && !statusIds.includes(status) ? [...statusIds, status] : statusIds
 );
@@ -141,13 +145,14 @@ export const normalizeStatusIds = (statusIds) => (
 );
 
 export const normalizeVideoUserRecord = (record = {}) => {
-  const statusIds = hasOwn(record, 'statusIds')
-    ? normalizeStatusIds(record.statusIds)
-    : normalizeStatusIds(record.status ? [record.status] : []);
+  const sourceRecord = toRecordObject(record);
+  const statusIds = hasOwn(sourceRecord, 'statusIds')
+    ? normalizeStatusIds(sourceRecord.statusIds)
+    : normalizeStatusIds(sourceRecord.status ? [sourceRecord.status] : []);
 
   return {
-    ...record,
-    statusIds: appendStatusId(statusIds, record.status),
+    ...sourceRecord,
+    statusIds: appendStatusId(statusIds, sourceRecord.status),
   };
 };
 
@@ -165,8 +170,9 @@ export const normalizeVideoUserRecords = (records = {}) => {
 };
 
 export const getVideoStatusIds = (record = {}) => {
-  const statusIds = Array.isArray(record.statusIds) ? record.statusIds.filter(Boolean) : [];
-  return appendStatusId(statusIds, record.status);
+  const sourceRecord = toRecordObject(record);
+  const statusIds = normalizeStatusIds(sourceRecord.statusIds);
+  return appendStatusId(statusIds, sourceRecord.status);
 };
 
 export const getVideoReviewStatusIds = (record = {}) => (
@@ -203,13 +209,14 @@ export const getProductionStatusFromRecord = (record = {}) => {
 };
 
 export const withRecordStatus = (record = {}, status, extraUpdates = {}) => {
-  const currentStatusIds = getVideoStatusIds(record);
+  const sourceRecord = toRecordObject(record);
+  const currentStatusIds = getVideoStatusIds(sourceRecord);
   const statusIds = isProductionStatus(status)
     ? currentStatusIds.filter(currentStatus => !isProductionStatus(currentStatus))
     : currentStatusIds;
 
   return {
-    ...record,
+    ...sourceRecord,
     status,
     statusIds: uniqueStatusIds(appendStatusId(statusIds, status)),
     ...extraUpdates,
