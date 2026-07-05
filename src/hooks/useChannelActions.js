@@ -2,18 +2,13 @@ import { useCallback } from 'react';
 import { createChannel, createChannelNote, createChannelsBulk, removeChannel, updateChannel } from '../services/functionApi';
 import {
   appendChannel,
-  getChannelDeleteName,
+  getChannelCloudActionError,
+  getChannelDeleteConfirmMessage,
   removeChannelById,
   removeSelectedChannelId,
   replaceChannel,
   shouldDeselectChannelAfterUpdate,
 } from '../utils/channelActions';
-
-const getChannelCloudActionError = (message, fallbackMessage, actionLabel = '저장') => {
-  const baseMessage = message || fallbackMessage;
-  if (baseMessage.includes('완료 처리하지 않았습니다')) return baseMessage;
-  return `${baseMessage} Cloud 채널 ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
-};
 
 export function useChannelActions({
   setSavedChannels,
@@ -44,10 +39,7 @@ export function useChannelActions({
   }, []);
 
   const deleteChannel = useCallback(async (id, category, title) => {
-    const channelName = getChannelDeleteName(title);
-    const confirmed = window.confirm(
-      `'${channelName}' 채널을 Cloud 채널 목록에서 삭제할까요?\n\n삭제하면 저장 영상 조회와 새 영상 수집 대상에서 빠집니다. 나중에 다시 보려면 채널을 다시 추가해야 합니다.`
-    );
+    const confirmed = window.confirm(getChannelDeleteConfirmMessage(title));
 
     if (!confirmed) return;
 
