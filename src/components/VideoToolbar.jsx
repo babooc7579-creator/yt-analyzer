@@ -1,3 +1,4 @@
+import { getVideoToolbarViewProps } from '../utils/videoToolbarProps';
 import VideoToolbarFilters from './VideoToolbarFilters';
 import VideoToolbarReferenceHeader from './VideoToolbarReferenceHeader';
 import VideoToolbarScanAction from './VideoToolbarScanAction';
@@ -28,39 +29,35 @@ export default function VideoToolbar({
   ttoTtoMode,
   setTtoTtoMode,
 }) {
-  const scanTargetCount = selectedChannelCount > 0 ? activeSelectedChannelCount : scannableChannelCount;
-  const referenceHeaderProps = {
+  const {
+    filtersProps,
+    referenceHeaderProps,
+    scanActionProps,
+    ttoTtoButtonProps,
+  } = getVideoToolbarViewProps({
+    activeSelectedChannelCount,
     filteredCount,
     filteredVideoUrlList,
-    totalCount,
-  };
-
-  const filtersProps = {
+    handleManualScan,
+    isScanning,
     lengthFilter,
+    scannableChannelCount,
     searchKeyword,
+    selectedChannelCount,
     setLengthFilter,
     setSearchKeyword,
     setShowWorkPanel,
     setSortType,
+    setTtoTtoMode,
     setViewFilter,
     setViewMode,
     showWorkPanel,
     sortType,
+    totalCount,
+    ttoTtoMode,
     viewFilter,
     viewMode,
-  };
-
-  const scanActionProps = {
-    handleManualScan,
-    isScanning,
-    scanTargetCount,
-    selectedChannelCount,
-  };
-
-  const ttoTtoButtonProps = {
-    setTtoTtoMode,
-    ttoTtoMode,
-  };
+  });
 
   return (
     <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-4 flex flex-col 2xl:flex-row gap-4 justify-between items-stretch z-20">
