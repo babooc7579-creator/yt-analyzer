@@ -1,7 +1,7 @@
 import SelectedVideosActionBar from './SelectedVideosActionBar';
 import VideoDashboardSourceSummary from './VideoDashboardSourceSummary';
 import VideoToolbar from './VideoToolbar';
-import { formatNumberedUrlList, getYouTubeVideoUrl } from '../utils/urls';
+import { getVideoDashboardControlsViewProps } from '../utils/videoDashboardControls';
 
 export default function VideoDashboardControls({
   activeSelectedChannelCount,
@@ -36,53 +36,43 @@ export default function VideoDashboardControls({
   viewMode,
   visibleScrapCount,
 }) {
-  const filteredVideoUrlList = formatNumberedUrlList(
-    filteredVideos
-      .filter((video) => video.videoId)
-      .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
-  );
-
-  const sourceSummaryProps = {
-    isReferenceVaultView,
-    savedChannelCount,
-    savedVideoCount,
-    totalVideoCount,
-    ttoTtoAssetCount,
-    visibleScrapCount,
-  };
-
-  const toolbarProps = {
-    isReferenceVaultView,
-    filteredCount,
-    filteredVideoUrlList,
-    totalCount: totalVideoCount,
-    searchKeyword,
-    setSearchKeyword,
-    viewFilter,
-    setViewFilter,
-    lengthFilter,
-    setLengthFilter,
-    sortType,
-    setSortType,
-    viewMode,
-    setViewMode,
-    showWorkPanel,
-    setShowWorkPanel,
-    isScanning,
-    selectedChannelCount,
+  const {
+    selectedVideosActionProps,
+    sourceSummaryProps,
+    toolbarProps,
+  } = getVideoDashboardControlsViewProps({
     activeSelectedChannelCount,
-    scannableChannelCount,
-    handleManualScan: onManualScan,
-    ttoTtoMode,
-    setTtoTtoMode,
-  };
-
-  const selectedVideosActionProps = {
-    selectedCount: checkedVideos.length,
+    checkedVideos,
     copiedPrompt,
     promptCopyError,
+    filteredCount,
+    filteredVideos,
+    isReferenceVaultView,
+    isScanning,
+    lengthFilter,
     onCopyPrompt,
-  };
+    onManualScan,
+    savedChannelCount,
+    savedVideoCount,
+    scannableChannelCount,
+    searchKeyword,
+    selectedChannelCount,
+    setLengthFilter,
+    setSearchKeyword,
+    setShowWorkPanel,
+    setSortType,
+    setTtoTtoMode,
+    setViewFilter,
+    setViewMode,
+    showWorkPanel,
+    sortType,
+    totalVideoCount,
+    ttoTtoAssetCount,
+    ttoTtoMode,
+    viewFilter,
+    viewMode,
+    visibleScrapCount,
+  });
 
   return (
     <>
