@@ -1,3 +1,4 @@
+import { getProductionVideoCardProps } from '../utils/productionKanbanColumn';
 import ProductionVideoCard from './ProductionVideoCard';
 
 export default function ProductionKanbanColumn({
@@ -28,23 +29,19 @@ export default function ProductionKanbanColumn({
           <div className="rounded-xl border border-dashed border-slate-300 bg-white/70 p-5 text-center text-xs font-semibold text-slate-400">비어 있음</div>
         ) : (
           videos.map((video) => {
-            const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
-            const isDirty = hasUnsavedChanges(video.videoId);
-            const saveState = saveStates[video.videoId];
-            const moveState = moveStates[video.videoId];
-            const scheduleSignal = getScheduleSignal(record);
-            const cardProps = {
+            const cardProps = getProductionVideoCardProps({
               columnId: column.id,
-              isDirty,
-              moveState,
+              draftRecords,
+              getScheduleSignal,
+              hasUnsavedChanges,
+              moveStates,
               onMove,
               onSave,
               onUpdateDraft,
-              record,
-              saveState,
-              scheduleSignal,
+              saveStates,
               video,
-            };
+              videoUserRecords,
+            });
 
             return (
               <ProductionVideoCard key={video.videoId} {...cardProps} />
