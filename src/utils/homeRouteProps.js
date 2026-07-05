@@ -1,3 +1,5 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export function buildHomeRouteProps({
   clearRadarDecisions,
   discoveryCandidateCount,
@@ -19,6 +21,8 @@ export function buildHomeRouteProps({
   videoUserRecords,
   videos,
 }) {
+  const selectedChannels = toArray(selectedChannelIds);
+
   return {
     clearRadarDecisions,
     discoveryCandidateCount,
@@ -34,7 +38,7 @@ export function buildHomeRouteProps({
     restoreVideoToRadar,
     savedChannels,
     savedVideos,
-    selectedChannelCount: selectedChannelIds.length,
+    selectedChannelCount: selectedChannels.length,
     toggleScrapVideo,
     ttoTtoAssetCount,
     videoUserRecords,
