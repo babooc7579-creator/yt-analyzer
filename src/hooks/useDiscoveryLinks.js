@@ -16,7 +16,7 @@ import {
   replaceDiscoveryLink,
   sortDiscoveryLinksByRecentUpdate,
   upsertDiscoveryLink,
-} from '../utils/discoveryLinks';
+} from '../utils/discoveryLinkCollection';
 
 const getDiscoveryActionError = (error, fallbackMessage, actionLabel = '저장') => {
   const message = error?.message || fallbackMessage;

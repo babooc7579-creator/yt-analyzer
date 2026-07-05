@@ -1,0 +1,83 @@
+import {
+  getDiscoveryLinkHost,
+  getDiscoveryLinkStatusLabel,
+  getDiscoveryRightsStatusLabel,
+} from '../constants/discoveryLinks';
+
+export const getDiscoveryLinksFromResponse = (data) => {
+  if (Array.isArray(data?.links)) return data.links;
+  if (Array.isArray(data?.items)) return data.items;
+  return [];
+};
+
+export const getDiscoveryLinkFromResponse = (data) => (
+  data?.link || data?.item || data?.discoveryLink || null
+);
+
+export const getDiscoveryLinkTimestamp = (link) => (
+  new Date(link?.updatedAt || link?.createdAt || 0).getTime()
+);
+
+export const sortDiscoveryLinksByRecentUpdate = (links = []) => (
+  [...links].sort((left, right) => getDiscoveryLinkTimestamp(right) - getDiscoveryLinkTimestamp(left))
+);
+
+export const getDiscoveryLinkById = (links = [], id) => (
+  links.find((link) => link.id === id)
+);
+
+export const upsertDiscoveryLink = (links = [], nextLink) => [
+  nextLink,
+  ...links.filter((link) => link.id !== nextLink.id),
+];
+
+export const replaceDiscoveryLink = (links = [], nextLink) => (
+  links.map((link) => (link.id === nextLink.id ? nextLink : link))
+);
+
+export const removeDiscoveryLinkById = (links = [], id) => (
+  links.filter((link) => link.id !== id)
+);
+
+export const getDiscoveryLinkName = (link) => {
+  if (link?.title) return link.title;
+  if (link?.url) return getDiscoveryLinkHost(link.url, link.url);
+  return '발견 링크';
+};
+
+export const getDiscoveryLinkSavingAction = (updates) => {
+  const updateKeys = Object.keys(updates || {});
+  if (updateKeys.length === 1 && updateKeys.includes('status')) return 'update_status';
+  if (updateKeys.length === 1 && updateKeys.includes('rightsStatus')) return 'update_rights';
+  if (updateKeys.length > 0 && updateKeys.every((key) => ['title', 'memo'].includes(key))) return 'update_text';
+  return 'update';
+};
+
+export const getDiscoveryLinkUpdateNotice = (updates, link) => {
+  const updateKeys = Object.keys(updates || {});
+  const linkName = getDiscoveryLinkName(link);
+
+  if (updateKeys.length === 1 && updates.status !== undefined) {
+    const statusLabel = getDiscoveryLinkStatusLabel(updates.status);
+    return `${linkName}의 검토 상태를 '${statusLabel}'로 저장했습니다.`;
+  }
+
+  if (updateKeys.length === 1 && updates.rightsStatus !== undefined) {
+    const rightsLabel = getDiscoveryRightsStatusLabel(updates.rightsStatus);
+    return `${linkName}의 권리 확인 상태를 '${rightsLabel}'로 저장했습니다.`;
+  }
+
+  if (updateKeys.length > 0 && updateKeys.every((key) => ['title', 'memo'].includes(key))) {
+    if (updates.title !== undefined && updates.memo !== undefined) {
+      return `${linkName}의 제목과 메모를 Cloud에 저장했습니다.`;
+    }
+    if (updates.title !== undefined) {
+      return `${linkName}의 제목을 Cloud에 저장했습니다.`;
+    }
+    if (updates.memo !== undefined) {
+      return `${linkName}의 메모를 Cloud에 저장했습니다.`;
+    }
+  }
+
+  return `${linkName}의 변경 사항을 Cloud에 저장했습니다.`;
+};
