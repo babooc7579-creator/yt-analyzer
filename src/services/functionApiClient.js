@@ -44,3 +44,23 @@ export const sendJson = async (path, options = {}) => {
   });
   return readJsonResponse(response);
 };
+
+export const postJson = (path, body) => (
+  sendJson(path, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+);
+
+export const patchJson = (path, body) => (
+  sendJson(path, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  })
+);
+
+export const deleteJson = (path) => (
+  sendJson(path, {
+    method: 'DELETE',
+  })
+);
