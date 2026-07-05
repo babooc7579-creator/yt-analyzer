@@ -1,5 +1,5 @@
 import { CheckSquare, Square } from 'lucide-react';
-import { getChannelGrade, getChannelStatus } from '../constants/status';
+import { getChannelListItemViewProps } from '../utils/channelListItemProps';
 import ChannelListItemActions from './ChannelListItemActions';
 import ChannelListItemMeta from './ChannelListItemMeta';
 import ChannelMetadataControls from './ChannelMetadataControls';
@@ -15,48 +15,34 @@ export default function ChannelListItem({
   isUpdating,
   onDelete,
 }) {
-  const grade = getChannelGrade(channel);
-  const status = getChannelStatus(channel);
-  const selectionLabel = `${channel.title} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 대상에 포함`;
-
-  const metaProps = {
+  const {
+    actionsProps,
+    containerClassName,
+    metaProps,
+    metadataControlsProps,
+    scanSummaryProps,
+    selectionButtonProps,
+    thumbnailProps,
+    titleProps,
+  } = getChannelListItemViewProps({
     channel,
-    grade,
-    status,
-  };
-
-  const metadataControlsProps = {
-    channel,
-    grade,
-    isUpdating,
-    onUpdateMetadata,
-    status,
-  };
-
-  const scanSummaryProps = {
+    isSelected,
     scanDisplay,
-  };
-
-  const actionsProps = {
-    channel,
-    onDelete,
+    onToggleSelection,
     onOpenNotes,
-  };
+    onUpdateMetadata,
+    isUpdating,
+    onDelete,
+  });
 
   return (
-    <div className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${isSelected ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100 hover:border-slate-300'}`}>
-      <button
-        type="button"
-        onClick={() => onToggleSelection(channel.id)}
-        className="text-indigo-600 focus:outline-none shrink-0 mt-1"
-        aria-label={selectionLabel}
-        title={selectionLabel}
-      >
+    <div className={containerClassName}>
+      <button {...selectionButtonProps}>
         {isSelected ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5 text-slate-300" />}
       </button>
-      <img src={channel.thumbnail} alt="" className="w-9 h-9 rounded-full border border-slate-200 shrink-0 mt-1" />
+      <img {...thumbnailProps} />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2" title={channel.title}>{channel.title}</p>
+        <p {...titleProps}>{channel.title}</p>
         <ChannelListItemMeta {...metaProps} />
         <ChannelMetadataControls {...metadataControlsProps} />
         <ChannelScanSummaryBox {...scanSummaryProps} />
