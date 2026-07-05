@@ -15,6 +15,7 @@ export default function HomeRadarSummary({
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   productionCandidateCount,
+  selectedChannelCount,
 }) {
   return (
     <>
@@ -37,6 +38,7 @@ export default function HomeRadarSummary({
         onOpenProductionCandidates={onOpenProductionCandidates}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
+        selectedChannelCount={selectedChannelCount}
       />
     </>
   );

@@ -12,7 +12,17 @@ export default function HomeRadarWorkflowSection({
   onOpenProductionCandidates,
   openRadarCandidateCount,
   productionCandidateCount,
+  selectedChannelCount = 0,
 }) {
+  const hasSelectedChannels = selectedChannelCount > 0;
+  const loadStoredVideosActionLabel = hasSelectedChannels ? '불러오기' : '채널 선택 필요';
+  const loadStoredVideosActionTitle = hasSelectedChannels
+    ? `DB 조회: 선택 채널 ${selectedChannelCount}개의 저장된 영상을 불러옵니다. YouTube API를 새로 호출하지 않습니다.`
+    : '왼쪽 채널 목록에서 볼 채널을 먼저 체크해야 저장 영상을 불러올 수 있습니다.';
+  const loadStoredVideosActionAriaLabel = hasSelectedChannels
+    ? `선택 채널 ${selectedChannelCount}개 저장 영상 불러오기, DB 조회이며 YouTube API 호출 없음`
+    : '채널 선택 필요, 왼쪽 채널 목록에서 볼 채널을 먼저 체크하세요';
+
   return (
     <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -28,9 +38,10 @@ export default function HomeRadarWorkflowSection({
           description="이미 저장된 영상만 화면에 올립니다. YouTube API를 새로 호출하지 않습니다."
           value={`${loadedVideoCount}개`}
           icon={Bookmark}
-          actionLabel="불러오기"
-          actionTitle="DB 조회: 선택 채널의 저장된 영상을 불러옵니다. YouTube API를 새로 호출하지 않습니다."
-          actionAriaLabel="선택 채널 저장 영상 불러오기, DB 조회이며 YouTube API 호출 없음"
+          actionLabel={loadStoredVideosActionLabel}
+          actionTitle={loadStoredVideosActionTitle}
+          actionAriaLabel={loadStoredVideosActionAriaLabel}
+          actionDisabled={!hasSelectedChannels}
           onAction={onLoadStoredVideos}
           className="border-blue-400/20 bg-blue-500/10"
           titleClassName="text-blue-100"
