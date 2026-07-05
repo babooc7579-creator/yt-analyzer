@@ -6,6 +6,10 @@ const getChannelList = (channels) => (
   Array.isArray(channels) ? channels.filter(channel => channel && typeof channel === 'object') : []
 );
 
+const hasChannelTag = (channel, tag) => (
+  Array.isArray(channel?.tags) && channel.tags.includes(tag)
+);
+
 export default function ChannelList({
   channels,
   selectedCategory,
@@ -18,7 +22,7 @@ export default function ChannelList({
   updatingChannelId,
   onDelete,
 }) {
-  const visibleChannels = getChannelList(channels).filter((channel) => channel.tags?.includes(selectedCategory));
+  const visibleChannels = getChannelList(channels).filter((channel) => hasChannelTag(channel, selectedCategory));
   const visibleChannelUrlList = formatNumberedUrlList(
     visibleChannels.map((channel) => {
       const channelUrl = getYouTubeChannelUrl(channel);
