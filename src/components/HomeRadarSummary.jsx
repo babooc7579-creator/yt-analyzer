@@ -11,6 +11,7 @@ export default function HomeRadarSummary({
   openRadarCandidateCount,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
+  onLoadStoredVideos,
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   productionCandidateCount,
@@ -31,6 +32,7 @@ export default function HomeRadarSummary({
         discoveryCandidateCount={discoveryCandidateCount}
         discoveryRightsWarningCount={discoveryRightsWarningCount}
         loadedVideoCount={loadedVideoCount}
+        onLoadStoredVideos={onLoadStoredVideos}
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
         onOpenProductionCandidates={onOpenProductionCandidates}
         openRadarCandidateCount={openRadarCandidateCount}

@@ -16,6 +16,7 @@ export default function RadarCandidateStrip({
   onPromoteToProduction,
   onRestoreVideo,
   onClearDecisions,
+  onLoadStoredVideos,
   onOpenVault,
   onOpenScrapbook,
 }) {
@@ -57,7 +58,12 @@ export default function RadarCandidateStrip({
   });
 
   if (isEmpty) {
-    return <RadarCandidateEmptyState onOpenVault={onOpenVault} />;
+    return (
+      <RadarCandidateEmptyState
+        onLoadStoredVideos={onLoadStoredVideos}
+        onOpenVault={onOpenVault}
+      />
+    );
   }
 
   if (isCompleted) {

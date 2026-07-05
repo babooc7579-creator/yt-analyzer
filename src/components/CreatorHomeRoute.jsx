@@ -6,6 +6,7 @@ export default function CreatorHomeRoute({
   discoveryRightsWarningCount,
   isVideoSaved,
   latestScanText,
+  loadStoredVideosForSelectedChannels,
   markRadarVideoStatus,
   onOpenView,
   openRadarCandidateCount,
@@ -24,6 +25,7 @@ export default function CreatorHomeRoute({
       clearRadarDecisions={clearRadarDecisions}
       isVideoSaved={isVideoSaved}
       latestScanText={latestScanText}
+      loadStoredVideosForSelectedChannels={loadStoredVideosForSelectedChannels}
       markRadarVideoStatus={markRadarVideoStatus}
       openRadarCandidateCount={openRadarCandidateCount}
       discoveryCandidateCount={discoveryCandidateCount}
