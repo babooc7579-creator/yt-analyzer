@@ -1,4 +1,4 @@
-import { getJson, sendJson } from './functionApiClient';
+import { deleteJson, getJson, patchJson, postJson } from './functionApiClient';
 
 export const fetchChannels = () => getJson('/channels');
 
@@ -7,37 +7,23 @@ export const fetchChannelPreview = (handle) => (
 );
 
 export const createChannel = ({ handle, tags, language, note }) => (
-  sendJson('/channels', {
-    method: 'POST',
-    body: JSON.stringify({ handle, tags, language, note }),
-  })
+  postJson('/channels', { handle, tags, language, note })
 );
 
 export const createChannelsBulk = ({ handles, tags, language }) => (
-  sendJson('/channels/bulk', {
-    method: 'POST',
-    body: JSON.stringify({ handles, tags, language }),
-  })
+  postJson('/channels/bulk', { handles, tags, language })
 );
 
 export const removeChannel = ({ id, category }) => (
-  sendJson(`/channels/${id}?category=${encodeURIComponent(category)}`, {
-    method: 'DELETE',
-  })
+  deleteJson(`/channels/${id}?category=${encodeURIComponent(category)}`)
 );
 
 export const updateChannel = ({ id, category, updates }) => (
-  sendJson(`/channels/${id}?category=${encodeURIComponent(category)}`, {
-    method: 'PATCH',
-    body: JSON.stringify(updates),
-  })
+  patchJson(`/channels/${id}?category=${encodeURIComponent(category)}`, updates)
 );
 
 export const createChannelNote = ({ id, category, text }) => (
-  sendJson(`/channels/${id}/notes?category=${encodeURIComponent(category)}`, {
-    method: 'POST',
-    body: JSON.stringify({ text }),
-  })
+  postJson(`/channels/${id}/notes?category=${encodeURIComponent(category)}`, { text })
 );
 
 export const fetchStoredVideosByChannelIds = (channelIds) => (
@@ -45,10 +31,7 @@ export const fetchStoredVideosByChannelIds = (channelIds) => (
 );
 
 export const scanSelectedChannels = (channelIds) => (
-  sendJson('/scan/selected', {
-    method: 'POST',
-    body: JSON.stringify({ channelIds, reason: 'manual' }),
-  })
+  postJson('/scan/selected', { channelIds, reason: 'manual' })
 );
 
 export const scanChannels = ({ tag } = {}) => (
@@ -62,51 +45,33 @@ export const renameTag = ({ from, to }) => (
 export const fetchScrapbook = () => getJson('/scrapbook');
 
 export const saveScrapbookVideos = (videos) => (
-  sendJson('/scrapbook', {
-    method: 'POST',
-    body: JSON.stringify({ videos }),
-  })
+  postJson('/scrapbook', { videos })
 );
 
 export const deleteScrapbookVideo = (videoId) => (
-  sendJson(`/scrapbook/${encodeURIComponent(videoId)}`, {
-    method: 'DELETE',
-  })
+  deleteJson(`/scrapbook/${encodeURIComponent(videoId)}`)
 );
 
 export const fetchVideoUserRecords = () => getJson('/video-records');
 
 export const saveVideoUserRecord = (record) => (
-  sendJson('/video-records', {
-    method: 'POST',
-    body: JSON.stringify(record),
-  })
+  postJson('/video-records', record)
 );
 
 export const clearVideoUserRecords = () => (
-  sendJson('/video-records', {
-    method: 'DELETE',
-  })
+  deleteJson('/video-records')
 );
 
 export const fetchDiscoveryLinks = () => getJson('/discovery-links');
 
 export const createDiscoveryLink = (link) => (
-  sendJson('/discovery-links', {
-    method: 'POST',
-    body: JSON.stringify(link),
-  })
+  postJson('/discovery-links', link)
 );
 
 export const updateDiscoveryLink = ({ id, updates }) => (
-  sendJson(`/discovery-links/${encodeURIComponent(id)}`, {
-    method: 'PATCH',
-    body: JSON.stringify(updates),
-  })
+  patchJson(`/discovery-links/${encodeURIComponent(id)}`, updates)
 );
 
 export const deleteDiscoveryLink = (id) => (
-  sendJson(`/discovery-links/${encodeURIComponent(id)}`, {
-    method: 'DELETE',
-  })
+  deleteJson(`/discovery-links/${encodeURIComponent(id)}`)
 );
