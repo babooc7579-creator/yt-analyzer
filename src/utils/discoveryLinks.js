@@ -1,4 +1,5 @@
 import {
+  DISCOVERY_RIGHTS_TONES,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
   getDiscoveryLinkRightsStatusValue,
@@ -146,6 +147,34 @@ export const getDiscoveryLinkUrlListItems = (links = []) => (
     ] : null;
   })
 );
+
+export const getDiscoveryLinkDraft = (link = {}) => ({
+  title: link.title || '',
+  memo: link.memo || '',
+});
+
+export const getDiscoveryLinkDraftUpdates = (draftTitle, draftMemo) => ({
+  title: draftTitle.trim(),
+  memo: draftMemo.trim(),
+});
+
+export const hasDiscoveryLinkDraftChanges = (link = {}, draftUpdates = {}) => (
+  draftUpdates.title !== (link.title || '')
+  || draftUpdates.memo !== (link.memo || '')
+);
+
+export const getDiscoveryLinkRowMeta = (link = {}) => {
+  const currentRightsStatus = getDiscoveryLinkRightsStatusValue(link);
+
+  return {
+    currentRightsStatus,
+    currentStatus: getDiscoveryLinkStatusValue(link),
+    platformLabel: getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link)),
+    rightsTone: DISCOVERY_RIGHTS_TONES[currentRightsStatus] || DISCOVERY_RIGHTS_TONES.unknown,
+    sourceHost: getDiscoveryLinkHost(link.url),
+    title: link.title || getDiscoveryLinkHost(link.url),
+  };
+};
 
 export const getDiscoveryLinkUrlPreview = (url) => {
   const trimmedUrl = url.trim();

@@ -1,15 +1,11 @@
 import { useState } from 'react';
 
 import {
-  DISCOVERY_RIGHTS_TONES,
-  getDiscoveryLinkHost,
-  getDiscoveryLinkPlatform,
-  getDiscoveryLinkRightsStatusValue,
-  getDiscoveryLinkStatusValue,
-  getDiscoveryPlatformLabel,
-} from '../constants/discoveryLinks';
-import {
   confirmRiskyDiscoveryCandidate,
+  getDiscoveryLinkDraft,
+  getDiscoveryLinkDraftUpdates,
+  getDiscoveryLinkRowMeta,
+  hasDiscoveryLinkDraftChanges,
   needsRiskyDiscoveryCandidateConfirmation,
 } from '../utils/discoveryLinks';
 
@@ -18,15 +14,11 @@ export function useDiscoveryLinkRow({
   onDelete,
   onUpdate,
 }) {
+  const linkDraft = getDiscoveryLinkDraft(link);
+  const rowMeta = getDiscoveryLinkRowMeta(link);
   const [isEditing, setIsEditing] = useState(false);
-  const [draftTitle, setDraftTitle] = useState(link.title || '');
-  const [draftMemo, setDraftMemo] = useState(link.memo || '');
-  const title = link.title || getDiscoveryLinkHost(link.url);
-  const sourceHost = getDiscoveryLinkHost(link.url);
-  const platformLabel = getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link));
-  const currentStatus = getDiscoveryLinkStatusValue(link);
-  const currentRightsStatus = getDiscoveryLinkRightsStatusValue(link);
-  const rightsTone = DISCOVERY_RIGHTS_TONES[currentRightsStatus] || DISCOVERY_RIGHTS_TONES.unknown;
+  const [draftTitle, setDraftTitle] = useState(linkDraft.title);
+  const [draftMemo, setDraftMemo] = useState(linkDraft.memo);
 
   const handleDelete = () => {
     const confirmed = window.confirm(
@@ -38,8 +30,8 @@ export function useDiscoveryLinkRow({
   const handleStatusChange = (event) => {
     const nextStatus = event.target.value;
 
-    if (needsRiskyDiscoveryCandidateConfirmation(nextStatus, currentRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
-      event.target.value = currentStatus;
+    if (needsRiskyDiscoveryCandidateConfirmation(nextStatus, rowMeta.currentRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
+      event.target.value = rowMeta.currentStatus;
       return;
     }
 
@@ -49,8 +41,8 @@ export function useDiscoveryLinkRow({
   const handleRightsStatusChange = (event) => {
     const nextRightsStatus = event.target.value;
 
-    if (needsRiskyDiscoveryCandidateConfirmation(currentStatus, nextRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
-      event.target.value = currentRightsStatus;
+    if (needsRiskyDiscoveryCandidateConfirmation(rowMeta.currentStatus, nextRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
+      event.target.value = rowMeta.currentRightsStatus;
       return;
     }
 
@@ -58,9 +50,9 @@ export function useDiscoveryLinkRow({
   };
 
   const handleSendToCandidate = () => {
-    if (currentStatus === 'candidate') return;
+    if (rowMeta.currentStatus === 'candidate') return;
 
-    if (needsRiskyDiscoveryCandidateConfirmation('candidate', currentRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
+    if (needsRiskyDiscoveryCandidateConfirmation('candidate', rowMeta.currentRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
       return;
     }
 
@@ -68,30 +60,26 @@ export function useDiscoveryLinkRow({
   };
 
   const openEdit = () => {
-    setDraftTitle(link.title || '');
-    setDraftMemo(link.memo || '');
+    setDraftTitle(linkDraft.title);
+    setDraftMemo(linkDraft.memo);
     setIsEditing(true);
   };
 
   const cancelEdit = () => {
-    setDraftTitle(link.title || '');
-    setDraftMemo(link.memo || '');
+    setDraftTitle(linkDraft.title);
+    setDraftMemo(linkDraft.memo);
     setIsEditing(false);
   };
 
   const handleSaveEdit = async () => {
-    const nextTitle = draftTitle.trim();
-    const nextMemo = draftMemo.trim();
+    const draftUpdates = getDiscoveryLinkDraftUpdates(draftTitle, draftMemo);
 
-    if (nextTitle === (link.title || '') && nextMemo === (link.memo || '')) {
+    if (!hasDiscoveryLinkDraftChanges(link, draftUpdates)) {
       setIsEditing(false);
       return;
     }
 
-    const didSave = await onUpdate(link.id, {
-      title: nextTitle,
-      memo: nextMemo,
-    });
+    const didSave = await onUpdate(link.id, draftUpdates);
 
     if (didSave) {
       setIsEditing(false);
@@ -100,8 +88,8 @@ export function useDiscoveryLinkRow({
 
   return {
     cancelEdit,
-    currentRightsStatus,
-    currentStatus,
+    currentRightsStatus: rowMeta.currentRightsStatus,
+    currentStatus: rowMeta.currentStatus,
     draftMemo,
     draftTitle,
     handleDelete,
@@ -111,11 +99,11 @@ export function useDiscoveryLinkRow({
     handleStatusChange,
     isEditing,
     openEdit,
-    platformLabel,
-    rightsTone,
+    platformLabel: rowMeta.platformLabel,
+    rightsTone: rowMeta.rightsTone,
     setDraftMemo,
     setDraftTitle,
-    sourceHost,
-    title,
+    sourceHost: rowMeta.sourceHost,
+    title: rowMeta.title,
   };
 }
