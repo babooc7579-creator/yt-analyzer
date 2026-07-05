@@ -16,7 +16,7 @@ export default function LoadStoredVideosButton({
     ? 'DB 조회: 선택 채널 저장 영상 불러오기'
     : '채널 선택 필요';
   const helperDescription = hasSelectedChannels
-    ? '이미 클라우드 DB에 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.'
+    ? '이미 Cloud DB에 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.'
     : '왼쪽 채널 목록에서 볼 채널을 체크하면 버튼이 활성화됩니다. 새 영상 수집은 실행하지 않습니다.';
 
   return (
