@@ -18,7 +18,7 @@ export default function HomeRadarWorkflowSection({
   const loadStoredVideosActionLabel = hasSelectedChannels ? '불러오기' : '채널 선택 필요';
   const loadStoredVideosActionTitle = hasSelectedChannels
     ? `DB 조회: 선택 채널 ${selectedChannelCount}개의 저장된 영상을 불러옵니다. YouTube API를 새로 호출하지 않습니다.`
-    : '왼쪽 채널 목록에서 볼 채널을 먼저 체크해야 저장 영상을 불러올 수 있습니다.';
+    : '왼쪽 채널 목록에서 볼 채널을 먼저 체크해야 저장 영상을 불러올 수 있습니다. 이 버튼은 DB 조회용이며 YouTube API를 새로 호출하지 않습니다.';
   const loadStoredVideosActionAriaLabel = hasSelectedChannels
     ? `선택 채널 ${selectedChannelCount}개 저장 영상 불러오기, DB 조회이며 YouTube API 호출 없음`
     : '채널 선택 필요, 왼쪽 채널 목록에서 볼 채널을 먼저 체크하세요';
