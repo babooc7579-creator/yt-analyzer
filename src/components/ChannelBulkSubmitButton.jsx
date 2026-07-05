@@ -15,7 +15,7 @@ export default function ChannelBulkSubmitButton({
       aria-label="YouTube 확인 후 채널 일괄 저장"
     >
       {bulkLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-      {bulkLoading ? 'YouTube 확인 후 저장 중...' : 'YouTube 확인 후 일괄 저장'}
+      {bulkLoading ? 'YouTube 확인 후 Cloud 저장 중' : 'YouTube 확인 후 일괄 저장'}
     </button>
   );
 }
