@@ -1,5 +1,9 @@
 import { useProductionKanbanActions } from '../hooks/useProductionKanbanActions';
 import { useProductionKanbanData } from '../hooks/useProductionKanbanData';
+import {
+  getProductionKanbanContentProps,
+  shouldShowProductionKanbanEmptyState,
+} from '../utils/productionKanbanProps';
 import ProductionKanbanContent from './ProductionKanbanContent';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
 
@@ -41,7 +45,7 @@ export default function ProductionKanban({
     videos,
   });
 
-  if (videos.length === 0 && discoveryLinkCandidates.length === 0) {
+  if (shouldShowProductionKanbanEmptyState({ discoveryLinkCandidates, videos })) {
     return (
       <ProductionKanbanEmptyState
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
@@ -50,7 +54,7 @@ export default function ProductionKanban({
     );
   }
 
-  const contentProps = {
+  const contentProps = getProductionKanbanContentProps({
     discoveryLinkCandidates,
     draftRecords,
     groupedVideos,
@@ -64,9 +68,9 @@ export default function ProductionKanban({
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
-    videoCount: videos.length,
+    videos,
     videoUserRecords,
-  };
+  });
 
   return (
     <ProductionKanbanContent {...contentProps} />
