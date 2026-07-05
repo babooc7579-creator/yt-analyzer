@@ -4,6 +4,8 @@ import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
 import ProductionKanbanBoard from './ProductionKanbanBoard';
 import ProductionKanbanSummary from './ProductionKanbanSummary';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function ProductionKanbanContent({
   discoveryLinkCandidates,
   draftRecords,
@@ -21,15 +23,17 @@ export default function ProductionKanbanContent({
   videoCount,
   videoUserRecords,
 }) {
+  const discoveryLinkCandidateList = toArray(discoveryLinkCandidates);
+
   const summaryProps = {
-    discoveryLinkCandidateCount: discoveryLinkCandidates.length,
+    discoveryLinkCandidateCount: discoveryLinkCandidateList.length,
     productionSummary,
     videoCount,
   };
 
   const discoveryLinksSectionProps = {
     linkMoveStates,
-    links: discoveryLinkCandidates,
+    links: discoveryLinkCandidateList,
     onMoveLink: moveDiscoveryLink,
     onOpenDiscoveryLinks,
   };
