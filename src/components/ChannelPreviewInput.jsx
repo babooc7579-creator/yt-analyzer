@@ -30,7 +30,7 @@ export default function ChannelPreviewInput({
           YouTube에서 확인
         </button>
       </div>
-      <p className="text-[10px] text-slate-500">아직 클라우드에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다. 영상 수집은 하지 않습니다.</p>
+      <p className="text-[10px] text-slate-500">아직 Cloud에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다. 영상 수집은 하지 않습니다.</p>
     </div>
   );
 }
