@@ -4,6 +4,8 @@ import ChannelBulkSubmitButton from './ChannelBulkSubmitButton';
 import ChannelLanguageSelect from './ChannelLanguageSelect';
 import ChannelTagSelector from './ChannelTagSelector';
 
+const toInputText = (value) => (typeof value === 'string' ? value : '');
+
 export default function ChannelBulkAddForm({
   bulkInput,
   setBulkInput,
@@ -17,10 +19,11 @@ export default function ChannelBulkAddForm({
   newChannelLang,
   setNewChannelLang,
 }) {
-  const recognizedLineCount = bulkInput.split('\n').map((line) => line.trim()).filter(Boolean).length;
+  const inputText = toInputText(bulkInput);
+  const recognizedLineCount = inputText.split('\n').map((line) => line.trim()).filter(Boolean).length;
 
   const inputBoxProps = {
-    bulkInput,
+    bulkInput: inputText,
     bulkLoading,
     recognizedLineCount,
     setBulkInput,
@@ -32,7 +35,7 @@ export default function ChannelBulkAddForm({
   };
 
   const submitButtonProps = {
-    bulkInput,
+    bulkInput: inputText,
     bulkLoading,
     handleBulkAdd,
   };

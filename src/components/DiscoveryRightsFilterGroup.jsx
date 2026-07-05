@@ -1,17 +1,21 @@
 import { DISCOVERY_RIGHTS_TONES } from '../constants/discoveryLinks';
 
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export default function DiscoveryRightsFilterGroup({
   rightsFilter,
   rightsFilterOptions,
   setRightsFilter,
 }) {
+  const filterOptions = toArray(rightsFilterOptions);
+
   return (
     <>
       <p className="mt-4 text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
         권리 확인 상태별 보기
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
-        {rightsFilterOptions.map((option) => {
+        {filterOptions.map((option) => {
           const isActive = rightsFilter === option.value;
           const rightsTone = DISCOVERY_RIGHTS_TONES[option.value];
           const buttonTone = rightsTone
