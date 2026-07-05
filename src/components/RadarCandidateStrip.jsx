@@ -25,6 +25,7 @@ export default function RadarCandidateStrip({
     decisionGroups,
     decisionSummary,
     loadedDecisionCount,
+    queueSummary,
   } = useRadarCandidateData({
     videoUserRecords,
     videos,
@@ -50,6 +51,7 @@ export default function RadarCandidateStrip({
     onPromoteToProduction,
     onRestoreVideo,
     onToggleScrap,
+    queueSummary,
     savedVideos,
     videos,
   });

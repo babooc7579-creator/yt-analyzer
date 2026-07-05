@@ -34,6 +34,10 @@ export const countLoadedRadarDecisions = (videos = [], videoUserRecords = {}) =>
   videos.filter(video => isRadarHiddenRecord(videoUserRecords[video.videoId])).length
 );
 
+export const countOpenRadarCandidates = (videos = [], videoUserRecords = {}) => (
+  videos.filter(video => !isRadarHiddenRecord(videoUserRecords[video.videoId])).length
+);
+
 export const countProductionCandidates = (savedVideos = [], videoUserRecords = {}) => (
   savedVideos.filter(video => (
     getProductionStatusFromRecord(videoUserRecords[video.videoId]) === PRODUCTION_STATUS.CANDIDATE

@@ -8,7 +8,11 @@ import {
   hasVideoReviewStatus,
   isRadarHiddenRecord,
 } from '../constants/status';
-import { getRadarScore } from '../utils/radarCandidates';
+import {
+  RADAR_PRIORITY_SCORE_THRESHOLD,
+  RADAR_TODAY_CANDIDATE_LIMIT,
+  getRadarScore,
+} from '../utils/radarCandidates';
 
 export function useRadarCandidateData({
   videoUserRecords,
@@ -41,15 +45,28 @@ export function useRadarCandidateData({
     Object.values(videoUserRecords).filter(isRadarHiddenRecord).length
   ), [videoUserRecords]);
 
-  const candidates = useMemo(() => (
+  const candidatePool = useMemo(() => (
     [...videos]
       .filter((video) => {
         const record = videoUserRecords[video.videoId];
         return !isRadarHiddenRecord(record);
       })
       .sort((a, b) => getRadarScore(b) - getRadarScore(a))
-      .slice(0, 3)
   ), [videos, videoUserRecords]);
+
+  const candidates = useMemo(() => (
+    candidatePool.slice(0, RADAR_TODAY_CANDIDATE_LIMIT)
+  ), [candidatePool]);
+
+  const queueSummary = useMemo(() => ({
+    candidateLimit: RADAR_TODAY_CANDIDATE_LIMIT,
+    hiddenDecisionCount: allDecisionCount,
+    highPriorityCount: candidatePool.filter((video) => (
+      getRadarScore(video) >= RADAR_PRIORITY_SCORE_THRESHOLD
+    )).length,
+    shownCandidateCount: candidates.length,
+    visibleQueueCount: candidatePool.length,
+  }), [allDecisionCount, candidatePool, candidates]);
 
   const decisionGroups = [
     { key: 'reviewed', label: '봤음', videos: decisionBuckets.reviewed },
@@ -64,5 +81,6 @@ export function useRadarCandidateData({
     decisionGroups,
     decisionSummary,
     loadedDecisionCount,
+    queueSummary,
   };
 }

@@ -5,7 +5,7 @@ import {
   countActiveSelectedChannels,
   countDiscoveryCandidates,
   countDiscoveryRightsWarnings,
-  countLoadedRadarDecisions,
+  countOpenRadarCandidates,
   countProductionCandidates,
   countScannableChannels,
   countTtoTtoAssets,
@@ -49,11 +49,9 @@ export function useCreatorOsMetrics({
     countVisibleScraps(videos, savedVideos)
   ), [savedVideos, videos]);
 
-  const loadedDecisionCount = useMemo(() => (
-    countLoadedRadarDecisions(videos, videoUserRecords)
+  const openRadarCandidateCount = useMemo(() => (
+    countOpenRadarCandidates(videos, videoUserRecords)
   ), [videoUserRecords, videos]);
-
-  const openRadarCandidateCount = Math.max(videos.length - loadedDecisionCount, 0);
 
   const productionCandidateCount = useMemo(() => (
     countProductionCandidates(savedVideos, videoUserRecords)
