@@ -7,10 +7,15 @@ import {
 } from '../services/functionApi';
 import {
   getDiscoveryLinkFromResponse,
+  getDiscoveryLinkById,
   getDiscoveryLinkName,
   getDiscoveryLinkSavingAction,
   getDiscoveryLinkUpdateNotice,
   getDiscoveryLinksFromResponse,
+  removeDiscoveryLinkById,
+  replaceDiscoveryLink,
+  sortDiscoveryLinksByRecentUpdate,
+  upsertDiscoveryLink,
 } from '../utils/discoveryLinks';
 
 export function useDiscoveryLinks() {
@@ -21,13 +26,7 @@ export function useDiscoveryLinks() {
   const [notice, setNotice] = useState('');
   const [savingAction, setSavingAction] = useState('');
 
-  const sortedLinks = useMemo(() => {
-    return [...links].sort((left, right) => {
-      const leftDate = new Date(left.updatedAt || left.createdAt || 0).getTime();
-      const rightDate = new Date(right.updatedAt || right.createdAt || 0).getTime();
-      return rightDate - leftDate;
-    });
-  }, [links]);
+  const sortedLinks = useMemo(() => sortDiscoveryLinksByRecentUpdate(links), [links]);
 
   const loadDiscoveryLinks = useCallback(async () => {
     setLoading(true);
@@ -64,10 +63,7 @@ export function useDiscoveryLinks() {
 
       const createdLink = getDiscoveryLinkFromResponse(data);
       if (createdLink) {
-        setLinks((currentLinks) => [
-          createdLink,
-          ...currentLinks.filter((link) => link.id !== createdLink.id),
-        ]);
+        setLinks((currentLinks) => upsertDiscoveryLink(currentLinks, createdLink));
       } else {
         await loadDiscoveryLinks();
       }
@@ -88,7 +84,7 @@ export function useDiscoveryLinks() {
     setSavingAction(getDiscoveryLinkSavingAction(updates));
     setError('');
     setNotice('');
-    const currentLink = links.find((link) => link.id === id);
+    const currentLink = getDiscoveryLinkById(links, id);
 
     try {
       const data = await updateDiscoveryLink({ id, updates });
@@ -98,9 +94,7 @@ export function useDiscoveryLinks() {
 
       const updatedLink = getDiscoveryLinkFromResponse(data);
       if (updatedLink) {
-        setLinks((currentLinks) => currentLinks.map((link) => (
-          link.id === updatedLink.id ? updatedLink : link
-        )));
+        setLinks((currentLinks) => replaceDiscoveryLink(currentLinks, updatedLink));
       } else {
         await loadDiscoveryLinks();
       }
@@ -121,7 +115,7 @@ export function useDiscoveryLinks() {
     setSavingAction('delete');
     setError('');
     setNotice('');
-    const currentLink = links.find((link) => link.id === id);
+    const currentLink = getDiscoveryLinkById(links, id);
 
     try {
       const data = await deleteDiscoveryLink(id);
@@ -129,7 +123,7 @@ export function useDiscoveryLinks() {
         throw new Error(data?.error || '링크를 삭제하지 못했습니다.');
       }
 
-      setLinks((currentLinks) => currentLinks.filter((link) => link.id !== id));
+      setLinks((currentLinks) => removeDiscoveryLinkById(currentLinks, id));
       setNotice(`${getDiscoveryLinkName(currentLink)} 링크 기록을 Cloud 발견함에서 삭제했습니다.`);
       return true;
     } catch (deleteError) {
