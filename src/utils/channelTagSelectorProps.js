@@ -1,3 +1,5 @@
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
 export const getChannelTagSelectorButtonProps = ({
   category,
   isSelected,
@@ -18,13 +20,18 @@ export const getChannelTagSelectorViewProps = ({
   categories,
   selectedTags,
   toggleTag,
-}) => ({
-  tagButtons: categories.map((category) => ({
-    category,
-    buttonProps: getChannelTagSelectorButtonProps({
+}) => {
+  const categoryList = toArray(categories);
+  const selectedTagList = toArray(selectedTags);
+
+  return {
+    tagButtons: categoryList.map((category) => ({
       category,
-      isSelected: selectedTags.includes(category),
-      toggleTag,
-    }),
-  })),
-});
+      buttonProps: getChannelTagSelectorButtonProps({
+        category,
+        isSelected: selectedTagList.includes(category),
+        toggleTag,
+      }),
+    })),
+  };
+};
