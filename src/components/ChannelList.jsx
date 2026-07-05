@@ -2,6 +2,10 @@ import { formatNumberedUrlList, getYouTubeChannelUrl } from '../utils/urls';
 import ChannelListBody from './ChannelListBody';
 import ChannelListUrlExportPanel from './ChannelListUrlExportPanel';
 
+const getChannelList = (channels) => (
+  Array.isArray(channels) ? channels.filter(channel => channel && typeof channel === 'object') : []
+);
+
 export default function ChannelList({
   channels,
   selectedCategory,
@@ -14,7 +18,7 @@ export default function ChannelList({
   updatingChannelId,
   onDelete,
 }) {
-  const visibleChannels = channels.filter((channel) => channel.tags?.includes(selectedCategory));
+  const visibleChannels = getChannelList(channels).filter((channel) => channel.tags?.includes(selectedCategory));
   const visibleChannelUrlList = formatNumberedUrlList(
     visibleChannels.map((channel) => {
       const channelUrl = getYouTubeChannelUrl(channel);

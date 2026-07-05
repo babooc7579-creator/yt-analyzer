@@ -1,14 +1,22 @@
-export const getTrimmedChannelInput = (input = '') => input.trim();
+const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toText = (value) => (typeof value === 'string' ? value : '');
+
+const toChannelObject = (channel) => (
+  channel && typeof channel === 'object' ? channel : {}
+);
+
+export const getTrimmedChannelInput = (input = '') => toText(input).trim();
 
 export const getBulkChannelHandles = (bulkInput = '') => (
-  bulkInput
+  toText(bulkInput)
     .split('\n')
     .map(line => line.trim())
     .filter(Boolean)
 );
 
 export const isDuplicateChannel = (channels = [], channelId) => (
-  channels.some(channel => channel.id === channelId)
+  toArray(channels).some(channel => toChannelObject(channel).id === channelId)
 );
 
 export const getChannelCreatePayload = ({
@@ -18,7 +26,7 @@ export const getChannelCreatePayload = ({
   tags,
 }) => ({
   handle: getTrimmedChannelInput(handle),
-  tags,
+  tags: toArray(tags),
   language,
   note,
 });
@@ -28,8 +36,8 @@ export const getBulkChannelCreatePayload = ({
   language,
   tags,
 }) => ({
-  handles,
-  tags,
+  handles: toArray(handles),
+  tags: toArray(tags),
   language,
 });
 
