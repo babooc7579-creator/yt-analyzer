@@ -12,7 +12,7 @@ export const getChannelListItemViewProps = ({
 }) => {
   const grade = getChannelGrade(channel);
   const status = getChannelStatus(channel);
-  const selectionLabel = `${channel.title} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 대상에 포함`;
+  const selectionLabel = `${channel.title} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.`;
 
   return {
     actionsProps: {
