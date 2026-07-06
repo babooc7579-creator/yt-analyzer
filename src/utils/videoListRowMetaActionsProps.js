@@ -9,7 +9,7 @@ export const getVideoListRowMetaActionsViewProps = ({
   commentsButtonProps: {
     className: 'text-[11px] bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-2 py-1 rounded-full font-bold border border-indigo-100 flex items-center gap-1 transition-colors',
     onClick: () => fetchTopComments(video.videoId, video.title),
-    title: 'YouTube API로 댓글 Top 10을 조회합니다',
+    title: 'YouTube API로 댓글 Top 10을 조회합니다. 저장 영상 불러오기와 다른 작업입니다.',
     'aria-label': `${videoTitle} 댓글 Top 10 조회 - YouTube API 호출`,
     type: 'button',
   },

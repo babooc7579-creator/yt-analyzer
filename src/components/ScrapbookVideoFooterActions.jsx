@@ -30,7 +30,7 @@ export default function ScrapbookVideoFooterActions({
       <button
         onClick={() => onFetchComments(video.videoId, video.title)}
         className="p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
-        title="댓글 Top 10 보기 - YouTube API로 댓글을 조회합니다"
+        title="댓글 Top 10 보기 - YouTube API로 댓글을 조회합니다. 저장 영상 불러오기와 다른 작업입니다."
         aria-label={`${videoTitle} 댓글 Top 10 보기 - YouTube API로 댓글 조회`}
         type="button"
       >
