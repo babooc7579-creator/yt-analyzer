@@ -212,14 +212,14 @@
 ### Issue 11. 프론트 테스트 전략 결정
 
 - 목적: 기능을 많이 쌓은 뒤 작은 수정으로 기존 흐름이 깨지는 위험을 줄입니다.
-- 현재 상태: 2026-07-06 기준 선택지 문서 작성 완료. 현재 `package.json`에는 `test` 스크립트가 없고 GitHub Actions는 `npm run build`만 실행합니다.
+- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했고, 순수 함수 테스트 1차를 작성했습니다. GitHub Actions는 아직 `npm run build`만 실행합니다.
 - 왜 필요한가: `status/statusIds`, discovery links, production kanban, Cloud/localStorage fallback처럼 깨지면 사용자가 바로 불편한 계산이 늘었습니다.
-- 작업 범위: 테스트 도구 도입 선택지 검토. 바로 package나 workflow를 바꾸지 않습니다.
-- 건드릴 파일 예상: 결정 후 `package.json`, `package-lock.json`, 테스트 파일, 필요 시 `.github/workflows/build.yml`.
-- 건드리면 안 되는 것: 사용자 승인 없는 새 devDependency 추가, workflow test step 추가, 실제 YouTube API/Cloud DB를 호출하는 테스트.
+- 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`의 순수 함수 테스트입니다.
+- 건드린 파일: `package.json`, `package-lock.json`, `src/utils/*.test.js`, `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`.
+- 건드리면 안 되는 것: 추가 승인 없는 workflow test step 추가, React/Playwright 테스트 도구 추가, 실제 YouTube API/Cloud DB를 호출하는 테스트.
 - 위험도: 중간.
-- 완료 기준: `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` 작성 완료. 추천은 Vitest로 순수 함수 테스트부터 시작하는 방식입니다.
-- 사용자 판단 필요 여부: 필요. `vitest` 추가와 CI test step 추가 여부는 package/workflow 변경이므로 승인 후 진행합니다.
+- 완료 기준: 1차 완료. `npm.cmd test`로 순수 함수 테스트를 실행할 수 있고, 첫 테스트 묶음이 통과합니다.
+- 사용자 판단 필요 여부: 현재 없음. GitHub Actions에 `npm test`를 추가하거나 React/Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
 
