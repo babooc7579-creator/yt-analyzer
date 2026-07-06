@@ -23,13 +23,13 @@ export default function DiscoveryLinkStatusFields({ onChange, rightsStatus, stat
       </div>
 
       <div className="space-y-1.5">
-        <DiscoveryLinkFieldLabel>권리 확인</DiscoveryLinkFieldLabel>
+        <DiscoveryLinkFieldLabel>권리 상태</DiscoveryLinkFieldLabel>
         <select
           className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm font-bold text-white outline-none transition focus:border-indigo-400"
           onChange={(event) => onChange('rightsStatus', event.target.value)}
           value={rightsStatus}
-          title="발견 링크 권리 확인 상태 선택"
-          aria-label="발견 링크 권리 확인 상태 선택"
+          title="사용자가 표시하는 권리 상태입니다. 선택만으로 사용 허가나 권리 확인 완료가 되지는 않습니다."
+          aria-label="발견 링크 권리 상태 선택, 사용 허가나 권리 확인 완료 의미 아님"
         >
           {DISCOVERY_RIGHTS_STATUS_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>{option.label}</option>

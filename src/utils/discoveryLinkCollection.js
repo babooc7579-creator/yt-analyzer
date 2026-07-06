@@ -84,7 +84,7 @@ export const getDiscoveryLinkUpdateNotice = (updates, link) => {
 
   if (updateKeys.length === 1 && updates.rightsStatus !== undefined) {
     const rightsLabel = getDiscoveryRightsStatusLabel(updates.rightsStatus);
-    return `${linkName}의 권리 확인 상태를 '${rightsLabel}'로 저장했습니다.`;
+    return `${linkName}의 권리 상태 표시를 '${rightsLabel}'로 저장했습니다.`;
   }
 
   if (updateKeys.length > 0 && updateKeys.every((key) => ['title', 'memo'].includes(key))) {
