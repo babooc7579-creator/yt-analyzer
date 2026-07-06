@@ -279,4 +279,4 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 
 ## 한 줄 인수인계
 
-이 프로젝트는 이미 작동 가능한 1차 앱이 있으며, 앞으로의 핵심은 기존 기능을 보존하면서 App.jsx에 몰린 책임을 기능별 폴더, services, utils, hooks, 공통 UI로 안전하게 분리해 Creator OS형 앱 구조로 발전시키는 것입니다.
+이 프로젝트는 이미 작동 가능한 1차 앱이며, 현재는 `App.jsx`가 얇아지고 주요 책임이 hooks, components, services, utils로 분리된 상태입니다. 앞으로의 핵심은 이 구조를 깨지 않고 데이터 기준, 상태 기준, 화면 문구, 작은 컴포넌트 정리를 쌓아 Creator OS형 앱으로 안정화하는 것입니다.
