@@ -29,7 +29,7 @@ export default function VideoListRowMetaActions({ fetchTopComments, video, video
         </span>
       )}
       <button {...commentsButtonProps}>
-        <MessageSquareText className="w-3 h-3" /> 댓글 Top 10 보기
+        <MessageSquareText className="w-3 h-3" /> 댓글 Top 10(API)
       </button>
       <CopyUrlButton {...copyUrlButtonProps} />
     </div>

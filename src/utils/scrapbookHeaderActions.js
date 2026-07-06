@@ -11,7 +11,7 @@ export const getScrapbookHeaderActionsViewProps = ({
     ? '복사 실패 - 다시 시도'
     : copiedPrompt
       ? '복사 완료! AI에게 붙여넣으세요'
-      : 'AI 리메이크 프롬프트 복사';
+      : 'AI 요청문 복사';
   const promptIconName = promptCopyError ? 'alert' : copiedPrompt ? 'check' : 'lightbulb';
   const promptHelpText = promptCopyError
     ? '브라우저가 클립보드 복사를 막았습니다. 다시 누르거나 브라우저 권한을 확인해 주세요.'

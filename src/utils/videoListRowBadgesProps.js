@@ -21,7 +21,7 @@ export const getVideoListRowBadgeItems = ({
     className: 'inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold text-indigo-700',
     icon: 'checked',
     isVisible: isChecked,
-    label: 'AI 리메이크 선택',
+    label: 'AI 요청문 선택',
   },
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-sm',
