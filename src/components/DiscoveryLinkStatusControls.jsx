@@ -31,8 +31,8 @@ export default function DiscoveryLinkStatusControls({
         disabled={saving}
         value={currentRightsStatus}
         onChange={onRightsStatusChange}
-        title="권리 확인 상태 변경 - Cloud 발견함 기록에 저장됩니다. 원본 사이트를 새로 수집하지 않습니다."
-        aria-label={`${title} 권리 확인 상태 변경, Cloud 발견함 기록 저장`}
+        title="권리 상태 표시 변경 - Cloud 발견함 기록에 저장됩니다. 사용 허가나 권리 확인 완료를 의미하지 않습니다."
+        aria-label={`${title} 권리 상태 표시 변경, Cloud 발견함 기록 저장, 사용 허가 의미 아님`}
       >
         {DISCOVERY_RIGHTS_STATUS_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>{option.label}</option>

@@ -12,7 +12,7 @@ export default function DiscoveryRightsFilterGroup({
   return (
     <>
       <p className="mt-4 text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
-        권리 확인 상태별 보기
+        권리 상태별 보기
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         {filterOptions.map((option) => {
