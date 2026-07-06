@@ -36,21 +36,34 @@ babooc7579-creator/yt-analyzer
 
 현재 앱은 React + Vite 기반 프론트엔드입니다.
 
+2026-07-06 기준으로 초기의 `App.jsx` 집중 구조는 상당 부분 해소되었습니다.
+
+- `src/App.jsx`는 현재 13줄 수준의 얇은 연결 파일입니다.
+- 앱의 주요 상태와 워크플로우는 `src/hooks`로 분리되어 있습니다.
+- 화면은 `src/components`로 나뉘어 있습니다.
+- 데이터/화면 props 계산은 `src/utils`로 많이 분리되어 있습니다.
+- Cloud API 호출은 `src/services`에서 관리합니다.
+
 이미 들어있는 핵심 기능:
 
 - 채널 등록
 - 채널 미리보기
 - 채널 일괄 추가
 - 태그/카테고리/언어 관리
+- 채널 등급/운영 상태 관리
 - Azure Function API 연동
 - 클라우드 채널 목록 로딩
-- 채널 스캔 요청
-- 영상 목록 조회
+- 선택 채널 새 영상 수집
+- 저장 영상 목록 조회
 - 쇼츠/롱폼 필터
 - 조회수/성과배수/일조회수/좋아요 비율 정렬
 - 6개월 이상 지난 영상 기반 또터또 발굴
 - 댓글 Top 10 조회
-- 스크랩북 저장
+- Cloud 기준 스크랩북 저장
+- 영상별 사용자 판단 기록 저장
+- 발견함 수동 링크 저장
+- 발견 링크 제작 후보 연결
+- 제작 후보함
 - AI 리메이크 프롬프트 복사
 
 ---
@@ -85,13 +98,31 @@ docs/WORK_LOG.md
 src/App.jsx
 ```
 
-현재 앱의 대부분 기능이 들어있는 메인 파일입니다. 앞으로 가장 중요한 리팩터링 대상입니다.
+현재는 레이아웃과 라우트를 연결하는 얇은 파일입니다. 큰 변경 대상이 아니라, 관련 hook/component를 작게 정리하는 방식으로 유지합니다.
 
 ```txt
 src/config.js
 ```
 
 앱 전체 설정값을 분리하기 위해 새로 추가한 파일입니다.
+
+```txt
+src/hooks
+```
+
+앱 상태, 채널 워크플로우, 영상 워크플로우, 발견함, 스크랩북, 제작 후보 흐름이 분리되어 있습니다.
+
+```txt
+src/services
+```
+
+Cloud Function API와 localStorage 보조 저장 접근을 담당합니다.
+
+```txt
+docs/CREATOR_OS_DOCUMENT_INDEX.md
+```
+
+현재 Creator OS 문서를 어떤 순서로 읽어야 하는지 정리한 문서입니다. 코드 작업 전 먼저 확인합니다.
 
 ---
 
@@ -132,34 +163,12 @@ npm run build
 
 반드시 작은 단위로 진행합니다.
 
-1. `src/config.js` 기반 API Base URL 분리 상태 유지
-2. `constants` 분리 상태 유지
-   - 기본 카테고리
-   - 언어 목록
-   - 정렬 옵션
-3. `utils` 분리
-   - 날짜 계산
-   - 숫자 포맷
-   - 영상 길이 파싱
-   - AI 프롬프트 생성
-4. `services` 분리 상태 유지
-   - Azure Function API 호출
-   - YouTube API 호출
-   - localStorage 접근
-5. 공통 UI 컴포넌트 분리
-   - 버튼
-   - 카드
-   - 모달
-   - 로딩
-   - 에러 배너
-6. 기능별 화면 분리
-   - DashboardPage
-   - ChannelsPage
-   - VideosPage
-   - TtoTtoPage
-   - ScrapbookPage
-   - SettingsPage
-7. 최종적으로 App.jsx를 레이아웃과 화면 연결만 담당하게 정리
+1. 현재 구현과 오래된 문서 표현의 차이를 계속 줄입니다.
+2. DB 조회, Cloud 저장, YouTube API 호출, 로컬 클립보드 동작을 화면 문구에서 명확히 구분합니다.
+3. 이미 분리된 hook/component/utils 안에서 기능 보존형 작은 정리를 진행합니다.
+4. 테스트 도구 추가처럼 `package.json` 변경이 필요한 작업은 선택지 보고 후 진행합니다.
+5. `/videos` 페이지네이션, `scan_logs`, `api_quota_logs`, `local_assets`, `production_candidates`는 구현 전 선택지와 위험을 먼저 정리합니다.
+6. 전체 UI 대개편보다 현재 작동하는 흐름을 안정화한 뒤 화면 단위로 개선합니다.
 
 ---
 
@@ -212,12 +221,19 @@ npm run build
 
 - 채널/영상 데이터: Azure Function + Cosmos DB
 - 스크랩북: Cloud DB 기준. 백엔드에서는 `videos` container 안의 `docType: scrapbook` 문서로 저장
+- 영상별 사용자 판단 기록: 기존 `status` 유지 + `statusIds` 복수 판단 보존
+- 발견함 링크: 새 별도 container가 아니라 현재 MVP에서는 `docType: discovery_link` 방식
 - localStorage: 기준 저장소가 아니라 Cloud 실패 시 임시 fallback과 기존 데이터 보호 용도
+- 제작 후보: 현재 별도 `production_candidates` 저장소 없이 `videoUserRecords`와 발견 링크 `status: candidate`를 사용
 
 장기 의사결정:
 
 - 사용자 계정 기반 저장이 필요한지
 - 스크랩북을 장기적으로 별도 container로 분리할지
+- 발견 링크를 별도 container로 분리할지
+- 제작 후보를 별도 production model로 분리할지
+- local assets를 어떤 방식으로 저장/연결할지
+- scan/api quota 로그를 어디에 저장할지
 
 ### 8.4 백엔드 저장소 역할
 
@@ -240,7 +256,8 @@ babooc7579-creator/yt-analyzer-functions
 1. 현재 문서와 실제 구현이 어긋나는 오래된 표현을 계속 정리합니다.
 2. 공통 UI, 작은 hook, helper처럼 기능 동작을 바꾸지 않는 단위를 먼저 정리합니다.
 3. 버튼 문구에서 DB 조회, Cloud 저장, YouTube API 호출, 로컬 클립보드 동작이 명확히 구분되는지 확인합니다.
-4. `App.jsx`를 크게 갈아엎지 않고 이미 분리된 컴포넌트와 hook을 기준으로 조금씩 얇게 만듭니다.
+4. 큰 구조 변경 전에는 `CREATOR_OS_DOCUMENT_INDEX.md`와 관련 기준 문서를 먼저 확인합니다.
+5. 다음 큰 후보는 `/videos` 페이지네이션, scan/API 사용 기록, local assets, 테스트 러너 추가이며 모두 선택지 보고가 먼저 필요합니다.
 
 주의:
 
