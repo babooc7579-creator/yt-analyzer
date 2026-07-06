@@ -13,10 +13,10 @@ export default function VideoToolbarSelectFilters({
         title="불러온 저장 영상의 조회수 조건 필터"
         aria-label="조회수 조건 필터"
       >
-        <option value={0}>👁️ 조회수 전체</option>
-        <option value={100000}>🔥 10만 이상</option>
-        <option value={500000}>🔥🔥 50만 이상</option>
-        <option value={1000000}>👑 100만 이상</option>
+        <option value={0}>조회수 전체</option>
+        <option value={100000}>10만 이상</option>
+        <option value={500000}>50만 이상</option>
+        <option value={1000000}>100만 이상</option>
       </select>
 
       <select
@@ -26,9 +26,9 @@ export default function VideoToolbarSelectFilters({
         title="쇼츠/롱폼 길이 필터"
         aria-label="영상 길이 필터"
       >
-        <option value="all">🎬 길이 전체</option>
-        <option value="shorts">📱 쇼츠만</option>
-        <option value="long">🎞️ 롱폼만</option>
+        <option value="all">길이 전체</option>
+        <option value="shorts">쇼츠만</option>
+        <option value="long">롱폼만</option>
       </select>
     </>
   );
