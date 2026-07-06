@@ -18,8 +18,8 @@ export const getChannelListItemActionsViewProps = ({
   deleteButtonProps: {
     className: 'p-1 text-slate-400 hover:text-red-500 transition-colors shrink-0 mt-1',
     onClick: () => onDelete(channel.id, channel.category, channel.title),
-    title: 'Cloud 채널 목록에서 삭제합니다. 저장 영상 조회와 새 영상 수집 대상에서 빠집니다.',
-    'aria-label': `${channel.title} Cloud 채널 목록에서 삭제하고 조회/수집 대상에서 제외`,
+    title: 'Cloud 채널 목록에서 삭제합니다. 조회/수집 대상에서 빠지지만 YouTube 원본이나 이미 저장된 영상 데이터는 삭제하지 않습니다.',
+    'aria-label': `${channel.title} Cloud 채널 목록에서 삭제하고 조회/수집 대상에서 제외, 저장 영상 데이터는 삭제하지 않음`,
     type: 'button',
   },
   noteCount: channel.notes?.length || 0,
