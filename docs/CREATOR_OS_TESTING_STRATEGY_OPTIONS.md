@@ -10,18 +10,19 @@
 
 현재 프론트 저장소의 확인된 상태:
 
-- `package.json`에는 `build` 스크립트만 있습니다.
-- `test` 스크립트는 없습니다.
-- `vitest`, `jest`, `playwright`, `@testing-library/react` 같은 테스트 도구는 설치되어 있지 않습니다.
+- 2026-07-06 사용자 승인 후 `vitest`를 devDependency로 추가했습니다.
+- `package.json`에는 `test: vitest run` 스크립트가 있습니다.
+- `jest`, `playwright`, `@testing-library/react` 같은 브라우저/컴포넌트 테스트 도구는 설치되어 있지 않습니다.
 - `.github/workflows/build.yml`은 `npm ci` 후 `npm run build`만 실행합니다.
 - `package-lock.json`은 존재합니다.
-- 현재 검증은 주로 `npm.cmd run build`, `git diff --check`, GitHub Actions build check에 의존합니다.
+- 현재 검증은 `npm.cmd test`, `npm.cmd run build`, `git diff --check`, GitHub Actions build check에 의존합니다.
 
 현재 의미:
 
 - 앱이 빌드되는지는 확인할 수 있습니다.
-- 버튼 클릭 후 상태가 맞는지, helper 함수가 값을 제대로 계산하는지 자동 테스트로 확인하지는 못합니다.
-- 새 테스트 도구를 도입하려면 `package.json`, `package-lock.json`, 그리고 경우에 따라 GitHub Actions workflow 변경이 필요합니다.
+- 일부 helper 함수가 값을 제대로 계산하는지는 자동 테스트로 확인할 수 있습니다.
+- 버튼 클릭 후 UI 상태까지는 아직 자동 테스트로 확인하지 않습니다.
+- GitHub Actions에서 `npm test`를 실행하려면 workflow 변경 결정이 추가로 필요합니다.
 
 ---
 
@@ -155,27 +156,36 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 - `videoUserRecords`, discovery links, production kanban, URL/필터/정렬 helper는 테스트 효과가 큽니다.
 - Playwright나 React Testing Library보다 도입 부담이 낮습니다.
 
-단, 선택지 B도 `package.json`과 lockfile을 바꾸므로 사용자 결정이 필요합니다.
+2026-07-06에 선택지 B가 1차 승인되어 Vitest와 순수 함수 테스트를 추가했습니다.
+
+아직 하지 않은 것:
+
+- GitHub Actions에 `npm test` step 추가
+- React Testing Library 도입
+- Playwright 도입
 
 ---
 
 ## 8. 첫 테스트 후보
 
-선택지 B를 승인한다면 첫 테스트 후보는 아래 순서가 좋습니다.
+선택지 B 1차 적용 기준으로 첫 테스트는 아래 순서에서 시작했습니다.
 
 1. `src/utils/discoveryLinkForm.js`
    - URL 정규화
    - 사용 금지 링크를 후보로 보낼 때 확인 필요 여부
+   - 1차 테스트 추가 완료
 
 2. `src/utils/discoveryLinkCollection.js`
    - 응답에서 링크 목록 꺼내기
    - 링크 추가/교체/삭제
    - 상태 변경 완료 메시지
+   - 1차 테스트 추가 완료
 
 3. `src/utils/videoUserRecords.js`
    - 기존 `status` 유지
    - `statusIds` fallback/보존
    - 레이더 숨김 상태 처리
+   - 1차 테스트 추가 완료
 
 4. `src/utils/productionKanbanData.js`
    - 제작 후보 영상 그룹
@@ -200,15 +210,13 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 
 ## 10. 결정이 필요한 질문
 
-테스트 도구를 도입한다면 아래 결정이 필요합니다.
+테스트 도구 1차 도입은 완료되었습니다. 다음 단계에서는 아래 결정이 필요합니다.
 
-1. `vitest` devDependency 추가를 승인할까요?
-2. 첫 단계는 순수 함수 테스트만 할까요?
-3. GitHub Actions에서 `npm test`를 바로 실행할까요, 아니면 로컬 테스트부터 시작할까요?
+1. GitHub Actions에서 `npm test`를 바로 실행할까요, 아니면 로컬 테스트만 유지할까요?
+2. React 컴포넌트 테스트 도구를 추가할까요?
+3. Playwright 같은 브라우저 E2E 테스트를 나중에 도입할까요?
 
 Codex 추천:
 
-- `vitest` 추가 승인
-- 첫 단계는 순수 함수 테스트만
 - GitHub Actions에는 1차 테스트가 안정된 뒤 `npm test` 추가
-
+- 다음 테스트도 순수 함수 중심으로 조금 더 늘린 뒤 CI 연결
