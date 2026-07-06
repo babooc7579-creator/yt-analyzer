@@ -30,7 +30,12 @@ export default function ProductionKanbanColumn({
 
       <div className="space-y-3">
         {videoList.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-white/70 p-5 text-center text-xs font-semibold text-slate-400">비어 있음</div>
+          <div className="rounded-xl border border-dashed border-slate-300 bg-white/70 p-5 text-center">
+            <p className="text-xs font-extrabold text-slate-500">{column.emptyTitle || '비어 있음'}</p>
+            {column.emptyDescription ? (
+              <p className="mt-2 text-[11px] leading-relaxed text-slate-400">{column.emptyDescription}</p>
+            ) : null}
+          </div>
         ) : (
           videoList.map((video) => {
             const cardProps = getProductionVideoCardProps({

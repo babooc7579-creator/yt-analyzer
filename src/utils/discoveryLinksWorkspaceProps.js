@@ -75,7 +75,9 @@ export const getDiscoveryLinksWorkspaceViewProps = ({
     },
     noticesProps: {
       error,
+      loading,
       notice,
+      onRefresh,
       savingMessage,
     },
   };

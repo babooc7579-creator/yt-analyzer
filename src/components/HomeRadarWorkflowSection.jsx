@@ -1,17 +1,21 @@
 import { Bookmark, Sparkles } from 'lucide-react';
 
 import HomeCandidateWorkflowCard from './HomeCandidateWorkflowCard';
+import HomeNextActionPanel from './HomeNextActionPanel';
 import HomeWorkflowCard from './HomeWorkflowCard';
 
 export default function HomeRadarWorkflowSection({
   discoveryCandidateCount,
   discoveryRightsWarningCount,
   loadedVideoCount,
+  onOpenAddChannel,
   onLoadStoredVideos,
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
+  onOpenSelectedScan,
   openRadarCandidateCount,
   productionCandidateCount,
+  savedChannelCount = 0,
   selectedChannelCount = 0,
 }) {
   const hasSelectedChannels = selectedChannelCount > 0;
@@ -32,6 +36,18 @@ export default function HomeRadarWorkflowSection({
         </div>
         <p className="text-[11px] font-bold text-emerald-200">이 영역은 DB 조회 중심입니다. 새 수집은 선택 채널 새 영상 수집 버튼에서만 실행됩니다.</p>
       </div>
+      <HomeNextActionPanel
+        discoveryCandidateCount={discoveryCandidateCount}
+        loadedVideoCount={loadedVideoCount}
+        onLoadStoredVideos={onLoadStoredVideos}
+        onOpenAddChannel={onOpenAddChannel}
+        onOpenProductionCandidates={onOpenProductionCandidates}
+        onOpenSelectedScan={onOpenSelectedScan}
+        openRadarCandidateCount={openRadarCandidateCount}
+        productionCandidateCount={productionCandidateCount}
+        savedChannelCount={savedChannelCount}
+        selectedChannelCount={selectedChannelCount}
+      />
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
         <HomeWorkflowCard
           title="1. 저장된 영상 불러오기"

@@ -52,6 +52,7 @@ export const getCreatorHomeViewProps = ({
       loadedVideoCount: videoList.length,
       savedVideoCount: savedVideoList.length,
       latestScanText,
+      onOpenAddChannel: () => onOpenView({ id: 'ops-add-channel' }),
       onLoadStoredVideos: loadStoredVideosForSelectedChannels,
       selectedChannelCount,
       ttoTtoAssetCount,
@@ -60,6 +61,7 @@ export const getCreatorHomeViewProps = ({
       discoveryRightsWarningCount,
       onOpenDiscoveryLinks: () => onOpenView({ id: 'vault-sources' }),
       onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
+      onOpenSelectedScan: () => onOpenView({ id: 'ops-selected-scan' }),
       productionCandidateCount,
     },
   };
