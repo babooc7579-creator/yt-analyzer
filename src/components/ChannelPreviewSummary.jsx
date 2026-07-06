@@ -9,7 +9,7 @@ export default function ChannelPreviewSummary({
       <img src={channelPreview.thumbnail} alt="" className="w-9 h-9 rounded-full border border-slate-200" />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-bold text-slate-800 truncate">{channelPreview.title}</p>
-        <p className="text-[10px] text-emerald-600 font-semibold">✓ 채널 확인됨</p>
+        <p className="text-[10px] text-emerald-600 font-semibold">채널 확인 완료</p>
       </div>
       <button
         type="button"
