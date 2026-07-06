@@ -22,7 +22,8 @@ export default function ChannelList({
   updatingChannelId,
   onDelete,
 }) {
-  const visibleChannels = getChannelList(channels).filter((channel) => hasChannelTag(channel, selectedCategory));
+  const channelList = getChannelList(channels);
+  const visibleChannels = channelList.filter((channel) => hasChannelTag(channel, selectedCategory));
   const visibleChannelUrlList = formatNumberedUrlList(
     visibleChannels.map((channel) => {
       const channelUrl = getYouTubeChannelUrl(channel);
@@ -44,6 +45,8 @@ export default function ChannelList({
     onToggleSelection,
     onUpdateMetadata,
     selectedChannelIds,
+    selectedCategory,
+    totalChannelCount: channelList.length,
     updatingChannelId,
     visibleChannels,
   };

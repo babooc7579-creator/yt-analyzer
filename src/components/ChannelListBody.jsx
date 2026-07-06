@@ -12,6 +12,8 @@ export default function ChannelListBody({
   onToggleSelection,
   onUpdateMetadata,
   selectedChannelIds,
+  selectedCategory,
+  totalChannelCount,
   updatingChannelId,
   visibleChannels,
 }) {
@@ -22,7 +24,12 @@ export default function ChannelListBody({
   }
 
   if (visibleChannelList.length === 0) {
-    return <ChannelListEmptyState />;
+    return (
+      <ChannelListEmptyState
+        selectedCategory={selectedCategory}
+        totalChannelCount={totalChannelCount}
+      />
+    );
   }
 
   const itemsProps = {
