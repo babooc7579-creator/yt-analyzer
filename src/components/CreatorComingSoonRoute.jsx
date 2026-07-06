@@ -1,5 +1,5 @@
 import ComingSoonView from './ComingSoonView';
 
-export default function CreatorComingSoonRoute({ item }) {
-  return <ComingSoonView item={item} />;
+export default function CreatorComingSoonRoute({ item, onOpenHome }) {
+  return <ComingSoonView item={item} onOpenHome={onOpenHome} />;
 }
