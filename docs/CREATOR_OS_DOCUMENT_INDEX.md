@@ -124,9 +124,15 @@ GitHub Actions와 Azure Static Web Apps 배포 경고를 어떻게 정리할지 
 
 배포 workflow, GitHub Actions 버전, Azure Static Web Apps 인증 흐름을 수정하기 전에 확인해야 합니다.
 
+17. `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`
+
+프론트 테스트 도구를 도입할지, 도입한다면 어디서부터 시작할지 정리합니다.
+
+`package.json`, `package-lock.json`, GitHub Actions test step을 바꾸기 전에 확인해야 합니다.
+
 ### 6단계. 실행 순서 확인
 
-17. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
+18. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
 
 위 문서들을 바탕으로 다음 작업을 작은 Issue 단위로 쪼갠 실행 계획입니다.
 
@@ -155,6 +161,7 @@ GitHub Actions와 Azure Static Web Apps 배포 경고를 어떻게 정리할지 
 | `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md` | video records 장기 상태 모델 선택지 | 예 | 예 | 제작 상태 분리 전 필수 |
 | `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` | Cloud/localStorage sync 선택지 | 예 | 예 | sync 작업 전 필수 |
 | `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` | GitHub Actions/Azure 배포 경고 선택지 | 예 | 일부 | 배포 workflow 수정 전 필수 |
+| `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` | 프론트 테스트 도입 선택지 | 예 | 일부 | test/package 변경 전 필수 |
 | `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md` | 다음 구현 Issue 순서 | 예 | 예 | 필수 |
 
 ---
@@ -175,6 +182,7 @@ GitHub Actions와 Azure Static Web Apps 배포 경고를 어떻게 정리할지 
 | discovery links 또는 local assets 구현 | `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md`, `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`, `CREATOR_OS_DISCOVERY_LINKS_API_BOUNDARY_OPTIONS.md` |
 | 새 DB container 추가 | `CREATOR_OS_DATA_OWNERSHIP.md`, 관련 선택지 문서 |
 | GitHub Actions 또는 Azure 배포 workflow 수정 | `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` |
+| 테스트 도구 또는 `package.json` test script 추가 | `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` |
 
 ---
 
@@ -206,6 +214,7 @@ GitHub Actions와 Azure Static Web Apps 배포 경고를 어떻게 정리할지 
 - `scan_logs`, `api_quota_logs` container를 만들지
 - `/videos` pagination을 어떤 방식으로 구현할지
 - Azure Static Web Apps 배포 workflow 경고를 token 방식 단순화로 정리할지
+- 테스트 도구를 추가하고 `package.json` / CI test step을 바꿀지
 
 ---
 
