@@ -47,5 +47,5 @@ export const getChannelCloudActionError = (message, fallbackMessage, actionLabel
 
 export const getChannelDeleteConfirmMessage = (title) => {
   const channelName = getChannelDeleteName(title);
-  return `'${channelName}' 채널을 Cloud 채널 목록에서 삭제할까요?\n\n삭제하면 저장 영상 조회와 새 영상 수집 대상에서 빠집니다. 나중에 다시 보려면 채널을 다시 추가해야 합니다.`;
+  return `'${channelName}' 채널을 Cloud 채널 목록에서 삭제할까요?\n\n삭제하면 저장 영상 조회와 새 영상 수집 대상에서 빠집니다. YouTube 원본이나 이미 Cloud에 저장된 영상 데이터는 삭제하지 않습니다. 나중에 다시 보려면 채널을 다시 추가해야 합니다.`;
 };
