@@ -21,6 +21,7 @@ export function useCreatorAppViewProps(props) {
     isHomeView: props.isHomeView,
     isLegacyWorkspaceView: props.isLegacyWorkspaceView,
     legacyWorkspaceRouteProps,
+    onOpenHome: () => props.openCreatorView({ id: 'home' }),
   });
 
   return {

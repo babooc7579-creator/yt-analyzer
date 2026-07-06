@@ -7,6 +7,7 @@ export function buildRoutesProps({
   isHomeView,
   isLegacyWorkspaceView,
   legacyWorkspaceRouteProps,
+  onOpenHome,
 }) {
   return {
     activeCreatorItem,
@@ -17,5 +18,6 @@ export function buildRoutesProps({
     isHomeView,
     isLegacyWorkspaceView,
     legacyWorkspaceRouteProps,
+    onOpenHome,
   };
 }

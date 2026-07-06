@@ -12,13 +12,14 @@ export default function CreatorAppRoutes({
   isHomeView,
   isLegacyWorkspaceView,
   legacyWorkspaceRouteProps,
+  onOpenHome,
 }) {
   if (isHomeView) {
     return <CreatorHomeRoute {...homeRouteProps} />;
   }
 
   if (isComingSoonView) {
-    return <CreatorComingSoonRoute item={activeCreatorItem} />;
+    return <CreatorComingSoonRoute item={activeCreatorItem} onOpenHome={onOpenHome} />;
   }
 
   if (isDiscoveryLinksView) {
