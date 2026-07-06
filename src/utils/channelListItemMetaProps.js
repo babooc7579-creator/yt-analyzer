@@ -20,15 +20,15 @@ export const getChannelListItemMetaViewProps = ({
   stats: channel.stats ? [
     {
       label: '구독자 수',
-      text: `👤${formatCompactKo(channel.stats.subscriberCount)}`,
+      text: `구독자 ${formatCompactKo(channel.stats.subscriberCount)}`,
     },
     {
       label: '전체 영상 수',
-      text: `🎬${formatCompactKo(channel.stats.totalVideoCount)}`,
+      text: `영상 ${formatCompactKo(channel.stats.totalVideoCount)}`,
     },
     {
       label: '평균 조회수',
-      text: `👁️${formatCompactKo(channel.stats.avgViewCount)}`,
+      text: `평균 ${formatCompactKo(channel.stats.avgViewCount)}`,
     },
   ] : [],
   statusBadgeProps: {
