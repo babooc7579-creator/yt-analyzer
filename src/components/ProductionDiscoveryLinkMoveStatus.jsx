@@ -1,8 +1,16 @@
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function ProductionDiscoveryLinkMoveStatus({ moveState }) {
-  if (moveState !== 'error') {
+  if (moveState !== 'error' && moveState !== 'saved') {
     return null;
+  }
+
+  if (moveState === 'saved') {
+    return (
+      <p className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold leading-relaxed text-emerald-700">
+        <CheckCircle2 className="h-3 w-3 shrink-0" /> Cloud 발견함 상태 저장 완료. 링크 기록은 유지됩니다.
+      </p>
+    );
   }
 
   return (
