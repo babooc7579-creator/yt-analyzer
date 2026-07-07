@@ -334,6 +334,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 32. `src/utils/productionVideoCard.js`
    - 제작 후보 영상 카드 props 구성
    - 레이더 점수와 제작 상태 표시 연결
+   - 1차 테스트 추가 완료
+
+33. `src/utils/productionKanbanColumn.js`
+   - 제작 칸반 컬럼 카드 props 구성
+   - 컬럼별 영상/기록 전달 안정화
 
 ---
 
