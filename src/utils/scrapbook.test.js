@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { PRODUCTION_STATUS, VIDEO_STATUS } from '../constants/status';
 import {
   getCloudScrapbookVideos,
+  getNextScrapbookVideos,
   getProductionScopedVideos,
   getScrapbookVideoUrlList,
   getScrapbookWorkspaceViewProps,
@@ -53,6 +54,21 @@ describe('scrapbook utils', () => {
     expect(upsertScrapbookVideo([savedVideo, null, 'bad'], secondVideo)).toEqual([
       savedVideo,
       secondVideo,
+    ]);
+  });
+
+  it('builds the next scrapbook list for saved and unsaved videos', () => {
+    expect(getNextScrapbookVideos([savedVideo, secondVideo], savedVideo, true)).toEqual([
+      secondVideo,
+    ]);
+
+    expect(getNextScrapbookVideos([savedVideo], secondVideo, false)).toEqual([
+      savedVideo,
+      secondVideo,
+    ]);
+
+    expect(getNextScrapbookVideos([savedVideo], { title: 'No id' }, false)).toEqual([
+      savedVideo,
     ]);
   });
 

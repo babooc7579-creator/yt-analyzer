@@ -4,9 +4,8 @@ import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/sto
 import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
 import {
   getCloudScrapbookVideos,
+  getNextScrapbookVideos,
   hasScrapbookVideo,
-  removeScrapbookVideo,
-  upsertScrapbookVideo,
 } from '../utils/scrapbook';
 
 export function useScrapbook() {
@@ -62,13 +61,13 @@ export function useScrapbook() {
       if (isSaved) {
         const data = await deleteScrapbookVideo(video.videoId);
         if (!data.success) throw new Error(data.error || '스크랩북에서 삭제하지 못했습니다.');
-        const nextVideos = removeScrapbookVideo(cloudScrapbookCacheRef.current, video.videoId);
+        const nextVideos = getNextScrapbookVideos(cloudScrapbookCacheRef.current, video, true);
         setSavedVideos(nextVideos);
         cacheCloudScrapbook(nextVideos);
       } else {
         const data = await saveScrapbookVideos([video]);
         if (!data.success) throw new Error(data.error || '스크랩북에 저장하지 못했습니다.');
-        const nextVideos = upsertScrapbookVideo(cloudScrapbookCacheRef.current, video);
+        const nextVideos = getNextScrapbookVideos(cloudScrapbookCacheRef.current, video, false);
         setSavedVideos(nextVideos);
         cacheCloudScrapbook(nextVideos);
       }
