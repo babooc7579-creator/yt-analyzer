@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { getChannelAddFormViewProps } from './channelAddFormProps';
+import {
+  getChannelAddFormViewProps,
+  getChannelBulkAddFormInnerProps,
+  getChannelSingleAddFormInnerProps,
+  getRecognizedBulkChannelLineCount,
+} from './channelAddFormProps';
 
 const createInput = (overrides = {}) => ({
   addMode: 'single',
@@ -124,5 +129,66 @@ describe('channelAddFormProps utils', () => {
       toggleNewChannelTag: input.toggleNewChannelTag,
     });
     expect(props.categorySettingsProps.cloudOnlyTags).toEqual([]);
+  });
+
+  it('builds bulk add form inner props from normalized text input', () => {
+    const input = createInput({
+      bulkInput: ' @a \n\n @b \n ',
+      bulkLoading: true,
+    });
+
+    expect(getRecognizedBulkChannelLineCount(input.bulkInput)).toBe(2);
+    expect(getRecognizedBulkChannelLineCount(null)).toBe(0);
+
+    const props = getChannelBulkAddFormInnerProps(input);
+
+    expect(props.inputBoxProps).toMatchObject({
+      bulkInput: ' @a \n\n @b \n ',
+      bulkLoading: true,
+      recognizedLineCount: 2,
+      setBulkInput: input.setBulkInput,
+    });
+    expect(props.languageSelectProps).toEqual({
+      language: 'EN',
+      setLanguage: input.setNewChannelLang,
+    });
+    expect(props.submitButtonProps).toMatchObject({
+      bulkInput: ' @a \n\n @b \n ',
+      bulkLoading: true,
+      handleBulkAdd: input.handleBulkAdd,
+    });
+    expect(props.resultPanelProps).toEqual({
+      bulkResult: input.bulkResult,
+      resetBulkAdd: input.resetBulkAdd,
+    });
+  });
+
+  it('builds single add form inner props for preview input and editor states', () => {
+    const input = createInput({
+      loading: true,
+      previewLoading: true,
+    });
+
+    const props = getChannelSingleAddFormInnerProps(input);
+
+    expect(props.previewInputProps).toEqual({
+      handlePreviewChannel: input.handlePreviewChannel,
+      newChannelInput: '@peakviral',
+      previewLoading: true,
+      setNewChannelInput: input.setNewChannelInput,
+    });
+    expect(props.previewEditorProps).toMatchObject({
+      cancelChannelPreview: input.cancelChannelPreview,
+      categories: input.categories,
+      channelPreview: input.channelPreview,
+      handleSaveChannel: input.handleSaveChannel,
+      loading: true,
+      newChannelLang: 'EN',
+      newChannelNote: 'check source',
+      newChannelTags: input.newChannelTags,
+      setNewChannelLang: input.setNewChannelLang,
+      setNewChannelNote: input.setNewChannelNote,
+      toggleNewChannelTag: input.toggleNewChannelTag,
+    });
   });
 });
