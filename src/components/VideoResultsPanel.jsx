@@ -1,9 +1,8 @@
+import { getVideoResultsPanelViewProps } from '../utils/videoResultsPanelProps';
 import ReferenceVaultEmptyState from './ReferenceVaultEmptyState';
 import VideoCard from './VideoCard';
 import VideoFilterEmptyState from './VideoFilterEmptyState';
 import VideoListTable from './VideoListTable';
-
-const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export default function VideoResultsPanel({
   checkedVideos,
@@ -18,33 +17,23 @@ export default function VideoResultsPanel({
   videos,
   viewMode,
 }) {
-  const checkedVideoList = toArray(checkedVideos);
-  const filteredVideoList = toArray(filteredVideos);
-  const videoList = toArray(videos);
-
-  const getVideoCardProps = (video, index) => ({
-    video,
-    rank: index + 1,
-    isChecked: checkedVideoList.includes(video.videoId),
-    isSaved: isVideoSaved(video.videoId),
-    isProductionCandidate: isProductionCandidate(video.videoId),
-    showWorkPanel,
+  const {
+    filteredVideoList,
+    getVideoCardProps,
+    listTableProps,
+    videoList,
+  } = getVideoResultsPanelViewProps({
+    checkedVideos,
+    filteredVideos,
+    isProductionCandidate,
+    isVideoSaved,
+    onFetchComments,
+    onPromoteToProduction,
     onToggleCheck,
     onToggleScrap,
-    onPromoteToProduction,
-    onFetchComments,
+    showWorkPanel,
+    videos,
   });
-
-  const listTableProps = {
-    videos: filteredVideoList,
-    checkedVideos: checkedVideoList,
-    isVideoSaved,
-    isProductionCandidate,
-    toggleCheckVideo: onToggleCheck,
-    toggleScrapVideo: onToggleScrap,
-    promoteVideoToProduction: onPromoteToProduction,
-    fetchTopComments: onFetchComments,
-  };
 
   return (
     <>
