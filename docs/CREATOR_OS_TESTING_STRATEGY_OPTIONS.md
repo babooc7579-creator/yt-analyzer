@@ -219,6 +219,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 9. `src/utils/channelScanDisplay.js`
    - 채널별 최근 수집 상태 표시
    - 수집 성공/실패/미수집 상태 요약
+   - 1차 테스트 추가 완료
+
+10. `src/utils/channelScanSummaryBoxProps.js`
+   - 채널 수집 요약 박스 표시 문구
+   - 상태 badge와 오류 tooltip 연결
 
 ---
 

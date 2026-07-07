@@ -212,13 +212,13 @@
 ### Issue 11. 프론트 테스트 전략 결정
 
 - 목적: 기능을 많이 쌓은 뒤 작은 수정으로 기존 흐름이 깨지는 위험을 줄입니다.
-- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했고, 순수 함수 테스트 48개를 작성했습니다. GitHub Actions는 아직 `npm run build`만 실행합니다.
+- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했고, 순수 함수 테스트 53개를 작성했습니다. GitHub Actions는 아직 `npm run build`만 실행합니다.
 - 왜 필요한가: `status/statusIds`, discovery links, production kanban, Cloud/localStorage fallback처럼 깨지면 사용자가 바로 불편한 계산이 늘었습니다.
-- 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`, `src/utils/productionKanbanData.js`, `src/utils/videoCollection.js`, `src/utils/video.js`, `src/utils/creatorOsMetrics.js`, `src/utils/channels.js`의 순수 함수 테스트입니다.
+- 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`, `src/utils/productionKanbanData.js`, `src/utils/videoCollection.js`, `src/utils/video.js`, `src/utils/creatorOsMetrics.js`, `src/utils/channels.js`, `src/utils/channelScanDisplay.js`의 순수 함수 테스트입니다.
 - 건드린 파일: `package.json`, `package-lock.json`, `src/utils/*.test.js`, `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`.
 - 건드리면 안 되는 것: 추가 승인 없는 workflow test step 추가, React/Playwright 테스트 도구 추가, 실제 YouTube API/Cloud DB를 호출하는 테스트.
 - 위험도: 중간.
-- 완료 기준: 1차 완료. `npm.cmd test`로 순수 함수 테스트를 실행할 수 있고, 발견함/영상 상태/제작 후보함 계산/저장 영상 조회와 수집 안내/영상 필터와 정렬/홈 요약 숫자/채널 태그와 최근 수집일 테스트가 통과합니다.
+- 완료 기준: 1차 완료. `npm.cmd test`로 순수 함수 테스트를 실행할 수 있고, 발견함/영상 상태/제작 후보함 계산/저장 영상 조회와 수집 안내/영상 필터와 정렬/홈 요약 숫자/채널 태그와 최근 수집일/채널 수집 상태 표시 테스트가 통과합니다.
 - 사용자 판단 필요 여부: 현재 없음. GitHub Actions에 `npm test`를 추가하거나 React/Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
