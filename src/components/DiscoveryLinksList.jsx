@@ -1,9 +1,8 @@
+import { getDiscoveryLinksListViewProps } from '../utils/discoveryLinksWorkspaceProps';
 import DiscoveryLinksEmptyState from './DiscoveryLinksEmptyState';
 import DiscoveryLinksFilteredEmptyState from './DiscoveryLinksFilteredEmptyState';
 import DiscoveryLinksGrid from './DiscoveryLinksGrid';
 import DiscoveryLinksLoadingState from './DiscoveryLinksLoadingState';
-
-const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export default function DiscoveryLinksList({
   allLinkCount,
@@ -14,7 +13,18 @@ export default function DiscoveryLinksList({
   onUpdateLink,
   saving,
 }) {
-  const linkList = toArray(filteredLinks);
+  const {
+    filteredEmptyStateProps,
+    gridProps,
+    linkList,
+  } = getDiscoveryLinksListViewProps({
+    allLinkCount,
+    clearFilters,
+    filteredLinks,
+    onDeleteLink,
+    onUpdateLink,
+    saving,
+  });
 
   if (loading) {
     return <DiscoveryLinksLoadingState />;
@@ -25,22 +35,10 @@ export default function DiscoveryLinksList({
   }
 
   if (linkList.length === 0) {
-    const filteredEmptyStateProps = {
-      allLinkCount,
-      clearFilters,
-    };
-
     return (
       <DiscoveryLinksFilteredEmptyState {...filteredEmptyStateProps} />
     );
   }
-
-  const gridProps = {
-    filteredLinks: linkList,
-    onDeleteLink,
-    onUpdateLink,
-    saving,
-  };
 
   return (
     <DiscoveryLinksGrid {...gridProps} />
