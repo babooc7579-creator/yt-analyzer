@@ -429,6 +429,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 51. `src/utils/routesProps.js`
    - 라우트 props 최종 묶음 구성
    - 홈/발견함/기존 화면 분기 상태 연결
+   - 1차 테스트 추가 완료
+
+52. `src/utils/productionSchedule.js`
+   - 제작 일정/업로드 일정 표시 계산
+   - 날짜 기반 제작 흐름 정렬 기준
 
 ---
 
