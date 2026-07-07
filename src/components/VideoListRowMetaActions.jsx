@@ -1,5 +1,6 @@
 import { Clock, MessageSquareText } from 'lucide-react';
 
+import { COMMENT_API_BUTTON_LABEL } from '../utils/commentApiButtonProps';
 import { getVideoListRowMetaActionsViewProps } from '../utils/videoListRowMetaActionsProps';
 import CopyUrlButton from './CopyUrlButton';
 
@@ -29,7 +30,7 @@ export default function VideoListRowMetaActions({ fetchTopComments, video, video
         </span>
       )}
       <button {...commentsButtonProps}>
-        <MessageSquareText className="w-3 h-3" /> 댓글 Top 10(API)
+        <MessageSquareText className="w-3 h-3" /> {COMMENT_API_BUTTON_LABEL}
       </button>
       <CopyUrlButton {...copyUrlButtonProps} />
     </div>
