@@ -354,6 +354,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 36. `src/utils/videoCard.js`
    - 영상 카드 props 구성
    - 상태 버튼/스크랩북 표시/복사 액션 연결
+   - 1차 테스트 추가 완료
+
+37. `src/utils/videoDashboardControls.js`
+   - 영상 검색/필터/정렬 컨트롤 props 구성
+   - 저장 영상 조회와 수집 안내 버튼 구분
 
 ---
 
