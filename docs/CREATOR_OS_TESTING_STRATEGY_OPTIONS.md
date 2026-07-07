@@ -439,6 +439,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 53. `src/utils/homeActionShortcuts.js`
    - 홈 화면 빠른 작업 버튼 구성
    - 버튼 표시 문구와 연결 대상 관리
+   - 1차 테스트 추가 완료
+
+54. `src/utils/discoveryLinkActionCopy.js`
+   - 발견 링크 상태별 액션 문구 구성
+   - 사용자가 누를 버튼과 저장 의미 안내
 
 ---
 
