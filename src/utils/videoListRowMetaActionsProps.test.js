@@ -25,6 +25,8 @@ describe('videoListRowMetaActionsProps utils', () => {
       type: 'button',
       className: expect.stringContaining('bg-indigo-50'),
     });
+    expect(props.commentsButtonProps.title).toContain('YouTube API');
+    expect(props.commentsButtonProps['aria-label']).toContain('YouTube API');
     expect(props.copyUrlButtonProps).toMatchObject({
       className: expect.stringContaining('bg-slate-50'),
       url: 'https://youtube.com/watch?v=video1',

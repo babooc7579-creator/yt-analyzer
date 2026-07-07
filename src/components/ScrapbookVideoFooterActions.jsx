@@ -1,5 +1,6 @@
 import { MessageSquareText, Trash2 } from 'lucide-react';
 
+import { getCommentApiButtonProps } from '../utils/commentApiButtonProps';
 import CopyUrlButton from './CopyUrlButton';
 
 export default function ScrapbookVideoFooterActions({
@@ -17,6 +18,13 @@ export default function ScrapbookVideoFooterActions({
     if (confirmed) onRemoveScrap(video);
   };
 
+  const commentsButtonProps = getCommentApiButtonProps({
+    className: 'p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors',
+    onFetchComments,
+    video,
+    videoTitle,
+  });
+
   return (
     <div className="flex gap-2">
       <CopyUrlButton
@@ -27,13 +35,7 @@ export default function ScrapbookVideoFooterActions({
         title="YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다."
         className="inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1.5 text-[11px] font-bold text-slate-600 transition-colors hover:bg-slate-100 disabled:text-slate-300"
       />
-      <button
-        onClick={() => onFetchComments(video.videoId, video.title)}
-        className="p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
-        title="댓글 Top 10 보기 - YouTube API로 댓글을 조회합니다. 저장 영상 불러오기와 다른 작업입니다."
-        aria-label={`${videoTitle} 댓글 Top 10 보기 - YouTube API로 댓글 조회`}
-        type="button"
-      >
+      <button {...commentsButtonProps}>
         <MessageSquareText className="w-4 h-4" />
       </button>
       <button
