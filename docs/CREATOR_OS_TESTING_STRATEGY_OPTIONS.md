@@ -434,6 +434,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 52. `src/utils/productionSchedule.js`
    - 제작 일정/업로드 일정 표시 계산
    - 날짜 기반 제작 흐름 정렬 기준
+   - 1차 테스트 추가 완료
+
+53. `src/utils/homeActionShortcuts.js`
+   - 홈 화면 빠른 작업 버튼 구성
+   - 버튼 표시 문구와 연결 대상 관리
 
 ---
 
