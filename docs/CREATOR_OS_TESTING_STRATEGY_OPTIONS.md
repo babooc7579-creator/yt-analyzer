@@ -459,6 +459,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 57. `src/utils/legacyAsideProps.js`
    - 기존 좌측 보조 패널 카운트 props 구성
    - 선택 채널/영상/스크랩 개수 표시
+   - 1차 테스트 추가 완료
+
+58. `src/utils/legacyChannelPanelProps.js`
+   - 기존 채널 관리 패널 props 구성
+   - 채널 추가/수정/스캔/메모 핸들러 연결
 
 ---
 
