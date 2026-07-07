@@ -1,3 +1,4 @@
+import { getDiscoveryLinkFormProps } from '../utils/discoveryLinkForm';
 import DiscoveryLinkFormHeader from './DiscoveryLinkFormHeader';
 import DiscoveryLinkMemoField from './DiscoveryLinkMemoField';
 import DiscoveryLinkRiskyCandidateHint from './DiscoveryLinkRiskyCandidateHint';
@@ -17,29 +18,22 @@ export default function DiscoveryLinkForm({
   onChange,
   onSubmit,
 }) {
-  const urlFieldProps = {
+  const {
+    memoFieldProps,
+    riskyCandidateHintProps,
+    statusFieldsProps,
+    submitButtonProps,
+    titleFieldProps,
+    urlFieldProps,
+  } = getDiscoveryLinkFormProps({
     duplicateLink,
-    onChange,
-    url: form.url,
-    urlPreview,
-  };
-
-  const statusFieldsProps = {
-    onChange,
-    rightsStatus: form.rightsStatus,
-    status: form.status,
-  };
-
-  const memoFieldProps = {
-    onChange: (value) => onChange('memo', value),
-    value: form.memo,
-  };
-
-  const submitButtonProps = {
-    duplicateLink,
+    form,
     isCreateDisabled,
+    onChange,
     saving,
-  };
+    showRiskyCandidateHint,
+    urlPreview,
+  });
 
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-xl shadow-slate-950/30">
@@ -48,17 +42,11 @@ export default function DiscoveryLinkForm({
       <form className="mt-5 space-y-4" onSubmit={onSubmit}>
         <DiscoveryLinkUrlField {...urlFieldProps} />
 
-        <DiscoveryLinkTextField
-          ariaLabel="발견 링크 제목 또는 기억할 이름"
-          label="제목 또는 기억할 이름"
-          onChange={(value) => onChange('title', value)}
-          placeholder="나중에 알아볼 수 있는 이름"
-          value={form.title}
-        />
+        <DiscoveryLinkTextField {...titleFieldProps} />
 
         <DiscoveryLinkStatusFields {...statusFieldsProps} />
 
-        <DiscoveryLinkRiskyCandidateHint show={showRiskyCandidateHint} />
+        <DiscoveryLinkRiskyCandidateHint {...riskyCandidateHintProps} />
 
         <DiscoveryLinkMemoField {...memoFieldProps} />
 
