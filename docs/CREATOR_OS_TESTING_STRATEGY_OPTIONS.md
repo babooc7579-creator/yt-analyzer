@@ -299,6 +299,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 25. `src/utils/discoveryLinks.js`
    - 발견 링크 기본값/상태 helper
    - 수동 링크 저장 데이터 정규화
+   - 1차 테스트 추가 완료
+
+26. `src/utils/discoveryLinksRouteProps.js`
+   - 발견함 라우트 props 전달
+   - 발견함 Cloud 상태와 화면 props 연결
 
 ---
 
