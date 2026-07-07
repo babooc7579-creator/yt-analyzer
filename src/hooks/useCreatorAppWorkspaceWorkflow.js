@@ -1,5 +1,5 @@
 import { useCreatorWorkspaceNavigation } from './useCreatorWorkspaceNavigation';
-import { useDiscoveryLinks } from './useDiscoveryLinks';
+import { useCreatorAppDiscoveryWorkflow } from './useCreatorAppDiscoveryWorkflow';
 import { useTopComments } from './useTopComments';
 
 export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
@@ -22,6 +22,7 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     setShowWorkPanel,
     showWorkPanel,
   } = useCreatorWorkspaceNavigation();
+  const discoveryWorkflow = useCreatorAppDiscoveryWorkflow();
   const {
     discoveryLinks,
     discoveryLinksError,
@@ -33,7 +34,7 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     changeDiscoveryLink,
     loadDiscoveryLinks,
     removeDiscoveryLink,
-  } = useDiscoveryLinks();
+  } = discoveryWorkflow;
 
   return {
     activeCreatorItem,
