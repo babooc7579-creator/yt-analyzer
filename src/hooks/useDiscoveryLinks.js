@@ -32,6 +32,18 @@ export function useDiscoveryLinks() {
 
   const sortedLinks = useMemo(() => sortDiscoveryLinksByRecentUpdate(links), [links]);
 
+  const beginSaving = useCallback((action) => {
+    setSaving(true);
+    setSavingAction(action);
+    setError('');
+    setNotice('');
+  }, []);
+
+  const finishSaving = useCallback(() => {
+    setSaving(false);
+    setSavingAction('');
+  }, []);
+
   const loadDiscoveryLinks = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -54,10 +66,7 @@ export function useDiscoveryLinks() {
   }, [loadDiscoveryLinks]);
 
   const addDiscoveryLink = async (payload) => {
-    setSaving(true);
-    setSavingAction('create');
-    setError('');
-    setNotice('');
+    beginSaving('create');
 
     try {
       const data = await createDiscoveryLink(payload);
@@ -78,16 +87,12 @@ export function useDiscoveryLinks() {
       setError(getDiscoveryActionError(saveError, 'Cloud에 링크를 저장하지 못했습니다.', '저장'));
       return false;
     } finally {
-      setSaving(false);
-      setSavingAction('');
+      finishSaving();
     }
   };
 
   const changeDiscoveryLink = async (id, updates) => {
-    setSaving(true);
-    setSavingAction(getDiscoveryLinkSavingAction(updates));
-    setError('');
-    setNotice('');
+    beginSaving(getDiscoveryLinkSavingAction(updates));
     const currentLink = getDiscoveryLinkById(links, id);
 
     try {
@@ -109,16 +114,12 @@ export function useDiscoveryLinks() {
       setError(getDiscoveryActionError(saveError, 'Cloud에 링크 변경 사항을 저장하지 못했습니다.', '변경 저장'));
       return false;
     } finally {
-      setSaving(false);
-      setSavingAction('');
+      finishSaving();
     }
   };
 
   const removeDiscoveryLink = async (id) => {
-    setSaving(true);
-    setSavingAction('delete');
-    setError('');
-    setNotice('');
+    beginSaving('delete');
     const currentLink = getDiscoveryLinkById(links, id);
 
     try {
@@ -134,8 +135,7 @@ export function useDiscoveryLinks() {
       setError(getDiscoveryActionError(deleteError, 'Cloud에서 링크 기록을 삭제하지 못했습니다.', '삭제'));
       return false;
     } finally {
-      setSaving(false);
-      setSavingAction('');
+      finishSaving();
     }
   };
 
