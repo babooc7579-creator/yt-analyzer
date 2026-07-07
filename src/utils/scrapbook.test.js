@@ -45,6 +45,17 @@ describe('scrapbook utils', () => {
     expect(removeScrapbookVideo([savedVideo, secondVideo], 'video-1')).toEqual([secondVideo]);
   });
 
+  it('keeps scrapbook mutations scoped to valid Cloud video objects', () => {
+    expect(removeScrapbookVideo([savedVideo, null, 'bad', secondVideo], 'video-2')).toEqual([
+      savedVideo,
+    ]);
+
+    expect(upsertScrapbookVideo([savedVideo, null, 'bad'], secondVideo)).toEqual([
+      savedVideo,
+      secondVideo,
+    ]);
+  });
+
   it('builds URL list text and production scoped video lists', () => {
     expect(getScrapbookVideoUrlList([savedVideo, { title: 'No id' }])).toBe(
       '1. Saved video\nhttps://youtube.com/watch?v=video-1'
@@ -54,6 +65,10 @@ describe('scrapbook utils', () => {
       'video-1': { statusIds: [PRODUCTION_STATUS.CANDIDATE] },
       'video-2': { status: VIDEO_STATUS.REVIEWED },
     })).toEqual([savedVideo]);
+
+    expect(getProductionScopedVideos([savedVideo, secondVideo], {
+      'video-2': { status: PRODUCTION_STATUS.ACTIVE },
+    })).toEqual([secondVideo]);
   });
 
   it('builds scrapbook workspace props for scrapbook and production views', () => {
