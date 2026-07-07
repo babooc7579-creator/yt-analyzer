@@ -3,7 +3,9 @@ import { describe, expect, it } from 'vitest';
 import {
   getChannelList,
   getChannelListBodyProps,
+  getChannelListBodyVisibleChannels,
   getChannelListExportPanelProps,
+  getChannelListItemsProps,
   getVisibleChannelUrlList,
   getVisibleChannels,
   hasChannelTag,
@@ -82,5 +84,25 @@ describe('channelListProps utils', () => {
       updatingChannelId: 'channel-1',
       visibleChannels,
     });
+  });
+
+  it('builds channel list body item props with safe visible channel fallback', () => {
+    const visibleChannels = [overseasChannel];
+
+    expect(getChannelListBodyVisibleChannels(visibleChannels)).toBe(visibleChannels);
+    expect(getChannelListBodyVisibleChannels(null)).toEqual([]);
+
+    const props = {
+      getScanDisplay: () => 'scan',
+      onDelete: () => 'delete',
+      onOpenNotes: () => 'notes',
+      onToggleSelection: () => 'toggle',
+      onUpdateMetadata: () => 'metadata',
+      selectedChannelIds: ['channel-1'],
+      updatingChannelId: 'channel-1',
+      visibleChannels,
+    };
+
+    expect(getChannelListItemsProps(props)).toEqual(props);
   });
 });

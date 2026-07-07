@@ -1,8 +1,10 @@
+import {
+  getChannelListBodyVisibleChannels,
+  getChannelListItemsProps,
+} from '../utils/channelListProps';
 import ChannelListEmptyState from './ChannelListEmptyState';
 import ChannelListItems from './ChannelListItems';
 import ChannelListLoadingState from './ChannelListLoadingState';
-
-const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export default function ChannelListBody({
   channelsLoading,
@@ -17,7 +19,7 @@ export default function ChannelListBody({
   updatingChannelId,
   visibleChannels,
 }) {
-  const visibleChannelList = toArray(visibleChannels);
+  const visibleChannelList = getChannelListBodyVisibleChannels(visibleChannels);
 
   if (channelsLoading) {
     return <ChannelListLoadingState />;
@@ -32,7 +34,7 @@ export default function ChannelListBody({
     );
   }
 
-  const itemsProps = {
+  const itemsProps = getChannelListItemsProps({
     getScanDisplay,
     onDelete,
     onOpenNotes,
@@ -41,7 +43,7 @@ export default function ChannelListBody({
     selectedChannelIds,
     updatingChannelId,
     visibleChannels: visibleChannelList,
-  };
+  });
 
   return (
     <ChannelListItems {...itemsProps} />
