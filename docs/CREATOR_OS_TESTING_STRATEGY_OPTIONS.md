@@ -214,6 +214,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 8. `src/utils/channels.js`
    - Cloud 태그와 화면 카테고리 차이 계산
    - 최근 채널 수집일 계산
+   - 1차 테스트 추가 완료
+
+9. `src/utils/channelScanDisplay.js`
+   - 채널별 최근 수집 상태 표시
+   - 수집 성공/실패/미수집 상태 요약
 
 ---
 

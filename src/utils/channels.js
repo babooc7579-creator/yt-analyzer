@@ -15,6 +15,8 @@ export const getCloudOnlyTags = (channels = [], categories = []) => {
   const tagSet = new Set();
 
   channels.forEach((channel) => {
+    if (!channel || typeof channel !== 'object') return;
+
     const tags = Array.isArray(channel.tags) ? channel.tags : [];
     [...tags, channel.category].forEach((tag) => {
       const cleanTag = typeof tag === 'string' ? tag.trim() : '';
