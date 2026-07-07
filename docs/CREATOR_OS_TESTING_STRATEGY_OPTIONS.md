@@ -274,6 +274,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 20. `src/utils/channelNotesModal.js`
    - 채널 분석/기록 모달 props
    - 메모 저장 버튼 상태와 입력 문구
+   - 1차 테스트 추가 완료
+
+21. `src/utils/clipboard.js`
+   - 클립보드 복사 성공/실패 처리
+   - 브라우저 API fallback 범위
 
 ---
 
