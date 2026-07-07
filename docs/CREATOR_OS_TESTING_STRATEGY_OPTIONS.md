@@ -244,6 +244,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 14. `src/utils/channelMetadataControlsProps.js`
    - 채널 등급/상태 변경 컨트롤 props
    - 수집 대상 상태 안내 문구
+   - 1차 테스트 추가 완료
+
+15. `src/utils/channelTagSelectorProps.js`
+   - 채널 태그 선택/필터 표시 props
+   - 태그 선택이 API 호출을 의미하지 않는다는 안내
 
 ---
 
