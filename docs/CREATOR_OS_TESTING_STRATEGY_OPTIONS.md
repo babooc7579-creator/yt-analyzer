@@ -329,6 +329,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 31. `src/utils/radarCandidates.js`
    - 오늘 볼 후보 영상 계산
    - 레이더 후보 표시용 데이터 구성
+   - 1차 테스트 추가 완료
+
+32. `src/utils/productionVideoCard.js`
+   - 제작 후보 영상 카드 props 구성
+   - 레이더 점수와 제작 상태 표시 연결
 
 ---
 
