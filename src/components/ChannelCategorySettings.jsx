@@ -1,9 +1,14 @@
+import {
+  canAddCategoryToLocalList,
+  getCategoriesAfterLocalAdd,
+  getCategoriesAfterLocalHide,
+  getCategoryHideConfirmMessage,
+  getChannelCategorySettingsProps,
+} from '../utils/channelCategorySettingsProps';
 import ChannelCategoryAddInput from './ChannelCategoryAddInput';
 import ChannelCategoryChipList from './ChannelCategoryChipList';
 import ChannelCategoryHelpText from './ChannelCategoryHelpText';
 import ChannelCloudOnlyTagsNotice from './ChannelCloudOnlyTagsNotice';
-
-const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export default function ChannelCategorySettings({
   cancelRenameCategory,
@@ -19,42 +24,38 @@ export default function ChannelCategorySettings({
   setRenameValue,
   startRenameCategory,
 }) {
-  const categoryList = toArray(categories);
+  const categoryList = Array.isArray(categories) ? categories : [];
 
   const hideCategoryFromLocalList = (category) => {
-    const confirmed = window.confirm(
-      `'${category}' 카테고리를 화면 목록에서 숨길까요?\n\n이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다. 나중에 같은 이름으로 카테고리를 다시 추가하면 목록에 다시 보입니다.`
-    );
+    const confirmed = window.confirm(getCategoryHideConfirmMessage(category));
     if (!confirmed) return;
-    setCategories(categoryList.filter((currentCategory) => currentCategory !== category));
+    setCategories(getCategoriesAfterLocalHide(categoryList, category));
   };
 
   const addCategoryToLocalList = () => {
-    if (!newCategoryName || categoryList.includes(newCategoryName)) return;
-    setCategories([...categoryList, newCategoryName]);
+    if (!canAddCategoryToLocalList(categoryList, newCategoryName)) return;
+    setCategories(getCategoriesAfterLocalAdd(categoryList, newCategoryName));
     setNewCategoryName('');
   };
-  const addInputProps = {
-    newCategoryName,
-    onAddCategory: addCategoryToLocalList,
-    setNewCategoryName,
-  };
-
-  const chipListProps = {
+  const {
+    addInputProps,
+    chipListProps,
+    cloudOnlyTagsNoticeProps,
+  } = getChannelCategorySettingsProps({
+    addCategoryToLocalList,
     cancelRenameCategory,
     categories: categoryList,
+    cloudOnlyTags,
     confirmRenameCategory,
     hideCategoryFromLocalList,
+    newCategoryName,
     renameLoading,
     renameValue,
     renamingCategory,
+    setNewCategoryName,
     setRenameValue,
     startRenameCategory,
-  };
-
-  const cloudOnlyTagsNoticeProps = {
-    cloudOnlyTags,
-  };
+  });
 
   return (
     <div className="mb-3 p-2 bg-white rounded border border-indigo-200 shadow-inner">
