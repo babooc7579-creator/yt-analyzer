@@ -262,8 +262,13 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
    - 1차 테스트 추가 완료
 
 18. `src/utils/channelAddActions.js`
-   - 채널 추가/삭제 확인 문구
-   - Cloud 저장과 수집 실행 의미 구분
+   - 채널 추가 입력 정리와 Cloud 저장 문구
+   - Cloud 저장과 새 영상 수집 실행 의미 구분
+   - 1차 테스트 추가 완료
+
+19. `src/utils/channelActions.js`
+   - 채널 삭제 확인 문구
+   - 삭제가 저장 영상/YouTube 원본 삭제가 아니라는 안내
 
 ---
 
