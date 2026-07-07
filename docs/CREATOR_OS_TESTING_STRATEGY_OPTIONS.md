@@ -339,6 +339,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 33. `src/utils/productionKanbanColumn.js`
    - 제작 칸반 컬럼 카드 props 구성
    - 컬럼별 영상/기록 전달 안정화
+   - 1차 테스트 추가 완료
+
+34. `src/utils/productionKanbanProps.js`
+   - 제작 칸반 전체 props 구성
+   - 컬럼/일정/발견 링크 props 연결
 
 ---
 
