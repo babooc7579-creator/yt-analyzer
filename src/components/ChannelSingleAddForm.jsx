@@ -1,3 +1,4 @@
+import { getChannelSingleAddFormInnerProps } from '../utils/channelAddFormProps';
 import ChannelPreviewEditor from './ChannelPreviewEditor';
 import ChannelPreviewInput from './ChannelPreviewInput';
 
@@ -18,26 +19,26 @@ export default function ChannelSingleAddForm({
   handleSaveChannel,
   loading,
 }) {
-  const previewInputProps = {
-    handlePreviewChannel,
-    newChannelInput,
-    previewLoading,
-    setNewChannelInput,
-  };
-
-  const previewEditorProps = {
+  const {
+    previewEditorProps,
+    previewInputProps,
+  } = getChannelSingleAddFormInnerProps({
     cancelChannelPreview,
     categories,
     channelPreview,
+    handlePreviewChannel,
     handleSaveChannel,
     loading,
+    newChannelInput,
     newChannelLang,
     newChannelNote,
     newChannelTags,
+    previewLoading,
+    setNewChannelInput,
     setNewChannelLang,
     setNewChannelNote,
     toggleNewChannelTag,
-  };
+  });
 
   if (!channelPreview) {
     return (

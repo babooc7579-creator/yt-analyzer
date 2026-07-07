@@ -1,10 +1,9 @@
+import { getChannelBulkAddFormInnerProps } from '../utils/channelAddFormProps';
 import ChannelBulkInputBox from './ChannelBulkInputBox';
 import ChannelBulkResultPanel from './ChannelBulkResultPanel';
 import ChannelBulkSubmitButton from './ChannelBulkSubmitButton';
 import ChannelLanguageSelect from './ChannelLanguageSelect';
 import ChannelTagSelector from './ChannelTagSelector';
-
-const toInputText = (value) => (typeof value === 'string' ? value : '');
 
 export default function ChannelBulkAddForm({
   bulkInput,
@@ -19,31 +18,21 @@ export default function ChannelBulkAddForm({
   newChannelLang,
   setNewChannelLang,
 }) {
-  const inputText = toInputText(bulkInput);
-  const recognizedLineCount = inputText.split('\n').map((line) => line.trim()).filter(Boolean).length;
-
-  const inputBoxProps = {
-    bulkInput: inputText,
+  const {
+    inputBoxProps,
+    languageSelectProps,
+    resultPanelProps,
+    submitButtonProps,
+  } = getChannelBulkAddFormInnerProps({
+    bulkInput,
     bulkLoading,
-    recognizedLineCount,
-    setBulkInput,
-  };
-
-  const languageSelectProps = {
-    language: newChannelLang,
-    setLanguage: setNewChannelLang,
-  };
-
-  const submitButtonProps = {
-    bulkInput: inputText,
-    bulkLoading,
-    handleBulkAdd,
-  };
-
-  const resultPanelProps = {
     bulkResult,
+    handleBulkAdd,
+    newChannelLang,
     resetBulkAdd,
-  };
+    setBulkInput,
+    setNewChannelLang,
+  });
 
   return (
     <div className="space-y-2 animate-in fade-in duration-200">

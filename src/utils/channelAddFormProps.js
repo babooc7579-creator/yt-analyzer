@@ -1,3 +1,13 @@
+const toInputText = (value) => (typeof value === 'string' ? value : '');
+
+export const getRecognizedBulkChannelLineCount = (bulkInput) => (
+  toInputText(bulkInput)
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .length
+);
+
 export const getChannelAddFormViewProps = ({
   addMode,
   setAddMode,
@@ -86,5 +96,78 @@ export const getChannelAddFormViewProps = ({
     setNewChannelLang,
     setNewChannelNote,
     toggleNewChannelTag,
+  },
+});
+
+export const getChannelBulkAddFormInnerProps = ({
+  bulkInput,
+  bulkLoading,
+  bulkResult,
+  handleBulkAdd,
+  newChannelLang,
+  resetBulkAdd,
+  setBulkInput,
+  setNewChannelLang,
+}) => {
+  const inputText = toInputText(bulkInput);
+
+  return {
+    inputBoxProps: {
+      bulkInput: inputText,
+      bulkLoading,
+      recognizedLineCount: getRecognizedBulkChannelLineCount(inputText),
+      setBulkInput,
+    },
+    languageSelectProps: {
+      language: newChannelLang,
+      setLanguage: setNewChannelLang,
+    },
+    resultPanelProps: {
+      bulkResult,
+      resetBulkAdd,
+    },
+    submitButtonProps: {
+      bulkInput: inputText,
+      bulkLoading,
+      handleBulkAdd,
+    },
+  };
+};
+
+export const getChannelSingleAddFormInnerProps = ({
+  cancelChannelPreview,
+  categories,
+  channelPreview,
+  handlePreviewChannel,
+  handleSaveChannel,
+  loading,
+  newChannelInput,
+  newChannelLang,
+  newChannelNote,
+  newChannelTags,
+  previewLoading,
+  setNewChannelInput,
+  setNewChannelLang,
+  setNewChannelNote,
+  toggleNewChannelTag,
+}) => ({
+  previewEditorProps: {
+    cancelChannelPreview,
+    categories,
+    channelPreview,
+    handleSaveChannel,
+    loading,
+    newChannelLang,
+    newChannelNote,
+    newChannelTags,
+    setNewChannelLang,
+    setNewChannelNote,
+    toggleNewChannelTag,
+  },
+  previewInputProps: {
+    handlePreviewChannel,
+    newChannelInput,
+    previewLoading,
+    setNewChannelInput,
   },
 });
