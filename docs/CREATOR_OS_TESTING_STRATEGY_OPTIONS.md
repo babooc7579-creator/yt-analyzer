@@ -484,6 +484,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 62. `src/utils/legacyVaultTabViewProps.js`
    - 기존 보관함 탭 props 구성
    - 저장 영상/발견 링크/사용자 기록 액션 props 연결
+   - 1차 테스트 추가 완료
+
+63. `src/utils/legacyChannelPanelViewProps.js`
+   - 기존 채널 패널 하위 뷰 props 구성
+   - 채널 추가/목록/태그 탭/footer props 연결
 
 ---
 
