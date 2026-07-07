@@ -424,6 +424,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 50. `src/utils/legacyWorkspaceRouteProps.js`
    - 기존 작업 화면 props 구성
    - legacy 화면과 discovery link 변경 핸들러 연결
+   - 1차 테스트 추가 완료
+
+51. `src/utils/routesProps.js`
+   - 라우트 props 최종 묶음 구성
+   - 홈/발견함/기존 화면 분기 상태 연결
 
 ---
 
