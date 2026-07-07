@@ -347,8 +347,13 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
    - 1차 테스트 추가 완료
 
 35. `src/utils/productionKanbanActions.js`
-   - 제작 칸반 이동/저장 액션 helper
-   - 상태 변경 메시지와 저장 대상 분리
+   - 제작 칸반 임시 입력/저장 액션 helper
+   - 임시 입력값과 저장 대상 분리
+   - 1차 테스트 추가 완료
+
+36. `src/utils/videoCard.js`
+   - 영상 카드 props 구성
+   - 상태 버튼/스크랩북 표시/복사 액션 연결
 
 ---
 
