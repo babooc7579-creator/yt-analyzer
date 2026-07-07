@@ -314,6 +314,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 28. `src/utils/scrapbook.js`
    - 스크랩북 표시 데이터 구성
    - 저장 영상과 발견 링크 보관함 연결
+   - 1차 테스트 추가 완료
+
+29. `src/utils/scrapbookHeaderActions.js`
+   - 스크랩북 헤더 버튼 props 구성
+   - AI 리메이크 프롬프트/URL 복사 버튼 상태
 
 ---
 
