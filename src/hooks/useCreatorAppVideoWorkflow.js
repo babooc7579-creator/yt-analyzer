@@ -1,33 +1,9 @@
-import { useScrapbook } from './useScrapbook';
+import { useCreatorAppVideoReviewWorkflow } from './useCreatorAppVideoReviewWorkflow';
 import { useVideoExplorerState } from './useVideoExplorerState';
-import { useVideoProductionActions } from './useVideoProductionActions';
 import { useVideoSelection } from './useVideoSelection';
-import { useVideoUserRecords } from './useVideoUserRecords';
 
 export function useCreatorAppVideoWorkflow({ videos }) {
-  const {
-    savedVideos,
-    scrapbookSyncWarning,
-    isVideoSaved,
-    toggleScrapVideo,
-  } = useScrapbook();
-  const {
-    videoUserRecords,
-    videoRecordsSyncWarning,
-    markVideoStatus: markRadarVideoStatus,
-    updateVideoUserRecord,
-    restoreVideoToRadar,
-    clearRadarDecisions,
-  } = useVideoUserRecords();
-  const {
-    isProductionCandidate,
-    promoteVideoToProduction,
-  } = useVideoProductionActions({
-    isVideoSaved,
-    markVideoStatus: markRadarVideoStatus,
-    toggleScrapVideo,
-    videoUserRecords,
-  });
+  const reviewWorkflow = useCreatorAppVideoReviewWorkflow();
   const {
     filteredAndSortedVideos,
     lengthFilter,
@@ -55,19 +31,19 @@ export function useCreatorAppVideoWorkflow({ videos }) {
   return {
     checkedVideos,
     clearCheckedVideos,
-    clearRadarDecisions,
+    clearRadarDecisions: reviewWorkflow.clearRadarDecisions,
     copiedPrompt,
     copyPromptForVideos,
     filteredAndSortedVideos,
-    isProductionCandidate,
-    isVideoSaved,
+    isProductionCandidate: reviewWorkflow.isProductionCandidate,
+    isVideoSaved: reviewWorkflow.isVideoSaved,
     lengthFilter,
-    markRadarVideoStatus,
-    promoteVideoToProduction,
+    markRadarVideoStatus: reviewWorkflow.markRadarVideoStatus,
+    promoteVideoToProduction: reviewWorkflow.promoteVideoToProduction,
     promptCopyError,
-    restoreVideoToRadar,
-    savedVideos,
-    scrapbookSyncWarning,
+    restoreVideoToRadar: reviewWorkflow.restoreVideoToRadar,
+    savedVideos: reviewWorkflow.savedVideos,
+    scrapbookSyncWarning: reviewWorkflow.scrapbookSyncWarning,
     searchKeyword,
     setLengthFilter,
     setSearchKeyword,
@@ -77,11 +53,11 @@ export function useCreatorAppVideoWorkflow({ videos }) {
     setViewMode,
     sortType,
     toggleCheckVideo,
-    toggleScrapVideo,
+    toggleScrapVideo: reviewWorkflow.toggleScrapVideo,
     ttoTtoMode,
-    updateVideoUserRecord,
-    videoRecordsSyncWarning,
-    videoUserRecords,
+    updateVideoUserRecord: reviewWorkflow.updateVideoUserRecord,
+    videoRecordsSyncWarning: reviewWorkflow.videoRecordsSyncWarning,
+    videoUserRecords: reviewWorkflow.videoUserRecords,
     viewFilter,
     viewMode,
   };
