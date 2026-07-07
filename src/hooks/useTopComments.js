@@ -1,18 +1,10 @@
 import { useState } from 'react';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from '../services/youtubeApi';
-
-const EMPTY_COMMENT_MODAL = {
-  comments: [],
-  isOpen: false,
-  loading: false,
-  videoTitle: '',
-};
-
-const getYoutubeErrorMessage = (error) => {
-  const reason = error?.errors?.[0]?.reason;
-  if (reason === 'commentsDisabled') return '이 영상은 댓글이 사용 중지되었습니다.';
-  return error?.message || '댓글을 불러오지 못했습니다.';
-};
+import {
+  EMPTY_COMMENT_MODAL,
+  getYoutubeCommentErrorMessage,
+  getYoutubeTopComments,
+} from '../utils/topComments';
 
 export function useTopComments({ apiKey, onError }) {
   const [commentModal, setCommentModal] = useState(EMPTY_COMMENT_MODAL);
@@ -32,15 +24,10 @@ export function useTopComments({ apiKey, onError }) {
     try {
       const data = await fetchTopCommentsFromYoutube({ videoId, apiKey });
       if (data.error) {
-        throw new Error(getYoutubeErrorMessage(data.error));
+        throw new Error(getYoutubeCommentErrorMessage(data.error));
       }
 
-      const comments = data.items ? data.items.map(item => ({
-        id: item.id,
-        author: item.snippet.topLevelComment.snippet.authorDisplayName,
-        text: item.snippet.topLevelComment.snippet.textOriginal,
-        likeCount: item.snippet.topLevelComment.snippet.likeCount,
-      })) : [];
+      const comments = getYoutubeTopComments(data.items);
 
       setCommentModal({ isOpen: true, videoTitle, comments, loading: false });
     } catch (err) {
