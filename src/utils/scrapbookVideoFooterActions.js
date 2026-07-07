@@ -1,0 +1,74 @@
+import { getCommentApiButtonProps } from './commentApiButtonProps';
+
+const getSafeVideo = (video) => (
+  video && typeof video === 'object' ? video : {}
+);
+
+const getSafeVideoTitle = ({ video, videoTitle }) => (
+  videoTitle || getSafeVideo(video).title || '이 영상'
+);
+
+export const getScrapbookRemoveConfirmMessage = ({ video, videoTitle } = {}) => {
+  const displayTitle = getSafeVideoTitle({ video, videoTitle });
+
+  return `'${displayTitle}' 영상을 Cloud 스크랩북에서 해제할까요?\n\n영상 원본이나 저장된 영상 데이터는 삭제되지 않고, 스크랩북 보관 표시만 해제됩니다.`;
+};
+
+export const getScrapbookRemoveButtonProps = ({
+  confirmFn,
+  onRemoveScrap,
+  video,
+  videoTitle,
+} = {}) => {
+  const displayTitle = getSafeVideoTitle({ video, videoTitle });
+  const safeVideo = getSafeVideo(video);
+
+  return {
+    'aria-label': `${displayTitle} Cloud 스크랩북에서 해제, 원본 영상과 저장 영상 데이터는 삭제하지 않음`,
+    className: 'p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors',
+    onClick: () => {
+      const message = getScrapbookRemoveConfirmMessage({
+        video: safeVideo,
+        videoTitle: displayTitle,
+      });
+
+      if (confirmFn?.(message)) onRemoveScrap?.(safeVideo);
+    },
+    title: 'Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 저장 영상 데이터는 삭제하지 않습니다.',
+    type: 'button',
+  };
+};
+
+export const getScrapbookVideoFooterActionsViewProps = ({
+  confirmFn,
+  onFetchComments,
+  onRemoveScrap,
+  video,
+  videoTitle,
+  videoUrl,
+} = {}) => {
+  const displayTitle = getSafeVideoTitle({ video, videoTitle });
+
+  return {
+    commentsButtonProps: getCommentApiButtonProps({
+      className: 'p-1.5 text-indigo-500 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors',
+      onFetchComments,
+      video,
+      videoTitle: displayTitle,
+    }),
+    copyUrlButtonProps: {
+      ariaLabel: `${displayTitle} YouTube 원본 URL 복사`,
+      className: 'inline-flex items-center gap-1 rounded-lg bg-slate-50 px-2 py-1.5 text-[11px] font-bold text-slate-600 transition-colors hover:bg-slate-100 disabled:text-slate-300',
+      copiedLabel: '복사 완료',
+      label: 'URL 복사',
+      title: 'YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
+      url: videoUrl,
+    },
+    removeButtonProps: getScrapbookRemoveButtonProps({
+      confirmFn,
+      onRemoveScrap,
+      video,
+      videoTitle: displayTitle,
+    }),
+  };
+};
