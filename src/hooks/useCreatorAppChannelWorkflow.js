@@ -5,7 +5,7 @@ import { useChannelNotesModal } from './useChannelNotesModal';
 import { useChannelSelection } from './useChannelSelection';
 import { useCloudChannels } from './useCloudChannels';
 import { useCreatorAppChannelAddWorkflow } from './useCreatorAppChannelAddWorkflow';
-import { useTagRenameActions } from './useTagRenameActions';
+import { useCreatorAppChannelRenameWorkflow } from './useCreatorAppChannelRenameWorkflow';
 
 export function useCreatorAppChannelWorkflow({
   setError,
@@ -39,18 +39,13 @@ export function useCreatorAppChannelWorkflow({
     onError: setError,
   });
 
-  const renameActions = useTagRenameActions({
-    cancelRenameCategory: formState.cancelRenameCategory,
-    categories: categoryState.categories,
-    loadChannelsFromCloud: cloudChannels.loadChannelsFromCloud,
-    renameValue: formState.renameValue,
-    renamingCategory: formState.renamingCategory,
-    selectedCategoryTab: channelSelection.selectedCategoryTab,
-    setCategories: categoryState.setCategories,
+  const renameActions = useCreatorAppChannelRenameWorkflow({
+    categoryState,
+    channelSelection,
+    cloudChannels,
+    formState,
     setError,
     setProgressMsg,
-    setRenameLoading: formState.setRenameLoading,
-    setSelectedCategoryTab: channelSelection.setSelectedCategoryTab,
   });
 
   return {
