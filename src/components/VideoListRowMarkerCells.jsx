@@ -1,4 +1,5 @@
 import { CheckSquare, Square, Star } from 'lucide-react';
+import { getVideoScrapActionCopy } from '../utils/videoActionButtonProps';
 
 export default function VideoListRowMarkerCells({
   isChecked,
@@ -7,6 +8,14 @@ export default function VideoListRowMarkerCells({
   onToggleScrap,
   videoTitle,
 }) {
+  const {
+    ariaLabel: scrapAriaLabel,
+    title: scrapTitle,
+  } = getVideoScrapActionCopy({
+    isSaved,
+    videoTitle,
+  });
+
   return (
     <>
       <td className="px-4 py-5 text-center rounded-l-2xl">
@@ -28,8 +37,8 @@ export default function VideoListRowMarkerCells({
         <button
           type="button"
           onClick={onToggleScrap}
-          title={isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
-          aria-label={`${videoTitle} ${isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
+          title={scrapTitle}
+          aria-label={scrapAriaLabel}
           className="p-2 rounded-full hover:bg-yellow-100 transition-colors"
         >
           <Star className={`w-6 h-6 ${isSaved ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
