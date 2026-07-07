@@ -309,6 +309,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 27. `src/utils/discoveryLinksWorkspaceProps.js`
    - 발견함 작업 화면 props 구성
    - 폼/필터/목록/알림 props 분리
+   - 1차 테스트 추가 완료
+
+28. `src/utils/scrapbook.js`
+   - 스크랩북 표시 데이터 구성
+   - 저장 영상과 발견 링크 보관함 연결
 
 ---
 
