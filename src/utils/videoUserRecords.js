@@ -30,6 +30,21 @@ export const upsertVideoUserRecord = (records, record) => {
   };
 };
 
+export const restoreVideoUserRecord = (records, videoId, previousRecord) => {
+  const recordMap = toRecordMap(records);
+
+  if (previousRecord) {
+    return {
+      ...recordMap,
+      [videoId]: previousRecord,
+    };
+  }
+
+  const nextRecords = { ...recordMap };
+  delete nextRecords[videoId];
+  return nextRecords;
+};
+
 export const createVideoStatusRecord = (records, videoId, status, extraUpdates = {}, updatedAt) => (
   withRecordStatus({
     ...(toRecordMap(records)[videoId] || {}),
