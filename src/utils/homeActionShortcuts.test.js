@@ -41,4 +41,22 @@ describe('homeActionShortcuts utils', () => {
     expect(items.find((item) => item.key === 'selected-scan')?.onClick).toBeUndefined();
     expect(items.find((item) => item.key === 'discovery-links')?.onClick).toBeUndefined();
   });
+
+  it('keeps home shortcut copy explicit about save, scan, DB lookup, and manual link capture', () => {
+    const items = getHomeActionShortcutItems({});
+    const shortcutsByKey = Object.fromEntries(items.map((item) => [item.key, item]));
+
+    expect(shortcutsByKey['add-channel'].description).toContain('Cloud 목록에 저장');
+    expect(shortcutsByKey['add-channel'].hint).toContain('오퍼레이션');
+
+    expect(shortcutsByKey['selected-scan'].description).toContain('YouTube API');
+    expect(shortcutsByKey['selected-scan'].hint).toContain('YouTube API 호출');
+
+    expect(shortcutsByKey.vault.description).toContain('Cloud DB');
+    expect(shortcutsByKey.vault.description).toContain('새 YouTube API 호출은 없습니다');
+    expect(shortcutsByKey.vault.hint).toContain('DB 조회');
+
+    expect(shortcutsByKey['discovery-links'].description).toContain('Cloud 발견함');
+    expect(shortcutsByKey['discovery-links'].hint).toContain('외부 수집 없이');
+  });
 });
