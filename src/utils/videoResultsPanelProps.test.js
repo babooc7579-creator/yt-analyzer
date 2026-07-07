@@ -85,4 +85,18 @@ describe('videoResultsPanelProps utils', () => {
     expect(props.listTableProps.videos).toEqual([]);
     expect(props.listTableProps.checkedVideos).toEqual([]);
   });
+
+  it('keeps all videos separate from filtered videos for empty-state decisions', () => {
+    const props = getVideoResultsPanelViewProps({
+      ...baseHandlers,
+      checkedVideos: [],
+      filteredVideos: [],
+      showWorkPanel: false,
+      videos: [video],
+    });
+
+    expect(props.videoList).toEqual([video]);
+    expect(props.filteredVideoList).toEqual([]);
+    expect(props.listTableProps.videos).toEqual([]);
+  });
 });
