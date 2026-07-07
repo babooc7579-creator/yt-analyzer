@@ -229,6 +229,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 11. `src/utils/channelListItemProps.js`
    - 채널 목록 항목 표시 props
    - 선택 버튼 안내와 scan summary 연결
+   - 1차 테스트 추가 완료
+
+12. `src/utils/channelListItemActionsProps.js`
+   - 채널 URL 복사/메모/삭제 버튼 props
+   - 삭제 안내와 저장 데이터 보존 문구
 
 ---
 
