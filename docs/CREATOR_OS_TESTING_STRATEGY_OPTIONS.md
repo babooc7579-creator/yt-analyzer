@@ -489,6 +489,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 63. `src/utils/legacyChannelPanelViewProps.js`
    - 기존 채널 패널 하위 뷰 props 구성
    - 채널 추가/목록/태그 탭/footer props 연결
+   - 1차 테스트 추가 완료
+
+64. `src/utils` 1차 순수 유틸 테스트 목록 점검
+   - 누락된 순수 유틸 파일 확인
+   - 다음 테스트 단계 분리 여부 검토
 
 ---
 
