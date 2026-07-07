@@ -379,6 +379,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 41. `src/utils/videoListTableRowProps.js`
    - 영상 리스트 행 props 구성
    - 상태 배지/메타/액션 props 연결
+   - 1차 테스트 추가 완료
+
+42. `src/utils/videoListRowBadgesProps.js`
+   - 영상 리스트 행 배지 props 구성
+   - 터또터/강한 반응/저장 상태 표시 연결
 
 ---
 
