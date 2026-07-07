@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { getDiscoveryLinksWorkspaceViewProps } from './discoveryLinksWorkspaceProps';
+import {
+  getDiscoveryLinksFiltersChildProps,
+  getDiscoveryLinksHeaderActionsProps,
+  getDiscoveryLinksListViewProps,
+  getDiscoveryLinksWorkspaceViewProps,
+} from './discoveryLinksWorkspaceProps';
 
 describe('discoveryLinksWorkspaceProps utils', () => {
   const baseProps = {
@@ -85,5 +90,80 @@ describe('discoveryLinksWorkspaceProps utils', () => {
     expect(viewProps.headerProps.totalLinkCount).toBe(0);
     expect(viewProps.listProps.allLinkCount).toBe(0);
     expect(viewProps.listProps.filteredLinks).toEqual([]);
+  });
+
+  it('builds discovery filter child props with active summary count', () => {
+    const props = getDiscoveryLinksFiltersChildProps({
+      ...baseProps,
+      filteredLinkCount: 3,
+    });
+
+    expect(props).toMatchObject({
+      activeFilterSummaryProps: {
+        filteredLinkCount: 3,
+      },
+      rightsFilterProps: {
+        rightsFilter: 'needs_check',
+        rightsFilterOptions: [{ value: 'needs_check' }],
+        setRightsFilter: baseProps.setRightsFilter,
+      },
+      searchBoxProps: {
+        searchQuery: 'clip',
+        setSearchQuery: baseProps.setSearchQuery,
+      },
+      statusFilterProps: {
+        setStatusFilter: baseProps.setStatusFilter,
+        statusFilter: 'candidate',
+        statusFilterOptions: [{ value: 'candidate' }],
+      },
+    });
+  });
+
+  it('builds discovery header actions props without changing handlers', () => {
+    expect(getDiscoveryLinksHeaderActionsProps({
+      filteredLinkCount: 1,
+      loading: true,
+      onRefresh: baseProps.onRefresh,
+      saving: false,
+      urlList: baseProps.filteredDiscoveryLinkUrlList,
+    })).toEqual({
+      filteredLinkCount: 1,
+      loading: true,
+      onRefresh: baseProps.onRefresh,
+      saving: false,
+      urlList: baseProps.filteredDiscoveryLinkUrlList,
+    });
+  });
+
+  it('builds discovery list view props with safe filtered list fallback', () => {
+    const props = getDiscoveryLinksListViewProps({
+      allLinkCount: 2,
+      clearFilters: baseProps.clearDiscoveryFilters,
+      filteredLinks: [{ id: 'visible' }],
+      onDeleteLink: baseProps.onDeleteLink,
+      onUpdateLink: baseProps.onUpdateLink,
+      saving: true,
+    });
+
+    expect(props.linkList).toEqual([{ id: 'visible' }]);
+    expect(props.filteredEmptyStateProps).toEqual({
+      allLinkCount: 2,
+      clearFilters: baseProps.clearDiscoveryFilters,
+    });
+    expect(props.gridProps).toMatchObject({
+      filteredLinks: [{ id: 'visible' }],
+      onDeleteLink: baseProps.onDeleteLink,
+      onUpdateLink: baseProps.onUpdateLink,
+      saving: true,
+    });
+
+    expect(getDiscoveryLinksListViewProps({
+      allLinkCount: 1,
+      clearFilters: baseProps.clearDiscoveryFilters,
+      filteredLinks: null,
+      onDeleteLink: baseProps.onDeleteLink,
+      onUpdateLink: baseProps.onUpdateLink,
+      saving: false,
+    }).linkList).toEqual([]);
   });
 });

@@ -1,5 +1,74 @@
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
+export const getDiscoveryLinksFiltersChildProps = ({
+  filteredLinkCount,
+  rightsFilter,
+  rightsFilterOptions,
+  searchQuery,
+  setRightsFilter,
+  setSearchQuery,
+  setStatusFilter,
+  statusFilter,
+  statusFilterOptions,
+}) => ({
+  activeFilterSummaryProps: {
+    filteredLinkCount,
+  },
+  rightsFilterProps: {
+    rightsFilter,
+    rightsFilterOptions,
+    setRightsFilter,
+  },
+  searchBoxProps: {
+    searchQuery,
+    setSearchQuery,
+  },
+  statusFilterProps: {
+    setStatusFilter,
+    statusFilter,
+    statusFilterOptions,
+  },
+});
+
+export const getDiscoveryLinksHeaderActionsProps = ({
+  filteredLinkCount,
+  loading,
+  onRefresh,
+  saving,
+  urlList,
+}) => ({
+  filteredLinkCount,
+  loading,
+  onRefresh,
+  saving,
+  urlList,
+});
+
+export const getDiscoveryLinksListViewProps = ({
+  allLinkCount,
+  clearFilters,
+  filteredLinks,
+  onDeleteLink,
+  onUpdateLink,
+  saving,
+}) => {
+  const linkList = toArray(filteredLinks);
+
+  return {
+    filteredEmptyStateProps: {
+      allLinkCount,
+      clearFilters,
+    },
+    gridProps: {
+      filteredLinks: linkList,
+      onDeleteLink,
+      onUpdateLink,
+      saving,
+    },
+    linkList,
+  };
+};
+
 export const getDiscoveryLinksWorkspaceViewProps = ({
   clearDiscoveryFilters,
   duplicateLink,

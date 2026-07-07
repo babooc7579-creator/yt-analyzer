@@ -1,3 +1,4 @@
+import { getDiscoveryLinksHeaderActionsProps } from '../utils/discoveryLinksWorkspaceProps';
 import DiscoveryLinksHeaderActions from './DiscoveryLinksHeaderActions';
 import DiscoveryLinksHeaderTitle from './DiscoveryLinksHeaderTitle';
 
@@ -9,13 +10,13 @@ export default function DiscoveryLinksHeader({
   totalLinkCount,
   urlList,
 }) {
-  const headerActionsProps = {
+  const headerActionsProps = getDiscoveryLinksHeaderActionsProps({
     filteredLinkCount,
     loading,
     onRefresh,
     saving,
     urlList,
-  };
+  });
 
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
