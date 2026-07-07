@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getProductionKanbanContentChildProps,
   getProductionKanbanContentProps,
   shouldShowProductionKanbanEmptyState,
 } from './productionKanbanProps';
@@ -75,5 +76,75 @@ describe('productionKanbanProps utils', () => {
     expect(viewProps.discoveryLinkCandidates).toEqual([]);
     expect(viewProps.productionSummary).toEqual({});
     expect(viewProps.videoCount).toBe(0);
+  });
+
+  it('builds child component props for the production kanban content view', () => {
+    const props = {
+      discoveryLinkCandidates: [{ id: 'link-1' }],
+      draftRecords: { video1: { memo: 'draft' } },
+      groupedVideos: { production_candidate: [{ videoId: 'video1' }] },
+      hasUnsavedChanges: () => true,
+      linkMoveStates: { link1: 'saving' },
+      moveDiscoveryLink: () => 'move link',
+      moveStates: { video1: 'saving' },
+      moveVideo: () => 'move video',
+      onOpenDiscoveryLinks: () => 'open links',
+      productionSummary: { videoCount: 1, activeCount: 1 },
+      saveDraftRecord: () => 'save',
+      saveStates: { video1: 'idle' },
+      updateDraftRecord: () => 'update',
+      videoCount: 1,
+      videoUserRecords: { video1: { status: 'production_candidate' } },
+    };
+
+    const viewProps = getProductionKanbanContentChildProps(props);
+
+    expect(viewProps.summaryProps).toEqual({
+      discoveryLinkCandidateCount: 1,
+      productionSummary: props.productionSummary,
+      videoCount: 1,
+    });
+    expect(viewProps.discoveryLinksSectionProps).toEqual({
+      linkMoveStates: props.linkMoveStates,
+      links: props.discoveryLinkCandidates,
+      onMoveLink: props.moveDiscoveryLink,
+      onOpenDiscoveryLinks: props.onOpenDiscoveryLinks,
+    });
+    expect(viewProps.boardProps).toMatchObject({
+      draftRecords: props.draftRecords,
+      groupedVideos: props.groupedVideos,
+      hasUnsavedChanges: props.hasUnsavedChanges,
+      moveStates: props.moveStates,
+      onMove: props.moveVideo,
+      onSave: props.saveDraftRecord,
+      onUpdateDraft: props.updateDraftRecord,
+      saveStates: props.saveStates,
+      videoUserRecords: props.videoUserRecords,
+    });
+    expect(viewProps.boardProps.columns.length).toBeGreaterThan(0);
+    expect(typeof viewProps.boardProps.getScheduleSignal).toBe('function');
+  });
+
+  it('uses safe discovery link fallback for child component props', () => {
+    const viewProps = getProductionKanbanContentChildProps({
+      discoveryLinkCandidates: null,
+      draftRecords: {},
+      groupedVideos: {},
+      hasUnsavedChanges: () => false,
+      linkMoveStates: {},
+      moveDiscoveryLink: () => 'move link',
+      moveStates: {},
+      moveVideo: () => 'move video',
+      onOpenDiscoveryLinks: () => 'open links',
+      productionSummary: {},
+      saveDraftRecord: () => 'save',
+      saveStates: {},
+      updateDraftRecord: () => 'update',
+      videoCount: 0,
+      videoUserRecords: {},
+    });
+
+    expect(viewProps.summaryProps.discoveryLinkCandidateCount).toBe(0);
+    expect(viewProps.discoveryLinksSectionProps.links).toEqual([]);
   });
 });

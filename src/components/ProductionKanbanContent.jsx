@@ -1,10 +1,7 @@
-import { PRODUCTION_KANBAN_COLUMNS } from '../constants/productionKanban';
-import { getProductionScheduleSignal } from '../utils/productionSchedule';
+import { getProductionKanbanContentChildProps } from '../utils/productionKanbanProps';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
 import ProductionKanbanBoard from './ProductionKanbanBoard';
 import ProductionKanbanSummary from './ProductionKanbanSummary';
-
-const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export default function ProductionKanbanContent({
   discoveryLinkCandidates,
@@ -23,34 +20,27 @@ export default function ProductionKanbanContent({
   videoCount,
   videoUserRecords,
 }) {
-  const discoveryLinkCandidateList = toArray(discoveryLinkCandidates);
-
-  const summaryProps = {
-    discoveryLinkCandidateCount: discoveryLinkCandidateList.length,
-    productionSummary,
-    videoCount,
-  };
-
-  const discoveryLinksSectionProps = {
-    linkMoveStates,
-    links: discoveryLinkCandidateList,
-    onMoveLink: moveDiscoveryLink,
-    onOpenDiscoveryLinks,
-  };
-
-  const boardProps = {
-    columns: PRODUCTION_KANBAN_COLUMNS,
+  const {
+    boardProps,
+    discoveryLinksSectionProps,
+    summaryProps,
+  } = getProductionKanbanContentChildProps({
+    discoveryLinkCandidates,
     draftRecords,
-    getScheduleSignal: getProductionScheduleSignal,
     groupedVideos,
     hasUnsavedChanges,
+    linkMoveStates,
+    moveDiscoveryLink,
     moveStates,
-    onMove: moveVideo,
-    onSave: saveDraftRecord,
-    onUpdateDraft: updateDraftRecord,
+    moveVideo,
+    onOpenDiscoveryLinks,
+    productionSummary,
+    saveDraftRecord,
     saveStates,
+    updateDraftRecord,
+    videoCount,
     videoUserRecords,
-  };
+  });
 
   return (
     <div className="space-y-4">
