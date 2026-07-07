@@ -454,6 +454,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 56. `src/utils/legacyWorkspaceProps.js`
    - 기존 작업 화면 전체 props 구성
    - 기존 기능 묶음과 주요 섹션 props 연결
+   - 1차 테스트 추가 완료
+
+57. `src/utils/legacyAsideProps.js`
+   - 기존 좌측 보조 패널 카운트 props 구성
+   - 선택 채널/영상/스크랩 개수 표시
 
 ---
 
