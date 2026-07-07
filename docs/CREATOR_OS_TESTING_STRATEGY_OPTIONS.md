@@ -257,8 +257,13 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
    - 1차 테스트 추가 완료
 
 17. `src/utils/channelAddFormProps.js`
-   - 새 채널 추가 입력/버튼 props
-   - 미리보기와 Cloud 저장 안내 문구
+   - 새 채널 단일/대량 추가 props 연결
+   - 카테고리 설정과 입력 상태 분리
+   - 1차 테스트 추가 완료
+
+18. `src/utils/channelAddActions.js`
+   - 채널 추가/삭제 확인 문구
+   - Cloud 저장과 수집 실행 의미 구분
 
 ---
 
