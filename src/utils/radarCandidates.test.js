@@ -48,6 +48,9 @@ describe('radarCandidates utils', () => {
       video: radarVideo,
       videoTitle: 'Old idea returns',
     });
+    expect(viewProps.decisionActionsProps.onMarkVideoStatus).toBe(handlers.onMarkVideoStatus);
+    expect(viewProps.decisionActionsProps.onPromoteToProduction).toBe(handlers.onPromoteToProduction);
+    expect(viewProps.decisionActionsProps.onToggleScrap).toBe(handlers.onToggleScrap);
     expect(viewProps.primaryActionsProps).toEqual({
       videoTitle: 'Old idea returns',
       videoUrl: 'https://youtube.com/watch?v=radar-1',
