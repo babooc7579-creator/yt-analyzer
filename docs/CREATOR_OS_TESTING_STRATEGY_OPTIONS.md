@@ -369,6 +369,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 39. `src/utils/videoToolbarFiltersProps.js`
    - 영상 툴바 필터 props 구성
    - 검색어/조회수/길이/정렬 제어값 연결
+   - 1차 테스트 추가 완료
+
+40. `src/utils/videoListTableProps.js`
+   - 영상 리스트 테이블 props 구성
+   - 행 선택/스크랩/제작 후보 액션 연결
 
 ---
 
