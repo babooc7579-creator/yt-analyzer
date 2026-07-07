@@ -45,6 +45,11 @@ export const getChannelCloudActionError = (message, fallbackMessage, actionLabel
   return `${baseMessage} Cloud 채널 ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
+export const getChannelLoadErrorMessage = (error) => {
+  const message = error?.message || '채널 목록을 불러오지 못했습니다.';
+  return `${message} Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
+};
+
 export const getChannelDeleteConfirmMessage = (title) => {
   const channelName = getChannelDeleteName(title);
   return `'${channelName}' 채널을 Cloud 채널 목록에서 삭제할까요?\n\n삭제하면 저장 영상 조회와 새 영상 수집 대상에서 빠집니다. YouTube 원본이나 이미 Cloud에 저장된 영상 데이터는 삭제하지 않습니다. 나중에 다시 보려면 채널을 다시 추가해야 합니다.`;
