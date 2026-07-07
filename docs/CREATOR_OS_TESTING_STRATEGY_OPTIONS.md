@@ -464,6 +464,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 58. `src/utils/legacyChannelPanelProps.js`
    - 기존 채널 관리 패널 props 구성
    - 채널 추가/수정/스캔/메모 핸들러 연결
+   - 1차 테스트 추가 완료
+
+59. `src/utils/legacyMainPanelProps.js`
+   - 기존 메인 작업 패널 props 구성
+   - 영상 목록/스크랩/필터/제작 후보 핸들러 연결
 
 ---
 
