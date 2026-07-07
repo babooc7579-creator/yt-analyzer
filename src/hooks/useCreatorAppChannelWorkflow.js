@@ -1,10 +1,10 @@
 import { useCategories } from './useCategories';
 import { useChannelActions } from './useChannelActions';
-import { useChannelAddActions } from './useChannelAddActions';
 import { useChannelFormState } from './useChannelFormState';
 import { useChannelNotesModal } from './useChannelNotesModal';
 import { useChannelSelection } from './useChannelSelection';
 import { useCloudChannels } from './useCloudChannels';
+import { useCreatorAppChannelAddWorkflow } from './useCreatorAppChannelAddWorkflow';
 import { useTagRenameActions } from './useTagRenameActions';
 
 export function useCreatorAppChannelWorkflow({
@@ -24,26 +24,14 @@ export function useCreatorAppChannelWorkflow({
     setError,
   });
 
-  const channelAddActions = useChannelAddActions({
-    bulkCreateChannels: channelActions.bulkCreateChannels,
-    bulkInput: formState.bulkInput,
-    cancelChannelPreview: formState.cancelChannelPreview,
-    channelPreview: formState.channelPreview,
-    loadChannelsFromCloud: cloudChannels.loadChannelsFromCloud,
-    newChannelInput: formState.newChannelInput,
-    newChannelLang: formState.newChannelLang,
-    newChannelNote: formState.newChannelNote,
-    newChannelTags: formState.newChannelTags,
-    savedChannels: cloudChannels.savedChannels,
-    saveChannel: channelActions.saveChannel,
-    setBulkLoading: formState.setBulkLoading,
-    setBulkResult: formState.setBulkResult,
-    setChannelPreview: formState.setChannelPreview,
+  const channelAddActions = useCreatorAppChannelAddWorkflow({
+    channelActions,
+    channelSelection,
+    cloudChannels,
+    formState,
     setError,
     setLoading,
-    setPreviewLoading: formState.setPreviewLoading,
     setProgressMsg,
-    setSelectedCategoryTab: channelSelection.setSelectedCategoryTab,
   });
 
   const notesModal = useChannelNotesModal({
