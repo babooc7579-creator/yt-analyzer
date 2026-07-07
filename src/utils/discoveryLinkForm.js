@@ -87,6 +87,51 @@ export const getDiscoveryLinkEditFormViewProps = ({
   },
 });
 
+export const getDiscoveryLinkFormProps = ({
+  duplicateLink,
+  form,
+  isCreateDisabled,
+  onChange,
+  saving,
+  showRiskyCandidateHint,
+  urlPreview,
+}) => {
+  const sourceForm = toLinkObject(form);
+
+  return {
+    memoFieldProps: {
+      onChange: (value) => onChange('memo', value),
+      value: sourceForm.memo,
+    },
+    riskyCandidateHintProps: {
+      show: showRiskyCandidateHint,
+    },
+    statusFieldsProps: {
+      onChange,
+      rightsStatus: sourceForm.rightsStatus,
+      status: sourceForm.status,
+    },
+    submitButtonProps: {
+      duplicateLink,
+      isCreateDisabled,
+      saving,
+    },
+    titleFieldProps: {
+      ariaLabel: '발견 링크 제목 또는 기억할 이름',
+      label: '제목 또는 기억할 이름',
+      onChange: (value) => onChange('title', value),
+      placeholder: '나중에 알아볼 수 있는 이름',
+      value: sourceForm.title,
+    },
+    urlFieldProps: {
+      duplicateLink,
+      onChange,
+      url: sourceForm.url,
+      urlPreview,
+    },
+  };
+};
+
 export const getDiscoveryLinkUrlPreview = (url) => {
   const trimmedUrl = toText(url).trim();
   if (!trimmedUrl) return null;

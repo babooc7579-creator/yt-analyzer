@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getDiscoveryLinkDraftUpdates,
+  getDiscoveryLinkFormProps,
   getDiscoveryLinkUrlPreview,
   needsRiskyDiscoveryCandidateConfirmation,
   normalizeDiscoveryLinkUrl,
@@ -40,5 +41,63 @@ describe('discoveryLinkForm utils', () => {
     expect(needsRiskyDiscoveryCandidateConfirmation('candidate', 'do_not_use')).toBe(true);
     expect(needsRiskyDiscoveryCandidateConfirmation('candidate', 'needs_check')).toBe(false);
     expect(needsRiskyDiscoveryCandidateConfirmation('saved', 'do_not_use')).toBe(false);
+  });
+
+  it('builds discovery link create form child props and field update handlers', () => {
+    const changes = [];
+    const onChange = (field, value) => changes.push([field, value]);
+    const duplicateLink = { id: 'link-1' };
+    const urlPreview = { isValid: true, label: 'Instagram link' };
+
+    const props = getDiscoveryLinkFormProps({
+      duplicateLink,
+      form: {
+        url: 'https://instagram.com/reel/abc',
+        title: 'Cake table',
+        memo: 'check source',
+        status: 'candidate',
+        rightsStatus: 'needs_check',
+      },
+      isCreateDisabled: true,
+      onChange,
+      saving: true,
+      showRiskyCandidateHint: true,
+      urlPreview,
+    });
+
+    expect(props.urlFieldProps).toMatchObject({
+      duplicateLink,
+      onChange,
+      url: 'https://instagram.com/reel/abc',
+      urlPreview,
+    });
+    expect(props.titleFieldProps).toMatchObject({
+      ariaLabel: '발견 링크 제목 또는 기억할 이름',
+      label: '제목 또는 기억할 이름',
+      placeholder: '나중에 알아볼 수 있는 이름',
+      value: 'Cake table',
+    });
+    expect(props.statusFieldsProps).toMatchObject({
+      onChange,
+      rightsStatus: 'needs_check',
+      status: 'candidate',
+    });
+    expect(props.memoFieldProps.value).toBe('check source');
+    expect(props.submitButtonProps).toEqual({
+      duplicateLink,
+      isCreateDisabled: true,
+      saving: true,
+    });
+    expect(props.riskyCandidateHintProps).toEqual({
+      show: true,
+    });
+
+    props.titleFieldProps.onChange('New title');
+    props.memoFieldProps.onChange('New memo');
+
+    expect(changes).toEqual([
+      ['title', 'New title'],
+      ['memo', 'New memo'],
+    ]);
   });
 });
