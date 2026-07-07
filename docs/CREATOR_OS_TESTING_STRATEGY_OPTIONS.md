@@ -224,6 +224,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 10. `src/utils/channelScanSummaryBoxProps.js`
    - 채널 수집 요약 박스 표시 문구
    - 상태 badge와 오류 tooltip 연결
+   - 1차 테스트 추가 완료
+
+11. `src/utils/channelListItemProps.js`
+   - 채널 목록 항목 표시 props
+   - 선택 버튼 안내와 scan summary 연결
 
 ---
 
