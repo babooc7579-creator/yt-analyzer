@@ -1,14 +1,12 @@
-import { formatNumberedUrlList, getYouTubeChannelUrl } from '../utils/urls';
+import {
+  getChannelList,
+  getChannelListBodyProps,
+  getChannelListExportPanelProps,
+  getVisibleChannelUrlList,
+  getVisibleChannels,
+} from '../utils/channelListProps';
 import ChannelListBody from './ChannelListBody';
 import ChannelListUrlExportPanel from './ChannelListUrlExportPanel';
-
-const getChannelList = (channels) => (
-  Array.isArray(channels) ? channels.filter(channel => channel && typeof channel === 'object') : []
-);
-
-const hasChannelTag = (channel, tag) => (
-  Array.isArray(channel?.tags) && channel.tags.includes(tag)
-);
 
 export default function ChannelList({
   channels,
@@ -23,21 +21,17 @@ export default function ChannelList({
   onDelete,
 }) {
   const channelList = getChannelList(channels);
-  const visibleChannels = channelList.filter((channel) => hasChannelTag(channel, selectedCategory));
-  const visibleChannelUrlList = formatNumberedUrlList(
-    visibleChannels.map((channel) => {
-      const channelUrl = getYouTubeChannelUrl(channel);
-      return channelUrl ? [channel.title || '제목 없는 채널', channelUrl] : null;
-    })
-  );
+  const visibleChannels = getVisibleChannels(channelList, selectedCategory);
+  const visibleChannelUrlList = getVisibleChannelUrlList(visibleChannels);
 
-  const exportPanelProps = {
+  const exportPanelProps = getChannelListExportPanelProps({
     selectedCategory,
     visibleChannelUrlList,
     visibleChannels,
-  };
+  });
 
-  const bodyProps = {
+  const bodyProps = getChannelListBodyProps({
+    channelList,
     channelsLoading,
     getScanDisplay,
     onDelete,
@@ -46,10 +40,9 @@ export default function ChannelList({
     onUpdateMetadata,
     selectedChannelIds,
     selectedCategory,
-    totalChannelCount: channelList.length,
     updatingChannelId,
     visibleChannels,
-  };
+  });
 
   return (
     <div className="space-y-3">
