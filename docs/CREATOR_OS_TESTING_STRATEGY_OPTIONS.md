@@ -344,6 +344,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 34. `src/utils/productionKanbanProps.js`
    - 제작 칸반 전체 props 구성
    - 컬럼/일정/발견 링크 props 연결
+   - 1차 테스트 추가 완료
+
+35. `src/utils/productionKanbanActions.js`
+   - 제작 칸반 이동/저장 액션 helper
+   - 상태 변경 메시지와 저장 대상 분리
 
 ---
 
