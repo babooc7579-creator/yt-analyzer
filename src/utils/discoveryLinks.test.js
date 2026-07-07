@@ -14,6 +14,7 @@ import {
   getDiscoveryLinkRowMeta,
   getDiscoveryLinkRowViewProps,
   getDiscoveryLinkUrlListItems,
+  getProductionDiscoveryLinkTitle,
   getSearchableDiscoveryLinkText,
 } from './discoveryLinks';
 
@@ -103,6 +104,15 @@ describe('discoveryLinks utils', () => {
       sourceHost: 'example.com',
       title: 'example.com',
     });
+  });
+
+  it('builds production discovery link titles with host and empty-link fallback', () => {
+    expect(getProductionDiscoveryLinkTitle(instagramLink)).toBe('Cake Idea');
+    expect(getProductionDiscoveryLinkTitle({
+      url: 'https://www.instagram.com/reel/no-title',
+    })).toBe('instagram.com');
+    expect(getProductionDiscoveryLinkTitle({})).toBe('발견 링크');
+    expect(getProductionDiscoveryLinkTitle(null)).toBe('발견 링크');
   });
 
   it('builds row view props and switches edit toggle handlers by state', () => {
