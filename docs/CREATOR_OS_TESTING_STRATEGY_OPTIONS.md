@@ -469,6 +469,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 59. `src/utils/legacyMainPanelProps.js`
    - 기존 메인 작업 패널 props 구성
    - 영상 목록/스크랩/필터/제작 후보 핸들러 연결
+   - 1차 테스트 추가 완료
+
+60. `src/utils/legacyWorkspaceMainPanelViewProps.js`
+   - 기존 메인 작업 패널 하위 뷰 props 구성
+   - 대시보드/채널/보관함 탭 props 연결
 
 ---
 
