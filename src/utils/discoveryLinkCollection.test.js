@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getDiscoveryLinkById,
   getDiscoveryLinkFromResponse,
   getDiscoveryLinkSavingAction,
   getDiscoveryLinkUpdateNotice,
@@ -22,6 +23,7 @@ describe('discoveryLinkCollection utils', () => {
 
     expect(getDiscoveryLinkFromResponse({ link: oldLink })).toBe(oldLink);
     expect(getDiscoveryLinkFromResponse({ item: newLink })).toBe(newLink);
+    expect(getDiscoveryLinkFromResponse({ discoveryLink: newLink })).toBe(newLink);
   });
 
   it('sorts links by latest update first', () => {
@@ -36,6 +38,16 @@ describe('discoveryLinkCollection utils', () => {
     expect(replaced.find(link => link.id === 'old')).toMatchObject({ title: 'Updated Old' });
 
     expect(removeDiscoveryLinkById(replaced, 'new').map(link => link.id)).toEqual(['old']);
+  });
+
+  it('keeps collection mutations scoped to valid Cloud link objects', () => {
+    const mixedLinks = [oldLink, null, 'bad', newLink];
+
+    expect(sortDiscoveryLinksByRecentUpdate(mixedLinks).map(link => link.id)).toEqual(['new', 'old']);
+    expect(getDiscoveryLinkById(mixedLinks, 'new')).toBe(newLink);
+    expect(upsertDiscoveryLink(mixedLinks, { title: 'No id' })).toEqual([oldLink, newLink]);
+    expect(replaceDiscoveryLink(mixedLinks, { title: 'No id' })).toEqual([oldLink, newLink]);
+    expect(removeDiscoveryLinkById(mixedLinks, 'old')).toEqual([newLink]);
   });
 
   it('classifies saving actions by changed fields', () => {
