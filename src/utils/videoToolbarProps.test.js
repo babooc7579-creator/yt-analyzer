@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { getVideoToolbarViewProps } from './videoToolbarProps';
+import {
+  getVideoToolbarScanActionViewProps,
+  getVideoToolbarViewProps,
+} from './videoToolbarProps';
 
 describe('videoToolbarProps utils', () => {
   const baseProps = {
@@ -72,5 +75,56 @@ describe('videoToolbarProps utils', () => {
       scannableChannelCount: 9,
       selectedChannelCount: 0,
     }).scanActionProps.scanTargetCount).toBe(9);
+  });
+
+  it('builds selected-channel scan copy as a YouTube API action', () => {
+    const props = getVideoToolbarScanActionViewProps({
+      isScanning: false,
+      scanTargetCount: 2,
+      selectedChannelCount: 3,
+    });
+
+    expect(props).toMatchObject({
+      hasScanTargets: true,
+      isScanDisabled: false,
+      scanAriaLabel: '선택 범위 새 영상 수집, YouTube API 호출',
+      scanButtonLabel: '선택 채널 새 영상 수집 (2/3개)',
+    });
+    expect(props.scanTitle).toContain('YouTube API');
+    expect(props.scanDescription).toContain('체크한 채널');
+  });
+
+  it('builds all-active-channel scan copy when no channel is selected', () => {
+    const props = getVideoToolbarScanActionViewProps({
+      isScanning: false,
+      scanTargetCount: 5,
+      selectedChannelCount: 0,
+    });
+
+    expect(props.scanButtonLabel).toBe('전체 운영중 채널 새 영상 수집 (5개)');
+    expect(props.scanDescription).toContain('전체 운영중 채널');
+    expect(props.isScanDisabled).toBe(false);
+  });
+
+  it('disables scan action when there are no scan targets or scan is running', () => {
+    expect(getVideoToolbarScanActionViewProps({
+      isScanning: false,
+      scanTargetCount: 0,
+      selectedChannelCount: 0,
+    })).toMatchObject({
+      hasScanTargets: false,
+      isScanDisabled: true,
+      scanAriaLabel: '새 영상 수집 불가, 운영중 채널 없음',
+    });
+
+    expect(getVideoToolbarScanActionViewProps({
+      isScanning: true,
+      scanTargetCount: 2,
+      selectedChannelCount: 2,
+    })).toMatchObject({
+      hasScanTargets: true,
+      isScanDisabled: true,
+      scanButtonLabel: '새 영상 수집 중...',
+    });
   });
 });
