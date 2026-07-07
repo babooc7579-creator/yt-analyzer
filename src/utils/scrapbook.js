@@ -34,6 +34,12 @@ export const upsertScrapbookVideo = (videos, video) => {
   ];
 };
 
+export const getNextScrapbookVideos = (videos, video, isSaved) => (
+  isSaved
+    ? removeScrapbookVideo(videos, getVideoId(video))
+    : upsertScrapbookVideo(videos, video)
+);
+
 export const getScrapbookVideoUrlList = (savedVideos = []) => formatNumberedUrlList(
   getCloudScrapbookVideos(savedVideos)
     .filter((video) => getVideoId(video))
