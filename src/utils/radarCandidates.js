@@ -1,3 +1,13 @@
+import {
+  PRODUCTION_STATUS,
+  PRODUCTION_STATUS_LABELS,
+  VIDEO_STATUS,
+  VIDEO_STATUS_LABELS,
+  hasAnyVideoReviewStatus,
+  hasProductionStatus,
+  hasVideoReviewStatus,
+  isRadarHiddenRecord,
+} from '../constants/status';
 import { hasStrongReaction, isTtoTtoCandidate } from './video';
 import { getYouTubeVideoUrl } from './urls';
 
@@ -5,6 +15,14 @@ export const RADAR_TODAY_CANDIDATE_LIMIT = 6;
 export const RADAR_PRIORITY_SCORE_THRESHOLD = 120;
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
+
+const toRadarVideoList = (videos) => (
+  toArray(videos).filter(video => video && typeof video === 'object')
+);
+
+const toRecordMap = (records) => (
+  records && typeof records === 'object' ? records : {}
+);
 
 const toVideoObject = (video) => (
   video && typeof video === 'object' ? video : {}
@@ -40,6 +58,103 @@ export const getRadarScore = (video) => {
   const savedAgeBonus = Math.min(toNumber(sourceVideo.daysOld) / 30, 20);
 
   return ttoTtoBonus + strongBonus + toNumber(sourceVideo.multiplier) * 10 + toNumber(sourceVideo.like_ratio) + savedAgeBonus;
+};
+
+export const getRadarDecisionBuckets = ({
+  userRecordMap,
+  videoList,
+} = {}) => (
+  toRadarVideoList(videoList).reduce((buckets, video) => {
+    const record = toRecordMap(userRecordMap)[video.videoId];
+    if (hasVideoReviewStatus(record, VIDEO_STATUS.REVIEWED)) buckets.reviewed.push(video);
+    if (hasAnyVideoReviewStatus(record, [VIDEO_STATUS.LEGACY_LATER, VIDEO_STATUS.WATCH_LATER])) buckets.later.push(video);
+    if (hasVideoReviewStatus(record, VIDEO_STATUS.EXCLUDED)) buckets.excluded.push(video);
+    if (hasProductionStatus(record, PRODUCTION_STATUS.CANDIDATE)) buckets.production.push(video);
+    return buckets;
+  }, { reviewed: [], later: [], excluded: [], production: [] })
+);
+
+export const getRadarDecisionSummary = (decisionBuckets = {}) => ({
+  excluded: toArray(decisionBuckets.excluded).length,
+  later: toArray(decisionBuckets.later).length,
+  production: toArray(decisionBuckets.production).length,
+  reviewed: toArray(decisionBuckets.reviewed).length,
+});
+
+export const getRadarLoadedDecisionCount = (decisionSummary = {}) => (
+  toNumber(decisionSummary.reviewed)
+  + toNumber(decisionSummary.later)
+  + toNumber(decisionSummary.excluded)
+  + toNumber(decisionSummary.production)
+);
+
+export const getRadarHiddenDecisionCount = (userRecordMap = {}) => (
+  Object.values(toRecordMap(userRecordMap)).filter(isRadarHiddenRecord).length
+);
+
+export const getRadarCandidatePool = ({
+  userRecordMap,
+  videoList,
+} = {}) => (
+  [...toRadarVideoList(videoList)]
+    .filter((video) => {
+      const record = toRecordMap(userRecordMap)[video.videoId];
+      return !isRadarHiddenRecord(record);
+    })
+    .sort((a, b) => getRadarScore(b) - getRadarScore(a))
+);
+
+export const getRadarTodayCandidates = (candidatePool = []) => (
+  toArray(candidatePool).slice(0, RADAR_TODAY_CANDIDATE_LIMIT)
+);
+
+export const getRadarQueueSummary = ({
+  allDecisionCount = 0,
+  candidatePool = [],
+  candidates = [],
+} = {}) => ({
+  candidateLimit: RADAR_TODAY_CANDIDATE_LIMIT,
+  hiddenDecisionCount: allDecisionCount,
+  highPriorityCount: toArray(candidatePool).filter((video) => (
+    getRadarScore(video) >= RADAR_PRIORITY_SCORE_THRESHOLD
+  )).length,
+  shownCandidateCount: toArray(candidates).length,
+  visibleQueueCount: toArray(candidatePool).length,
+});
+
+export const getRadarDecisionGroups = (decisionBuckets = {}) => [
+  { key: 'reviewed', label: VIDEO_STATUS_LABELS[VIDEO_STATUS.REVIEWED], videos: toArray(decisionBuckets.reviewed) },
+  { key: 'later', label: VIDEO_STATUS_LABELS[VIDEO_STATUS.WATCH_LATER], videos: toArray(decisionBuckets.later) },
+  { key: 'production', label: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.CANDIDATE], videos: toArray(decisionBuckets.production) },
+  { key: 'excluded', label: VIDEO_STATUS_LABELS[VIDEO_STATUS.EXCLUDED], videos: toArray(decisionBuckets.excluded) },
+];
+
+export const getRadarCandidateDataModel = ({
+  videoUserRecords,
+  videos,
+} = {}) => {
+  const videoList = toRadarVideoList(videos);
+  const userRecordMap = toRecordMap(videoUserRecords);
+  const decisionBuckets = getRadarDecisionBuckets({ userRecordMap, videoList });
+  const decisionSummary = getRadarDecisionSummary(decisionBuckets);
+  const loadedDecisionCount = getRadarLoadedDecisionCount(decisionSummary);
+  const allDecisionCount = getRadarHiddenDecisionCount(userRecordMap);
+  const candidatePool = getRadarCandidatePool({ userRecordMap, videoList });
+  const candidates = getRadarTodayCandidates(candidatePool);
+  const queueSummary = getRadarQueueSummary({
+    allDecisionCount,
+    candidatePool,
+    candidates,
+  });
+
+  return {
+    allDecisionCount,
+    candidates,
+    decisionGroups: getRadarDecisionGroups(decisionBuckets),
+    decisionSummary,
+    loadedDecisionCount,
+    queueSummary,
+  };
 };
 
 export const getRadarCandidateCardViewProps = ({
