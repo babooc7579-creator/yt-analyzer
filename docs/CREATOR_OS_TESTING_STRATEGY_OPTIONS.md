@@ -364,6 +364,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 38. `src/utils/videoToolbarProps.js`
    - 영상 툴바 props 구성
    - 필터/정렬/보기 모드 제어값 연결
+   - 1차 테스트 추가 완료
+
+39. `src/utils/videoToolbarFiltersProps.js`
+   - 영상 툴바 필터 props 구성
+   - 검색어/조회수/길이/정렬 제어값 연결
 
 ---
 
