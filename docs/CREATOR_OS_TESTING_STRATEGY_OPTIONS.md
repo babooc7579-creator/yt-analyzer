@@ -374,6 +374,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 40. `src/utils/videoListTableProps.js`
    - 영상 리스트 테이블 props 구성
    - 행 선택/스크랩/제작 후보 액션 연결
+   - 1차 테스트 추가 완료
+
+41. `src/utils/videoListTableRowProps.js`
+   - 영상 리스트 행 props 구성
+   - 상태 배지/메타/액션 props 연결
 
 ---
 
