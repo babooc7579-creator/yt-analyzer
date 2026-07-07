@@ -56,3 +56,27 @@ export const getChannelListBodyProps = ({
   updatingChannelId,
   visibleChannels,
 });
+
+export const getChannelListBodyVisibleChannels = (visibleChannels) => (
+  Array.isArray(visibleChannels) ? visibleChannels : []
+);
+
+export const getChannelListItemsProps = ({
+  getScanDisplay,
+  onDelete,
+  onOpenNotes,
+  onToggleSelection,
+  onUpdateMetadata,
+  selectedChannelIds,
+  updatingChannelId,
+  visibleChannels,
+}) => ({
+  getScanDisplay,
+  onDelete,
+  onOpenNotes,
+  onToggleSelection,
+  onUpdateMetadata,
+  selectedChannelIds,
+  updatingChannelId,
+  visibleChannels,
+});
