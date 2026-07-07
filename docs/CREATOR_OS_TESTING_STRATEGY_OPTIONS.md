@@ -444,6 +444,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 54. `src/utils/discoveryLinkActionCopy.js`
    - 발견 링크 상태별 액션 문구 구성
    - 사용자가 누를 버튼과 저장 의미 안내
+   - 1차 테스트 추가 완료
+
+55. `src/utils/creatorHomeViewProps.js`
+   - Creator OS 홈 화면 props 구성
+   - 오늘 화면의 카드/요약/작업 버튼 데이터 연결
 
 ---
 
