@@ -289,6 +289,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 23. `src/utils/urls.js`
    - YouTube 영상/채널 URL 생성
    - URL 목록 복사용 텍스트 포맷
+   - 1차 테스트 추가 완료
+
+24. `src/utils/formatters.js`
+   - 숫자/비율/커버리지 표시 helper
+   - 화면 통계 표시 안정화
 
 ---
 
