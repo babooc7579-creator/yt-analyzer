@@ -279,6 +279,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 21. `src/utils/clipboard.js`
    - 클립보드 복사 성공/실패 처리
    - 브라우저 API fallback 범위
+   - 1차 테스트 추가 완료
+
+22. `src/utils/dates.js`
+   - 날짜/시간 표시 helper
+   - 업로드일/수집일 표시 안정화
 
 ---
 
