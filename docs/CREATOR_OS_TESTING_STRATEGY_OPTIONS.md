@@ -208,7 +208,12 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 7. `src/utils/creatorOsMetrics.js`
    - 홈/레이더 요약 숫자
    - 스크랩/제작 후보 개수
+   - 발견 링크 후보/권리 경고 개수
+   - 1차 테스트 추가 완료
+
+8. `src/utils/channels.js`
    - Cloud 태그와 화면 카테고리 차이 계산
+   - 최근 채널 수집일 계산
 
 ---
 
