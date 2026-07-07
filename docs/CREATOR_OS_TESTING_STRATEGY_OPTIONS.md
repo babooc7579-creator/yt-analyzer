@@ -474,6 +474,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 60. `src/utils/legacyWorkspaceMainPanelViewProps.js`
    - 기존 메인 작업 패널 하위 뷰 props 구성
    - 대시보드/채널/보관함 탭 props 연결
+   - 1차 테스트 추가 완료
+
+61. `src/utils/legacyDashboardTabViewProps.js`
+   - 기존 대시보드 탭 props 구성
+   - 수집/필터/정렬/영상 액션 props 연결
 
 ---
 
