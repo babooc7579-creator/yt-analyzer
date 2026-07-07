@@ -2,6 +2,7 @@ import { Link as LinkIcon } from 'lucide-react';
 import {
   getProductionDiscoveryLinkCardProps,
   getProductionDiscoveryLinkList,
+  getProductionDiscoveryLinksSectionActions,
 } from '../utils/productionDiscoveryLinksSection';
 import ProductionDiscoveryLinkCard from './ProductionDiscoveryLinkCard';
 
@@ -12,6 +13,9 @@ export default function ProductionDiscoveryLinksSection({
   onMoveLink,
 }) {
   const linkList = getProductionDiscoveryLinkList(links);
+  const { openDiscoveryLinksButtonProps } = getProductionDiscoveryLinksSectionActions({
+    onOpenDiscoveryLinks,
+  });
 
   if (linkList.length === 0) {
     return null;
@@ -32,9 +36,7 @@ export default function ProductionDiscoveryLinksSection({
         </div>
         <button
           className="inline-flex h-9 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100"
-          aria-label="발견함 링크 관리 화면 열기"
-          onClick={onOpenDiscoveryLinks}
-          title="발견함 화면에서 링크 후보를 수정"
+          {...openDiscoveryLinksButtonProps}
           type="button"
         >
           <LinkIcon className="h-4 w-4" />
