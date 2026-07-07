@@ -6,14 +6,10 @@ import {
   getDiscoveryLinkRightsStatusValue,
   getDiscoveryPlatformLabel,
 } from '../constants/discoveryLinks';
+import { getProductionDiscoveryLinkTitle } from '../utils/discoveryLinks';
 import ProductionDiscoveryLinkActions from './ProductionDiscoveryLinkActions';
 import ProductionDiscoveryLinkBadges from './ProductionDiscoveryLinkBadges';
 import ProductionDiscoveryLinkBody from './ProductionDiscoveryLinkBody';
-
-const getDiscoveryLinkTitle = (link) => {
-  if (link.title) return link.title;
-  return getDiscoveryLinkHost(link.url, '발견 링크');
-};
 
 export default function ProductionDiscoveryLinkCard({
   link,
@@ -26,7 +22,7 @@ export default function ProductionDiscoveryLinkCard({
   const rightsWarning = DISCOVERY_RIGHTS_WARNINGS[rightsStatus];
   const sourceHost = getDiscoveryLinkHost(link.url);
   const platformLabel = getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(link));
-  const linkTitle = getDiscoveryLinkTitle(link);
+  const linkTitle = getProductionDiscoveryLinkTitle(link);
   const rightsTone = DISCOVERY_RIGHTS_TONES[rightsStatus] || DISCOVERY_RIGHTS_TONES.unknown;
 
   return (

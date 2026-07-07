@@ -85,6 +85,12 @@ export const getDiscoveryLinkUrlListItems = (links = []) => (
   })
 );
 
+export const getProductionDiscoveryLinkTitle = (link) => {
+  const sourceLink = toLinkObject(link);
+  if (sourceLink.title) return sourceLink.title;
+  return getDiscoveryLinkHost(sourceLink.url, '발견 링크');
+};
+
 export const getDiscoveryLinkRowMeta = (link = {}) => {
   const sourceLink = toLinkObject(link);
   const currentRightsStatus = getDiscoveryLinkRightsStatusValue(sourceLink);
