@@ -419,6 +419,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 49. `src/utils/homeRouteProps.js`
    - 홈 화면 props 구성
    - 오늘 후보/제작 후보/발견함 요약 데이터 연결
+   - 1차 테스트 추가 완료
+
+50. `src/utils/legacyWorkspaceRouteProps.js`
+   - 기존 작업 화면 props 구성
+   - legacy 화면과 discovery link 변경 핸들러 연결
 
 ---
 
