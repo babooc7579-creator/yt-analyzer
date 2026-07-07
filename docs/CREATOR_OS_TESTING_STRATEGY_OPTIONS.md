@@ -239,6 +239,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 13. `src/utils/channelListItemMetaProps.js`
    - 채널 등급/상태/언어/통계 표시 props
    - 구독자/영상/평균 조회수 문구
+   - 1차 테스트 추가 완료
+
+14. `src/utils/channelMetadataControlsProps.js`
+   - 채널 등급/상태 변경 컨트롤 props
+   - 수집 대상 상태 안내 문구
 
 ---
 
