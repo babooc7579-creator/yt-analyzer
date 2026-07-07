@@ -449,6 +449,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 55. `src/utils/creatorHomeViewProps.js`
    - Creator OS 홈 화면 props 구성
    - 오늘 화면의 카드/요약/작업 버튼 데이터 연결
+   - 1차 테스트 추가 완료
+
+56. `src/utils/legacyWorkspaceProps.js`
+   - 기존 작업 화면 전체 props 구성
+   - 기존 기능 묶음과 주요 섹션 props 연결
 
 ---
 
