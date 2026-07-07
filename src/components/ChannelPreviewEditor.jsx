@@ -1,3 +1,4 @@
+import { getChannelPreviewEditorProps } from '../utils/channelAddFormProps';
 import ChannelLanguageSelect from './ChannelLanguageSelect';
 import ChannelPreviewActions from './ChannelPreviewActions';
 import ChannelPreviewNoteField from './ChannelPreviewNoteField';
@@ -18,26 +19,21 @@ export default function ChannelPreviewEditor({
   setNewChannelNote,
   toggleNewChannelTag,
 }) {
-  const summaryProps = {
+  const {
+    actionsProps,
+    languageSelectProps,
+    noteFieldProps,
+    summaryProps,
+  } = getChannelPreviewEditorProps({
     cancelChannelPreview,
     channelPreview,
-  };
-
-  const languageSelectProps = {
-    language: newChannelLang,
-    setLanguage: setNewChannelLang,
-  };
-
-  const noteFieldProps = {
-    note: newChannelNote,
-    setNote: setNewChannelNote,
-  };
-
-  const actionsProps = {
-    cancelChannelPreview,
     handleSaveChannel,
     loading,
-  };
+    newChannelLang,
+    newChannelNote,
+    setNewChannelLang,
+    setNewChannelNote,
+  });
 
   return (
     <div className="space-y-2 animate-in fade-in duration-200">

@@ -171,3 +171,32 @@ export const getChannelSingleAddFormInnerProps = ({
     setNewChannelInput,
   },
 });
+
+export const getChannelPreviewEditorProps = ({
+  cancelChannelPreview,
+  channelPreview,
+  handleSaveChannel,
+  loading,
+  newChannelLang,
+  newChannelNote,
+  setNewChannelLang,
+  setNewChannelNote,
+}) => ({
+  actionsProps: {
+    cancelChannelPreview,
+    handleSaveChannel,
+    loading,
+  },
+  languageSelectProps: {
+    language: newChannelLang,
+    setLanguage: setNewChannelLang,
+  },
+  noteFieldProps: {
+    note: newChannelNote,
+    setNote: setNewChannelNote,
+  },
+  summaryProps: {
+    cancelChannelPreview,
+    channelPreview,
+  },
+});

@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   getChannelAddFormViewProps,
   getChannelBulkAddFormInnerProps,
+  getChannelPreviewEditorProps,
   getChannelSingleAddFormInnerProps,
   getRecognizedBulkChannelLineCount,
 } from './channelAddFormProps';
@@ -189,6 +190,32 @@ describe('channelAddFormProps utils', () => {
       setNewChannelLang: input.setNewChannelLang,
       setNewChannelNote: input.setNewChannelNote,
       toggleNewChannelTag: input.toggleNewChannelTag,
+    });
+  });
+
+  it('builds channel preview editor child props without changing save handlers', () => {
+    const input = createInput({
+      loading: true,
+    });
+
+    const props = getChannelPreviewEditorProps(input);
+
+    expect(props.summaryProps).toEqual({
+      cancelChannelPreview: input.cancelChannelPreview,
+      channelPreview: input.channelPreview,
+    });
+    expect(props.languageSelectProps).toEqual({
+      language: 'EN',
+      setLanguage: input.setNewChannelLang,
+    });
+    expect(props.noteFieldProps).toEqual({
+      note: 'check source',
+      setNote: input.setNewChannelNote,
+    });
+    expect(props.actionsProps).toEqual({
+      cancelChannelPreview: input.cancelChannelPreview,
+      handleSaveChannel: input.handleSaveChannel,
+      loading: true,
     });
   });
 });
