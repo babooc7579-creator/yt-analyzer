@@ -127,4 +127,38 @@ describe('productionKanbanData utils', () => {
       activeWithoutDate: 1,
     });
   });
+
+  it('keeps video production candidates separate from discovery link candidates in the summary', () => {
+    const discoveryLinkCandidates = getDiscoveryLinkCandidates([
+      { id: 'saved-link', status: 'saved', rightsStatus: 'needs_check', updatedAt: '2026-07-08T00:00:00.000Z' },
+      { id: 'link-safe', status: 'candidate', rightsStatus: 'cleared', updatedAt: '2026-07-07T00:00:00.000Z' },
+      { id: 'link-check', status: 'candidate', rightsStatus: 'needs_check', updatedAt: '2026-07-06T00:00:00.000Z' },
+      { id: 'link-blocked', status: 'candidate', rightsStatus: 'do_not_use', updatedAt: '2026-07-05T00:00:00.000Z' },
+    ]);
+
+    const summary = getProductionSummary({
+      discoveryLinkCandidates,
+      draftRecords: {},
+      groupedVideos: {
+        [PRODUCTION_STATUS.CANDIDATE]: [videos[0], videos[3]],
+        [PRODUCTION_STATUS.ACTIVE]: [videos[1]],
+        [PRODUCTION_STATUS.DONE]: [],
+      },
+      today: '2026-07-08',
+      videoUserRecords: {},
+    });
+
+    expect(discoveryLinkCandidates.map(link => link.id)).toEqual([
+      'link-safe',
+      'link-check',
+      'link-blocked',
+    ]);
+    expect(summary).toMatchObject({
+      videoCount: 3,
+      candidateCount: 2,
+      activeCount: 1,
+      uploadedCount: 0,
+      discoveryRightsWarningCount: 2,
+    });
+  });
 });

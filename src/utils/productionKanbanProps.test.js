@@ -147,4 +147,47 @@ describe('productionKanbanProps utils', () => {
     expect(viewProps.summaryProps.discoveryLinkCandidateCount).toBe(0);
     expect(viewProps.discoveryLinksSectionProps.links).toEqual([]);
   });
+
+  it('keeps video board items and discovery link candidate items in separate child props', () => {
+    const groupedVideos = {
+      production_candidate: [{ videoId: 'video-candidate' }],
+      production_active: [{ videoId: 'video-active' }],
+    };
+    const discoveryLinkCandidates = [
+      { id: 'link-candidate-1', status: 'candidate' },
+      { id: 'link-candidate-2', status: 'candidate' },
+    ];
+
+    const viewProps = getProductionKanbanContentChildProps({
+      discoveryLinkCandidates,
+      draftRecords: {},
+      groupedVideos,
+      hasUnsavedChanges: () => false,
+      linkMoveStates: {},
+      moveDiscoveryLink: () => 'move link',
+      moveStates: {},
+      moveVideo: () => 'move video',
+      onOpenDiscoveryLinks: () => 'open links',
+      productionSummary: {
+        candidateCount: 1,
+        videoCount: 2,
+      },
+      saveDraftRecord: () => 'save',
+      saveStates: {},
+      updateDraftRecord: () => 'update',
+      videoCount: 2,
+      videoUserRecords: {},
+    });
+
+    expect(viewProps.boardProps.groupedVideos).toBe(groupedVideos);
+    expect(viewProps.discoveryLinksSectionProps.links).toBe(discoveryLinkCandidates);
+    expect(viewProps.summaryProps).toMatchObject({
+      discoveryLinkCandidateCount: 2,
+      productionSummary: {
+        candidateCount: 1,
+        videoCount: 2,
+      },
+      videoCount: 2,
+    });
+  });
 });
