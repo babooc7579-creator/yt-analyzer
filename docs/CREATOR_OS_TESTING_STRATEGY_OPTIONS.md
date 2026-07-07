@@ -284,6 +284,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 22. `src/utils/dates.js`
    - 날짜/시간 표시 helper
    - 업로드일/수집일 표시 안정화
+   - 1차 테스트 추가 완료
+
+23. `src/utils/urls.js`
+   - YouTube 영상/채널 URL 생성
+   - URL 목록 복사용 텍스트 포맷
 
 ---
 
