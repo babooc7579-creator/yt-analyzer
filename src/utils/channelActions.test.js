@@ -6,6 +6,7 @@ import {
   getChannelCloudActionError,
   getChannelDeleteConfirmMessage,
   getChannelDeleteName,
+  getChannelLoadErrorMessage,
   removeChannelById,
   removeSelectedChannelId,
   replaceChannel,
@@ -71,6 +72,15 @@ describe('channelActions utils', () => {
     );
     expect(getChannelCloudActionError('이미 완료 처리하지 않았습니다', 'fallback', '삭제')).toBe(
       '이미 완료 처리하지 않았습니다',
+    );
+  });
+
+  it('builds Cloud channel load errors that avoid treating failed lookup as source data', () => {
+    expect(getChannelLoadErrorMessage(new Error('network down'))).toBe(
+      'network down Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+    );
+    expect(getChannelLoadErrorMessage(null)).toBe(
+      '채널 목록을 불러오지 못했습니다. Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
   });
 

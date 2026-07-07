@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchChannels } from '../services/channelApi';
-
-const getChannelLoadErrorMessage = (error) => {
-  const message = error?.message || '채널 목록을 불러오지 못했습니다.';
-  return `${message} Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
-};
+import { getChannelLoadErrorMessage } from '../utils/channelActions';
 
 export function useCloudChannels({ onError } = {}) {
   const [savedChannels, setSavedChannels] = useState([]);
