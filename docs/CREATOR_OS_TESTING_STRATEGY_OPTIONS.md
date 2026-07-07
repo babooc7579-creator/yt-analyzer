@@ -269,6 +269,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 19. `src/utils/channelActions.js`
    - 채널 삭제 확인 문구
    - 삭제가 저장 영상/YouTube 원본 삭제가 아니라는 안내
+   - 1차 테스트 추가 완료
+
+20. `src/utils/channelNotesModal.js`
+   - 채널 분석/기록 모달 props
+   - 메모 저장 버튼 상태와 입력 문구
 
 ---
 
