@@ -13,8 +13,9 @@
 - 2026-07-06 사용자 승인 후 `vitest`를 devDependency로 추가했습니다.
 - `package.json`에는 `test: vitest run` 스크립트가 있습니다.
 - `jest`, `playwright`, `@testing-library/react` 같은 브라우저/컴포넌트 테스트 도구는 설치되어 있지 않습니다.
-- `.github/workflows/build.yml`은 `npm ci` 후 `npm run build`만 실행합니다.
+- `.github/workflows/build.yml`은 `npm ci` 후 `npm test`, `npm run build`를 실행합니다.
 - `package-lock.json`은 존재합니다.
+- 2026-07-08 기준 `npm.cmd test`는 테스트 파일 90개, 테스트 359개가 통과합니다.
 - 현재 검증은 `npm.cmd test`, `npm.cmd run build`, `git diff --check`, GitHub Actions build check에 의존합니다.
 
 현재 의미:
@@ -158,9 +159,12 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 
 2026-07-06에 선택지 B가 1차 승인되어 Vitest와 순수 함수 테스트를 추가했습니다.
 
+완료된 것:
+
+- GitHub Actions `Build` workflow에서 `npm test`를 실행합니다.
+
 아직 하지 않은 것:
 
-- GitHub Actions에 `npm test` step 추가
 - React Testing Library 도입
 - Playwright 도입
 
@@ -494,10 +498,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 64. `src/utils` 1차 순수 유틸 테스트 목록 점검
    - 누락된 순수 유틸 파일 확인
    - 다음 테스트 단계 분리 여부 검토
-   - 1차 점검 완료: `src/utils` 순수 유틸 63개와 테스트 파일 63개가 일치
+   - 2026-07-08 점검 완료: `src/utils` 순수 유틸 78개와 테스트 파일 78개가 일치
+   - 전체 테스트 파일은 `src/utils` 78개, `src/services` 9개, `src/hooks` 1개, `src/constants` 2개로 총 90개입니다.
 
 65. 다음 테스트 단계 결정
-   - 컴포넌트 smoke 테스트, hook 분리 후 테스트, GitHub Actions test step 중 우선순위 선택
+   - 컴포넌트 smoke 테스트, hook 분리 후 테스트, 브라우저 E2E 테스트 중 우선순위 선택
    - 새 테스트 도구/CI 변경은 사용자 판단 필요
 
 ---
@@ -517,11 +522,10 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 
 테스트 도구 1차 도입은 완료되었습니다. 다음 단계에서는 아래 결정이 필요합니다.
 
-1. GitHub Actions에서 `npm test`를 바로 실행할까요, 아니면 로컬 테스트만 유지할까요?
-2. React 컴포넌트 테스트 도구를 추가할까요?
-3. Playwright 같은 브라우저 E2E 테스트를 나중에 도입할까요?
+1. React 컴포넌트 테스트 도구를 추가할까요?
+2. Playwright 같은 브라우저 E2E 테스트를 나중에 도입할까요?
 
 Codex 추천:
 
-- GitHub Actions에는 1차 테스트가 안정된 뒤 `npm test` 추가
-- 다음 테스트도 순수 함수 중심으로 조금 더 늘린 뒤 CI 연결
+- GitHub Actions의 `npm test` 실행은 이미 적용된 상태로 유지
+- 다음 테스트도 순수 함수와 hook 분리 중심으로 조금 더 늘린 뒤, 화면 구조가 안정되면 컴포넌트/E2E 테스트 검토
