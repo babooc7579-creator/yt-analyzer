@@ -359,6 +359,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 37. `src/utils/videoDashboardControls.js`
    - 영상 검색/필터/정렬 컨트롤 props 구성
    - 저장 영상 조회와 수집 안내 버튼 구분
+   - 1차 테스트 추가 완료
+
+38. `src/utils/videoToolbarProps.js`
+   - 영상 툴바 props 구성
+   - 필터/정렬/보기 모드 제어값 연결
 
 ---
 
