@@ -399,6 +399,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 45. `src/utils/videoListRowCandidateActionProps.js`
    - 영상 리스트 행 제작 후보 액션 props 구성
    - 제작 후보 지정 버튼 상태 연결
+   - 1차 테스트 추가 완료
+
+46. `src/utils/videoListRowStatsProps.js`
+   - 영상 리스트 행 통계 props 구성
+   - 조회수/대박지수/참여율/경과일 표시 연결
 
 ---
 
