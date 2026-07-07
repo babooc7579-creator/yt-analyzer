@@ -11,6 +11,7 @@ import {
   countScannableChannels,
   countTtoTtoAssets,
   countVisibleScraps,
+  getCreatorOsMetricsModel,
 } from './creatorOsMetrics';
 
 describe('creatorOsMetrics utils', () => {
@@ -90,5 +91,43 @@ describe('creatorOsMetrics utils', () => {
 
     expect(countDiscoveryCandidates(links)).toBe(3);
     expect(countDiscoveryRightsWarnings(links)).toBe(2);
+  });
+
+  it('builds the Creator OS home metrics model from current app data', () => {
+    const model = getCreatorOsMetricsModel({
+      categories: ['existing'],
+      discoveryLinks: [
+        { id: 'link-candidate', status: 'candidate', rightsStatus: 'needs_check' },
+        { id: 'link-saved', status: 'saved', rightsStatus: 'needs_check' },
+      ],
+      savedChannels: [
+        { id: 'active-a', category: 'existing', lastScannedAt: new Date().toISOString(), status: CHANNEL_STATUS.ACTIVE },
+        { id: 'active-b', tags: ['new-tag'], status: CHANNEL_STATUS.ACTIVE },
+        { id: 'paused-a', category: 'paused-tag', status: CHANNEL_STATUS.PAUSED },
+      ],
+      savedVideos: [
+        { videoId: 'v1' },
+        { videoId: 'v2' },
+        { videoId: 'missing-from-current-list' },
+      ],
+      selectedChannelIds: ['active-a', 'active-b', 'paused-a'],
+      videoUserRecords,
+      videos,
+    });
+
+    expect(model).toMatchObject({
+      activeSelectedChannelCount: 2,
+      discoveryCandidateCount: 1,
+      discoveryRightsWarningCount: 1,
+      openRadarCandidateCount: 1,
+      productionCandidateCount: 1,
+      scannableChannelCount: 2,
+      ttoTtoAssetCount: 2,
+      visibleScrapCount: 2,
+    });
+    expect(model.cloudOnlyTags).toEqual(['new-tag', 'paused-tag']);
+    expect(model.latestScanText).not.toBe('수집 기록 없음');
+
+    expect(getCreatorOsMetricsModel().latestScanText).toBe('수집 기록 없음');
   });
 });

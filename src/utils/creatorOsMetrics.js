@@ -9,6 +9,8 @@ import {
   isChannelScannable,
   isRadarHiddenRecord,
 } from '../constants/status';
+import { formatRelativeTime } from './channelScanDisplay';
+import { getCloudOnlyTags, getLatestChannelScanDate } from './channels';
 import { isTtoTtoCandidate } from './video';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
@@ -85,3 +87,30 @@ export const countDiscoveryRightsWarnings = (discoveryLinks = []) => (
     && DISCOVERY_RIGHTS_WARNINGS[getDiscoveryLinkRightsStatusValue(link)]
   )).length
 );
+
+export const getCreatorOsMetricsModel = ({
+  categories,
+  discoveryLinks = [],
+  savedChannels,
+  savedVideos,
+  selectedChannelIds,
+  videoUserRecords,
+  videos,
+} = {}) => {
+  const latestScannedAt = getLatestChannelScanDate(savedChannels);
+
+  return {
+    activeSelectedChannelCount: countActiveSelectedChannels(savedChannels, selectedChannelIds),
+    cloudOnlyTags: getCloudOnlyTags(savedChannels, categories),
+    discoveryCandidateCount: countDiscoveryCandidates(discoveryLinks),
+    discoveryRightsWarningCount: countDiscoveryRightsWarnings(discoveryLinks),
+    latestScanText: latestScannedAt
+      ? formatRelativeTime(latestScannedAt)
+      : '수집 기록 없음',
+    openRadarCandidateCount: countOpenRadarCandidates(videos, videoUserRecords),
+    productionCandidateCount: countProductionCandidates(savedVideos, videoUserRecords),
+    scannableChannelCount: countScannableChannels(savedChannels),
+    ttoTtoAssetCount: countTtoTtoAssets(videos),
+    visibleScrapCount: countVisibleScraps(videos, savedVideos),
+  };
+};
