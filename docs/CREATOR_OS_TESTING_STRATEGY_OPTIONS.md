@@ -319,6 +319,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 29. `src/utils/scrapbookHeaderActions.js`
    - 스크랩북 헤더 버튼 props 구성
    - AI 리메이크 프롬프트/URL 복사 버튼 상태
+   - 1차 테스트 추가 완료
+
+30. `src/utils/prompts.js`
+   - AI 리메이크 프롬프트 텍스트 생성
+   - 저장 영상 기반 요청문 구성
 
 ---
 
