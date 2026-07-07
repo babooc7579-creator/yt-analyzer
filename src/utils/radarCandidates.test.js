@@ -1,11 +1,23 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  PRODUCTION_STATUS,
+  VIDEO_STATUS,
+  VIDEO_STATUS_LABELS,
+} from '../constants/status';
+import {
+  RADAR_TODAY_CANDIDATE_LIMIT,
+  getRadarCandidateDataModel,
   getRadarCandidateCardViewProps,
   getRadarCandidateStripViewProps,
+  getRadarDecisionBuckets,
+  getRadarDecisionGroups,
+  getRadarDecisionSummary,
   getRadarPriorityLabel,
+  getRadarQueueSummary,
   getRadarReasons,
   getRadarScore,
+  getRadarTodayCandidates,
 } from './radarCandidates';
 
 describe('radarCandidates utils', () => {
@@ -100,5 +112,96 @@ describe('radarCandidates utils', () => {
 
     expect(getRadarCandidateStripViewProps({ ...baseProps, candidates: [] }).isCompleted).toBe(true);
     expect(getRadarCandidateStripViewProps({ ...baseProps, candidates: [], videos: [] }).isEmpty).toBe(true);
+  });
+
+  it('builds radar candidate data from videos and user records without API calls', () => {
+    const candidateTwo = {
+      videoId: 'candidate-2',
+      title: 'Fresh strong clip',
+      daysOld: 20,
+      like_ratio: 2,
+      multiplier: 4,
+      view_count: 900000,
+    };
+    const reviewedVideo = { ...radarVideo, videoId: 'reviewed-1' };
+    const productionVideo = { ...radarVideo, videoId: 'production-1' };
+    const excludedVideo = { ...radarVideo, videoId: 'excluded-1' };
+    const laterVideo = { ...radarVideo, videoId: 'later-1' };
+
+    const model = getRadarCandidateDataModel({
+      videoUserRecords: {
+        'excluded-1': { status: VIDEO_STATUS.EXCLUDED },
+        'later-1': { statusIds: [VIDEO_STATUS.WATCH_LATER] },
+        'production-1': { statusIds: [PRODUCTION_STATUS.CANDIDATE] },
+        'reviewed-1': { status: VIDEO_STATUS.REVIEWED },
+      },
+      videos: [
+        candidateTwo,
+        reviewedVideo,
+        null,
+        productionVideo,
+        radarVideo,
+        excludedVideo,
+        laterVideo,
+      ],
+    });
+
+    expect(model.candidates.map(video => video.videoId)).toEqual(['radar-1', 'candidate-2']);
+    expect(model.decisionSummary).toEqual({
+      excluded: 1,
+      later: 1,
+      production: 1,
+      reviewed: 1,
+    });
+    expect(model.loadedDecisionCount).toBe(4);
+    expect(model.allDecisionCount).toBe(4);
+    expect(model.queueSummary).toMatchObject({
+      candidateLimit: RADAR_TODAY_CANDIDATE_LIMIT,
+      hiddenDecisionCount: 4,
+      highPriorityCount: 1,
+      shownCandidateCount: 2,
+      visibleQueueCount: 2,
+    });
+    expect(model.decisionGroups.map(group => group.key)).toEqual([
+      'reviewed',
+      'later',
+      'production',
+      'excluded',
+    ]);
+  });
+
+  it('builds radar decision buckets, summaries, groups, and queue summaries safely', () => {
+    const videoList = [
+      { videoId: 'reviewed' },
+      { videoId: 'candidate', daysOld: 300, multiplier: 4, like_ratio: 1 },
+      { videoId: 'excluded' },
+    ];
+    const userRecordMap = {
+      excluded: { status: VIDEO_STATUS.EXCLUDED },
+      reviewed: { status: VIDEO_STATUS.REVIEWED },
+    };
+    const buckets = getRadarDecisionBuckets({ userRecordMap, videoList });
+    const candidatePool = getRadarTodayCandidates(videoList);
+
+    expect(buckets.reviewed.map(video => video.videoId)).toEqual(['reviewed']);
+    expect(buckets.excluded.map(video => video.videoId)).toEqual(['excluded']);
+    expect(getRadarDecisionSummary(buckets)).toMatchObject({
+      excluded: 1,
+      reviewed: 1,
+    });
+    expect(getRadarDecisionGroups(buckets)[0]).toMatchObject({
+      key: 'reviewed',
+      label: VIDEO_STATUS_LABELS[VIDEO_STATUS.REVIEWED],
+    });
+    expect(candidatePool).toHaveLength(3);
+    expect(getRadarQueueSummary({
+      allDecisionCount: 2,
+      candidatePool,
+      candidates: candidatePool.slice(0, 2),
+    })).toMatchObject({
+      hiddenDecisionCount: 2,
+      shownCandidateCount: 2,
+      visibleQueueCount: 3,
+    });
   });
 });
