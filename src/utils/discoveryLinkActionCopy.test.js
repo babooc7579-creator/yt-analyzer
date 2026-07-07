@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   DISCOVERY_LINK_SAVING_MESSAGES,
   getDiscoveryActionError,
+  getDiscoveryLinkSavingMessage,
 } from './discoveryLinkActionCopy';
 
 describe('discoveryLinkActionCopy utils', () => {
@@ -15,6 +16,14 @@ describe('discoveryLinkActionCopy utils', () => {
       'update_status',
       'update_text',
     ]);
+  });
+
+  it('returns a saving message only while a known action is running', () => {
+    expect(getDiscoveryLinkSavingMessage(true, 'create')).toBe(
+      DISCOVERY_LINK_SAVING_MESSAGES.create
+    );
+    expect(getDiscoveryLinkSavingMessage(true, 'missing')).toBe('');
+    expect(getDiscoveryLinkSavingMessage(false, 'create')).toBe('');
   });
 
   it('uses the thrown error message when building a Cloud action error', () => {

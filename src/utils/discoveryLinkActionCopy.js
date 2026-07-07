@@ -7,6 +7,10 @@ export const DISCOVERY_LINK_SAVING_MESSAGES = {
   delete: 'Cloud 발견함에서 링크 기록을 삭제하는 중입니다.',
 };
 
+export const getDiscoveryLinkSavingMessage = (saving, action) => (
+  saving ? DISCOVERY_LINK_SAVING_MESSAGES[action] || '' : ''
+);
+
 export const getDiscoveryActionError = (error, fallbackMessage, actionLabel = '저장') => {
   const message = error?.message || fallbackMessage;
   return `${message} Cloud ${actionLabel} 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;

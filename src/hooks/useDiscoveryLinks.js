@@ -18,8 +18,8 @@ import {
   upsertDiscoveryLink,
 } from '../utils/discoveryLinkCollection';
 import {
-  DISCOVERY_LINK_SAVING_MESSAGES,
   getDiscoveryActionError,
+  getDiscoveryLinkSavingMessage,
 } from '../utils/discoveryLinkActionCopy';
 
 export function useDiscoveryLinks() {
@@ -145,7 +145,7 @@ export function useDiscoveryLinks() {
     discoveryLinksLoading: loading,
     discoveryLinksNotice: notice,
     discoveryLinksSaving: saving,
-    discoveryLinksSavingMessage: saving ? DISCOVERY_LINK_SAVING_MESSAGES[savingAction] || '' : '',
+    discoveryLinksSavingMessage: getDiscoveryLinkSavingMessage(saving, savingAction),
     addDiscoveryLink,
     changeDiscoveryLink,
     loadDiscoveryLinks,
