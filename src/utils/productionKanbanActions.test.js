@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getProductionDiscoveryLinkMoveUpdates,
   getNextDraftRecords,
   getProductionDraftUpdates,
   hasProductionDraftChanges,
@@ -94,5 +95,12 @@ describe('productionKanbanActions utils', () => {
       note: '',
       targetPublishDate: '',
     });
+  });
+
+  it('builds discovery link move updates with status only', () => {
+    expect(getProductionDiscoveryLinkMoveUpdates('saved')).toEqual({
+      status: 'saved',
+    });
+    expect(Object.keys(getProductionDiscoveryLinkMoveUpdates('candidate'))).toEqual(['status']);
   });
 });

@@ -42,3 +42,7 @@ export const getProductionDraftUpdates = (draft = {}) => {
     targetPublishDate: draftRecord.targetPublishDate || '',
   };
 };
+
+export const getProductionDiscoveryLinkMoveUpdates = (status) => ({
+  status,
+});

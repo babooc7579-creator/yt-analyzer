@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+  getProductionDiscoveryLinkMoveUpdates,
   getNextDraftRecords,
   getProductionDraftUpdates,
   hasProductionDraftChanges,
@@ -69,7 +70,7 @@ export function useProductionKanbanActions({
     if (!onUpdateDiscoveryLink) return;
 
     setLinkMoveStates(prev => ({ ...prev, [linkId]: 'saving' }));
-    const didMove = await onUpdateDiscoveryLink(linkId, { status });
+    const didMove = await onUpdateDiscoveryLink(linkId, getProductionDiscoveryLinkMoveUpdates(status));
     setLinkMoveStates(prev => ({ ...prev, [linkId]: didMove ? 'saved' : 'error' }));
 
     if (didMove) {
