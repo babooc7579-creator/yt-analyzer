@@ -1,4 +1,5 @@
 import { CheckSquare, Square, Star } from 'lucide-react';
+import { getVideoScrapActionCopy } from '../utils/videoActionButtonProps';
 
 export default function VideoCardThumbnailActions({
   isChecked,
@@ -8,6 +9,15 @@ export default function VideoCardThumbnailActions({
   video,
   videoTitle,
 }) {
+  const {
+    ariaLabel: scrapAriaLabel,
+    thumbnailLabel,
+    title: scrapTitle,
+  } = getVideoScrapActionCopy({
+    isSaved,
+    videoTitle,
+  });
+
   return (
     <div className="absolute right-3 top-3 flex gap-2">
       <button
@@ -22,12 +32,12 @@ export default function VideoCardThumbnailActions({
       <button
         type="button"
         onClick={() => onToggleScrap(video)}
-        title={isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}
-        aria-label={`${videoTitle} ${isSaved ? 'Cloud 스크랩북에서 보관 해제' : 'Cloud 스크랩북에 소재로 보관'}`}
+        title={scrapTitle}
+        aria-label={scrapAriaLabel}
         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-extrabold shadow-sm transition-colors ${isSaved ? 'bg-yellow-400 text-yellow-950 hover:bg-yellow-300' : 'bg-white/90 text-slate-600 hover:bg-yellow-50 hover:text-yellow-700'}`}
       >
         <Star className={`w-4 h-4 ${isSaved ? 'fill-yellow-950 text-yellow-950' : 'text-slate-400 group-hover:text-yellow-500'}`} />
-        {isSaved ? '보관됨' : '소재 보관'}
+        {thumbnailLabel}
       </button>
     </div>
   );

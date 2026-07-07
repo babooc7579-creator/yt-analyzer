@@ -19,8 +19,10 @@ describe('videoListRowCandidateActionProps utils', () => {
       type: 'button',
     });
     expect(props.buttonProps.className).toContain('bg-indigo-600');
-    expect(props.buttonProps.title).not.toBe('');
+    expect(props.buttonProps.title).toContain('Cloud 판단 기록');
+    expect(props.buttonProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props.buttonProps['aria-label']).toContain('First idea');
+    expect(props.buttonProps['aria-label']).toContain('YouTube API 호출 없음');
   });
 
   it('builds a disabled button for videos already in production candidates', () => {
@@ -35,6 +37,7 @@ describe('videoListRowCandidateActionProps utils', () => {
     expect(props.buttonProps.className).toContain('cursor-not-allowed');
     expect(props.buttonProps.className).toContain('bg-indigo-100');
     expect(props.buttonProps['aria-label']).toContain('First idea');
+    expect(props.buttonProps.title).toContain('이미 Cloud 판단 기록');
   });
 
   it('does not call the promote handler while building props', () => {
