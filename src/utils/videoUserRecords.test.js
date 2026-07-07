@@ -7,6 +7,7 @@ import {
   createVideoStatusRecord,
   getCloudVideoUserRecord,
   getCloudVideoUserRecords,
+  restoreVideoUserRecord,
   upsertVideoUserRecord,
 } from './videoUserRecords';
 
@@ -47,6 +48,28 @@ describe('videoUserRecords utils', () => {
     });
 
     expect(upsertVideoUserRecord(initialRecords, { status: VIDEO_STATUS.EXCLUDED })).toBe(initialRecords);
+  });
+
+  it('restores a previous record after an optimistic save failure', () => {
+    const currentRecords = {
+      v1: { videoId: 'v1', status: VIDEO_STATUS.PRODUCTION_CANDIDATE },
+      v2: { videoId: 'v2', status: VIDEO_STATUS.REVIEWED },
+    };
+    const previousRecord = { videoId: 'v1', status: VIDEO_STATUS.WATCH_LATER };
+
+    expect(restoreVideoUserRecord(currentRecords, 'v1', previousRecord)).toEqual({
+      v1: previousRecord,
+      v2: { videoId: 'v2', status: VIDEO_STATUS.REVIEWED },
+    });
+  });
+
+  it('removes an optimistic record when there was no previous Cloud record', () => {
+    expect(restoreVideoUserRecord({
+      v1: { videoId: 'v1', status: VIDEO_STATUS.PRODUCTION_CANDIDATE },
+      v2: { videoId: 'v2', status: VIDEO_STATUS.REVIEWED },
+    }, 'v1')).toEqual({
+      v2: { videoId: 'v2', status: VIDEO_STATUS.REVIEWED },
+    });
   });
 
   it('creates status records without dropping existing statusIds', () => {

@@ -11,6 +11,7 @@ import {
   createVideoStatusRecord,
   getCloudVideoUserRecord,
   getCloudVideoUserRecords,
+  restoreVideoUserRecord,
   upsertVideoUserRecord,
 } from '../utils/videoUserRecords';
 
@@ -29,18 +30,7 @@ export function useVideoUserRecords() {
   };
 
   const restorePreviousRecord = (videoId, previousRecord) => {
-    setVideoUserRecords(prev => {
-      if (previousRecord) {
-        return {
-          ...prev,
-          [videoId]: previousRecord,
-        };
-      }
-
-      const next = { ...prev };
-      delete next[videoId];
-      return next;
-    });
+    setVideoUserRecords(prev => restoreVideoUserRecord(prev, videoId, previousRecord));
   };
 
   useEffect(() => {
