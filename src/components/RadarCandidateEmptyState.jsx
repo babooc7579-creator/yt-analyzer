@@ -1,17 +1,22 @@
 import { Bookmark, Database } from 'lucide-react';
 
+import { getLoadStoredVideosActionProps } from '../utils/loadStoredVideosActionProps';
+
 export default function RadarCandidateEmptyState({
   onLoadStoredVideos,
   onOpenVault,
   selectedChannelCount = 0,
 }) {
-  const hasSelectedChannels = selectedChannelCount > 0;
-  const loadStoredVideosTitle = hasSelectedChannels
-    ? `DB 조회: 선택 채널 ${selectedChannelCount}개의 저장된 영상을 불러옵니다. YouTube API를 새로 호출하지 않습니다.`
-    : '왼쪽 채널 목록에서 볼 채널을 먼저 체크해야 저장 영상을 불러올 수 있습니다. 이 버튼은 DB 조회용이며 YouTube API를 새로 호출하지 않습니다.';
-  const loadStoredVideosAriaLabel = hasSelectedChannels
-    ? `선택 채널 ${selectedChannelCount}개 저장 영상 불러오기, DB 조회이며 YouTube API 호출 없음`
-    : '채널 선택 필요, 왼쪽 채널 목록에서 볼 채널을 먼저 체크하세요';
+  const {
+    actionAriaLabel: loadStoredVideosAriaLabel,
+    actionDisabled: loadStoredVideosDisabled,
+    emptyStateLabel: loadStoredVideosLabel,
+    hasSelectedChannels,
+    title: loadStoredVideosTitle,
+  } = getLoadStoredVideosActionProps({
+    onLoad: onLoadStoredVideos,
+    selectedChannelCount,
+  });
 
   return (
     <div className="mt-6 rounded-2xl border border-dashed border-slate-700 bg-slate-950/70 p-5">
@@ -24,7 +29,7 @@ export default function RadarCandidateEmptyState({
           <button
             type="button"
             onClick={onLoadStoredVideos}
-            disabled={!hasSelectedChannels}
+            disabled={loadStoredVideosDisabled}
             className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold ${
               hasSelectedChannels
                 ? 'bg-blue-500 text-white hover:bg-blue-400'
@@ -33,7 +38,7 @@ export default function RadarCandidateEmptyState({
             title={loadStoredVideosTitle}
             aria-label={loadStoredVideosAriaLabel}
           >
-            <Database className="h-4 w-4" /> {hasSelectedChannels ? '저장 영상 불러오기' : '채널 선택 필요'}
+            <Database className="h-4 w-4" /> {loadStoredVideosLabel}
           </button>
         )}
         <button
