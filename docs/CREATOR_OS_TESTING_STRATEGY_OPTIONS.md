@@ -254,6 +254,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 16. `src/utils/channelCategoryChipProps.js`
    - 카테고리 칩 표시/숨김/이름 변경 props
    - 화면 카테고리와 Cloud 태그 의미 구분
+   - 1차 테스트 추가 완료
+
+17. `src/utils/channelAddFormProps.js`
+   - 새 채널 추가 입력/버튼 props
+   - 미리보기와 Cloud 저장 안내 문구
 
 ---
 
