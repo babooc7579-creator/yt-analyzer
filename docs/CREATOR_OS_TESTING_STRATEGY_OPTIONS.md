@@ -294,6 +294,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 24. `src/utils/formatters.js`
    - 숫자/비율/커버리지 표시 helper
    - 화면 통계 표시 안정화
+   - 1차 테스트 추가 완료
+
+25. `src/utils/discoveryLinks.js`
+   - 발견 링크 기본값/상태 helper
+   - 수동 링크 저장 데이터 정규화
 
 ---
 
