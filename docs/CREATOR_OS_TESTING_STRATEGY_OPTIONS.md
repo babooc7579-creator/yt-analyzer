@@ -249,6 +249,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 15. `src/utils/channelTagSelectorProps.js`
    - 채널 태그 선택/필터 표시 props
    - 태그 선택이 API 호출을 의미하지 않는다는 안내
+   - 1차 테스트 추가 완료
+
+16. `src/utils/channelCategoryChipProps.js`
+   - 카테고리 칩 표시/숨김/이름 변경 props
+   - 화면 카테고리와 Cloud 태그 의미 구분
 
 ---
 
