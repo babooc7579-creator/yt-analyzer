@@ -304,6 +304,11 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 26. `src/utils/discoveryLinksRouteProps.js`
    - 발견함 라우트 props 전달
    - 발견함 Cloud 상태와 화면 props 연결
+   - 1차 테스트 추가 완료
+
+27. `src/utils/discoveryLinksWorkspaceProps.js`
+   - 발견함 작업 화면 props 구성
+   - 폼/필터/목록/알림 props 분리
 
 ---
 
