@@ -4,7 +4,9 @@ import {
   CHANNEL_BULK_INPUT_PLACEHOLDER,
   CHANNEL_INPUT_PLACEHOLDER,
   getChannelBulkInputCopy,
+  getChannelBulkResultPanelViewProps,
   getChannelBulkSubmitButtonCopy,
+  getChannelAddFormHeaderCopy,
   getChannelPreviewActionsCopy,
   getChannelPreviewInputCopy,
   getChannelPreviewSaveNoticeText,
@@ -45,5 +47,45 @@ describe('channelAddCopy utils', () => {
     expect(copy.saveButtonTitle).toContain('새 영상 수집은 하지 않습니다');
     expect(noticeText).toContain('Cloud 목록에 저장');
     expect(noticeText).toContain('선택 채널 새 영상 수집 버튼');
+  });
+
+  it('builds channel add header mode and category copy', () => {
+    const copy = getChannelAddFormHeaderCopy();
+
+    expect(copy.label).toBe('새 채널 모니터링 추가');
+    expect(copy.modeButtons.map(button => button.mode)).toEqual(['single', 'bulk']);
+    expect(copy.modeButtons[0]).toMatchObject({
+      ariaLabel: '단일 채널 추가 모드',
+      label: '단일',
+      title: '채널을 하나씩 확인하고 추가',
+    });
+    expect(copy.modeButtons[1].title).toContain('여러 채널');
+    expect(copy.categoryButtonProps).toMatchObject({
+      ariaLabel: '카테고리 설정 열기',
+      label: '카테고리 설정',
+    });
+    expect(copy.categoryButtonProps.title).toContain('Cloud 태그');
+  });
+
+  it('builds bulk result panel copy with safe result fallback', () => {
+    const props = getChannelBulkResultPanelViewProps({
+      added: 2,
+      results: [
+        { handle: '@ok', success: true },
+        { error: 'Not found', handle: '@missing', success: false },
+      ],
+      total: 3,
+    });
+
+    expect(props.summaryText).toBe('총 3개 중 2개 성공');
+    expect(props.failedResults).toEqual([
+      { error: 'Not found', handle: '@missing', success: false },
+    ]);
+    expect(props.closeButtonProps).toMatchObject({
+      label: '닫기',
+      title: '일괄 저장 결과 닫기',
+    });
+
+    expect(getChannelBulkResultPanelViewProps(null).summaryText).toBe('총 0개 중 0개 성공');
   });
 });

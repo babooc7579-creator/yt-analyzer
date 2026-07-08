@@ -41,3 +41,42 @@ export const getChannelPreviewActionsCopy = () => ({
 export const getChannelPreviewSaveNoticeText = () => (
   '채널을 Cloud 목록에 저장합니다. 새 영상 수집은 선택 채널 새 영상 수집 버튼을 눌렀을 때만 진행됩니다.'
 );
+
+export const getChannelAddFormHeaderCopy = () => ({
+  label: '새 채널 모니터링 추가',
+  modeButtons: [
+    {
+      ariaLabel: '단일 채널 추가 모드',
+      label: '단일',
+      mode: 'single',
+      title: '채널을 하나씩 확인하고 추가',
+    },
+    {
+      ariaLabel: '채널 일괄 추가 모드',
+      label: '일괄',
+      mode: 'bulk',
+      title: '여러 채널을 한 번에 확인하고 추가',
+    },
+  ],
+  categoryButtonProps: {
+    ariaLabel: '카테고리 설정 열기',
+    label: '카테고리 설정',
+    title: '화면 카테고리와 Cloud 태그 이름을 관리',
+  },
+});
+
+export const getChannelBulkResultPanelViewProps = (bulkResult = {}) => {
+  const resultSummary = bulkResult && typeof bulkResult === 'object' ? bulkResult : {};
+  const results = Array.isArray(resultSummary.results) ? resultSummary.results : [];
+  const failedResults = results.filter(result => !result.success);
+
+  return {
+    closeButtonProps: {
+      'aria-label': '채널 일괄 저장 결과 닫기',
+      label: '닫기',
+      title: '일괄 저장 결과 닫기',
+    },
+    failedResults,
+    summaryText: `총 ${resultSummary.total || 0}개 중 ${resultSummary.added || 0}개 성공`,
+  };
+};

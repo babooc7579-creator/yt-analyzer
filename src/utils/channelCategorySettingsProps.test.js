@@ -5,8 +5,10 @@ import {
   getCategoriesAfterLocalAdd,
   getCategoriesAfterLocalHide,
   getCategoryHideConfirmMessage,
+  getChannelCategoryAddInputViewProps,
   getChannelCategoryList,
   getChannelCategorySettingsProps,
+  getChannelCloudOnlyTagsNoticeViewProps,
 } from './channelCategorySettingsProps';
 
 describe('channelCategorySettingsProps utils', () => {
@@ -70,5 +72,34 @@ describe('channelCategorySettingsProps utils', () => {
       },
       categoryList: ['해외'],
     });
+  });
+
+  it('builds category add input copy for local screen categories', () => {
+    const props = getChannelCategoryAddInputViewProps();
+
+    expect(props).toEqual({
+      addButtonProps: {
+        'aria-label': '화면 카테고리 추가',
+        title: '화면 카테고리 추가',
+      },
+      inputAriaLabel: '새 화면 카테고리 이름',
+      inputPlaceholder: '새 카테고리명',
+    });
+  });
+
+  it('builds Cloud-only tag notice copy without implying tag deletion', () => {
+    expect(getChannelCloudOnlyTagsNoticeViewProps([])).toBeNull();
+
+    const props = getChannelCloudOnlyTagsNoticeViewProps([
+      '해외',
+      '예능',
+      '정치',
+      '역사',
+      '미분류',
+    ]);
+
+    expect(props.title).toContain('Cloud에는 있지만');
+    expect(props.tagSummary).toBe('해외, 예능, 정치, 역사 외 1개');
+    expect(props.description).toContain('Cloud 채널 태그는 삭제되지 않습니다');
   });
 });
