@@ -2,8 +2,8 @@ export const HOME_ACTION_SHORTCUTS = [
   {
     key: 'add-channel',
     title: '1. 새 채널 등록',
-    description: '소재를 모을 채널을 먼저 Cloud 목록에 저장합니다.',
-    hint: '오퍼레이션 관제로 이동',
+    description: '소재를 모을 채널을 Cloud 채널 목록에 저장합니다. 저장만으로 영상 수집은 실행하지 않습니다.',
+    hint: '채널 등록 화면 열기',
     iconName: 'plus',
     actionName: 'openAddChannel',
     className: 'border-indigo-400/20 bg-indigo-500/10 hover:border-indigo-300/50 hover:bg-indigo-500/15',
@@ -15,8 +15,8 @@ export const HOME_ACTION_SHORTCUTS = [
   {
     key: 'selected-scan',
     title: '2. 선택 채널 새 영상 수집',
-    description: '체크한 채널만 YouTube API로 새 영상 여부를 확인합니다.',
-    hint: 'YouTube API 호출',
+    description: '체크한 운영중 채널만 YouTube API로 새 영상 여부를 확인합니다.',
+    hint: 'YouTube API 호출 작업',
     iconName: 'refresh',
     actionName: 'openSelectedScan',
     className: 'border-emerald-400/20 bg-emerald-500/10 hover:border-emerald-300/50 hover:bg-emerald-500/15',
@@ -28,8 +28,8 @@ export const HOME_ACTION_SHORTCUTS = [
   {
     key: 'vault',
     title: '3. 저장 영상 탐색',
-    description: 'Cloud DB에 저장된 영상만 열어 후보를 고릅니다. 새 YouTube API 호출은 없습니다.',
-    hint: 'DB 조회 화면 열기',
+    description: 'Cloud DB에 이미 저장된 영상만 열어 후보를 고릅니다. 새 YouTube API 호출은 없습니다.',
+    hint: 'Cloud DB 조회 화면 열기',
     iconName: 'bookmark',
     actionName: 'openVault',
     className: 'border-blue-400/20 bg-blue-500/10 hover:border-blue-300/50 hover:bg-blue-500/15',
@@ -41,8 +41,8 @@ export const HOME_ACTION_SHORTCUTS = [
   {
     key: 'discovery-links',
     title: '4. 발견 링크 저장',
-    description: '외부에서 본 링크를 Cloud 발견함에 남기고 제작 후보로 보낼 수 있습니다.',
-    hint: '외부 수집 없이 링크만 저장',
+    description: '외부에서 본 URL을 Cloud 발견함에 저장하고 필요하면 제작 후보로 보냅니다.',
+    hint: '자동 수집 없이 URL만 저장',
     iconName: 'link',
     actionName: 'openDiscoveryLinks',
     className: 'border-amber-400/20 bg-amber-500/10 hover:border-amber-300/50 hover:bg-amber-500/15',
