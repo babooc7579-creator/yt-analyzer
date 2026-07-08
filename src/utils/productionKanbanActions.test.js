@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getClearedSavedState,
   getProductionDiscoveryLinkMoveUpdates,
   getNextDraftRecords,
   getProductionDraftUpdates,
@@ -102,5 +103,25 @@ describe('productionKanbanActions utils', () => {
       status: 'saved',
     });
     expect(Object.keys(getProductionDiscoveryLinkMoveUpdates('candidate'))).toEqual(['status']);
+  });
+
+  it('clears only saved temporary action states after the display delay', () => {
+    expect(getClearedSavedState({
+      video1: 'saved',
+      video2: 'error',
+      video3: 'saving',
+    }, 'video1')).toEqual({
+      video2: 'error',
+      video3: 'saving',
+    });
+  });
+
+  it('keeps non-saved temporary action states untouched', () => {
+    const states = {
+      video1: 'error',
+    };
+
+    expect(getClearedSavedState(states, 'video1')).toBe(states);
+    expect(getClearedSavedState(null, 'video1')).toEqual({});
   });
 });

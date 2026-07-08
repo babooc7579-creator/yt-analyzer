@@ -317,7 +317,7 @@ src/App.jsx
 
 검증:
 
-- `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 108개, 테스트 479개
+- `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 108개, 테스트 481개
 - `npm.cmd run build` 통과
 - `npm.cmd audit --omit=dev` 취약점 0개
 - GitHub Actions Build 통과

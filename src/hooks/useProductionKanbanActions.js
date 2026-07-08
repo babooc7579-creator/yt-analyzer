@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+  getClearedSavedState,
   getProductionDiscoveryLinkMoveUpdates,
   getNextDraftRecords,
   getProductionDraftUpdates,
@@ -19,12 +20,7 @@ export function useProductionKanbanActions({
 
   const clearSavedStateAfterDelay = (setStates, itemId, delay) => {
     setTimeout(() => {
-      setStates(prev => {
-        if (prev[itemId] !== 'saved') return prev;
-        const next = { ...prev };
-        delete next[itemId];
-        return next;
-      });
+      setStates(prev => getClearedSavedState(prev, itemId));
     }, delay);
   };
 
