@@ -1,4 +1,8 @@
+import { getVideoTitleLinkAriaLabel } from '../utils/videoCard';
+
 export default function VideoCardTitleLink({ videoTitle, videoUrl }) {
+  const ariaLabel = getVideoTitleLinkAriaLabel({ videoTitle });
+
   return (
     <a
       href={videoUrl}
@@ -6,7 +10,7 @@ export default function VideoCardTitleLink({ videoTitle, videoUrl }) {
       rel="noreferrer"
       className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600"
       title={videoTitle}
-      aria-label={`${videoTitle} YouTube 원본 영상 열기`}
+      aria-label={ariaLabel}
     >
       {videoTitle}
     </a>

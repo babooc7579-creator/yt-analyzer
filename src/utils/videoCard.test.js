@@ -2,7 +2,15 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getVideoCardCandidateReasons,
+  getVideoCardCandidateReasonsViewProps,
+  getVideoCardCopyUrlButtonProps,
+  getVideoCardMetaBadgesViewProps,
+  getVideoCardStatsGridViewProps,
+  getVideoCardStatusBadgeItems,
+  getVideoCardThumbnailBadgeItems,
   getVideoCardViewProps,
+  getVideoThumbnailAltText,
+  getVideoTitleLinkAriaLabel,
 } from './videoCard';
 
 describe('videoCard utils', () => {
@@ -130,5 +138,119 @@ describe('videoCard utils', () => {
     expect(props.candidateReasons).toEqual([]);
     expect(props.videoTitle).not.toBe('');
     expect(props.videoUrl).toBe('');
+  });
+
+  it('builds candidate reason display props', () => {
+    expect(getVideoCardCandidateReasonsViewProps({
+      candidateReasons: ['평균 대비 3.2배', '200일 지난 소재'],
+    })).toEqual({
+      joinedReasons: '평균 대비 3.2배 · 200일 지난 소재',
+      reasonList: ['평균 대비 3.2배', '200일 지난 소재'],
+      shouldShow: true,
+      title: '후보 이유',
+    });
+
+    expect(getVideoCardCandidateReasonsViewProps({
+      candidateReasons: null,
+    }).shouldShow).toBe(false);
+  });
+
+  it('builds copy URL button props without API confusion', () => {
+    const props = getVideoCardCopyUrlButtonProps({
+      videoTitle: 'First idea',
+      videoUrl: 'https://youtube.com/watch?v=video1',
+    });
+
+    expect(props).toMatchObject({
+      ariaLabel: 'First idea YouTube 원본 URL 복사',
+      copiedLabel: '복사 완료',
+      label: 'URL 복사',
+      url: 'https://youtube.com/watch?v=video1',
+    });
+    expect(props.title).toContain('YouTube API 호출이나 저장 작업은 없습니다');
+  });
+
+  it('builds language and duration badges with unknown-language fallback', () => {
+    expect(getVideoCardMetaBadgesViewProps({
+      video: {
+        duration: '00:59',
+        isShorts: true,
+        language: 'EN',
+      },
+    })).toEqual({
+      durationBadge: {
+        isShorts: true,
+        text: 'Shorts (00:59)',
+      },
+      languageLabel: 'EN',
+    });
+
+    expect(getVideoCardMetaBadgesViewProps({
+      video: {
+        duration: '08:30',
+        isShorts: false,
+        language: 'UNKNOWN',
+      },
+    })).toEqual({
+      durationBadge: {
+        isShorts: false,
+        text: '08:30',
+      },
+      languageLabel: '언어 미상',
+    });
+  });
+
+  it('builds status badge items in display order', () => {
+    const badges = getVideoCardStatusBadgeItems({
+      isChecked: true,
+      isProductionCandidate: true,
+      isSaved: true,
+    });
+
+    expect(badges.map((badge) => badge.label)).toEqual([
+      '소재 보관됨',
+      '후보함 등록',
+      'AI 요청문 선택',
+    ]);
+    expect(badges.every((badge) => badge.isVisible)).toBe(true);
+  });
+
+  it('builds stats grid text and labels', () => {
+    const props = getVideoCardStatsGridViewProps({
+      isStrongReaction: true,
+      showWorkPanel: true,
+      video: {
+        daysOld: 200,
+        like_count: 1234,
+        like_ratio: 4.5,
+        multiplier: 3.2,
+        view_count: 987654,
+      },
+    });
+
+    expect(props.viewCountTileProps.label).toBe('총 조회수');
+    expect(props.multiplierTileProps.label).toBe('대박 지수');
+    expect(props.engagementTileProps.label).toBe('참여율');
+    expect(props.daysOldTileProps.label).toBe('경과일');
+    expect(props.viewCountText).toBe('987,654');
+    expect(props.engagementLikeText).toBe('좋아요 1,234');
+    expect(props.daysOldText).toBe('200일');
+    expect(props.multiplierTileProps.className).toContain('bg-rose-600');
+  });
+
+  it('builds thumbnail badge items and generic media copy', () => {
+    const badges = getVideoCardThumbnailBadgeItems({
+      isCandidate: true,
+      isStrongReaction: true,
+      rank: 4,
+    });
+
+    expect(badges.filter((badge) => badge.isVisible).map((badge) => badge.label)).toEqual([
+      '#4',
+      '또터또 후보',
+      '강한 반응',
+    ]);
+    expect(getVideoThumbnailAltText({ videoTitle: 'First idea' })).toBe('First idea 썸네일');
+    expect(getVideoTitleLinkAriaLabel({ videoTitle: 'First idea' })).toBe('First idea YouTube 원본 영상 열기');
   });
 });
