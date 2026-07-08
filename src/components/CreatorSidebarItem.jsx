@@ -1,10 +1,15 @@
+import { getCreatorSidebarItemViewProps } from '../utils/appLayoutProps';
+
 export default function CreatorSidebarItem({
   isActive,
   item,
   onOpenView,
 }) {
-  const isComingSoon = item.status === 'soon';
-  const actionLabel = isComingSoon ? `${item.label} 준비중 안내 보기` : `${item.label} 화면 열기`;
+  const {
+    actionLabel,
+    isComingSoon,
+    statusLabel,
+  } = getCreatorSidebarItemViewProps({ item });
 
   return (
     <button
@@ -19,7 +24,7 @@ export default function CreatorSidebarItem({
       <span className="flex items-center justify-between gap-2">
         <span className="text-xs font-bold">{item.label}</span>
         {isComingSoon && (
-          <span className="shrink-0 rounded-full border border-slate-700/70 bg-slate-950/40 px-1.5 py-0.5 text-[8px] font-bold text-slate-500">준비중</span>
+          <span className="shrink-0 rounded-full border border-slate-700/70 bg-slate-950/40 px-1.5 py-0.5 text-[8px] font-bold text-slate-500">{statusLabel}</span>
         )}
       </span>
     </button>
