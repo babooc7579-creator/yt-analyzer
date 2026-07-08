@@ -7,6 +7,8 @@ import {
   getChannelListExportPanelProps,
   getChannelListEmptyStateViewProps,
   getChannelListItemsProps,
+  getChannelListLoadingStateViewProps,
+  getChannelListUrlExportPanelViewProps,
   getVisibleChannelUrlList,
   getVisibleChannels,
   hasChannelTag,
@@ -124,6 +126,38 @@ describe('channelListProps utils', () => {
       description: '다른 태그에는 저장된 채널이 있습니다. 이 태그로 보려면 채널 태그를 추가하거나 다른 태그를 선택해 주세요.',
       hasChannelsInOtherTags: true,
       title: '해외 태그에 채널이 없습니다.',
+    });
+  });
+
+  it('builds URL export panel copy without implying scan or save work', () => {
+    const visibleChannelUrlList = '1. Peak Viral Shorts\nhttps://youtube.com/@peakviral';
+    const props = getChannelListUrlExportPanelViewProps({
+      selectedCategory: '해외',
+      visibleChannelUrlList,
+      visibleChannels: [overseasChannel, null],
+    });
+
+    expect(props.title).toBe('현재 목록 1개');
+    expect(props.description).toContain('저장이나 수집은 실행하지 않습니다');
+    expect(props.copyButtonProps).toMatchObject({
+      ariaLabel: '해외 채널 1개 URL 목록 복사',
+      copiedLabel: '목록 복사 완료',
+      disabled: false,
+      label: '채널 URL 목록 복사',
+      url: visibleChannelUrlList,
+    });
+    expect(props.copyButtonProps.title).toContain('YouTube API 호출이나 저장 작업은 없습니다');
+    expect(getChannelListUrlExportPanelViewProps({ visibleChannels: [] })).toBeNull();
+    expect(getChannelListUrlExportPanelViewProps({
+      selectedCategory: '해외',
+      visibleChannelUrlList: '',
+      visibleChannels: [overseasChannel],
+    }).copyButtonProps.disabled).toBe(true);
+  });
+
+  it('builds loading state copy for Cloud channel lookup', () => {
+    expect(getChannelListLoadingStateViewProps()).toEqual({
+      label: 'Cloud에서 채널 불러오는 중...',
     });
   });
 });
