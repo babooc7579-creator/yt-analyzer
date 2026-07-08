@@ -5,6 +5,7 @@ import {
   PRODUCTION_VIDEO_STATUS_HELP_TEXT,
   getProductionVideoDraftSaveButtonProps,
   getProductionVideoMoveActionCopy,
+  getProductionVideoMoveButtonViewProps,
   getProductionVideoMoveStatusViewProps,
   getProductionVideoSaveStatusViewProps,
 } from './productionVideoStatusProps';
@@ -63,6 +64,17 @@ describe('productionVideoStatusProps utils', () => {
       label: 'Cloud 저장됨',
       title: 'Cloud에 저장된 상태',
     });
+  });
+
+  it('builds moving button visible labels', () => {
+    expect(getProductionVideoMoveButtonViewProps({
+      isMoving: true,
+      label: '제작 중으로',
+    }).visibleLabel).toBe('이동 중...');
+    expect(getProductionVideoMoveButtonViewProps({
+      isMoving: false,
+      label: '제작 중으로',
+    }).visibleLabel).toBe('제작 중으로');
   });
 
   it('builds move and save status messages without pretending failed saves succeeded', () => {

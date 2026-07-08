@@ -84,3 +84,11 @@ export const getProductionVideoSaveStatusViewProps = (saveState) => {
 
   return null;
 };
+
+export const getProductionVideoMoveButtonViewProps = ({
+  isMoving = false,
+  label,
+  loadingLabel = '이동 중...',
+} = {}) => ({
+  visibleLabel: isMoving ? loadingLabel : label,
+});
