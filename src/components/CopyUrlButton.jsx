@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { AlertCircle, CheckCircle2, Copy } from 'lucide-react';
 import { copyTextToClipboard } from '../utils/clipboard';
+import { getCopyUrlButtonDefaults } from '../utils/copyUrlButtonProps';
 
 export default function CopyUrlButton({
   url,
-  label = 'URL 복사',
-  copiedLabel = '복사 완료',
-  copyingLabel = '복사 중',
-  errorLabel = '복사 실패',
+  label,
+  copiedLabel,
+  copyingLabel,
+  errorLabel,
   title,
   ariaLabel,
   className = '',
@@ -16,12 +17,20 @@ export default function CopyUrlButton({
   disabled = false,
 }) {
   const [copyState, setCopyState] = useState('idle');
+  const defaults = getCopyUrlButtonDefaults({
+    label,
+    title,
+  });
+  const resolvedLabel = label || defaults.label;
+  const resolvedCopiedLabel = copiedLabel || defaults.copiedLabel;
+  const resolvedCopyingLabel = copyingLabel || defaults.copyingLabel;
+  const resolvedErrorLabel = errorLabel || defaults.errorLabel;
   const resetTimerRef = useRef(null);
   const isCopying = copyState === 'copying';
   const isCopied = copyState === 'copied';
   const isError = copyState === 'error';
-  const buttonLabel = isCopied ? copiedLabel : isCopying ? copyingLabel : isError ? errorLabel : label;
-  const buttonTitle = title || `${label} - 클립보드에 복사합니다. API 호출이나 저장 작업은 없습니다.`;
+  const buttonLabel = isCopied ? resolvedCopiedLabel : isCopying ? resolvedCopyingLabel : isError ? resolvedErrorLabel : resolvedLabel;
+  const buttonTitle = defaults.title;
 
   const handleCopy = async () => {
     if (!url || isCopying || disabled) return;

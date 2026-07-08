@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildRoutesProps } from './routesProps';
+import {
+  buildRoutesProps,
+  getComingSoonViewProps,
+} from './routesProps';
 
 describe('routesProps utils', () => {
   it('builds route props from the current view flags and route data', () => {
@@ -40,5 +43,22 @@ describe('routesProps utils', () => {
     });
 
     expect(props.onOpenHome).toBe(onOpenHome);
+  });
+
+  it('builds coming soon screen copy without implying data work', () => {
+    const props = getComingSoonViewProps({
+      item: {
+        label: '설정',
+      },
+    });
+
+    expect(props).toMatchObject({
+      backButtonAriaLabel: '오늘의 레이더로 돌아가기, 데이터 조회나 저장 작업 없음',
+      backButtonLabel: '오늘의 레이더로 돌아가기',
+      title: '설정 준비중',
+    });
+    expect(props.noticeText).toContain('새 API 호출');
+    expect(props.noticeText).toContain('localStorage 삭제');
+    expect(props.backButtonTitle).toContain('저장 작업은 실행하지 않습니다');
   });
 });
