@@ -1,3 +1,5 @@
+import { hasCopyableUrlValue } from './copyUrlButtonProps';
+
 export const getVideoToolbarScanActionViewProps = ({
   isScanning,
   scanTargetCount,
@@ -38,7 +40,7 @@ export const getVideoToolbarReferenceHeaderViewProps = ({
 }) => ({
   copyButtonAriaLabel: `현재 표시된 저장 영상 ${filteredCount}개 URL 목록 복사`,
   copyButtonCopiedLabel: '목록 복사 완료',
-  copyButtonDisabled: !filteredVideoUrlList,
+  copyButtonDisabled: !hasCopyableUrlValue(filteredVideoUrlList),
   copyButtonLabel: '영상 URL 목록 복사',
   copyButtonTitle: '현재 검색/필터/정렬 조건으로 보이는 영상 제목과 YouTube URL 목록을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
   description: '검색, 필터, 정렬, 보기 방식을 바꿔 제작 소재를 좁혀봅니다.',
