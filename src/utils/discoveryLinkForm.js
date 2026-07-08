@@ -171,6 +171,15 @@ export const normalizeDiscoveryLinkUrl = (url) => {
   }
 };
 
+export const findDuplicateDiscoveryLink = (links = [], url) => {
+  if (!Array.isArray(links)) return null;
+
+  const normalizedUrl = normalizeDiscoveryLinkUrl(url);
+  if (!normalizedUrl) return null;
+
+  return links.find((link) => normalizeDiscoveryLinkUrl(link?.url) === normalizedUrl) || null;
+};
+
 export const needsRiskyDiscoveryCandidateConfirmation = (status, rightsStatus) => (
   status === 'candidate' && rightsStatus === 'do_not_use'
 );

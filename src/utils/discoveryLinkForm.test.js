@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  findDuplicateDiscoveryLink,
   getDiscoveryLinkDraftUpdates,
   getDiscoveryLinkEditFormViewProps,
   getDiscoveryLinkFormProps,
@@ -23,6 +24,19 @@ describe('discoveryLinkForm utils', () => {
 
   it('falls back to trimmed lower-case text for invalid URLs', () => {
     expect(normalizeDiscoveryLinkUrl('  NOT A URL/  ')).toBe('not a url');
+  });
+
+  it('finds duplicate discovery links using normalized URLs', () => {
+    const existingLinks = [
+      { id: 'one', url: 'https://example.com/path/' },
+      { id: 'two', url: 'https://instagram.com/reel/abc?utm=1' },
+    ];
+
+    expect(findDuplicateDiscoveryLink(existingLinks, 'https://www.example.com/path')).toEqual(existingLinks[0]);
+    expect(findDuplicateDiscoveryLink(existingLinks, 'https://instagram.com/reel/abc?utm=1')).toEqual(existingLinks[1]);
+    expect(findDuplicateDiscoveryLink(existingLinks, 'https://instagram.com/reel/abc')).toBeNull();
+    expect(findDuplicateDiscoveryLink(null, 'https://example.com/path')).toBeNull();
+    expect(findDuplicateDiscoveryLink(existingLinks, '   ')).toBeNull();
   });
 
   it('returns URL preview metadata for valid and invalid input', () => {
