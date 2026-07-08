@@ -1,6 +1,7 @@
 import { renameTag } from '../services/channelApi';
 import {
   TAG_RENAME_DUPLICATE_MESSAGE,
+  TAG_RENAME_FAILED_MESSAGE,
   getRenamedCategories,
   getSelectedCategoryAfterRename,
   getTagRenameCompleteMessage,
@@ -45,7 +46,7 @@ export function useTagRenameActions({
 
     try {
       const data = await renameTag({ from, to });
-      if (!data.success) throw new Error(data.error || '태그 이름 변경에 실패했습니다.');
+      if (!data.success) throw new Error(data.error || TAG_RENAME_FAILED_MESSAGE);
 
       setCategories(prev => getRenamedCategories(prev, from, to));
       const nextSelectedCategoryTab = getSelectedCategoryAfterRename(selectedCategoryTab, from, to);

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   TAG_RENAME_DUPLICATE_MESSAGE,
+  TAG_RENAME_FAILED_MESSAGE,
   getRenamedCategories,
   getSelectedCategoryAfterRename,
   getTagRenameCompleteMessage,
@@ -13,6 +14,7 @@ import {
 describe('tagRenameActions utils', () => {
   it('builds tag rename messages that clearly mention Cloud updates', () => {
     expect(TAG_RENAME_DUPLICATE_MESSAGE).toBe('이미 존재하는 카테고리 이름입니다.');
+    expect(TAG_RENAME_FAILED_MESSAGE).toBe('태그 이름 변경에 실패했습니다.');
     expect(getTagRenameConfirmMessage('해외', '해외 레퍼런스')).toContain('Cloud DB');
     expect(getTagRenameConfirmMessage('해외', '해외 레퍼런스')).toContain('일괄 반영');
     expect(getTagRenameStartMessage('해외', '해외 레퍼런스')).toBe(

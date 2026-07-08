@@ -1,7 +1,9 @@
 export const TAG_RENAME_DUPLICATE_MESSAGE = '이미 존재하는 카테고리 이름입니다.';
 
+export const TAG_RENAME_FAILED_MESSAGE = '태그 이름 변경에 실패했습니다.';
+
 export const getTagRenameErrorMessage = (error) => {
-  const message = error?.message || '태그 이름 변경에 실패했습니다.';
+  const message = error?.message || TAG_RENAME_FAILED_MESSAGE;
   return `${message} Cloud 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
