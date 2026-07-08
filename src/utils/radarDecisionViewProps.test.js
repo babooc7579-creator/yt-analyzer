@@ -67,6 +67,7 @@ describe('radarDecisionViewProps utils', () => {
     expect(props.title).toBe('처리 기록');
     expect(props.description).toContain('다시 레이더로 돌릴 수 있습니다');
     expect(props.groups[0]).toMatchObject({
+      emptyText: '아직 없음',
       groupKey: 'reviewed',
       label: '봤음',
       overflowText: '외 1개',
@@ -80,5 +81,6 @@ describe('radarDecisionViewProps utils', () => {
       label: '레이더로 되돌리기',
       title: '이 영상을 오늘 레이더 후보로 다시 표시',
     });
+    expect(props.groups[0].videos[0].titleLinkProps['aria-label']).toContain('YouTube 원본 영상 열기');
   });
 });

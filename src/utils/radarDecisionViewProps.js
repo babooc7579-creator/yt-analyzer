@@ -56,6 +56,7 @@ export const getRadarDecisionListsViewProps = ({
 
       return {
         groupKey,
+        emptyText: '아직 없음',
         label: safeGroup.label,
         overflowText: toArray(safeGroup.videos).length > 3
           ? `외 ${toArray(safeGroup.videos).length - 3}개`
@@ -69,6 +70,9 @@ export const getRadarDecisionListsViewProps = ({
               'aria-label': `${videoTitle} 레이더로 되돌리기`,
               label: '레이더로 되돌리기',
               title: '이 영상을 오늘 레이더 후보로 다시 표시',
+            },
+            titleLinkProps: {
+              'aria-label': `${videoTitle} YouTube 원본 영상 열기`,
             },
             video: sourceVideo,
             videoTitle,

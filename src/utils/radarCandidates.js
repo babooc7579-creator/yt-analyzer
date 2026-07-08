@@ -28,6 +28,10 @@ const toVideoObject = (video) => (
   video && typeof video === 'object' ? video : {}
 );
 
+const getDisplayVideoTitle = (videoTitle) => videoTitle || '이 영상';
+
+const getVideoTitle = (video) => toVideoObject(video).title || '제목 없는 영상';
+
 const toNumber = (value) => {
   const numericValue = Number(value || 0);
   return Number.isFinite(numericValue) ? numericValue : 0;
@@ -129,6 +133,130 @@ export const getRadarDecisionGroups = (decisionBuckets = {}) => [
   { key: 'excluded', label: VIDEO_STATUS_LABELS[VIDEO_STATUS.EXCLUDED], videos: toArray(decisionBuckets.excluded) },
 ];
 
+export const getRadarCandidateBadgesViewProps = ({
+  isStrong = false,
+  isTtoTto = false,
+} = {}) => ({
+  badges: [
+    isTtoTto && {
+      className: 'inline-flex items-center gap-1 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white',
+      iconName: 'ttoTto',
+      key: 'ttoTto',
+      label: '또터또',
+    },
+    isStrong && {
+      className: 'inline-flex items-center gap-1 rounded-full bg-orange-100 px-2 py-1 text-[10px] font-bold text-orange-700',
+      iconName: 'strong',
+      key: 'strong',
+      label: '강한 반응',
+    },
+  ].filter(Boolean),
+});
+
+export const getRadarCandidateMetricsViewProps = (video) => {
+  const sourceVideo = toVideoObject(video);
+
+  return {
+    items: [
+      { label: '대박 지수', value: `${toNumber(sourceVideo.multiplier).toFixed(1)}x` },
+      { label: '경과', value: `${toNumber(sourceVideo.daysOld)}일` },
+      { label: '참여율', value: `${toNumber(sourceVideo.like_ratio)}%` },
+    ],
+  };
+};
+
+export const getRadarCandidatePrimaryActionsViewProps = ({
+  videoTitle,
+  videoUrl,
+} = {}) => {
+  const displayTitle = getDisplayVideoTitle(videoTitle);
+
+  return {
+    copyButtonProps: {
+      ariaLabel: `${displayTitle} YouTube 원본 URL 복사`,
+      copiedLabel: '복사 완료',
+      label: 'URL 복사',
+      title: 'YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
+    },
+    openButtonProps: {
+      'aria-label': `${displayTitle} YouTube에서 열기`,
+      label: '1. 영상 열고 판단',
+      title: 'YouTube에서 원본 영상 열기',
+    },
+    videoUrl,
+  };
+};
+
+export const getRadarCandidateScorePanelViewProps = ({
+  radarScore = 0,
+  reasons,
+} = {}) => ({
+  reasonList: toArray(reasons),
+  scoreText: radarScore,
+  titleText: '후보 판단 점수',
+});
+
+export const getRadarCandidateThumbnailViewProps = ({
+  index = 0,
+  priorityLabel = '',
+  video,
+  videoTitle,
+} = {}) => {
+  const displayTitle = getDisplayVideoTitle(videoTitle);
+
+  return {
+    imageProps: {
+      alt: `${displayTitle} 썸네일`,
+      src: toVideoObject(video).thumbnail,
+    },
+    priorityLabel,
+    rankText: `#${index + 1}`,
+  };
+};
+
+export const getRadarCandidateTitleLinkViewProps = ({
+  videoTitle,
+  videoUrl,
+} = {}) => {
+  const displayTitle = getDisplayVideoTitle(videoTitle);
+
+  return {
+    'aria-label': `${displayTitle} YouTube 원본 영상 열기`,
+    title: displayTitle,
+    videoTitle: displayTitle,
+    videoUrl,
+  };
+};
+
+export const getRadarDecisionSummaryViewProps = (summary = {}) => ({
+  cards: [
+    {
+      className: 'rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-3 py-2',
+      label: '봤음',
+      labelClassName: 'text-[10px] font-extrabold text-emerald-100',
+      value: toNumber(summary.reviewed),
+    },
+    {
+      className: 'rounded-xl border border-slate-500/30 bg-slate-900/60 px-3 py-2',
+      label: '나중에 보기',
+      labelClassName: 'text-[10px] font-extrabold text-slate-200',
+      value: toNumber(summary.later),
+    },
+    {
+      className: 'rounded-xl border border-indigo-400/20 bg-indigo-500/10 px-3 py-2',
+      label: '제작 후보',
+      labelClassName: 'text-[10px] font-extrabold text-indigo-100',
+      value: toNumber(summary.production),
+    },
+    {
+      className: 'rounded-xl border border-slate-500/30 bg-slate-950/70 px-3 py-2',
+      label: '제외',
+      labelClassName: 'text-[10px] font-extrabold text-slate-300',
+      value: toNumber(summary.excluded),
+    },
+  ],
+});
+
 export const getRadarCandidateDataModel = ({
   videoUserRecords,
   videos,
@@ -166,7 +294,7 @@ export const getRadarCandidateCardViewProps = ({
   onToggleScrap,
 }) => {
   const sourceVideo = toVideoObject(video);
-  const videoTitle = sourceVideo.title || '제목 없는 영상';
+  const videoTitle = getVideoTitle(sourceVideo);
   const isTtoTto = isTtoTtoCandidate(sourceVideo);
   const isStrong = hasStrongReaction(sourceVideo);
   const radarScore = Math.round(getRadarScore(sourceVideo));

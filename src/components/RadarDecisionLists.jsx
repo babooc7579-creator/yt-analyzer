@@ -24,7 +24,7 @@ export default function RadarDecisionLists({
           <div key={group.groupKey} className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5">
             <p className="text-[10px] font-extrabold text-slate-300">{group.label}</p>
             {group.videos.length === 0 ? (
-              <p className="mt-2 text-[10px] text-slate-500">아직 없음</p>
+              <p className="mt-2 text-[10px] text-slate-500">{group.emptyText}</p>
             ) : (
               <div className="mt-2 space-y-1.5">
                 {group.videos.map((item) => (
@@ -35,7 +35,7 @@ export default function RadarDecisionLists({
                         rel="noreferrer"
                         className="block truncate text-[10px] font-bold text-slate-200 hover:text-white"
                         title={item.videoTitle}
-                        aria-label={`${item.videoTitle} YouTube 원본 영상 열기`}
+                        aria-label={item.titleLinkProps['aria-label']}
                       >
                         {item.videoTitle}
                       </a>
