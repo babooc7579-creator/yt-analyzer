@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AlertCircle, CheckCircle2, Copy } from 'lucide-react';
 import { copyTextToClipboard } from '../utils/clipboard';
-import { getCopyUrlButtonDefaults, hasCopyableUrlValue } from '../utils/copyUrlButtonProps';
+import { getCopyableUrlText, getCopyUrlButtonDefaults, hasCopyableUrlValue } from '../utils/copyUrlButtonProps';
 
 export default function CopyUrlButton({
   url,
@@ -31,6 +31,7 @@ export default function CopyUrlButton({
   const isError = copyState === 'error';
   const buttonLabel = isCopied ? resolvedCopiedLabel : isCopying ? resolvedCopyingLabel : isError ? resolvedErrorLabel : resolvedLabel;
   const buttonTitle = defaults.title;
+  const copyText = getCopyableUrlText(url);
   const canCopyUrl = hasCopyableUrlValue(url);
 
   const handleCopy = async () => {
@@ -42,7 +43,7 @@ export default function CopyUrlButton({
 
     setCopyState('copying');
     try {
-      await copyTextToClipboard(url);
+      await copyTextToClipboard(copyText);
       setCopyState('copied');
     } catch {
       setCopyState('error');
