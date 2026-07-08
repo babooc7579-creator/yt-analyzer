@@ -16,6 +16,7 @@ export default function DiscoveryLinksWorkspace({
   error,
   onCreateLink,
   onDeleteLink,
+  onOpenProductionCandidates,
   onRefresh,
   onUpdateLink,
 }) {
@@ -66,6 +67,7 @@ export default function DiscoveryLinksWorkspace({
     loading,
     notice,
     onDeleteLink,
+    onOpenProductionCandidates,
     onRefresh,
     onUpdateLink,
     rightsFilter,

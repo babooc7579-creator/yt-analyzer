@@ -54,6 +54,7 @@ export const getDiscoveryLinkSearchBoxViewProps = () => ({
 export const getDiscoveryLinksHeaderActionsViewProps = ({
   filteredLinkCount = 0,
   loading = false,
+  onOpenProductionCandidates,
   onRefresh,
   saving = false,
   urlList,
@@ -66,6 +67,14 @@ export const getDiscoveryLinksHeaderActionsViewProps = ({
     ariaLabel: `현재 조건에 맞는 발견 링크 ${filteredLinkCount}개 URL 목록 복사`,
     title: '현재 필터와 검색 조건에 맞는 발견 링크 제목, URL, 상태를 클립보드에 복사합니다. 외부 사이트 수집이나 저장 작업은 없습니다.',
   },
+  productionCandidatesButtonProps: {
+    disabled: !onOpenProductionCandidates || loading || saving,
+    onClick: onOpenProductionCandidates,
+    title: '제작 후보함을 열어 후보로 표시한 영상과 발견 링크를 확인합니다. 화면 이동만 하며 새 YouTube API 호출이나 외부 수집은 없습니다.',
+    'aria-label': '제작 후보함 보기, 화면 이동만 하며 새 YouTube API 호출이나 외부 수집 없음',
+    type: 'button',
+  },
+  productionCandidatesButtonLabel: '후보함 보기',
   refreshButtonProps: {
     disabled: loading || saving,
     onClick: onRefresh,

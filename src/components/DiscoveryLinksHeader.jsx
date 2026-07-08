@@ -5,6 +5,7 @@ import DiscoveryLinksHeaderTitle from './DiscoveryLinksHeaderTitle';
 export default function DiscoveryLinksHeader({
   filteredLinkCount,
   loading,
+  onOpenProductionCandidates,
   onRefresh,
   saving,
   totalLinkCount,
@@ -13,6 +14,7 @@ export default function DiscoveryLinksHeader({
   const headerActionsProps = getDiscoveryLinksHeaderActionsProps({
     filteredLinkCount,
     loading,
+    onOpenProductionCandidates,
     onRefresh,
     saving,
     urlList,
