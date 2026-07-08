@@ -83,11 +83,13 @@ describe('discoveryLinksCopy utils', () => {
   });
 
   it('builds discovery header and filter action props as non-collection actions', () => {
+    const onOpenProductionCandidates = () => 'open candidates';
     const onRefresh = () => 'refresh';
     const urlList = [['Clip', 'https://example.com']];
     const headerProps = getDiscoveryLinksHeaderActionsViewProps({
       filteredLinkCount: 2,
       loading: true,
+      onOpenProductionCandidates,
       onRefresh,
       saving: false,
       urlList,
@@ -100,6 +102,11 @@ describe('discoveryLinksCopy utils', () => {
       url: urlList,
     });
     expect(headerProps.copyUrlButtonProps.title).toContain('외부 사이트 수집이나 저장 작업은 없습니다');
+    expect(headerProps.productionCandidatesButtonLabel).toBe('후보함 보기');
+    expect(headerProps.productionCandidatesButtonProps.disabled).toBe(true);
+    expect(headerProps.productionCandidatesButtonProps.onClick).toBe(onOpenProductionCandidates);
+    expect(headerProps.productionCandidatesButtonProps.title).toContain('새 YouTube API 호출');
+    expect(headerProps.productionCandidatesButtonProps.title).toContain('외부 수집은 없습니다');
     expect(headerProps.refreshButtonProps.disabled).toBe(true);
     expect(headerProps.refreshButtonProps.onClick).toBe(onRefresh);
     expect(headerProps.refreshButtonLabel).toBe('새로고침');

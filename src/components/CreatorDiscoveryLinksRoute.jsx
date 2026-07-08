@@ -10,6 +10,7 @@ export default function CreatorDiscoveryLinksRoute({
   discoveryLinksSaving,
   discoveryLinksSavingMessage,
   loadDiscoveryLinks,
+  onOpenProductionCandidates,
   removeDiscoveryLink,
 }) {
   return (
@@ -22,6 +23,7 @@ export default function CreatorDiscoveryLinksRoute({
       savingMessage={discoveryLinksSavingMessage}
       onCreateLink={addDiscoveryLink}
       onDeleteLink={removeDiscoveryLink}
+      onOpenProductionCandidates={onOpenProductionCandidates}
       onRefresh={loadDiscoveryLinks}
       onUpdateLink={changeDiscoveryLink}
     />

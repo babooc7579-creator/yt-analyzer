@@ -22,6 +22,7 @@ describe('discoveryLinksWorkspaceProps utils', () => {
     loading: false,
     notice: 'Loaded',
     onDeleteLink: () => 'delete',
+    onOpenProductionCandidates: () => 'open candidates',
     onRefresh: () => 'refresh',
     onUpdateLink: () => 'update',
     rightsFilter: 'needs_check',
@@ -60,6 +61,7 @@ describe('discoveryLinksWorkspaceProps utils', () => {
     expect(viewProps.headerProps).toMatchObject({
       filteredLinkCount: 1,
       loading: false,
+      onOpenProductionCandidates: baseProps.onOpenProductionCandidates,
       saving: false,
       totalLinkCount: 2,
       urlList: [['Clip', 'https://example.com', 'status']],
@@ -123,12 +125,14 @@ describe('discoveryLinksWorkspaceProps utils', () => {
     expect(getDiscoveryLinksHeaderActionsProps({
       filteredLinkCount: 1,
       loading: true,
+      onOpenProductionCandidates: baseProps.onOpenProductionCandidates,
       onRefresh: baseProps.onRefresh,
       saving: false,
       urlList: baseProps.filteredDiscoveryLinkUrlList,
     })).toEqual({
       filteredLinkCount: 1,
       loading: true,
+      onOpenProductionCandidates: baseProps.onOpenProductionCandidates,
       onRefresh: baseProps.onRefresh,
       saving: false,
       urlList: baseProps.filteredDiscoveryLinkUrlList,

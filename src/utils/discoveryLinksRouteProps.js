@@ -8,8 +8,13 @@ export function buildDiscoveryLinksRouteProps({
   discoveryLinksSaving,
   discoveryLinksSavingMessage,
   loadDiscoveryLinks,
+  openCreatorView,
   removeDiscoveryLink,
 }) {
+  const onOpenProductionCandidates = typeof openCreatorView === 'function'
+    ? () => openCreatorView({ id: 'studio-candidates' })
+    : undefined;
+
   return {
     addDiscoveryLink,
     changeDiscoveryLink,
@@ -20,6 +25,7 @@ export function buildDiscoveryLinksRouteProps({
     discoveryLinksSaving,
     discoveryLinksSavingMessage,
     loadDiscoveryLinks,
+    onOpenProductionCandidates,
     removeDiscoveryLink,
   };
 }
