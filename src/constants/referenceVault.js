@@ -5,6 +5,12 @@ export const REFERENCE_VAULT_SUMMARY_TONES = {
   rose: 'border-rose-200 bg-rose-50 text-rose-600',
 };
 
+export const REFERENCE_VAULT_HEADER = {
+  eyebrow: 'Reference Vault',
+  title: '레퍼런스 금고',
+  description: '저장된 영상과 스크랩 소재를 한 곳에서 훑고, 제작에 활용할 후보를 고르는 작업 캔버스입니다.',
+};
+
 export const REFERENCE_VAULT_SUMMARY_CARDS = [
   { key: 'videoCount', label: '불러온 영상' },
   { key: 'channelCount', label: '저장 채널' },

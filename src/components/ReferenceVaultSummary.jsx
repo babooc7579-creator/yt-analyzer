@@ -2,6 +2,7 @@ import { Bookmark, Play, Sparkles } from 'lucide-react';
 
 import {
   REFERENCE_VAULT_GUIDE_CARDS,
+  REFERENCE_VAULT_HEADER,
   REFERENCE_VAULT_SUMMARY_CARDS,
 } from '../constants/referenceVault';
 import ReferenceVaultGuideCard from './ReferenceVaultGuideCard';
@@ -32,10 +33,10 @@ export default function ReferenceVaultSummary({
     <div className="overflow-hidden rounded-2xl border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-200 shadow-sm">
       <div className="flex flex-col gap-5 p-5 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <p className="text-xs font-extrabold text-indigo-700">Reference Vault</p>
-          <h3 className="mt-1 text-2xl font-extrabold text-slate-950">레퍼런스 금고</h3>
+          <p className="text-xs font-extrabold text-indigo-700">{REFERENCE_VAULT_HEADER.eyebrow}</p>
+          <h3 className="mt-1 text-2xl font-extrabold text-slate-950">{REFERENCE_VAULT_HEADER.title}</h3>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-            저장된 영상과 스크랩 소재를 한 곳에서 훑고, 제작에 활용할 후보를 고르는 작업 캔버스입니다.
+            {REFERENCE_VAULT_HEADER.description}
           </p>
         </div>
         <div className="grid grid-cols-2 gap-2 md:grid-cols-5">
