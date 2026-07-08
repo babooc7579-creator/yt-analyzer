@@ -1,6 +1,4 @@
-const hasCopyableUrlList = (urlList) => (
-  Array.isArray(urlList) ? urlList.length > 0 : Boolean(urlList)
-);
+import { hasCopyableUrlValue } from './copyUrlButtonProps';
 
 export const getDiscoveryLinksHeaderTitleViewProps = ({ totalLinkCount = 0 } = {}) => ({
   eyebrow: 'Cloud 발견함',
@@ -67,7 +65,7 @@ export const getDiscoveryLinksHeaderActionsViewProps = ({
     url: urlList,
     label: 'URL 목록 복사',
     copiedLabel: '목록 복사 완료',
-    disabled: !hasCopyableUrlList(urlList),
+    disabled: !hasCopyableUrlValue(urlList),
     ariaLabel: `현재 조건에 맞는 발견 링크 ${filteredLinkCount}개 URL 목록 복사`,
     title: '현재 필터와 검색 조건에 맞는 발견 링크 제목, URL, 상태를 클립보드에 복사합니다. 외부 사이트 수집이나 저장 작업은 없습니다.',
   },
