@@ -258,7 +258,41 @@ src/App.jsx
 - package.json 변경 없음
 - YouTube API 호출량 증가 없음
 
-### 3. 다음 결정이 필요한 큰 작업
+### 3. 2026-07-08 안정화 묶음
+
+2026-07-08에는 기능 흐름을 바꾸지 않고, 이미 분리된 hook/service 계층의 문구와 테스트 기준을 더 안정화했습니다.
+
+완료한 작업:
+
+- `src/hooks` 안에 직접 남아 있던 사용자 안내/오류 문구를 `src/utils`와 `src/constants` 쪽으로 정리했습니다.
+- 영상 불러오기, 채널 작업, 채널 추가, Cloud 채널 로드, 발견 링크, 스크랩북, 태그 이름 변경, 영상 판단 기록 관련 hook 문구를 중앙화했습니다.
+- `src/services/functionApiClient.js`의 Cloud API fallback 문구를 이름 붙은 상수로 정리했습니다.
+- `src/services/youtubeApi.js`의 YouTube 댓글 API fallback 문구를 이름 붙은 상수로 정리했습니다.
+- 각 변경에 대응하는 테스트를 추가해 문구가 의도치 않게 흩어지거나 바뀌는 위험을 줄였습니다.
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- status/statusIds 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 전체 UI 대개편 없음
+
+검증:
+
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 취약점 0개
+- GitHub Actions Build 통과
+- Azure Static Web Apps 배포 통과
+
+남은 주의점:
+
+- Azure Static Web Apps workflow의 `github_id_token` 입력 경고는 여전히 비차단 경고로 남아 있습니다.
+- 이 경고 수정은 배포 설정 변경에 가까우므로 별도 선택지 검토 후 진행합니다.
+
+### 4. 다음 결정이 필요한 큰 작업
 
 아래는 바로 구현하지 않고 선택지 보고가 먼저 필요합니다.
 
