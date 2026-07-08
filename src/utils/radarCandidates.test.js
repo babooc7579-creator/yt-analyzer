@@ -7,12 +7,19 @@ import {
 } from '../constants/status';
 import {
   RADAR_TODAY_CANDIDATE_LIMIT,
-  getRadarCandidateDataModel,
+  getRadarCandidateBadgesViewProps,
   getRadarCandidateCardViewProps,
+  getRadarCandidateDataModel,
+  getRadarCandidateMetricsViewProps,
+  getRadarCandidatePrimaryActionsViewProps,
+  getRadarCandidateScorePanelViewProps,
   getRadarCandidateStripViewProps,
+  getRadarCandidateThumbnailViewProps,
+  getRadarCandidateTitleLinkViewProps,
   getRadarDecisionBuckets,
   getRadarDecisionGroups,
   getRadarDecisionSummary,
+  getRadarDecisionSummaryViewProps,
   getRadarPriorityLabel,
   getRadarQueueSummary,
   getRadarReasons,
@@ -76,6 +83,57 @@ describe('radarCandidates utils', () => {
       videoTitle: 'Old idea returns',
     });
     expect(viewProps.titleLinkProps.videoUrl).toBe('https://youtube.com/watch?v=radar-1');
+  });
+
+  it('builds radar card display copy helpers without changing candidate actions', () => {
+    expect(getRadarCandidateBadgesViewProps({
+      isStrong: true,
+      isTtoTto: true,
+    }).badges.map(badge => badge.label)).toEqual(['또터또', '강한 반응']);
+    expect(getRadarCandidateMetricsViewProps(radarVideo).items).toEqual([
+      { label: '대박 지수', value: '4.0x' },
+      { label: '경과', value: '300일' },
+      { label: '참여율', value: '5%' },
+    ]);
+    expect(getRadarCandidatePrimaryActionsViewProps({
+      videoTitle: 'Radar clip',
+      videoUrl: 'https://youtube.com/watch?v=radar-1',
+    })).toMatchObject({
+      copyButtonProps: {
+        copiedLabel: '복사 완료',
+        label: 'URL 복사',
+      },
+      openButtonProps: {
+        label: '1. 영상 열고 판단',
+        title: 'YouTube에서 원본 영상 열기',
+      },
+    });
+    expect(getRadarCandidateScorePanelViewProps({
+      radarScore: 215,
+      reasons: ['reason'],
+    })).toMatchObject({
+      reasonList: ['reason'],
+      scoreText: 215,
+      titleText: '후보 판단 점수',
+    });
+    expect(getRadarCandidateThumbnailViewProps({
+      index: 1,
+      priorityLabel: '우선 검토',
+      video: radarVideo,
+      videoTitle: 'Radar clip',
+    })).toMatchObject({
+      imageProps: {
+        alt: 'Radar clip 썸네일',
+      },
+      rankText: '#2',
+    });
+    expect(getRadarCandidateTitleLinkViewProps({
+      videoTitle: 'Radar clip',
+      videoUrl: 'https://youtube.com/watch?v=radar-1',
+    })).toMatchObject({
+      title: 'Radar clip',
+      videoTitle: 'Radar clip',
+    });
   });
 
   it('builds radar strip props for active, completed, and empty states', () => {
@@ -203,5 +261,20 @@ describe('radarCandidates utils', () => {
       shownCandidateCount: 2,
       visibleQueueCount: 3,
     });
+  });
+
+  it('builds radar decision summary card labels and safe counts', () => {
+    expect(getRadarDecisionSummaryViewProps({
+      excluded: 4,
+      later: 2,
+      production: 3,
+      reviewed: 1,
+    }).cards.map(card => [card.label, card.value])).toEqual([
+      ['봤음', 1],
+      ['나중에 보기', 2],
+      ['제작 후보', 3],
+      ['제외', 4],
+    ]);
+    expect(getRadarDecisionSummaryViewProps().cards.map(card => card.value)).toEqual([0, 0, 0, 0]);
   });
 });

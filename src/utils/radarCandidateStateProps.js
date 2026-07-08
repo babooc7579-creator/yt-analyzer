@@ -34,3 +34,24 @@ export const getRadarCandidateProductionButtonProps = ({ videoTitle } = {}) => {
     'aria-label': `${displayTitle} 스크랩북에 보관하고 Cloud 판단 기록에 제작 후보로 저장, YouTube API 호출 없음`,
   };
 };
+
+export const getRadarCandidateDecisionActionsViewProps = () => ({
+  descriptionText: '2. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.',
+});
+
+export const getRadarCandidateScrapButtonProps = ({
+  isSaved = false,
+  videoTitle,
+} = {}) => {
+  const displayTitle = getDisplayVideoTitle(videoTitle);
+  const actionText = isSaved
+    ? 'Cloud 스크랩북에서 보관을 해제합니다'
+    : 'Cloud 스크랩북에 소재로 보관합니다';
+
+  return {
+    actionText,
+    buttonText: isSaved ? '보관 해제' : '소재 보관',
+    title: actionText,
+    'aria-label': `${displayTitle} ${actionText}`,
+  };
+};

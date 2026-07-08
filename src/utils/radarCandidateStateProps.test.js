@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getRadarCandidateDecisionActionsViewProps,
   getRadarCandidateCompletedStateViewProps,
   getRadarCandidateEmptyStateViewProps,
   getRadarCandidateProductionButtonProps,
+  getRadarCandidateScrapButtonProps,
 } from './radarCandidateStateProps';
 
 describe('radarCandidateStateProps utils', () => {
@@ -39,5 +41,30 @@ describe('radarCandidateStateProps utils', () => {
     expect(props['aria-label']).toContain('Radar clip');
 
     expect(getRadarCandidateProductionButtonProps()['aria-label']).toContain('이 영상');
+  });
+
+  it('builds radar decision and scrapbook copy as Cloud-only user actions', () => {
+    const decisionProps = getRadarCandidateDecisionActionsViewProps();
+    const saveProps = getRadarCandidateScrapButtonProps({
+      isSaved: false,
+      videoTitle: 'Radar clip',
+    });
+    const unsaveProps = getRadarCandidateScrapButtonProps({
+      isSaved: true,
+      videoTitle: 'Radar clip',
+    });
+
+    expect(decisionProps.descriptionText).toContain('Cloud 판단 기록');
+    expect(decisionProps.descriptionText).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(saveProps).toMatchObject({
+      buttonText: '소재 보관',
+      title: 'Cloud 스크랩북에 소재로 보관합니다',
+    });
+    expect(saveProps['aria-label']).toContain('Radar clip');
+    expect(unsaveProps).toMatchObject({
+      buttonText: '보관 해제',
+      title: 'Cloud 스크랩북에서 보관을 해제합니다',
+    });
+    expect(getRadarCandidateScrapButtonProps()['aria-label']).toContain('이 영상');
   });
 });

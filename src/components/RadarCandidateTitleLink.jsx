@@ -1,14 +1,18 @@
+import { getRadarCandidateTitleLinkViewProps } from '../utils/radarCandidates';
+
 export default function RadarCandidateTitleLink({ videoTitle, videoUrl }) {
+  const viewProps = getRadarCandidateTitleLinkViewProps({ videoTitle, videoUrl });
+
   return (
     <a
-      href={videoUrl}
+      href={viewProps.videoUrl}
       target="_blank"
       rel="noreferrer"
       className="line-clamp-2 text-sm font-extrabold leading-snug text-white hover:text-rose-100"
-      title={videoTitle}
-      aria-label={`${videoTitle} YouTube 원본 영상 열기`}
+      title={viewProps.title}
+      aria-label={viewProps['aria-label']}
     >
-      {videoTitle}
+      {viewProps.videoTitle}
     </a>
   );
 }
