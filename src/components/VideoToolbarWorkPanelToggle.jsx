@@ -1,7 +1,15 @@
+import { getVideoToolbarWorkPanelToggleViewProps } from '../utils/videoToolbarFiltersProps';
+
 export default function VideoToolbarWorkPanelToggle({
   setShowWorkPanel,
   showWorkPanel,
 }) {
+  const {
+    ariaLabel,
+    label,
+    title,
+  } = getVideoToolbarWorkPanelToggleViewProps({ showWorkPanel });
+
   return (
     <button
       type="button"
@@ -11,10 +19,10 @@ export default function VideoToolbarWorkPanelToggle({
           ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
           : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-200 hover:text-indigo-700'
       }`}
-      title={showWorkPanel ? '작업 패널 숨기기' : '카드 보기에서 작업 패널 함께 보기'}
-      aria-label={showWorkPanel ? '작업 패널 닫기' : '작업 패널 열기'}
+      title={title}
+      aria-label={ariaLabel}
     >
-      {showWorkPanel ? '작업 패널 닫기' : '작업 패널 열기'}
+      {label}
     </button>
   );
 }
