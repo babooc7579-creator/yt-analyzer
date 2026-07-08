@@ -6,6 +6,18 @@ export const mapStoredVideosToViewModels = (videos = []) => (
   videos.map((video) => mapCloudVideoToViewModel(video, getDaysDiff(video.uploadDate)))
 );
 
+export const STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE =
+  '저장된 영상을 불러올 채널을 하나 이상 선택해 주세요. 이 작업은 DB 조회이며 새 영상 수집은 실행하지 않습니다.';
+
+export const STORED_VIDEO_LOAD_FAILED_MESSAGE =
+  'Cloud DB에 저장된 영상을 불러오지 못했습니다.';
+
+export const SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE =
+  '운영중 상태의 채널을 하나 이상 선택해 주세요. 보류/제외 채널은 새 영상 수집에서 제외됩니다.';
+
+export const SCAN_FAILED_MESSAGE =
+  '스캔에 실패했습니다.';
+
 export const getStoredVideosLoadedMessage = (videoCount) => (
   videoCount === 0
     ? 'Cloud DB에는 아직 저장된 영상이 없습니다. 새 데이터가 필요할 때만 "선택 채널 새 영상 수집"을 실행해 주세요.'
@@ -17,7 +29,7 @@ export const getStoredVideoLoadStartMessage = () => (
 );
 
 export const getStoredVideoLoadErrorMessage = (error) => {
-  const message = error?.message || 'Cloud DB에 저장된 영상을 불러오지 못했습니다.';
+  const message = error?.message || STORED_VIDEO_LOAD_FAILED_MESSAGE;
   return `${message} Cloud DB 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 

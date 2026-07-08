@@ -6,6 +6,10 @@ import {
   scanSelectedChannels as scanSelectedChannelsRequest,
 } from '../services/scanApi';
 import {
+  SCAN_FAILED_MESSAGE,
+  SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE,
+  STORED_VIDEO_LOAD_FAILED_MESSAGE,
+  STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE,
   getScanCompleteMessage,
   getScanErrorMessage,
   getScanRequestContext,
@@ -63,7 +67,7 @@ export function useVideoCollectionActions({
 
   const loadStoredVideosForSelectedChannels = async () => {
     if (selectedChannelIds.length === 0) {
-      setError('저장된 영상을 불러올 채널을 하나 이상 선택해 주세요. 이 작업은 DB 조회이며 새 영상 수집은 실행하지 않습니다.');
+      setError(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE);
       return;
     }
 
@@ -71,7 +75,7 @@ export function useVideoCollectionActions({
 
     try {
       const data = await fetchStoredVideosByChannelIds(selectedChannelIds);
-      if (!data.success) throw new Error(data.error || 'Cloud DB에 저장된 영상을 불러오지 못했습니다.');
+      if (!data.success) throw new Error(data.error || STORED_VIDEO_LOAD_FAILED_MESSAGE);
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
@@ -88,7 +92,7 @@ export function useVideoCollectionActions({
     const scanContext = getScanRequestContext({ tag, selectedChannelIds, savedChannels });
 
     if (scanContext.scanSelectedChannels && scanContext.channelIdsForScan.length === 0) {
-      setError('운영중 상태의 채널을 하나 이상 선택해 주세요. 보류/제외 채널은 새 영상 수집에서 제외됩니다.');
+      setError(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE);
       return;
     }
 
@@ -98,7 +102,7 @@ export function useVideoCollectionActions({
       const data = scanContext.scanSelectedChannels
         ? await scanSelectedChannelsRequest(scanContext.channelIdsForScan)
         : await scanChannels({ tag });
-      if (!data.success) throw new Error(data.error || '스캔에 실패했습니다.');
+      if (!data.success) throw new Error(data.error || SCAN_FAILED_MESSAGE);
 
       setProgressMsg(getScanCompleteMessage(data.results || []));
 

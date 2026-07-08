@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import { CHANNEL_STATUS } from '../constants/status';
 import {
+  SCAN_FAILED_MESSAGE,
+  SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE,
+  STORED_VIDEO_LOAD_FAILED_MESSAGE,
+  STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE,
   getScanCompleteMessage,
   getScanErrorMessage,
   getScanRequestContext,
@@ -52,6 +56,10 @@ describe('videoCollection utils', () => {
   });
 
   it('keeps stored video load messages separate from YouTube API scans', () => {
+    expect(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE).toContain('DB 조회');
+    expect(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE).toContain('새 영상 수집');
+    expect(STORED_VIDEO_LOAD_FAILED_MESSAGE).toContain('Cloud DB');
+
     expect(getStoredVideoLoadStartMessage()).toContain('YouTube API');
     expect(getStoredVideoLoadStartMessage()).toContain('Cloud DB');
 
@@ -104,6 +112,10 @@ describe('videoCollection utils', () => {
   });
 
   it('creates scan start messages that identify YouTube API work', () => {
+    expect(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE).toContain('운영중');
+    expect(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE).toContain('새 영상 수집');
+    expect(SCAN_FAILED_MESSAGE).toContain('스캔');
+
     expect(getScanStartMessage({
       scanSelectedChannels: true,
       channelIdsForScan: ['active-1', 'active-2'],
