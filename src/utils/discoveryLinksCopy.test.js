@@ -111,6 +111,10 @@ describe('discoveryLinksCopy utils', () => {
     expect(headerProps.refreshButtonProps.onClick).toBe(onRefresh);
     expect(headerProps.refreshButtonLabel).toBe('새로고침');
     expect(headerProps.isRefreshing).toBe(true);
+    expect(getDiscoveryLinksHeaderActionsViewProps({
+      filteredLinkCount: 0,
+      urlList: [],
+    }).copyUrlButtonProps.disabled).toBe(true);
     expect(getDiscoveryStatusFilterGroupViewProps().title).toBe('검토 상태별 보기');
     expect(getDiscoveryRightsFilterGroupViewProps().title).toBe('권리 상태별 보기');
     expect(getDiscoveryStatusFilterButtonProps({ option: { label: '보관', count: 3 } }).title).toBe('보관 상태 링크만 보기');
