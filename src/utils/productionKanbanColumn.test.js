@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import { getProductionVideoCardProps } from './productionKanbanColumn';
+import {
+  getProductionKanbanColumnEmptyTitle,
+  getProductionVideoCardProps,
+} from './productionKanbanColumn';
 
 describe('productionKanbanColumn utils', () => {
   const video = { videoId: 'video-1', title: 'Idea' };
+
+  it('builds the empty column title fallback', () => {
+    expect(getProductionKanbanColumnEmptyTitle({ emptyTitle: 'Ready' })).toBe('Ready');
+    expect(getProductionKanbanColumnEmptyTitle({})).toBe('비어 있음');
+  });
 
   it('uses draft records before saved user records and forwards card state', () => {
     const draftRecord = { memo: 'draft', uploadDate: 'today' };

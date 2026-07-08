@@ -2,14 +2,31 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS,
+  getProductionDiscoveryLinkBadgesViewProps,
   getProductionDiscoveryLinkCopyButtonProps,
   getProductionDiscoveryLinkEditButtonProps,
   getProductionDiscoveryLinkMoveActions,
+  getProductionDiscoveryLinkMoveButtonViewProps,
   getProductionDiscoveryLinkMoveStatusViewProps,
   getProductionDiscoveryLinkOpenButtonProps,
 } from './productionDiscoveryLinkActionProps';
 
 describe('productionDiscoveryLinkActionProps utils', () => {
+  it('builds production discovery link badge and moving button copy', () => {
+    expect(getProductionDiscoveryLinkBadgesViewProps({ sourceHost: 'instagram.com' })).toEqual({
+      candidateLabel: '링크 후보',
+      sourceLabel: '출처 instagram.com',
+    });
+    expect(getProductionDiscoveryLinkMoveButtonViewProps({
+      isMoving: true,
+      label: '후보 제외',
+    }).visibleLabel).toBe('Cloud 저장 중');
+    expect(getProductionDiscoveryLinkMoveButtonViewProps({
+      isMoving: false,
+      label: '후보 제외',
+    }).visibleLabel).toBe('후보 제외');
+  });
+
   it('builds copy/open/edit button props without external collection or save work', () => {
     expect(getProductionDiscoveryLinkCopyButtonProps({
       disabled: true,

@@ -1,13 +1,21 @@
+import { getProductionDiscoveryLinkMoveButtonViewProps } from '../utils/productionDiscoveryLinkActionProps';
+
 export default function ProductionDiscoveryLinkMoveButton({
   ariaLabel,
   disabled,
   isMoving,
   label,
-  movingLabel = 'Cloud 저장 중',
+  movingLabel,
   onClick,
   title,
   tone = 'indigo',
 }) {
+  const { visibleLabel } = getProductionDiscoveryLinkMoveButtonViewProps({
+    isMoving,
+    label,
+    movingLabel,
+  });
+
   const toneClassName =
     tone === 'danger'
       ? 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
@@ -22,7 +30,7 @@ export default function ProductionDiscoveryLinkMoveButton({
       title={title}
       type="button"
     >
-      {isMoving ? movingLabel : label}
+      {visibleLabel}
     </button>
   );
 }

@@ -1,3 +1,7 @@
+import { formatDateWithDots } from './dates';
+
+const formatProductionCount = (count = 0) => `${count}개`;
+
 export const getProductionKanbanSummaryHeaderProps = ({
   discoveryLinkCandidateCount = 0,
   videoCount = 0,
@@ -26,3 +30,61 @@ export const getProductionKanbanSummaryLegendItems = () => [
     className: 'bg-slate-100 px-2.5 py-1 text-slate-600',
   },
 ];
+
+export const getProductionKanbanSummaryMetricCards = ({
+  discoveryLinkCandidateCount = 0,
+  productionSummary = {},
+} = {}) => [
+  {
+    key: 'candidate',
+    label: '제작 후보',
+    labelClassName: 'text-indigo-500',
+    value: formatProductionCount(productionSummary.candidateCount),
+    valueClassName: 'text-lg text-indigo-900',
+    wrapperClassName: 'border-indigo-100 bg-indigo-50',
+  },
+  {
+    key: 'active',
+    label: '제작 중',
+    labelClassName: 'text-emerald-600',
+    value: formatProductionCount(productionSummary.activeCount),
+    valueClassName: 'text-lg text-emerald-900',
+    wrapperClassName: 'border-emerald-100 bg-emerald-50',
+  },
+  {
+    key: 'uploaded',
+    label: '업로드 완료',
+    labelClassName: 'text-slate-500',
+    value: formatProductionCount(productionSummary.uploadedCount),
+    valueClassName: 'text-lg text-slate-900',
+    wrapperClassName: 'border-slate-200 bg-slate-50',
+  },
+  {
+    key: 'discovery-links',
+    label: '링크 후보',
+    labelClassName: 'inline-flex items-center gap-1 text-amber-700',
+    value: formatProductionCount(discoveryLinkCandidateCount),
+    valueClassName: 'text-lg text-amber-950',
+    wrapperClassName: 'border-amber-100 bg-amber-50',
+    showLinkIcon: true,
+    warningText: productionSummary.discoveryRightsWarningCount > 0
+      ? `권리 확인 필요 ${formatProductionCount(productionSummary.discoveryRightsWarningCount)}`
+      : '',
+  },
+];
+
+export const getProductionKanbanScheduleSummaryViewProps = ({
+  productionSummary = {},
+} = {}) => ({
+  label: '다음 일정',
+  nextScheduledText: productionSummary.nextScheduled
+    ? formatDateWithDots(productionSummary.nextScheduled.date)
+    : '일정 없음',
+  nextScheduledTitle: productionSummary.nextScheduled?.video?.title || '',
+  overdueText: productionSummary.overdueCount > 0
+    ? `지난 일정 ${formatProductionCount(productionSummary.overdueCount)} 확인 필요`
+    : '',
+  activeWithoutDateText: productionSummary.activeWithoutDate > 0
+    ? `제작 중 ${formatProductionCount(productionSummary.activeWithoutDate)} 일정 미정`
+    : '',
+});

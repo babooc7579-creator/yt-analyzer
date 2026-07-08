@@ -1,3 +1,7 @@
+export const getProductionKanbanColumnEmptyTitle = (column = {}) => (
+  column.emptyTitle || '비어 있음'
+);
+
 export const getProductionVideoCardProps = ({
   columnId,
   draftRecords,

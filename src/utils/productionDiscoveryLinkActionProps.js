@@ -7,6 +7,19 @@ export const PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS = {
   INBOX: 'inbox',
 };
 
+export const getProductionDiscoveryLinkBadgesViewProps = ({ sourceHost } = {}) => ({
+  candidateLabel: '링크 후보',
+  sourceLabel: `출처 ${sourceHost}`,
+});
+
+export const getProductionDiscoveryLinkMoveButtonViewProps = ({
+  isMoving = false,
+  label,
+  movingLabel = 'Cloud 저장 중',
+} = {}) => ({
+  visibleLabel: isMoving ? movingLabel : label,
+});
+
 export const getProductionDiscoveryLinkCopyButtonProps = ({
   disabled,
   link,
