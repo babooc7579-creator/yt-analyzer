@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  BULK_CHANNEL_EMPTY_INPUT_MESSAGE,
+  BULK_CHANNEL_SAVE_ACTION_LABEL,
+  CHANNEL_PREVIEW_DUPLICATE_MESSAGE,
+  CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE,
+  CHANNEL_SAVE_ACTION_LABEL,
   getBulkChannelCreatePayload,
   getBulkChannelHandles,
   getBulkChannelSaveCompleteMessage,
@@ -14,6 +19,14 @@ import {
 } from './channelAddActions';
 
 describe('channelAddActions utils', () => {
+  it('keeps channel add form messages and action labels centralized', () => {
+    expect(CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE).toBe('채널을 불러오지 못했습니다.');
+    expect(CHANNEL_PREVIEW_DUPLICATE_MESSAGE).toBe('이미 등록된 채널입니다.');
+    expect(BULK_CHANNEL_EMPTY_INPUT_MESSAGE).toBe('등록할 채널을 한 줄에 하나씩 입력해 주세요.');
+    expect(CHANNEL_SAVE_ACTION_LABEL).toBe('저장');
+    expect(BULK_CHANNEL_SAVE_ACTION_LABEL).toBe('일괄 저장');
+  });
+
   it('trims single input and parses bulk channel handles safely', () => {
     expect(getTrimmedChannelInput('  @peakviral  ')).toBe('@peakviral');
     expect(getTrimmedChannelInput(null)).toBe('');

@@ -6,6 +6,19 @@ const toChannelObject = (channel) => (
   channel && typeof channel === 'object' ? channel : {}
 );
 
+export const CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE =
+  '채널을 불러오지 못했습니다.';
+
+export const CHANNEL_PREVIEW_DUPLICATE_MESSAGE =
+  '이미 등록된 채널입니다.';
+
+export const BULK_CHANNEL_EMPTY_INPUT_MESSAGE =
+  '등록할 채널을 한 줄에 하나씩 입력해 주세요.';
+
+export const CHANNEL_SAVE_ACTION_LABEL = '저장';
+
+export const BULK_CHANNEL_SAVE_ACTION_LABEL = '일괄 저장';
+
 export const getTrimmedChannelInput = (input = '') => toText(input).trim();
 
 export const getBulkChannelHandles = (bulkInput = '') => (

@@ -1,5 +1,10 @@
 import { fetchChannelPreview } from '../services/channelApi';
 import {
+  BULK_CHANNEL_EMPTY_INPUT_MESSAGE,
+  BULK_CHANNEL_SAVE_ACTION_LABEL,
+  CHANNEL_PREVIEW_DUPLICATE_MESSAGE,
+  CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE,
+  CHANNEL_SAVE_ACTION_LABEL,
   getBulkChannelCreatePayload,
   getBulkChannelHandles,
   getBulkChannelSaveCompleteMessage,
@@ -43,10 +48,10 @@ export function useChannelAddActions({
 
     try {
       const data = await fetchChannelPreview(channelInput);
-      if (!data.success) throw new Error(data.error || '채널을 불러오지 못했습니다.');
+      if (!data.success) throw new Error(data.error || CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE);
 
       if (isDuplicateChannel(savedChannels, data.channel.id)) {
-        setError('이미 등록된 채널입니다.');
+        setError(CHANNEL_PREVIEW_DUPLICATE_MESSAGE);
       } else {
         setChannelPreview(data.channel);
       }
@@ -76,7 +81,7 @@ export function useChannelAddActions({
       setProgressMsg(getChannelSaveCompleteMessage());
       cancelChannelPreview();
     } catch (err) {
-      setError(getChannelSaveFailureMessage(err, '저장'));
+      setError(getChannelSaveFailureMessage(err, CHANNEL_SAVE_ACTION_LABEL));
     } finally {
       setLoading(false);
       setTimeout(() => setProgressMsg(''), 4000);
@@ -86,7 +91,7 @@ export function useChannelAddActions({
   const handleBulkAdd = async () => {
     const handles = getBulkChannelHandles(bulkInput);
     if (handles.length === 0) {
-      setError('등록할 채널을 한 줄에 하나씩 입력해 주세요.');
+      setError(BULK_CHANNEL_EMPTY_INPUT_MESSAGE);
       return;
     }
 
@@ -107,7 +112,7 @@ export function useChannelAddActions({
       setProgressMsg(getBulkChannelSaveCompleteMessage(data));
       await loadChannelsFromCloud();
     } catch (err) {
-      setError(getChannelSaveFailureMessage(err, '일괄 저장'));
+      setError(getChannelSaveFailureMessage(err, BULK_CHANNEL_SAVE_ACTION_LABEL));
     } finally {
       setBulkLoading(false);
       setTimeout(() => setProgressMsg(''), 5000);
