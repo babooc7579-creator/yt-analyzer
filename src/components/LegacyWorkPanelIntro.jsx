@@ -1,43 +1,49 @@
 import { CheckCircle2, Sparkles } from 'lucide-react';
 
+import { getLegacyWorkPanelIntroViewProps } from '../utils/legacyWorkPanelIntroProps';
+
+const WORKFLOW_STEP_TITLE_CLASS_NAMES = [
+  'text-xs font-bold text-slate-800',
+  'text-xs font-bold text-emerald-700',
+  'text-xs font-bold text-blue-700',
+];
+
+const WORKFLOW_STEP_CARD_CLASS_NAMES = [
+  'bg-white border border-indigo-100 rounded-lg p-3',
+  'bg-white border border-emerald-100 rounded-lg p-3',
+  'bg-white border border-blue-100 rounded-lg p-3',
+];
+
 export default function LegacyWorkPanelIntro({ apiKey, onChangeApiKey }) {
+  const viewProps = getLegacyWorkPanelIntroViewProps({ apiKey, onChangeApiKey });
+
   return (
     <>
       <h1 className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-4">
-        <Sparkles className="w-6 h-6 text-indigo-600" /> 타임머신 CRM
+        <Sparkles className="w-6 h-6 text-indigo-600" /> {viewProps.brandTitle}
       </h1>
       <div className="mb-4 border border-indigo-100 bg-indigo-50/60 rounded-xl p-4">
         <div className="flex items-center gap-2 mb-3">
           <CheckCircle2 className="w-5 h-5 text-indigo-600" />
           <div>
-            <p className="text-sm font-extrabold text-slate-900">오늘의 작업 흐름</p>
-            <p className="text-[11px] text-slate-500">채널 저장 → 필요할 때만 새 영상 수집 → 저장된 영상 확인</p>
+            <p className="text-sm font-extrabold text-slate-900">{viewProps.workflowTitle}</p>
+            <p className="text-[11px] text-slate-500">{viewProps.workflowDescription}</p>
           </div>
         </div>
         <div className="grid gap-2">
-          <div className="bg-white border border-indigo-100 rounded-lg p-3">
-            <p className="text-xs font-bold text-slate-800">1. 먼저 채널 저장</p>
-            <p className="text-[11px] text-slate-500 mt-1">소재를 모을 유튜브 채널을 Cloud 목록에 추가합니다. 채널 저장만으로 새 영상 수집은 실행되지 않습니다.</p>
-          </div>
-          <div className="bg-white border border-emerald-100 rounded-lg p-3">
-            <p className="text-xs font-bold text-emerald-700">2. 선택 채널 새 영상 수집</p>
-            <p className="text-[11px] text-slate-500 mt-1">새 데이터가 필요할 때만 실행합니다. YouTube API를 호출할 수 있습니다.</p>
-          </div>
-          <div className="bg-white border border-blue-100 rounded-lg p-3">
-            <p className="text-xs font-bold text-blue-700">3. 저장된 영상 불러오기</p>
-            <p className="text-[11px] text-slate-500 mt-1">Cloud DB에 이미 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.</p>
-          </div>
+          {viewProps.workflowSteps.map((step, index) => (
+            <div className={WORKFLOW_STEP_CARD_CLASS_NAMES[index]} key={step.title}>
+              <p className={WORKFLOW_STEP_TITLE_CLASS_NAMES[index]}>{step.title}</p>
+              <p className="text-[11px] text-slate-500 mt-1">{step.description}</p>
+            </div>
+          ))}
         </div>
       </div>
 
       <div className="mb-4">
         <input
-          type="password"
-          value={apiKey}
-          onChange={(e) => onChangeApiKey(e.target.value)}
-          placeholder="YouTube API Key (댓글 스캔에만 필요)"
+          {...viewProps.apiKeyInputProps}
           className="w-full text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-          aria-label="댓글 Top 10 조회용 YouTube API Key"
         />
       </div>
     </>

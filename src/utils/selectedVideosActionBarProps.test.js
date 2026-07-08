@@ -13,6 +13,8 @@ describe('selectedVideosActionBarProps utils', () => {
     expect(props).toMatchObject({
       buttonLabel: 'AI 요청문 복사',
       iconName: 'copy',
+      selectedCountText: '3',
+      selectedSuffixText: '개 선택됨',
       selectedText: '3개 선택됨',
     });
     expect(props.helpText).toContain('AI API를 호출하지 않고');

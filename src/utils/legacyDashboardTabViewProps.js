@@ -4,6 +4,8 @@ const toVideoList = (videos) => (
   toArray(videos).filter(video => video && typeof video === 'object')
 );
 
+export const LEGACY_DASHBOARD_COMMENT_NOTICE = '댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.';
+
 export function getLegacyDashboardTabViewProps({
   activeSelectedChannelCount,
   checkedVideos,
@@ -52,6 +54,7 @@ export function getLegacyDashboardTabViewProps({
   const selectedVideos = videoList.filter(video => checkedVideoIds.includes(video.videoId));
 
   return {
+    commentApiNotice: LEGACY_DASHBOARD_COMMENT_NOTICE,
     controlsProps: {
       activeSelectedChannelCount,
       checkedVideos: checkedVideoIds,

@@ -25,7 +25,10 @@ export default function SelectedVideosActionBar({
 
   return (
     <div className="bg-indigo-900 rounded-xl p-4 flex justify-between items-center shadow-lg animate-in slide-in-from-top-4">
-      <span className="text-indigo-100 font-medium text-sm"><span className="text-white font-bold text-lg">{selectedCount}</span>개 선택됨</span>
+      <span className="text-indigo-100 font-medium text-sm">
+        <span className="text-white font-bold text-lg">{viewProps.selectedCountText}</span>
+        {viewProps.selectedSuffixText}
+      </span>
       <div className="flex flex-col items-end gap-1">
         <button
           onClick={onCopyPrompt}
