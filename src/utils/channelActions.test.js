@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CHANNEL_STATUS } from '../constants/status';
 import {
+  CHANNEL_ACTION_COPY,
   appendChannel,
   getChannelCloudActionError,
   getChannelDeleteConfirmMessage,
@@ -24,6 +25,29 @@ const channelB = {
 };
 
 describe('channelActions utils', () => {
+  it('keeps Cloud channel action copy centralized by action type', () => {
+    expect(CHANNEL_ACTION_COPY.add).toEqual({
+      failureMessage: '채널 추가에 실패했습니다.',
+      actionLabel: '저장',
+    });
+    expect(CHANNEL_ACTION_COPY.bulkAdd).toEqual({
+      failureMessage: '일괄 추가에 실패했습니다.',
+      actionLabel: '일괄 저장',
+    });
+    expect(CHANNEL_ACTION_COPY.delete).toEqual({
+      failureMessage: '채널 삭제에 실패했습니다.',
+      actionLabel: '삭제',
+    });
+    expect(CHANNEL_ACTION_COPY.metadata).toEqual({
+      failureMessage: '채널 정보를 저장하지 못했습니다.',
+      actionLabel: '정보 저장',
+    });
+    expect(CHANNEL_ACTION_COPY.note).toEqual({
+      failureMessage: '기록 저장에 실패했습니다.',
+      actionLabel: '메모 저장',
+    });
+  });
+
   it('appends valid channels and ignores invalid channel objects', () => {
     expect(appendChannel([channelA], channelB)).toEqual([channelA, channelB]);
     expect(appendChannel([channelA], { title: 'No id' })).toEqual([channelA]);
