@@ -36,13 +36,15 @@ babooc7579-creator/yt-analyzer
 
 현재 앱은 React + Vite 기반 프론트엔드입니다.
 
-2026-07-06 기준으로 초기의 `App.jsx` 집중 구조는 상당 부분 해소되었습니다.
+2026-07-08 기준으로 초기의 `App.jsx` 집중 구조는 상당 부분 해소되었습니다.
 
 - `src/App.jsx`는 현재 13줄 수준의 얇은 연결 파일입니다.
 - 앱의 주요 상태와 워크플로우는 `src/hooks`로 분리되어 있습니다.
 - 화면은 `src/components`로 나뉘어 있습니다.
 - 데이터/화면 props 계산은 `src/utils`로 많이 분리되어 있습니다.
 - Cloud API 호출은 `src/services`에서 관리합니다.
+- `src/hooks` 내부 사용자 안내/오류 문구는 `src/utils`와 `src/constants`로 분리되어, hook은 상태 흐름에 집중하는 구조입니다.
+- `src/services`의 공통 Cloud/YouTube API fallback 문구는 이름 붙은 상수와 테스트로 보호합니다.
 
 이미 들어있는 핵심 기능:
 
