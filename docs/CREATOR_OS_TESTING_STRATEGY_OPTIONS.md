@@ -15,7 +15,7 @@
 - `jest`, `playwright`, `@testing-library/react` 같은 브라우저/컴포넌트 테스트 도구는 설치되어 있지 않습니다.
 - `.github/workflows/build.yml`은 `npm ci` 후 `npm test`, `npm run build`를 실행합니다.
 - `package-lock.json`은 존재합니다.
-- 2026-07-08 기준 `npm.cmd test`는 테스트 파일 90개, 테스트 359개가 통과합니다.
+- 2026-07-08 기준 `npm.cmd test`는 테스트 파일 91개, 테스트 369개가 통과합니다.
 - 현재 검증은 `npm.cmd test`, `npm.cmd run build`, `git diff --check`, GitHub Actions build check에 의존합니다.
 
 현재 의미:
@@ -23,7 +23,7 @@
 - 앱이 빌드되는지는 확인할 수 있습니다.
 - 일부 helper 함수가 값을 제대로 계산하는지는 자동 테스트로 확인할 수 있습니다.
 - 버튼 클릭 후 UI 상태까지는 아직 자동 테스트로 확인하지 않습니다.
-- GitHub Actions에서 `npm test`를 실행하려면 workflow 변경 결정이 추가로 필요합니다.
+- GitHub Actions에서는 이미 `npm test`를 실행합니다. React Testing Library나 Playwright 같은 새 테스트 도구 도입은 별도 결정이 필요합니다.
 
 ---
 
@@ -162,6 +162,7 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 완료된 것:
 
 - GitHub Actions `Build` workflow에서 `npm test`를 실행합니다.
+- 2026-07-08 후속 안정화에서 홈 화면 빠른 작업 버튼 문구, 홈 화면 내비게이션 props, 제작 후보함의 발견 링크 설명을 테스트로 보강했습니다.
 
 아직 하지 않은 것:
 
@@ -498,10 +499,16 @@ Creator OS는 지금 데이터 기준과 상태 기준을 안정화하는 단계
 64. `src/utils` 1차 순수 유틸 테스트 목록 점검
    - 누락된 순수 유틸 파일 확인
    - 다음 테스트 단계 분리 여부 검토
-   - 2026-07-08 점검 완료: `src/utils` 순수 유틸 78개와 테스트 파일 78개가 일치
-   - 전체 테스트 파일은 `src/utils` 78개, `src/services` 9개, `src/hooks` 1개, `src/constants` 2개로 총 90개입니다.
+   - 2026-07-08 점검 완료: `src/utils` 순수 유틸 79개와 테스트 파일 79개가 일치
+   - 전체 테스트 파일은 `src/utils` 79개, `src/services` 9개, `src/hooks` 1개, `src/constants` 2개로 총 91개입니다.
 
-65. 다음 테스트 단계 결정
+65. 안정화 후속 테스트 보강
+   - 홈 화면 빠른 작업 버튼 문구
+   - 홈 화면 내비게이션 props
+   - 제작 후보함의 발견 링크 섹션 설명
+   - 2026-07-08 1차 완료: 전체 테스트 파일 91개, 테스트 369개가 통과합니다.
+
+66. 다음 테스트 단계 결정
    - 컴포넌트 smoke 테스트, hook 분리 후 테스트, 브라우저 E2E 테스트 중 우선순위 선택
    - 새 테스트 도구/CI 변경은 사용자 판단 필요
 
