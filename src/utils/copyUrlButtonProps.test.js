@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
-import { getCopyUrlButtonDefaults } from './copyUrlButtonProps';
+import { getCopyUrlButtonDefaults, hasCopyableUrlValue } from './copyUrlButtonProps';
 
 describe('copyUrlButtonProps utils', () => {
+  it('detects copyable URL values and rejects empty strings or lists', () => {
+    expect(hasCopyableUrlValue('https://example.com')).toBe(true);
+    expect(hasCopyableUrlValue([['Clip', 'https://example.com']])).toBe(true);
+    expect(hasCopyableUrlValue('')).toBe(false);
+    expect(hasCopyableUrlValue([])).toBe(false);
+    expect(hasCopyableUrlValue(null)).toBe(false);
+  });
+
   it('builds default copy button labels and safe title', () => {
     expect(getCopyUrlButtonDefaults()).toEqual({
       copiedLabel: '복사 완료',

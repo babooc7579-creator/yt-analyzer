@@ -1,3 +1,7 @@
+export const hasCopyableUrlValue = (url) => (
+  Array.isArray(url) ? url.length > 0 : Boolean(url)
+);
+
 export const getCopyUrlButtonDefaults = ({
   label = 'URL 복사',
   title,
