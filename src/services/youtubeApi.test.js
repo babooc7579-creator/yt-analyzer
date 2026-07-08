@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { YOUTUBE_API_BASE } from '../config';
-import { fetchTopComments } from './youtubeApi';
+import {
+  YOUTUBE_API_REQUEST_FAILED_MESSAGE,
+  YOUTUBE_COMMENTS_RESPONSE_READ_FAILED_MESSAGE,
+  fetchTopComments,
+} from './youtubeApi';
 
 const installFetchMock = (response) => {
   const fetchMock = vi.fn(async () => response);
@@ -18,6 +22,13 @@ describe('youtubeApi service', () => {
   afterEach(() => {
     Reflect.deleteProperty(globalThis, 'fetch');
     vi.restoreAllMocks();
+  });
+
+  it('keeps YouTube API fallback copy centralized', () => {
+    expect(YOUTUBE_API_REQUEST_FAILED_MESSAGE).toBe('YouTube API 요청에 실패했습니다.');
+    expect(YOUTUBE_COMMENTS_RESPONSE_READ_FAILED_MESSAGE).toBe(
+      'YouTube 댓글 응답을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.'
+    );
   });
 
   it('requests top comments through the YouTube commentThreads API', async () => {
