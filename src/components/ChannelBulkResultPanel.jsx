@@ -7,6 +7,7 @@ export default function ChannelBulkResultPanel({
   if (!bulkResult) return null;
   const {
     closeButtonProps,
+    failedResultMessages,
     failedResults,
     summaryText,
   } = getChannelBulkResultPanelViewProps(bulkResult);
@@ -14,8 +15,8 @@ export default function ChannelBulkResultPanel({
   return (
     <div className="p-2 bg-white rounded-lg border border-indigo-200 text-xs space-y-1 max-h-32 overflow-y-auto">
       <p className="font-bold text-slate-700">{summaryText}</p>
-      {failedResults.map((result, index) => (
-        <p key={index} className="text-red-500 truncate">실패: {result.handle} - {result.error}</p>
+      {failedResultMessages.map((message, index) => (
+        <p key={failedResults[index]?.handle || index} className="text-red-500 truncate">{message}</p>
       ))}
       <button
         type="button"
