@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
 
-import { getIsoTodayDate } from '../utils/dates';
-import {
-  getDiscoveryLinkCandidates,
-  getProductionSummary,
-  groupProductionVideos,
-} from '../utils/productionKanbanData';
+import { getProductionKanbanDataModel } from '../utils/productionKanbanData';
 
 export function useProductionKanbanData({
   discoveryLinks,
@@ -13,27 +8,10 @@ export function useProductionKanbanData({
   videoUserRecords,
   videos,
 }) {
-  const discoveryLinkCandidates = useMemo(() => (
-    getDiscoveryLinkCandidates(discoveryLinks)
-  ), [discoveryLinks]);
-
-  const groupedVideos = useMemo(() => (
-    groupProductionVideos(videos, videoUserRecords)
-  ), [videos, videoUserRecords]);
-
-  const productionSummary = useMemo(() => {
-    return getProductionSummary({
-      discoveryLinkCandidates,
-      draftRecords,
-      groupedVideos,
-      today: getIsoTodayDate(),
-      videoUserRecords,
-    });
-  }, [discoveryLinkCandidates, draftRecords, groupedVideos, videoUserRecords]);
-
-  return {
-    discoveryLinkCandidates,
-    groupedVideos,
-    productionSummary,
-  };
+  return useMemo(() => getProductionKanbanDataModel({
+    discoveryLinks,
+    draftRecords,
+    videoUserRecords,
+    videos,
+  }), [discoveryLinks, draftRecords, videoUserRecords, videos]);
 }

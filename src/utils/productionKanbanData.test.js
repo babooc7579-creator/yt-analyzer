@@ -6,6 +6,7 @@ import {
   countDiscoveryRightsWarnings,
   countGroupedProductionVideos,
   getDiscoveryLinkCandidates,
+  getProductionKanbanDataModel,
   getProductionSummary,
   getScheduledProductionVideos,
   groupProductionVideos,
@@ -159,6 +160,37 @@ describe('productionKanbanData utils', () => {
       activeCount: 1,
       uploadedCount: 0,
       discoveryRightsWarningCount: 2,
+    });
+  });
+
+  it('builds production kanban data model with video and discovery candidates kept separate', () => {
+    const model = getProductionKanbanDataModel({
+      discoveryLinks: [
+        { id: 'saved-link', status: 'saved', rightsStatus: 'needs_check', updatedAt: '2026-07-08T00:00:00.000Z' },
+        { id: 'new-link', status: 'candidate', rightsStatus: 'needs_check', updatedAt: '2026-07-09T00:00:00.000Z' },
+        { id: 'old-link', status: 'candidate', rightsStatus: 'cleared', updatedAt: '2026-07-01T00:00:00.000Z' },
+      ],
+      draftRecords: {
+        v2: { targetPublishDate: '2026-07-10' },
+      },
+      today: '2026-07-08',
+      videoUserRecords: records,
+      videos,
+    });
+
+    expect(model.discoveryLinkCandidates.map(link => link.id)).toEqual(['new-link', 'old-link']);
+    expect(model.groupedVideos[PRODUCTION_STATUS.CANDIDATE].map(video => video.videoId)).toEqual(['v4', 'v1']);
+    expect(model.groupedVideos[PRODUCTION_STATUS.ACTIVE].map(video => video.videoId)).toEqual(['v2']);
+    expect(model.productionSummary).toMatchObject({
+      activeCount: 1,
+      candidateCount: 2,
+      discoveryRightsWarningCount: 1,
+      uploadedCount: 1,
+      videoCount: 4,
+    });
+    expect(model.productionSummary.nextScheduled).toMatchObject({
+      date: '2026-07-10',
+      video: videos[1],
     });
   });
 });
