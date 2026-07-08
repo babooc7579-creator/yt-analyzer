@@ -9,6 +9,7 @@ import {
   getProductionStatusFromRecord,
   hasAnyProductionStatus,
 } from '../constants/status';
+import { getIsoTodayDate } from './dates';
 
 const FALLBACK_TARGET_DATE = '9999-12-31';
 
@@ -146,5 +147,29 @@ export const getProductionSummary = ({
       draftRecords,
       videoUserRecords,
     ),
+  };
+};
+
+export const getProductionKanbanDataModel = ({
+  discoveryLinks,
+  draftRecords,
+  today = getIsoTodayDate(),
+  videoUserRecords,
+  videos,
+} = {}) => {
+  const discoveryLinkCandidates = getDiscoveryLinkCandidates(discoveryLinks);
+  const groupedVideos = groupProductionVideos(videos, videoUserRecords);
+  const productionSummary = getProductionSummary({
+    discoveryLinkCandidates,
+    draftRecords,
+    groupedVideos,
+    today,
+    videoUserRecords,
+  });
+
+  return {
+    discoveryLinkCandidates,
+    groupedVideos,
+    productionSummary,
   };
 };
