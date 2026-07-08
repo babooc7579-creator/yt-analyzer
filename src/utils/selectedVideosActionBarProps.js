@@ -19,6 +19,8 @@ export const getSelectedVideosActionBarViewProps = ({
     buttonLabel,
     helpText,
     iconName,
+    selectedCountText: `${selectedCount}`,
+    selectedSuffixText: '개 선택됨',
     selectedText: `${selectedCount}개 선택됨`,
     buttonProps: {
       'aria-label': `선택 영상 ${selectedCount}개: ${buttonLabel}`,
