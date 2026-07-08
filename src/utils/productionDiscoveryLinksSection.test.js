@@ -4,6 +4,7 @@ import {
   getProductionDiscoveryLinkCardProps,
   getProductionDiscoveryLinkList,
   getProductionDiscoveryLinksSectionActions,
+  getProductionDiscoveryLinksSectionHeaderProps,
 } from './productionDiscoveryLinksSection';
 
 describe('productionDiscoveryLinksSection utils', () => {
@@ -54,5 +55,17 @@ describe('productionDiscoveryLinksSection utils', () => {
     expect(openDiscoveryLinksButtonProps.title).toContain('다운로드는 실행하지 않습니다');
     expect(openDiscoveryLinksButtonProps['aria-label']).toContain('Cloud 저장 링크 조회와 수정');
     expect(openDiscoveryLinksButtonProps['aria-label']).toContain('외부 자동 수집 없음');
+  });
+
+  it('explains discovery link candidates as Cloud discovery records, not a separate production DB', () => {
+    const headerProps = getProductionDiscoveryLinksSectionHeaderProps();
+
+    expect(headerProps.eyebrow).toBe('발견함 링크 후보');
+    expect(headerProps.title).toBe('외부에서 저장한 제작 후보 링크');
+    expect(headerProps.description).toContain('Cloud 발견함 기록');
+    expect(headerProps.description).toContain('제작 참고 목록');
+    expect(headerProps.description).toContain('별도 제작 DB');
+    expect(headerProps.description).toContain('자동 수집이나 다운로드는 실행하지 않습니다');
+    expect(headerProps.openButtonLabel).toBe('발견함 열기');
   });
 });
