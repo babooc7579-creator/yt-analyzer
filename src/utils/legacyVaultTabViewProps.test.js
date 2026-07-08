@@ -68,10 +68,12 @@ describe('legacyVaultTabViewProps utils', () => {
     expect(props.scrapbookWorkspaceProps.onUpdateDiscoveryLink).toBe(updateDiscoveryLink);
     expect(props.scrapbookWorkspaceProps.onUpdateVideoRecord).toBe(updateVideoUserRecord);
 
+    props.scrapbookWorkspaceProps.onOpenHome();
     props.scrapbookWorkspaceProps.onOpenDiscoveryLinks();
     props.scrapbookWorkspaceProps.onOpenReferenceVault();
 
     expect(openedViews).toEqual([
+      { id: 'home' },
       { id: 'vault-sources' },
       { id: 'vault-all' },
     ]);

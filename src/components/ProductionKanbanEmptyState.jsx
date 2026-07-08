@@ -1,12 +1,31 @@
-import { Link as LinkIcon, Rocket, Star } from 'lucide-react';
+import { Home, Link as LinkIcon, Rocket, Star } from 'lucide-react';
 
 import { PRODUCTION_KANBAN_EMPTY_STATE } from '../constants/emptyStates';
+import { getProductionKanbanEmptyStateActions } from '../utils/productionKanbanProps';
+
+const ACTION_ICONS = {
+  discoveryLinks: LinkIcon,
+  home: Home,
+  referenceVault: Rocket,
+};
+
+const ACTION_CLASSES = {
+  indigo: 'bg-indigo-600 text-white hover:bg-indigo-700',
+  rose: 'bg-rose-600 text-white hover:bg-rose-700',
+  secondary: 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50',
+};
 
 export default function ProductionKanbanEmptyState({
   onOpenDiscoveryLinks,
+  onOpenHome,
   onOpenReferenceVault,
 }) {
   const [radarStep, storedVideoStep, discoveryStep] = PRODUCTION_KANBAN_EMPTY_STATE.steps;
+  const actionButtons = getProductionKanbanEmptyStateActions({
+    onOpenDiscoveryLinks,
+    onOpenHome,
+    onOpenReferenceVault,
+  });
 
   return (
     <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
@@ -36,24 +55,23 @@ export default function ProductionKanbanEmptyState({
         </div>
       </div>
       <div className="mt-5 flex flex-wrap justify-center gap-2">
-        <button
-          type="button"
-          onClick={onOpenReferenceVault}
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-700"
-          title={PRODUCTION_KANBAN_EMPTY_STATE.referenceVaultButton.title}
-          aria-label={PRODUCTION_KANBAN_EMPTY_STATE.referenceVaultButton.ariaLabel}
-        >
-          <Rocket className="h-4 w-4" /> {PRODUCTION_KANBAN_EMPTY_STATE.referenceVaultButton.label}
-        </button>
-        <button
-          type="button"
-          onClick={onOpenDiscoveryLinks}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50"
-          title={PRODUCTION_KANBAN_EMPTY_STATE.discoveryLinksButton.title}
-          aria-label={PRODUCTION_KANBAN_EMPTY_STATE.discoveryLinksButton.ariaLabel}
-        >
-          <LinkIcon className="h-4 w-4" /> {PRODUCTION_KANBAN_EMPTY_STATE.discoveryLinksButton.label}
-        </button>
+        {actionButtons.map((action) => {
+          const ActionIcon = ACTION_ICONS[action.iconKey] || Rocket;
+          const actionClassName = ACTION_CLASSES[action.variant] || ACTION_CLASSES.secondary;
+
+          return (
+            <button
+              key={action.key}
+              type="button"
+              onClick={action.onClick}
+              className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold ${actionClassName}`}
+              title={action.title}
+              aria-label={action.ariaLabel}
+            >
+              <ActionIcon className="h-4 w-4" /> {action.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

@@ -29,6 +29,7 @@ export function getLegacyVaultTabViewProps({
       onFetchComments: fetchTopComments,
       onMoveVideo: markRadarVideoStatus,
       onOpenDiscoveryLinks: () => openCreatorView({ id: 'vault-sources' }),
+      onOpenHome: () => openCreatorView({ id: 'home' }),
       onOpenReferenceVault: () => openCreatorView({ id: 'vault-all' }),
       onRemoveScrap: toggleScrapVideo,
       onUpdateDiscoveryLink: updateDiscoveryLink,
