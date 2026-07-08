@@ -46,3 +46,13 @@ export const getProductionDraftUpdates = (draft = {}) => {
 export const getProductionDiscoveryLinkMoveUpdates = (status) => ({
   status,
 });
+
+export const getClearedSavedState = (states, itemId) => {
+  const stateMap = toRecordMap(states);
+
+  if (stateMap[itemId] !== 'saved') return stateMap;
+
+  const nextState = { ...stateMap };
+  delete nextState[itemId];
+  return nextState;
+};
