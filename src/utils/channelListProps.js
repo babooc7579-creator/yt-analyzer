@@ -31,6 +31,35 @@ export const getChannelListExportPanelProps = ({
   visibleChannels,
 });
 
+export const getChannelListUrlExportPanelViewProps = ({
+  selectedCategory,
+  visibleChannelUrlList,
+  visibleChannels,
+} = {}) => {
+  const visibleChannelList = getChannelList(visibleChannels);
+  const visibleChannelCount = visibleChannelList.length;
+
+  if (visibleChannelCount === 0) return null;
+
+  return {
+    copyButtonProps: {
+      ariaLabel: `${selectedCategory} 채널 ${visibleChannelCount}개 URL 목록 복사`,
+      copiedLabel: '목록 복사 완료',
+      disabled: !visibleChannelUrlList,
+      label: '채널 URL 목록 복사',
+      title: '현재 카테고리에 보이는 채널명과 YouTube URL 목록을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
+      url: visibleChannelUrlList,
+    },
+    description: '화면에 보이는 채널명과 YouTube URL만 복사합니다. 저장이나 수집은 실행하지 않습니다.',
+    title: `현재 목록 ${visibleChannelCount}개`,
+    visibleChannelList,
+  };
+};
+
+export const getChannelListLoadingStateViewProps = () => ({
+  label: 'Cloud에서 채널 불러오는 중...',
+});
+
 export const getChannelListBodyProps = ({
   channelList,
   channelsLoading,
