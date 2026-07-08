@@ -1,7 +1,13 @@
 import { FUNCTION_API_BASE } from '../config';
 
+export const FUNCTION_API_REQUEST_FAILED_MESSAGE =
+  'Cloud API 요청에 실패했습니다.';
+
+export const FUNCTION_API_RESPONSE_READ_FAILED_MESSAGE =
+  'Cloud API 응답을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.';
+
 const getResponseErrorMessage = (response, data) => (
-  data?.error || data?.message || `Cloud API 요청에 실패했습니다. (${response.status})`
+  data?.error || data?.message || `${FUNCTION_API_REQUEST_FAILED_MESSAGE} (${response.status})`
 );
 
 const readJsonResponse = async (response) => {
@@ -24,7 +30,7 @@ const readJsonResponse = async (response) => {
   if (!data || typeof data !== 'object') {
     return {
       success: false,
-      error: 'Cloud API 응답을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.',
+      error: FUNCTION_API_RESPONSE_READ_FAILED_MESSAGE,
     };
   }
 
