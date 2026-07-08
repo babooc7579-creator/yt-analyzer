@@ -1,4 +1,5 @@
 import { FolderOpen, Loader2, RefreshCw } from 'lucide-react';
+import { getChannelTagTabRowProps } from '../utils/channelTagScanProps';
 
 export default function ChannelTagTabRow({
   category,
@@ -10,21 +11,25 @@ export default function ChannelTagTabRow({
   onSelectCategory,
   scannableCount,
 }) {
-  const canScanTag = scannableCount > 0;
-  const scanTitle = canScanTag
-    ? `'${category}' 태그의 운영중 채널 ${scannableCount}개만 새 영상 수집합니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.`
-    : `'${category}' 태그에는 새 영상 수집을 실행할 운영중 채널이 없습니다. 보류/제외 채널은 수집하지 않습니다.`;
-  const scanAriaLabel = canScanTag
-    ? `'${category}' 태그 새 영상 수집, YouTube API 호출`
-    : `'${category}' 태그 새 영상 수집 불가, 운영중 채널 없음`;
+  const {
+    canScanTag,
+    listButtonAriaLabel,
+    listButtonTitle,
+    scanButtonAriaLabel,
+    scanButtonTitle,
+  } = getChannelTagTabRowProps({
+    category,
+    count,
+    scannableCount,
+  });
 
   return (
     <div className="flex items-center gap-1">
       <button
         type="button"
         onClick={() => onSelectCategory(category)}
-        title={`'${category}' 태그 채널 목록 보기 - 운영중 ${scannableCount}개 / 전체 ${count}개`}
-        aria-label={`'${category}' 태그 채널 목록 보기`}
+        title={listButtonTitle}
+        aria-label={listButtonAriaLabel}
         className={`flex-1 text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-between ${isActive ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100'}`}
       >
         <span className="flex items-center gap-2">
@@ -39,8 +44,8 @@ export default function ChannelTagTabRow({
         type="button"
         onClick={() => onScanTag(category)}
         disabled={isScanning || !canScanTag}
-        title={scanTitle}
-        aria-label={scanAriaLabel}
+        title={scanButtonTitle}
+        aria-label={scanButtonAriaLabel}
         className="p-2 text-slate-400 hover:text-emerald-600 disabled:text-slate-200 disabled:cursor-not-allowed transition-colors shrink-0"
       >
         {isScanningTag ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <RefreshCw className="w-4 h-4" />}
