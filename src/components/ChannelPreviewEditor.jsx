@@ -1,4 +1,6 @@
+import { getChannelPreviewTagSelectorLabel } from '../utils/channelAddCopy';
 import { getChannelPreviewEditorProps } from '../utils/channelAddFormProps';
+
 import ChannelLanguageSelect from './ChannelLanguageSelect';
 import ChannelPreviewActions from './ChannelPreviewActions';
 import ChannelPreviewNoteField from './ChannelPreviewNoteField';
@@ -19,6 +21,7 @@ export default function ChannelPreviewEditor({
   setNewChannelNote,
   toggleNewChannelTag,
 }) {
+  const tagSelectorLabel = getChannelPreviewTagSelectorLabel();
   const {
     actionsProps,
     languageSelectProps,
@@ -41,7 +44,7 @@ export default function ChannelPreviewEditor({
 
       <ChannelTagSelector
         categories={categories}
-        label="태그 선택 (여러 개 가능, 안 골라도 OK)"
+        label={tagSelectorLabel}
         selectedTags={newChannelTags}
         toggleTag={toggleNewChannelTag}
       />

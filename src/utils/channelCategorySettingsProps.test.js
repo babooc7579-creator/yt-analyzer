@@ -6,6 +6,7 @@ import {
   getCategoriesAfterLocalHide,
   getCategoryHideConfirmMessage,
   getChannelCategoryAddInputViewProps,
+  getChannelCategoryHelpText,
   getChannelCategoryList,
   getChannelCategorySettingsProps,
   getChannelCloudOnlyTagsNoticeViewProps,
@@ -101,5 +102,13 @@ describe('channelCategorySettingsProps utils', () => {
     expect(props.title).toContain('Cloud에는 있지만');
     expect(props.tagSummary).toBe('해외, 예능, 정치, 역사 외 1개');
     expect(props.description).toContain('Cloud 채널 태그는 삭제되지 않습니다');
+  });
+
+  it('builds category help text that separates Cloud tags from local category visibility', () => {
+    const text = getChannelCategoryHelpText();
+
+    expect(text).toContain('이름 변경은 Cloud 태그명');
+    expect(text).toContain('숨김은 화면 카테고리 목록');
+    expect(text).toContain('Cloud 태그는 유지됩니다');
   });
 });

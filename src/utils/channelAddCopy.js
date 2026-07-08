@@ -42,6 +42,32 @@ export const getChannelPreviewSaveNoticeText = () => (
   '채널을 Cloud 목록에 저장합니다. 새 영상 수집은 선택 채널 새 영상 수집 버튼을 눌렀을 때만 진행됩니다.'
 );
 
+export const getChannelBulkTagSelectorLabel = () => (
+  '태그 선택 (전체 일괄 적용, 여러 개 가능)'
+);
+
+export const getChannelPreviewTagSelectorLabel = () => (
+  '태그 선택 (여러 개 가능, 안 골라도 OK)'
+);
+
+export const getChannelLanguageSelectCopy = () => ({
+  ariaLabel: '채널 기본 언어 선택',
+  title: '채널 기본 언어 선택',
+});
+
+export const getChannelPreviewNoteFieldCopy = () => ({
+  ariaLabel: '새 채널 첫 기록 메모',
+  placeholder: '첫 기록 메모 (선택) - 예) 시니어롱폼 소재용, 톤 비슷함',
+});
+
+export const getChannelPreviewSummaryViewProps = () => ({
+  closeButtonProps: {
+    ariaLabel: '채널 확인 결과 닫기',
+    title: '채널 확인 결과 닫기',
+  },
+  statusLabel: '채널 확인 완료',
+});
+
 export const getChannelAddFormHeaderCopy = () => ({
   label: '새 채널 모니터링 추가',
   modeButtons: [
