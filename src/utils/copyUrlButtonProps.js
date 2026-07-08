@@ -1,7 +1,14 @@
+import { formatNumberedUrlList } from './urls';
+
+export const getCopyableUrlText = (url) => {
+  if (Array.isArray(url)) return formatNumberedUrlList(url);
+  if (typeof url === 'string') return url;
+  return url ? String(url) : '';
+};
+
 export const hasCopyableUrlValue = (url) => {
-  if (Array.isArray(url)) return url.length > 0;
-  if (typeof url === 'string') return url.trim().length > 0;
-  return Boolean(url);
+  const copyText = getCopyableUrlText(url);
+  return copyText.trim().length > 0;
 };
 
 export const getCopyUrlButtonDefaults = ({

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getCopyUrlButtonDefaults, hasCopyableUrlValue } from './copyUrlButtonProps';
+import { getCopyableUrlText, getCopyUrlButtonDefaults, hasCopyableUrlValue } from './copyUrlButtonProps';
 
 describe('copyUrlButtonProps utils', () => {
   it('detects copyable URL values and rejects empty strings or lists', () => {
@@ -9,7 +9,15 @@ describe('copyUrlButtonProps utils', () => {
     expect(hasCopyableUrlValue('')).toBe(false);
     expect(hasCopyableUrlValue('   ')).toBe(false);
     expect(hasCopyableUrlValue([])).toBe(false);
+    expect(hasCopyableUrlValue([null])).toBe(false);
     expect(hasCopyableUrlValue(null)).toBe(false);
+  });
+
+  it('formats array URL values into copyable numbered text', () => {
+    expect(getCopyableUrlText([
+      ['First clip', 'https://example.com/one'],
+      ['Second clip', 'https://example.com/two'],
+    ])).toBe('1. First clip\nhttps://example.com/one\n\n2. Second clip\nhttps://example.com/two');
   });
 
   it('builds default copy button labels and safe title', () => {
