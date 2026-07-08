@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   EMPTY_COMMENT_MODAL,
+  TOP_COMMENTS_API_KEY_REQUIRED_MESSAGE,
   getTopCommentsModalBodyViewProps,
   getTopCommentsModalHeaderViewProps,
   getTopCommentsModalVideoTitleViewProps,
@@ -20,6 +21,9 @@ describe('topComments utils', () => {
   });
 
   it('builds user-facing YouTube comment error messages', () => {
+    expect(TOP_COMMENTS_API_KEY_REQUIRED_MESSAGE).toContain('YouTube API Key');
+    expect(TOP_COMMENTS_API_KEY_REQUIRED_MESSAGE).toContain('YouTube API를 호출');
+
     expect(getYoutubeCommentErrorMessage({
       errors: [{ reason: 'commentsDisabled' }],
       message: 'comments disabled',
