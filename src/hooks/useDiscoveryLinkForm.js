@@ -5,10 +5,10 @@ import {
 } from '../constants/discoveryLinks';
 import {
   confirmRiskyDiscoveryCandidate,
+  findDuplicateDiscoveryLink,
   getDiscoveryLinkUrlPreview,
   getInitialDiscoveryLinkForm,
   needsRiskyDiscoveryCandidateConfirmation,
-  normalizeDiscoveryLinkUrl,
 } from '../utils/discoveryLinkForm';
 
 export function useDiscoveryLinkForm({
@@ -24,12 +24,7 @@ export function useDiscoveryLinkForm({
   };
 
   const urlPreview = getDiscoveryLinkUrlPreview(form.url);
-  const duplicateLink = useMemo(() => {
-    const normalizedFormUrl = normalizeDiscoveryLinkUrl(trimmedFormUrl);
-    if (!normalizedFormUrl) return null;
-
-    return links.find((link) => normalizeDiscoveryLinkUrl(link.url) === normalizedFormUrl) || null;
-  }, [links, trimmedFormUrl]);
+  const duplicateLink = useMemo(() => findDuplicateDiscoveryLink(links, trimmedFormUrl), [links, trimmedFormUrl]);
   const hasInvalidUrl = urlPreview?.isValid === false;
   const isCreateDisabled = saving || !trimmedFormUrl || hasInvalidUrl || Boolean(duplicateLink);
   const showRiskyCandidateHint = needsRiskyDiscoveryCandidateConfirmation(form.status, form.rightsStatus);
