@@ -5,6 +5,10 @@ import {
   getCloudScrapbookVideos,
   getNextScrapbookVideos,
   getProductionScopedVideos,
+  getScrapbookVideoCardViewProps,
+  getScrapbookVideoFooterStatsViewProps,
+  getScrapbookVideoInfoViewProps,
+  getScrapbookVideoThumbnailViewProps,
   getScrapbookVideoUrlList,
   getScrapbookWorkspaceViewProps,
   hasScrapbookVideo,
@@ -85,6 +89,52 @@ describe('scrapbook utils', () => {
     expect(getProductionScopedVideos([savedVideo, secondVideo], {
       'video-2': { status: PRODUCTION_STATUS.ACTIVE },
     })).toEqual([secondVideo]);
+  });
+
+  it('builds scrapbook video card, thumbnail, info, and footer stats copy', () => {
+    const richVideo = {
+      ...savedVideo,
+      channel_title: 'Saved Channel',
+      duration: '12:34',
+      isShorts: true,
+      like_ratio: 5,
+      view_count: 123456,
+    };
+    const cardProps = getScrapbookVideoCardViewProps(richVideo);
+    const thumbnailProps = getScrapbookVideoThumbnailViewProps({
+      video: richVideo,
+      videoTitle: cardProps.videoTitle,
+    });
+    const infoProps = getScrapbookVideoInfoViewProps({
+      video: richVideo,
+      videoUrl: cardProps.videoUrl,
+    });
+    const statsProps = getScrapbookVideoFooterStatsViewProps(richVideo);
+
+    expect(cardProps).toEqual({
+      videoTitle: 'Saved video',
+      videoUrl: 'https://youtube.com/watch?v=video-1',
+    });
+    expect(thumbnailProps).toMatchObject({
+      durationText: '12:34',
+      imageProps: {
+        alt: 'Saved video 썸네일',
+        src: 'https://i.ytimg.com/vi/video-1/hqdefault.jpg',
+      },
+      shortsLabel: 'Shorts',
+      showShortsLabel: true,
+    });
+    expect(infoProps).toMatchObject({
+      channelTitle: 'Saved Channel',
+      title: 'Saved video',
+    });
+    expect(infoProps.titleLinkProps['aria-label']).toContain('YouTube 원본 영상 열기');
+    expect(statsProps).toEqual({
+      label: '조회수 / 참여율',
+      likeRatioText: '(5%)',
+      viewCountText: '123,456',
+    });
+    expect(getScrapbookVideoCardViewProps({}).videoTitle).toBe('이 영상');
   });
 
   it('builds scrapbook workspace props for scrapbook and production views', () => {

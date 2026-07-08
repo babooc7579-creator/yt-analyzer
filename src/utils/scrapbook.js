@@ -11,6 +11,13 @@ const toRecordMap = (records) => (
 
 const getVideoId = (video) => toVideoObject(video).videoId;
 
+const getVideoTitle = (video) => toVideoObject(video).title || '이 영상';
+
+const toNumber = (value) => {
+  const numericValue = Number(value || 0);
+  return Number.isFinite(numericValue) ? numericValue : 0;
+};
+
 export const getCloudScrapbookVideos = (videos) => (
   Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
 );
@@ -45,6 +52,62 @@ export const getScrapbookVideoUrlList = (savedVideos = []) => formatNumberedUrlL
     .filter((video) => getVideoId(video))
     .map((video) => [video.title || '제목 없는 영상', getYouTubeVideoUrl(video.videoId)])
 );
+
+export const getScrapbookVideoCardViewProps = (video) => {
+  const sourceVideo = toVideoObject(video);
+  const videoTitle = getVideoTitle(sourceVideo);
+
+  return {
+    videoTitle,
+    videoUrl: getYouTubeVideoUrl(sourceVideo.videoId),
+  };
+};
+
+export const getScrapbookVideoFooterStatsViewProps = (video) => {
+  const sourceVideo = toVideoObject(video);
+
+  return {
+    label: '조회수 / 참여율',
+    likeRatioText: `(${toNumber(sourceVideo.like_ratio)}%)`,
+    viewCountText: toNumber(sourceVideo.view_count).toLocaleString(),
+  };
+};
+
+export const getScrapbookVideoInfoViewProps = ({
+  video,
+  videoUrl,
+} = {}) => {
+  const sourceVideo = toVideoObject(video);
+  const videoTitle = getVideoTitle(sourceVideo);
+
+  return {
+    channelTitle: sourceVideo.channel_title || '',
+    title: videoTitle,
+    titleLinkProps: {
+      'aria-label': `${videoTitle} YouTube 원본 영상 열기`,
+      href: videoUrl,
+      title: videoTitle,
+    },
+  };
+};
+
+export const getScrapbookVideoThumbnailViewProps = ({
+  video,
+  videoTitle,
+} = {}) => {
+  const sourceVideo = toVideoObject(video);
+  const displayTitle = videoTitle || getVideoTitle(sourceVideo);
+
+  return {
+    durationText: sourceVideo.duration,
+    imageProps: {
+      alt: `${displayTitle} 썸네일`,
+      src: `https://i.ytimg.com/vi/${sourceVideo.videoId}/hqdefault.jpg`,
+    },
+    shortsLabel: 'Shorts',
+    showShortsLabel: Boolean(sourceVideo.isShorts),
+  };
+};
 
 export const getProductionScopedVideos = (savedVideos = [], videoUserRecords = {}) => {
   const records = toRecordMap(videoUserRecords);

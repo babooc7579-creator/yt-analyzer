@@ -1,4 +1,4 @@
-import { getYouTubeVideoUrl } from '../utils/urls';
+import { getScrapbookVideoCardViewProps } from '../utils/scrapbook';
 import ScrapbookVideoCardFooter from './ScrapbookVideoCardFooter';
 import ScrapbookVideoInfo from './ScrapbookVideoInfo';
 import ScrapbookVideoThumbnail from './ScrapbookVideoThumbnail';
@@ -8,22 +8,21 @@ export default function ScrapbookVideoCard({
   onFetchComments,
   onRemoveScrap,
 }) {
-  const videoTitle = video.title || '이 영상';
-  const videoUrl = getYouTubeVideoUrl(video.videoId);
+  const viewProps = getScrapbookVideoCardViewProps(video);
 
   const footerProps = {
     onFetchComments,
     onRemoveScrap,
     video,
-    videoTitle,
-    videoUrl,
+    videoTitle: viewProps.videoTitle,
+    videoUrl: viewProps.videoUrl,
   };
 
   return (
     <div className="border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition-all group bg-white flex flex-col">
-      <ScrapbookVideoThumbnail video={video} videoTitle={videoTitle} />
+      <ScrapbookVideoThumbnail video={video} videoTitle={viewProps.videoTitle} />
       <div className="p-4 flex-1 flex flex-col justify-between">
-        <ScrapbookVideoInfo video={video} videoUrl={videoUrl} />
+        <ScrapbookVideoInfo video={video} videoUrl={viewProps.videoUrl} />
         <ScrapbookVideoCardFooter {...footerProps} />
       </div>
     </div>
