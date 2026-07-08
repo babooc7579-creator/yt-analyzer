@@ -129,6 +129,7 @@ describe('creatorHomeViewProps utils', () => {
     props.radarSummaryProps.onOpenDiscoveryLinks();
     props.radarSummaryProps.onOpenProductionCandidates();
     props.radarSummaryProps.onOpenSelectedScan();
+    props.radarSummaryProps.onOpenVault();
 
     expect(openedViews).toEqual([
       'ops-add-channel',
@@ -141,6 +142,7 @@ describe('creatorHomeViewProps utils', () => {
       'vault-sources',
       'studio-candidates',
       'ops-selected-scan',
+      'vault-all',
     ]);
   });
 

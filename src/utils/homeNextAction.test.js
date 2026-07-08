@@ -25,15 +25,21 @@ describe('homeNextAction utils', () => {
   });
 
   it('keeps channel selection clear that it does not call the YouTube API', () => {
+    const onOpenVault = () => 'open vault';
+
     const action = getHomeNextAction({
       savedChannelCount: 12,
       selectedChannelCount: 0,
+      onOpenVault,
     });
 
     expect(action.tone).toBe('amber');
     expect(action.iconKey).toBe('listChecks');
     expect(action.description).toContain('YouTube API를 호출하지 않습니다');
-    expect(action.actionLabel).toBeUndefined();
+    expect(action.actionLabel).toBe('저장 영상/채널 목록 열기');
+    expect(action.actionTitle).toContain('Cloud DB 조회');
+    expect(action.actionTitle).toContain('YouTube API 호출은 실행되지 않습니다');
+    expect(action.onAction).toBe(onOpenVault);
   });
 
   it('keeps stored video loading clear that it is a Cloud DB lookup without YouTube API calls', () => {
