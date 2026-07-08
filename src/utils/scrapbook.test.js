@@ -152,6 +152,7 @@ describe('scrapbook utils', () => {
       onFetchComments: () => 'comments',
       onMoveVideo: () => 'move',
       onOpenDiscoveryLinks: () => 'open links',
+      onOpenHome: () => 'open home',
       onOpenReferenceVault: () => 'open vault',
       onRemoveScrap: () => 'remove',
       onUpdateDiscoveryLink: () => 'update link',
@@ -185,6 +186,7 @@ describe('scrapbook utils', () => {
       videoUserRecords: {
         'video-1': { statusIds: [PRODUCTION_STATUS.ACTIVE] },
       },
+      onOpenHome: handlers.onOpenHome,
     });
     expect(productionProps.getScrapbookVideoCardProps(savedVideo)).toMatchObject({
       video: savedVideo,

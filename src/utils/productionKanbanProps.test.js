@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getProductionKanbanEmptyStateActions,
   getProductionKanbanContentChildProps,
   getProductionKanbanContentProps,
   shouldShowProductionKanbanEmptyState,
@@ -22,6 +23,40 @@ describe('productionKanbanProps utils', () => {
       discoveryLinkCandidates: [],
       productionSummary: { videoCount: 1 },
     })).toBe(false);
+  });
+
+  it('builds empty state actions for home, reference vault, and discovery links without data changes', () => {
+    const onOpenDiscoveryLinks = () => 'open discovery';
+    const onOpenHome = () => 'open home';
+    const onOpenReferenceVault = () => 'open vault';
+
+    const actions = getProductionKanbanEmptyStateActions({
+      onOpenDiscoveryLinks,
+      onOpenHome,
+      onOpenReferenceVault,
+    });
+
+    expect(actions.map((action) => action.key)).toEqual([
+      'home',
+      'reference-vault',
+      'discovery-links',
+    ]);
+    expect(actions[0]).toMatchObject({
+      iconKey: 'home',
+      label: '오늘 레이더로',
+      onClick: onOpenHome,
+      variant: 'rose',
+    });
+    expect(actions[0].title).toContain('YouTube API');
+    expect(actions[0].title).toContain('호출하지 않습니다');
+    expect(actions[1].onClick).toBe(onOpenReferenceVault);
+    expect(actions[2].onClick).toBe(onOpenDiscoveryLinks);
+  });
+
+  it('omits empty state actions that do not have handlers', () => {
+    expect(getProductionKanbanEmptyStateActions({
+      onOpenDiscoveryLinks: () => 'open discovery',
+    }).map((action) => action.key)).toEqual(['discovery-links']);
   });
 
   it('builds kanban content props with summary video count and forwarded handlers', () => {

@@ -13,6 +13,7 @@ export default function ProductionKanban({
   videoUserRecords,
   onMoveVideo,
   onOpenDiscoveryLinks,
+  onOpenHome,
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
   onOpenReferenceVault,
@@ -49,6 +50,7 @@ export default function ProductionKanban({
     return (
       <ProductionKanbanEmptyState
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
+        onOpenHome={onOpenHome}
         onOpenReferenceVault={onOpenReferenceVault}
       />
     );
