@@ -49,8 +49,13 @@ describe('productionKanbanProps utils', () => {
     });
     expect(actions[0].title).toContain('YouTube API');
     expect(actions[0].title).toContain('호출하지 않습니다');
+    expect(actions[0].ariaLabel).toContain('YouTube API 호출 없음');
     expect(actions[1].onClick).toBe(onOpenReferenceVault);
+    expect(actions[1].title).toContain('Cloud DB 조회');
+    expect(actions[1].ariaLabel).toContain('YouTube API 호출 없음');
     expect(actions[2].onClick).toBe(onOpenDiscoveryLinks);
+    expect(actions[2].title).toContain('자동 수집이나 다운로드는 실행하지 않습니다');
+    expect(actions[2].ariaLabel).toContain('자동 수집이나 다운로드 없음');
   });
 
   it('omits empty state actions that do not have handlers', () => {
