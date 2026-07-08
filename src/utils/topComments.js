@@ -5,6 +5,8 @@ export const EMPTY_COMMENT_MODAL = {
   videoTitle: '',
 };
 
+export const TOP_COMMENTS_API_KEY_REQUIRED_MESSAGE = '댓글 Top 10 조회에는 YouTube API Key가 필요합니다. 이 기능은 YouTube API를 호출합니다.';
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 const toModalObject = (modal) => (modal && typeof modal === 'object' ? modal : {});
 

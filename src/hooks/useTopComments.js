@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { fetchTopComments as fetchTopCommentsFromYoutube } from '../services/youtubeApi';
 import {
   EMPTY_COMMENT_MODAL,
+  TOP_COMMENTS_API_KEY_REQUIRED_MESSAGE,
   getYoutubeCommentErrorMessage,
   getYoutubeTopComments,
 } from '../utils/topComments';
@@ -15,7 +16,7 @@ export function useTopComments({ apiKey, onError }) {
 
   const fetchTopComments = async (videoId, videoTitle) => {
     if (!apiKey) {
-      onError('댓글 Top 10 조회에는 YouTube API Key가 필요합니다. 이 기능은 YouTube API를 호출합니다.');
+      onError(TOP_COMMENTS_API_KEY_REQUIRED_MESSAGE);
       return;
     }
 
