@@ -1,3 +1,8 @@
+import {
+  getDiscoveryStatusFilterButtonProps,
+  getDiscoveryStatusFilterGroupViewProps,
+} from '../utils/discoveryLinksCopy';
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export default function DiscoveryStatusFilterGroup({
@@ -6,15 +11,17 @@ export default function DiscoveryStatusFilterGroup({
   statusFilterOptions,
 }) {
   const filterOptions = toArray(statusFilterOptions);
+  const { title } = getDiscoveryStatusFilterGroupViewProps();
 
   return (
     <>
       <p className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
-        검토 상태별 보기
+        {title}
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         {filterOptions.map((option) => {
           const isActive = statusFilter === option.value;
+          const buttonProps = getDiscoveryStatusFilterButtonProps({ option });
           return (
             <button
               className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-extrabold transition ${
@@ -24,8 +31,8 @@ export default function DiscoveryStatusFilterGroup({
               }`}
               key={option.value}
               onClick={() => setStatusFilter(option.value)}
-              title={`${option.label} 상태 링크만 보기`}
-              aria-label={`${option.label} 상태 링크 ${option.count}개 보기`}
+              title={buttonProps.title}
+              aria-label={buttonProps['aria-label']}
               type="button"
             >
               <span>{option.label}</span>

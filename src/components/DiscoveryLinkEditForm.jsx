@@ -14,8 +14,10 @@ export default function DiscoveryLinkEditForm({
   title,
 }) {
   const {
+    cancelButtonLabel,
     cancelButtonProps,
     memoField,
+    saveButtonLabel,
     saveButtonProps,
     titleField,
   } = getDiscoveryLinkEditFormViewProps({
@@ -55,11 +57,11 @@ export default function DiscoveryLinkEditForm({
       <div className="flex flex-wrap gap-2">
         <button {...saveButtonProps}>
           <Save className="h-4 w-4" />
-          저장
+          {saveButtonLabel}
         </button>
         <button {...cancelButtonProps}>
           <X className="h-4 w-4" />
-          취소
+          {cancelButtonLabel}
         </button>
       </div>
     </div>

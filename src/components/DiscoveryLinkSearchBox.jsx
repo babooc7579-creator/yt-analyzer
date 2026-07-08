@@ -1,13 +1,17 @@
 import { Search, X } from 'lucide-react';
 
+import { getDiscoveryLinkSearchBoxViewProps } from '../utils/discoveryLinksCopy';
+
 export default function DiscoveryLinkSearchBox({
   searchQuery,
   setSearchQuery,
 }) {
+  const viewProps = getDiscoveryLinkSearchBoxViewProps();
+
   return (
     <div className="mt-3">
       <label className="sr-only" htmlFor="discovery-link-search">
-        발견 링크 검색
+        {viewProps.label}
       </label>
       <div className="flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-500 transition focus-within:border-indigo-400 focus-within:bg-white">
         <Search className="h-4 w-4 shrink-0" />
@@ -15,18 +19,17 @@ export default function DiscoveryLinkSearchBox({
           className="min-w-0 flex-1 bg-transparent py-2 text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400"
           id="discovery-link-search"
           onChange={(event) => setSearchQuery(event.target.value)}
-          placeholder="제목, 메모, URL 검색"
+          placeholder={viewProps.inputPlaceholder}
           type="search"
           value={searchQuery}
-          aria-label="발견 링크 검색어"
+          aria-label={viewProps.inputAriaLabel}
         />
         {searchQuery ? (
           <button
             className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-200 hover:text-slate-700"
             onClick={() => setSearchQuery('')}
             type="button"
-            aria-label="검색어 지우기"
-            title="검색어 지우기"
+            {...viewProps.clearButtonProps}
           >
             <X className="h-4 w-4" />
           </button>

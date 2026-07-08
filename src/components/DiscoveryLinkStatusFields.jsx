@@ -2,19 +2,21 @@ import {
   DISCOVERY_LINK_STATUS_OPTIONS,
   DISCOVERY_RIGHTS_STATUS_OPTIONS,
 } from '../constants/discoveryLinks';
+import { getDiscoveryLinkStatusFieldsViewProps } from '../utils/discoveryLinksCopy';
 import DiscoveryLinkFieldLabel from './DiscoveryLinkFieldLabel';
 
 export default function DiscoveryLinkStatusFields({ onChange, rightsStatus, status }) {
+  const { rightsField, statusField } = getDiscoveryLinkStatusFieldsViewProps();
+
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-1">
       <div className="space-y-1.5">
-        <DiscoveryLinkFieldLabel>검토 상태</DiscoveryLinkFieldLabel>
+        <DiscoveryLinkFieldLabel>{statusField.label}</DiscoveryLinkFieldLabel>
         <select
           className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm font-bold text-white outline-none transition focus:border-indigo-400"
           onChange={(event) => onChange('status', event.target.value)}
           value={status}
-          title="발견 링크 검토 상태 선택"
-          aria-label="발견 링크 검토 상태 선택"
+          {...statusField.selectProps}
         >
           {DISCOVERY_LINK_STATUS_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>{option.label}</option>
@@ -23,13 +25,12 @@ export default function DiscoveryLinkStatusFields({ onChange, rightsStatus, stat
       </div>
 
       <div className="space-y-1.5">
-        <DiscoveryLinkFieldLabel>권리 상태</DiscoveryLinkFieldLabel>
+        <DiscoveryLinkFieldLabel>{rightsField.label}</DiscoveryLinkFieldLabel>
         <select
           className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm font-bold text-white outline-none transition focus:border-indigo-400"
           onChange={(event) => onChange('rightsStatus', event.target.value)}
           value={rightsStatus}
-          title="사용자가 표시하는 권리 상태입니다. 선택만으로 사용 허가나 권리 확인 완료가 되지는 않습니다."
-          aria-label="발견 링크 권리 상태 선택, 사용 허가나 권리 확인 완료 의미 아님"
+          {...rightsField.selectProps}
         >
           {DISCOVERY_RIGHTS_STATUS_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>{option.label}</option>

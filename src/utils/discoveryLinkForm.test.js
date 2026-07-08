@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getDiscoveryLinkDraftUpdates,
+  getDiscoveryLinkEditFormViewProps,
   getDiscoveryLinkFormProps,
   getDiscoveryLinkUrlPreview,
   needsRiskyDiscoveryCandidateConfirmation,
@@ -99,5 +100,30 @@ describe('discoveryLinkForm utils', () => {
       ['title', 'New title'],
       ['memo', 'New memo'],
     ]);
+  });
+
+  it('builds edit form button labels and preserves handlers', () => {
+    const onCancel = () => 'cancel';
+    const onSave = () => 'save';
+    const setDraftMemo = () => 'memo';
+    const setDraftTitle = () => 'title';
+    const props = getDiscoveryLinkEditFormViewProps({
+      draftMemo: 'memo',
+      draftTitle: 'title',
+      linkId: 'link-1',
+      onCancel,
+      onSave,
+      saving: false,
+      setDraftMemo,
+      setDraftTitle,
+      title: 'Idea link',
+    });
+
+    expect(props.saveButtonLabel).toBe('저장');
+    expect(props.cancelButtonLabel).toBe('취소');
+    expect(props.saveButtonProps.onClick).toBe(onSave);
+    expect(props.cancelButtonProps.onClick).toBe(onCancel);
+    expect(props.titleField.label).toBe('제목');
+    expect(props.memoField.label).toBe('메모');
   });
 });

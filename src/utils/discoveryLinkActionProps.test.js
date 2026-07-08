@@ -51,6 +51,7 @@ describe('discoveryLinkActionProps utils', () => {
 
     expect(props.openLinkProps.href).toBe('https://example.com/post');
     expect(props.openLinkProps.title).toContain('자동 수집하거나 다운로드하지 않습니다');
+    expect(props.openLinkLabel).toBe('열기');
     expect(props.copyUrlButtonProps.title).toContain('외부 사이트 수집이나 저장 작업은 없습니다');
     expect(props.editButtonLabel).toBe('수정');
     expect(props.editIconName).toBe('edit');

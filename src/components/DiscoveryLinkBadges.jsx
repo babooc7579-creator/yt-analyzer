@@ -2,6 +2,7 @@ import {
   getDiscoveryLinkStatusLabel,
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
+import { getDiscoveryLinkSourceBadgeLabel } from '../utils/discoveryLinksCopy';
 
 export default function DiscoveryLinkBadges({
   currentRightsStatus,
@@ -16,7 +17,7 @@ export default function DiscoveryLinkBadges({
         {platformLabel}
       </span>
       <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-extrabold text-slate-600">
-        출처 {sourceHost}
+        {getDiscoveryLinkSourceBadgeLabel(sourceHost)}
       </span>
       <span className="rounded-full bg-indigo-50 px-2 py-1 text-[10px] font-extrabold text-indigo-700">
         {getDiscoveryLinkStatusLabel(currentStatus)}
