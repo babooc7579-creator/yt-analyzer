@@ -45,6 +45,19 @@ describe('scrapbookHeaderActions utils', () => {
     expect(viewProps.promptIconName).toBe('lightbulb');
   });
 
+  it('disables URL copy when the URL list is whitespace-only', () => {
+    const viewProps = getScrapbookHeaderActionsViewProps({
+      copiedPrompt: '',
+      onCopyPrompt: () => 'copy prompt',
+      promptCopyError: '',
+      savedVideoCount: 1,
+      videoUrlList: '   ',
+    });
+
+    expect(viewProps.copyUrlButtonProps.disabled).toBe(true);
+    expect(viewProps.promptButtonProps.disabled).toBe(false);
+  });
+
   it('switches prompt copy feedback between copied and error states', () => {
     const copiedProps = getScrapbookHeaderActionsViewProps({
       copiedPrompt: 'copied',

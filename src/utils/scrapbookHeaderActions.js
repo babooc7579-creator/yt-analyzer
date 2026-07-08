@@ -1,3 +1,5 @@
+import { hasCopyableUrlValue } from './copyUrlButtonProps';
+
 export const getScrapbookHeaderActionsViewProps = ({
   copiedPrompt,
   onCopyPrompt,
@@ -6,7 +8,7 @@ export const getScrapbookHeaderActionsViewProps = ({
   videoUrlList,
 }) => {
   const hasSavedVideos = savedVideoCount > 0;
-  const hasVideoUrlList = Boolean(videoUrlList);
+  const hasVideoUrlList = hasCopyableUrlValue(videoUrlList);
   const promptButtonLabel = promptCopyError
     ? '복사 실패 - 다시 시도'
     : copiedPrompt

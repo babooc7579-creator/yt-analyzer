@@ -156,6 +156,14 @@ describe('videoToolbarProps utils', () => {
     }).copyButtonDisabled).toBe(false);
   });
 
+  it('disables reference header URL copy when list is whitespace-only', () => {
+    expect(getVideoToolbarReferenceHeaderViewProps({
+      filteredCount: 1,
+      filteredVideoUrlList: '   ',
+      totalCount: 1,
+    }).copyButtonDisabled).toBe(true);
+  });
+
   it('builds tteotteotto button copy for both modes', () => {
     expect(getVideoToolbarTtoTtoButtonViewProps({
       ttoTtoMode: true,

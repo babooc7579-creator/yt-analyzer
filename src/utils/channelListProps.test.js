@@ -153,6 +153,11 @@ describe('channelListProps utils', () => {
       visibleChannelUrlList: '',
       visibleChannels: [overseasChannel],
     }).copyButtonProps.disabled).toBe(true);
+    expect(getChannelListUrlExportPanelViewProps({
+      selectedCategory: '해외',
+      visibleChannelUrlList: '   ',
+      visibleChannels: [overseasChannel],
+    }).copyButtonProps.disabled).toBe(true);
   });
 
   it('builds loading state copy for Cloud channel lookup', () => {
