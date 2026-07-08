@@ -135,6 +135,7 @@ export const getCreatorHomeViewProps = ({
       onOpenDiscoveryLinks: () => onOpenView({ id: 'vault-sources' }),
       onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
       onOpenSelectedScan: () => onOpenView({ id: 'ops-selected-scan' }),
+      onOpenVault: () => onOpenView({ id: 'vault-all' }),
       productionCandidateCount,
     },
   };

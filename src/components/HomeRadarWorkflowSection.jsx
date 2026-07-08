@@ -18,6 +18,7 @@ export default function HomeRadarWorkflowSection({
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   onOpenSelectedScan,
+  onOpenVault,
   openRadarCandidateCount,
   productionCandidateCount,
   savedChannelCount = 0,
@@ -54,6 +55,7 @@ export default function HomeRadarWorkflowSection({
         onOpenAddChannel={onOpenAddChannel}
         onOpenProductionCandidates={onOpenProductionCandidates}
         onOpenSelectedScan={onOpenSelectedScan}
+        onOpenVault={onOpenVault}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
         savedChannelCount={savedChannelCount}

@@ -16,6 +16,7 @@ export default function HomeRadarSummary({
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   onOpenSelectedScan,
+  onOpenVault,
   productionCandidateCount,
   selectedChannelCount,
 }) {
@@ -40,6 +41,7 @@ export default function HomeRadarSummary({
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
         onOpenProductionCandidates={onOpenProductionCandidates}
         onOpenSelectedScan={onOpenSelectedScan}
+        onOpenVault={onOpenVault}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
         savedChannelCount={savedChannelCount}
