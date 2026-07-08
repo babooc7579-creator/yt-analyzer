@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { PRODUCTION_STATUS, VIDEO_STATUS } from '../constants/status';
 import {
+  VIDEO_USER_RECORD_SAVE_FAILED_MESSAGE,
+  VIDEO_USER_RECORDS_CLEAR_FAILED_MESSAGE,
+  VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE,
   createRadarRestoredRecord,
   createUpdatedVideoUserRecord,
   createVideoStatusRecord,
@@ -12,6 +15,12 @@ import {
 } from './videoUserRecords';
 
 describe('videoUserRecords utils', () => {
+  it('keeps Cloud video user record fallback copy centralized', () => {
+    expect(VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE).toBe('영상 판단 기록을 불러오지 못했습니다.');
+    expect(VIDEO_USER_RECORD_SAVE_FAILED_MESSAGE).toBe('영상 판단 기록을 저장하지 못했습니다.');
+    expect(VIDEO_USER_RECORDS_CLEAR_FAILED_MESSAGE).toBe('영상 판단 기록을 초기화하지 못했습니다.');
+  });
+
   it('normalizes old records with a single status into statusIds fallback', () => {
     expect(getCloudVideoUserRecord({
       videoId: 'v1',

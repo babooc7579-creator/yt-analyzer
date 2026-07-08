@@ -14,6 +14,15 @@ const toRecordObject = (record) => (
   record && typeof record === 'object' ? record : {}
 );
 
+export const VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE =
+  '영상 판단 기록을 불러오지 못했습니다.';
+
+export const VIDEO_USER_RECORD_SAVE_FAILED_MESSAGE =
+  '영상 판단 기록을 저장하지 못했습니다.';
+
+export const VIDEO_USER_RECORDS_CLEAR_FAILED_MESSAGE =
+  '영상 판단 기록을 초기화하지 못했습니다.';
+
 export const getCloudVideoUserRecords = (records = {}) => normalizeVideoUserRecords(records || {});
 
 export const getCloudVideoUserRecord = (record = {}) => normalizeVideoUserRecord(record);
