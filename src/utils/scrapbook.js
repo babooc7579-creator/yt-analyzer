@@ -13,6 +13,15 @@ const getVideoId = (video) => toVideoObject(video).videoId;
 
 const getVideoTitle = (video) => toVideoObject(video).title || '이 영상';
 
+export const SCRAPBOOK_LOAD_FAILED_MESSAGE =
+  '스크랩북을 불러오지 못했습니다.';
+
+export const SCRAPBOOK_DELETE_FAILED_MESSAGE =
+  '스크랩북에서 삭제하지 못했습니다.';
+
+export const SCRAPBOOK_SAVE_FAILED_MESSAGE =
+  '스크랩북에 저장하지 못했습니다.';
+
 const toNumber = (value) => {
   const numericValue = Number(value || 0);
   return Number.isFinite(numericValue) ? numericValue : 0;

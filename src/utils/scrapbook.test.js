@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { PRODUCTION_STATUS, VIDEO_STATUS } from '../constants/status';
 import {
+  SCRAPBOOK_DELETE_FAILED_MESSAGE,
+  SCRAPBOOK_LOAD_FAILED_MESSAGE,
+  SCRAPBOOK_SAVE_FAILED_MESSAGE,
   getCloudScrapbookVideos,
   getNextScrapbookVideos,
   getProductionScopedVideos,
@@ -26,6 +29,12 @@ describe('scrapbook utils', () => {
     videoId: 'video-2',
     title: 'Second video',
   };
+
+  it('keeps Cloud scrapbook fallback copy centralized', () => {
+    expect(SCRAPBOOK_LOAD_FAILED_MESSAGE).toBe('스크랩북을 불러오지 못했습니다.');
+    expect(SCRAPBOOK_DELETE_FAILED_MESSAGE).toBe('스크랩북에서 삭제하지 못했습니다.');
+    expect(SCRAPBOOK_SAVE_FAILED_MESSAGE).toBe('스크랩북에 저장하지 못했습니다.');
+  });
 
   it('keeps only object videos in the Cloud scrapbook list', () => {
     expect(getCloudScrapbookVideos([savedVideo, null, 'bad', secondVideo])).toEqual([
