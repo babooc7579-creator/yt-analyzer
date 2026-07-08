@@ -31,6 +31,27 @@ export const getVideoToolbarScanActionViewProps = ({
   };
 };
 
+export const getVideoToolbarReferenceHeaderViewProps = ({
+  filteredCount,
+  filteredVideoUrlList,
+  totalCount,
+}) => ({
+  copyButtonAriaLabel: `현재 표시된 저장 영상 ${filteredCount}개 URL 목록 복사`,
+  copyButtonCopiedLabel: '목록 복사 완료',
+  copyButtonDisabled: !filteredVideoUrlList,
+  copyButtonLabel: '영상 URL 목록 복사',
+  copyButtonTitle: '현재 검색/필터/정렬 조건으로 보이는 영상 제목과 YouTube URL 목록을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
+  description: '검색, 필터, 정렬, 보기 방식을 바꿔 제작 소재를 좁혀봅니다.',
+  statusText: `현재 표시 ${filteredCount}개 / 전체 ${totalCount}개`,
+  title: '보관함 도구막대',
+});
+
+export const getVideoToolbarTtoTtoButtonViewProps = ({ ttoTtoMode }) => ({
+  ariaLabel: ttoTtoMode ? '터또터 발굴 모드 끄기' : '터또터 발굴 모드 켜기',
+  label: '터또터 발굴 (6개월+)',
+  title: '6개월 이상 지난 또터또 후보 중심으로 보기',
+});
+
 export const getVideoToolbarViewProps = ({
   activeSelectedChannelCount,
   filteredCount,

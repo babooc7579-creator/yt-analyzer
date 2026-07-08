@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getVideoToolbarReferenceHeaderViewProps,
   getVideoToolbarScanActionViewProps,
+  getVideoToolbarTtoTtoButtonViewProps,
   getVideoToolbarViewProps,
 } from './videoToolbarProps';
 
@@ -125,6 +127,48 @@ describe('videoToolbarProps utils', () => {
       hasScanTargets: true,
       isScanDisabled: true,
       scanButtonLabel: '새 영상 수집 중...',
+    });
+  });
+
+  it('builds reference header copy and disables URL copy when list is empty', () => {
+    const props = getVideoToolbarReferenceHeaderViewProps({
+      filteredCount: 3,
+      filteredVideoUrlList: '',
+      totalCount: 12,
+    });
+
+    expect(props).toMatchObject({
+      copyButtonAriaLabel: '현재 표시된 저장 영상 3개 URL 목록 복사',
+      copyButtonCopiedLabel: '목록 복사 완료',
+      copyButtonDisabled: true,
+      copyButtonLabel: '영상 URL 목록 복사',
+      statusText: '현재 표시 3개 / 전체 12개',
+      title: '보관함 도구막대',
+    });
+    expect(props.copyButtonTitle).toContain('YouTube API 호출이나 저장 작업은 없습니다');
+  });
+
+  it('enables reference header URL copy when list exists', () => {
+    expect(getVideoToolbarReferenceHeaderViewProps({
+      filteredCount: 1,
+      filteredVideoUrlList: 'https://youtube.com/watch?v=1',
+      totalCount: 1,
+    }).copyButtonDisabled).toBe(false);
+  });
+
+  it('builds tteotteotto button copy for both modes', () => {
+    expect(getVideoToolbarTtoTtoButtonViewProps({
+      ttoTtoMode: true,
+    })).toMatchObject({
+      ariaLabel: '터또터 발굴 모드 끄기',
+      label: '터또터 발굴 (6개월+)',
+    });
+
+    expect(getVideoToolbarTtoTtoButtonViewProps({
+      ttoTtoMode: false,
+    })).toMatchObject({
+      ariaLabel: '터또터 발굴 모드 켜기',
+      title: '6개월 이상 지난 또터또 후보 중심으로 보기',
     });
   });
 });
