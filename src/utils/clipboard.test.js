@@ -38,6 +38,10 @@ describe('clipboard utils', () => {
     await expect(copyTextToClipboard('')).rejects.toThrow('copy_failed');
   });
 
+  it('throws copy_failed for whitespace-only text', async () => {
+    await expect(copyTextToClipboard('   ')).rejects.toThrow('copy_failed');
+  });
+
   it('uses navigator clipboard writeText when available', async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal('navigator', {

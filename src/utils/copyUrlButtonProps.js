@@ -1,6 +1,8 @@
-export const hasCopyableUrlValue = (url) => (
-  Array.isArray(url) ? url.length > 0 : Boolean(url)
-);
+export const hasCopyableUrlValue = (url) => {
+  if (Array.isArray(url)) return url.length > 0;
+  if (typeof url === 'string') return url.trim().length > 0;
+  return Boolean(url);
+};
 
 export const getCopyUrlButtonDefaults = ({
   label = 'URL 복사',

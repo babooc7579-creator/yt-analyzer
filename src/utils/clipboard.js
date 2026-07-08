@@ -1,5 +1,7 @@
 export const copyTextToClipboard = async (text) => {
-  if (!text) throw new Error('copy_failed');
+  if (typeof text === 'string' ? text.trim().length === 0 : !text) {
+    throw new Error('copy_failed');
+  }
 
   if (navigator.clipboard?.writeText) {
     try {
