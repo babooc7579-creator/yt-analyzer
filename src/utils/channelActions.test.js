@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { CHANNEL_STATUS } from '../constants/status';
 import {
   CHANNEL_ACTION_COPY,
+  CHANNEL_LOAD_FAILED_MESSAGE,
   appendChannel,
   getChannelCloudActionError,
   getChannelDeleteConfirmMessage,
@@ -100,6 +101,7 @@ describe('channelActions utils', () => {
   });
 
   it('builds Cloud channel load errors that avoid treating failed lookup as source data', () => {
+    expect(CHANNEL_LOAD_FAILED_MESSAGE).toBe('채널 목록을 불러오지 못했습니다.');
     expect(getChannelLoadErrorMessage(new Error('network down'))).toBe(
       'network down Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );

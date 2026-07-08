@@ -31,6 +31,9 @@ export const CHANNEL_ACTION_COPY = Object.freeze({
   },
 });
 
+export const CHANNEL_LOAD_FAILED_MESSAGE =
+  '채널 목록을 불러오지 못했습니다.';
+
 export const appendChannel = (channels, channel) => {
   const nextChannel = toChannelObject(channel);
   if (!getChannelId(nextChannel)) return toArray(channels);
@@ -69,7 +72,7 @@ export const getChannelCloudActionError = (message, fallbackMessage, actionLabel
 };
 
 export const getChannelLoadErrorMessage = (error) => {
-  const message = error?.message || '채널 목록을 불러오지 못했습니다.';
+  const message = error?.message || CHANNEL_LOAD_FAILED_MESSAGE;
   return `${message} Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
