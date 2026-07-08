@@ -3,6 +3,9 @@ import { deleteScrapbookVideo, fetchScrapbook, saveScrapbookVideos } from '../se
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
 import {
+  SCRAPBOOK_DELETE_FAILED_MESSAGE,
+  SCRAPBOOK_LOAD_FAILED_MESSAGE,
+  SCRAPBOOK_SAVE_FAILED_MESSAGE,
   getCloudScrapbookVideos,
   getNextScrapbookVideos,
   hasScrapbookVideo,
@@ -25,7 +28,7 @@ export function useScrapbook() {
     const syncScrapbookFromCloud = async () => {
       try {
         const data = await fetchScrapbook();
-        if (!data.success) throw new Error(data.error || '스크랩북을 불러오지 못했습니다.');
+        if (!data.success) throw new Error(data.error || SCRAPBOOK_LOAD_FAILED_MESSAGE);
         if (isCancelled) return;
 
         const cloudVideos = getCloudScrapbookVideos(data.videos);
@@ -60,13 +63,13 @@ export function useScrapbook() {
     try {
       if (isSaved) {
         const data = await deleteScrapbookVideo(video.videoId);
-        if (!data.success) throw new Error(data.error || '스크랩북에서 삭제하지 못했습니다.');
+        if (!data.success) throw new Error(data.error || SCRAPBOOK_DELETE_FAILED_MESSAGE);
         const nextVideos = getNextScrapbookVideos(cloudScrapbookCacheRef.current, video, true);
         setSavedVideos(nextVideos);
         cacheCloudScrapbook(nextVideos);
       } else {
         const data = await saveScrapbookVideos([video]);
-        if (!data.success) throw new Error(data.error || '스크랩북에 저장하지 못했습니다.');
+        if (!data.success) throw new Error(data.error || SCRAPBOOK_SAVE_FAILED_MESSAGE);
         const nextVideos = getNextScrapbookVideos(cloudScrapbookCacheRef.current, video, false);
         setSavedVideos(nextVideos);
         cacheCloudScrapbook(nextVideos);
