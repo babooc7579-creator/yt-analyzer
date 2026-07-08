@@ -1,5 +1,8 @@
 import { CheckSquare, Square, Star } from 'lucide-react';
-import { getVideoScrapActionCopy } from '../utils/videoActionButtonProps';
+import {
+  getVideoScrapActionCopy,
+  getVideoSelectionActionCopy,
+} from '../utils/videoActionButtonProps';
 
 export default function VideoListRowMarkerCells({
   isChecked,
@@ -15,6 +18,13 @@ export default function VideoListRowMarkerCells({
     isSaved,
     videoTitle,
   });
+  const {
+    ariaLabel: selectionAriaLabel,
+    title: selectionTitle,
+  } = getVideoSelectionActionCopy({
+    isChecked,
+    videoTitle,
+  });
 
   return (
     <>
@@ -22,8 +32,8 @@ export default function VideoListRowMarkerCells({
         <button
           type="button"
           onClick={onToggleCheck}
-          title="AI API를 호출하지 않고, 나중에 복사할 요청문에 포함할 영상으로 선택합니다."
-          aria-label={`${videoTitle} AI 요청문 포함 선택 ${isChecked ? '해제' : '추가'}, API 호출 없음`}
+          title={selectionTitle}
+          aria-label={selectionAriaLabel}
           className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors"
         >
           {isChecked ? (

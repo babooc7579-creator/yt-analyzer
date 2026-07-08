@@ -1,9 +1,17 @@
+import { getVideoCardStatusBadgeItems } from '../utils/videoCard';
+
 export default function VideoCardStatusBadges({ isChecked, isProductionCandidate, isSaved }) {
+  const badgeItems = getVideoCardStatusBadgeItems({
+    isChecked,
+    isProductionCandidate,
+    isSaved,
+  });
+
   return (
     <div className="mt-2 flex flex-wrap items-center gap-1.5">
-      {isSaved && <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700">소재 보관됨</span>}
-      {isProductionCandidate && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">후보함 등록</span>}
-      {isChecked && <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700">AI 요청문 선택</span>}
+      {badgeItems.filter((item) => item.isVisible).map((item) => (
+        <span key={item.label} className={item.className}>{item.label}</span>
+      ))}
     </div>
   );
 }

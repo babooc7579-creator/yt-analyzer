@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   getVideoProductionCandidateActionCopy,
   getVideoScrapActionCopy,
+  getVideoSelectionActionCopy,
 } from './videoActionButtonProps';
 
 describe('videoActionButtonProps utils', () => {
@@ -56,5 +57,20 @@ describe('videoActionButtonProps utils', () => {
       isProductionCandidate: false,
       videoTitle: null,
     }).ariaLabel).toContain('이 영상');
+  });
+
+  it('builds AI prompt selection copy without calling an API', () => {
+    const checkedProps = getVideoSelectionActionCopy({
+      isChecked: true,
+      videoTitle: 'First idea',
+    });
+    const uncheckedProps = getVideoSelectionActionCopy({
+      isChecked: false,
+      videoTitle: 'First idea',
+    });
+
+    expect(checkedProps.ariaLabel).toBe('First idea AI 요청문 포함 선택 해제, API 호출 없음');
+    expect(uncheckedProps.ariaLabel).toBe('First idea AI 요청문 포함 선택 추가, API 호출 없음');
+    expect(checkedProps.title).toContain('AI API를 호출하지 않고');
   });
 });

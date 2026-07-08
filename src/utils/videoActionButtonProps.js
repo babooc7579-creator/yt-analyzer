@@ -32,3 +32,15 @@ export const getVideoProductionCandidateActionCopy = ({
     title,
   };
 };
+
+export const getVideoSelectionActionCopy = ({
+  isChecked,
+  videoTitle,
+}) => {
+  const displayTitle = toDisplayTitle(videoTitle);
+
+  return {
+    ariaLabel: `${displayTitle} AI 요청문 포함 선택 ${isChecked ? '해제' : '추가'}, API 호출 없음`,
+    title: 'AI API를 호출하지 않고, 나중에 복사할 요청문에 포함할 영상으로 선택합니다.',
+  };
+};
