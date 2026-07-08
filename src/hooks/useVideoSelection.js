@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { copyTextToClipboard } from '../utils/clipboard';
 import { buildAIRemakePrompt } from '../utils/prompts';
+import { toggleListValue } from '../utils/selection';
 
 export function useVideoSelection() {
   const [checkedVideos, setCheckedVideos] = useState([]);
@@ -29,11 +30,7 @@ export function useVideoSelection() {
   };
 
   const toggleCheckVideo = (videoId) => {
-    setCheckedVideos(prev => (
-      prev.includes(videoId)
-        ? prev.filter(id => id !== videoId)
-        : [...prev, videoId]
-    ));
+    setCheckedVideos((prev) => toggleListValue(prev, videoId));
   };
 
   const copyPromptForVideos = async (targetVideos) => {

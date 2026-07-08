@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toggleListValue } from '../utils/selection';
 
 export function useChannelFormState() {
   const [newCategoryName, setNewCategoryName] = useState('');
@@ -35,11 +36,7 @@ export function useChannelFormState() {
   };
 
   const toggleNewChannelTag = (tag) => {
-    setNewChannelTags(prev => (
-      prev.includes(tag)
-        ? prev.filter(currentTag => currentTag !== tag)
-        : [...prev, tag]
-    ));
+    setNewChannelTags((prev) => toggleListValue(prev, tag));
   };
 
   const startRenameCategory = (category) => {
