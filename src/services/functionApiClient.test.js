@@ -1,7 +1,14 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { FUNCTION_API_BASE } from '../config';
-import { deleteJson, getJson, patchJson, postJson } from './functionApiClient';
+import {
+  FUNCTION_API_REQUEST_FAILED_MESSAGE,
+  FUNCTION_API_RESPONSE_READ_FAILED_MESSAGE,
+  deleteJson,
+  getJson,
+  patchJson,
+  postJson,
+} from './functionApiClient';
 
 const installFetchMock = (response) => {
   const fetchMock = vi.fn(async () => response);
@@ -25,6 +32,13 @@ describe('functionApiClient', () => {
   afterEach(() => {
     Reflect.deleteProperty(globalThis, 'fetch');
     vi.restoreAllMocks();
+  });
+
+  it('keeps Cloud API fallback copy centralized', () => {
+    expect(FUNCTION_API_REQUEST_FAILED_MESSAGE).toBe('Cloud API 요청에 실패했습니다.');
+    expect(FUNCTION_API_RESPONSE_READ_FAILED_MESSAGE).toBe(
+      'Cloud API 응답을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.'
+    );
   });
 
   it('reads JSON responses from the configured Cloud API base URL', async () => {
