@@ -7,6 +7,7 @@ describe('copyUrlButtonProps utils', () => {
     expect(hasCopyableUrlValue('https://example.com')).toBe(true);
     expect(hasCopyableUrlValue([['Clip', 'https://example.com']])).toBe(true);
     expect(hasCopyableUrlValue('')).toBe(false);
+    expect(hasCopyableUrlValue('   ')).toBe(false);
     expect(hasCopyableUrlValue([])).toBe(false);
     expect(hasCopyableUrlValue(null)).toBe(false);
   });
