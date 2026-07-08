@@ -71,6 +71,10 @@ export const getChannelCategoryAddInputViewProps = () => ({
   inputPlaceholder: '새 카테고리명',
 });
 
+export const getChannelCategoryHelpText = () => (
+  '이름 변경은 Cloud 태그명을 바꿉니다. 숨김은 화면 카테고리 목록에서만 빠지며, 이미 채널에 붙은 Cloud 태그는 유지됩니다.'
+);
+
 export const getChannelCloudOnlyTagsNoticeViewProps = (cloudOnlyTags = []) => {
   const tagList = getChannelCategoryList(cloudOnlyTags);
 

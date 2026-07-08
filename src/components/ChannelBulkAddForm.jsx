@@ -1,4 +1,6 @@
+import { getChannelBulkTagSelectorLabel } from '../utils/channelAddCopy';
 import { getChannelBulkAddFormInnerProps } from '../utils/channelAddFormProps';
+
 import ChannelBulkInputBox from './ChannelBulkInputBox';
 import ChannelBulkResultPanel from './ChannelBulkResultPanel';
 import ChannelBulkSubmitButton from './ChannelBulkSubmitButton';
@@ -18,6 +20,7 @@ export default function ChannelBulkAddForm({
   newChannelLang,
   setNewChannelLang,
 }) {
+  const tagSelectorLabel = getChannelBulkTagSelectorLabel();
   const {
     inputBoxProps,
     languageSelectProps,
@@ -40,7 +43,7 @@ export default function ChannelBulkAddForm({
 
       <ChannelTagSelector
         categories={categories}
-        label="태그 선택 (전체 일괄 적용, 여러 개 가능)"
+        label={tagSelectorLabel}
         selectedTags={newChannelTags}
         toggleTag={toggleNewChannelTag}
       />

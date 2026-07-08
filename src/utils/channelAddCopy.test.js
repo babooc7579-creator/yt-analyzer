@@ -6,10 +6,15 @@ import {
   getChannelBulkInputCopy,
   getChannelBulkResultPanelViewProps,
   getChannelBulkSubmitButtonCopy,
+  getChannelBulkTagSelectorLabel,
   getChannelAddFormHeaderCopy,
+  getChannelLanguageSelectCopy,
   getChannelPreviewActionsCopy,
   getChannelPreviewInputCopy,
+  getChannelPreviewNoteFieldCopy,
   getChannelPreviewSaveNoticeText,
+  getChannelPreviewSummaryViewProps,
+  getChannelPreviewTagSelectorLabel,
 } from './channelAddCopy';
 
 describe('channelAddCopy utils', () => {
@@ -87,5 +92,29 @@ describe('channelAddCopy utils', () => {
     });
 
     expect(getChannelBulkResultPanelViewProps(null).summaryText).toBe('총 0개 중 0개 성공');
+  });
+
+  it('builds channel tag selector and language selector copy', () => {
+    expect(getChannelBulkTagSelectorLabel()).toBe('태그 선택 (전체 일괄 적용, 여러 개 가능)');
+    expect(getChannelPreviewTagSelectorLabel()).toBe('태그 선택 (여러 개 가능, 안 골라도 OK)');
+    expect(getChannelLanguageSelectCopy()).toEqual({
+      ariaLabel: '채널 기본 언어 선택',
+      title: '채널 기본 언어 선택',
+    });
+  });
+
+  it('builds channel preview note and summary copy', () => {
+    expect(getChannelPreviewNoteFieldCopy()).toEqual({
+      ariaLabel: '새 채널 첫 기록 메모',
+      placeholder: '첫 기록 메모 (선택) - 예) 시니어롱폼 소재용, 톤 비슷함',
+    });
+
+    expect(getChannelPreviewSummaryViewProps()).toEqual({
+      closeButtonProps: {
+        ariaLabel: '채널 확인 결과 닫기',
+        title: '채널 확인 결과 닫기',
+      },
+      statusLabel: '채널 확인 완료',
+    });
   });
 });
