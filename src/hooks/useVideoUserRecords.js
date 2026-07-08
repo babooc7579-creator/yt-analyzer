@@ -6,6 +6,9 @@ import {
   VIDEO_RECORDS_SYNC_WARNINGS,
 } from '../constants/syncWarnings';
 import {
+  VIDEO_USER_RECORD_SAVE_FAILED_MESSAGE,
+  VIDEO_USER_RECORDS_CLEAR_FAILED_MESSAGE,
+  VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE,
   createRadarRestoredRecord,
   createUpdatedVideoUserRecord,
   createVideoStatusRecord,
@@ -39,7 +42,7 @@ export function useVideoUserRecords() {
     const syncVideoUserRecordsFromCloud = async () => {
       try {
         const data = await fetchVideoUserRecords();
-        if (!data.success) throw new Error(data.error || '영상 판단 기록을 불러오지 못했습니다.');
+        if (!data.success) throw new Error(data.error || VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE);
         if (isCancelled) return;
         const cloudRecords = getCloudVideoUserRecords(data.records);
         setVideoUserRecords(cloudRecords);
@@ -60,7 +63,7 @@ export function useVideoUserRecords() {
 
   const saveRecordToCloud = async (record) => {
     const data = await saveVideoUserRecord(record);
-    if (!data.success) throw new Error(data.error || '영상 판단 기록을 저장하지 못했습니다.');
+    if (!data.success) throw new Error(data.error || VIDEO_USER_RECORD_SAVE_FAILED_MESSAGE);
     const cloudRecord = getCloudVideoUserRecord(data.record || record);
     cacheCloudRecord(cloudRecord);
     setVideoRecordsSyncWarning('');
@@ -117,7 +120,7 @@ export function useVideoUserRecords() {
     setVideoUserRecords({});
     try {
       const data = await clearVideoUserRecords();
-      if (!data.success) throw new Error(data.error || '영상 판단 기록을 초기화하지 못했습니다.');
+      if (!data.success) throw new Error(data.error || VIDEO_USER_RECORDS_CLEAR_FAILED_MESSAGE);
       cacheCloudRecords({});
       setVideoRecordsSyncWarning('');
       return true;
