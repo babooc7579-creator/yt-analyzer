@@ -1,0 +1,76 @@
+import { describe, expect, it, vi } from 'vitest';
+
+import {
+  PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS,
+  getProductionDiscoveryLinkCopyButtonProps,
+  getProductionDiscoveryLinkEditButtonProps,
+  getProductionDiscoveryLinkMoveActions,
+  getProductionDiscoveryLinkMoveStatusViewProps,
+  getProductionDiscoveryLinkOpenButtonProps,
+} from './productionDiscoveryLinkActionProps';
+
+describe('productionDiscoveryLinkActionProps utils', () => {
+  it('builds copy/open/edit button props without external collection or save work', () => {
+    expect(getProductionDiscoveryLinkCopyButtonProps({
+      disabled: true,
+      link: { url: 'https://example.com/post' },
+      linkTitle: 'Idea link',
+    })).toMatchObject({
+      ariaLabel: 'Idea link 원본 링크 URL 복사',
+      copiedLabel: '복사 완료',
+      copyingLabel: '복사 중',
+      disabled: true,
+      errorLabel: '복사 실패',
+      label: '링크 복사',
+      title: '원본 링크 URL을 클립보드에 복사합니다. 외부 사이트 수집이나 저장 작업은 없습니다.',
+      url: 'https://example.com/post',
+    });
+
+    expect(getProductionDiscoveryLinkOpenButtonProps({ linkTitle: 'Idea link' })).toEqual({
+      'aria-label': 'Idea link 원본 링크 열기',
+      label: '원본 열기',
+      title: '원본 링크를 새 탭에서 열기',
+    });
+
+    expect(getProductionDiscoveryLinkEditButtonProps()).toEqual({
+      'aria-label': '이 링크 발견함에서 수정',
+      label: '발견함에서 수정',
+      title: '발견함 화면에서 링크 상태와 메모 수정',
+    });
+  });
+
+  it('builds move actions that update Cloud discovery status without deleting link records', () => {
+    const onMove = vi.fn();
+    const actions = getProductionDiscoveryLinkMoveActions({
+      link: { id: 'link-1' },
+      linkTitle: 'Idea link',
+      onMove,
+    });
+
+    expect(actions.map(action => action.targetStatus)).toEqual([
+      PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.INBOX,
+      PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.DISCARDED,
+    ]);
+    expect(actions[0].title).toContain('링크 기록은 삭제되지 않습니다');
+    expect(actions[1].title).toContain('링크 기록을 삭제하지 않고');
+    expect(onMove).not.toHaveBeenCalled();
+
+    actions[0].onClick();
+    actions[1].onClick();
+
+    expect(onMove).toHaveBeenNthCalledWith(1, 'link-1', 'inbox');
+    expect(onMove).toHaveBeenNthCalledWith(2, 'link-1', 'discarded');
+  });
+
+  it('builds move status messages for saved, error, and idle states', () => {
+    expect(getProductionDiscoveryLinkMoveStatusViewProps('saved')).toEqual({
+      message: 'Cloud 발견함 상태 저장 완료. 링크 기록은 유지됩니다.',
+      tone: 'success',
+    });
+    expect(getProductionDiscoveryLinkMoveStatusViewProps('error')).toEqual({
+      message: 'Cloud 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.',
+      tone: 'danger',
+    });
+    expect(getProductionDiscoveryLinkMoveStatusViewProps('saving')).toBeNull();
+  });
+});
