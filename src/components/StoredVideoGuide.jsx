@@ -1,26 +1,31 @@
 import { Play, RefreshCw } from 'lucide-react';
+import { getStoredVideoGuideCards } from '../utils/storedVideoGuide';
+
+const ICONS = {
+  load: Play,
+  scan: RefreshCw,
+};
 
 export default function StoredVideoGuide() {
+  const guideCards = getStoredVideoGuideCards();
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-        <div className="flex items-start gap-4">
-          <RefreshCw className="w-5 h-5 text-emerald-600 mt-0.5" />
-          <div>
-            <p className="text-sm font-extrabold text-emerald-800">선택 채널 새 영상 수집</p>
-            <p className="text-xs text-slate-600 mt-1">새 데이터가 필요할 때만 실행하세요. YouTube API를 호출할 수 있고, 저장 영상 불러오기와 다른 작업입니다.</p>
+      {guideCards.map((card) => {
+        const Icon = ICONS[card.icon];
+
+        return (
+          <div key={card.key} className={card.cardClassName}>
+            <div className="flex items-start gap-4">
+              <Icon className={card.iconClassName} />
+              <div>
+                <p className={card.titleClassName}>{card.title}</p>
+                <p className="text-xs text-slate-600 mt-1">{card.description}</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-        <div className="flex items-start gap-4">
-          <Play className="w-5 h-5 text-blue-600 mt-0.5" />
-          <div>
-            <p className="text-sm font-extrabold text-blue-800">저장된 영상 불러오기</p>
-            <p className="text-xs text-slate-600 mt-1">Cloud DB에 이미 저장된 영상만 조회합니다. YouTube API를 새로 호출하지 않습니다.</p>
-          </div>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 }
