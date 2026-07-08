@@ -85,7 +85,11 @@ describe('creatorHomeViewProps utils', () => {
     props.actionShortcutsProps.onOpenSelectedScan();
     props.actionShortcutsProps.onOpenVault();
     props.radarCandidateStripProps.onOpenScrapbook();
+    props.radarCandidateStripProps.onOpenVault();
+    props.radarSummaryProps.onOpenAddChannel();
+    props.radarSummaryProps.onOpenDiscoveryLinks();
     props.radarSummaryProps.onOpenProductionCandidates();
+    props.radarSummaryProps.onOpenSelectedScan();
 
     expect(openedViews).toEqual([
       'ops-add-channel',
@@ -93,7 +97,11 @@ describe('creatorHomeViewProps utils', () => {
       'ops-selected-scan',
       'vault-all',
       'studio-scrapbook',
+      'vault-all',
+      'ops-add-channel',
+      'vault-sources',
       'studio-candidates',
+      'ops-selected-scan',
     ]);
   });
 
