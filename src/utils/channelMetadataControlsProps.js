@@ -24,6 +24,7 @@ export const getChannelMetadataControlsViewProps = ({
   onUpdateMetadata,
   status,
 }) => ({
+  gradeLabelText: '채널 등급',
   gradeSelectProps: {
     'aria-label': `${channel.title} 채널 등급 선택, 중요도 표시`,
     className: SELECT_CLASS_NAME,
@@ -33,6 +34,7 @@ export const getChannelMetadataControlsViewProps = ({
     value: grade,
   },
   gradeOptions: CHANNEL_GRADE_OPTIONS,
+  statusLabelText: '채널 상태',
   statusSelectProps: {
     'aria-label': `${channel.title} 채널 상태 선택, 활성 채널만 새 영상 수집 대상`,
     className: SELECT_CLASS_NAME,

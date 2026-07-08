@@ -86,6 +86,9 @@ describe('channelAddCopy utils', () => {
     expect(props.failedResults).toEqual([
       { error: 'Not found', handle: '@missing', success: false },
     ]);
+    expect(props.failedResultMessages).toEqual([
+      '실패: @missing - Not found',
+    ]);
     expect(props.closeButtonProps).toMatchObject({
       label: '닫기',
       title: '일괄 저장 결과 닫기',

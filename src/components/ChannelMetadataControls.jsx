@@ -10,8 +10,10 @@ export default function ChannelMetadataControls({
   status,
 }) {
   const {
+    gradeLabelText,
     gradeOptions,
     gradeSelectProps,
+    statusLabelText,
     statusOptions,
     statusSelectProps,
   } = getChannelMetadataControlsViewProps({
@@ -27,7 +29,7 @@ export default function ChannelMetadataControls({
   return (
     <div className="mt-2 grid grid-cols-2 gap-2">
       <label className="block">
-        <span className="sr-only">채널 등급</span>
+        <span className="sr-only">{gradeLabelText}</span>
         <select {...gradeSelectProps}>
           {gradeOptionList.map(({ label, value }) => (
             <option key={value} value={value}>{label}</option>
@@ -35,7 +37,7 @@ export default function ChannelMetadataControls({
         </select>
       </label>
       <label className="block">
-        <span className="sr-only">채널 상태</span>
+        <span className="sr-only">{statusLabelText}</span>
         <select {...statusSelectProps}>
           {statusOptionList.map(({ label, value }) => (
             <option key={value} value={value}>{label}</option>

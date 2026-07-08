@@ -47,6 +47,7 @@ describe('channelMetadataControlsProps utils', () => {
       title: '채널 등급 변경 - 중요도 표시이며 새 영상 수집 주기를 자동으로 바꾸지 않습니다',
       value: CHANNEL_GRADE.A,
     });
+    expect(props.gradeLabelText).toBe('채널 등급');
 
     props.gradeSelectProps.onChange({
       target: {
@@ -75,6 +76,7 @@ describe('channelMetadataControlsProps utils', () => {
       title: '채널 상태 변경 - 활성 채널만 새 영상 수집 대상이며 변경 내용은 Cloud에 저장됩니다',
       value: CHANNEL_STATUS.PAUSED,
     });
+    expect(props.statusLabelText).toBe('채널 상태');
 
     props.statusSelectProps.onChange({
       target: {

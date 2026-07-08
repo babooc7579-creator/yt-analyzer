@@ -95,6 +95,9 @@ export const getChannelBulkResultPanelViewProps = (bulkResult = {}) => {
   const resultSummary = bulkResult && typeof bulkResult === 'object' ? bulkResult : {};
   const results = Array.isArray(resultSummary.results) ? resultSummary.results : [];
   const failedResults = results.filter(result => !result.success);
+  const failedResultMessages = failedResults.map(result => (
+    `실패: ${result.handle} - ${result.error}`
+  ));
 
   return {
     closeButtonProps: {
@@ -102,6 +105,7 @@ export const getChannelBulkResultPanelViewProps = (bulkResult = {}) => {
       label: '닫기',
       title: '일괄 저장 결과 닫기',
     },
+    failedResultMessages,
     failedResults,
     summaryText: `총 ${resultSummary.total || 0}개 중 ${resultSummary.added || 0}개 성공`,
   };
