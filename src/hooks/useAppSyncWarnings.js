@@ -1,9 +1,11 @@
+import { getAppSyncWarnings } from '../utils/appSyncWarnings';
+
 export function useAppSyncWarnings({
   scrapbookSyncWarning,
   videoRecordsSyncWarning,
 }) {
-  return [
-    videoRecordsSyncWarning,
+  return getAppSyncWarnings({
     scrapbookSyncWarning,
-  ].filter(Boolean);
+    videoRecordsSyncWarning,
+  });
 }
