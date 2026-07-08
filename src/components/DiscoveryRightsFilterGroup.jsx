@@ -1,4 +1,8 @@
 import { DISCOVERY_RIGHTS_TONES } from '../constants/discoveryLinks';
+import {
+  getDiscoveryRightsFilterButtonProps,
+  getDiscoveryRightsFilterGroupViewProps,
+} from '../utils/discoveryLinksCopy';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
@@ -8,16 +12,18 @@ export default function DiscoveryRightsFilterGroup({
   setRightsFilter,
 }) {
   const filterOptions = toArray(rightsFilterOptions);
+  const { title } = getDiscoveryRightsFilterGroupViewProps();
 
   return (
     <>
       <p className="mt-4 text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
-        권리 상태별 보기
+        {title}
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         {filterOptions.map((option) => {
           const isActive = rightsFilter === option.value;
           const rightsTone = DISCOVERY_RIGHTS_TONES[option.value];
+          const buttonProps = getDiscoveryRightsFilterButtonProps({ option });
           const buttonTone = rightsTone
             ? `${rightsTone.badge} ${isActive ? 'shadow-sm ring-2 ring-white' : 'opacity-75 hover:opacity-100'}`
             : isActive
@@ -28,8 +34,8 @@ export default function DiscoveryRightsFilterGroup({
               className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-extrabold transition ${buttonTone}`}
               key={option.value}
               onClick={() => setRightsFilter(option.value)}
-              title={`${option.label} 권리 상태 링크만 보기`}
-              aria-label={`${option.label} 권리 상태 링크 ${option.count}개 보기`}
+              title={buttonProps.title}
+              aria-label={buttonProps['aria-label']}
               type="button"
             >
               <span>{option.label}</span>

@@ -45,6 +45,7 @@ export const getDiscoveryLinkEditFormViewProps = ({
   setDraftTitle,
   title,
 }) => ({
+  cancelButtonLabel: '취소',
   cancelButtonProps: {
     className: 'inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100 disabled:opacity-50',
     disabled: saving,
@@ -65,6 +66,7 @@ export const getDiscoveryLinkEditFormViewProps = ({
     },
     label: '메모',
   },
+  saveButtonLabel: '저장',
   saveButtonProps: {
     className: 'inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 text-xs font-extrabold text-white transition hover:bg-indigo-500 disabled:bg-slate-300',
     disabled: saving,

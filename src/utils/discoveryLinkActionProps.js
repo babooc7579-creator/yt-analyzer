@@ -82,6 +82,7 @@ export const getDiscoveryLinkUtilityActionProps = ({
       type: 'button',
     },
     editIconName: isEditing ? 'close' : 'edit',
+    openLinkLabel: '열기',
     openLinkProps: {
       'aria-label': `${displayTitle} 원본 링크 새 탭으로 열기, 외부 사이트 수집 없음`,
       className: utilityButtonClassName.replace('disabled:opacity-50', ''),

@@ -22,6 +22,7 @@ export default function DiscoveryLinkUtilityActions({
     editButtonLabel,
     editButtonProps,
     editIconName,
+    openLinkLabel,
     openLinkProps,
   } = getDiscoveryLinkUtilityActionProps({
     isEditing,
@@ -36,7 +37,7 @@ export default function DiscoveryLinkUtilityActions({
     <>
       <a {...openLinkProps}>
         <ExternalLink className="h-4 w-4" />
-        열기
+        {openLinkLabel}
       </a>
 
       <CopyUrlButton {...copyUrlButtonProps} />

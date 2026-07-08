@@ -1,3 +1,4 @@
+import { getDiscoveryLinkUrlFieldViewProps } from '../utils/discoveryLinksCopy';
 import DiscoveryLinkFieldLabel from './DiscoveryLinkFieldLabel';
 
 export default function DiscoveryLinkUrlField({
@@ -6,9 +7,16 @@ export default function DiscoveryLinkUrlField({
   url,
   urlPreview,
 }) {
+  const {
+    duplicateWarning,
+    inputAriaLabel,
+    label,
+    previewHostText,
+  } = getDiscoveryLinkUrlFieldViewProps({ duplicateLink, urlPreview });
+
   return (
     <div className="space-y-1.5">
-      <DiscoveryLinkFieldLabel>원본 링크</DiscoveryLinkFieldLabel>
+      <DiscoveryLinkFieldLabel>{label}</DiscoveryLinkFieldLabel>
       <input
         className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-indigo-400"
         onChange={(event) => onChange('url', event.target.value)}
@@ -16,7 +24,7 @@ export default function DiscoveryLinkUrlField({
         required
         type="url"
         value={url}
-        aria-label="저장할 원본 링크 URL"
+        aria-label={inputAriaLabel}
       />
       {urlPreview && (
         <div className={`rounded-lg border px-3 py-2 text-xs leading-relaxed ${
@@ -28,16 +36,16 @@ export default function DiscoveryLinkUrlField({
           <p className="font-extrabold">{urlPreview.label}</p>
           {urlPreview.host ? (
             <p className="mt-0.5 text-[11px] opacity-80">
-              출처 도메인: {urlPreview.host}
+              {previewHostText}
             </p>
           ) : null}
         </div>
       )}
-      {duplicateLink ? (
+      {duplicateWarning ? (
         <div className="rounded-lg border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-100">
-          <p className="font-extrabold">이미 Cloud 발견함에 저장된 링크입니다.</p>
+          <p className="font-extrabold">{duplicateWarning.title}</p>
           <p className="mt-0.5">
-            새로 저장하지 말고 오른쪽 목록에서 기존 항목을 수정하세요.
+            {duplicateWarning.description}
           </p>
         </div>
       ) : null}
