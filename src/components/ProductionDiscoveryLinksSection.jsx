@@ -3,6 +3,7 @@ import {
   getProductionDiscoveryLinkCardProps,
   getProductionDiscoveryLinkList,
   getProductionDiscoveryLinksSectionActions,
+  getProductionDiscoveryLinksSectionHeaderProps,
 } from '../utils/productionDiscoveryLinksSection';
 import ProductionDiscoveryLinkCard from './ProductionDiscoveryLinkCard';
 
@@ -13,6 +14,7 @@ export default function ProductionDiscoveryLinksSection({
   onMoveLink,
 }) {
   const linkList = getProductionDiscoveryLinkList(links);
+  const headerProps = getProductionDiscoveryLinksSectionHeaderProps();
   const { openDiscoveryLinksButtonProps } = getProductionDiscoveryLinksSectionActions({
     onOpenDiscoveryLinks,
   });
@@ -27,11 +29,11 @@ export default function ProductionDiscoveryLinksSection({
         <div>
           <p className="inline-flex items-center gap-2 text-sm font-extrabold text-amber-700">
             <LinkIcon className="h-4 w-4" />
-            발견함 링크 후보
+            {headerProps.eyebrow}
           </p>
-          <h3 className="mt-1 text-lg font-extrabold text-slate-900">외부에서 저장한 제작 후보 링크</h3>
+          <h3 className="mt-1 text-lg font-extrabold text-slate-900">{headerProps.title}</h3>
           <p className="mt-1 text-xs text-slate-500">
-            발견함에서 상태를 제작 후보로 바꾼 링크입니다. 아직 별도 제작 DB로 옮긴 것은 아니며, 후보 참고 목록으로 보여줍니다.
+            {headerProps.description}
           </p>
         </div>
         <button
@@ -40,7 +42,7 @@ export default function ProductionDiscoveryLinksSection({
           type="button"
         >
           <LinkIcon className="h-4 w-4" />
-          발견함 열기
+          {headerProps.openButtonLabel}
         </button>
       </div>
 
