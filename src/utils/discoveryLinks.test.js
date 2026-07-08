@@ -6,6 +6,7 @@ import {
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
 import {
+  DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE,
   countDiscoveryLinksByRightsStatus,
   countDiscoveryLinksByStatus,
   filterDiscoveryLinksByRightsStatus,
@@ -36,6 +37,12 @@ describe('discoveryLinks utils', () => {
     status: 'saved',
     rightsStatus: 'cleared',
   };
+
+  it('keeps destructive discovery link confirmation copy explicit', () => {
+    expect(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE).toContain('Cloud 발견함에서 삭제');
+    expect(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE).toContain('외부 링크 자체는 삭제되지 않습니다');
+    expect(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE).toContain('Creator OS 안의 발견함 기록만 삭제');
+  });
 
   it('builds searchable text from title, url, memo, platform, and host', () => {
     const searchableText = getSearchableDiscoveryLinkText(instagramLink);

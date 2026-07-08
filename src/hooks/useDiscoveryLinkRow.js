@@ -8,6 +8,7 @@ import {
   needsRiskyDiscoveryCandidateConfirmation,
 } from '../utils/discoveryLinkForm';
 import {
+  DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE,
   getDiscoveryLinkRowMeta,
 } from '../utils/discoveryLinks';
 
@@ -23,9 +24,7 @@ export function useDiscoveryLinkRow({
   const [draftMemo, setDraftMemo] = useState(linkDraft.memo);
 
   const handleDelete = () => {
-    const confirmed = window.confirm(
-      '이 발견 링크를 Cloud 발견함에서 삭제할까요?\n\n원본 사이트 게시물이나 외부 링크 자체는 삭제되지 않습니다. Creator OS 안의 발견함 기록만 삭제됩니다.'
-    );
+    const confirmed = window.confirm(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE);
     if (confirmed) onDelete(link.id);
   };
 
