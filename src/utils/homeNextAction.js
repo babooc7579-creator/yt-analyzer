@@ -1,5 +1,9 @@
 const toCount = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
 
+export const getHomeNextActionPanelViewProps = () => ({
+  eyebrow: '다음 추천 행동',
+});
+
 export const getHomeNextAction = ({
   discoveryCandidateCount,
   loadedVideoCount,

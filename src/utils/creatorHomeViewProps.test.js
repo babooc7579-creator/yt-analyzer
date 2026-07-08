@@ -1,8 +1,47 @@
 import { describe, expect, it } from 'vitest';
 
-import { getCreatorHomeViewProps } from './creatorHomeViewProps';
+import {
+  getCreatorHomeViewProps,
+  getHomeOperatingGuidelinesViewProps,
+  getHomeRadarHeroViewProps,
+  getHomeRadarStatsGridViewProps,
+} from './creatorHomeViewProps';
 
 describe('creatorHomeViewProps utils', () => {
+  it('builds home hero, operating guideline, and summary card copy', () => {
+    const heroProps = getHomeRadarHeroViewProps();
+    const guidelinesProps = getHomeOperatingGuidelinesViewProps();
+    const statsProps = getHomeRadarStatsGridViewProps({
+      latestScanText: 'just now',
+      loadedVideoCount: 10,
+      savedChannelCount: 2,
+      savedVideoCount: 3,
+      ttoTtoAssetCount: 4,
+    });
+
+    expect(heroProps).toMatchObject({
+      eyebrow: '오늘의 레이더',
+      title: '오늘 볼 소재와 다음 행동을 먼저 정합니다',
+    });
+    expect(heroProps.description).toContain('발굴');
+    expect(guidelinesProps.sectionTitle).toBe('운영 기준');
+    expect(guidelinesProps.guidelines.map(guideline => guideline.title)).toEqual([
+      '수집은 API 호출',
+      '불러오기는 저장 데이터 조회',
+      '터또터 기준',
+    ]);
+    expect(guidelinesProps.guidelines[0].description).toContain('YouTube API');
+    expect(statsProps.cards.map(card => [card.label, card.value])).toEqual([
+      ['저장된 채널', 2],
+      ['불러온 영상', 10],
+      ['스크랩 소재', 3],
+      ['최근 수집 상태', 'just now'],
+      ['터또터 후보', 4],
+    ]);
+    expect(statsProps.cards[3].className).toContain('emerald');
+    expect(statsProps.cards[4].className).toContain('rose');
+  });
+
   it('builds home summary counts and dashboard metrics from provided lists', () => {
     const props = getCreatorHomeViewProps({
       discoveryCandidateCount: 4,

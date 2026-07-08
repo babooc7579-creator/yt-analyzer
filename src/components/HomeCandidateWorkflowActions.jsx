@@ -23,7 +23,7 @@ export default function HomeCandidateWorkflowActions({
         type="button"
       >
         <Rocket className="h-3.5 w-3.5" />
-        후보함
+        {actions.productionCandidates.label}
       </button>
       <button
         className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-white/10 px-3 text-[11px] font-extrabold text-white/90 transition hover:bg-white/10"
@@ -33,7 +33,7 @@ export default function HomeCandidateWorkflowActions({
         type="button"
       >
         <LinkIcon className="h-3.5 w-3.5" />
-        발견함
+        {actions.discoveryLinks.label}
       </button>
     </div>
   );

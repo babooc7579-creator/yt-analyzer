@@ -1,6 +1,6 @@
 import { Bookmark, CheckCircle2, ListChecks, Plus, RefreshCw, Rocket } from 'lucide-react';
 
-import { getHomeNextAction } from '../utils/homeNextAction';
+import { getHomeNextAction, getHomeNextActionPanelViewProps } from '../utils/homeNextAction';
 
 const TONE_STYLES = {
   amber: {
@@ -51,6 +51,7 @@ const NEXT_ACTION_ICONS = {
 
 export default function HomeNextActionPanel(props) {
   const nextAction = getHomeNextAction(props);
+  const panelProps = getHomeNextActionPanelViewProps();
   const styles = TONE_STYLES[nextAction.tone] || TONE_STYLES.indigo;
   const Icon = NEXT_ACTION_ICONS[nextAction.iconKey] || Plus;
 
@@ -63,7 +64,7 @@ export default function HomeNextActionPanel(props) {
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <p className={`text-[11px] font-extrabold ${styles.eyebrow}`}>다음 추천 행동</p>
+              <p className={`text-[11px] font-extrabold ${styles.eyebrow}`}>{panelProps.eyebrow}</p>
               <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${styles.badge}`}>
                 {nextAction.badge}
               </span>

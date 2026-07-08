@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { getHomeNextAction } from './homeNextAction';
+import { getHomeNextAction, getHomeNextActionPanelViewProps } from './homeNextAction';
 
 describe('homeNextAction utils', () => {
+  it('builds the next action panel eyebrow copy', () => {
+    expect(getHomeNextActionPanelViewProps()).toEqual({
+      eyebrow: '다음 추천 행동',
+    });
+  });
+
   it('starts with channel registration when no channels are saved', () => {
     const onOpenAddChannel = () => 'add channel';
 
