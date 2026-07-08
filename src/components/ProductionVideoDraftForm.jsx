@@ -1,4 +1,6 @@
 import { Loader2, Save } from 'lucide-react';
+
+import { getProductionVideoDraftSaveButtonProps } from '../utils/productionVideoStatusProps';
 import ProductionVideoDraftFields from './ProductionVideoDraftFields';
 import ProductionVideoSaveStatus from './ProductionVideoSaveStatus';
 
@@ -12,6 +14,12 @@ export default function ProductionVideoDraftForm({
   video,
   videoTitle,
 }) {
+  const saveButtonProps = getProductionVideoDraftSaveButtonProps({
+    isDirty,
+    isSaving,
+    videoTitle,
+  });
+
   return (
     <div className="mt-3 space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3">
       <ProductionVideoDraftFields
@@ -23,13 +31,13 @@ export default function ProductionVideoDraftForm({
       <button
         type="button"
         onClick={() => onSave(video.videoId)}
-        disabled={!isDirty || isSaving}
+        disabled={saveButtonProps.disabled}
         className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isDirty && !isSaving ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
-        title={isDirty ? '제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장' : 'Cloud에 저장된 상태'}
-        aria-label={`${videoTitle} 제작 메모 저장`}
+        title={saveButtonProps.title}
+        aria-label={saveButtonProps.ariaLabel}
       >
         {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-        {isSaving ? 'Cloud 저장 중' : isDirty ? 'Cloud에 변경 저장' : 'Cloud 저장됨'}
+        {saveButtonProps.label}
       </button>
       <ProductionVideoSaveStatus saveState={saveState} />
     </div>

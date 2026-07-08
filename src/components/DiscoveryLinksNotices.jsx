@@ -1,5 +1,7 @@
 import { CheckCircle2, RefreshCw } from 'lucide-react';
 
+import { getDiscoveryLinksRefreshButtonProps } from '../utils/discoveryLinksCopy';
+
 export default function DiscoveryLinksNotices({
   error,
   loading,
@@ -7,6 +9,8 @@ export default function DiscoveryLinksNotices({
   onRefresh,
   savingMessage,
 }) {
+  const refreshButtonProps = getDiscoveryLinksRefreshButtonProps();
+
   return (
     <>
       {error ? (
@@ -23,11 +27,11 @@ export default function DiscoveryLinksNotices({
                     ? 'cursor-not-allowed bg-red-100 text-red-300'
                     : 'bg-white text-red-700 ring-1 ring-red-200 hover:bg-red-100'
                 }`}
-                title="Cloud 발견함 목록을 다시 조회합니다. 외부 사이트 수집이나 저장 변경은 없습니다."
-                aria-label="Cloud 발견함 다시 조회, 외부 수집이나 저장 변경 없음"
+                title={refreshButtonProps.title}
+                aria-label={refreshButtonProps['aria-label']}
               >
                 <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                다시 조회
+                {refreshButtonProps.label}
               </button>
             ) : null}
           </div>

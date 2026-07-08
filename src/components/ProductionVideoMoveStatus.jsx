@@ -1,18 +1,27 @@
 import { AlertCircle } from 'lucide-react';
 
-import { PRODUCTION_STATUS } from '../constants/status';
+import { getProductionVideoMoveStatusViewProps } from '../utils/productionVideoStatusProps';
 
 export default function ProductionVideoMoveStatus({ columnId, moveState, uploadedAt }) {
+  const {
+    errorMessage,
+    uploadedAtText,
+  } = getProductionVideoMoveStatusViewProps({
+    columnId,
+    moveState,
+    uploadedAt,
+  });
+
   return (
     <>
-      {moveState === 'error' && (
+      {errorMessage && (
         <p className="inline-flex items-center justify-center gap-1 text-[10px] font-bold leading-relaxed text-red-600">
-          <AlertCircle className="h-3 w-3 shrink-0" /> Cloud 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.
+          <AlertCircle className="h-3 w-3 shrink-0" /> {errorMessage}
         </p>
       )}
-      {columnId === PRODUCTION_STATUS.DONE && (
+      {uploadedAtText && (
         <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center text-[11px] font-bold text-slate-600">
-          업로드 완료일 {uploadedAt || '기록 없음'}
+          {uploadedAtText}
         </div>
       )}
     </>
