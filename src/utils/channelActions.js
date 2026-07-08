@@ -8,6 +8,29 @@ const toChannelObject = (channel) => (
 
 const getChannelId = (channel) => toChannelObject(channel).id;
 
+export const CHANNEL_ACTION_COPY = Object.freeze({
+  add: {
+    failureMessage: '채널 추가에 실패했습니다.',
+    actionLabel: '저장',
+  },
+  bulkAdd: {
+    failureMessage: '일괄 추가에 실패했습니다.',
+    actionLabel: '일괄 저장',
+  },
+  delete: {
+    failureMessage: '채널 삭제에 실패했습니다.',
+    actionLabel: '삭제',
+  },
+  metadata: {
+    failureMessage: '채널 정보를 저장하지 못했습니다.',
+    actionLabel: '정보 저장',
+  },
+  note: {
+    failureMessage: '기록 저장에 실패했습니다.',
+    actionLabel: '메모 저장',
+  },
+});
+
 export const appendChannel = (channels, channel) => {
   const nextChannel = toChannelObject(channel);
   if (!getChannelId(nextChannel)) return toArray(channels);
