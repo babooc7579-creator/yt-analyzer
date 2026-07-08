@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { HOME_ACTION_SHORTCUTS } from '../constants/homeActionShortcuts';
 import { getHomeActionShortcutItems } from './homeActionShortcuts';
@@ -29,6 +29,23 @@ describe('homeActionShortcuts utils', () => {
     expect(items.find((item) => item.key === 'selected-scan')?.onClick).toBe(onOpenSelectedScan);
     expect(items.find((item) => item.key === 'vault')?.onClick).toBe(onOpenVault);
     expect(items.find((item) => item.key === 'discovery-links')?.onClick).toBe(onOpenDiscoveryLinks);
+  });
+
+  it('does not invoke shortcut handlers while building the shortcut list', () => {
+    const handlers = {
+      onOpenAddChannel: vi.fn(),
+      onOpenDiscoveryLinks: vi.fn(),
+      onOpenSelectedScan: vi.fn(),
+      onOpenVault: vi.fn(),
+    };
+
+    const items = getHomeActionShortcutItems(handlers);
+
+    expect(items).toHaveLength(HOME_ACTION_SHORTCUTS.length);
+    expect(handlers.onOpenAddChannel).not.toHaveBeenCalled();
+    expect(handlers.onOpenDiscoveryLinks).not.toHaveBeenCalled();
+    expect(handlers.onOpenSelectedScan).not.toHaveBeenCalled();
+    expect(handlers.onOpenVault).not.toHaveBeenCalled();
   });
 
   it('leaves missing shortcut handlers undefined instead of inventing fallbacks', () => {
