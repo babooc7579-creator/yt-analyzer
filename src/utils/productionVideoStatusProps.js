@@ -1,6 +1,7 @@
 import { PRODUCTION_STATUS } from '../constants/status';
 
 const getDisplayVideoTitle = (videoTitle) => videoTitle || '이 영상';
+const noop = () => {};
 
 export const PRODUCTION_VIDEO_STATUS_HELP_TEXT =
   '아래 상태 버튼은 이 영상의 제작 진행 상태를 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.';
@@ -86,9 +87,22 @@ export const getProductionVideoSaveStatusViewProps = (saveState) => {
 };
 
 export const getProductionVideoMoveButtonViewProps = ({
+  disabled = false,
   isMoving = false,
   label,
   loadingLabel = '이동 중...',
 } = {}) => ({
+  disabled: Boolean(disabled) || isMoving,
   visibleLabel: isMoving ? loadingLabel : label,
 });
+
+export const getProductionVideoMoveHandler = ({
+  onMove,
+  targetStatus,
+  updates,
+  videoId,
+} = {}) => (
+  videoId && typeof onMove === 'function'
+    ? () => onMove(videoId, targetStatus, updates)
+    : noop
+);
