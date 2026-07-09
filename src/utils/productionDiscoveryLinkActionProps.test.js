@@ -68,6 +68,7 @@ describe('productionDiscoveryLinkActionProps utils', () => {
       PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.INBOX,
       PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.DISCARDED,
     ]);
+    expect(actions.every(action => action.disabled === false)).toBe(true);
     expect(actions[0].title).toContain('링크 기록은 삭제되지 않습니다');
     expect(actions[1].title).toContain('링크 기록을 삭제하지 않고');
     expect(onMove).not.toHaveBeenCalled();
@@ -77,6 +78,27 @@ describe('productionDiscoveryLinkActionProps utils', () => {
 
     expect(onMove).toHaveBeenNthCalledWith(1, 'link-1', 'inbox');
     expect(onMove).toHaveBeenNthCalledWith(2, 'link-1', 'discarded');
+  });
+
+  it('disables move actions when the Cloud update target is missing', () => {
+    const missingHandlerActions = getProductionDiscoveryLinkMoveActions({
+      link: { id: 'link-1' },
+      linkTitle: 'Idea link',
+    });
+    const missingIdMove = vi.fn();
+    const missingIdActions = getProductionDiscoveryLinkMoveActions({
+      link: {},
+      linkTitle: 'Idea link',
+      onMove: missingIdMove,
+    });
+
+    expect(missingHandlerActions.every(action => action.disabled)).toBe(true);
+    expect(missingIdActions.every(action => action.disabled)).toBe(true);
+
+    missingHandlerActions[0].onClick();
+    missingIdActions[0].onClick();
+
+    expect(missingIdMove).not.toHaveBeenCalled();
   });
 
   it('builds move status messages for saved, error, and idle states', () => {

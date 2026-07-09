@@ -19,7 +19,7 @@ export default function ProductionDiscoveryLinkMoveActions({
         <ProductionDiscoveryLinkMoveButton
           key={action.targetStatus}
           ariaLabel={action.ariaLabel}
-          disabled={isMoving}
+          disabled={isMoving || action.disabled}
           onClick={action.onClick}
           title={action.title}
           isMoving={isMoving}
