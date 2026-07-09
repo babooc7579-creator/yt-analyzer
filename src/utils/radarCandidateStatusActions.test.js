@@ -59,4 +59,26 @@ describe('radarCandidateStatusActions utils', () => {
 
     expect(actionProps[0].ariaLabel).toContain('이 영상');
   });
+
+  it('disables actions when the video id or save handler is missing', () => {
+    const onMarkVideoStatus = vi.fn();
+    const missingVideoIdActions = getRadarCandidateStatusActionProps({
+      onMarkVideoStatus,
+      video: { title: 'No id' },
+      videoTitle: 'No id',
+    });
+    const missingHandlerActions = getRadarCandidateStatusActionProps({
+      video: { videoId: 'radar-2' },
+      videoTitle: 'No handler',
+    });
+
+    expect(missingVideoIdActions.every(action => action.disabled)).toBe(true);
+    expect(missingHandlerActions.every(action => action.disabled)).toBe(true);
+    expect(missingVideoIdActions[0].title).toContain('저장할 영상 ID가 없어');
+
+    missingVideoIdActions[0].onClick();
+    missingHandlerActions[0].onClick();
+
+    expect(onMarkVideoStatus).not.toHaveBeenCalled();
+  });
 });

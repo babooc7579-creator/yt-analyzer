@@ -1,6 +1,7 @@
 export default function RadarCandidateStatusButton({
   ariaLabel,
   className,
+  disabled = false,
   icon: Icon,
   label,
   onClick,
@@ -10,7 +11,8 @@ export default function RadarCandidateStatusButton({
     <button
       type="button"
       onClick={onClick}
-      className={className}
+      disabled={disabled}
+      className={`${className} ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
       title={title}
       aria-label={ariaLabel}
     >
