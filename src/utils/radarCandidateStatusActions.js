@@ -28,6 +28,8 @@ const toVideoObject = (video) => (
   video && typeof video === 'object' ? video : {}
 );
 
+const noop = () => {};
+
 const getStatusAriaLabel = ({ label, videoTitle }) => {
   if (label === '후보에서 제외') {
     return `${videoTitle} Cloud 판단 기록에 후보 제외로 저장`;
@@ -43,6 +45,7 @@ export const getRadarCandidateStatusActionProps = ({
 }) => {
   const sourceVideo = toVideoObject(video);
   const displayTitle = videoTitle || sourceVideo.title || '이 영상';
+  const canMarkStatus = Boolean(sourceVideo.videoId) && typeof onMarkVideoStatus === 'function';
 
   return RADAR_STATUS_ACTION_ITEMS.map((item) => ({
     ariaLabel: getStatusAriaLabel({
@@ -50,10 +53,15 @@ export const getRadarCandidateStatusActionProps = ({
       videoTitle: displayTitle,
     }),
     className: item.className,
+    disabled: !canMarkStatus,
     iconName: item.iconName,
     label: item.label,
-    onClick: () => onMarkVideoStatus(sourceVideo.videoId, item.status),
+    onClick: canMarkStatus
+      ? () => onMarkVideoStatus(sourceVideo.videoId, item.status)
+      : noop,
     status: item.status,
-    title: item.title,
+    title: canMarkStatus
+      ? item.title
+      : '저장할 영상 ID가 없어 Cloud 판단 기록을 저장할 수 없습니다.',
   }));
 };
