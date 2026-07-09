@@ -75,4 +75,36 @@ describe('productionKanbanColumn utils', () => {
       scheduleSignal: 'none',
     });
   });
+
+  it('builds safe card props when optional maps and handlers are missing', () => {
+    expect(getProductionVideoCardProps({
+      columnId: 'production_active',
+      video: null,
+    })).toMatchObject({
+      columnId: 'production_active',
+      isDirty: false,
+      moveState: undefined,
+      record: {},
+      saveState: undefined,
+      scheduleSignal: '',
+      video: {},
+    });
+
+    expect(getProductionVideoCardProps({
+      columnId: 'production_done',
+      draftRecords: null,
+      getScheduleSignal: (record) => record.targetPublishDate || 'none',
+      hasUnsavedChanges: (videoId) => videoId === 'video-2',
+      moveStates: null,
+      saveStates: null,
+      video: { videoId: 'video-2' },
+      videoUserRecords: null,
+    })).toMatchObject({
+      columnId: 'production_done',
+      isDirty: true,
+      record: {},
+      scheduleSignal: 'none',
+      video: { videoId: 'video-2' },
+    });
+  });
 });
