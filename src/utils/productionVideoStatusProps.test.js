@@ -4,6 +4,7 @@ import { PRODUCTION_STATUS } from '../constants/status';
 import {
   PRODUCTION_VIDEO_STATUS_HELP_TEXT,
   getProductionVideoDraftSaveButtonProps,
+  getProductionVideoDraftSaveHandler,
   getProductionVideoMoveActionCopy,
   getProductionVideoMoveButtonViewProps,
   getProductionVideoMoveHandler,
@@ -65,6 +66,32 @@ describe('productionVideoStatusProps utils', () => {
       label: 'Cloud 저장됨',
       title: 'Cloud에 저장된 상태',
     });
+
+    expect(getProductionVideoDraftSaveButtonProps({
+      hasSaveTarget: false,
+      isDirty: true,
+      isSaving: false,
+    })).toMatchObject({
+      disabled: true,
+      label: '저장 대상 없음',
+      title: '저장할 영상 ID가 없어 Cloud 저장을 실행하지 않습니다.',
+    });
+  });
+
+  it('builds safe draft save handlers', () => {
+    const onSave = vi.fn();
+
+    getProductionVideoDraftSaveHandler({
+      onSave,
+      videoId: 'video-1',
+    })();
+
+    expect(onSave).toHaveBeenCalledWith('video-1');
+
+    getProductionVideoDraftSaveHandler({ onSave })();
+    getProductionVideoDraftSaveHandler({ videoId: 'video-2' })();
+
+    expect(onSave).toHaveBeenCalledTimes(1);
   });
 
   it('builds moving button visible labels', () => {
