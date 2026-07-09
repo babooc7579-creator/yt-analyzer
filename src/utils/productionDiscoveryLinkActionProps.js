@@ -1,6 +1,7 @@
 const FALLBACK_LINK_TITLE = '이 링크';
 
 const getDisplayLinkTitle = (linkTitle) => linkTitle || FALLBACK_LINK_TITLE;
+const noop = () => {};
 
 export const PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS = {
   DISCARDED: 'discarded',
@@ -64,19 +65,25 @@ export const getProductionDiscoveryLinkEditButtonProps = ({ linkTitle } = {}) =>
 export const getProductionDiscoveryLinkMoveActions = ({ link, linkTitle, onMove } = {}) => {
   const displayTitle = getDisplayLinkTitle(linkTitle);
   const linkId = link?.id;
+  const canMove = Boolean(linkId) && typeof onMove === 'function';
+  const getOnMoveClick = (targetStatus) => (
+    canMove ? () => onMove(linkId, targetStatus) : noop
+  );
 
   return [
     {
       ariaLabel: `${displayTitle} 제작 후보 표시를 해제하고 Cloud 발견함 받은 링크 상태로 저장`,
+      disabled: !canMove,
       label: '발견함으로 되돌리기',
-      onClick: () => onMove(linkId, PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.INBOX),
+      onClick: getOnMoveClick(PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.INBOX),
       targetStatus: PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.INBOX,
       title: '제작 후보 표시만 해제하고 Cloud 발견함 상태를 받은 링크로 저장합니다. 링크 기록은 삭제되지 않습니다.',
     },
     {
       ariaLabel: `${displayTitle} 링크 삭제 없이 Cloud 발견함 후보 제외 상태로 저장`,
+      disabled: !canMove,
       label: '후보 제외',
-      onClick: () => onMove(linkId, PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.DISCARDED),
+      onClick: getOnMoveClick(PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.DISCARDED),
       targetStatus: PRODUCTION_DISCOVERY_LINK_MOVE_TARGETS.DISCARDED,
       title: '링크 기록을 삭제하지 않고 Cloud 발견함의 후보 제외 상태로 저장합니다.',
       tone: 'danger',
