@@ -34,6 +34,18 @@ describe('channelTagScanProps utils', () => {
     expect(props.scanButtonAriaLabel).toBe("'보류' 태그 새 영상 수집 불가, 운영중 채널 없음");
   });
 
+  it('uses safe count fallbacks for invalid tag counts', () => {
+    const props = getChannelTagTabRowProps({
+      category: '기타',
+      count: Number.NaN,
+      scannableCount: -2,
+    });
+
+    expect(props.canScanTag).toBe(false);
+    expect(props.listButtonTitle).toBe("'기타' 태그 채널 목록 보기 - 운영중 0개 / 전체 0개");
+    expect(props.scanButtonTitle).toContain('운영중 채널이 없습니다');
+  });
+
   it('builds the tag scan notice as an API-cost boundary', () => {
     const props = getChannelTagScanNoticeProps();
 
