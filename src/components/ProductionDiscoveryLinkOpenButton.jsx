@@ -6,16 +6,18 @@ export default function ProductionDiscoveryLinkOpenButton({
   link,
   linkTitle,
 }) {
-  const buttonProps = getProductionDiscoveryLinkOpenButtonProps({ linkTitle });
+  const buttonProps = getProductionDiscoveryLinkOpenButtonProps({ link, linkTitle });
 
   return (
     <a
-      className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-extrabold text-white transition hover:bg-slate-800"
-      href={link.url}
+      className={`inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-3 text-[11px] font-extrabold text-white transition hover:bg-slate-800 ${buttonProps.disabled ? 'pointer-events-none opacity-50' : ''}`}
+      href={buttonProps.href}
       rel="noreferrer"
       target="_blank"
       title={buttonProps.title}
       aria-label={buttonProps['aria-label']}
+      aria-disabled={buttonProps.disabled ? 'true' : undefined}
+      tabIndex={buttonProps.disabled ? -1 : undefined}
     >
       {buttonProps.label}
       <ExternalLink className="h-3.5 w-3.5" />

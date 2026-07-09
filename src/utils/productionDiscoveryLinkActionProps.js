@@ -42,13 +42,21 @@ export const getProductionDiscoveryLinkCopyButtonProps = ({
   };
 };
 
-export const getProductionDiscoveryLinkOpenButtonProps = ({ linkTitle } = {}) => {
+export const getProductionDiscoveryLinkOpenButtonProps = ({ link, linkTitle } = {}) => {
   const displayTitle = getDisplayLinkTitle(linkTitle);
+  const href = link?.url || '#';
+  const disabled = !link?.url;
 
   return {
-    'aria-label': `${displayTitle} 원본 링크 열기`,
+    'aria-label': disabled
+      ? `${displayTitle} 원본 링크 URL 없음`
+      : `${displayTitle} 원본 링크 열기`,
+    disabled,
+    href,
     label: '원본 열기',
-    title: '원본 링크를 새 탭에서 열기',
+    title: disabled
+      ? '원본 링크 URL이 없어 열 수 없습니다.'
+      : '원본 링크를 새 탭에서 열기',
   };
 };
 
