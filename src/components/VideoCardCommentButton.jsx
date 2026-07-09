@@ -6,7 +6,7 @@ import {
 
 export default function VideoCardCommentButton({ onFetchComments, video, videoTitle }) {
   const commentsButtonProps = getCommentApiButtonProps({
-    className: 'flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-1 text-[11px] font-bold text-indigo-600 transition-colors hover:bg-indigo-100',
+    className: 'flex items-center gap-1 rounded-full border border-indigo-100 bg-indigo-50 px-2 py-1 text-[11px] font-bold text-indigo-600 transition-colors hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-indigo-50',
     onFetchComments,
     video,
     videoTitle,
