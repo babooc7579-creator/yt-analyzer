@@ -61,4 +61,11 @@ describe('routesProps utils', () => {
     expect(props.noticeText).toContain('localStorage 삭제');
     expect(props.backButtonTitle).toContain('저장 작업은 실행하지 않습니다');
   });
+
+  it('uses a safe coming soon title when the menu item is missing', () => {
+    const props = getComingSoonViewProps();
+
+    expect(props.title).toBe('선택한 메뉴 준비중');
+    expect(props.noticeText).toContain('DB 변경');
+  });
 });
