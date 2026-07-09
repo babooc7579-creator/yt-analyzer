@@ -1,5 +1,11 @@
 const toDisplayTitle = (videoTitle) => videoTitle || '이 영상';
 
+const noop = () => {};
+
+const toVideoObject = (video) => (
+  video && typeof video === 'object' ? video : {}
+);
+
 export const getVideoScrapActionCopy = ({
   isSaved,
   videoTitle,
@@ -17,6 +23,26 @@ export const getVideoScrapActionCopy = ({
   };
 };
 
+export const getVideoScrapButtonActionProps = ({
+  isSaved,
+  onToggleScrap,
+  video,
+  videoTitle,
+} = {}) => {
+  const safeVideo = toVideoObject(video);
+  const copy = getVideoScrapActionCopy({ isSaved, videoTitle });
+  const canToggleScrap = Boolean(safeVideo.videoId) && typeof onToggleScrap === 'function';
+
+  return {
+    ...copy,
+    disabled: !canToggleScrap,
+    onClick: canToggleScrap ? () => onToggleScrap(safeVideo) : noop,
+    title: canToggleScrap
+      ? copy.title
+      : '보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.',
+  };
+};
+
 export const getVideoProductionCandidateActionCopy = ({
   isProductionCandidate,
   videoTitle,
@@ -30,6 +56,28 @@ export const getVideoProductionCandidateActionCopy = ({
     ariaLabel: `${displayTitle} ${isProductionCandidate ? '이미 Cloud 판단 기록에 제작 후보로 저장되어 제작 후보함에 표시됨' : 'Cloud 판단 기록에 제작 후보로 저장하고 제작 후보함에서 관리'}, YouTube API 호출 없음`,
     buttonLabel: isProductionCandidate ? '후보함 등록됨' : '제작 후보로',
     title,
+  };
+};
+
+export const getVideoProductionCandidateButtonActionProps = ({
+  isProductionCandidate,
+  onPromoteToProduction,
+  video,
+  videoTitle,
+} = {}) => {
+  const safeVideo = toVideoObject(video);
+  const copy = getVideoProductionCandidateActionCopy({ isProductionCandidate, videoTitle });
+  const canPromote = Boolean(safeVideo.videoId)
+    && typeof onPromoteToProduction === 'function'
+    && !isProductionCandidate;
+
+  return {
+    ...copy,
+    disabled: !canPromote,
+    onClick: canPromote ? () => onPromoteToProduction(safeVideo) : noop,
+    title: canPromote || isProductionCandidate
+      ? copy.title
+      : '제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
   };
 };
 
