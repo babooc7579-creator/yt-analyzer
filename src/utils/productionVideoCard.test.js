@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   getProductionVideoCandidateReasonsViewProps,
   getProductionVideoCardViewProps,
+  getProductionVideoDraftFieldProps,
   getProductionVideoDraftFieldsViewProps,
   getProductionVideoExternalActionsViewProps,
   getProductionVideoMetaBadgesViewProps,
@@ -127,5 +128,39 @@ describe('productionVideoCard utils', () => {
       channelLabel: 'Channel',
       multiplierLabel: '대박 지수 3.3x',
     });
+  });
+
+  it('builds safe draft field handlers', () => {
+    const onUpdateDraft = vi.fn();
+    const titleProps = getProductionVideoDraftFieldProps({
+      fieldName: 'draftTitle',
+      onUpdateDraft,
+      videoId: 'video-1',
+    });
+
+    titleProps.onChange({ target: { value: 'New title' } });
+
+    expect(titleProps.disabled).toBe(false);
+    expect(onUpdateDraft).toHaveBeenCalledWith('video-1', {
+      draftTitle: 'New title',
+    });
+
+    getProductionVideoDraftFieldProps({
+      fieldName: 'note',
+      onUpdateDraft,
+    }).onChange({ target: { value: 'Ignored' } });
+
+    getProductionVideoDraftFieldProps({
+      fieldName: 'targetPublishDate',
+      videoId: 'video-2',
+    }).onChange({ target: { value: '2026-07-09' } });
+
+    expect(getProductionVideoDraftFieldProps({
+      fieldName: 'note',
+    })).toMatchObject({
+      disabled: true,
+      title: '저장할 영상 ID가 없어 제작 메모를 수정할 수 없습니다.',
+    });
+    expect(onUpdateDraft).toHaveBeenCalledTimes(1);
   });
 });
