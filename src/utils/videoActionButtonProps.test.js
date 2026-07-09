@@ -1,7 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
+  getVideoProductionCandidateButtonActionProps,
   getVideoProductionCandidateActionCopy,
+  getVideoScrapButtonActionProps,
   getVideoScrapActionCopy,
   getVideoSelectionActionCopy,
 } from './videoActionButtonProps';
@@ -72,5 +74,71 @@ describe('videoActionButtonProps utils', () => {
     expect(checkedProps.ariaLabel).toBe('First idea AI 요청문 포함 선택 해제, API 호출 없음');
     expect(uncheckedProps.ariaLabel).toBe('First idea AI 요청문 포함 선택 추가, API 호출 없음');
     expect(checkedProps.title).toContain('AI API를 호출하지 않고');
+  });
+
+  it('guards scrapbook action when video id or handler is missing', () => {
+    const onToggleScrap = vi.fn();
+    const enabledProps = getVideoScrapButtonActionProps({
+      isSaved: false,
+      onToggleScrap,
+      video: { videoId: 'video-1', title: 'First idea' },
+      videoTitle: 'First idea',
+    });
+
+    expect(enabledProps.disabled).toBe(false);
+    enabledProps.onClick();
+    expect(onToggleScrap).toHaveBeenCalledWith({ videoId: 'video-1', title: 'First idea' });
+
+    const missingIdProps = getVideoScrapButtonActionProps({
+      onToggleScrap,
+      video: { title: 'No ID' },
+    });
+    const missingHandlerProps = getVideoScrapButtonActionProps({
+      video: { videoId: 'video-2' },
+    });
+
+    expect(missingIdProps.disabled).toBe(true);
+    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.');
+    expect(missingHandlerProps.disabled).toBe(true);
+
+    missingIdProps.onClick();
+    missingHandlerProps.onClick();
+
+    expect(onToggleScrap).toHaveBeenCalledTimes(1);
+  });
+
+  it('guards production candidate action when video id or handler is missing', () => {
+    const onPromoteToProduction = vi.fn();
+    const enabledProps = getVideoProductionCandidateButtonActionProps({
+      isProductionCandidate: false,
+      onPromoteToProduction,
+      video: { videoId: 'video-1', title: 'First idea' },
+      videoTitle: 'First idea',
+    });
+
+    expect(enabledProps.disabled).toBe(false);
+    enabledProps.onClick();
+    expect(onPromoteToProduction).toHaveBeenCalledWith({ videoId: 'video-1', title: 'First idea' });
+
+    const alreadyCandidateProps = getVideoProductionCandidateButtonActionProps({
+      isProductionCandidate: true,
+      onPromoteToProduction,
+      video: { videoId: 'video-2' },
+    });
+    const missingIdProps = getVideoProductionCandidateButtonActionProps({
+      isProductionCandidate: false,
+      onPromoteToProduction,
+      video: { title: 'No ID' },
+    });
+
+    expect(alreadyCandidateProps.disabled).toBe(true);
+    expect(alreadyCandidateProps.title).toContain('이미 Cloud 판단 기록');
+    expect(missingIdProps.disabled).toBe(true);
+    expect(missingIdProps.title).toBe('제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+
+    alreadyCandidateProps.onClick();
+    missingIdProps.onClick();
+
+    expect(onPromoteToProduction).toHaveBeenCalledTimes(1);
   });
 });

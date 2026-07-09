@@ -1,10 +1,12 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   getRadarCandidateDecisionActionsViewProps,
   getRadarCandidateCompletedStateViewProps,
   getRadarCandidateEmptyStateViewProps,
+  getRadarCandidateProductionButtonActionProps,
   getRadarCandidateProductionButtonProps,
+  getRadarCandidateScrapButtonActionProps,
   getRadarCandidateScrapButtonProps,
 } from './radarCandidateStateProps';
 
@@ -66,5 +68,66 @@ describe('radarCandidateStateProps utils', () => {
       title: 'Cloud 스크랩북에서 보관을 해제합니다',
     });
     expect(getRadarCandidateScrapButtonProps()['aria-label']).toContain('이 영상');
+  });
+
+  it('guards radar production promotion action when video id or handler is missing', () => {
+    const onPromoteToProduction = vi.fn();
+    const enabledProps = getRadarCandidateProductionButtonActionProps({
+      onPromoteToProduction,
+      video: { videoId: 'video-1', title: 'Radar clip' },
+      videoTitle: 'Radar clip',
+    });
+
+    expect(enabledProps.disabled).toBe(false);
+    enabledProps.onClick();
+    expect(onPromoteToProduction).toHaveBeenCalledWith({ videoId: 'video-1', title: 'Radar clip' });
+
+    const missingIdProps = getRadarCandidateProductionButtonActionProps({
+      onPromoteToProduction,
+      video: { title: 'No ID' },
+    });
+    const missingHandlerProps = getRadarCandidateProductionButtonActionProps({
+      video: { videoId: 'video-2' },
+    });
+
+    expect(missingIdProps.disabled).toBe(true);
+    expect(missingIdProps.title).toBe('제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+    expect(missingHandlerProps.disabled).toBe(true);
+
+    missingIdProps.onClick();
+    missingHandlerProps.onClick();
+
+    expect(onPromoteToProduction).toHaveBeenCalledTimes(1);
+  });
+
+  it('guards radar scrapbook action when video id or handler is missing', () => {
+    const onToggleScrap = vi.fn();
+    const enabledProps = getRadarCandidateScrapButtonActionProps({
+      isSaved: false,
+      onToggleScrap,
+      video: { videoId: 'video-1', title: 'Radar clip' },
+      videoTitle: 'Radar clip',
+    });
+
+    expect(enabledProps.disabled).toBe(false);
+    enabledProps.onClick();
+    expect(onToggleScrap).toHaveBeenCalledWith({ videoId: 'video-1', title: 'Radar clip' });
+
+    const missingIdProps = getRadarCandidateScrapButtonActionProps({
+      onToggleScrap,
+      video: { title: 'No ID' },
+    });
+    const missingHandlerProps = getRadarCandidateScrapButtonActionProps({
+      video: { videoId: 'video-2' },
+    });
+
+    expect(missingIdProps.disabled).toBe(true);
+    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.');
+    expect(missingHandlerProps.disabled).toBe(true);
+
+    missingIdProps.onClick();
+    missingHandlerProps.onClick();
+
+    expect(onToggleScrap).toHaveBeenCalledTimes(1);
   });
 });

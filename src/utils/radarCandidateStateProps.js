@@ -1,5 +1,11 @@
 const getDisplayVideoTitle = (videoTitle) => videoTitle || '이 영상';
 
+const noop = () => {};
+
+const toVideoObject = (video) => (
+  video && typeof video === 'object' ? video : {}
+);
+
 export const getRadarCandidateCompletedStateViewProps = () => ({
   titleText: '오늘 볼 후보를 모두 처리했습니다',
   descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 Cloud 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있습니다.',
@@ -35,6 +41,25 @@ export const getRadarCandidateProductionButtonProps = ({ videoTitle } = {}) => {
   };
 };
 
+export const getRadarCandidateProductionButtonActionProps = ({
+  onPromoteToProduction,
+  video,
+  videoTitle,
+} = {}) => {
+  const safeVideo = toVideoObject(video);
+  const copy = getRadarCandidateProductionButtonProps({ videoTitle });
+  const canPromote = Boolean(safeVideo.videoId) && typeof onPromoteToProduction === 'function';
+
+  return {
+    ...copy,
+    disabled: !canPromote,
+    onClick: canPromote ? () => onPromoteToProduction(safeVideo) : noop,
+    title: canPromote
+      ? copy.title
+      : '제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
+  };
+};
+
 export const getRadarCandidateDecisionActionsViewProps = () => ({
   descriptionText: '2. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.',
 });
@@ -53,5 +78,25 @@ export const getRadarCandidateScrapButtonProps = ({
     buttonText: isSaved ? '보관 해제' : '소재 보관',
     title: actionText,
     'aria-label': `${displayTitle} ${actionText}`,
+  };
+};
+
+export const getRadarCandidateScrapButtonActionProps = ({
+  isSaved = false,
+  onToggleScrap,
+  video,
+  videoTitle,
+} = {}) => {
+  const safeVideo = toVideoObject(video);
+  const copy = getRadarCandidateScrapButtonProps({ isSaved, videoTitle });
+  const canToggleScrap = Boolean(safeVideo.videoId) && typeof onToggleScrap === 'function';
+
+  return {
+    ...copy,
+    disabled: !canToggleScrap,
+    onClick: canToggleScrap ? () => onToggleScrap(safeVideo) : noop,
+    title: canToggleScrap
+      ? copy.title
+      : '보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.',
   };
 };

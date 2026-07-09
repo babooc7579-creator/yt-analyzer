@@ -1,6 +1,6 @@
 import { Star } from 'lucide-react';
 
-import { getRadarCandidateScrapButtonProps } from '../utils/radarCandidateStateProps';
+import { getRadarCandidateScrapButtonActionProps } from '../utils/radarCandidateStateProps';
 
 export default function RadarCandidateScrapButton({
   isSaved,
@@ -8,13 +8,19 @@ export default function RadarCandidateScrapButton({
   video,
   videoTitle,
 }) {
-  const buttonProps = getRadarCandidateScrapButtonProps({ isSaved, videoTitle });
+  const buttonProps = getRadarCandidateScrapButtonActionProps({
+    isSaved,
+    onToggleScrap,
+    video,
+    videoTitle,
+  });
 
   return (
     <button
       type="button"
-      onClick={() => onToggleScrap(video)}
-      className={`inline-flex items-center justify-center gap-1 rounded-xl px-3 py-2 text-[11px] font-extrabold ${isSaved ? 'bg-yellow-400 text-slate-950 hover:bg-yellow-300' : 'bg-yellow-500/10 text-yellow-100 ring-1 ring-yellow-400/20 hover:bg-yellow-500/15'}`}
+      onClick={buttonProps.onClick}
+      disabled={buttonProps.disabled}
+      className={`inline-flex items-center justify-center gap-1 rounded-xl px-3 py-2 text-[11px] font-extrabold disabled:cursor-not-allowed disabled:opacity-50 ${isSaved ? 'bg-yellow-400 text-slate-950 hover:bg-yellow-300 disabled:hover:bg-yellow-400' : 'bg-yellow-500/10 text-yellow-100 ring-1 ring-yellow-400/20 hover:bg-yellow-500/15 disabled:hover:bg-yellow-500/10'}`}
       title={buttonProps.title}
       aria-label={buttonProps['aria-label']}
     >
