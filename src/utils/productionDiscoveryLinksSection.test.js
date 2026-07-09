@@ -11,8 +11,17 @@ describe('productionDiscoveryLinksSection utils', () => {
   it('normalizes production discovery link candidates for rendering', () => {
     const links = [{ id: 'link-1' }];
 
-    expect(getProductionDiscoveryLinkList(links)).toBe(links);
+    expect(getProductionDiscoveryLinkList(links)).toEqual(links);
     expect(getProductionDiscoveryLinkList(null)).toEqual([]);
+  });
+
+  it('removes invalid discovery link entries before rendering cards', () => {
+    const links = [{ id: 'link-1' }, null, undefined, 'bad', { id: 'link-2' }];
+
+    expect(getProductionDiscoveryLinkList(links)).toEqual([
+      { id: 'link-1' },
+      { id: 'link-2' },
+    ]);
   });
 
   it('builds card props with move state and forwarded handlers', () => {
@@ -40,6 +49,18 @@ describe('productionDiscoveryLinksSection utils', () => {
       onMoveLink: () => 'move',
       onOpenDiscoveryLinks: () => 'open',
     }).moveState).toBeUndefined();
+  });
+
+  it('uses safe card props when a discovery link candidate is missing', () => {
+    expect(getProductionDiscoveryLinkCardProps({
+      link: null,
+      linkMoveStates: { 'link-1': 'saving' },
+      onMoveLink: () => 'move',
+      onOpenDiscoveryLinks: () => 'open',
+    })).toMatchObject({
+      link: {},
+      moveState: undefined,
+    });
   });
 
   it('builds discovery link management copy as a stored Cloud lookup without external collection', () => {

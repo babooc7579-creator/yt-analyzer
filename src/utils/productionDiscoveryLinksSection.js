@@ -2,7 +2,9 @@ const toArray = (items) => (Array.isArray(items) ? items : []);
 
 const toRecordMap = (items) => (items && typeof items === 'object' ? items : {});
 
-export const getProductionDiscoveryLinkList = (links) => toArray(links);
+const isLinkObject = (link) => link && typeof link === 'object';
+
+export const getProductionDiscoveryLinkList = (links) => toArray(links).filter(isLinkObject);
 
 export const getProductionDiscoveryLinksSectionHeaderProps = () => ({
   eyebrow: '발견함 링크 후보',
@@ -26,11 +28,12 @@ export const getProductionDiscoveryLinkCardProps = ({
   onMoveLink,
   onOpenDiscoveryLinks,
 }) => {
+  const sourceLink = isLinkObject(link) ? link : {};
   const moveStateMap = toRecordMap(linkMoveStates);
 
   return {
-    link,
-    moveState: moveStateMap[link.id],
+    link: sourceLink,
+    moveState: moveStateMap[sourceLink.id],
     onEditInDiscoveryLinks: onOpenDiscoveryLinks,
     onMove: onMoveLink,
   };
