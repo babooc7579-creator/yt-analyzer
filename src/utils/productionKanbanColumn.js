@@ -2,6 +2,22 @@ export const getProductionKanbanColumnEmptyTitle = (column = {}) => (
   column.emptyTitle || '비어 있음'
 );
 
+const toRecordMap = (records) => (
+  records && typeof records === 'object' ? records : {}
+);
+
+const getVideoId = (video) => (
+  video && typeof video === 'object' ? video.videoId : undefined
+);
+
+const runPredicate = (predicate, value) => (
+  typeof predicate === 'function' ? predicate(value) : false
+);
+
+const runMapper = (mapper, value) => (
+  typeof mapper === 'function' ? mapper(value) : ''
+);
+
 export const getProductionVideoCardProps = ({
   columnId,
   draftRecords,
@@ -15,18 +31,23 @@ export const getProductionVideoCardProps = ({
   video,
   videoUserRecords,
 }) => {
-  const record = draftRecords[video.videoId] || videoUserRecords[video.videoId] || {};
+  const videoId = getVideoId(video);
+  const drafts = toRecordMap(draftRecords);
+  const records = toRecordMap(videoUserRecords);
+  const moves = toRecordMap(moveStates);
+  const saves = toRecordMap(saveStates);
+  const record = (videoId && (drafts[videoId] || records[videoId])) || {};
 
   return {
     columnId,
-    isDirty: hasUnsavedChanges(video.videoId),
-    moveState: moveStates[video.videoId],
+    isDirty: runPredicate(hasUnsavedChanges, videoId),
+    moveState: videoId ? moves[videoId] : undefined,
     onMove,
     onSave,
     onUpdateDraft,
     record,
-    saveState: saveStates[video.videoId],
-    scheduleSignal: getScheduleSignal(record),
-    video,
+    saveState: videoId ? saves[videoId] : undefined,
+    scheduleSignal: runMapper(getScheduleSignal, record),
+    video: video || {},
   };
 };
