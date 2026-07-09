@@ -5,6 +5,8 @@ import {
 } from './radarCandidates';
 import { getYouTubeVideoUrl } from './urls';
 
+const noop = () => {};
+
 export const getProductionVideoCardViewProps = ({
   columnId,
   isDirty,
@@ -86,6 +88,24 @@ export const getProductionVideoDraftFieldsViewProps = ({ videoTitle = '이 영�
     'aria-label': `${videoTitle} 업로드 예정일 선택`,
   },
 });
+
+export const getProductionVideoDraftFieldProps = ({
+  fieldName,
+  onUpdateDraft,
+  videoId,
+} = {}) => {
+  const canUpdate = Boolean(videoId) && Boolean(fieldName) && typeof onUpdateDraft === 'function';
+
+  return {
+    disabled: !canUpdate,
+    onChange: canUpdate
+      ? (event) => onUpdateDraft(videoId, { [fieldName]: event?.target?.value || '' })
+      : noop,
+    title: canUpdate
+      ? ''
+      : '저장할 영상 ID가 없어 제작 메모를 수정할 수 없습니다.',
+  };
+};
 
 export const getProductionVideoExternalActionsViewProps = ({
   videoTitle = '이 영상',
