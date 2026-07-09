@@ -18,6 +18,7 @@ describe('commentApiButtonProps utils', () => {
 
     expect(buttonProps).toMatchObject({
       className: 'button-class',
+      disabled: false,
       title: COMMENT_API_BUTTON_TITLE,
       'aria-label': 'Display title 댓글 Top 10 보기 - YouTube API로 댓글 조회',
       type: 'button',
@@ -32,7 +33,7 @@ describe('commentApiButtonProps utils', () => {
     expect(onFetchComments).toHaveBeenCalledWith('video-1', 'Original title');
   });
 
-  it('uses safe title fallback for invalid video input', () => {
+  it('disables the button when the video id is missing', () => {
     const onFetchComments = vi.fn();
     const buttonProps = getCommentApiButtonProps({
       className: 'button-class',
@@ -41,10 +42,24 @@ describe('commentApiButtonProps utils', () => {
       videoTitle: '',
     });
 
+    expect(buttonProps).toMatchObject({
+      disabled: true,
+      title: '댓글을 조회할 영상 ID가 없어 YouTube API를 호출하지 않습니다.',
+    });
     expect(buttonProps['aria-label']).toBe('이 영상 댓글 Top 10 보기 - YouTube API로 댓글 조회');
 
     buttonProps.onClick();
 
-    expect(onFetchComments).toHaveBeenCalledWith(undefined, undefined);
+    expect(onFetchComments).not.toHaveBeenCalled();
+  });
+
+  it('disables the button when the fetch handler is missing', () => {
+    const buttonProps = getCommentApiButtonProps({
+      video: { videoId: 'video-2', title: 'Clip' },
+    });
+
+    expect(buttonProps.disabled).toBe(true);
+
+    buttonProps.onClick();
   });
 });
