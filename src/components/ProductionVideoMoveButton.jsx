@@ -6,6 +6,7 @@ export default function ProductionVideoMoveButton({
   activeClassName,
   ariaLabel,
   baseClassName = 'inline-flex items-center justify-center gap-1',
+  disabled = false,
   icon: Icon,
   isMoving,
   label,
@@ -13,7 +14,8 @@ export default function ProductionVideoMoveButton({
   onClick,
   title,
 }) {
-  const { visibleLabel } = getProductionVideoMoveButtonViewProps({
+  const { disabled: buttonDisabled, visibleLabel } = getProductionVideoMoveButtonViewProps({
+    disabled,
     isMoving,
     label,
     loadingLabel,
@@ -23,8 +25,8 @@ export default function ProductionVideoMoveButton({
     <button
       type="button"
       onClick={onClick}
-      disabled={isMoving}
-      className={`${baseClassName} rounded-lg px-3 py-2 text-[11px] font-extrabold ${isMoving ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : activeClassName}`}
+      disabled={buttonDisabled}
+      className={`${baseClassName} rounded-lg px-3 py-2 text-[11px] font-extrabold ${buttonDisabled ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : activeClassName}`}
       title={title}
       aria-label={ariaLabel}
     >

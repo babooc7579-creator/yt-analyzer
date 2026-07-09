@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { PRODUCTION_STATUS } from '../constants/status';
 import {
@@ -6,6 +6,7 @@ import {
   getProductionVideoDraftSaveButtonProps,
   getProductionVideoMoveActionCopy,
   getProductionVideoMoveButtonViewProps,
+  getProductionVideoMoveHandler,
   getProductionVideoMoveStatusViewProps,
   getProductionVideoSaveStatusViewProps,
 } from './productionVideoStatusProps';
@@ -75,6 +76,42 @@ describe('productionVideoStatusProps utils', () => {
       isMoving: false,
       label: '제작 중으로',
     }).visibleLabel).toBe('제작 중으로');
+    expect(getProductionVideoMoveButtonViewProps({
+      disabled: true,
+      isMoving: false,
+      label: '제작 중으로',
+    })).toMatchObject({
+      disabled: true,
+      visibleLabel: '제작 중으로',
+    });
+  });
+
+  it('builds safe move handlers for production status updates', () => {
+    const onMove = vi.fn();
+    const moveToDone = getProductionVideoMoveHandler({
+      onMove,
+      targetStatus: PRODUCTION_STATUS.DONE,
+      updates: { uploadedAt: '2026-07-09' },
+      videoId: 'video-1',
+    });
+
+    moveToDone();
+
+    expect(onMove).toHaveBeenCalledWith('video-1', PRODUCTION_STATUS.DONE, {
+      uploadedAt: '2026-07-09',
+    });
+
+    getProductionVideoMoveHandler({
+      onMove,
+      targetStatus: PRODUCTION_STATUS.ACTIVE,
+    })();
+
+    getProductionVideoMoveHandler({
+      targetStatus: PRODUCTION_STATUS.CANDIDATE,
+      videoId: 'video-2',
+    })();
+
+    expect(onMove).toHaveBeenCalledTimes(1);
   });
 
   it('builds move and save status messages without pretending failed saves succeeded', () => {
