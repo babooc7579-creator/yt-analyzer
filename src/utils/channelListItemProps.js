@@ -1,5 +1,11 @@
 import { getChannelGrade, getChannelStatus } from '../constants/status';
 
+const noop = () => {};
+
+const toChannelObject = (channel) => (
+  channel && typeof channel === 'object' ? channel : {}
+);
+
 export const getChannelListItemViewProps = ({
   channel,
   isSelected,
@@ -10,13 +16,16 @@ export const getChannelListItemViewProps = ({
   isUpdating,
   onDelete,
 }) => {
-  const grade = getChannelGrade(channel);
-  const status = getChannelStatus(channel);
-  const selectionLabel = `${channel.title} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.`;
+  const safeChannel = toChannelObject(channel);
+  const grade = getChannelGrade(safeChannel);
+  const status = getChannelStatus(safeChannel);
+  const channelTitle = safeChannel.title || '이 채널';
+  const canToggleSelection = Boolean(safeChannel.id) && typeof onToggleSelection === 'function';
+  const selectionLabel = `${channelTitle} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.`;
 
   return {
     actionsProps: {
-      channel,
+      channel: safeChannel,
       onDelete,
       onOpenNotes,
     },
@@ -27,7 +36,7 @@ export const getChannelListItemViewProps = ({
       status,
     },
     metadataControlsProps: {
-      channel,
+      channel: safeChannel,
       grade,
       isUpdating,
       onUpdateMetadata,
@@ -37,20 +46,23 @@ export const getChannelListItemViewProps = ({
       scanDisplay,
     },
     selectionButtonProps: {
-      className: 'text-indigo-600 focus:outline-none shrink-0 mt-1',
-      onClick: () => onToggleSelection(channel.id),
-      title: selectionLabel,
+      className: 'text-indigo-600 focus:outline-none shrink-0 mt-1 disabled:cursor-not-allowed disabled:text-slate-300',
+      disabled: !canToggleSelection,
+      onClick: canToggleSelection ? () => onToggleSelection(safeChannel.id) : noop,
+      title: canToggleSelection
+        ? selectionLabel
+        : `${channelTitle} 선택 비활성화 - 채널 ID가 없어 선택 상태를 바꾸지 않습니다.`,
       'aria-label': selectionLabel,
       type: 'button',
     },
     thumbnailProps: {
       alt: '',
       className: 'w-9 h-9 rounded-full border border-slate-200 shrink-0 mt-1',
-      src: channel.thumbnail,
+      src: safeChannel.thumbnail,
     },
     titleProps: {
       className: 'text-sm font-semibold text-slate-800 leading-snug line-clamp-2',
-      title: channel.title,
+      title: safeChannel.title,
     },
   };
 };

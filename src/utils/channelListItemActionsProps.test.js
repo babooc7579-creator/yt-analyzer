@@ -53,6 +53,7 @@ describe('channelListItemActionsProps utils', () => {
 
     expect(props.noteCount).toBe(2);
     expect(props.notesButtonProps).toMatchObject({
+      disabled: false,
       title: '분석/기록 남기기',
       'aria-label': 'Peak Viral Shorts 분석/기록 남기기',
       type: 'button',
@@ -64,11 +65,56 @@ describe('channelListItemActionsProps utils', () => {
 
     expect(props.deleteButtonProps.title).toContain('Cloud 채널 목록에서 삭제합니다');
     expect(props.deleteButtonProps.title).toContain('이미 저장된 영상 데이터는 삭제하지 않습니다');
+    expect(props.deleteButtonProps.disabled).toBe(false);
     expect(props.deleteButtonProps['aria-label']).toContain('저장 영상 데이터는 삭제하지 않음');
     expect(props.deleteButtonProps.type).toBe('button');
 
     props.deleteButtonProps.onClick();
 
     expect(onDelete).toHaveBeenCalledWith('UC123', '해외', 'Peak Viral Shorts');
+  });
+
+  it('disables note and delete actions when the channel id or handlers are missing', () => {
+    const onDelete = vi.fn();
+    const onOpenNotes = vi.fn();
+    const props = getChannelListItemActionsViewProps({
+      channel: { title: 'No ID Channel' },
+      onDelete,
+      onOpenNotes,
+    });
+
+    expect(props.noteCount).toBe(0);
+    expect(props.copyUrlButtonProps).toMatchObject({
+      ariaLabel: 'No ID Channel YouTube 채널 URL 복사',
+      url: '',
+    });
+    expect(props.notesButtonProps).toMatchObject({
+      disabled: true,
+      title: '분석/기록을 열 채널 ID가 없습니다.',
+      'aria-label': 'No ID Channel 분석/기록 비활성화 - 채널 ID 없음',
+    });
+    expect(props.deleteButtonProps).toMatchObject({
+      disabled: true,
+      title: '삭제할 채널 ID가 없어 Cloud 삭제를 실행하지 않습니다.',
+      'aria-label': 'No ID Channel 삭제 비활성화 - 채널 ID 없음',
+    });
+
+    props.notesButtonProps.onClick();
+    props.deleteButtonProps.onClick();
+
+    expect(onOpenNotes).not.toHaveBeenCalled();
+    expect(onDelete).not.toHaveBeenCalled();
+  });
+
+  it('uses inert fallback actions when handlers are missing', () => {
+    const props = getChannelListItemActionsViewProps({
+      channel: baseChannel,
+    });
+
+    expect(props.notesButtonProps.disabled).toBe(true);
+    expect(props.deleteButtonProps.disabled).toBe(true);
+
+    props.notesButtonProps.onClick();
+    props.deleteButtonProps.onClick();
   });
 });

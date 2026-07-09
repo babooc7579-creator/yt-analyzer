@@ -37,6 +37,7 @@ describe('channelListItemProps utils', () => {
     expect(props.containerClassName).toContain('border-indigo-500');
     expect(props.selectionButtonProps.title).toContain('선택 해제');
     expect(props.selectionButtonProps.title).toContain('YouTube API를 호출하지 않습니다');
+    expect(props.selectionButtonProps.disabled).toBe(false);
     expect(props.selectionButtonProps['aria-label']).toBe(props.selectionButtonProps.title);
     expect(props.selectionButtonProps.type).toBe('button');
 
@@ -103,5 +104,43 @@ describe('channelListItemProps utils', () => {
       isUpdating: true,
       status: CHANNEL_STATUS.ACTIVE,
     });
+  });
+
+  it('disables selection when the channel id or toggle handler is missing', () => {
+    const onToggleSelection = vi.fn();
+    const props = getChannelListItemViewProps({
+      channel: { title: 'No ID Channel' },
+      isSelected: false,
+      scanDisplay: {},
+      onToggleSelection,
+      onOpenNotes: vi.fn(),
+      onUpdateMetadata: vi.fn(),
+      isUpdating: false,
+      onDelete: vi.fn(),
+    });
+
+    expect(props.selectionButtonProps).toMatchObject({
+      disabled: true,
+      title: 'No ID Channel 선택 비활성화 - 채널 ID가 없어 선택 상태를 바꾸지 않습니다.',
+      'aria-label': 'No ID Channel 선택 - 저장 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.',
+      type: 'button',
+    });
+
+    props.selectionButtonProps.onClick();
+
+    expect(onToggleSelection).not.toHaveBeenCalled();
+
+    const missingHandlerProps = getChannelListItemViewProps({
+      channel: baseChannel,
+      isSelected: false,
+      scanDisplay: {},
+      onOpenNotes: vi.fn(),
+      onUpdateMetadata: vi.fn(),
+      isUpdating: false,
+      onDelete: vi.fn(),
+    });
+
+    expect(missingHandlerProps.selectionButtonProps.disabled).toBe(true);
+    missingHandlerProps.selectionButtonProps.onClick();
   });
 });
