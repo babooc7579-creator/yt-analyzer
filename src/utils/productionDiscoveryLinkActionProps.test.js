@@ -43,8 +43,13 @@ describe('productionDiscoveryLinkActionProps utils', () => {
       url: 'https://example.com/post',
     });
 
-    expect(getProductionDiscoveryLinkOpenButtonProps({ linkTitle: 'Idea link' })).toEqual({
+    expect(getProductionDiscoveryLinkOpenButtonProps({
+      link: { url: 'https://example.com/post' },
+      linkTitle: 'Idea link',
+    })).toEqual({
       'aria-label': 'Idea link 원본 링크 열기',
+      disabled: false,
+      href: 'https://example.com/post',
       label: '원본 열기',
       title: '원본 링크를 새 탭에서 열기',
     });
@@ -53,6 +58,19 @@ describe('productionDiscoveryLinkActionProps utils', () => {
       'aria-label': '이 링크 발견함에서 수정',
       label: '발견함에서 수정',
       title: '발견함 화면에서 링크 상태와 메모 수정',
+    });
+  });
+
+  it('disables the original-link open action when the URL is missing', () => {
+    expect(getProductionDiscoveryLinkOpenButtonProps({
+      link: {},
+      linkTitle: 'Idea link',
+    })).toEqual({
+      'aria-label': 'Idea link 원본 링크 URL 없음',
+      disabled: true,
+      href: '#',
+      label: '원본 열기',
+      title: '원본 링크 URL이 없어 열 수 없습니다.',
     });
   });
 
