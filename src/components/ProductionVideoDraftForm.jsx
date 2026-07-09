@@ -1,6 +1,9 @@
 import { Loader2, Save } from 'lucide-react';
 
-import { getProductionVideoDraftSaveButtonProps } from '../utils/productionVideoStatusProps';
+import {
+  getProductionVideoDraftSaveButtonProps,
+  getProductionVideoDraftSaveHandler,
+} from '../utils/productionVideoStatusProps';
 import ProductionVideoDraftFields from './ProductionVideoDraftFields';
 import ProductionVideoSaveStatus from './ProductionVideoSaveStatus';
 
@@ -14,7 +17,10 @@ export default function ProductionVideoDraftForm({
   video,
   videoTitle,
 }) {
+  const videoId = video?.videoId;
+  const hasSaveTarget = Boolean(videoId) && typeof onSave === 'function';
   const saveButtonProps = getProductionVideoDraftSaveButtonProps({
+    hasSaveTarget,
     isDirty,
     isSaving,
     videoTitle,
@@ -30,9 +36,9 @@ export default function ProductionVideoDraftForm({
       />
       <button
         type="button"
-        onClick={() => onSave(video.videoId)}
+        onClick={getProductionVideoDraftSaveHandler({ onSave, videoId })}
         disabled={saveButtonProps.disabled}
-        className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${isDirty && !isSaving ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+        className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${saveButtonProps.disabled ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
         title={saveButtonProps.title}
         aria-label={saveButtonProps.ariaLabel}
       >

@@ -36,22 +36,42 @@ export const getProductionVideoMoveActionCopy = ({ targetStatus, videoTitle } = 
 };
 
 export const getProductionVideoDraftSaveButtonProps = ({
+  hasSaveTarget = true,
   isDirty,
   isSaving,
   videoTitle,
 } = {}) => {
   const displayTitle = getDisplayVideoTitle(videoTitle);
-  const canSave = Boolean(isDirty) && !isSaving;
+  const canSave = Boolean(hasSaveTarget) && Boolean(isDirty) && !isSaving;
+  let label = 'Cloud 저장됨';
+  let title = 'Cloud에 저장된 상태';
+
+  if (isSaving) {
+    label = 'Cloud 저장 중';
+  } else if (!hasSaveTarget) {
+    label = '저장 대상 없음';
+    title = '저장할 영상 ID가 없어 Cloud 저장을 실행하지 않습니다.';
+  } else if (isDirty) {
+    label = 'Cloud에 변경 저장';
+    title = '제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장';
+  }
 
   return {
     ariaLabel: `${displayTitle} 제작 메모 저장`,
     disabled: !canSave,
-    label: isSaving ? 'Cloud 저장 중' : isDirty ? 'Cloud에 변경 저장' : 'Cloud 저장됨',
-    title: isDirty
-      ? '제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장'
-      : 'Cloud에 저장된 상태',
+    label,
+    title,
   };
 };
+
+export const getProductionVideoDraftSaveHandler = ({
+  onSave,
+  videoId,
+} = {}) => (
+  videoId && typeof onSave === 'function'
+    ? () => onSave(videoId)
+    : noop
+);
 
 export const getProductionVideoMoveStatusViewProps = ({
   columnId,
