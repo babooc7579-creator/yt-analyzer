@@ -1436,3 +1436,28 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - localStorage key 변경 없음
 - 발견 링크 Cloud 조회/저장/삭제 호출 조건 변경 없음
 - 외부 사이트 자동 수집/다운로드 추가 없음
+
+### 46. 2026-07-11 채널 Cloud 로드 hook 테스트 보강
+
+채널 목록이 Cloud 기준 데이터로 로드되고, 조회 실패 때 화면의 채널 목록을 기준 데이터로 보지 않는다는 원칙을 `useCloudChannels` 테스트로 보강했습니다.
+
+완료한 작업:
+
+- mount 시 Cloud 채널 목록 조회가 실행되고 성공 응답을 채널 상태에 반영하는지 확인했습니다.
+- Cloud 응답에 channels가 없으면 빈 목록으로 안전하게 처리하는지 확인했습니다.
+- Cloud 조회 실패 때 기존 채널 상태를 임의로 대체하지 않고 오류 안내만 전달하는지 확인했습니다.
+- 실패 메시지가 `Cloud 채널 목록 조회를 완료하지 못했다`는 기준을 유지하는지 확인했습니다.
+- 반환된 `loadChannelsFromCloud` 함수로 수동 재조회가 가능한지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useCloudChannels.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 채널 Cloud 조회 호출 조건 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
