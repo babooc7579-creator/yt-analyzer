@@ -102,7 +102,7 @@ export const getProductionDiscoveryLinkMoveActions = ({ link, linkTitle, onMove 
 export const getProductionDiscoveryLinkMoveStatusViewProps = (moveState) => {
   if (moveState === 'saved') {
     return {
-      message: 'Cloud 발견함 상태 저장 완료. 링크 기록은 유지됩니다.',
+      message: 'Cloud 발견함 상태 저장 완료. 제작 후보 표시만 갱신되고 링크 기록은 유지됩니다.',
       tone: 'success',
     };
   }

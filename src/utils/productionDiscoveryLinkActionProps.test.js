@@ -121,7 +121,7 @@ describe('productionDiscoveryLinkActionProps utils', () => {
 
   it('builds move status messages for saved, error, and idle states', () => {
     expect(getProductionDiscoveryLinkMoveStatusViewProps('saved')).toEqual({
-      message: 'Cloud 발견함 상태 저장 완료. 링크 기록은 유지됩니다.',
+      message: 'Cloud 발견함 상태 저장 완료. 제작 후보 표시만 갱신되고 링크 기록은 유지됩니다.',
       tone: 'success',
     });
     expect(getProductionDiscoveryLinkMoveStatusViewProps('error')).toEqual({
