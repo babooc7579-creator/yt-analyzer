@@ -129,14 +129,14 @@ describe('appLayoutProps utils', () => {
       savedVideoCount: 7,
     })).toEqual({
       dashboardTab: {
-        ariaLabel: '분석 대시보드 탭 열기',
+        ariaLabel: '분석 대시보드 탭 열기, 탭 이동만으로 YouTube API 호출 없음',
         label: '분석 대시보드',
-        title: '저장 영상 분석 대시보드 보기',
+        title: '현재 불러온 저장 영상 분석 대시보드 보기. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
       },
       scrapbookTab: {
-        ariaLabel: '영구 스크랩북 탭 열기, 보관 영상 7개',
+        ariaLabel: '영구 스크랩북 탭 열기, 보관 영상 7개, 탭 이동만으로 YouTube API 호출 없음',
         label: '영구 스크랩북',
-        title: 'Cloud 스크랩북 보기 - 보관 영상 7개',
+        title: 'Cloud 스크랩북 보기 - 보관 영상 7개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
       },
     });
   });
