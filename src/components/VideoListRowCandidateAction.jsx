@@ -2,6 +2,7 @@ import { Rocket } from 'lucide-react';
 import { getVideoListRowCandidateActionViewProps } from '../utils/videoListRowCandidateActionProps';
 
 export default function VideoListRowCandidateAction({
+  disabled,
   isProductionCandidate,
   onPromote,
   videoTitle,
@@ -10,6 +11,7 @@ export default function VideoListRowCandidateAction({
     buttonLabel,
     buttonProps,
   } = getVideoListRowCandidateActionViewProps({
+    disabled,
     isProductionCandidate,
     onPromote,
     videoTitle,

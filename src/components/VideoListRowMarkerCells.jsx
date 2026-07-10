@@ -5,10 +5,12 @@ import {
 } from '../utils/videoActionButtonProps';
 
 export default function VideoListRowMarkerCells({
+  checkDisabled,
   isChecked,
   isSaved,
   onToggleCheck,
   onToggleScrap,
+  scrapDisabled,
   videoTitle,
 }) {
   const {
@@ -32,9 +34,10 @@ export default function VideoListRowMarkerCells({
         <button
           type="button"
           onClick={onToggleCheck}
-          title={selectionTitle}
+          disabled={checkDisabled}
+          title={checkDisabled ? '선택할 영상 ID가 없어 선택 상태를 바꾸지 않습니다.' : selectionTitle}
           aria-label={selectionAriaLabel}
-          className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors"
+          className="focus:outline-none rounded-lg p-1 hover:bg-white transition-colors disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         >
           {isChecked ? (
             <CheckSquare className="w-6 h-6 text-indigo-600" />
@@ -47,9 +50,10 @@ export default function VideoListRowMarkerCells({
         <button
           type="button"
           onClick={onToggleScrap}
-          title={scrapTitle}
+          disabled={scrapDisabled}
+          title={scrapDisabled ? '보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.' : scrapTitle}
           aria-label={scrapAriaLabel}
-          className="p-2 rounded-full hover:bg-yellow-100 transition-colors"
+          className="p-2 rounded-full hover:bg-yellow-100 transition-colors disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         >
           <Star className={`w-6 h-6 ${isSaved ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300 group-hover:text-yellow-400'}`} />
         </button>

@@ -51,4 +51,19 @@ describe('videoListRowCandidateActionProps utils', () => {
 
     expect(onPromote).not.toHaveBeenCalled();
   });
+
+  it('builds a disabled button when the row action is unavailable', () => {
+    const onPromote = vi.fn();
+
+    const props = getVideoListRowCandidateActionViewProps({
+      disabled: true,
+      isProductionCandidate: false,
+      onPromote,
+      videoTitle: 'No ID video',
+    });
+
+    expect(props.buttonProps.disabled).toBe(true);
+    expect(props.buttonProps.className).toContain('cursor-not-allowed');
+    expect(props.buttonProps.title).toBe('제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+  });
 });
