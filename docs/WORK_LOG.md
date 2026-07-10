@@ -886,3 +886,32 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 27. 2026-07-11 채널 추가 액션 hook 테스트 보강
+
+채널 추가/미리보기/일괄 추가 흐름이 비용성 YouTube 조회와 Cloud 저장 경계를 지키는지 확인하는 hook 테스트를 추가했습니다.
+
+완료한 작업:
+
+- 빈 채널 입력에서는 채널 미리보기 API를 호출하지 않는지 확인했습니다.
+- 새 채널 미리보기 성공 시 이전 미리보기를 비우고 새 미리보기를 표시하는지 확인했습니다.
+- 이미 등록된 채널은 저장 전 중복 안내로 막히는지 확인했습니다.
+- 채널 저장 payload가 입력값을 trim하고 첫 태그 탭을 선택하는지 확인했습니다.
+- 빈 일괄 입력은 Cloud 저장을 실행하지 않고 안내만 표시하는지 확인했습니다.
+- 일괄 추가 성공 후 Cloud 채널 목록을 다시 불러오는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useChannelAddActions.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
