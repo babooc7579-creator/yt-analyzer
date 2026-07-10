@@ -23,6 +23,7 @@ export default function ChannelNotesModal({
     shouldRender,
     textareaAriaLabel,
     textareaPlaceholder,
+    textareaTitle,
   } = getChannelNotesModalViewProps(modal);
 
   if (!shouldRender) return null;
@@ -54,6 +55,7 @@ export default function ChannelNotesModal({
             className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg outline-none resize-none focus:ring-2 focus:ring-indigo-500"
             rows={2}
             aria-label={textareaAriaLabel}
+            title={textareaTitle}
           />
           <button
             onClick={onAddNote}

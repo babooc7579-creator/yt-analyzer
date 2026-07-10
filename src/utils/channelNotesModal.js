@@ -23,5 +23,6 @@ export const getChannelNotesModalViewProps = (modal) => {
     notes,
     textareaAriaLabel: `${channelTitle} 채널 분석 기록 입력`,
     textareaPlaceholder: '예) 또 떡상함, 패턴인듯 / 시니어롱폼 소재로 쓰기 좋음 / 톤이 우리 채널이랑 비슷함...',
+    textareaTitle: '입력만으로는 Cloud에 저장되지 않습니다. 기록 추가 버튼을 눌러야 Cloud 채널 메모에 저장됩니다.',
   };
 };
