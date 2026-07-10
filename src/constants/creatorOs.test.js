@@ -22,7 +22,14 @@ describe('creatorOs constants', () => {
   });
 
   it('keeps scrapbook storage separate from production candidate meaning', () => {
+    const studioSection = CREATOR_OS_PRODUCT_MAP.find(section => section.title === '제작 스튜디오');
+
+    expect(studioSection.description).toContain('후보로 표시한 소재');
+    expect(studioSection.description).not.toContain('저장한 소재를 제작 후보로 전환');
     expect(itemsById['studio-candidates'].summary).toContain('제작 후보');
+    expect(itemsById['studio-candidates'].summary).toContain('표시한 영상');
+    expect(itemsById['studio-candidates'].summary).toContain('발견함 링크');
+    expect(itemsById['studio-candidates'].summary).not.toContain('스크랩 영상');
     expect(itemsById['studio-scrapbook'].summary).toContain('보관한 영상');
     expect(itemsById['studio-scrapbook'].summary).toContain('제작 후보를 구분');
     expect(itemsById['studio-scrapbook'].summary).not.toContain('영상을 제작 후보로 봅니다');
