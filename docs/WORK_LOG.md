@@ -1570,3 +1570,27 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - localStorage key 변경 없음
 - 제작 칸반 Cloud 저장/이동 호출 조건 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 51. 2026-07-11 Creator App workflow 조립 hook 테스트 보강
+
+App 구조가 여러 hook으로 나뉜 뒤에도 채널, 수집, 발견함, 영상 검토 workflow가 올바른 하위 hook과 상태를 연결하는지 `useCreatorAppWorkflowComposition` 테스트를 추가했습니다.
+
+완료한 작업:
+
+- 채널 workflow가 카테고리, 선택 채널, Cloud 채널 목록, 채널 액션, 채널 추가, 메모 모달, 태그 변경 workflow를 올바르게 연결하는지 확인했습니다.
+- 수집 workflow가 저장 영상 조회/스캔 액션에 필요한 채널/런타임/영상/작업공간 의존성을 전달하는지 확인했습니다.
+- 발견함 workflow가 Cloud 발견 링크 hook 결과를 그대로 사용하는지 확인했습니다.
+- 영상 검토 workflow가 스크랩북, 영상별 사용자 기록, 제작 후보 액션을 올바르게 연결하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useCreatorAppWorkflowComposition.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- workflow 연결 구조 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
