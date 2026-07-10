@@ -362,6 +362,10 @@ src/App.jsx
 - 새 채널 등록 입력칸 문구를 정리했습니다.
   - 붙여넣기만으로는 Cloud 저장이나 영상 수집이 실행되지 않는다고 안내합니다.
   - `YouTube에서 확인` 버튼은 채널 정보 확인용이며 영상 수집과 다르다고 구분했습니다.
+- 사이드바의 준비중 메뉴 문구를 정리했습니다.
+  - 준비중 메뉴는 안내 화면만 열며 API 호출이나 DB 변경이 없다고 안내합니다.
+- 분석 대시보드/영구 스크랩북 탭 문구를 정리했습니다.
+  - 탭 이동만으로 YouTube API를 새로 호출하지 않는다고 안내합니다.
 
 검증:
 
@@ -371,6 +375,7 @@ src/App.jsx
 - `npm.cmd test -- src/utils/productionVideoCard.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/channelNotesModal.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/channelAddCopy.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/appLayoutProps.test.js --reporter=dot` 통과
 - `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 109개, 테스트 513개
 - `npm.cmd run build` 통과
 - `npm.cmd audit --omit=dev` 취약점 0개
