@@ -1647,3 +1647,34 @@ App 구조가 여러 hook으로 나뉜 뒤에도 채널, 수집, 발견함, 영�
 - localStorage key 변경 없음
 - 화면 이동 동작 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 54. 2026-07-11 Creator App controller 조립 테스트 보강
+
+앱 최상위 controller가 runtime, 채널 workflow, 영상 workflow, 작업공간 workflow, 수집 workflow, 파생 상태, 화면 props를 올바르게 연결하는지 `useCreatorAppController` 테스트를 추가했습니다.
+
+완료한 작업:
+
+- runtime 상태 hook이 한 번 호출되는지 확인했습니다.
+- 채널 workflow에 오류/로딩/진행 메시지/채널 업데이트 setter가 전달되는지 확인했습니다.
+- 영상 workflow에 현재 영상 목록이 전달되는지 확인했습니다.
+- 작업공간 workflow에 API key와 오류 setter가 전달되는지 확인했습니다.
+- 수집 workflow가 채널/runtime/영상/작업공간 workflow를 함께 받는지 확인했습니다.
+- 파생 상태 계산에 카테고리, 발견 링크, 저장 채널/영상, sync warning, 사용자 판단 기록이 연결되는지 확인했습니다.
+- 화면 props hook에 모든 workflow 결과와 파생 상태가 합쳐져 전달되는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useCreatorAppController.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 화면 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
