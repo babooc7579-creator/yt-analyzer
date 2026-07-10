@@ -1073,3 +1073,29 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 33. 2026-07-11 채널 선택 상태 hook 테스트 보강
+
+채널 관리 화면에서 선택한 카테고리와 선택 채널 목록이 안전하게 초기화되고 토글되는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 채널 선택 hook이 최초 카테고리 탭과 빈 선택 목록으로 시작하는지 확인했습니다.
+- 채널 선택 토글이 선택 목록 state updater를 통해 추가/해제되는지 확인했습니다.
+- 채널 선택/스캔 대상 상태의 실제 동작 로직은 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useChannelSelection.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
