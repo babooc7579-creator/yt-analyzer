@@ -43,10 +43,13 @@ describe('videoActionButtonProps utils', () => {
 
     expect(enabledProps.buttonLabel).toBe('제작 후보로');
     expect(enabledProps.title).toContain('Cloud 판단 기록');
+    expect(enabledProps.title).toContain('제작 후보로 표시');
     expect(enabledProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(enabledProps.ariaLabel).toContain('YouTube API 호출 없음');
-    expect(disabledProps.buttonLabel).toBe('후보함 등록됨');
+    expect(enabledProps.title).not.toContain('제작 후보로 저장');
+    expect(disabledProps.buttonLabel).toBe('후보 표시됨');
     expect(disabledProps.title).toContain('이미 Cloud 판단 기록');
+    expect(disabledProps.title).toContain('제작 후보로 표시');
   });
 
   it('uses a safe title fallback for unnamed videos', () => {
@@ -134,7 +137,7 @@ describe('videoActionButtonProps utils', () => {
     expect(alreadyCandidateProps.disabled).toBe(true);
     expect(alreadyCandidateProps.title).toContain('이미 Cloud 판단 기록');
     expect(missingIdProps.disabled).toBe(true);
-    expect(missingIdProps.title).toBe('제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+    expect(missingIdProps.title).toBe('제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
 
     alreadyCandidateProps.onClick();
     missingIdProps.onClick();

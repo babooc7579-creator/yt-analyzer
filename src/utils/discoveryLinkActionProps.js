@@ -21,20 +21,20 @@ export const getDiscoveryLinkCandidateActionProps = ({
   return {
     buttonProps: {
       'aria-label': isCandidate
-        ? `${displayTitle} 이미 Cloud 발견함 기록에 제작 후보로 저장됨, 권리 확인 상태는 별도 확인 필요`
-        : `${displayTitle} Cloud 발견함 기록에 제작 후보로 저장, 권리 확인 완료 의미 아님`,
+        ? `${displayTitle} 이미 Cloud 발견함 기록에 제작 후보로 표시됨, 권리 확인 상태는 별도 확인 필요`
+        : `${displayTitle} Cloud 발견함 기록에 제작 후보로 표시, 권리 확인 완료 의미 아님`,
       className: `inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3 text-xs font-extrabold transition disabled:cursor-not-allowed ${
         isCandidate ? candidateButtonClassNames.active : candidateButtonClassNames.enabled
       }`,
       disabled: saving || isCandidate,
       onClick: onSendToCandidate,
       title: isCandidate
-        ? '이미 Cloud 발견함 기록에 제작 후보로 저장되어 제작실에 표시됩니다. 권리 확인 상태는 별도로 확인해야 합니다.'
-        : '검토 상태를 제작 후보로 저장하고 제작실에 표시합니다. 권리 확인 완료를 의미하지 않으며, 외부 사이트를 새로 수집하지 않습니다.',
+        ? '이미 Cloud 발견함 기록에 제작 후보로 표시되어 제작실에 표시됩니다. 권리 확인 상태는 별도로 확인해야 합니다.'
+        : '검토 상태를 제작 후보로 표시하고 제작실에 표시합니다. 권리 확인 완료를 의미하지 않으며, 외부 사이트를 새로 수집하지 않습니다.',
       type: 'button',
     },
     isCandidate,
-    label: isCandidate ? '후보 등록됨' : '제작 후보로',
+    label: isCandidate ? '후보 표시됨' : '제작 후보로',
   };
 };
 

@@ -49,12 +49,12 @@ export const getVideoProductionCandidateActionCopy = ({
 }) => {
   const displayTitle = toDisplayTitle(videoTitle);
   const title = isProductionCandidate
-    ? '이미 Cloud 판단 기록에 제작 후보로 저장되어 제작 후보함에 표시됩니다. YouTube API를 새로 호출하지 않습니다.'
-    : 'Cloud 판단 기록에 제작 후보로 저장하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.';
+    ? '이미 Cloud 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됩니다. YouTube API를 새로 호출하지 않습니다.'
+    : 'Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.';
 
   return {
-    ariaLabel: `${displayTitle} ${isProductionCandidate ? '이미 Cloud 판단 기록에 제작 후보로 저장되어 제작 후보함에 표시됨' : 'Cloud 판단 기록에 제작 후보로 저장하고 제작 후보함에서 관리'}, YouTube API 호출 없음`,
-    buttonLabel: isProductionCandidate ? '후보함 등록됨' : '제작 후보로',
+    ariaLabel: `${displayTitle} ${isProductionCandidate ? '이미 Cloud 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됨' : 'Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 관리'}, YouTube API 호출 없음`,
+    buttonLabel: isProductionCandidate ? '후보 표시됨' : '제작 후보로',
     title,
   };
 };
@@ -77,7 +77,7 @@ export const getVideoProductionCandidateButtonActionProps = ({
     onClick: canPromote ? () => onPromoteToProduction(safeVideo) : noop,
     title: canPromote || isProductionCandidate
       ? copy.title
-      : '제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
+      : '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
   };
 };
 

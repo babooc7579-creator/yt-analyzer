@@ -22,6 +22,8 @@ describe('discoveryLinkActionProps utils', () => {
     expect(props.buttonProps.title).toContain('권리 확인 완료를 의미하지');
     expect(props.buttonProps.title).toContain('외부 사이트를 새로 수집하지 않습니다');
     expect(props.buttonProps['aria-label']).toContain('Cloud 발견함 기록');
+    expect(props.buttonProps['aria-label']).toContain('제작 후보로 표시');
+    expect(props.buttonProps.title).not.toContain('제작 후보로 저장');
   });
 
   it('disables already-candidate discovery links', () => {
@@ -32,9 +34,11 @@ describe('discoveryLinkActionProps utils', () => {
     });
 
     expect(props.isCandidate).toBe(true);
-    expect(props.label).toBe('후보 등록됨');
+    expect(props.label).toBe('후보 표시됨');
     expect(props.buttonProps.disabled).toBe(true);
+    expect(props.buttonProps['aria-label']).toContain('제작 후보로 표시됨');
     expect(props.buttonProps.title).toContain('권리 확인 상태는 별도로 확인');
+    expect(props.buttonProps.title).not.toContain('제작 후보로 저장');
   });
 
   it('builds utility actions for open, copy, edit, and delete without external collection', () => {

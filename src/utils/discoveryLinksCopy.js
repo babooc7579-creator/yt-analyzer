@@ -34,7 +34,7 @@ export const getDiscoveryLinkMemoFieldViewProps = () => ({
 });
 
 export const getDiscoveryLinkRiskyCandidateHintViewProps = () => ({
-  title: '사용 금지 링크를 제작 후보로 저장하려고 합니다',
+  title: '사용 금지 링크를 제작 후보로 표시하려고 합니다',
   description: '저장 버튼을 누르면 한 번 더 확인합니다. 이 작업은 Cloud 발견함 상태만 바꾸며, 사용 허가나 권리 확인 완료를 의미하지 않습니다.',
 });
 

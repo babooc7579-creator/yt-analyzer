@@ -20,9 +20,11 @@ describe('videoListRowCandidateActionProps utils', () => {
     });
     expect(props.buttonProps.className).toContain('bg-indigo-600');
     expect(props.buttonProps.title).toContain('Cloud 판단 기록');
+    expect(props.buttonProps.title).toContain('제작 후보로 표시');
     expect(props.buttonProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props.buttonProps['aria-label']).toContain('First idea');
     expect(props.buttonProps['aria-label']).toContain('YouTube API 호출 없음');
+    expect(props.buttonProps.title).not.toContain('제작 후보로 저장');
   });
 
   it('builds a disabled button for videos already in production candidates', () => {
@@ -64,6 +66,6 @@ describe('videoListRowCandidateActionProps utils', () => {
 
     expect(props.buttonProps.disabled).toBe(true);
     expect(props.buttonProps.className).toContain('cursor-not-allowed');
-    expect(props.buttonProps.title).toBe('제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+    expect(props.buttonProps.title).toBe('제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
   });
 });
