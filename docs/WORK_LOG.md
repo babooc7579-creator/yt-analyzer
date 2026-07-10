@@ -1242,3 +1242,31 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 39. 2026-07-11 발견 링크 필터 hook 테스트 보강
+
+발견함 검색/상태/권리 필터가 화면 표시 조건만 바꾸고, 원본 Cloud 데이터나 외부 API 호출 흐름을 건드리지 않도록 hook 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 발견 링크 필터가 전체 상태/전체 권리/빈 검색어 기본값으로 시작하는지 확인했습니다.
+- 현재 필터 상태가 발견 링크 필터 계산 모델에 그대로 전달되는지 확인했습니다.
+- 상태/권리/검색어 setter가 화면 제어용으로 외부에 그대로 노출되는지 확인했습니다.
+- 필터 초기화가 전체 상태, 전체 권리, 빈 검색어로 되돌리는지 확인했습니다.
+- 실제 discovery link API, DB schema, localStorage, UI 구조는 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useDiscoveryLinkFilters.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
