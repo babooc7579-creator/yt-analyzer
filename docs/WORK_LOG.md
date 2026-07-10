@@ -1490,3 +1490,29 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - localStorage key 변경 없음
 - 채널 Cloud 저장/삭제 호출 조건 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 48. 2026-07-11 태그 이름 변경 Cloud 액션 hook 테스트 보강
+
+태그 이름 변경이 Cloud DB 일괄 반영 작업이라는 점을 유지하면서, 중복 방지/확인창/성공 후 재조회/실패 시 미변경 흐름을 `useTagRenameActions` 테스트로 보강했습니다.
+
+완료한 작업:
+
+- 변경 대상이 비어 있거나 기존 이름과 같으면 편집 모드만 닫고 Cloud API를 호출하지 않는지 확인했습니다.
+- 이미 존재하는 카테고리 이름이면 Cloud 변경 확인창을 띄우기 전에 중단하는지 확인했습니다.
+- 사용자가 확인창을 취소하면 Cloud rename API와 화면 상태 변경이 발생하지 않는지 확인했습니다.
+- Cloud 태그 이름 변경 성공 때 카테고리 목록, 선택 카테고리, 완료 안내, Cloud 채널 재조회, 편집 모드 닫기가 순서대로 실행되는지 확인했습니다.
+- 선택 중인 카테고리가 아닌 다른 태그를 변경할 때 선택 카테고리를 불필요하게 바꾸지 않는지 확인했습니다.
+- Cloud 태그 이름 변경 실패 때 카테고리 목록을 바꾸지 않고 실패 안내만 표시하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useTagRenameActions.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 태그 이름 변경 Cloud API 호출 조건 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
