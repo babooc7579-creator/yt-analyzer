@@ -650,3 +650,27 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 화면 구조 변경 없음
+
+### 17. 2026-07-11 제작 후보 빈 화면 문구 정리
+
+제작 후보 빈 화면과 제작 칸반 컬럼에서 후보를 별도 저장소로 "보내면 쌓이는" 듯한 표현을 줄이고, 현재 구조처럼 제작 후보로 표시된 항목이 보이는 흐름으로 정리했습니다.
+
+완료한 작업:
+
+- 제작 후보 빈 화면 설명을 `제작 후보로 표시하면 이곳에 보입니다` 기준으로 바꿨습니다.
+- 오늘 레이더와 발견 링크 단계 설명을 `표시` 기준으로 맞췄습니다.
+- 제작 칸반 후보 컬럼 빈 안내를 `표시하면 여기에 보입니다`로 정리했습니다.
+- 사용 금지 발견 링크를 제작 후보로 바꾸는 확인창도 `표시` 기준으로 정리했습니다.
+- 같은 표현이 다시 섞이지 않도록 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/constants/emptyStates.test.js src/utils/productionKanbanProps.test.js src/utils/discoveryLinkForm.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음

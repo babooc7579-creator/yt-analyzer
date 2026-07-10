@@ -163,7 +163,9 @@ describe('productionKanbanProps utils', () => {
     });
     expect(viewProps.boardProps.columns.length).toBeGreaterThan(0);
     expect(viewProps.boardProps.columns[0].emptyDescription).toContain('스크랩북 전체가 자동으로 들어오지는 않습니다');
-    expect(viewProps.boardProps.columns[0].emptyDescription).toContain('만들 만한 항목만 제작 후보');
+    expect(viewProps.boardProps.columns[0].emptyDescription).toContain('만들 만한 항목만 제작 후보로 표시');
+    expect(viewProps.boardProps.columns[0].emptyDescription).toContain('여기에 보입니다');
+    expect(viewProps.boardProps.columns[0].emptyDescription).not.toContain('제작 후보로 보내');
     expect(typeof viewProps.boardProps.getScheduleSignal).toBe('function');
   });
 

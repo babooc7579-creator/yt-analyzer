@@ -57,19 +57,19 @@ export const DISCOVERY_LINKS_EMPTY_STATE = {
 
 export const PRODUCTION_KANBAN_EMPTY_STATE = {
   title: '아직 제작 후보가 없습니다',
-  description: '스크랩북에 저장된 모든 영상이 자동으로 제작 후보가 되지는 않습니다. 레이더, 레퍼런스 금고, 발견함에서 만들 만한 항목만 제작 후보로 보내면 이곳에 모입니다.',
+  description: '스크랩북에 저장된 모든 영상이 자동으로 제작 후보가 되지는 않습니다. 레이더, 레퍼런스 금고, 발견함에서 만들 만한 항목만 제작 후보로 표시하면 이곳에 보입니다.',
   steps: [
     {
       title: '1. 오늘 레이더에서 고르기',
-      description: '저장 영상을 불러온 뒤 오늘 볼 후보에서 제작 후보로 보낼 영상을 고릅니다.',
+      description: '저장 영상을 불러온 뒤 오늘 볼 후보에서 제작 후보로 표시할 영상을 고릅니다.',
     },
     {
       title: '2. 저장 영상에서 고르기',
       description: 'Cloud DB에 저장된 영상만 훑고 제작 후보로 표시합니다. 새 YouTube API 호출은 없습니다.',
     },
     {
-      title: '3. 발견 링크에서 보내기',
-      description: '외부에서 본 링크를 Cloud 발견함에 저장하고 상태를 제작 후보로 바꿉니다.',
+      title: '3. 발견 링크에서 표시하기',
+      description: '외부에서 본 링크를 Cloud 발견함에 저장하고 상태를 제작 후보로 표시합니다.',
     },
   ],
   referenceVaultButton: {
