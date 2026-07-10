@@ -66,6 +66,8 @@ describe('discoveryLinksCopy utils', () => {
       label: '메모',
       'aria-label': '발견 링크 메모',
     });
+    expect(getDiscoveryLinkRiskyCandidateHintViewProps().title).toContain('제작 후보로 표시');
+    expect(getDiscoveryLinkRiskyCandidateHintViewProps().title).not.toContain('제작 후보로 저장');
     expect(getDiscoveryLinkRiskyCandidateHintViewProps().description).toContain('권리 확인 완료를 의미하지 않습니다');
     expect(getDiscoveryLinkSafetyNoticeViewProps().description).toContain('외부 사이트 크롤링을 실행하지 않습니다');
   });

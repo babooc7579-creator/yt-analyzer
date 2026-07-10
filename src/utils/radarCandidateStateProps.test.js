@@ -39,8 +39,11 @@ describe('radarCandidateStateProps utils', () => {
 
     expect(props.label).toBe('제작 후보로');
     expect(props.title).toContain('Cloud 판단 기록');
+    expect(props.title).toContain('제작 후보로 표시');
     expect(props.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props['aria-label']).toContain('Radar clip');
+    expect(props['aria-label']).toContain('제작 후보로 표시');
+    expect(props.title).not.toContain('제작 후보로 저장');
 
     expect(getRadarCandidateProductionButtonProps()['aria-label']).toContain('이 영상');
   });
@@ -91,7 +94,7 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(missingIdProps.disabled).toBe(true);
-    expect(missingIdProps.title).toBe('제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+    expect(missingIdProps.title).toBe('제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
     expect(missingHandlerProps.disabled).toBe(true);
 
     missingIdProps.onClick();

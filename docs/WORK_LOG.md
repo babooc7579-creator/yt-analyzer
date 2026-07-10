@@ -674,3 +674,27 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 화면 구조 변경 없음
+
+### 18. 2026-07-11 제작 후보 표시 문구 정리
+
+영상 카드, 리스트 행, 오늘 레이더, 발견함 액션에서 제작 후보를 별도 저장소에 "등록/저장"한 것처럼 보일 수 있는 표현을 `표시` 기준으로 정리했습니다.
+
+완료한 작업:
+
+- 영상 카드의 후보 완료 버튼을 `후보 표시됨`으로 바꿨습니다.
+- 발견함 링크의 후보 완료 버튼을 `후보 표시됨`으로 바꿨습니다.
+- 레이더와 영상 리스트의 제작 후보 안내를 `Cloud 판단 기록에 제작 후보로 표시` 기준으로 맞췄습니다.
+- 사용 금지 발견 링크 안내 제목도 `제작 후보로 표시` 기준으로 맞췄습니다.
+- 같은 표현이 다시 섞이지 않도록 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/videoActionButtonProps.test.js src/utils/videoListRowCandidateActionProps.test.js src/utils/radarCandidateStateProps.test.js src/utils/discoveryLinkActionProps.test.js src/utils/discoveryLinksCopy.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음

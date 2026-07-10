@@ -36,8 +36,8 @@ export const getRadarCandidateProductionButtonProps = ({ videoTitle } = {}) => {
 
   return {
     label: '제작 후보로',
-    title: '스크랩북에 보관하고 Cloud 판단 기록에 제작 후보로 저장합니다. YouTube API를 새로 호출하지 않습니다.',
-    'aria-label': `${displayTitle} 스크랩북에 보관하고 Cloud 판단 기록에 제작 후보로 저장, YouTube API 호출 없음`,
+    title: '스크랩북에 보관하고 Cloud 판단 기록에 제작 후보로 표시합니다. YouTube API를 새로 호출하지 않습니다.',
+    'aria-label': `${displayTitle} 스크랩북에 보관하고 Cloud 판단 기록에 제작 후보로 표시, YouTube API 호출 없음`,
   };
 };
 
@@ -56,7 +56,7 @@ export const getRadarCandidateProductionButtonActionProps = ({
     onClick: canPromote ? () => onPromoteToProduction(safeVideo) : noop,
     title: canPromote
       ? copy.title
-      : '제작 후보로 저장할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
+      : '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
   };
 };
 
