@@ -36,7 +36,7 @@ babooc7579-creator/yt-analyzer
 
 현재 앱은 React + Vite 기반 프론트엔드입니다.
 
-2026-07-08 기준으로 초기의 `App.jsx` 집중 구조는 상당 부분 해소되었습니다.
+2026-07-11 기준으로 초기의 `App.jsx` 집중 구조는 상당 부분 해소되었고, 주요 데이터/상태 흐름에는 회귀 테스트 안전망이 추가되었습니다.
 
 - `src/App.jsx`는 현재 13줄 수준의 얇은 연결 파일입니다.
 - 앱의 주요 상태와 워크플로우는 `src/hooks`로 분리되어 있습니다.
@@ -45,6 +45,12 @@ babooc7579-creator/yt-analyzer
 - Cloud API 호출은 `src/services`에서 관리합니다.
 - `src/hooks` 내부 사용자 안내/오류 문구는 `src/utils`와 `src/constants`로 분리되어, hook은 상태 흐름에 집중하는 구조입니다.
 - `src/services`의 공통 Cloud/YouTube API fallback 문구는 이름 붙은 상수와 테스트로 보호합니다.
+
+최근 안정화 기준:
+
+- Cloud/localStorage 기준, 영상별 사용자 기록, 스크랩북, 발견함, 제작 후보함, 채널 액션, workflow 조립 흐름을 작은 hook/service/utils 단위 테스트로 보호하고 있습니다.
+- 최근 전체 검증 기준은 `npm.cmd test -- --reporter=dot`, `npm.cmd run build`, `npm.cmd audit --omit=dev` 통과입니다.
+- 이 검증은 "버그가 절대 없다"는 의미가 아니라, 핵심 흐름을 고치다가 기존 동작이 깨지는 위험을 훨씬 빨리 발견할 수 있는 상태라는 뜻입니다.
 
 이미 들어있는 핵심 기능:
 
@@ -169,9 +175,10 @@ npm run build
 1. 현재 구현과 오래된 문서 표현의 차이를 계속 줄입니다.
 2. DB 조회, Cloud 저장, YouTube API 호출, 로컬 클립보드 동작을 화면 문구에서 명확히 구분합니다.
 3. 이미 분리된 hook/component/utils 안에서 기능 보존형 작은 정리를 진행합니다.
-4. 테스트 도구 추가처럼 `package.json` 변경이 필요한 작업은 선택지 보고 후 진행합니다.
-5. `/videos` 페이지네이션, `scan_logs`, `api_quota_logs`, `local_assets`, `production_candidates`는 구현 전 선택지와 위험을 먼저 정리합니다.
-6. 전체 UI 대개편보다 현재 작동하는 흐름을 안정화한 뒤 화면 단위로 개선합니다.
+4. 새 화면 흐름을 추가하기 전, 관련 hook/service/utils 테스트를 먼저 보강합니다.
+5. 테스트 도구 추가처럼 `package.json` 변경이 필요한 작업은 선택지 보고 후 진행합니다.
+6. `/videos` 페이지네이션, `scan_logs`, `api_quota_logs`, `local_assets`, `production_candidates`는 구현 전 선택지와 위험을 먼저 정리합니다.
+7. 전체 UI 대개편보다 현재 작동하는 흐름을 안정화한 뒤 화면 단위로 개선합니다.
 
 ---
 
@@ -252,16 +259,17 @@ babooc7579-creator/yt-analyzer-functions
 
 ## 9. 다음에 바로 할 작업
 
-가장 안전한 다음 작업은 이미 작동하는 기능을 보존하면서 작은 단위로 정리하는 것입니다.
+가장 안전한 다음 작업은 이미 작동하는 기능을 보존하면서 작은 단위로 화면 흐름과 문구를 정리하는 것입니다.
 
 추천 순서:
 
 1. 공통 UI, 작은 hook, helper처럼 기능 동작을 바꾸지 않는 단위를 먼저 정리합니다.
 2. 버튼 문구에서 DB 조회, Cloud 저장, YouTube API 호출, 로컬 클립보드 동작이 명확히 구분되는지 계속 확인합니다.
-3. 홈, 발견함, 제작 후보함 사이의 작은 화면 이동 흐름을 더 다듬습니다.
-4. 현재 문서와 실제 구현이 어긋나는 오래된 표현을 계속 정리합니다.
-5. 큰 구조 변경 전에는 `CREATOR_OS_DOCUMENT_INDEX.md`와 관련 기준 문서를 먼저 확인합니다.
-6. 다음 큰 후보는 `/videos` 페이지네이션, scan/API 사용 기록, local assets, 테스트 러너 추가이며 모두 선택지 보고가 먼저 필요합니다.
+3. 홈, 발견함, 제작 후보함, 스크랩북 사이의 작은 화면 이동 흐름을 더 다듬습니다.
+4. 테스트가 약한 새 조합 흐름이 있으면 테스트부터 추가합니다.
+5. 현재 문서와 실제 구현이 어긋나는 오래된 표현을 계속 정리합니다.
+6. 큰 구조 변경 전에는 `CREATOR_OS_DOCUMENT_INDEX.md`와 관련 기준 문서를 먼저 확인합니다.
+7. 다음 큰 후보는 `/videos` 페이지네이션, scan/API 사용 기록, local assets, 테스트 러너 추가이며 모두 선택지 보고가 먼저 필요합니다.
 
 주의:
 
