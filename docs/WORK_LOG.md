@@ -1154,3 +1154,32 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 36. 2026-07-11 영상 선택/AI 프롬프트 복사 hook 테스트 보강
+
+영상 찾기 화면에서 선택한 영상 목록과 AI 리메이크 프롬프트 복사 피드백이 안전하게 동작하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 영상 선택 상태가 빈 목록과 복사 피드백 해제 상태로 시작하는지 확인했습니다.
+- 선택 영상 초기화와 영상 체크 토글이 선택 목록 state updater를 통해 동작하는지 확인했습니다.
+- 선택 영상이 없을 때는 프롬프트 생성/클립보드 복사를 실행하지 않는지 확인했습니다.
+- 프롬프트 복사 성공 시 성공 피드백을 표시하고 3초 뒤 피드백을 초기화하는지 확인했습니다.
+- 클립보드 복사 실패 시 오류 피드백을 표시하는지 확인했습니다.
+- 기존 피드백 타이머가 있을 때 새 타이머 전 정리되고, hook cleanup에서도 정리되는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useVideoSelection.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
