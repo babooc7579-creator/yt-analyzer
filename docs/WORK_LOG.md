@@ -605,3 +605,25 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 화면 구조 변경 없음
+
+### 15. 2026-07-11 홈 스크랩 지표 문구 정정
+
+홈의 `스크랩 소재` 지표는 제작 후보 수가 아니라 Cloud 스크랩북 보관 영상 수이므로 설명을 데이터 기준에 맞게 정정했습니다.
+
+완료한 작업:
+
+- `스크랩 소재` 설명을 `Cloud 스크랩북에 보관한 영상`으로 바꿨습니다.
+- 스크랩북 지표가 제작 후보로 오해되지 않도록 테스트를 보강했습니다.
+- 제작 후보 수와 스크랩북 보관 수를 다시 분리했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/creatorHomeViewProps.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음

@@ -38,7 +38,8 @@ describe('creatorHomeViewProps utils', () => {
       ['최근 수집 상태', 'just now'],
       ['터또터 후보', 4],
     ]);
-    expect(statsProps.cards[2].description).toContain('제작 후보로 표시한 영상');
+    expect(statsProps.cards[2].description).toContain('Cloud 스크랩북에 보관한 영상');
+    expect(statsProps.cards[2].description).not.toContain('제작 후보로 표시한 영상');
     expect(statsProps.cards[2].description).not.toContain('제작 후보로 남긴');
     expect(statsProps.cards[3].className).toContain('emerald');
     expect(statsProps.cards[4].className).toContain('rose');
