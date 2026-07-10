@@ -98,7 +98,7 @@ describe('appLayoutProps utils', () => {
     expect(getCreatorSidebarItemViewProps({
       item: { label: '설정', status: 'soon' },
     })).toEqual({
-      actionLabel: '설정 준비중 안내 보기',
+      actionLabel: '설정 준비중 안내 보기, API 호출이나 DB 변경 없음',
       isComingSoon: true,
       statusLabel: '준비중',
     });
