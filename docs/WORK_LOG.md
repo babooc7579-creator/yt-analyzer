@@ -859,3 +859,30 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 26. 2026-07-11 제작 후보 액션 hook 테스트 보강
+
+제작 후보 표시 흐름에서 스크랩북 보관과 Cloud 판단 기록 저장 순서가 깨지지 않도록 hook 테스트를 추가했습니다.
+
+완료한 작업:
+
+- 이미 스크랩북에 있는 영상은 바로 제작 후보 상태로 표시되는지 확인했습니다.
+- 아직 스크랩북에 없는 영상은 먼저 보관한 뒤 제작 후보 상태로 표시되는지 확인했습니다.
+- 스크랩북 보관이 실패하면 제작 후보 상태 저장을 실행하지 않는지 확인했습니다.
+- Cloud 판단 기록의 `statusIds` 기준으로 제작 후보 여부를 판단하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useVideoProductionActions.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
