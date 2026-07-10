@@ -40,12 +40,15 @@ describe('videoListTableRowProps utils', () => {
       videoUrl: 'https://youtube.com/watch?v=video%201',
     });
     expect(props.candidateActionProps).toMatchObject({
+      disabled: false,
       isProductionCandidate: true,
       videoTitle: 'Old viral idea',
     });
     expect(props.markerCellsProps).toMatchObject({
+      checkDisabled: false,
       isChecked: true,
       isSaved: true,
+      scrapDisabled: false,
       videoTitle: 'Old viral idea',
     });
     expect(props.statsCellsProps).toEqual({
@@ -98,5 +101,48 @@ describe('videoListTableRowProps utils', () => {
       videoUrl: '',
     });
     expect(props.contentCellProps.videoTitle).not.toBe('');
+  });
+
+  it('disables row actions when the video id or handlers are missing', () => {
+    const promoteVideoToProduction = vi.fn();
+    const toggleCheckVideo = vi.fn();
+    const toggleScrapVideo = vi.fn();
+
+    const props = getVideoListTableRowViewProps({
+      fetchTopComments: () => {},
+      isChecked: false,
+      isProductionCandidate: false,
+      isSaved: false,
+      promoteVideoToProduction,
+      toggleCheckVideo,
+      toggleScrapVideo,
+      video: { title: 'No ID video' },
+    });
+
+    expect(props.candidateActionProps.disabled).toBe(true);
+    expect(props.markerCellsProps).toMatchObject({
+      checkDisabled: true,
+      scrapDisabled: true,
+    });
+
+    props.candidateActionProps.onPromote();
+    props.markerCellsProps.onToggleCheck();
+    props.markerCellsProps.onToggleScrap();
+
+    expect(promoteVideoToProduction).not.toHaveBeenCalled();
+    expect(toggleCheckVideo).not.toHaveBeenCalled();
+    expect(toggleScrapVideo).not.toHaveBeenCalled();
+
+    const missingHandlerProps = getVideoListTableRowViewProps({
+      fetchTopComments: () => {},
+      isChecked: false,
+      isProductionCandidate: false,
+      isSaved: false,
+      video,
+    });
+
+    expect(missingHandlerProps.candidateActionProps.disabled).toBe(true);
+    expect(missingHandlerProps.markerCellsProps.checkDisabled).toBe(true);
+    expect(missingHandlerProps.markerCellsProps.scrapDisabled).toBe(true);
   });
 });
