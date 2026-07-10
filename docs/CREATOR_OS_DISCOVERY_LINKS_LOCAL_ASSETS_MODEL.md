@@ -50,7 +50,7 @@
 - 다운로드한 로컬 파일
 - 출처를 잊어버린 파일
 - 원본인지 리포스트인지 불확실한 링크
-- 나중에 제작 후보로 보낼 아이디어 조각
+- 나중에 제작 후보로 표시할 아이디어 조각
 
 이것들을 바로 스크랩북이나 제작 후보에 섞어 넣으면 문제가 생깁니다.
 
@@ -73,7 +73,7 @@
 | Source URL | 소재의 원본 또는 출처로 추정되는 URL | 미구현 |
 | Repost suspected | 원본이 아니라 재업로드일 가능성이 있는 상태 | 미구현 |
 | Rights check needed | 제작에 쓰기 전 권리 확인이 필요한 상태 | 미구현 |
-| Production candidate | 제작 후보로 보낼 수 있는 소재 | 현재는 `videoUserRecords` 기반 부분 구현 |
+| Production candidate | 제작 후보로 표시할 수 있는 소재 | 현재는 `videoUserRecords` 기반 부분 구현 |
 
 ---
 
@@ -246,7 +246,7 @@
 
 운영 기준:
 
-- 파일만 있다고 바로 제작 후보로 보지 않습니다.
+- 파일만 있다고 바로 제작 후보로 간주하지 않습니다.
 - 출처 불명 상태를 명확히 표시합니다.
 
 ### 7.3 링크와 파일이 모두 있는 경우
@@ -256,7 +256,7 @@ discovery link 생성
 → local asset 생성
 → local asset.discoveryLinkId 연결
 → sourceUrl 또는 url 기준으로 출처 연결
-→ 제작 후보로 보낼지 판단
+→ 제작 후보로 표시할지 판단
 ```
 
 운영 기준:
@@ -284,7 +284,7 @@ discovery link 생성
 discovery link 또는 local asset 검토
 → status 확인
 → rightsStatus 확인
-→ production candidate 후보로 연결
+→ 제작 후보 상태로 연결
 ```
 
 운영 기준:
