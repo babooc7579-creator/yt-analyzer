@@ -12,7 +12,8 @@ describe('homeRadarWorkflowSection utils', () => {
     expect(headerProps.eyebrow).toBe('오늘 작업 흐름');
     expect(headerProps.description).toContain('저장된 영상');
     expect(headerProps.description).toContain('레이더 후보');
-    expect(headerProps.description).toContain('제작 후보');
+    expect(headerProps.description).toContain('제작 후보로 표시');
+    expect(headerProps.description).not.toContain('제작 후보로 넘깁니다');
     expect(headerProps.safetyNote).toContain('Cloud DB 조회');
     expect(headerProps.safetyNote).toContain('Cloud 판단 기록');
     expect(headerProps.safetyNote).toContain('선택 채널 새 영상 수집 버튼에서만 실행');

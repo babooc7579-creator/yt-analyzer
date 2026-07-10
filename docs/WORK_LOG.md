@@ -763,3 +763,27 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 22. 2026-07-11 제작 후보 보내기 문구 정리
+
+홈 작업 흐름과 제작 칸반 안내에서 제작 후보를 다른 저장소로 보내거나 넘기는 것처럼 보일 수 있는 표현을 `표시` 기준으로 맞췄습니다.
+
+완료한 작업:
+
+- 홈 빠른 작업의 발견 링크 설명을 `제작 후보로 표시` 기준으로 바꿨습니다.
+- 홈 후보 워크플로우 제목을 `제작 후보로 표시하기`로 바꿨습니다.
+- 홈 다음 행동과 오늘 작업 흐름 설명을 `제작 후보로 표시` 기준으로 바꿨습니다.
+- 제작 칸반 제목을 `다음 행동으로 정리` 기준으로 바꿨습니다.
+- 같은 표현이 다시 섞이지 않도록 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/homeActionShortcuts.test.js src/utils/homeCandidateWorkflowActions.test.js src/utils/homeNextAction.test.js src/utils/homeRadarWorkflowSection.test.js src/utils/productionKanbanSummary.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음

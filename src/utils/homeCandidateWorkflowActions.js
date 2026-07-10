@@ -30,7 +30,7 @@ export const getHomeCandidateWorkflowCardViewProps = ({
   return {
     hasCandidates,
     hasRightsWarning,
-    titleText: '3. 제작 후보로 넘기기',
+    titleText: '3. 제작 후보로 표시하기',
   };
 };
 

@@ -44,7 +44,7 @@ export const HOME_ACTION_SHORTCUTS = [
   {
     key: 'discovery-links',
     title: '4. 발견 링크 저장',
-    description: '외부에서 본 URL을 Cloud 발견함에 저장하고 필요하면 제작 후보로 보냅니다.',
+    description: '외부에서 본 URL을 Cloud 발견함에 저장하고 필요하면 제작 후보로 표시합니다.',
     hint: '자동 수집 없이 URL만 저장',
     dataFlowLabels: ['Cloud 링크 저장', '자동 수집 없음'],
     iconName: 'link',
