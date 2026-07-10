@@ -59,8 +59,9 @@ describe('discoveryLinkCollection utils', () => {
 
   it('keeps user notices aligned with Cloud state changes', () => {
     expect(getDiscoveryLinkUpdateNotice({ status: 'candidate' }, { title: 'Clip' })).toBe(
-      "Clip의 검토 상태를 '제작 후보'로 저장했습니다. 제작 후보함에서 이어서 확인할 수 있습니다."
+      "Clip의 검토 상태를 '제작 후보'로 표시했습니다. 제작 후보함에서 이어서 확인할 수 있습니다."
     );
+    expect(getDiscoveryLinkUpdateNotice({ status: 'candidate' }, { title: 'Clip' })).not.toContain('후보함에 저장');
     expect(getDiscoveryLinkUpdateNotice({ rightsStatus: 'do_not_use' }, { title: 'Clip' })).toBe(
       "Clip의 권리 상태 표시를 '사용 금지'로 저장했습니다."
     );

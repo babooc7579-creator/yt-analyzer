@@ -209,9 +209,10 @@ describe('videoCard utils', () => {
 
     expect(badges.map((badge) => badge.label)).toEqual([
       '소재 보관됨',
-      '후보함 등록',
+      '후보 표시됨',
       'AI 요청문 선택',
     ]);
+    expect(badges.map((badge) => badge.label)).not.toContain('후보함 등록');
     expect(badges.every((badge) => badge.isVisible)).toBe(true);
   });
 

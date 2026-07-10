@@ -80,7 +80,7 @@ export const getDiscoveryLinkUpdateNotice = (updates, link) => {
   if (updateKeys.length === 1 && updates.status !== undefined) {
     const statusLabel = getDiscoveryLinkStatusLabel(updates.status);
     if (updates.status === 'candidate') {
-      return `${linkName}의 검토 상태를 '${statusLabel}'로 저장했습니다. 제작 후보함에서 이어서 확인할 수 있습니다.`;
+      return `${linkName}의 검토 상태를 '${statusLabel}'로 표시했습니다. 제작 후보함에서 이어서 확인할 수 있습니다.`;
     }
     return `${linkName}의 검토 상태를 '${statusLabel}'로 저장했습니다.`;
   }

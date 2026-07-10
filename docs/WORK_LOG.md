@@ -698,3 +698,25 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 화면 구조 변경 없음
+
+### 19. 2026-07-11 제작 후보 후속 표시 문구 정리
+
+이전 정리 뒤에도 영상 카드 뱃지와 발견함 상태 변경 완료 안내에 후보를 별도 저장소에 등록하는 것처럼 보일 수 있는 표현이 남아 있어 `표시` 기준으로 맞췄습니다.
+
+완료한 작업:
+
+- 영상 카드의 제작 후보 상태 뱃지를 `후보 표시됨`으로 바꿨습니다.
+- 발견함 링크를 제작 후보 상태로 바꾼 뒤 완료 안내를 `표시했습니다` 기준으로 바꿨습니다.
+- 같은 표현이 다시 섞이지 않도록 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/videoCard.test.js src/utils/discoveryLinkCollection.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음
