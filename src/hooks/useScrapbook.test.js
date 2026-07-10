@@ -1,0 +1,251 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const {
+  deleteScrapbookVideoMock,
+  effectCleanups,
+  fetchScrapbookMock,
+  readJsonStorageMock,
+  saveScrapbookVideosMock,
+  stateOverrides,
+  stateSetters,
+  writeJsonStorageMock,
+} = vi.hoisted(() => ({
+  deleteScrapbookVideoMock: vi.fn(),
+  effectCleanups: [],
+  fetchScrapbookMock: vi.fn(),
+  readJsonStorageMock: vi.fn(),
+  saveScrapbookVideosMock: vi.fn(),
+  stateOverrides: [],
+  stateSetters: [],
+  writeJsonStorageMock: vi.fn(),
+}));
+
+vi.mock('react', () => ({
+  useEffect: vi.fn((effect) => {
+    const cleanup = effect();
+    if (typeof cleanup === 'function') effectCleanups.push(cleanup);
+  }),
+  useRef: vi.fn((initialValue) => ({ current: initialValue })),
+  useState: vi.fn((initialValue) => {
+    const setter = vi.fn();
+    stateSetters.push(setter);
+
+    const stateValue = stateOverrides.length
+      ? stateOverrides.shift()
+      : (typeof initialValue === 'function' ? initialValue() : initialValue);
+
+    return [stateValue, setter];
+  }),
+}));
+
+vi.mock('../services/scrapbookApi', () => ({
+  deleteScrapbookVideo: deleteScrapbookVideoMock,
+  fetchScrapbook: fetchScrapbookMock,
+  saveScrapbookVideos: saveScrapbookVideosMock,
+}));
+
+vi.mock('../services/storage', () => ({
+  STORAGE_KEYS: {
+    savedVideos: 'yt_crm_saved_videos',
+  },
+  readJsonStorage: readJsonStorageMock,
+  writeJsonStorage: writeJsonStorageMock,
+}));
+
+import { useEffect, useRef, useState } from 'react';
+import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
+import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
+import {
+  deleteScrapbookVideo,
+  fetchScrapbook,
+  saveScrapbookVideos,
+} from '../services/scrapbookApi';
+import { useScrapbook } from './useScrapbook';
+
+const savedVideo = {
+  videoId: 'video-1',
+  title: 'Saved video',
+};
+
+const secondVideo = {
+  videoId: 'video-2',
+  title: 'Second video',
+};
+
+const flushPromises = async () => {
+  await Promise.resolve();
+  await Promise.resolve();
+};
+
+const setScrapbookState = ({
+  cloudReady = false,
+  savedVideos = [],
+  warning = '',
+} = {}) => {
+  stateOverrides.push(savedVideos, cloudReady, warning);
+};
+
+describe('useScrapbook', () => {
+  beforeEach(() => {
+    effectCleanups.length = 0;
+    stateOverrides.length = 0;
+    stateSetters.length = 0;
+    vi.clearAllMocks();
+
+    deleteScrapbookVideoMock.mockReset();
+    fetchScrapbookMock.mockReset();
+    readJsonStorageMock.mockReset();
+    saveScrapbookVideosMock.mockReset();
+    writeJsonStorageMock.mockReset();
+
+    deleteScrapbookVideoMock.mockResolvedValue({ success: true });
+    fetchScrapbookMock.mockResolvedValue({
+      success: true,
+      videos: [],
+    });
+    readJsonStorageMock.mockReturnValue([]);
+    saveScrapbookVideosMock.mockResolvedValue({ success: true });
+    writeJsonStorageMock.mockReturnValue(true);
+  });
+
+  it('uses Cloud scrapbook videos as the source of truth when Cloud load succeeds', async () => {
+    fetchScrapbookMock.mockResolvedValueOnce({
+      success: true,
+      videos: [savedVideo, null, 'bad'],
+    });
+
+    useScrapbook();
+    await flushPromises();
+
+    expect(useRef).toHaveBeenCalledWith([]);
+    expect(useState).toHaveBeenNthCalledWith(1, []);
+    expect(fetchScrapbook).toHaveBeenCalledTimes(1);
+    expect(readJsonStorage).not.toHaveBeenCalled();
+    expect(stateSetters[0]).toHaveBeenCalledWith([savedVideo]);
+    expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, [savedVideo]);
+    expect(stateSetters[1]).toHaveBeenCalledWith(true);
+    expect(stateSetters[2]).toHaveBeenCalledWith('');
+  });
+
+  it('does not replace an empty successful Cloud response with localStorage scrapbook videos', async () => {
+    fetchScrapbookMock.mockResolvedValueOnce({
+      success: true,
+      videos: [],
+    });
+    readJsonStorageMock.mockReturnValueOnce([savedVideo]);
+
+    useScrapbook();
+    await flushPromises();
+
+    expect(readJsonStorage).not.toHaveBeenCalled();
+    expect(stateSetters[0]).toHaveBeenCalledWith([]);
+    expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, []);
+    expect(stateSetters[1]).toHaveBeenCalledWith(true);
+    expect(stateSetters[2]).toHaveBeenCalledWith('');
+  });
+
+  it('falls back to localStorage only when Cloud scrapbook load fails', async () => {
+    fetchScrapbookMock.mockRejectedValueOnce(new Error('network failed'));
+    readJsonStorageMock.mockReturnValueOnce([savedVideo, null, secondVideo]);
+
+    useScrapbook();
+    await flushPromises();
+
+    expect(readJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, []);
+    expect(stateSetters[0]).toHaveBeenCalledWith([savedVideo, secondVideo]);
+    expect(stateSetters[1]).toHaveBeenCalledWith(false);
+    expect(stateSetters[2]).toHaveBeenCalledWith(SCRAPBOOK_SYNC_WARNINGS.loadFallback);
+    expect(writeJsonStorage).not.toHaveBeenCalled();
+  });
+
+  it('does not silently save to localStorage when Cloud scrapbook is not ready', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    const scrapbook = useScrapbook();
+
+    const changed = await scrapbook.toggleScrapVideo(savedVideo);
+
+    expect(changed).toBe(false);
+    expect(saveScrapbookVideos).not.toHaveBeenCalled();
+    expect(deleteScrapbookVideo).not.toHaveBeenCalled();
+    expect(writeJsonStorage).not.toHaveBeenCalled();
+    expect(stateSetters[2]).toHaveBeenCalledWith(SCRAPBOOK_SYNC_WARNINGS.cloudRequired);
+  });
+
+  it('saves an unsaved video through Cloud before updating the local cache', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [] });
+    const scrapbook = useScrapbook();
+
+    const changed = await scrapbook.toggleScrapVideo(savedVideo);
+
+    expect(changed).toBe(true);
+    expect(saveScrapbookVideos).toHaveBeenCalledWith([savedVideo]);
+    expect(deleteScrapbookVideo).not.toHaveBeenCalled();
+    expect(stateSetters[0]).toHaveBeenCalledWith([savedVideo]);
+    expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, [savedVideo]);
+    expect(stateSetters[2]).toHaveBeenCalledWith('');
+  });
+
+  it('deletes a saved video through Cloud before updating the local cache', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [savedVideo] });
+    const scrapbook = useScrapbook();
+
+    const changed = await scrapbook.toggleScrapVideo(savedVideo);
+
+    expect(changed).toBe(true);
+    expect(deleteScrapbookVideo).toHaveBeenCalledWith('video-1');
+    expect(saveScrapbookVideos).not.toHaveBeenCalled();
+    expect(stateSetters[0]).toHaveBeenCalledWith([]);
+    expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, []);
+    expect(stateSetters[2]).toHaveBeenCalledWith('');
+  });
+
+  it('marks Cloud as not ready and avoids cache updates when scrapbook save fails', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [] });
+    saveScrapbookVideosMock.mockResolvedValueOnce({
+      success: false,
+      error: 'save failed',
+    });
+    const scrapbook = useScrapbook();
+
+    const changed = await scrapbook.toggleScrapVideo(savedVideo);
+
+    expect(changed).toBe(false);
+    expect(stateSetters[1]).toHaveBeenCalledWith(false);
+    expect(stateSetters[2]).toHaveBeenCalledWith(SCRAPBOOK_SYNC_WARNINGS.saveFailed);
+    expect(stateSetters[0]).not.toHaveBeenCalled();
+    expect(writeJsonStorage).not.toHaveBeenCalled();
+  });
+
+  it('uses the current savedVideos state to answer whether a video is saved', () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [savedVideo] });
+    const scrapbook = useScrapbook();
+
+    expect(scrapbook.isVideoSaved('video-1')).toBe(true);
+    expect(scrapbook.isVideoSaved('missing')).toBe(false);
+  });
+
+  it('ignores the Cloud scrapbook load result after the hook cleanup runs', async () => {
+    let resolveFetch;
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(resolve => {
+      resolveFetch = resolve;
+    }));
+
+    useScrapbook();
+    expect(useEffect).toHaveBeenCalledTimes(1);
+    effectCleanups[0]();
+    resolveFetch({
+      success: true,
+      videos: [savedVideo],
+    });
+    await flushPromises();
+
+    expect(stateSetters[0]).not.toHaveBeenCalled();
+    expect(stateSetters[1]).not.toHaveBeenCalled();
+    expect(stateSetters[2]).not.toHaveBeenCalled();
+    expect(writeJsonStorage).not.toHaveBeenCalled();
+  });
+});
