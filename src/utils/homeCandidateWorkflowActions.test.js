@@ -73,7 +73,8 @@ describe('homeCandidateWorkflowActions utils', () => {
       titleText: '3. 제작 후보로 넘기기',
     });
     expect(warningCard.hasRightsWarning).toBe(true);
-    expect(normalStatus.descriptionText).toContain('제작 후보로 모으고');
+    expect(normalStatus.descriptionText).toContain('제작 후보로 표시하고');
+    expect(normalStatus.descriptionText).not.toContain('제작 후보로 모으고');
     expect(normalStatus.metricText).toBe('영상 1개 · 링크 2개');
     expect(warningStatus.descriptionText).toContain('권리 확인이 필요한 항목 3개');
     expect(warningStatus.metricText).toBe('영상 0개 · 링크 1개');

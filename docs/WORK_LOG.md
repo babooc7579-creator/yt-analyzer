@@ -539,3 +539,25 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 전체 UI 구조 변경 없음
+
+### 12. 2026-07-11 홈 후보 흐름 문구 정리
+
+홈의 후보 처리 흐름에서 발견 링크가 별도 제작 DB로 모이는 것처럼 보이지 않도록 표현을 정리했습니다.
+
+완료한 작업:
+
+- `제작 후보로 모으고`를 `제작 후보로 표시하고`로 바꿨습니다.
+- 영상과 외부 발견 링크가 상태값으로 후보 표시된다는 의미를 유지했습니다.
+- 같은 문구가 다시 돌아오지 않도록 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/homeCandidateWorkflowActions.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음
