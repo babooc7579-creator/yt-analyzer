@@ -11,6 +11,7 @@ export const CHANNEL_BULK_INPUT_PLACEHOLDER = [
 export const getChannelPreviewInputCopy = () => ({
   inputPlaceholder: CHANNEL_INPUT_PLACEHOLDER,
   inputAriaLabel: '확인할 채널 핸들, 채널 링크 또는 영상 링크',
+  inputTitle: '붙여넣기만으로는 Cloud 저장이나 영상 수집이 실행되지 않습니다. YouTube에서 확인 버튼으로 채널 정보만 먼저 확인합니다.',
   previewButtonTitle: 'YouTube에서 채널 정보만 확인합니다. Cloud 저장과 영상 수집은 하지 않습니다.',
   previewButtonAriaLabel: 'YouTube에서 채널 정보 확인',
   previewButtonLabel: 'YouTube에서 확인',

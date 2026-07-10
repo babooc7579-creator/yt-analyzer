@@ -22,6 +22,7 @@ describe('channelAddCopy utils', () => {
     const copy = getChannelPreviewInputCopy();
 
     expect(copy.inputPlaceholder).toBe(CHANNEL_INPUT_PLACEHOLDER);
+    expect(copy.inputTitle).toContain('붙여넣기만으로는 Cloud 저장이나 영상 수집이 실행되지 않습니다');
     expect(copy.previewButtonTitle).toContain('YouTube에서 채널 정보만 확인');
     expect(copy.previewButtonTitle).toContain('Cloud 저장과 영상 수집은 하지 않습니다');
     expect(copy.helperText).toContain('아직 Cloud에 저장하지 않고');
