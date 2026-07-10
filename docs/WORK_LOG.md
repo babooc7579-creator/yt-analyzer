@@ -887,6 +887,33 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 
+### 28. 2026-07-11 영상 필터/정렬 edge case 테스트 보강
+
+저장 영상 조회 후 화면에서 필터/정렬할 때, Cloud DB에서 숫자 필드가 문자열 또는 잘못된 값으로 들어와도 안전하게 처리되는지 확인하는 테스트를 보강했습니다.
+
+완료한 작업:
+
+- Cloud 영상 숫자 필드가 잘못된 값이어도 0 기준으로 안전하게 정규화되는지 확인했습니다.
+- 업로드 후 경과일이 0이어도 조회수/일 계산이 깨지지 않는지 확인했습니다.
+- 조회수 필터값과 영상 숫자 필드가 문자열이어도 필터가 동작하는지 확인했습니다.
+- 정렬 결과가 원본 영상 목록 순서를 직접 바꾸지 않는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/video.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+
 ### 27. 2026-07-11 채널 추가 액션 hook 테스트 보강
 
 채널 추가/미리보기/일괄 추가 흐름이 비용성 YouTube 조회와 Cloud 저장 경계를 지키는지 확인하는 hook 테스트를 추가했습니다.
