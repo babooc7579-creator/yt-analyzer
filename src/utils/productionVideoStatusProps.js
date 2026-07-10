@@ -44,20 +44,21 @@ export const getProductionVideoDraftSaveButtonProps = ({
   const displayTitle = getDisplayVideoTitle(videoTitle);
   const canSave = Boolean(hasSaveTarget) && Boolean(isDirty) && !isSaving;
   let label = 'Cloud 저장됨';
-  let title = 'Cloud에 저장된 상태';
+  let title = '제작 제목, 메모, 업로드 예정일이 Cloud 판단 기록에 저장된 상태입니다. YouTube API를 새로 호출하지 않습니다.';
 
   if (isSaving) {
     label = 'Cloud 저장 중';
+    title = '제작 제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장하는 중입니다. YouTube API를 새로 호출하지 않습니다.';
   } else if (!hasSaveTarget) {
     label = '저장 대상 없음';
     title = '저장할 영상 ID가 없어 Cloud 저장을 실행하지 않습니다.';
   } else if (isDirty) {
     label = 'Cloud에 변경 저장';
-    title = '제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장';
+    title = '제작 제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.';
   }
 
   return {
-    ariaLabel: `${displayTitle} 제작 메모 저장`,
+    ariaLabel: `${displayTitle} 제작 메모 Cloud 판단 기록에 저장, YouTube API 호출 없음`,
     disabled: !canSave,
     label,
     title,

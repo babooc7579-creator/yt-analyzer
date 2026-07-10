@@ -49,10 +49,15 @@ describe('productionVideoStatusProps utils', () => {
       isSaving: false,
       videoTitle: 'Clip',
     })).toMatchObject({
-      ariaLabel: 'Clip 제작 메모 저장',
+      ariaLabel: 'Clip 제작 메모 Cloud 판단 기록에 저장, YouTube API 호출 없음',
       disabled: false,
       label: 'Cloud에 변경 저장',
     });
+    expect(getProductionVideoDraftSaveButtonProps({
+      isDirty: true,
+      isSaving: false,
+      videoTitle: 'Clip',
+    }).title).toContain('YouTube API를 새로 호출하지 않습니다');
 
     expect(getProductionVideoDraftSaveButtonProps({
       isDirty: true,
@@ -61,6 +66,10 @@ describe('productionVideoStatusProps utils', () => {
       disabled: true,
       label: 'Cloud 저장 중',
     });
+    expect(getProductionVideoDraftSaveButtonProps({
+      isDirty: true,
+      isSaving: true,
+    }).title).toContain('저장하는 중입니다');
 
     expect(getProductionVideoDraftSaveButtonProps({
       isDirty: false,
@@ -68,8 +77,11 @@ describe('productionVideoStatusProps utils', () => {
     })).toMatchObject({
       disabled: true,
       label: 'Cloud 저장됨',
-      title: 'Cloud에 저장된 상태',
     });
+    expect(getProductionVideoDraftSaveButtonProps({
+      isDirty: false,
+      isSaving: false,
+    }).title).toContain('Cloud 판단 기록에 저장된 상태입니다');
 
     expect(getProductionVideoDraftSaveButtonProps({
       hasSaveTarget: false,
