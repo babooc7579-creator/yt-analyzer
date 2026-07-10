@@ -1618,3 +1618,32 @@ App 구조가 여러 hook으로 나뉜 뒤에도 채널, 수집, 발견함, 영�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 53. 2026-07-11 Creator App 파생 상태/화면 props hook 테스트 보강
+
+앱 전체 상태가 화면 props와 지표/동기화 경고로 조립되는 과정이 흔들리지 않도록 `useCreatorAppDerivedState`와 `useCreatorAppViewProps` 테스트를 추가했습니다.
+
+완료한 작업:
+
+- Creator OS 지표 계산 hook에 전달되는 입력값을 확인했습니다.
+- Cloud sync warning hook에 스크랩북/영상 판단 기록 경고가 분리되어 전달되는지 확인했습니다.
+- 지표 결과와 동기화 경고가 하나의 derived state로 합쳐지는지 확인했습니다.
+- 화면 layout, home, 발견함, legacy workspace route props builder가 App 상태를 그대로 받는지 확인했습니다.
+- 홈 이동 callback이 `openCreatorView({ id: 'home' })`로 연결되는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useCreatorAppDerivedState.test.js src/hooks/useCreatorAppViewProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 화면 이동 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
