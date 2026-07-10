@@ -120,7 +120,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 | `reviewed` | 봤음 | 검토 완료, 레이더 숨김 후보 | 확인함 | 표시명 개선 후보 |
 | `watch_later` | 나중에 보기 | 다시 볼 영상 | 다시 보기 | 유지 |
 | `later` | 나중에 보기 | 기존 호환값 | `watch_later`로 흡수 후보 | 레거시 호환 유지 |
-| `production_candidate` | 제작 후보 | 제작 후보로 보냄 | 제작 후보 | 유지 |
+| `production_candidate` | 제작 후보 | 제작 후보로 표시됨 | 제작 후보 | 유지 |
 | `reference_material` | 자료 참고 | 참고 자료 | 자료 참고 | 유지 |
 | `title_reference` | 제목 참고 | 제목 아이디어 참고 | 제목 참고 | 유지 |
 | `excluded` | 제외 | 레이더/목록에서 숨김 | 제외 | 유지 |
