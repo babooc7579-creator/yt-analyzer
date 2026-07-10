@@ -94,6 +94,8 @@ describe('homeNextAction utils', () => {
     expect(action.tone).toBe('emerald');
     expect(action.iconKey).toBe('rocket');
     expect(action.metric).toBe('후보 5개');
+    expect(action.description).toContain('후보로 표시한 영상과 발견 링크');
+    expect(action.description).not.toContain('후보로 남긴');
     expect(action.actionTitle).toContain('저장된 후보 조회');
     expect(action.actionTitle).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(action.onAction).toBe(onOpenProductionCandidates);

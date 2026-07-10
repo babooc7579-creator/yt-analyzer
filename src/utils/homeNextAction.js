@@ -83,7 +83,7 @@ export const getHomeNextAction = ({
       tone: 'emerald',
       iconKey: 'rocket',
       title: '제작 후보함을 열어 다음 콘텐츠를 고르세요',
-      description: '이미 후보로 남긴 영상과 발견 링크를 한곳에서 확인할 수 있습니다.',
+      description: '후보로 표시한 영상과 발견 링크를 한곳에서 확인할 수 있습니다.',
       badge: '제작 준비',
       metric: `후보 ${candidateTotal}개`,
       actionLabel: '후보함 열기',
