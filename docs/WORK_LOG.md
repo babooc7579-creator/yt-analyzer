@@ -1127,3 +1127,30 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 35. 2026-07-11 영상 찾기 상태 hook 테스트 보강
+
+저장 영상 조회 후 검색/조회수/길이/터또터/정렬/보기 모드가 안전한 기본값으로 시작하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 영상 찾기 화면 필터가 빈 검색어, 조회수 0, 전체 길이, 터또터 해제, 대박지수 정렬, 카드 보기로 시작하는지 확인했습니다.
+- 기본 필터 상태가 영상 필터/정렬 계산 모델에 그대로 전달되는지 확인했습니다.
+- 화면 제어용 setter가 모두 외부로 노출되는지 확인했습니다.
+- 실제 필터 계산 로직이나 화면 UI는 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useVideoExplorerState.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
