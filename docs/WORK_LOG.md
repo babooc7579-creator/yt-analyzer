@@ -1354,3 +1354,30 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - localStorage key 변경 없음
 - status/statusIds 의미 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 43. 2026-07-11 저장 영상 조회와 새 영상 수집 액션 경계 테스트 보강
+
+저장 영상 불러오기와 새 영상 수집이 서로 다른 작업이라는 기준이 훅 레벨에서도 유지되도록 `useVideoCollectionActions` 테스트를 추가했습니다.
+
+완료한 작업:
+
+- 선택 채널이 없으면 저장 영상 DB 조회를 실행하지 않고 안내만 표시하는지 확인했습니다.
+- 저장 영상 불러오기는 `/videos?channelIds=...` DB 조회 흐름만 사용하고 스캔 API를 호출하지 않는지 확인했습니다.
+- 저장 영상 조회 실패 문구가 새 YouTube API 호출이나 새 영상 수집을 실행하지 않았다고 안내하는지 확인했습니다.
+- 선택 채널 수동 스캔은 운영중 채널만 골라 selected scan API를 호출하는지 확인했습니다.
+- 보류 채널만 선택된 경우에는 새 영상 수집을 막고 스캔/DB 조회를 실행하지 않는지 확인했습니다.
+- 태그 스캔은 채널 선택 여부와 관계없이 태그 스캔 API를 사용하는지 확인했습니다.
+- 스캔 실패 때 저장 영상 DB 조회 실패와 다른 안내로 처리되는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useVideoCollectionActions.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장 영상 DB 조회/YouTube 스캔 호출 조건 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
