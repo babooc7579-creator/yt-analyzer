@@ -366,6 +366,9 @@ src/App.jsx
   - 준비중 메뉴는 안내 화면만 열며 API 호출이나 DB 변경이 없다고 안내합니다.
 - 분석 대시보드/영구 스크랩북 탭 문구를 정리했습니다.
   - 탭 이동만으로 YouTube API를 새로 호출하지 않는다고 안내합니다.
+- 댓글 Top 10 버튼 문구를 정리했습니다.
+  - 버튼을 누를 때만 YouTube API로 댓글을 조회한다고 안내합니다.
+  - 저장 영상 불러오기와 다른 작업이며, 조회 결과를 Cloud에 저장하지 않는다고 안내합니다.
 
 검증:
 
@@ -376,6 +379,7 @@ src/App.jsx
 - `npm.cmd test -- src/utils/channelNotesModal.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/channelAddCopy.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/appLayoutProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/commentApiButtonProps.test.js --reporter=dot` 통과
 - `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 109개, 테스트 513개
 - `npm.cmd run build` 통과
 - `npm.cmd audit --omit=dev` 취약점 0개
