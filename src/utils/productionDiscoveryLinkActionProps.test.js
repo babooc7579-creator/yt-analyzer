@@ -47,17 +47,17 @@ describe('productionDiscoveryLinkActionProps utils', () => {
       link: { url: 'https://example.com/post' },
       linkTitle: 'Idea link',
     })).toEqual({
-      'aria-label': 'Idea link 원본 링크 열기',
+      'aria-label': 'Idea link 원본 링크 새 탭에서 열기, 외부 수집이나 저장 작업 없음',
       disabled: false,
       href: 'https://example.com/post',
       label: '원본 열기',
-      title: '원본 링크를 새 탭에서 열기',
+      title: '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, Cloud 저장 작업은 없습니다.',
     });
 
     expect(getProductionDiscoveryLinkEditButtonProps()).toEqual({
       'aria-label': '이 링크 발견함에서 수정',
       label: '발견함에서 수정',
-      title: '발견함 화면에서 링크 상태와 메모 수정',
+      title: '발견함 화면에서 링크 상태와 메모를 수정합니다. Cloud 발견함 기록만 바꾸며 원본 사이트를 수집하지 않습니다.',
     });
   });
 
