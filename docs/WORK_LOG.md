@@ -1046,3 +1046,30 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 32. 2026-07-11 화면 데이터 조합 hook 테스트 보강
+
+홈 지표, 레이더 후보, 제작 칸반 화면이 각각 올바른 데이터 모델 계산기에 입력값을 넘기는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- Creator OS 홈 지표 hook이 발견 링크 기본값을 빈 배열로 유지하는지 확인했습니다.
+- 레이더 후보 hook이 영상과 사용자 판단 기록을 레이더 계산 모델에 그대로 넘기는지 확인했습니다.
+- 제작 칸반 hook이 발견 링크, 초안 기록, 영상 판단 기록, 영상 목록을 칸반 계산 모델에 넘기는지 확인했습니다.
+- 실제 계산 로직이나 화면 구조는 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useDataModelHooks.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
