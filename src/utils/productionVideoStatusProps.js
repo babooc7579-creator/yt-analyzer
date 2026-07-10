@@ -8,19 +8,19 @@ export const PRODUCTION_VIDEO_STATUS_HELP_TEXT =
 
 const MOVE_ACTION_COPY = {
   [PRODUCTION_STATUS.CANDIDATE]: {
-    ariaAction: '제작 후보로 이동',
+    ariaAction: '제작 후보로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음',
     label: '제작 후보로',
-    title: '제작 상태를 후보로 되돌려 저장',
+    title: '제작 진행 상태를 후보로 되돌려 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
   },
   [PRODUCTION_STATUS.ACTIVE]: {
-    ariaAction: '제작 중으로 이동',
+    ariaAction: '제작 중으로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음',
     label: '제작 중으로',
-    title: '제작 중 상태로 저장',
+    title: '제작 진행 상태를 제작 중으로 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
   },
   [PRODUCTION_STATUS.DONE]: {
-    ariaAction: '업로드 완료로 이동',
+    ariaAction: '업로드 완료로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음',
     label: '업로드 완료',
-    title: '업로드 완료 상태로 저장하고 완료일을 기록',
+    title: '업로드 완료 상태와 완료일을 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
   },
 };
 
