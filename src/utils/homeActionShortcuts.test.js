@@ -66,18 +66,22 @@ describe('homeActionShortcuts utils', () => {
     expect(shortcutsByKey['add-channel'].description).toContain('Cloud 채널 목록에 저장');
     expect(shortcutsByKey['add-channel'].description).toContain('영상 수집은 실행하지 않습니다');
     expect(shortcutsByKey['add-channel'].hint).toContain('채널 등록 화면');
+    expect(shortcutsByKey['add-channel'].dataFlowLabels).toEqual(['Cloud 채널 저장', '영상 수집 없음']);
 
     expect(shortcutsByKey['selected-scan'].description).toContain('YouTube API');
     expect(shortcutsByKey['selected-scan'].description).toContain('체크한 운영중 채널');
     expect(shortcutsByKey['selected-scan'].hint).toContain('YouTube API 호출 작업');
+    expect(shortcutsByKey['selected-scan'].dataFlowLabels).toEqual(['YouTube API 가능', 'Cloud 영상 갱신 가능']);
 
     expect(shortcutsByKey.vault.description).toContain('Cloud DB');
     expect(shortcutsByKey.vault.description).toContain('이미 저장된 영상');
     expect(shortcutsByKey.vault.description).toContain('새 YouTube API 호출은 없습니다');
     expect(shortcutsByKey.vault.hint).toContain('Cloud DB 조회');
+    expect(shortcutsByKey.vault.dataFlowLabels).toEqual(['Cloud DB 조회', '새 API 호출 없음']);
 
     expect(shortcutsByKey['discovery-links'].description).toContain('Cloud 발견함');
     expect(shortcutsByKey['discovery-links'].description).toContain('제작 후보');
     expect(shortcutsByKey['discovery-links'].hint).toContain('자동 수집 없이 URL만 저장');
+    expect(shortcutsByKey['discovery-links'].dataFlowLabels).toEqual(['Cloud 링크 저장', '자동 수집 없음']);
   });
 });
