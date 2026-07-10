@@ -185,7 +185,7 @@ export const needsRiskyDiscoveryCandidateConfirmation = (status, rightsStatus) =
 );
 
 export const confirmRiskyDiscoveryCandidate = () => window.confirm(
-  '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 보내시겠어요?\n이 작업은 Cloud 발견함 상태만 바꾸며, 사용 허가나 권리 확인 완료를 의미하지 않습니다. 나중에 제작 후보함에서 강한 경고로 표시됩니다.'
+  '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 표시하시겠어요?\n이 작업은 Cloud 발견함 상태만 바꾸며, 사용 허가나 권리 확인 완료를 의미하지 않습니다. 나중에 제작 후보함에서 강한 경고로 표시됩니다.'
 );
 
 export const getInitialDiscoveryLinkForm = () => ({

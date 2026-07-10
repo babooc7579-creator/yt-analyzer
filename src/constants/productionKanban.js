@@ -6,7 +6,7 @@ export const PRODUCTION_KANBAN_COLUMNS = [
     title: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.CANDIDATE],
     description: '만들지 말지 판단할 소재',
     emptyTitle: '대기 중인 제작 후보 없음',
-    emptyDescription: '스크랩북 전체가 자동으로 들어오지는 않습니다. 레이더, 저장 영상, 발견함에서 만들 만한 항목만 제작 후보로 보내면 여기에 쌓입니다.',
+    emptyDescription: '스크랩북 전체가 자동으로 들어오지는 않습니다. 레이더, 저장 영상, 발견함에서 만들 만한 항목만 제작 후보로 표시하면 여기에 보입니다.',
     tone: 'border-indigo-200 bg-indigo-50',
   },
   {

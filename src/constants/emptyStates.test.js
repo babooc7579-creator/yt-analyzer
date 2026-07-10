@@ -34,9 +34,14 @@ describe('emptyStates constants', () => {
 
   it('keeps production empty guidance limited to explicit candidates', () => {
     expect(PRODUCTION_KANBAN_EMPTY_STATE.description).toContain('자동으로 제작 후보가 되지는 않습니다');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.description).toContain('제작 후보로 표시하면');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.description).not.toContain('제작 후보로 보내');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[0].description).toContain('제작 후보로 표시할 영상');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[1].description).toContain('Cloud DB');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].title).toContain('표시하기');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].description).toContain('Cloud 발견함');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].description).toContain('제작 후보로 표시합니다');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.referenceVaultButton.title).toContain('Cloud DB 조회');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.discoveryLinksButton.title).toContain('자동 수집이나 다운로드는 실행하지 않습니다');
   });

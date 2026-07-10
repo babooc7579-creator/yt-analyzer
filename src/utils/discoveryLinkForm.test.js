@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
+  confirmRiskyDiscoveryCandidate,
   findDuplicateDiscoveryLink,
   getDiscoveryLinkDraftUpdates,
   getDiscoveryLinkEditFormViewProps,
@@ -52,10 +53,27 @@ describe('discoveryLinkForm utils', () => {
     });
   });
 
-  it('requires confirmation only when do-not-use links are sent to candidate', () => {
+  it('requires confirmation only when do-not-use links are marked as candidate', () => {
     expect(needsRiskyDiscoveryCandidateConfirmation('candidate', 'do_not_use')).toBe(true);
     expect(needsRiskyDiscoveryCandidateConfirmation('candidate', 'needs_check')).toBe(false);
     expect(needsRiskyDiscoveryCandidateConfirmation('saved', 'do_not_use')).toBe(false);
+  });
+
+  it('confirms risky candidate marking without implying transfer or rights clearance', () => {
+    const confirm = vi.fn(() => true);
+    vi.stubGlobal('window', { confirm });
+
+    try {
+      expect(confirmRiskyDiscoveryCandidate()).toBe(true);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+
+    const message = confirm.mock.calls[0][0];
+    expect(message).toContain('제작 후보로 표시하시겠어요?');
+    expect(message).toContain('Cloud 발견함 상태만 바꾸며');
+    expect(message).toContain('권리 확인 완료를 의미하지 않습니다');
+    expect(message).not.toContain('제작 후보로 보내');
   });
 
   it('builds discovery link create form child props and field update handlers', () => {
