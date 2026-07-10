@@ -720,3 +720,25 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 화면 구조 변경 없음
+
+### 20. 2026-07-11 제작 후보 지정 문구 정리
+
+제작 후보함과 제작 칸반 안내에서 후보를 별도 저장소에 지정하는 것처럼 보일 수 있는 표현을 `표시` 기준으로 맞췄습니다.
+
+완료한 작업:
+
+- 제작 칸반 요약 설명을 `제작 후보로 표시한 항목` 기준으로 바꿨습니다.
+- 제작 후보함 헤더 설명을 `제작 후보로 표시한 영상과 발견함 링크` 기준으로 바꿨습니다.
+- 같은 표현이 다시 섞이지 않도록 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/productionKanbanSummary.test.js src/utils/scrapbookHeaderProps.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음

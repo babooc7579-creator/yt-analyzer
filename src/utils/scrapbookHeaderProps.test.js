@@ -24,6 +24,8 @@ describe('scrapbookHeaderProps utils', () => {
       title: '제작 후보함',
     });
     expect(props.description).toContain('발견함 링크');
+    expect(props.description).toContain('제작 후보로 표시한 영상');
+    expect(props.description).not.toContain('제작 후보로 지정한');
     expect(props.description).toContain('Cloud 판단 기록');
   });
 });

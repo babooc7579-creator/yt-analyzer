@@ -18,6 +18,8 @@ describe('productionKanbanSummary utils', () => {
     expect(props.title).toContain('제작 후보');
     expect(props.description).toContain('스크랩북 전체가 아니라');
     expect(props.description).toContain('레이더와 발견함');
+    expect(props.description).toContain('제작 후보로 표시한 항목');
+    expect(props.description).not.toContain('제작 후보로 지정한');
     expect(props.description).toContain('저장된 데이터 기준');
     expect(props.description).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props.metric).toBe('영상 7개 관리 · 링크 3개 후보');
