@@ -468,3 +468,29 @@ src/App.jsx
 
 - Azure Static Web Apps workflow의 `github_id_token` 입력 경고는 여전히 비차단 경고로 남아 있습니다.
 - 이 경고 수정은 배포 설정 변경에 가까우므로 별도 선택지 검토 후 진행합니다.
+
+### 9. 2026-07-11 Creator OS 제품 지도 테스트 보강
+
+Creator OS 메뉴와 제품 지도 문구가 다시 모호해지지 않도록 상수 테스트를 추가했습니다.
+
+완료한 작업:
+
+- Creator OS 제품 지도가 section title과 함께 평탄화되는지 테스트했습니다.
+- `제작/스크랩북`이 별표 보관 영상과 제작 후보를 구분해 설명하는지 테스트했습니다.
+- `저장한 영상`과 `선택 채널 새 영상 수집`의 설명이 DB 조회와 YouTube API 수집을 혼동하지 않는지 테스트했습니다.
+- live view 그룹이 채널/스크랩북 작업 흐름과 맞는지 테스트했습니다.
+
+검증:
+
+- `npm.cmd test -- src/constants/creatorOs.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 110개, 테스트 518개
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 취약점 0개
+
+보존한 것:
+
+- 화면 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
