@@ -1542,3 +1542,31 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - localStorage key 변경 없음
 - 채널 메모 Cloud 저장 호출 조건 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 50. 2026-07-11 제작 칸반 액션 hook 테스트 보강
+
+제작 칸반에서 영상 제작 기록 저장, 영상 상태 이동, 발견 링크 상태 이동이 Cloud 액션 결과에 맞춰 임시 저장 상태를 표시하고 해제하는지 `useProductionKanbanActions` 테스트를 추가했습니다.
+
+완료한 작업:
+
+- Cloud 영상 사용자 기록이 draft 상태로 동기화되는지 확인했습니다.
+- 제작 draft 수정이 현재 draft 또는 저장된 Cloud 기록을 기준으로 병합되는지 확인했습니다.
+- 저장된 기록과 draft 기록의 차이를 감지하는지 확인했습니다.
+- 제작 draft 저장 성공 때 Cloud 저장 payload를 정규화하고 임시 saved 상태를 일정 시간 뒤 해제하는지 확인했습니다.
+- 제작 draft 저장 실패 때 임시 error 상태를 유지하는지 확인했습니다.
+- 영상 제작 상태 이동 성공 때 임시 saved 상태를 일정 시간 뒤 해제하는지 확인했습니다.
+- 발견 링크 이동 handler가 없으면 Cloud 업데이트를 시도하지 않는지 확인했습니다.
+- 발견 링크 상태 이동 실패 때 임시 error 상태를 유지하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useProductionKanbanActions.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 제작 칸반 Cloud 저장/이동 호출 조건 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
