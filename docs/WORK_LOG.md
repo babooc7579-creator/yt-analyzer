@@ -332,3 +332,47 @@ src/App.jsx
 - status/statusIds 동작 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 외부 사이트 자동 수집/다운로드 추가 없음
+
+### 6. 2026-07-10 화면 문구 안전화 묶음
+
+2026-07-10에는 기능 동작을 바꾸지 않고, 사용자가 버튼을 누르기 전에 데이터 흐름을 더 쉽게 구분할 수 있도록 화면 문구를 보강했습니다.
+
+완료한 작업:
+
+- 홈 화면 빠른 실행 버튼에 데이터 흐름 라벨을 추가했습니다.
+  - 새 채널 등록: Cloud 채널 저장, 영상 수집 없음
+  - 선택 채널 새 영상 수집: YouTube API 가능, Cloud 영상 갱신 가능
+  - 저장 영상 탐색: Cloud DB 조회, 새 API 호출 없음
+  - 발견 링크 저장: Cloud 링크 저장, 자동 수집 없음
+- 제작 후보함의 발견 링크 액션 문구를 정리했습니다.
+  - 원본 열기는 브라우저 새 탭에서 URL만 여는 동작입니다.
+  - 외부 사이트 수집, 다운로드, Cloud 저장 작업은 실행하지 않는다고 안내합니다.
+  - 발견함에서 수정은 Cloud 발견함 기록만 바꾸는 흐름임을 안내합니다.
+- 발견함 목록의 원본 링크 열기 문구도 같은 기준으로 맞췄습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/homeActionShortcuts.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/productionDiscoveryLinkActionProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/discoveryLinkActionProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 109개, 테스트 513개
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 취약점 0개
+- GitHub Actions Build 통과
+- Azure Static Web Apps 배포 통과
+- 공개 앱 루트 200 OK 확인
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- status/statusIds 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 외부 사이트 자동 수집/다운로드 추가 없음
+- 전체 UI 대개편 없음
+
+남은 주의점:
+
+- Azure Static Web Apps workflow의 `github_id_token` 입력 경고는 여전히 비차단 경고로 남아 있습니다.
+- 이 경고 수정은 배포 설정 변경에 가까우므로 별도 선택지 검토 후 진행합니다.
