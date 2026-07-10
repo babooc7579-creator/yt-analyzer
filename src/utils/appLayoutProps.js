@@ -10,7 +10,7 @@ export const getCreatorSidebarItemViewProps = ({ item }) => {
   const isComingSoon = item.status === 'soon';
 
   return {
-    actionLabel: isComingSoon ? `${item.label} 준비중 안내 보기` : `${item.label} 화면 열기`,
+    actionLabel: isComingSoon ? `${item.label} 준비중 안내 보기, API 호출이나 DB 변경 없음` : `${item.label} 화면 열기`,
     isComingSoon,
     statusLabel: '준비중',
   };
