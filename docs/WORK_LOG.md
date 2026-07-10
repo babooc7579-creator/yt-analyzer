@@ -1678,3 +1678,31 @@ App 구조가 여러 hook으로 나뉜 뒤에도 채널, 수집, 발견함, 영�
 - localStorage key 변경 없음
 - 화면 동작 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 55. 2026-07-11 Workspace/Video workflow 조립 테스트 보강
+
+작업공간 workflow와 영상 workflow가 각각 하위 hook 결과를 올바르게 합쳐 반환하는지 단독 테스트를 추가했습니다.
+
+완료한 작업:
+
+- 작업공간 workflow가 YouTube 댓글 도구에 API key와 오류 setter를 전달하는지 확인했습니다.
+- 작업공간 workflow가 네비게이션 상태, 발견 링크 Cloud 상태, 댓글 모달 도구를 하나의 반환값으로 합치는지 확인했습니다.
+- 영상 workflow가 현재 영상 목록을 영상 탐색 상태 hook에 전달하는지 확인했습니다.
+- 영상 workflow가 영상 검토, 필터/정렬 상태, 체크/프롬프트 복사 도구를 하나의 반환값으로 합치는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useCreatorAppWorkspaceWorkflow.test.js src/hooks/useCreatorAppVideoWorkflow.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 화면 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
