@@ -145,6 +145,8 @@ describe('videoToolbarProps utils', () => {
       statusText: '현재 표시 3개 / 전체 12개',
       title: '보관함 도구막대',
     });
+    expect(props.description).toContain('화면 표시 조건만 바꿉니다');
+    expect(props.description).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props.copyButtonTitle).toContain('YouTube API 호출이나 저장 작업은 없습니다');
   });
 
