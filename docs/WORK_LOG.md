@@ -810,3 +810,30 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 24. 2026-07-11 제작 칸반 상태 변경 문구 정리
+
+제작 칸반의 상태 버튼이 다른 저장소로 카드를 옮기는 것처럼 보이지 않도록 `이동` 표현을 `상태 변경` 기준으로 정리했습니다.
+
+완료한 작업:
+
+- 제작 후보/제작 중/업로드 완료 버튼의 접근성 문구를 `상태로 변경` 기준으로 바꿨습니다.
+- 상태 변경 중 버튼 문구를 `이동 중...`에서 `변경 중...`으로 바꿨습니다.
+- 제작 후보 MVP 문서의 제작 진행 설명도 `상태로 변경` 기준으로 맞췄습니다.
+- 같은 표현이 다시 섞이지 않도록 테스트 기대값을 갱신했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/productionVideoStatusProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 상태 저장 로직 변경 없음

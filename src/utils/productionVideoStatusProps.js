@@ -8,19 +8,19 @@ export const PRODUCTION_VIDEO_STATUS_HELP_TEXT =
 
 const MOVE_ACTION_COPY = {
   [PRODUCTION_STATUS.CANDIDATE]: {
-    ariaAction: '제작 후보로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음',
+    ariaAction: '제작 후보 상태로 변경, Cloud 판단 기록 저장, YouTube API 호출 없음',
     label: '제작 후보로',
-    title: '제작 진행 상태를 후보로 되돌려 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
+    title: '제작 진행 상태를 제작 후보로 변경해 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
   },
   [PRODUCTION_STATUS.ACTIVE]: {
-    ariaAction: '제작 중으로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음',
+    ariaAction: '제작 중 상태로 변경, Cloud 판단 기록 저장, YouTube API 호출 없음',
     label: '제작 중으로',
-    title: '제작 진행 상태를 제작 중으로 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
+    title: '제작 진행 상태를 제작 중으로 변경해 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
   },
   [PRODUCTION_STATUS.DONE]: {
-    ariaAction: '업로드 완료로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음',
+    ariaAction: '업로드 완료 상태로 변경, Cloud 판단 기록 저장, YouTube API 호출 없음',
     label: '업로드 완료',
-    title: '업로드 완료 상태와 완료일을 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
+    title: '제작 진행 상태를 업로드 완료로 변경하고 완료일을 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
   },
 };
 
@@ -111,7 +111,7 @@ export const getProductionVideoMoveButtonViewProps = ({
   disabled = false,
   isMoving = false,
   label,
-  loadingLabel = '이동 중...',
+  loadingLabel = '변경 중...',
 } = {}) => ({
   disabled: Boolean(disabled) || isMoving,
   visibleLabel: isMoving ? loadingLabel : label,
