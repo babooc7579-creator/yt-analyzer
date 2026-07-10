@@ -23,9 +23,9 @@ export const CREATOR_OS_PRODUCT_MAP = [
   },
   {
     title: '제작 스튜디오',
-    description: '제작: 저장한 소재를 제작 후보로 전환합니다.',
+    description: '제작: 후보로 표시한 소재를 제작 흐름으로 정리합니다.',
     items: [
-      { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '스크랩 영상과 발견함 링크를 제작 후보로 모아봅니다.' },
+      { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '제작 후보로 표시한 영상과 발견함 링크를 함께 봅니다.' },
       { id: 'studio-scrapbook', label: '제작/스크랩북', status: 'live', summary: '별표로 보관한 영상과 제작 후보를 구분해 봅니다.' },
       { id: 'studio-script', label: '대본 보드', status: 'soon', summary: '제목, 인트로, 대본 초안을 관리할 예정입니다.' },
       { id: 'studio-calendar', label: '업로드 캘린더', status: 'soon', summary: '제작 일정과 업로드 후보를 연결할 예정입니다.' },

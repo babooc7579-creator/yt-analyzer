@@ -517,3 +517,25 @@ Creator OS 메뉴와 제품 지도 문구가 다시 모호해지지 않도록 �
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 11. 2026-07-11 Creator OS 제작 지도 문구 정리
+
+Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 전체를 제작 후보로 전환"처럼 읽히지 않도록 문구를 정리했습니다.
+
+완료한 작업:
+
+- 제작 스튜디오 설명을 `후보로 표시한 소재` 중심으로 바꿨습니다.
+- 제작 후보함 설명을 `제작 후보로 표시한 영상과 발견함 링크`로 바꿨습니다.
+- 스크랩북 전체나 스크랩 영상 전체가 자동으로 제작 후보가 되는 표현을 피하도록 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/constants/creatorOs.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 전체 UI 구조 변경 없음
