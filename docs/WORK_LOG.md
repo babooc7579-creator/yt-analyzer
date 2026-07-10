@@ -1381,3 +1381,30 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - localStorage key 변경 없음
 - 저장 영상 DB 조회/YouTube 스캔 호출 조건 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 44. 2026-07-11 스크랩북 Cloud 기준 테스트 보강
+
+스크랩북이 Cloud DB를 기준으로 동작하고, Cloud 연결 실패 때만 브라우저 임시 기록을 fallback으로 표시하는 현재 원칙을 hook 테스트로 보강했습니다.
+
+완료한 작업:
+
+- Cloud 스크랩북 조회가 성공하면 Cloud 응답만 기준으로 사용하고 localStorage로 대체하지 않는지 확인했습니다.
+- Cloud 조회 성공 결과가 비어 있으면 빈 Cloud 결과를 기준으로 보고 localStorage와 자동 병합하지 않는지 확인했습니다.
+- Cloud 조회 실패 때만 localStorage 스크랩북 임시 기록을 읽는지 확인했습니다.
+- Cloud 준비 전에는 스크랩북 변경을 localStorage에만 조용히 저장하지 않는지 확인했습니다.
+- 스크랩북 추가/삭제가 Cloud 요청 성공 후에만 화면 상태와 localStorage 캐시를 갱신하는지 확인했습니다.
+- Cloud 저장 실패 때 Cloud 준비 상태를 해제하고 localStorage 캐시를 갱신하지 않는지 확인했습니다.
+- hook cleanup 뒤 늦게 도착한 Cloud 조회 결과를 화면 상태에 반영하지 않는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useScrapbook.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 스크랩북 저장/삭제 호출 조건 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
