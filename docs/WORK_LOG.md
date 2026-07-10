@@ -1099,3 +1099,31 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 34. 2026-07-11 채널 추가 폼 상태 hook 테스트 보강
+
+채널 추가/미리보기/일괄 추가/카테고리 이름 변경 화면 상태가 로컬에서 안전하게 초기화되고 정리되는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 채널 추가 폼이 빈 입력, 기본 언어, 단일 추가 모드, 빈 결과 상태로 시작하는지 확인했습니다.
+- 채널 미리보기 취소가 입력값, 태그, 메모, 미리보기를 로컬에서 정리하는지 확인했습니다.
+- 일괄 추가 초기화가 단일 추가 흐름으로 돌아가고 임시 입력/결과를 비우는지 확인했습니다.
+- 새 채널 태그 토글과 카테고리 이름 변경 시작/취소 상태를 확인했습니다.
+- Cloud 저장, YouTube 조회, 실제 채널 데이터 변경 로직은 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useChannelFormState.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
