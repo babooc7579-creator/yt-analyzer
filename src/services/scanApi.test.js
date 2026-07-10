@@ -46,6 +46,14 @@ describe('scanApi service', () => {
     expect(fetchMock).toHaveBeenCalledWith(`${FUNCTION_API_BASE}/scan`);
   });
 
+  it('keeps blank tag scans on the base scan endpoint', async () => {
+    const fetchMock = installFetchMock();
+
+    await scanChannels({ tag: '' });
+
+    expect(fetchMock).toHaveBeenCalledWith(`${FUNCTION_API_BASE}/scan`);
+  });
+
   it('encodes tag scans in the query string', async () => {
     const fetchMock = installFetchMock();
 

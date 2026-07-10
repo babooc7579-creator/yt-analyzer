@@ -1020,3 +1020,29 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - localStorage key 변경 없음
 - Cloud API 호출 방식 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 31. 2026-07-11 스캔 API 빈 태그 경계 테스트 보강
+
+비용성 YouTube 스캔 요청에서 빈 태그 값이 들어와도 불필요한 `tag=` 쿼리를 붙이지 않고 기본 스캔 endpoint를 사용하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 태그가 없는 전체 스캔은 `/scan` endpoint를 사용하는 기존 기준을 유지했습니다.
+- 빈 태그 값이 들어와도 `/scan?tag=`가 아니라 `/scan`으로 요청되는지 확인했습니다.
+- 실제 스캔 로직이나 API 호출 조건은 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/services/scanApi.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
