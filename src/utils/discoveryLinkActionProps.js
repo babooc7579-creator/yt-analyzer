@@ -84,12 +84,12 @@ export const getDiscoveryLinkUtilityActionProps = ({
     editIconName: isEditing ? 'close' : 'edit',
     openLinkLabel: '열기',
     openLinkProps: {
-      'aria-label': `${displayTitle} 원본 링크 새 탭으로 열기, 외부 사이트 수집 없음`,
+      'aria-label': `${displayTitle} 원본 링크 새 탭으로 열기, 외부 수집이나 저장 작업 없음`,
       className: utilityButtonClassName.replace('disabled:opacity-50', ''),
       href: sourceLink.url,
       rel: 'noreferrer',
       target: '_blank',
-      title: '원본 링크를 새 탭으로 엽니다. 외부 사이트를 자동 수집하거나 다운로드하지 않습니다.',
+      title: '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, Cloud 저장 작업은 없습니다.',
     },
   };
 };
