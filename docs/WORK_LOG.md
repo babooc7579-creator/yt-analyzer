@@ -410,3 +410,30 @@ src/App.jsx
 
 - Azure Static Web Apps workflow의 `github_id_token` 입력 경고는 여전히 비차단 경고로 남아 있습니다.
 - 이 경고 수정은 배포 설정 변경에 가까우므로 별도 선택지 검토 후 진행합니다.
+
+### 7. 2026-07-11 제작 후보함 상태 문구 세분화
+
+제작 후보함에서 발견 링크를 되돌리거나 제외할 때, 사용자가 링크 자체가 삭제되는 것으로 오해하지 않도록 완료 문구를 더 정확하게 정리했습니다.
+
+완료한 작업:
+
+- 제작 후보함 발견 링크 상태 저장 완료 문구를 정리했습니다.
+  - Cloud 발견함 상태 저장 완료 후 `제작 후보 표시만 갱신`된다고 안내합니다.
+  - 링크 기록은 유지된다고 함께 안내합니다.
+- Creator OS 제품 지도에서 `제작/스크랩북` 설명을 정리했습니다.
+  - 별표 보관 영상과 제작 후보를 구분해 본다는 의미로 바꿨습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/productionDiscoveryLinkActionProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 109개, 테스트 513개
+- `npm.cmd run build` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- status/statusIds 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 외부 사이트 자동 수집/다운로드 추가 없음

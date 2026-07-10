@@ -26,7 +26,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     description: '제작: 저장한 소재를 제작 후보로 전환합니다.',
     items: [
       { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '스크랩 영상과 발견함 링크를 제작 후보로 모아봅니다.' },
-      { id: 'studio-scrapbook', label: '제작/스크랩북', status: 'live', summary: '별표로 모은 영상을 제작 후보로 봅니다.' },
+      { id: 'studio-scrapbook', label: '제작/스크랩북', status: 'live', summary: '별표로 보관한 영상과 제작 후보를 구분해 봅니다.' },
       { id: 'studio-script', label: '대본 보드', status: 'soon', summary: '제목, 인트로, 대본 초안을 관리할 예정입니다.' },
       { id: 'studio-calendar', label: '업로드 캘린더', status: 'soon', summary: '제작 일정과 업로드 후보를 연결할 예정입니다.' },
       { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '미검토, 분석중, 대본화, 제작완료 상태를 관리할 예정입니다.' },
