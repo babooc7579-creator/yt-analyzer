@@ -23,20 +23,24 @@ describe('productionVideoStatusProps utils', () => {
       targetStatus: PRODUCTION_STATUS.CANDIDATE,
       videoTitle: 'Clip',
     })).toEqual({
-      ariaLabel: 'Clip 제작 후보로 이동',
+      ariaLabel: 'Clip 제작 후보로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음',
       label: '제작 후보로',
-      title: '제작 상태를 후보로 되돌려 저장',
+      title: '제작 진행 상태를 후보로 되돌려 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
     });
 
     expect(getProductionVideoMoveActionCopy({
       targetStatus: PRODUCTION_STATUS.ACTIVE,
       videoTitle: 'Clip',
     }).label).toBe('제작 중으로');
+    expect(getProductionVideoMoveActionCopy({
+      targetStatus: PRODUCTION_STATUS.ACTIVE,
+      videoTitle: 'Clip',
+    }).title).toContain('Cloud 판단 기록');
 
     expect(getProductionVideoMoveActionCopy({
       targetStatus: PRODUCTION_STATUS.DONE,
       videoTitle: '',
-    }).ariaLabel).toBe('이 영상 업로드 완료로 이동');
+    }).ariaLabel).toBe('이 영상 업로드 완료로 이동, Cloud 판단 기록 저장, YouTube API 호출 없음');
   });
 
   it('builds draft save button copy from dirty and saving state', () => {
