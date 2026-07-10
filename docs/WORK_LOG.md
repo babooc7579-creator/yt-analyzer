@@ -1327,3 +1327,30 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 42. 2026-07-11 영상 판단 기록 Cloud/localStorage 기준 테스트 보강
+
+영상별 사용자 판단 기록이 Cloud DB를 기준으로 사용하고, Cloud 연결 실패 때만 localStorage를 임시 fallback으로 쓰는 현재 원칙을 hook 테스트로 보강했습니다.
+
+완료한 작업:
+
+- Cloud 영상 판단 기록 조회가 성공하면 Cloud 응답을 기준으로 사용하고 localStorage로 대체하지 않는지 확인했습니다.
+- Cloud 조회가 성공했지만 결과가 비어 있으면, 그 빈 결과를 기준으로 보고 localStorage 기록을 자동 병합하지 않는지 확인했습니다.
+- Cloud 조회 실패 때만 localStorage 기록을 `임시 기록` fallback 대상으로 읽는지 확인했습니다.
+- `statusIds`가 Cloud 저장 payload와 응답 캐시에 보존되는지 확인했습니다.
+- Cloud 저장 실패 때는 낙관 업데이트를 되돌리고 localStorage를 조용히 갱신하지 않는지 확인했습니다.
+- 기록 초기화 실패 때 기존 화면 상태를 복구하고 localStorage를 갱신하지 않는지 확인했습니다.
+- hook cleanup 뒤 늦게 도착한 Cloud 조회 결과를 화면 상태에 반영하지 않는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useVideoUserRecords.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- status/statusIds 의미 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
