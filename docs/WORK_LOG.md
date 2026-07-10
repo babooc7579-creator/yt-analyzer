@@ -583,3 +583,25 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 화면 구조 변경 없음
+
+### 14. 2026-07-11 홈 지표 후보 문구 정리
+
+홈 지표와 UI 문구 감사 문서에서 제작 후보 표현을 `표시한` 기준으로 맞췄습니다.
+
+완료한 작업:
+
+- 홈 지표의 스크랩 소재 설명을 `제작 후보로 표시한 영상`으로 바꿨습니다.
+- `제작 후보로 남긴 영상` 표현이 다시 들어오지 않도록 테스트를 보강했습니다.
+- UI wording audit 문서의 제작 후보함 설명을 현재 제품 지도 문구 기준으로 갱신했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/creatorHomeViewProps.test.js --reporter=dot` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 화면 구조 변경 없음
