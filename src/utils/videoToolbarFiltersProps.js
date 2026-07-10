@@ -39,7 +39,7 @@ export const getVideoToolbarFiltersViewProps = ({
 export const getVideoToolbarSearchFieldViewProps = () => ({
   ariaLabel: '저장 영상 제목 검색',
   placeholder: '제목 검색...',
-  title: '불러온 저장 영상 제목 검색',
+  title: '불러온 저장 영상 제목만 검색합니다. YouTube API를 새로 호출하지 않습니다.',
 });
 
 export const getVideoToolbarSelectFiltersViewProps = () => ({
@@ -49,7 +49,7 @@ export const getVideoToolbarSelectFiltersViewProps = () => ({
     { label: '쇼츠만', value: 'shorts' },
     { label: '롱폼만', value: 'long' },
   ],
-  lengthFilterTitle: '쇼츠/롱폼 길이 필터',
+  lengthFilterTitle: '불러온 저장 영상의 쇼츠/롱폼 길이 필터입니다. YouTube API를 새로 호출하지 않습니다.',
   viewFilterAriaLabel: '조회수 조건 필터',
   viewFilterOptions: [
     { label: '조회수 전체', value: 0 },
@@ -57,15 +57,15 @@ export const getVideoToolbarSelectFiltersViewProps = () => ({
     { label: '50만 이상', value: 500000 },
     { label: '100만 이상', value: 1000000 },
   ],
-  viewFilterTitle: '불러온 저장 영상의 조회수 조건 필터',
+  viewFilterTitle: '불러온 저장 영상의 조회수 조건 필터입니다. YouTube API를 새로 호출하지 않습니다.',
 });
 
 export const getVideoToolbarSortControlOptions = () => [
   {
     value: 'multiplier',
     label: '대박지수',
-    title: '대박 지수 높은 순으로 정렬',
-    ariaLabel: '대박 지수 높은 순 정렬',
+    title: '현재 불러온 저장 영상을 대박 지수 높은 순으로 정렬합니다. YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '대박 지수 높은 순 정렬, 화면 정렬만 변경, YouTube API 호출 없음',
     activeClassName: 'text-indigo-700',
     inactiveClassName: 'text-slate-500 hover:text-slate-800',
     fontClassName: 'font-bold',
@@ -73,8 +73,8 @@ export const getVideoToolbarSortControlOptions = () => [
   {
     value: 'viral',
     label: '화제성(일평균)',
-    title: '일평균 조회 반응이 높은 순으로 정렬',
-    ariaLabel: '화제성 높은 순 정렬',
+    title: '현재 불러온 저장 영상을 일평균 조회 반응이 높은 순으로 정렬합니다. YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '화제성 높은 순 정렬, 화면 정렬만 변경, YouTube API 호출 없음',
     activeClassName: 'text-orange-600',
     inactiveClassName: 'text-slate-500 hover:text-slate-800',
     fontClassName: 'font-semibold',
@@ -82,8 +82,8 @@ export const getVideoToolbarSortControlOptions = () => [
   {
     value: 'date',
     label: '최신순',
-    title: '업로드 최신순으로 정렬',
-    ariaLabel: '최신순 정렬',
+    title: '현재 불러온 저장 영상을 업로드 최신순으로 정렬합니다. YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '최신순 정렬, 화면 정렬만 변경, YouTube API 호출 없음',
     activeClassName: 'text-slate-800',
     inactiveClassName: 'text-slate-500 hover:text-slate-800',
     fontClassName: 'font-semibold',
@@ -91,8 +91,8 @@ export const getVideoToolbarSortControlOptions = () => [
   {
     value: 'likes',
     label: '참여율(좋아요)',
-    title: '참여율 높은 순으로 정렬',
-    ariaLabel: '참여율 높은 순 정렬',
+    title: '현재 불러온 저장 영상을 참여율 높은 순으로 정렬합니다. YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '참여율 높은 순 정렬, 화면 정렬만 변경, YouTube API 호출 없음',
     activeClassName: 'text-rose-600',
     inactiveClassName: 'text-slate-500 hover:text-slate-800',
     fontClassName: 'font-semibold',
@@ -103,19 +103,23 @@ export const getVideoToolbarViewModeOptions = () => [
   {
     value: 'card',
     label: '카드 보기',
-    title: '영상 후보를 카드 형태로 보기',
-    ariaLabel: '카드 보기로 전환',
+    title: '현재 불러온 저장 영상을 카드 형태로 봅니다. YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '카드 보기로 전환, 화면 표시만 변경, YouTube API 호출 없음',
   },
   {
     value: 'list',
     label: '리스트 보기',
-    title: '영상 후보를 표 형태로 보기',
-    ariaLabel: '리스트 보기로 전환',
+    title: '현재 불러온 저장 영상을 표 형태로 봅니다. YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '리스트 보기로 전환, 화면 표시만 변경, YouTube API 호출 없음',
   },
 ];
 
 export const getVideoToolbarWorkPanelToggleViewProps = ({ showWorkPanel }) => ({
-  ariaLabel: showWorkPanel ? '작업 패널 닫기' : '작업 패널 열기',
+  ariaLabel: showWorkPanel
+    ? '작업 패널 닫기, 화면 표시만 변경, YouTube API 호출 없음'
+    : '작업 패널 열기, 화면 표시만 변경, YouTube API 호출 없음',
   label: showWorkPanel ? '작업 패널 닫기' : '작업 패널 열기',
-  title: showWorkPanel ? '작업 패널 숨기기' : '카드 보기에서 작업 패널 함께 보기',
+  title: showWorkPanel
+    ? '작업 패널을 숨깁니다. 화면 표시만 바꾸며 YouTube API를 새로 호출하지 않습니다.'
+    : '카드 보기에서 작업 패널을 함께 봅니다. 화면 표시만 바꾸며 YouTube API를 새로 호출하지 않습니다.',
 });

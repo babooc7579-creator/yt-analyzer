@@ -77,7 +77,7 @@ describe('videoToolbarFiltersProps utils', () => {
     expect(getVideoToolbarSearchFieldViewProps()).toEqual({
       ariaLabel: '저장 영상 제목 검색',
       placeholder: '제목 검색...',
-      title: '불러온 저장 영상 제목 검색',
+      title: '불러온 저장 영상 제목만 검색합니다. YouTube API를 새로 호출하지 않습니다.',
     });
   });
 
@@ -96,6 +96,8 @@ describe('videoToolbarFiltersProps utils', () => {
       { label: '롱폼만', value: 'long' },
     ]);
     expect(props.viewFilterTitle).toContain('저장 영상');
+    expect(props.viewFilterTitle).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(props.lengthFilterTitle).toContain('YouTube API를 새로 호출하지 않습니다');
   });
 
   it('builds sort control options in display order', () => {
@@ -106,43 +108,44 @@ describe('videoToolbarFiltersProps utils', () => {
       'likes',
     ]);
     expect(getVideoToolbarSortControlOptions()[0]).toMatchObject({
-      ariaLabel: '대박 지수 높은 순 정렬',
+      ariaLabel: '대박 지수 높은 순 정렬, 화면 정렬만 변경, YouTube API 호출 없음',
       label: '대박지수',
     });
+    expect(getVideoToolbarSortControlOptions().every(option => (
+      option.title.includes('YouTube API를 새로 호출하지 않습니다')
+    ))).toBe(true);
   });
 
   it('builds view mode options in display order', () => {
-    expect(getVideoToolbarViewModeOptions()).toEqual([
-      {
-        value: 'card',
-        label: '카드 보기',
-        title: '영상 후보를 카드 형태로 보기',
-        ariaLabel: '카드 보기로 전환',
-      },
-      {
-        value: 'list',
-        label: '리스트 보기',
-        title: '영상 후보를 표 형태로 보기',
-        ariaLabel: '리스트 보기로 전환',
-      },
-    ]);
+    const options = getVideoToolbarViewModeOptions();
+
+    expect(options.map(option => option.value)).toEqual(['card', 'list']);
+    expect(options[0]).toMatchObject({
+      label: '카드 보기',
+      ariaLabel: '카드 보기로 전환, 화면 표시만 변경, YouTube API 호출 없음',
+    });
+    expect(options[1]).toMatchObject({
+      label: '리스트 보기',
+      ariaLabel: '리스트 보기로 전환, 화면 표시만 변경, YouTube API 호출 없음',
+    });
+    expect(options.every(option => option.title.includes('YouTube API를 새로 호출하지 않습니다'))).toBe(true);
   });
 
   it('builds work panel toggle copy for open and closed states', () => {
     expect(getVideoToolbarWorkPanelToggleViewProps({
       showWorkPanel: true,
     })).toEqual({
-      ariaLabel: '작업 패널 닫기',
+      ariaLabel: '작업 패널 닫기, 화면 표시만 변경, YouTube API 호출 없음',
       label: '작업 패널 닫기',
-      title: '작업 패널 숨기기',
+      title: '작업 패널을 숨깁니다. 화면 표시만 바꾸며 YouTube API를 새로 호출하지 않습니다.',
     });
 
     expect(getVideoToolbarWorkPanelToggleViewProps({
       showWorkPanel: false,
     })).toEqual({
-      ariaLabel: '작업 패널 열기',
+      ariaLabel: '작업 패널 열기, 화면 표시만 변경, YouTube API 호출 없음',
       label: '작업 패널 열기',
-      title: '카드 보기에서 작업 패널 함께 보기',
+      title: '카드 보기에서 작업 패널을 함께 봅니다. 화면 표시만 바꾸며 YouTube API를 새로 호출하지 않습니다.',
     });
   });
 });
