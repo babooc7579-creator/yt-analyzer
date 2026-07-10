@@ -1212,3 +1212,33 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 38. 2026-07-11 발견 링크 행 상태 hook 테스트 보강
+
+발견함 목록의 각 링크 행에서 삭제 확인, 상태 변경, 권리 상태 변경, 제목/메모 수정 흐름이 안전하게 유지되는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 발견 링크 행이 현재 링크의 제목/메모/플랫폼/상태/권리 상태를 안전한 기본값으로 읽는지 확인했습니다.
+- 삭제 버튼은 확인창 승인 후에만 Cloud 발견함 기록 삭제 함수를 호출하는지 확인했습니다.
+- 상태와 권리 상태 변경은 Cloud 발견함 업데이트 payload로만 전달되는지 확인했습니다.
+- `사용 금지 + 제작 후보` 조합은 사용자 확인 없이는 상태가 바뀌지 않고 선택값도 원래 값으로 되돌리는지 확인했습니다.
+- 이미 제작 후보인 링크는 다시 후보 표시 요청을 보내지 않는지 확인했습니다.
+- 제목/메모 수정은 변경된 경우에만 trim된 값으로 저장하고, 저장 실패 시 편집 상태를 닫지 않는지 확인했습니다.
+- 실제 discovery link API, DB schema, localStorage, UI 구조는 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useDiscoveryLinkRow.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
