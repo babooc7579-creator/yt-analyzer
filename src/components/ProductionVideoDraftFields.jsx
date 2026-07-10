@@ -38,7 +38,7 @@ export default function ProductionVideoDraftFields({ onUpdateDraft, record, vide
           disabled={titleInputProps.disabled}
           placeholder={titleField.placeholder}
           className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-200"
-          title={titleInputProps.title}
+          title={titleInputProps.title || titleField.title}
           aria-label={titleField['aria-label']}
         />
       </label>
@@ -51,7 +51,7 @@ export default function ProductionVideoDraftFields({ onUpdateDraft, record, vide
           placeholder={noteField.placeholder}
           rows={2}
           className="mt-1 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none focus:ring-2 focus:ring-indigo-200"
-          title={noteInputProps.title}
+          title={noteInputProps.title || noteField.title}
           aria-label={noteField['aria-label']}
         />
       </label>

@@ -75,16 +75,18 @@ export const getProductionVideoDraftFieldsViewProps = ({ videoTitle = '이 영�
   titleField: {
     label: '내가 만들 제목',
     placeholder: '내 채널에 맞게 바꿀 제목 초안',
+    title: '입력만으로는 Cloud에 저장되지 않습니다. 아래 Cloud에 변경 저장 버튼을 눌러야 반영됩니다.',
     'aria-label': `${videoTitle} 내가 만들 제목 입력`,
   },
   noteField: {
     label: '메모',
     placeholder: '훅 포인트, 참고할 장면, 만들 방향',
+    title: '입력만으로는 Cloud에 저장되지 않습니다. 아래 Cloud에 변경 저장 버튼을 눌러야 반영됩니다.',
     'aria-label': `${videoTitle} 제작 메모 입력`,
   },
   publishDateField: {
     label: '업로드 예정일',
-    title: '업로드 예정일 선택',
+    title: '입력만으로는 Cloud에 저장되지 않습니다. 아래 Cloud에 변경 저장 버튼을 눌러야 반영됩니다.',
     'aria-label': `${videoTitle} 업로드 예정일 선택`,
   },
 });
