@@ -278,7 +278,7 @@ discovery link 생성
 - YouTube 영상 원본 데이터는 `videos`가 기준입니다.
 - discovery link는 출처/발견 경로 기록입니다.
 
-### 7.5 제작 후보로 보내는 경우
+### 7.5 제작 후보로 표시하는 경우
 
 ```txt
 discovery link 또는 local asset 검토
