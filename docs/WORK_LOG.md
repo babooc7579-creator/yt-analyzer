@@ -518,6 +518,34 @@ Creator OS 메뉴와 제품 지도 문구가 다시 모호해지지 않도록 �
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 
+### 30. 2026-07-11 Cloud fallback 경고 배너 표시 로직 분리
+
+Cloud 연결 실패나 저장 실패 때 보이는 경고 배너의 메시지 선택 로직을 작은 view props helper로 분리하고 테스트를 추가했습니다.
+
+완료한 작업:
+
+- 단일 경고 메시지와 여러 경고 메시지 중 무엇을 표시할지 결정하는 로직을 `syncWarningBannerProps`로 분리했습니다.
+- 경고 메시지가 없으면 배너가 보이지 않는지 확인했습니다.
+- 여러 경고 메시지가 있으면 단일 메시지보다 우선 표시되는지 확인했습니다.
+- 배너 도움말이 `Cloud 응답만 기준`, `자동 병합 없음`, `자동 업로드 없음` 원칙을 유지하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/syncWarningBannerProps.test.js src/constants/syncWarnings.test.js src/utils/appSyncWarnings.test.js src/hooks/useAppSyncWarnings.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 화면 문구/디자인 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- Cloud/localStorage 병합 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+
 ### 11. 2026-07-11 Creator OS 제작 지도 문구 정리
 
 Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 전체를 제작 후보로 전환"처럼 읽히지 않도록 문구를 정리했습니다.
