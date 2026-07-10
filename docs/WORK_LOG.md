@@ -355,12 +355,22 @@ src/App.jsx
 - 제작 후보함의 제목/메모/업로드 예정일 저장 버튼 문구를 정리했습니다.
   - 저장됨, 저장 중, 변경 저장 상태를 구분했습니다.
   - Cloud 판단 기록 저장 작업이며 YouTube API를 새로 호출하지 않는다고 안내합니다.
+- 제작 후보함의 제목/메모/업로드 예정일 입력칸 문구를 정리했습니다.
+  - 입력만으로는 Cloud에 저장되지 않고, `Cloud에 변경 저장` 버튼을 눌러야 반영된다고 안내합니다.
+- 채널 분석 기록 입력칸 문구를 정리했습니다.
+  - 입력만으로는 Cloud에 저장되지 않고, `기록 추가` 버튼을 눌러야 Cloud 채널 메모에 저장된다고 안내합니다.
+- 새 채널 등록 입력칸 문구를 정리했습니다.
+  - 붙여넣기만으로는 Cloud 저장이나 영상 수집이 실행되지 않는다고 안내합니다.
+  - `YouTube에서 확인` 버튼은 채널 정보 확인용이며 영상 수집과 다르다고 구분했습니다.
 
 검증:
 
 - `npm.cmd test -- src/utils/homeActionShortcuts.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/productionDiscoveryLinkActionProps.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/discoveryLinkActionProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/productionVideoCard.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/channelNotesModal.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/channelAddCopy.test.js --reporter=dot` 통과
 - `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 109개, 테스트 513개
 - `npm.cmd run build` 통과
 - `npm.cmd audit --omit=dev` 취약점 0개
