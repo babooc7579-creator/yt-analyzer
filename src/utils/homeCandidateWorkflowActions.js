@@ -42,6 +42,6 @@ export const getHomeCandidateWorkflowStatusViewProps = ({
 } = {}) => ({
   descriptionText: hasRightsWarning
     ? `링크 후보 중 권리 확인이 필요한 항목 ${discoveryRightsWarningCount}개가 있습니다.`
-    : '만들 만한 영상과 외부 발견 링크를 제작 후보로 모으고, 나머지는 봤음/나중에 보기/제외로 정리합니다.',
+    : '만들 만한 영상과 외부 발견 링크를 제작 후보로 표시하고, 나머지는 봤음/나중에 보기/제외로 정리합니다.',
   metricText: `영상 ${productionCandidateCount}개 · 링크 ${discoveryCandidateCount}개`,
 });
