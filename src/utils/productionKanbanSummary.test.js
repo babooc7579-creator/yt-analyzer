@@ -16,6 +16,7 @@ describe('productionKanbanSummary utils', () => {
 
     expect(props.eyebrow).toBe('제작 칸반');
     expect(props.title).toContain('제작 후보');
+    expect(props.title).not.toContain('넘깁니다');
     expect(props.description).toContain('스크랩북 전체가 아니라');
     expect(props.description).toContain('레이더와 발견함');
     expect(props.description).toContain('제작 후보로 표시한 항목');

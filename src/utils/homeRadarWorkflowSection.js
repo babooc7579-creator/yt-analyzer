@@ -1,6 +1,6 @@
 export const getHomeRadarWorkflowSectionHeaderProps = () => ({
   eyebrow: '오늘 작업 흐름',
-  description: '저장된 영상을 먼저 불러오고, 레이더 후보를 판단한 뒤, 만들 만한 항목만 제작 후보로 넘깁니다.',
+  description: '저장된 영상을 먼저 불러오고, 레이더 후보를 판단한 뒤, 만들 만한 항목만 제작 후보로 표시합니다.',
   safetyNote: '이 영역은 Cloud DB 조회와 Cloud 판단 기록 중심입니다. 새 영상 수집은 선택 채널 새 영상 수집 버튼에서만 실행됩니다.',
 });
 

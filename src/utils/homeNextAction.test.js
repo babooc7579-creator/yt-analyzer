@@ -76,6 +76,8 @@ describe('homeNextAction utils', () => {
     expect(action.iconKey).toBe('checkCircle');
     expect(action.metric).toBe('4개 남음');
     expect(action.title).toContain('오늘 후보');
+    expect(action.description).toContain('제작 후보로 표시하고');
+    expect(action.description).not.toContain('제작 후보로 넘기고');
   });
 
   it('opens production candidates as a stored candidate lookup after radar candidates are done', () => {

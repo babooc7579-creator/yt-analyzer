@@ -72,7 +72,7 @@ export const getHomeNextAction = ({
       tone: 'rose',
       iconKey: 'checkCircle',
       title: '아래 오늘 후보부터 판단하세요',
-      description: '좋은 후보는 제작 후보로 넘기고, 아닌 영상은 봤음/나중에 보기/제외로 정리합니다.',
+      description: '좋은 후보는 제작 후보로 표시하고, 아닌 영상은 봤음/나중에 보기/제외로 정리합니다.',
       badge: '오늘 검토',
       metric: `${radarCandidates}개 남음`,
     };

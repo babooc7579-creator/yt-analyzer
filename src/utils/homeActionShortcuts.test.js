@@ -80,7 +80,8 @@ describe('homeActionShortcuts utils', () => {
     expect(shortcutsByKey.vault.dataFlowLabels).toEqual(['Cloud DB 조회', '새 API 호출 없음']);
 
     expect(shortcutsByKey['discovery-links'].description).toContain('Cloud 발견함');
-    expect(shortcutsByKey['discovery-links'].description).toContain('제작 후보');
+    expect(shortcutsByKey['discovery-links'].description).toContain('제작 후보로 표시');
+    expect(shortcutsByKey['discovery-links'].description).not.toContain('제작 후보로 보냅니다');
     expect(shortcutsByKey['discovery-links'].hint).toContain('자동 수집 없이 URL만 저장');
     expect(shortcutsByKey['discovery-links'].dataFlowLabels).toEqual(['Cloud 링크 저장', '자동 수집 없음']);
   });
