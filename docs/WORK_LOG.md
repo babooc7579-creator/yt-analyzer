@@ -993,3 +993,30 @@ Creator OS 제품 지도에서 제작 스튜디오 설명이 "저장한 소재 �
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 30. 2026-07-11 Cloud API 공통 클라이언트 edge case 테스트 보강
+
+Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤더를 안전하게 처리하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- Cloud API가 실패 상태와 비JSON 응답을 함께 반환해도 상태 코드가 포함된 안전 오류 메시지로 정리되는지 확인했습니다.
+- `sendJson`이 JSON Content-Type을 유지하면서 사용자 지정 헤더도 보존하는지 확인했습니다.
+- 공통 API 호출 helper의 기존 GET/POST/PATCH/DELETE 동작은 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/services/functionApiClient.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- Cloud API 호출 방식 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음

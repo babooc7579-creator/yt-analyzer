@@ -8,6 +8,7 @@ import {
   getJson,
   patchJson,
   postJson,
+  sendJson,
 } from './functionApiClient';
 
 const installFetchMock = (response) => {
@@ -90,6 +91,39 @@ describe('functionApiClient', () => {
       success: false,
       error: 'Server unavailable',
       message: 'Server unavailable',
+    });
+  });
+
+  it('falls back to a status-coded Cloud API error when failed responses are not JSON', async () => {
+    installFetchMock(createResponse({
+      ok: false,
+      status: 503,
+      jsonThrows: true,
+    }));
+
+    await expect(getJson('/video-records')).resolves.toEqual({
+      success: false,
+      error: `${FUNCTION_API_REQUEST_FAILED_MESSAGE} (503)`,
+    });
+  });
+
+  it('preserves custom headers while keeping JSON content type', async () => {
+    const response = createResponse({ data: { success: true } });
+    const fetchMock = installFetchMock(response);
+
+    await sendJson('/channels', {
+      method: 'POST',
+      body: JSON.stringify({ title: 'Channel' }),
+      headers: { 'x-test-request': 'yes' },
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(`${FUNCTION_API_BASE}/channels`, {
+      method: 'POST',
+      body: JSON.stringify({ title: 'Channel' }),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-test-request': 'yes',
+      },
     });
   });
 
