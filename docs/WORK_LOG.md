@@ -437,3 +437,34 @@ src/App.jsx
 - status/statusIds 동작 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 외부 사이트 자동 수집/다운로드 추가 없음
+
+### 8. 2026-07-11 제작 칸반 빈 상태 문구 보강
+
+제작 칸반의 각 컬럼이 비어 있을 때, 사용자가 스크랩북 전체가 자동으로 제작 후보가 되는 것으로 오해하지 않도록 빈 상태 안내를 정리했습니다.
+
+완료한 작업:
+
+- 제작 후보 컬럼 빈 상태 문구에 `스크랩북 전체가 자동으로 들어오지는 않는다`는 기준을 추가했습니다.
+- 제작 중/업로드 완료 컬럼 문구도 제작 후보에서 이동한 항목만 관리한다는 흐름으로 다듬었습니다.
+- 제작 칸반 props 테스트에서 후보 컬럼 빈 상태 문구가 유지되는지 확인하도록 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/productionKanbanProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 109개, 테스트 513개
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 취약점 0개
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- status/statusIds 동작 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 전체 UI 대개편 없음
+
+남은 주의점:
+
+- Azure Static Web Apps workflow의 `github_id_token` 입력 경고는 여전히 비차단 경고로 남아 있습니다.
+- 이 경고 수정은 배포 설정 변경에 가까우므로 별도 선택지 검토 후 진행합니다.
