@@ -1,6 +1,7 @@
 # Creator OS 제작 후보 / 제작 칸반 MVP 범위
 
 작성일: 2026-07-02
+갱신일: 2026-07-11
 
 이 문서는 Creator OS에서 "제작 후보"와 "제작 칸반"을 1차 MVP에서 어떤 데이터 기준으로 볼지 정리합니다.
 
@@ -10,7 +11,7 @@
 
 ## 1. 현재 기준 사실
 
-아래 내용은 2026-07-02 현재 repo 기준입니다.
+아래 내용은 2026-07-11 현재 repo 기준입니다.
 
 - `production_candidates` 별도 저장소는 없습니다.
 - `production_candidates` API endpoint는 없습니다.
@@ -21,17 +22,24 @@
 - 제작 관련 보조 필드로 `draftTitle`, `note`, `targetPublishDate`, `uploadedAt`이 사용됩니다.
 - 제작 칸반은 현재 저장된 YouTube 영상과 `videoUserRecords`를 조합해 표시합니다.
 - 제작 칸반의 주요 칼럼은 `제작 후보`, `제작 중`, `업로드 완료`입니다.
-- discovery links / local assets는 아직 구현되지 않았고, 제작 후보와 직접 연결되지 않습니다.
+- discovery links는 Cloud 발견함(`docType: discovery_link`)으로 구현되어 있습니다.
+- `status: candidate` discovery link는 제작 후보함에서 링크 후보/참고 목록으로 함께 표시됩니다.
+- 단, discovery link는 별도 `production_candidates` DB로 이동한 것이 아니며 제작 프로젝트를 자동 생성하지 않습니다.
+- local assets는 아직 구현되지 않았고, 제작 후보와 자동 연결되지 않습니다.
 
 근거 파일:
 
 - `src/constants/status.js`
 - `src/hooks/useVideoProductionActions.js`
 - `src/components/ProductionKanban.jsx`
+- `src/components/ProductionDiscoveryLinksSection.jsx`
+- `src/services/discoveryLinksApi.js`
+- `src/utils/productionDiscoveryLinksSection.js`
 - `docs/CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md`
 - `docs/CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
 - `docs/CREATOR_OS_STATUS_DICTIONARY.md`
 - `docs/CREATOR_OS_DATA_OWNERSHIP.md`
+- `docs/CREATOR_OS_API_BEHAVIOR_MAP.md`
 
 ---
 
@@ -89,6 +97,22 @@
 | `targetPublishDate` | 업로드 예정일 | 예 |
 | `uploadedAt` | 업로드 완료일 | 예 |
 
+### 2.4 발견 링크 후보 표시
+
+```txt
+Cloud 발견함에 링크 저장
+→ 발견 링크 status를 candidate로 저장
+→ 제작 후보함에서 링크 후보/참고 목록으로 표시
+```
+
+의미:
+
+- 발견 링크 후보는 제작 참고 목록입니다.
+- `production_candidates` DB나 제작 프로젝트 문서를 만들지 않습니다.
+- YouTube 영상 기반 제작 칸반 상태와 별도입니다.
+- 상태 변경은 Cloud 발견함 기록의 `status`만 갱신합니다.
+- local asset 자동 업로드/다운로드 또는 파일 연결은 아직 구현하지 않습니다.
+
 ---
 
 ## 3. 용어 구분
@@ -98,8 +122,9 @@
 | 용어 | 현재 의미 | 목표 의미 | 지금 판단 |
 |---|---|---|---|
 | 제작 후보 | 만들 만한 YouTube 영상 후보 | 제작 후보 소재 또는 프로젝트 | MVP에서는 `videoUserRecords` 상태 |
-| 제작 칸반 | 후보 영상의 진행 상태 뷰 | 제작 프로젝트 관리 화면 | MVP에서는 `videoUserRecords` 기반 뷰 |
+| 제작 칸반 | 후보 영상의 진행 상태 뷰와 발견 링크 후보 참고 목록 | 제작 프로젝트 관리 화면 | MVP에서는 `videoUserRecords` 기반 뷰 + 발견 링크 후보 목록 |
 | 제작 프로젝트 | 여러 원본/링크/파일/작업을 묶은 단위 | 장기 목표 | 아직 미구현 |
+| 링크 후보 | 발견함에서 `candidate`로 표시한 외부 링크 | 제작 프로젝트의 참고 원본 | MVP에서는 Cloud 발견함 기록 |
 | 업로드 완료 | 이 후보로 만든 영상이 완료됨 | 제작 완료 기록 | MVP에서는 `uploaded` 상태 |
 | 사용함 | 소재를 사용했다는 영상 판단 | 제작 완료와 다름 | `used`와 `uploaded` 구분 유지 |
 
@@ -224,7 +249,8 @@ production_candidate = {
 현재 판단:
 
 - 지금은 만들지 않습니다.
-- discovery links / local assets가 실제로 들어오고, 여러 원본을 묶는 필요가 분명해질 때 다시 검토합니다.
+- discovery links는 이미 Cloud 발견함으로 들어왔지만, 아직 별도 제작 프로젝트로 묶지는 않습니다.
+- local assets가 실제로 들어오고 여러 원본을 하나의 제작물로 묶는 필요가 분명해질 때 다시 검토합니다.
 
 ### 선택지 D: 스크랩북을 제작 후보 저장소처럼 사용
 
@@ -272,14 +298,15 @@ production_candidate = {
 1. 지금 이미 작동하는 제작 후보/칸반 흐름이 있습니다.
 2. Cloud DB에 `status`, `statusIds`, `draftTitle`, `note`, `targetPublishDate`, `uploadedAt`이 저장됩니다.
 3. 1인 사용 MVP에서는 YouTube 영상 기반 제작 후보만으로도 실사용 가치가 있습니다.
-4. `production_candidates` 별도 DB는 discovery links/local assets가 실제로 붙기 전에는 과합니다.
-5. 현재 필요한 것은 DB 추가가 아니라 화면과 문서에서 "제작 후보 = 영상 기반 후보"임을 명확히 하는 것입니다.
+4. `production_candidates` 별도 DB는 아직 과합니다. discovery links는 후보 참고 목록으로만 연결하고, local assets는 아직 구현하지 않습니다.
+5. 현재 필요한 것은 DB 추가가 아니라 화면과 문서에서 "영상 제작 후보"와 "링크 후보 참고 목록"을 명확히 구분하는 것입니다.
 
 1차 MVP 기준:
 
-- 제작 후보는 YouTube 영상 기반입니다.
+- 제작 후보 칸반의 본체는 YouTube 영상 기반입니다.
 - 제작 후보 상태는 `videoUserRecords.status/statusIds`에 저장합니다.
 - 제작 칸반은 `videoUserRecords`를 읽는 화면입니다.
+- 발견 링크 후보는 Cloud 발견함의 `status: candidate` 기록을 참고 목록으로 함께 보여줍니다.
 - 별도 `production_candidates` 저장소는 만들지 않습니다.
 - 제작 메모/일정은 기존 필드를 유지합니다.
 - `uploaded`와 `used`는 구분합니다.
@@ -299,11 +326,13 @@ production_candidate = {
 - 업로드 완료일 기록
 - 제작 후보 수 요약
 - 일정 미정/지난 일정 표시
+- Cloud 발견함의 `candidate` 링크를 제작 후보함 참고 목록으로 보기
+- 발견 링크 후보를 보관/검토/제외 상태로 이동
 
 현재 구조로 어렵거나 하지 않는 작업:
 
 - 여러 영상을 하나의 제작 후보로 묶기
-- 인스타/웹 링크를 제작 후보로 직접 보내기
+- 인스타/웹 링크를 별도 제작 프로젝트로 직접 변환하기
 - 로컬 파일을 제작 후보와 연결하기
 - 제작 프로젝트별 세부 작업 관리
 - 제작 결과 성과 회고
@@ -316,7 +345,7 @@ production_candidate = {
 아래 조건 중 여러 개가 실제로 필요해지면 별도 모델을 다시 검토합니다.
 
 - 하나의 제작물이 여러 YouTube 영상을 참고해야 합니다.
-- discovery link를 제작 후보로 직접 보내야 합니다.
+- discovery link를 단순 참고 목록이 아니라 제작 프로젝트의 원본으로 묶어야 합니다.
 - local asset을 제작 후보에 연결해야 합니다.
 - 제목/대본/썸네일/편집/업로드 같은 세부 작업을 관리해야 합니다.
 - 제작 후보와 최종 업로드 영상을 분리해서 기록해야 합니다.
@@ -352,6 +381,8 @@ production_candidate = {
 
 - YouTube 영상 기반 제작 후보를 진행 상태별로 보여줍니다.
 - 제작 후보, 제작 중, 업로드 완료 상태를 관리합니다.
+- 발견함에서 `candidate`로 표시한 링크는 후보 참고 목록으로 함께 보여줍니다.
+- 링크 후보는 자동 제작 프로젝트가 아니며, YouTube 영상 칸반 카드와 같은 데이터가 아닙니다.
 
 피해야 할 표현:
 
@@ -380,7 +411,7 @@ production_candidate = {
 - `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 명시 필드 추가
 - 제작 칸반 대개편
 - 스크랩북을 제작 후보 저장소로 대체
-- discovery links / local assets를 제작 후보와 자동 연결
+- discovery links / local assets를 제작 프로젝트와 자동 연결
 - 제작 후보 자동 생성
 - AI 기반 자동 판단
 
@@ -397,7 +428,7 @@ production_candidate = {
 사용자 결정이 필요한 다음 작업:
 
 1. discovery links 후속 확장 전 API 경계와 `/videos` 조회 분리 방식 재확인
-2. discovery link 후보를 별도 제작 프로젝트 모델로 분리할지 여부
+2. discovery link 후보를 참고 목록에 둘지, 별도 제작 프로젝트 모델로 승격할지 여부
 3. `production_candidates` 별도 DB 도입 여부
 4. 제작 칸반을 3단계에서 더 확장할지 여부
 5. `productionStatus` 명시 필드 도입 여부
@@ -409,5 +440,7 @@ production_candidate = {
 현재 단계에서는 `production_candidates` 별도 DB를 만들지 않습니다.
 
 1차 MVP에서는 제작 후보와 제작 칸반을 **기존 `videoUserRecords` 기반 YouTube 영상 제작 흐름**으로 유지합니다.
+
+Cloud 발견함의 `candidate` 링크는 제작 후보함에서 참고 목록으로 보여주되, 별도 제작 프로젝트나 `production_candidates` DB로 보지 않습니다.
 
 장기적으로 discovery links, local assets, 여러 원본 영상이 하나의 제작물로 묶여야 하는 시점이 오면 `production_candidates` 별도 모델을 다시 검토합니다.

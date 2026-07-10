@@ -494,3 +494,26 @@ Creator OS 메뉴와 제품 지도 문구가 다시 모호해지지 않도록 �
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 10. 2026-07-11 제작 후보/발견 링크 기준 문서 갱신
+
+제작 후보 MVP 문서가 과거 기준으로 discovery links를 미구현으로 설명하고 있어, 현재 구현 상태에 맞게 문서만 갱신했습니다.
+
+완료한 작업:
+
+- discovery links가 Cloud 발견함(`docType: discovery_link`)으로 구현되어 있다는 현재 사실을 반영했습니다.
+- `status: candidate` 발견 링크가 제작 후보함에서 링크 후보/참고 목록으로 보인다는 기준을 추가했습니다.
+- 발견 링크 후보는 별도 `production_candidates` DB나 제작 프로젝트가 아니라는 경계를 명확히 했습니다.
+- local assets는 아직 미구현이며 제작 후보와 자동 연결하지 않는다는 기준을 유지했습니다.
+
+검증:
+
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 코드 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
