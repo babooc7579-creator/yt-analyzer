@@ -1299,3 +1299,31 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 41. 2026-07-11 댓글 Top 10 hook 테스트 보강
+
+댓글 Top 10 기능이 YouTube API Key 없이 API를 호출하지 않고, 버튼 실행 시 댓글 모달 상태를 안전하게 갱신하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 댓글 모달이 닫힌 빈 상태로 시작하고, 닫기 동작이 같은 빈 상태로 되돌리는지 확인했습니다.
+- YouTube API Key가 없으면 오류 안내만 표시하고 댓글 API 호출을 실행하지 않는지 확인했습니다.
+- API Key가 있을 때만 YouTube 댓글 API helper를 호출하고, 로딩 상태와 댓글 결과 상태를 순서대로 표시하는지 확인했습니다.
+- YouTube API 오류 payload와 네트워크 오류를 모달 오류 상태로 표시하는지 확인했습니다.
+- 실제 YouTube API 호출 조건, API endpoint, DB schema, localStorage, UI 구조는 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useTopComments.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
