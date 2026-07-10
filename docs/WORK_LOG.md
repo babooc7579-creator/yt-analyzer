@@ -371,6 +371,8 @@ src/App.jsx
   - 저장 영상 불러오기와 다른 작업이며, 조회 결과를 Cloud에 저장하지 않는다고 안내합니다.
 - 발견함 링크를 제작 후보로 저장한 뒤 완료 안내를 정리했습니다.
   - 검토 상태가 제작 후보로 저장되면 제작 후보함에서 이어서 확인할 수 있다고 안내합니다.
+- 터또터 발굴 버튼 문구를 정리했습니다.
+  - 현재 불러온 저장 영상을 필터링하는 화면 표시 조건이며, YouTube API를 새로 호출하지 않는다고 안내합니다.
 
 검증:
 
@@ -383,6 +385,7 @@ src/App.jsx
 - `npm.cmd test -- src/utils/appLayoutProps.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/commentApiButtonProps.test.js --reporter=dot` 통과
 - `npm.cmd test -- src/utils/discoveryLinkCollection.test.js --reporter=dot` 통과
+- `npm.cmd test -- src/utils/videoToolbarProps.test.js --reporter=dot` 통과
 - `npm.cmd test -- --reporter=dot` 통과: 테스트 파일 109개, 테스트 513개
 - `npm.cmd run build` 통과
 - `npm.cmd audit --omit=dev` 취약점 0개
