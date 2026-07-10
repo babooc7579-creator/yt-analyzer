@@ -1183,3 +1183,32 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 37. 2026-07-11 발견 링크 저장 폼 hook 테스트 보강
+
+발견함에 링크를 수동 저장할 때 URL/중복/권리 상태/저장 payload 흐름이 안전하게 유지되는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 빈 URL 상태에서는 저장 버튼 흐름이 비활성화되는지 확인했습니다.
+- URL 입력 변경 helper가 기존 폼 값을 보존하면서 특정 필드만 바꾸는지 확인했습니다.
+- 중복 URL과 잘못된 URL 형식에서는 Cloud 저장을 막는지 확인했습니다.
+- 정상 저장 시 URL, 제목, 메모를 trim하고 플랫폼/status/rightsStatus를 Cloud 저장 함수로 넘기는지 확인했습니다.
+- `candidate + do_not_use` 조합에서는 사용자 확인 없이는 저장하지 않는지 확인했습니다.
+- 실제 discovery link API, DB schema, localStorage, UI 구조는 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useDiscoveryLinkForm.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
