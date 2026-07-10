@@ -51,7 +51,7 @@ export const getHomeRadarStatsGridViewProps = ({
     {
       label: '스크랩 소재',
       value: savedVideoCount,
-      description: '제작 후보로 남긴 영상',
+      description: '제작 후보로 표시한 영상',
     },
     {
       label: '최근 수집 상태',
