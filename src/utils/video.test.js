@@ -105,6 +105,26 @@ describe('video utils', () => {
     });
   });
 
+  it('maps invalid Cloud number fields defensively', () => {
+    expect(mapCloudVideoToViewModel({
+      id: 'cloud-invalid',
+      title: 'Invalid numbers',
+      viewCount: 'not-a-number',
+      likeCount: null,
+      likeRatio: undefined,
+      multiplier: 'bad',
+      isShorts: false,
+    }, 0)).toMatchObject({
+      videoId: 'cloud-invalid',
+      view_count: 0,
+      like_count: 0,
+      like_ratio: 0,
+      daysOld: 0,
+      multiplier: 0,
+      views_per_day: 0,
+    });
+  });
+
   it('detects tteotteotto and strong reaction candidates by thresholds', () => {
     expect(isTtoTtoCandidate({
       daysOld: TTOTTO_MIN_DAYS_OLD,
@@ -173,6 +193,20 @@ describe('video utils', () => {
       'old-viral-short',
       'new-long',
     ]);
+  });
+
+  it('sorts numeric string fields without mutating the source list', () => {
+    const sourceVideos = [
+      { videoId: 'low', view_count: '10', views_per_day: '1', multiplier: '1' },
+      { videoId: 'high', view_count: '20', views_per_day: '2', multiplier: '3' },
+    ];
+
+    expect(filterAndSortVideos({
+      videos: sourceVideos,
+      viewFilter: '15',
+      sortType: 'multiplier',
+    }).map(video => video.videoId)).toEqual(['high']);
+    expect(sourceVideos.map(video => video.videoId)).toEqual(['low', 'high']);
   });
 
   it('ignores invalid video entries and keeps unknown sort order stable', () => {
