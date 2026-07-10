@@ -1270,3 +1270,32 @@ Cloud Function 공통 호출부가 비정상 HTTP 응답과 사용자 지정 헤
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 40. 2026-07-11 로컬 화면 상태 hook 테스트 보강
+
+앱의 기본 실행 상태, 카테고리 캐시, Creator OS 화면 이동 상태가 안전한 기본값을 유지하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 앱 실행 상태 hook이 API Key, 스캔 상태, 로딩 상태, 영상 목록, 오류 문구를 안전한 기본값으로 시작하는지 확인했습니다.
+- 앱 실행 상태 setter가 외부로 그대로 노출되어 기존 화면 제어 흐름을 유지하는지 확인했습니다.
+- 카테고리 hook이 기존 브라우저 캐시를 읽고, 유효한 값이 없으면 기본 카테고리로 fallback하는지 확인했습니다.
+- 카테고리 변경 저장은 기존 localStorage key를 유지하는지 확인했습니다.
+- Creator OS 화면 이동 hook이 홈/채널 작업/제작 후보 작업/수동 화면 이동의 탭과 작업 패널 상태를 안전하게 계산하는지 확인했습니다.
+- 실제 API, DB schema, localStorage key, UI 구조는 바꾸지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/hooks/useAppRuntimeState.test.js src/hooks/useCategories.test.js src/hooks/useCreatorWorkspaceNavigation.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과
+- `git diff --check` 통과
+
+보존한 것:
+
+- 앱 로직 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
