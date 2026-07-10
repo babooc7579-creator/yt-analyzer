@@ -13,7 +13,8 @@ describe('referenceVault constants', () => {
       eyebrow: 'Reference Vault',
       title: '레퍼런스 금고',
     });
-    expect(REFERENCE_VAULT_HEADER.description).toContain('제작에 활용할 후보');
+    expect(REFERENCE_VAULT_HEADER.description).toContain('제작 후보로 표시할 소재');
+    expect(REFERENCE_VAULT_HEADER.description).not.toContain('제작에 활용할 후보');
   });
 
   it('keeps summary card keys stable for the vault dashboard', () => {
@@ -35,6 +36,10 @@ describe('referenceVault constants', () => {
     expect(cardsByKey['load-saved-videos'].description).toContain('DB에 저장된 영상만');
     expect(cardsByKey['load-saved-videos'].description).toContain('새 YouTube API 호출은 없습니다');
     expect(cardsByKey['save-reference'].description).toContain('스크랩북');
+    expect(cardsByKey['promote-production'].title).toBe('3. 제작 후보로 표시');
+    expect(cardsByKey['promote-production'].description).toContain('Cloud 판단 기록');
     expect(cardsByKey['promote-production'].description).toContain('제작 칸반');
+    expect(cardsByKey['promote-production'].description).toContain('새 YouTube API 호출은 없습니다');
+    expect(cardsByKey['promote-production'].description).not.toContain('제작 후보로 보내');
   });
 });

@@ -8,7 +8,7 @@ export const REFERENCE_VAULT_SUMMARY_TONES = {
 export const REFERENCE_VAULT_HEADER = {
   eyebrow: 'Reference Vault',
   title: '레퍼런스 금고',
-  description: '저장된 영상과 스크랩 소재를 한 곳에서 훑고, 제작에 활용할 후보를 고르는 작업 캔버스입니다.',
+  description: '저장된 영상과 스크랩 소재를 한 곳에서 훑고, 제작 후보로 표시할 소재를 고르는 작업 캔버스입니다.',
 };
 
 export const REFERENCE_VAULT_SUMMARY_CARDS = [
@@ -40,8 +40,8 @@ export const REFERENCE_VAULT_GUIDE_CARDS = [
   },
   {
     key: 'promote-production',
-    title: '3. 제작 후보로 보내기',
-    description: '만들 만한 소재는 제작 후보로 보내면 제작 칸반에서 이어서 관리합니다.',
+    title: '3. 제작 후보로 표시',
+    description: '만들 만한 소재는 Cloud 판단 기록에 제작 후보로 표시하면 제작 칸반에서 이어서 관리합니다. 새 YouTube API 호출은 없습니다.',
     iconName: 'sparkles',
     className: 'border-indigo-100 bg-indigo-50/80',
     iconClassName: 'text-indigo-700',
