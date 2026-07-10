@@ -147,7 +147,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 
 | 저장값 | 화면 표시 | 현재 의미 | 목표 의미 | 현재 판단 |
 |---|---|---|---|---|
-| `production_candidate` | 제작 후보 | 후보로 등록됨 | 제작 후보 | MVP 유지 |
+| `production_candidate` | 제작 후보 | 후보로 표시됨 | 제작 후보 | MVP 유지 |
 | `production_reviewing` | 검토 중 | 프론트 상수 존재 | 제작 전 검토 중 | 부분 구현 |
 | `production_decided` | 제작 결정 | 프론트 상수 존재 | 만들기로 결정 | 부분 구현 |
 | `production_active` | 제작 중 | 제작 중 | 제작 진행 중 | 유지 |
