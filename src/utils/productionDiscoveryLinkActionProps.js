@@ -50,13 +50,13 @@ export const getProductionDiscoveryLinkOpenButtonProps = ({ link, linkTitle } = 
   return {
     'aria-label': disabled
       ? `${displayTitle} 원본 링크 URL 없음`
-      : `${displayTitle} 원본 링크 열기`,
+      : `${displayTitle} 원본 링크 새 탭에서 열기, 외부 수집이나 저장 작업 없음`,
     disabled,
     href,
     label: '원본 열기',
     title: disabled
       ? '원본 링크 URL이 없어 열 수 없습니다.'
-      : '원본 링크를 새 탭에서 열기',
+      : '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, Cloud 저장 작업은 없습니다.',
   };
 };
 
@@ -66,7 +66,7 @@ export const getProductionDiscoveryLinkEditButtonProps = ({ linkTitle } = {}) =>
   return {
     'aria-label': `${displayTitle} 발견함에서 수정`,
     label: '발견함에서 수정',
-    title: '발견함 화면에서 링크 상태와 메모 수정',
+    title: '발견함 화면에서 링크 상태와 메모를 수정합니다. Cloud 발견함 기록만 바꾸며 원본 사이트를 수집하지 않습니다.',
   };
 };
 
