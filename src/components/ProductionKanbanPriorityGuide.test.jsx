@@ -17,6 +17,8 @@ describe('ProductionKanbanPriorityGuide', () => {
 
     expect(html).toContain('일정 미정');
     expect(html).toContain('제작 중인 후보에 업로드 예정일을 붙이세요');
+    expect(html).toContain('오늘 순서');
+    expect(html).toContain('업로드 예정일 입력');
     expect(html).toContain('표시 전용 안내입니다');
     expect(html).toContain('YouTube API 호출');
     expect(html).toContain('Cloud 저장은 실행하지 않습니다');

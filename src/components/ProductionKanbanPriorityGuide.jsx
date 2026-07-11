@@ -62,6 +62,11 @@ export default function ProductionKanbanPriorityGuide({
         <p className="mt-1 text-xs leading-relaxed text-slate-600">
           {guideProps.description}
         </p>
+        {guideProps.nextAction ? (
+          <p className="mt-2 rounded-lg bg-white/70 px-3 py-2 text-[11px] font-bold leading-relaxed text-slate-700">
+            {guideProps.nextAction}
+          </p>
+        ) : null}
         <p className="mt-2 text-[11px] font-bold text-slate-500">
           표시 전용 안내입니다. YouTube API 호출, 외부 자동 수집, Cloud 저장은 실행하지 않습니다.
         </p>

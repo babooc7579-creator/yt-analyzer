@@ -9,6 +9,9 @@ export default function ProductionDiscoveryLinkRightsWarning({ rightsWarning }) 
       <div>
         <p className="font-extrabold">{rightsWarning.title}</p>
         <p className="mt-1 leading-relaxed">{rightsWarning.description}</p>
+        {rightsWarning.nextAction ? (
+          <p className="mt-2 font-bold leading-relaxed">{rightsWarning.nextAction}</p>
+        ) : null}
       </div>
     </div>
   );

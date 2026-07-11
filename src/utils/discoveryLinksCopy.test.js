@@ -73,6 +73,7 @@ describe('discoveryLinksCopy utils', () => {
     expect(getDiscoveryLinkRiskyCandidateHintViewProps().title).not.toContain('제작 후보로 저장');
     expect(getDiscoveryLinkRiskyCandidateHintViewProps().description).toContain('권리 확인 완료를 의미하지 않습니다');
     expect(getDiscoveryLinkSafetyNoticeViewProps().description).toContain('외부 사이트 크롤링을 실행하지 않습니다');
+    expect(getDiscoveryLinkSafetyNoticeViewProps().description).toContain('사용 허가나 자동 권리 확인을 의미하지 않습니다');
   });
 
   it('builds discovery search, loading, and active-filter copy', () => {

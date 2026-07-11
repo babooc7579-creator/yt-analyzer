@@ -93,13 +93,15 @@ export const DISCOVERY_RIGHTS_TONES = {
 export const DISCOVERY_RIGHTS_WARNINGS = {
   needs_check: {
     title: '권리 확인 후 사용',
-    description: '원본과 출처를 확인하기 전에는 제작에 바로 쓰지 마세요.',
+    description: '원본과 출처를 확인하기 전에는 제작에 바로 쓰지 마세요. 후보에는 남길 수 있지만 오늘 제작 순서에서는 먼저 확인해야 합니다.',
+    nextAction: '다음 행동: 원본 링크 열기 → 출처 확인 → 사용 가능 확인 또는 제외로 정리',
     cardClass: 'border-rose-200 bg-rose-50',
     panelClass: 'border-rose-200 bg-white text-rose-700',
   },
   do_not_use: {
     title: '사용 금지 표시',
-    description: '제작에 쓰면 위험한 링크입니다. 후보 제외 또는 발견함에서 상태를 수정하세요.',
+    description: '제작에 쓰면 위험한 링크입니다. 실수로 오늘 제작 후보에 섞이지 않도록 먼저 제외하거나 권리 상태를 다시 확인하세요.',
+    nextAction: '다음 행동: 제작 후보에서 제외하거나 발견함에서 권리 상태를 다시 확인',
     cardClass: 'border-red-300 bg-red-50',
     panelClass: 'border-red-200 bg-white text-red-700',
   },
