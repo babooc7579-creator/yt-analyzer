@@ -55,6 +55,18 @@ export function getLegacyDashboardTabViewProps({
   const videoList = toVideoList(videos);
   const selectedVideos = videoList.filter(video => checkedVideoIds.includes(video.videoId));
   const canOpenCreatorView = isFunction(openCreatorView);
+  const canResetFilters = [
+    setLengthFilter,
+    setSearchKeyword,
+    setTtoTtoMode,
+    setViewFilter,
+  ].every(isFunction);
+  const resetFilters = canResetFilters ? () => {
+    setSearchKeyword('');
+    setViewFilter(0);
+    setLengthFilter('all');
+    setTtoTtoMode(false);
+  } : undefined;
 
   return {
     commentApiNotice: LEGACY_DASHBOARD_COMMENT_NOTICE,
@@ -100,6 +112,7 @@ export function getLegacyDashboardTabViewProps({
       onOpenAddChannel: canOpenCreatorView ? () => openCreatorView({ id: 'ops-add-channel' }) : undefined,
       onOpenHome: canOpenCreatorView ? () => openCreatorView({ id: 'home' }) : undefined,
       onPromoteToProduction: promoteVideoToProduction,
+      onResetFilters: resetFilters,
       onToggleCheck: toggleCheckVideo,
       onToggleScrap: toggleScrapVideo,
       showWorkPanel,

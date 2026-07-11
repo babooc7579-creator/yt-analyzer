@@ -86,12 +86,13 @@ describe('legacyDashboardTabViewProps utils', () => {
     const openedViews = [];
     const openCreatorView = (item) => openedViews.push(item);
     const promoteVideoToProduction = () => 'promote';
-    const setLengthFilter = () => 'length';
-    const setSearchKeyword = () => 'search';
+    const filterResets = [];
+    const setLengthFilter = (value) => filterResets.push(['length', value]);
+    const setSearchKeyword = (value) => filterResets.push(['search', value]);
     const setShowWorkPanel = () => 'work';
     const setSortType = () => 'sort';
-    const setTtoTtoMode = () => 'mode';
-    const setViewFilter = () => 'filter';
+    const setTtoTtoMode = (value) => filterResets.push(['tteotteotto', value]);
+    const setViewFilter = (value) => filterResets.push(['view', value]);
     const setViewMode = () => 'view';
     const toggleCheckVideo = () => 'check';
     const toggleScrapVideo = () => 'scrap';
@@ -146,6 +147,13 @@ describe('legacyDashboardTabViewProps utils', () => {
       { id: 'ops-add-channel' },
     ]);
     expect(props.resultsPanelProps.onPromoteToProduction).toBe(promoteVideoToProduction);
+    props.resultsPanelProps.onResetFilters();
+    expect(filterResets).toEqual([
+      ['search', ''],
+      ['view', 0],
+      ['length', 'all'],
+      ['tteotteotto', false],
+    ]);
     expect(props.resultsPanelProps.onToggleCheck).toBe(toggleCheckVideo);
     expect(props.resultsPanelProps.onToggleScrap).toBe(toggleScrapVideo);
   });
@@ -155,5 +163,6 @@ describe('legacyDashboardTabViewProps utils', () => {
 
     expect(props.resultsPanelProps.onOpenHome).toBeUndefined();
     expect(props.resultsPanelProps.onOpenAddChannel).toBeUndefined();
+    expect(props.resultsPanelProps.onResetFilters).toBeUndefined();
   });
 });

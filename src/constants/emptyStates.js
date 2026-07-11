@@ -107,4 +107,9 @@ export const PRODUCTION_KANBAN_EMPTY_STATE = {
 export const VIDEO_FILTER_EMPTY_STATE = {
   title: '필터 조건에 맞는 영상이 없습니다',
   description: '검색어나 필터를 낮춰 보세요. 새 데이터가 필요할 때만 “선택 채널 새 영상 수집”을 실행합니다. 이 작업은 YouTube API를 호출할 수 있습니다.',
+  resetButton: {
+    label: '필터 초기화',
+    title: '검색어와 필터 조건만 기본값으로 돌립니다. 저장, 수집, YouTube API 호출은 실행하지 않습니다.',
+    ariaLabel: '검색어와 필터 조건 초기화, 저장이나 수집 또는 YouTube API 호출 없음',
+  },
 };

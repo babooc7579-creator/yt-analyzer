@@ -52,5 +52,6 @@ describe('emptyStates constants', () => {
     expect(VIDEO_FILTER_EMPTY_STATE.description).toContain('필터를 낮춰');
     expect(VIDEO_FILTER_EMPTY_STATE.description).toContain('필요할 때만');
     expect(VIDEO_FILTER_EMPTY_STATE.description).toContain('YouTube API를 호출할 수 있습니다');
+    expect(VIDEO_FILTER_EMPTY_STATE.resetButton.title).toContain('저장, 수집, YouTube API 호출은 실행하지 않습니다');
   });
 });

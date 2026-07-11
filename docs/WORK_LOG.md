@@ -1761,3 +1761,31 @@ App 구조가 여러 hook으로 나뉜 뒤에도 채널, 수집, 발견함, 영�
 - localStorage key 변경 없음
 - 저장 영상 조회/필터/정렬 로직 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 58. 2026-07-11 필터 빈 화면 초기화 흐름 개선
+
+저장 영상은 있지만 현재 검색어/필터 조건 때문에 결과가 0개인 경우, 사용자가 조건을 바로 기본값으로 되돌릴 수 있도록 `필터 초기화` 버튼을 추가했습니다.
+
+완료한 작업:
+
+- 필터 빈 화면에 초기화 버튼 문구를 상수로 고정했습니다.
+- 버튼은 검색어/조회수 조건/영상 길이/터또터 모드만 기본값으로 되돌리며 저장, 수집, YouTube API 호출을 실행하지 않도록 문구를 명확히 했습니다.
+- 영상 결과 패널 빈 화면 props에 필터 초기화 action을 연결했습니다.
+- legacy dashboard에서 초기화 동작을 안전하게 구성하고, 필요한 setter가 없으면 버튼을 표시하지 않도록 보호했습니다.
+- 필터 초기화 action 유틸과 reset 값 테스트를 추가했습니다.
+
+검증:
+
+- `npm.cmd test -- src/constants/emptyStates.test.js src/utils/videoResultsPanelProps.test.js src/utils/legacyDashboardTabViewProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장 영상 데이터 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음

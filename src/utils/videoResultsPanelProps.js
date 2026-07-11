@@ -1,4 +1,7 @@
-import { REFERENCE_VAULT_EMPTY_STATE } from '../constants/emptyStates';
+import {
+  REFERENCE_VAULT_EMPTY_STATE,
+  VIDEO_FILTER_EMPTY_STATE,
+} from '../constants/emptyStates';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
 const isFunction = (value) => typeof value === 'function';
@@ -25,6 +28,19 @@ export const getReferenceVaultEmptyStateActions = ({
   } : null,
 ]).filter(Boolean);
 
+export const getVideoFilterEmptyStateActions = ({
+  onResetFilters,
+} = {}) => ([
+  isFunction(onResetFilters) ? {
+    key: 'reset-filters',
+    iconKey: 'reset-filters',
+    label: VIDEO_FILTER_EMPTY_STATE.resetButton.label,
+    title: VIDEO_FILTER_EMPTY_STATE.resetButton.title,
+    ariaLabel: VIDEO_FILTER_EMPTY_STATE.resetButton.ariaLabel,
+    onClick: onResetFilters,
+  } : null,
+]).filter(Boolean);
+
 export const getVideoResultsPanelViewProps = ({
   checkedVideos,
   filteredVideos,
@@ -34,6 +50,7 @@ export const getVideoResultsPanelViewProps = ({
   onOpenAddChannel,
   onOpenHome,
   onPromoteToProduction,
+  onResetFilters,
   onToggleCheck,
   onToggleScrap,
   showWorkPanel,
@@ -75,6 +92,11 @@ export const getVideoResultsPanelViewProps = ({
       toggleScrapVideo: onToggleScrap,
       promoteVideoToProduction: onPromoteToProduction,
       fetchTopComments: onFetchComments,
+    },
+    videoFilterEmptyStateProps: {
+      actions: getVideoFilterEmptyStateActions({
+        onResetFilters,
+      }),
     },
     videoList,
   };
