@@ -8,6 +8,7 @@ import {
   getCloudScrapbookVideos,
   getNextScrapbookVideos,
   getProductionScopedVideos,
+  getScrapbookEmptyStateActions,
   getScrapbookVideoCardViewProps,
   getScrapbookVideoFooterStatsViewProps,
   getScrapbookVideoInfoViewProps,
@@ -210,5 +211,46 @@ describe('scrapbook utils', () => {
       savedVideoCount: 0,
       variant: 'scrapbook',
     });
+    expect(scrapbookProps.scrapbookEmptyStateProps).toEqual({
+      onOpenHome: handlers.onOpenHome,
+      onOpenReferenceVault: handlers.onOpenReferenceVault,
+    });
+  });
+
+  it('builds scrapbook empty state actions as navigation-only shortcuts', () => {
+    const onOpenHome = () => 'open home';
+    const onOpenReferenceVault = () => 'open vault';
+
+    const actions = getScrapbookEmptyStateActions({
+      onOpenHome,
+      onOpenReferenceVault,
+    });
+
+    expect(actions.map((action) => action.key)).toEqual([
+      'home',
+      'reference-vault',
+    ]);
+    expect(actions[0]).toMatchObject({
+      iconKey: 'home',
+      label: '오늘 레이더로',
+      onClick: onOpenHome,
+      variant: 'secondary',
+    });
+    expect(actions[0].title).toContain('화면 이동만');
+    expect(actions[0].ariaLabel).toContain('YouTube API 호출 없음');
+    expect(actions[1]).toMatchObject({
+      iconKey: 'referenceVault',
+      label: '저장 영상 탐색',
+      onClick: onOpenReferenceVault,
+      variant: 'indigo',
+    });
+    expect(actions[1].title).toContain('Cloud DB');
+    expect(actions[1].title).toContain('YouTube API를 새로 호출하지 않습니다');
+  });
+
+  it('omits scrapbook empty state actions without handlers', () => {
+    expect(getScrapbookEmptyStateActions({
+      onOpenReferenceVault: () => 'open vault',
+    }).map((action) => action.key)).toEqual(['reference-vault']);
   });
 });

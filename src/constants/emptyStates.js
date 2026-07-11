@@ -34,6 +34,16 @@ export const SCRAPBOOK_EMPTY_STATE = {
       description: '다시 볼 영상에 별표를 눌러 Cloud 스크랩북에 보관합니다.',
     },
   ],
+  homeButton: {
+    label: '오늘 레이더로',
+    title: '오늘 레이더로 이동합니다. 화면 이동만으로 YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '오늘 레이더 화면 열기, 이동만으로 YouTube API 호출 없음',
+  },
+  referenceVaultButton: {
+    label: '저장 영상 탐색',
+    title: '저장 영상 탐색 화면을 엽니다. Cloud DB에 저장된 영상 조회 흐름이며 YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '저장 영상 탐색 화면 열기, Cloud DB 조회 흐름이며 YouTube API 호출 없음',
+  },
 };
 
 export const DISCOVERY_LINKS_EMPTY_STATE = {
