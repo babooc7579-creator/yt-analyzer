@@ -45,6 +45,20 @@ describe('homeCandidateWorkflowActions utils', () => {
     expect(actions.discoveryLinks.ariaLabel).toContain('외부 자동 수집이나 다운로드 없음');
   });
 
+  it('uses rights-check copy when discovery link candidates need rights review', () => {
+    const actions = getHomeCandidateWorkflowActions({
+      hasCandidates: true,
+      hasRightsWarning: true,
+    });
+
+    expect(actions.productionCandidates.label).toBe('권리 확인');
+    expect(actions.productionCandidates.title).toContain('권리 확인이 필요한 링크 후보');
+    expect(actions.productionCandidates.title).toContain('저장된 후보 조회');
+    expect(actions.productionCandidates.title).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(actions.productionCandidates.ariaLabel).toContain('권리 확인 후보 보기');
+    expect(actions.productionCandidates.ariaLabel).toContain('YouTube API 호출 없음');
+  });
+
   it('builds candidate workflow card and status copy from video and link counts', () => {
     const normalCard = getHomeCandidateWorkflowCardViewProps({
       discoveryCandidateCount: 2,

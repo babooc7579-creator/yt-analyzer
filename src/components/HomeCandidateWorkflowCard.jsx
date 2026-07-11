@@ -31,6 +31,7 @@ export default function HomeCandidateWorkflowCard({
       />
       <HomeCandidateWorkflowActions
         hasCandidates={viewProps.hasCandidates}
+        hasRightsWarning={viewProps.hasRightsWarning}
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
         onOpenProductionCandidates={onOpenProductionCandidates}
       />
