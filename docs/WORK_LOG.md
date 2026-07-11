@@ -1966,3 +1966,30 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
 - Cloud/localStorage 저장 기준 변경 없음
+
+### 66. 2026-07-11 홈/제작 후보 안내 렌더링 테스트 보강
+
+홈 다음 행동, 홈 지표 카드, 제작 후보함 요약 카드에 추가된 안내 문구가 실제 컴포넌트 HTML까지 렌더링되는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- `HomeNextActionPanel`이 다음 행동의 영향 안내와 안전한 버튼 title/aria-label을 렌더링하는지 확인했습니다.
+- 오늘 후보 검토 단계에서는 추가 이동 버튼 없이 후보 카드 판단 안내만 보여주는지 확인했습니다.
+- `HomeSummaryCard`가 화면에 보이는 설명을 hover title로도 제공하는지 확인했습니다.
+- `ProductionKanbanSummaryCard`와 `ProductionKanbanSummaryMetrics`가 Cloud 판단 기록/Cloud 발견함 기준 설명을 카드 title로 전달하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/HomeNextActionPanel.test.jsx src/components/HomeSummaryCard.test.jsx src/components/ProductionKanbanSummaryCard.test.jsx src/components/ProductionKanbanSummaryMetrics.test.jsx --reporter=dot` 통과, 4개 파일 / 5개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 146개 파일 / 684개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
