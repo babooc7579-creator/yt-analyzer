@@ -6,6 +6,7 @@ export const getHomeNextActionPanelViewProps = () => ({
 
 export const getHomeNextAction = ({
   discoveryCandidateCount,
+  discoveryRightsWarningCount,
   loadedVideoCount,
   onLoadStoredVideos,
   onOpenAddChannel,
@@ -23,6 +24,7 @@ export const getHomeNextAction = ({
   const radarCandidates = toCount(openRadarCandidateCount);
   const productionCandidates = toCount(productionCandidateCount);
   const discoveryCandidates = toCount(discoveryCandidateCount);
+  const rightsWarnings = toCount(discoveryRightsWarningCount);
   const candidateTotal = productionCandidates + discoveryCandidates;
 
   if (savedChannels === 0) {
@@ -83,6 +85,21 @@ export const getHomeNextAction = ({
   }
 
   if (candidateTotal > 0) {
+    if (rightsWarnings > 0) {
+      return {
+        tone: 'amber',
+        iconKey: 'shieldAlert',
+        title: '권리 확인 필요한 후보를 먼저 정리하세요',
+        description: '제작 전에 사용해도 되는 링크인지 확인해야 할 발견 링크 후보가 있습니다.',
+        badge: '확인 필요',
+        metric: `권리 확인 ${rightsWarnings}개`,
+        actionLabel: '후보함에서 확인',
+        actionTitle: '제작 후보함에서 권리 확인이 필요한 발견 링크 후보를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
+        impactText: '화면 이동만 합니다. 권리 상태 변경은 후보함이나 발견함에서 직접 선택할 때 Cloud에 저장됩니다.',
+        onAction: onOpenProductionCandidates,
+      };
+    }
+
     return {
       tone: 'emerald',
       iconKey: 'rocket',

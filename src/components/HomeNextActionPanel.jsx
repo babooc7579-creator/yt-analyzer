@@ -1,4 +1,4 @@
-import { Bookmark, CheckCircle2, ListChecks, Plus, RefreshCw, Rocket } from 'lucide-react';
+import { Bookmark, CheckCircle2, ListChecks, Plus, RefreshCw, Rocket, ShieldAlert } from 'lucide-react';
 
 import { getHomeNextAction, getHomeNextActionPanelViewProps } from '../utils/homeNextAction';
 
@@ -47,6 +47,7 @@ const NEXT_ACTION_ICONS = {
   plus: Plus,
   refresh: RefreshCw,
   rocket: Rocket,
+  shieldAlert: ShieldAlert,
 };
 
 export default function HomeNextActionPanel(props) {

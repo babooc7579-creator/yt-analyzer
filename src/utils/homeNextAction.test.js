@@ -113,6 +113,32 @@ describe('homeNextAction utils', () => {
     expect(action.onAction).toBe(onOpenProductionCandidates);
   });
 
+  it('prioritizes discovery rights warnings before general production candidates', () => {
+    const onOpenProductionCandidates = () => 'open production candidates';
+
+    const action = getHomeNextAction({
+      savedChannelCount: 12,
+      selectedChannelCount: 3,
+      loadedVideoCount: 100,
+      openRadarCandidateCount: 0,
+      productionCandidateCount: 2,
+      discoveryCandidateCount: 3,
+      discoveryRightsWarningCount: 2,
+      onOpenProductionCandidates,
+    });
+
+    expect(action.tone).toBe('amber');
+    expect(action.iconKey).toBe('shieldAlert');
+    expect(action.badge).toBe('확인 필요');
+    expect(action.metric).toBe('권리 확인 2개');
+    expect(action.title).toContain('권리 확인');
+    expect(action.actionTitle).toContain('저장된 후보 조회');
+    expect(action.actionTitle).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(action.impactText).toContain('화면 이동만');
+    expect(action.impactText).toContain('Cloud에 저장');
+    expect(action.onAction).toBe(onOpenProductionCandidates);
+  });
+
   it('sends the user to manual collection only when nothing else is waiting', () => {
     const onOpenSelectedScan = () => 'open selected scan';
 
