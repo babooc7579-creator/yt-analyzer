@@ -2,6 +2,7 @@ import { Home, Search, Star } from 'lucide-react';
 
 import { SCRAPBOOK_EMPTY_STATE } from '../constants/emptyStates';
 import { getScrapbookEmptyStateActions } from '../utils/scrapbook';
+import EmptyStateActions from './EmptyStateActions';
 
 const ACTION_ICONS = {
   home: Home,
@@ -44,27 +45,17 @@ export default function ScrapbookEmptyState({
           <p className="text-xs text-slate-500 mt-2">{saveScrapStep.description}</p>
         </div>
       </div>
-      {actionButtons.length > 0 && (
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
-          {actionButtons.map((action) => {
-            const ActionIcon = ACTION_ICONS[action.iconKey] || Search;
-            const actionClassName = ACTION_CLASSES[action.variant] || ACTION_CLASSES.secondary;
-
-            return (
-              <button
-                key={action.key}
-                type="button"
-                onClick={action.onClick}
-                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-colors ${actionClassName}`}
-                title={action.title}
-                aria-label={action.ariaLabel}
-              >
-                <ActionIcon className="h-4 w-4" /> {action.label}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      <EmptyStateActions
+        actions={actionButtons}
+        buttonBaseClassName="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-colors"
+        className="mt-5 flex flex-wrap justify-center gap-2"
+        fallbackIcon={Search}
+        icons={ACTION_ICONS}
+        variantClasses={{
+          ...ACTION_CLASSES,
+          default: ACTION_CLASSES.secondary,
+        }}
+      />
     </div>
   );
 }

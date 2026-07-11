@@ -1,11 +1,14 @@
 import { Bookmark, Home, PlusCircle } from 'lucide-react';
 
 import { REFERENCE_VAULT_EMPTY_STATE } from '../constants/emptyStates';
+import EmptyStateActions from './EmptyStateActions';
 
 const ICONS = {
   'add-channel': PlusCircle,
   home: Home,
 };
+
+const ACTION_BUTTON_CLASS_NAME = 'inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700';
 
 export default function ReferenceVaultEmptyState({ actions = [] }) {
   const [saveChannelStep, scanStep, loadStoredStep] = REFERENCE_VAULT_EMPTY_STATE.steps;
@@ -30,27 +33,12 @@ export default function ReferenceVaultEmptyState({ actions = [] }) {
             <p className="text-xs text-slate-600 mt-2">{loadStoredStep.description}</p>
           </div>
         </div>
-        {actions.length > 0 && (
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {actions.map((action) => {
-              const Icon = ICONS[action.iconKey] || Bookmark;
-
-              return (
-                <button
-                  key={action.key}
-                  type="button"
-                  onClick={action.onClick}
-                  title={action.title}
-                  aria-label={action.ariaLabel}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
-                >
-                  <Icon className="h-4 w-4" />
-                  {action.label}
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <EmptyStateActions
+          actions={actions}
+          buttonBaseClassName={ACTION_BUTTON_CLASS_NAME}
+          fallbackIcon={Bookmark}
+          icons={ICONS}
+        />
       </div>
     </div>
   );

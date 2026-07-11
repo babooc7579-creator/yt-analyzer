@@ -2,6 +2,7 @@ import { Home, Link as LinkIcon, Rocket, Star } from 'lucide-react';
 
 import { PRODUCTION_KANBAN_EMPTY_STATE } from '../constants/emptyStates';
 import { getProductionKanbanEmptyStateActions } from '../utils/productionKanbanProps';
+import EmptyStateActions from './EmptyStateActions';
 
 const ACTION_ICONS = {
   discoveryLinks: LinkIcon,
@@ -54,25 +55,17 @@ export default function ProductionKanbanEmptyState({
           </p>
         </div>
       </div>
-      <div className="mt-5 flex flex-wrap justify-center gap-2">
-        {actionButtons.map((action) => {
-          const ActionIcon = ACTION_ICONS[action.iconKey] || Rocket;
-          const actionClassName = ACTION_CLASSES[action.variant] || ACTION_CLASSES.secondary;
-
-          return (
-            <button
-              key={action.key}
-              type="button"
-              onClick={action.onClick}
-              className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold ${actionClassName}`}
-              title={action.title}
-              aria-label={action.ariaLabel}
-            >
-              <ActionIcon className="h-4 w-4" /> {action.label}
-            </button>
-          );
-        })}
-      </div>
+      <EmptyStateActions
+        actions={actionButtons}
+        buttonBaseClassName="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold"
+        className="mt-5 flex flex-wrap justify-center gap-2"
+        fallbackIcon={Rocket}
+        icons={ACTION_ICONS}
+        variantClasses={{
+          ...ACTION_CLASSES,
+          default: ACTION_CLASSES.secondary,
+        }}
+      />
     </div>
   );
 }

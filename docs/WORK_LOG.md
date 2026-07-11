@@ -1859,3 +1859,30 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 62. 2026-07-11 빈 화면 액션 버튼 렌더링 공통화
+
+스크랩북, 제작 칸반, 참고 보관함, 필터 결과 없음 화면에서 반복되던 액션 버튼 렌더링을 `EmptyStateActions` 공통 컴포넌트로 분리했습니다.
+
+완료한 작업:
+
+- 빈 화면 액션 버튼의 label, title, aria-label, icon, variant class 렌더링을 공통 컴포넌트로 정리했습니다.
+- 기존 화면별 버튼 색상, 간격, hover 스타일은 유지했습니다.
+- 스크랩북/제작 칸반/참고 보관함/필터 결과 없음 화면이 같은 공통 컴포넌트를 사용하도록 연결했습니다.
+- 공통 컴포넌트의 빈 액션 처리와 버튼 렌더링 테스트를 추가했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/EmptyStateActions.test.jsx src/utils/scrapbook.test.js src/utils/productionKanbanProps.test.js src/utils/videoResultsPanelProps.test.js --reporter=dot` 통과, 4개 파일 / 30개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 141개 파일 / 677개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 버튼 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
