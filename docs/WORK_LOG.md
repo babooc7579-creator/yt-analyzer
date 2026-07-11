@@ -2042,3 +2042,29 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
+
+### 69. 2026-07-11 준비중 화면 렌더링 테스트 보강
+
+준비중 화면이 아직 연결되지 않은 설계 자리이며 API/DB/localStorage 변경이 없다는 안내를 실제 HTML에 렌더링하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 준비중 화면이 메뉴 제목, 섹션 제목, 요약 문구, 안전 안내 문구를 렌더링하는지 확인했습니다.
+- 홈으로 돌아가기 버튼의 title과 aria-label이 데이터 조회나 저장 작업이 없다는 안내를 유지하는지 확인했습니다.
+- 홈 이동 handler가 없을 때 버튼을 렌더링하지 않는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/ComingSoonView.test.jsx --reporter=dot` 통과, 1개 파일 / 2개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 148개 파일 / 689개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
