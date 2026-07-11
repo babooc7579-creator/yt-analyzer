@@ -10,6 +10,8 @@ export default function VideoResultsPanel({
   isProductionCandidate,
   isVideoSaved,
   onFetchComments,
+  onOpenAddChannel,
+  onOpenHome,
   onPromoteToProduction,
   onToggleCheck,
   onToggleScrap,
@@ -21,6 +23,7 @@ export default function VideoResultsPanel({
     filteredVideoList,
     getVideoCardProps,
     listTableProps,
+    referenceVaultEmptyStateProps,
     videoList,
   } = getVideoResultsPanelViewProps({
     checkedVideos,
@@ -28,6 +31,8 @@ export default function VideoResultsPanel({
     isProductionCandidate,
     isVideoSaved,
     onFetchComments,
+    onOpenAddChannel,
+    onOpenHome,
     onPromoteToProduction,
     onToggleCheck,
     onToggleScrap,
@@ -38,7 +43,7 @@ export default function VideoResultsPanel({
   return (
     <>
       {videoList.length === 0 ? (
-        <ReferenceVaultEmptyState />
+        <ReferenceVaultEmptyState {...referenceVaultEmptyStateProps} />
       ) : filteredVideoList.length === 0 ? (
         <VideoFilterEmptyState />
       ) : viewMode === 'card' ? (

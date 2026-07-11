@@ -83,6 +83,8 @@ describe('legacyDashboardTabViewProps utils', () => {
     const handleManualScan = () => 'scan';
     const isProductionCandidate = () => true;
     const isVideoSaved = () => true;
+    const openedViews = [];
+    const openCreatorView = (item) => openedViews.push(item);
     const promoteVideoToProduction = () => 'promote';
     const setLengthFilter = () => 'length';
     const setSearchKeyword = () => 'search';
@@ -102,6 +104,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       handleManualScan,
       isProductionCandidate,
       isVideoSaved,
+      openCreatorView,
       promoteVideoToProduction,
       setLengthFilter,
       setSearchKeyword,
@@ -136,8 +139,21 @@ describe('legacyDashboardTabViewProps utils', () => {
     expect(props.resultsPanelProps.isProductionCandidate).toBe(isProductionCandidate);
     expect(props.resultsPanelProps.isVideoSaved).toBe(isVideoSaved);
     expect(props.resultsPanelProps.onFetchComments).toBe(fetchTopComments);
+    props.resultsPanelProps.onOpenHome();
+    props.resultsPanelProps.onOpenAddChannel();
+    expect(openedViews).toEqual([
+      { id: 'home' },
+      { id: 'ops-add-channel' },
+    ]);
     expect(props.resultsPanelProps.onPromoteToProduction).toBe(promoteVideoToProduction);
     expect(props.resultsPanelProps.onToggleCheck).toBe(toggleCheckVideo);
     expect(props.resultsPanelProps.onToggleScrap).toBe(toggleScrapVideo);
+  });
+
+  it('leaves reference vault empty-state navigation unavailable without Creator view opener', () => {
+    const props = getLegacyDashboardTabViewProps({});
+
+    expect(props.resultsPanelProps.onOpenHome).toBeUndefined();
+    expect(props.resultsPanelProps.onOpenAddChannel).toBeUndefined();
   });
 });

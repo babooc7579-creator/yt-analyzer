@@ -74,6 +74,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
       isScanning,
       isVideoSaved,
       lengthFilter,
+      openCreatorView,
       promoteVideoToProduction,
       promptCopyError,
       savedChannels: savedChannelList,

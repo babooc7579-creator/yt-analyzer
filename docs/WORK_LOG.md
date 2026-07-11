@@ -1733,3 +1733,31 @@ App 구조가 여러 hook으로 나뉜 뒤에도 채널, 수집, 발견함, 영�
 - localStorage key 변경 없음
 - 스크랩북 저장/삭제 로직 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 57. 2026-07-11 참고 보관함 빈 화면 이동 흐름 개선
+
+참고 보관함에 저장 영상이 아직 없을 때 사용자가 다음 행동으로 바로 이동할 수 있도록 `오늘 레이더로`, `새 채널 등록` 이동 버튼을 추가했습니다.
+
+완료한 작업:
+
+- 참고 보관함 빈 화면 버튼 문구를 상수로 고정했습니다.
+- 버튼은 화면 이동만 실행하며 영상 수집, Cloud 저장, YouTube API 호출을 직접 실행하지 않도록 문구를 명확히 했습니다.
+- 영상 결과 패널 빈 화면 props에 이동 액션을 연결했습니다.
+- legacy dashboard와 workspace main panel에서 `openCreatorView`가 빈 화면까지 전달되도록 연결했습니다.
+- 빈 화면 액션 유틸 테스트를 추가해 handler가 없는 버튼은 표시하지 않도록 보호했습니다.
+
+검증:
+
+- `npm.cmd test -- src/constants/emptyStates.test.js src/utils/videoResultsPanelProps.test.js src/utils/legacyDashboardTabViewProps.test.js src/utils/legacyWorkspaceMainPanelViewProps.test.js --reporter=dot` 통과
+- `npm.cmd test -- --reporter=dot` 통과
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장 영상 조회/필터/정렬 로직 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
