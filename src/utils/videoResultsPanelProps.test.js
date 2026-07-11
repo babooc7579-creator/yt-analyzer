@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getReferenceVaultEmptyStateActions,
+  getVideoFilterEmptyStateActions,
   getVideoResultsPanelViewProps,
 } from './videoResultsPanelProps';
 
@@ -151,6 +152,47 @@ describe('videoResultsPanelProps utils', () => {
     expect(props.referenceVaultEmptyStateProps.actions.map(action => action.key)).toEqual([
       'home',
       'add-channel',
+    ]);
+  });
+
+  it('builds a filter empty-state reset action without scan, save, or API side effects', () => {
+    const onResetFilters = () => 'reset filters';
+
+    const actions = getVideoFilterEmptyStateActions({ onResetFilters });
+
+    expect(actions).toEqual([
+      expect.objectContaining({
+        key: 'reset-filters',
+        iconKey: 'reset-filters',
+        label: '필터 초기화',
+        onClick: onResetFilters,
+      }),
+    ]);
+    expect(actions[0].title).toContain('저장, 수집, YouTube API 호출은 실행하지 않습니다');
+  });
+
+  it('omits filter empty-state actions when reset handler is unavailable', () => {
+    expect(getVideoFilterEmptyStateActions()).toEqual([]);
+    expect(getVideoFilterEmptyStateActions({ onResetFilters: 'bad' })).toEqual([]);
+  });
+
+  it('passes filter empty-state actions through video results panel props', () => {
+    const onResetFilters = () => 'reset filters';
+
+    const props = getVideoResultsPanelViewProps({
+      ...baseHandlers,
+      checkedVideos: [],
+      filteredVideos: [],
+      onResetFilters,
+      showWorkPanel: false,
+      videos: [video],
+    });
+
+    expect(props.videoFilterEmptyStateProps.actions).toEqual([
+      expect.objectContaining({
+        key: 'reset-filters',
+        onClick: onResetFilters,
+      }),
     ]);
   });
 });
