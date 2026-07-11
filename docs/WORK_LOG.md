@@ -1994,6 +1994,33 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
 
+### 71. 2026-07-11 발견함 저장/제작 후보 이동 버튼 렌더링 테스트 보강
+
+발견함 수동 링크 저장 버튼과 제작 후보함의 영상/발견 링크 상태 이동 버튼이 Cloud 저장과 외부 수집 없음 기준을 실제 화면 HTML에 렌더링하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- `DiscoveryLinkSubmitButton`이 수동 링크 저장을 Cloud 발견함 저장으로 안내하고 외부 사이트 크롤링을 하지 않는다고 표시하는지 확인했습니다.
+- 중복 링크/저장 중 상태에서 링크 저장 버튼이 비활성화되고 상태 문구를 유지하는지 확인했습니다.
+- `ProductionVideoMoveActions`가 제작 후보/제작 중/업로드 완료 이동을 Cloud 판단 기록 저장으로 안내하고 YouTube API를 새로 호출하지 않는다고 표시하는지 확인했습니다.
+- `ProductionDiscoveryLinkMoveActions`가 발견 링크 후보 해제/후보 제외를 Cloud 발견함 상태 저장으로 안내하고 링크 기록을 삭제하지 않는다고 표시하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/DiscoveryLinkSubmitButton.test.jsx src/components/ProductionDiscoveryLinkMoveActions.test.jsx src/components/ProductionVideoMoveActions.test.jsx --reporter=dot` 통과, 3개 파일 / 9개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 153개 파일 / 704개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
+
 ### 67. 2026-07-11 다음 구현 이슈 계획의 흐름 안내 기준 갱신
 
 홈 다음 행동과 홈/제작 후보 지표 안내 문구, 컴포넌트 렌더링 테스트 보강이 완료된 상태를 다음 구현 계획 문서에 반영했습니다.
