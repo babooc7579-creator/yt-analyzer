@@ -7,6 +7,7 @@ import {
   getProductionVideoDraftFieldsViewProps,
   getProductionVideoExternalActionsViewProps,
   getProductionVideoMetaBadgesViewProps,
+  getProductionVideoReadinessChecklist,
 } from './productionVideoCard';
 
 describe('productionVideoCard utils', () => {
@@ -25,7 +26,7 @@ describe('productionVideoCard utils', () => {
       onSave: () => 'save',
       onUpdateDraft: () => 'draft',
     };
-    const record = { memo: 'draft memo' };
+    const record = { note: 'draft memo' };
     const viewProps = getProductionVideoCardViewProps({
       ...handlers,
       columnId: 'production_active',
@@ -55,6 +56,11 @@ describe('productionVideoCard utils', () => {
       scheduleSignal: 'today',
       video,
     });
+    expect(viewProps.readinessChecklistProps).toMatchObject({
+      readyCount: 2,
+      summaryText: '2/4 준비',
+      title: '작업 준비 체크',
+    });
     expect(viewProps.statusActionsProps).toMatchObject({
       columnId: 'production_active',
       isMoving: true,
@@ -81,7 +87,42 @@ describe('productionVideoCard utils', () => {
     expect(viewProps.videoTitle).not.toBe('');
     expect(viewProps.videoUrl).toBe('https://youtube.com/watch?v=missing-title');
     expect(viewProps.draftFormProps.isSaving).toBe(false);
+    expect(viewProps.readinessChecklistProps.readyCount).toBe(1);
     expect(viewProps.statusActionsProps.isMoving).toBe(false);
+  });
+
+  it('builds a production readiness checklist from existing video record fields', () => {
+    const emptyChecklist = getProductionVideoReadinessChecklist({
+      record: {},
+      video: { videoId: 'video-1' },
+    });
+    const readyChecklist = getProductionVideoReadinessChecklist({
+      record: {
+        draftTitle: 'My title',
+        note: 'Hook and scenes',
+        targetPublishDate: '2026-07-12',
+      },
+      video: { videoId: 'video-1' },
+    });
+
+    expect(emptyChecklist).toMatchObject({
+      readyCount: 1,
+      summaryText: '1/4 준비',
+      tone: 'working',
+    });
+    expect(emptyChecklist.description).toContain('저장이나 API 호출은 실행하지 않습니다');
+    expect(emptyChecklist.items.map((item) => [item.key, item.isReady])).toEqual([
+      ['source', true],
+      ['title', false],
+      ['note', false],
+      ['publish-date', false],
+    ]);
+    expect(readyChecklist).toMatchObject({
+      readyCount: 4,
+      summaryText: '4/4 준비',
+      tone: 'ready',
+    });
+    expect(readyChecklist.items.every((item) => item.title.includes('저장') || item.key === 'source')).toBe(true);
   });
 
   it('builds candidate reason, draft field, external action, and meta badge copy', () => {

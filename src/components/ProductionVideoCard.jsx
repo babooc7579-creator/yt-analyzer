@@ -2,6 +2,7 @@ import { getProductionVideoCardViewProps } from '../utils/productionVideoCard';
 import ProductionVideoCandidateReasons from './ProductionVideoCandidateReasons';
 import ProductionVideoDraftForm from './ProductionVideoDraftForm';
 import ProductionVideoMetaBadges from './ProductionVideoMetaBadges';
+import ProductionVideoReadinessChecklist from './ProductionVideoReadinessChecklist';
 import ProductionVideoStatusActions from './ProductionVideoStatusActions';
 
 export default function ProductionVideoCard({
@@ -20,6 +21,7 @@ export default function ProductionVideoCard({
     candidateReasonsProps,
     draftFormProps,
     metaBadgesProps,
+    readinessChecklistProps,
     statusActionsProps,
     thumbnailAlt,
     titleLinkAriaLabel,
@@ -47,6 +49,7 @@ export default function ProductionVideoCard({
         </a>
         <ProductionVideoMetaBadges {...metaBadgesProps} />
         <ProductionVideoCandidateReasons {...candidateReasonsProps} />
+        <ProductionVideoReadinessChecklist {...readinessChecklistProps} />
 
         <ProductionVideoDraftForm {...draftFormProps} />
 

@@ -7,6 +7,10 @@ import { getYouTubeVideoUrl } from './urls';
 
 const noop = () => {};
 
+const hasText = (value) => (
+  typeof value === 'string' ? value.trim().length > 0 : Boolean(value)
+);
+
 export const getProductionVideoCardViewProps = ({
   columnId,
   isDirty,
@@ -46,6 +50,10 @@ export const getProductionVideoCardViewProps = ({
       scheduleSignal,
       video,
     },
+    readinessChecklistProps: getProductionVideoReadinessChecklist({
+      record,
+      video,
+    }),
     statusActionsProps: {
       columnId,
       isMoving,
@@ -60,6 +68,59 @@ export const getProductionVideoCardViewProps = ({
     titleLinkAriaLabel: `${videoTitle} YouTube 원본 영상 열기`,
     videoTitle,
     videoUrl,
+  };
+};
+
+export const getProductionVideoReadinessChecklist = ({
+  record,
+  video,
+} = {}) => {
+  const safeRecord = record && typeof record === 'object' ? record : {};
+  const safeVideo = video && typeof video === 'object' ? video : {};
+  const items = [
+    {
+      key: 'source',
+      isReady: Boolean(safeVideo.videoId),
+      label: '원본 링크',
+      missingText: '영상 ID 없음',
+      readyText: '확인 가능',
+      title: 'YouTube 원본 링크 확인용입니다. 화면 표시만 하며 YouTube API를 새로 호출하지 않습니다.',
+    },
+    {
+      key: 'title',
+      isReady: hasText(safeRecord.draftTitle),
+      label: '제목 초안',
+      missingText: '제목 필요',
+      readyText: '작성됨',
+      title: '내 채널에 맞게 바꿀 제목 초안입니다. 아래 Cloud 저장 버튼을 눌러야 저장됩니다.',
+    },
+    {
+      key: 'note',
+      isReady: hasText(safeRecord.note),
+      label: '제작 메모',
+      missingText: '메모 필요',
+      readyText: '작성됨',
+      title: '훅 포인트, 참고 장면, 만들 방향 메모입니다. 아래 Cloud 저장 버튼을 눌러야 저장됩니다.',
+    },
+    {
+      key: 'publish-date',
+      isReady: hasText(safeRecord.targetPublishDate),
+      label: '업로드 예정일',
+      missingText: '일정 미정',
+      readyText: '지정됨',
+      title: '업로드 예정일입니다. 아래 Cloud 저장 버튼을 눌러야 저장됩니다.',
+    },
+  ];
+  const readyCount = items.filter((item) => item.isReady).length;
+
+  return {
+    description: '제작 시작 전 채워두면 좋은 항목입니다. 상태 확인만 하며 저장이나 API 호출은 실행하지 않습니다.',
+    items,
+    readyCount,
+    summaryText: `${readyCount}/${items.length} 준비`,
+    title: '작업 준비 체크',
+    tone: readyCount === items.length ? 'ready' : 'working',
+    totalCount: items.length,
   };
 };
 

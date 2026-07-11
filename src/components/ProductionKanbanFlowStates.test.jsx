@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { PRODUCTION_STATUS } from '../constants/status';
+import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
 import ProductionVideoMoveStatus from './ProductionVideoMoveStatus';
 import ProductionVideoSaveStatus from './ProductionVideoSaveStatus';
@@ -43,5 +44,24 @@ describe('Production kanban flow states', () => {
 
     expect(successHtml).toContain('Cloud에 저장됐습니다.');
     expect(errorHtml).toContain('Cloud 저장 실패. 저장 완료 처리하지 않았습니다. 다시 저장해 주세요.');
+  });
+
+  it('renders discovery link candidate count separately from video candidates', () => {
+    const html = renderToStaticMarkup(
+      <ProductionDiscoveryLinksSection
+        linkMoveStates={{}}
+        links={[
+          { id: 'link-1', title: '첫 번째 링크', url: 'https://example.com/1' },
+          { id: 'link-2', title: '두 번째 링크', url: 'https://example.com/2' },
+        ]}
+        onMoveLink={noop}
+        onOpenDiscoveryLinks={noop}
+      />,
+    );
+
+    expect(html).toContain('링크 후보 2개');
+    expect(html).toContain('Cloud 발견함에서 제작 후보로 표시한 외부 링크 수입니다. 영상 후보와 별도로 표시합니다.');
+    expect(html).toContain('별도 제작 DB');
+    expect(html).toContain('자동 수집이나 다운로드는 실행하지 않습니다.');
   });
 });

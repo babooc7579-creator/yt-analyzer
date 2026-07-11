@@ -79,8 +79,10 @@ describe('productionDiscoveryLinksSection utils', () => {
   });
 
   it('explains discovery link candidates as Cloud discovery records, not a separate production DB', () => {
-    const headerProps = getProductionDiscoveryLinksSectionHeaderProps();
+    const headerProps = getProductionDiscoveryLinksSectionHeaderProps({ linkCount: 3 });
 
+    expect(headerProps.badgeText).toBe('링크 후보 3개');
+    expect(headerProps.badgeTitle).toContain('영상 후보와 별도');
     expect(headerProps.eyebrow).toBe('발견함 링크 후보');
     expect(headerProps.title).toBe('외부에서 저장한 제작 후보 링크');
     expect(headerProps.description).toContain('Cloud 발견함 기록');
