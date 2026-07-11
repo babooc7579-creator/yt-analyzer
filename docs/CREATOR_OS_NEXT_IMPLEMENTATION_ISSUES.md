@@ -40,6 +40,9 @@
 - 2026-07-08 구조 안정화 후속 작업으로 레이더 후보, Creator OS 지표, 제작 칸반 데이터 모델을 hook 밖의 순수 유틸로 분리했고, 홈 화면 내비게이션 props와 홈 빠른 작업 버튼 문구, 홈 레이더 작업 흐름 안내, 저장 영상 안내 카드, 태그별 새 영상 수집 안내, 채널 추가 안내 문구, 제작 후보함의 발견 링크 설명, 제작 칸반 요약/범례 문구를 테스트로 보강했습니다. 이후 홈 다음 행동의 저장 영상/채널 목록 이동과 발견함의 제작 후보함 이동을 추가했습니다. main 빌드와 Azure Static Web Apps 배포가 통과했고, 공개 앱 루트는 200 OK로 응답했습니다.
 
 - 2026-07-09 제작 후보함 빈 상태에서 홈의 오늘 레이더로 돌아가는 버튼을 추가했습니다. 이 이동은 화면 전환만 수행하며 YouTube API 호출, Cloud DB 변경, localStorage 변경을 만들지 않습니다.
+- 2026-07-11 스크랩북/참고 보관함 빈 화면과 필터 결과 없음 화면의 다음 행동 흐름을 보강했습니다. 스크랩북/참고 보관함 버튼은 화면 이동만 수행하고, 필터 초기화는 검색어/조회수 조건/영상 길이/터또터 모드만 기본값으로 돌립니다. 이 흐름은 Cloud 저장, DB 쓰기, YouTube API 호출을 직접 실행하지 않습니다.
+- 2026-07-11 기준 `npm.cmd test -- --reporter=dot`은 테스트 파일 140개, 테스트 675개 통과 상태입니다.
+- 2026-07-11 Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤 프론트엔드 Build와 Azure Static Web Apps CI/CD가 여러 차례 성공했고 공개 앱 루트는 200 OK로 확인됐습니다. backend Function App 배포와 Sponsorship 비용 반영은 남은 운영 확인 항목입니다.
 
 ---
 
@@ -104,12 +107,13 @@
 - 추가 상태 3: 2026-07-03 후속 작업으로 저장 영상 카드/리스트, 오늘 레이더 판단 버튼, 발견함 상태 변경/새로고침, 새 영상 수집 버튼 설명을 보강했습니다.
 - 추가 상태 4: 2026-07-06 후속 작업으로 발견 링크 제작 후보 전환, 사용 금지 링크 경고, 권리 상태 표시, 영상 필터 라벨, 채널 통계/언어 라벨의 혼동 가능 문구를 정리했습니다.
 - 추가 상태 5: 2026-07-08 후속 작업으로 홈 빠른 작업 버튼이 채널 저장, YouTube API 수집, Cloud DB 조회, 수동 URL 저장을 더 명확히 구분하도록 정리했습니다.
+- 추가 상태 6: 2026-07-11 후속 작업으로 스크랩북/참고 보관함 빈 화면에는 이동 전용 버튼을, 필터 결과 없음 화면에는 조건 초기화 버튼을 추가했습니다. 모두 Cloud 저장, DB 쓰기, YouTube API 호출을 직접 실행하지 않습니다.
 - 왜 필요한가: YouTube API 호출은 비용과 quota가 걸릴 수 있어 버튼을 누르기 전 의미가 명확해야 합니다.
 - 작업 범위: 버튼명, 보조 설명, 안내 문구를 점검하고 필요한 곳만 작게 수정합니다.
 - 건드릴 파일 예상: `src/App.jsx`, 관련 컴포넌트, 필요 시 `src/constants`.
 - 건드리면 안 되는 것: API 호출 로직, scan 동작, 저장 데이터 구조.
 - 위험도: 낮음.
-- 완료 기준: 2차 완료. DB 조회 버튼과 YouTube API 호출 버튼이 주요 흐름에서 구분되고, Cloud 기록 삭제/상태 저장/외부 수집 없음/채널 수집 대상 여부가 주요 화면에서 설명됩니다.
+- 완료 기준: 2차 완료. DB 조회 버튼과 YouTube API 호출 버튼이 주요 흐름에서 구분되고, Cloud 기록 삭제/상태 저장/외부 수집 없음/채널 수집 대상 여부/빈 화면 다음 행동이 주요 화면에서 설명됩니다.
 - 사용자 판단 필요 여부: 문구 방향은 Codex가 진행 가능. 다만 큰 UI 재배치는 별도 판단 필요.
 
 ### Issue 3. 카테고리 삭제/이름 변경의 실제 의미를 UI에서 분리
@@ -217,7 +221,7 @@
 ### Issue 11. 프론트 테스트 전략 결정
 
 - 목적: 기능을 많이 쌓은 뒤 작은 수정으로 기존 흐름이 깨지는 위험을 줄입니다.
-- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-08 기준 `npm.cmd test`에서 테스트 파일 108개, 테스트 481개가 통과합니다. `src/utils` 순수 유틸 96개와 테스트 파일 96개가 1:1로 확인됐고, GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
+- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-11 기준 `npm.cmd test`에서 테스트 파일 140개, 테스트 675개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
 - 왜 필요한가: `status/statusIds`, discovery links, production kanban, Cloud/localStorage fallback처럼 깨지면 사용자가 바로 불편한 계산이 늘었습니다.
 - 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`, `src/utils/productionKanbanData.js`, `src/utils/videoCollection.js`, `src/utils/video.js`, `src/utils/creatorOsMetrics.js`, `src/utils/channels.js`, `src/utils/channelScanDisplay.js`, `src/utils/channelScanSummaryBoxProps.js`, `src/utils/channelListItemProps.js`, `src/utils/channelListItemActionsProps.js`, `src/utils/channelListItemMetaProps.js`, `src/utils/channelMetadataControlsProps.js`, `src/utils/channelTagSelectorProps.js`, `src/utils/channelCategoryChipProps.js`, `src/utils/channelAddFormProps.js`, `src/utils/channelAddActions.js`, `src/utils/channelActions.js`, `src/utils/channelNotesModal.js`, `src/utils/clipboard.js`, `src/utils/dates.js`, `src/utils/urls.js`, `src/utils/formatters.js`, `src/utils/discoveryLinks.js`, `src/utils/discoveryLinksRouteProps.js`, `src/utils/discoveryLinksWorkspaceProps.js`, `src/utils/scrapbook.js`, `src/utils/scrapbookHeaderActions.js`, `src/utils/prompts.js`, `src/utils/radarCandidates.js`, `src/utils/productionVideoCard.js`, `src/utils/productionKanbanColumn.js`, `src/utils/productionKanbanProps.js`, `src/utils/productionKanbanActions.js`, `src/utils/videoCard.js`, `src/utils/videoDashboardControls.js`, `src/utils/videoToolbarProps.js`, `src/utils/videoToolbarFiltersProps.js`, `src/utils/videoListTableProps.js`, `src/utils/videoListTableRowProps.js`, `src/utils/videoListRowBadgesProps.js`, `src/utils/videoListRowContentProps.js`, `src/utils/videoListRowMetaActionsProps.js`, `src/utils/videoListRowCandidateActionProps.js`, `src/utils/videoListRowStatsProps.js`, `src/utils/appLayoutProps.js`, `src/utils/appRouteProps.js`, `src/utils/homeRouteProps.js`, `src/utils/legacyWorkspaceRouteProps.js`, `src/utils/routesProps.js`, `src/utils/productionSchedule.js`, `src/utils/homeActionShortcuts.js`, `src/utils/discoveryLinkActionCopy.js`, `src/utils/creatorHomeViewProps.js`, `src/utils/legacyWorkspaceProps.js`, `src/utils/legacyAsideProps.js`, `src/utils/legacyWorkPanelIntroProps.js`, `src/utils/legacyChannelPanelProps.js`, `src/utils/legacyMainPanelProps.js`, `src/utils/legacyWorkspaceMainPanelViewProps.js`, `src/utils/legacyDashboardTabViewProps.js`, `src/utils/legacyVaultTabViewProps.js`, `src/utils/legacyChannelPanelViewProps.js`, `src/utils/discoveryLinksCopy.js`, `src/utils/productionVideoStatusProps.js`, `src/utils/radarCandidateStateProps.js`, `src/utils/scrapbookHeaderProps.js`, `src/utils/selectedVideosActionBarProps.js`, `src/utils/productionDiscoveryLinkActionProps.js`, `src/utils/radarDecisionViewProps.js`의 순수 함수 테스트입니다.
 - 건드린 파일: `package.json`, `package-lock.json`, `src/utils/*.test.js`, `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`.
@@ -226,6 +230,7 @@
 - 완료 기준: 1차 완료. `npm.cmd test`로 순수 함수와 서비스 wrapper 테스트를 실행할 수 있고, 발견함/영상 상태/제작 후보함 계산/저장 영상 조회와 수집 안내/영상 필터와 정렬/홈 요약 숫자/채널 태그와 최근 수집일/채널 수집 상태 표시/채널 목록 항목 안내/채널 복사·메모·삭제 안내/채널 메타 표시/채널 등급·상태 컨트롤/채널 태그 선택 안내/카테고리 칩 의미 구분/채널 추가 폼 props 연결/채널 Cloud 저장 문구/채널 삭제 안전 문구/채널 기록 모달/클립보드 fallback/날짜 표시/URL 복사 목록/숫자·비율 표시/발견함 필터·행 표시/발견함 라우트 props/발견함 작업 화면 props/스크랩북 보관함 표시/스크랩북 헤더 버튼/AI 요청문 생성/오늘 후보 레이더/제작 후보 카드/제작 칸반 컬럼/제작 칸반 전체 props/제작 칸반 액션/영상 카드 props/영상 대시보드 컨트롤/영상 툴바 props/영상 툴바 필터 props/영상 리스트 테이블 props/영상 리스트 행 props/영상 리스트 배지 props/영상 리스트 콘텐츠 props/영상 리스트 메타 액션 props/영상 리스트 제작 후보 액션 props/영상 리스트 통계 props/앱 레이아웃 props/앱 라우트 props/홈 라우트 props/기존 작업 화면 라우트 props/라우트 props 최종 묶음/제작 일정 신호/홈 빠른 작업 버튼/발견 링크 Cloud 액션 문구/Creator OS 홈 화면 props/홈 화면 내비게이션 props/홈 레이더 작업 흐름 안내/저장 영상 안내 카드/태그별 새 영상 수집 안내/채널 추가 안내 문구/제작 후보함의 발견 링크 설명/제작 칸반 요약과 범례 문구/기존 작업 화면 props 출입구/기존 좌측 보조 패널 props/기존 채널 패널 props/기존 메인 패널 props/기존 메인 패널 하위 뷰 props/기존 대시보드 탭 props/기존 보관함 탭 props/기존 채널 패널 하위 뷰 props/서비스 API wrapper/동기화 경고/레이더 후보 상태 문구/발견함 헤더·필터 빈 상태·재조회 문구/스크랩북 헤더 문구/제작 칸반 상태·저장 문구/선택 영상 AI 요청문 복사 바/제작 후보함 발견 링크 액션/레이더 후보 헤더·처리 기록 문구/채널 추가 헤더·일괄 결과·카테고리·빈 상태 문구/채널 URL 목록 복사·로딩 문구/채널 미리보기·언어 선택·카테고리 도움말 문구/채널 메모 모달·메타 컨트롤·일괄 실패 문구/영상 툴바 검색·필터·정렬·보기·터또터 버튼 문구/영상 카드·리스트 행 배지·복사·통계·AI 요청문 선택 문구/공통 복사 버튼·좌측 메뉴·작업 헤더·작업 탭·준비중 화면 문구/발견함 수동 링크 폼·검색·필터·상태 변경·중복 링크 안내 문구/제작 후보함 지표·일정·영상 카드·입력 필드·외부 링크 버튼 문구/레이더 후보 카드·지표·스크랩·요약 문구/홈 레이더 히어로·운영 기준·후보 워크플로우·다음 행동 문구/스크랩북 영상 카드·썸네일·통계 문구/댓글 Top 10 모달 제목·로딩·빈 상태 문구/`src/utils` 테스트 목록 점검이 통과합니다.
 - 추가 완료: 기존 작업 화면 안내 문구와 선택 영상 바 문구도 순수 유틸 테스트로 보강했습니다.
 - 추가 완료 2: 홈 다음 행동에서 저장 영상/채널 목록으로 이동하는 흐름과 발견함에서 제작 후보함으로 이동하는 흐름도 테스트로 보강했습니다.
+- 추가 완료 3: 스크랩북/참고 보관함 빈 화면 이동 흐름과 필터 결과 없음 화면의 조건 초기화 흐름도 테스트로 보강했습니다.
 - 사용자 판단 필요 여부: 현재 없음. React Testing Library나 Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
@@ -234,14 +239,15 @@
 
 바로 다음 작업은 아래 순서를 추천합니다.
 
-1. 배포된 앱에서 핵심 화면을 짧게 확인했습니다. 홈, 채널 목록, 발견함, 제작 후보함에서 새 문구가 의도대로 보이는지 화면 기준으로 확인했고, 저장/삭제/수집 같은 데이터 변경 버튼은 누르지 않았습니다.
-2. 구조 안정화 후속 작업은 작은 hook/utility 분리와 테스트 보강 중심으로 진행합니다. DB/API/localStorage 의미가 바뀌는 작업은 이 문서의 판단 필요 항목으로 분리합니다.
+1. 구조 안정화 후속 작업은 작은 hook/utility 분리와 테스트 보강 중심으로 진행합니다. DB/API/localStorage 의미가 바뀌는 작업은 이 문서의 판단 필요 항목으로 분리합니다.
+2. 화면 흐름 개선은 저장/수집/삭제를 직접 실행하지 않는 이동 버튼, 필터 초기화, 복사 편의처럼 되돌리기 쉬운 단위부터 진행합니다.
 3. 실제 기능 확장 전에는 선택지가 필요한 항목을 먼저 분리합니다. local assets, 별도 제작 프로젝트 모델, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정합니다.
-4. GitHub Actions와 Azure Static Web Apps 경고는 별도 배포 설정 이슈로 남깁니다. 현재 main 배포는 성공하므로, deployment token 또는 Azure OIDC 설정 변경은 사용자가 배포 설정 작업을 승인한 뒤 진행합니다.
+4. GitHub Actions와 Azure Static Web Apps `github_id_token` 경고는 별도 배포 설정 이슈로 남깁니다. 현재 main 배포는 성공하므로, deployment token 또는 Azure OIDC 설정 변경은 사용자가 배포 설정 작업을 승인한 뒤 진행합니다.
+5. Azure Sponsorship 이전 후 frontend 배포는 정상 확인됐습니다. backend Function App 배포와 비용 반영은 운영 확인 항목으로 남깁니다.
 
 이 순서가 안전한 이유:
 
-- 문서 기준, UI 문구 감사, 주요 화면 문구 안정화, 저장 영상 페이지네이션 감사, scan/API 사용 기록 모델, discovery MVP 범위 검토, 제작 후보 MVP 범위 검토는 완료됐습니다.
+- 문서 기준, UI 문구 감사, 주요 화면 문구 안정화, 빈 화면 다음 행동, 저장 영상 페이지네이션 감사, scan/API 사용 기록 모델, discovery MVP 범위 검토, 제작 후보 MVP 범위 검토는 완료됐습니다.
 - discovery links 1차 MVP는 `/discovery-links`와 `docType: discovery_link` 방식으로 부분 구현되었습니다.
 - 이후에는 이미 구현된 발견함을 안정화한 뒤, local assets와 별도 제작 프로젝트 모델처럼 데이터 의미가 커지는 작업을 별도 판단으로 넘깁니다.
 - DB/API 변경은 계속 별도 판단을 받고 진행합니다.
