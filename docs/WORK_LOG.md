@@ -2068,3 +2068,30 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
+
+### 70. 2026-07-11 저장 영상 조회/새 영상 수집 버튼 렌더링 테스트 보강
+
+저장 영상 불러오기 버튼과 새 영상 수집 버튼이 DB 조회와 YouTube API 호출 가능 작업을 실제 화면 HTML에서 명확히 구분하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- `LoadStoredVideosButton`이 선택 채널 저장 영상 불러오기를 Cloud DB 조회로 안내하고 YouTube API를 새로 호출하지 않는다고 표시하는지 확인했습니다.
+- 채널 미선택/로딩 상태에서 저장 영상 불러오기 버튼이 비활성화되고 안전 안내를 유지하는지 확인했습니다.
+- `VideoToolbarScanAction`이 새 영상 수집을 YouTube API 사용 작업으로 표시하는지 확인했습니다.
+- 수집 대상 없음/수집 중 상태에서 새 영상 수집 버튼이 비활성화되는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/LoadStoredVideosButton.test.jsx src/components/VideoToolbarScanAction.test.jsx --reporter=dot` 통과, 2개 파일 / 6개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 150개 파일 / 695개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
