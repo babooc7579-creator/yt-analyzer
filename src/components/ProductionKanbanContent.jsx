@@ -1,6 +1,7 @@
 import { getProductionKanbanContentChildProps } from '../utils/productionKanbanProps';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
 import ProductionKanbanBoard from './ProductionKanbanBoard';
+import ProductionKanbanNextActions from './ProductionKanbanNextActions';
 import ProductionKanbanSummary from './ProductionKanbanSummary';
 
 export default function ProductionKanbanContent({
@@ -13,6 +14,7 @@ export default function ProductionKanbanContent({
   moveStates,
   moveVideo,
   onOpenDiscoveryLinks,
+  onOpenReferenceVault,
   productionSummary,
   saveDraftRecord,
   saveStates,
@@ -23,6 +25,7 @@ export default function ProductionKanbanContent({
   const {
     boardProps,
     discoveryLinksSectionProps,
+    nextActionsProps,
     summaryProps,
   } = getProductionKanbanContentChildProps({
     discoveryLinkCandidates,
@@ -34,6 +37,7 @@ export default function ProductionKanbanContent({
     moveStates,
     moveVideo,
     onOpenDiscoveryLinks,
+    onOpenReferenceVault,
     productionSummary,
     saveDraftRecord,
     saveStates,
@@ -45,6 +49,8 @@ export default function ProductionKanbanContent({
   return (
     <div className="space-y-4">
       <ProductionKanbanSummary {...summaryProps} />
+
+      <ProductionKanbanNextActions {...nextActionsProps} />
 
       <ProductionDiscoveryLinksSection {...discoveryLinksSectionProps} />
 

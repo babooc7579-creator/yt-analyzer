@@ -6,12 +6,16 @@ import ScrapbookVideoThumbnail from './ScrapbookVideoThumbnail';
 export default function ScrapbookVideoCard({
   video,
   onFetchComments,
+  isProductionCandidate,
+  onPromoteToProduction,
   onRemoveScrap,
 }) {
   const viewProps = getScrapbookVideoCardViewProps(video);
 
   const footerProps = {
     onFetchComments,
+    isProductionCandidate,
+    onPromoteToProduction,
     onRemoveScrap,
     video,
     videoTitle: viewProps.videoTitle,

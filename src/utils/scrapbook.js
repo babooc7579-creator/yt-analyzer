@@ -1,4 +1,4 @@
-import { PRODUCTION_STATUSES, hasAnyProductionStatus } from '../constants/status';
+import { PRODUCTION_STATUS, PRODUCTION_STATUSES, hasAnyProductionStatus } from '../constants/status';
 import { SCRAPBOOK_EMPTY_STATE } from '../constants/emptyStates';
 import { formatNumberedUrlList, getYouTubeVideoUrl } from './urls';
 
@@ -179,11 +179,21 @@ export const getScrapbookWorkspaceViewProps = ({
   const videoUrlList = getScrapbookVideoUrlList(headerVideos);
 
   return {
-    getScrapbookVideoCardProps: (video) => ({
-      video,
-      onFetchComments,
-      onRemoveScrap,
-    }),
+    getScrapbookVideoCardProps: (video) => {
+      const videoId = getVideoId(video);
+      const record = toRecordMap(videoUserRecords)[videoId];
+      const isProductionCandidate = hasAnyProductionStatus(record, PRODUCTION_STATUSES);
+
+      return {
+        video,
+        isProductionCandidate,
+        onFetchComments,
+        onPromoteToProduction: isFunction(onMoveVideo) && videoId
+          ? () => onMoveVideo(videoId, PRODUCTION_STATUS.CANDIDATE)
+          : undefined,
+        onRemoveScrap,
+      };
+    },
     headerProps: {
       savedVideoCount: headerVideos.length,
       copiedPrompt,

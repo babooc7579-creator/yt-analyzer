@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { PRODUCTION_STATUS, VIDEO_STATUS } from '../constants/status';
 import {
@@ -151,7 +151,7 @@ describe('scrapbook utils', () => {
     const handlers = {
       onCopyPrompt: () => 'copy',
       onFetchComments: () => 'comments',
-      onMoveVideo: () => 'move',
+      onMoveVideo: vi.fn(),
       onOpenDiscoveryLinks: () => 'open links',
       onOpenHome: () => 'open home',
       onOpenReferenceVault: () => 'open vault',
@@ -189,11 +189,27 @@ describe('scrapbook utils', () => {
       },
       onOpenHome: handlers.onOpenHome,
     });
-    expect(productionProps.getScrapbookVideoCardProps(savedVideo)).toMatchObject({
+    const savedCardProps = productionProps.getScrapbookVideoCardProps(savedVideo);
+    const secondCardProps = productionProps.getScrapbookVideoCardProps(secondVideo);
+
+    expect(savedCardProps).toMatchObject({
       video: savedVideo,
+      isProductionCandidate: true,
       onFetchComments: handlers.onFetchComments,
+      onPromoteToProduction: expect.any(Function),
       onRemoveScrap: handlers.onRemoveScrap,
     });
+    expect(secondCardProps).toMatchObject({
+      video: secondVideo,
+      isProductionCandidate: false,
+      onPromoteToProduction: expect.any(Function),
+    });
+
+    secondCardProps.onPromoteToProduction();
+    expect(handlers.onMoveVideo).toHaveBeenCalledWith(
+      'video-2',
+      PRODUCTION_STATUS.CANDIDATE
+    );
 
     const scrapbookProps = getScrapbookWorkspaceViewProps({
       ...handlers,

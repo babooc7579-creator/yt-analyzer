@@ -27,6 +27,11 @@ describe('videoListRowBadgesProps utils', () => {
       'candidate',
       'checked',
     ]);
+    expect(badges.find(item => item.icon === 'saved')).toMatchObject({
+      label: '스크랩북 보관',
+      title: 'Cloud 스크랩북에 보관된 영상입니다. 제작 후보 여부와는 별도입니다.',
+    });
+    expect(badges.find(item => item.icon === 'candidate').title).toContain('제작 후보함');
   });
 
   it('shows tteotteotto badge for either candidate signal and strong badge only for strong reaction', () => {
@@ -45,5 +50,9 @@ describe('videoListRowBadgesProps utils', () => {
       isStrongReaction: true,
       isTtoTto: false,
     }).filter(item => item.isVisible).map(item => item.icon)).toEqual(['tteotteotto', 'strong']);
+    expect(getVideoListRowBadgeItems({
+      isStrongReaction: true,
+      isTtoTto: false,
+    }).find(item => item.icon === 'tteotteotto').title).toContain('성공 예측이 아닙니다');
   });
 });

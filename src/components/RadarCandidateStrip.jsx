@@ -19,6 +19,7 @@ export default function RadarCandidateStrip({
   onLoadStoredVideos,
   onOpenVault,
   onOpenScrapbook,
+  onOpenProductionCandidates,
   selectedChannelCount,
 }) {
   const {
@@ -49,6 +50,7 @@ export default function RadarCandidateStrip({
     onClearDecisions,
     onMarkVideoStatus,
     onOpenScrapbook,
+    onOpenProductionCandidates,
     onOpenVault,
     onPromoteToProduction,
     onRestoreVideo,
