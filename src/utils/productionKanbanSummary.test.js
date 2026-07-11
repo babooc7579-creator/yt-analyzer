@@ -55,6 +55,10 @@ describe('productionKanbanSummary utils', () => {
       ['discovery-links', '링크 후보', '4개'],
     ]);
     expect(cards[3].showLinkIcon).toBe(true);
+    expect(cards[0].title).toContain('Cloud 판단 기록');
+    expect(cards[0].title).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(cards[3].title).toContain('Cloud 발견함');
+    expect(cards[3].title).toContain('별도 제작 DB');
     expect(cards[3].warningText).toBe('권리 확인 필요 1개');
   });
 

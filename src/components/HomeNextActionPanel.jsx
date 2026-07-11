@@ -71,6 +71,11 @@ export default function HomeNextActionPanel(props) {
             </div>
             <h4 className="mt-1 text-base font-black text-white">{nextAction.title}</h4>
             <p className="mt-1 text-xs leading-relaxed text-slate-300">{nextAction.description}</p>
+            {nextAction.impactText && (
+              <p className="mt-2 text-[11px] font-bold leading-relaxed text-slate-400">
+                {nextAction.impactText}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2 lg:justify-end">

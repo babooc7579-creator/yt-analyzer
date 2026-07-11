@@ -1937,3 +1937,32 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 65. 2026-07-11 홈 다음 행동과 흐름 안내 문구 보강
+
+홈 화면과 제작 후보함에서 사용자가 버튼이나 지표를 눌렀을 때 어떤 일이 일어나는지 더 쉽게 구분할 수 있도록 안내 문구를 보강했습니다.
+
+완료한 작업:
+
+- 홈의 다음 추천 행동에 `impactText`를 추가해 화면 이동, Cloud DB 조회, Cloud 판단 기록 저장, YouTube API 호출 가능성을 분리해서 안내했습니다.
+- 홈 지표 카드의 설명을 Cloud 저장 데이터, 현재 화면에 불러온 저장 영상, 스크랩북, 마지막 수집 기록, 또터또 판단 보조 신호 기준으로 정리했습니다.
+- 홈 지표 카드와 제작 후보함 요약 카드에 hover/title 설명을 추가해 숫자의 의미를 확인할 수 있게 했습니다.
+- 제작 후보함의 후보/제작 중/업로드 완료/발견 링크 후보 숫자가 Cloud 판단 기록 또는 Cloud 발견함 기준이라는 점을 명확히 했습니다.
+- 준비중 화면과 URL 복사 버튼의 기본 안내 문구를 보강해 아직 연결되지 않은 설계 자리, 브라우저 로컬 클립보드 복사, API/DB/localStorage 변경 없음이 드러나게 했습니다.
+- 발견함 필터 결과 없음 화면은 이미 `필터 초기화` 동작이 연결되어 있음을 확인했고, 추가 동작 변경은 하지 않았습니다.
+
+검증:
+
+- `npm.cmd test -- src/utils/homeNextAction.test.js src/utils/creatorHomeViewProps.test.js src/utils/productionKanbanSummary.test.js src/utils/routesProps.test.js src/utils/copyUrlButtonProps.test.js --reporter=dot` 통과, 5개 파일 / 24개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 142개 파일 / 679개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
+- Cloud/localStorage 저장 기준 변경 없음

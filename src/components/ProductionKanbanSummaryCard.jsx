@@ -2,12 +2,13 @@ export default function ProductionKanbanSummaryCard({
   children,
   label,
   labelClassName,
+  title,
   value,
   valueClassName,
   wrapperClassName,
 }) {
   return (
-    <div className={`rounded-xl border px-3 py-3 ${wrapperClassName}`}>
+    <div className={`rounded-xl border px-3 py-3 ${wrapperClassName}`} title={title}>
       <p className={`text-[10px] font-extrabold uppercase ${labelClassName}`}>
         {label}
       </p>
