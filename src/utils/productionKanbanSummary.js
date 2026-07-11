@@ -42,6 +42,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     value: formatProductionCount(productionSummary.candidateCount),
     valueClassName: 'text-lg text-indigo-900',
     wrapperClassName: 'border-indigo-100 bg-indigo-50',
+    title: 'Cloud 판단 기록에서 제작 후보 상태로 표시된 저장 영상 수입니다. YouTube API를 새로 호출하지 않습니다.',
   },
   {
     key: 'active',
@@ -50,6 +51,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     value: formatProductionCount(productionSummary.activeCount),
     valueClassName: 'text-lg text-emerald-900',
     wrapperClassName: 'border-emerald-100 bg-emerald-50',
+    title: 'Cloud 판단 기록에서 제작 중 상태로 관리 중인 저장 영상 수입니다.',
   },
   {
     key: 'uploaded',
@@ -58,6 +60,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     value: formatProductionCount(productionSummary.uploadedCount),
     valueClassName: 'text-lg text-slate-900',
     wrapperClassName: 'border-slate-200 bg-slate-50',
+    title: 'Cloud 판단 기록에서 업로드 완료 상태로 표시한 저장 영상 수입니다.',
   },
   {
     key: 'discovery-links',
@@ -67,6 +70,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     valueClassName: 'text-lg text-amber-950',
     wrapperClassName: 'border-amber-100 bg-amber-50',
     showLinkIcon: true,
+    title: 'Cloud 발견함에서 제작 후보로 표시한 링크 수입니다. 별도 제작 DB로 옮긴 값이 아닙니다.',
     warningText: productionSummary.discoveryRightsWarningCount > 0
       ? `권리 확인 필요 ${formatProductionCount(productionSummary.discoveryRightsWarningCount)}`
       : '',

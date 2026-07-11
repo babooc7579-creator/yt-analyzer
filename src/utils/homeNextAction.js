@@ -35,6 +35,7 @@ export const getHomeNextAction = ({
       metric: '채널 0개',
       actionLabel: '채널 등록 열기',
       actionTitle: '채널 등록 화면으로 이동합니다.',
+      impactText: '화면 이동만 합니다. 채널 저장은 사용자가 등록 버튼을 눌렀을 때만 실행됩니다.',
       onAction: onOpenAddChannel,
     };
   }
@@ -49,6 +50,7 @@ export const getHomeNextAction = ({
       metric: `${savedChannels}개 채널 보유`,
       actionLabel: '저장 영상/채널 목록 열기',
       actionTitle: '저장 영상 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다.',
+      impactText: '화면 이동만 합니다. 채널 체크는 수집 실행이 아니라 볼 범위를 고르는 단계입니다.',
       onAction: onOpenVault,
     };
   }
@@ -63,6 +65,7 @@ export const getHomeNextAction = ({
       metric: `선택 ${selectedChannels}개`,
       actionLabel: '저장 영상 불러오기',
       actionTitle: `DB 조회: 선택 채널 ${selectedChannels}개의 저장된 영상을 불러옵니다. 새 YouTube API 호출은 없습니다.`,
+      impactText: 'Cloud DB 조회입니다. 새 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
       onAction: onLoadStoredVideos,
     };
   }
@@ -75,6 +78,7 @@ export const getHomeNextAction = ({
       description: '좋은 후보는 제작 후보로 표시하고, 아닌 영상은 봤음/나중에 보기/제외로 정리합니다.',
       badge: '오늘 검토',
       metric: `${radarCandidates}개 남음`,
+      impactText: '아래 후보 카드에서 누른 판단 버튼만 Cloud 판단 기록에 저장됩니다.',
     };
   }
 
@@ -88,6 +92,7 @@ export const getHomeNextAction = ({
       metric: `후보 ${candidateTotal}개`,
       actionLabel: '후보함 열기',
       actionTitle: '제작 후보함에서 영상 후보와 링크 후보를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
+      impactText: '화면 이동만 합니다. 후보 상태 변경은 제작 후보함 안에서 직접 선택할 때 저장됩니다.',
       onAction: onOpenProductionCandidates,
     };
   }
@@ -101,6 +106,7 @@ export const getHomeNextAction = ({
     metric: '후보 정리 완료',
     actionLabel: '수집 화면 열기',
     actionTitle: '선택 채널 새 영상 수집 화면으로 이동합니다. 이동만으로 수집이 실행되지는 않습니다.',
+    impactText: '화면 이동만 합니다. 실제 수집 버튼을 누를 때 YouTube API를 사용할 수 있습니다.',
     onAction: onOpenSelectedScan,
   };
 };

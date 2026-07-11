@@ -21,6 +21,8 @@ describe('homeNextAction utils', () => {
     expect(action.iconKey).toBe('plus');
     expect(action.title).toContain('소재 채널');
     expect(action.metric).toBe('채널 0개');
+    expect(action.impactText).toContain('화면 이동만');
+    expect(action.impactText).toContain('등록 버튼');
     expect(action.onAction).toBe(onOpenAddChannel);
   });
 
@@ -39,6 +41,8 @@ describe('homeNextAction utils', () => {
     expect(action.actionLabel).toBe('저장 영상/채널 목록 열기');
     expect(action.actionTitle).toContain('Cloud DB 조회');
     expect(action.actionTitle).toContain('YouTube API 호출은 실행되지 않습니다');
+    expect(action.impactText).toContain('화면 이동만');
+    expect(action.impactText).toContain('볼 범위');
     expect(action.onAction).toBe(onOpenVault);
   });
 
@@ -59,6 +63,8 @@ describe('homeNextAction utils', () => {
     expect(action.description).toContain('새 YouTube API 호출은 없습니다');
     expect(action.actionTitle).toContain('DB 조회');
     expect(action.actionTitle).toContain('새 YouTube API 호출은 없습니다');
+    expect(action.impactText).toContain('Cloud DB 조회');
+    expect(action.impactText).toContain('YouTube API 호출은 실행하지 않습니다');
     expect(action.onAction).toBe(onLoadStoredVideos);
   });
 
@@ -78,6 +84,8 @@ describe('homeNextAction utils', () => {
     expect(action.title).toContain('오늘 후보');
     expect(action.description).toContain('제작 후보로 표시하고');
     expect(action.description).not.toContain('제작 후보로 넘기고');
+    expect(action.impactText).toContain('후보 카드');
+    expect(action.impactText).toContain('Cloud 판단 기록');
   });
 
   it('opens production candidates as a stored candidate lookup after radar candidates are done', () => {
@@ -100,6 +108,8 @@ describe('homeNextAction utils', () => {
     expect(action.description).not.toContain('후보로 남긴');
     expect(action.actionTitle).toContain('저장된 후보 조회');
     expect(action.actionTitle).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(action.impactText).toContain('화면 이동만');
+    expect(action.impactText).toContain('후보 상태 변경');
     expect(action.onAction).toBe(onOpenProductionCandidates);
   });
 
@@ -121,6 +131,8 @@ describe('homeNextAction utils', () => {
     expect(action.badge).toBe('YouTube API 가능');
     expect(action.description).toContain('YouTube API를 사용할 수 있습니다');
     expect(action.actionTitle).toContain('이동만으로 수집이 실행되지는 않습니다');
+    expect(action.impactText).toContain('실제 수집 버튼');
+    expect(action.impactText).toContain('YouTube API');
     expect(action.onAction).toBe(onOpenSelectedScan);
   });
 });

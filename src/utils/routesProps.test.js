@@ -57,6 +57,7 @@ describe('routesProps utils', () => {
       backButtonLabel: '오늘의 레이더로 돌아가기',
       title: '설정 준비중',
     });
+    expect(props.noticeText).toContain('아직 연결되지 않은 설계 자리');
     expect(props.noticeText).toContain('새 API 호출');
     expect(props.noticeText).toContain('localStorage 삭제');
     expect(props.backButtonTitle).toContain('저장 작업은 실행하지 않습니다');
@@ -66,6 +67,7 @@ describe('routesProps utils', () => {
     const props = getComingSoonViewProps();
 
     expect(props.title).toBe('선택한 메뉴 준비중');
+    expect(props.noticeText).toContain('연결되지 않은');
     expect(props.noticeText).toContain('DB 변경');
   });
 });

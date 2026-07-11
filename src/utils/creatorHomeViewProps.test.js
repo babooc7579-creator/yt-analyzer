@@ -39,6 +39,10 @@ describe('creatorHomeViewProps utils', () => {
       ['터또터 후보', 4],
     ]);
     expect(statsProps.cards[2].description).toContain('Cloud 스크랩북에 보관한 영상');
+    expect(statsProps.cards[0].description).toContain('YouTube API를 호출하지 않습니다');
+    expect(statsProps.cards[1].description).toContain('새 YouTube API 호출 수가 아닙니다');
+    expect(statsProps.cards[3].description).toContain('현재 새 수집이 실행 중이라는 뜻은 아닙니다');
+    expect(statsProps.cards[4].description).toContain('판단 보조 신호');
     expect(statsProps.cards[2].description).not.toContain('제작 후보로 표시한 영상');
     expect(statsProps.cards[2].description).not.toContain('제작 후보로 남긴');
     expect(statsProps.cards[3].className).toContain('emerald');

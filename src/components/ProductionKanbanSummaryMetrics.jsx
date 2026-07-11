@@ -20,6 +20,7 @@ export default function ProductionKanbanSummaryMetrics({
           key={card.key}
           label={card.showLinkIcon ? <><LinkIcon className="h-3 w-3" /> {card.label}</> : card.label}
           labelClassName={card.labelClassName}
+          title={card.title}
           value={card.value}
           valueClassName={card.valueClassName}
           wrapperClassName={card.wrapperClassName}
