@@ -1886,3 +1886,31 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
+
+### 63. 2026-07-11 빈 화면 단계 안내 카드 렌더링 공통화
+
+스크랩북, 제작 칸반, 참고 보관함, 발견함 빈 화면에서 반복되던 3단계 안내 카드 렌더링을 `EmptyStateSteps` 공통 컴포넌트로 분리했습니다.
+
+완료한 작업:
+
+- 빈 화면 안내 단계의 title/description/card class 렌더링을 공통 컴포넌트로 정리했습니다.
+- 화면별 카드 색상, 간격, 글자 크기, 설명 문구는 유지했습니다.
+- 스크랩북/제작 칸반/참고 보관함/발견함 빈 화면이 같은 공통 단계 렌더러를 사용하도록 연결했습니다.
+- 공통 컴포넌트의 빈 단계 처리와 단계별 class fallback 테스트를 추가했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/EmptyStateSteps.test.jsx src/components/EmptyStateActions.test.jsx src/constants/emptyStates.test.js src/utils/scrapbook.test.js src/utils/productionKanbanProps.test.js src/utils/videoResultsPanelProps.test.js --reporter=dot` 통과, 6개 파일 / 37개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 142개 파일 / 679개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 안내 문구 변경 없음
+- 버튼 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
