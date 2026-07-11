@@ -43,7 +43,7 @@
 - 2026-07-11 스크랩북/참고 보관함 빈 화면과 필터 결과 없음 화면의 다음 행동 흐름을 보강했습니다. 스크랩북/참고 보관함 버튼은 화면 이동만 수행하고, 필터 초기화는 검색어/조회수 조건/영상 길이/터또터 모드만 기본값으로 돌립니다. 이 흐름은 Cloud 저장, DB 쓰기, YouTube API 호출을 직접 실행하지 않습니다.
 - 2026-07-11 빈 화면 액션 버튼과 단계 안내 카드 렌더링을 `EmptyStateActions`, `EmptyStateSteps` 공통 컴포넌트로 정리했습니다. 화면 문구와 버튼 동작은 유지했고, API/DB/localStorage/YouTube API 호출 조건은 변경하지 않았습니다.
 - 2026-07-11 홈 다음 행동과 홈/제작 후보 지표 안내 문구를 보강했습니다. 화면 이동, Cloud DB 조회, Cloud 판단 기록 저장, YouTube API 호출 가능성을 더 명확히 나눠 설명하며, API/DB/localStorage/YouTube API 호출 조건은 변경하지 않았습니다.
-- 2026-07-11 기준 `npm.cmd test -- --reporter=dot`은 테스트 파일 148개, 테스트 689개 통과 상태입니다.
+- 2026-07-11 기준 `npm.cmd test -- --reporter=dot`은 테스트 파일 150개, 테스트 695개 통과 상태입니다.
 - 2026-07-11 Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤 프론트엔드 Build와 Azure Static Web Apps CI/CD가 여러 차례 성공했고 공개 앱 루트는 200 OK로 확인됐습니다. backend Function App 배포와 Sponsorship 비용 반영은 남은 운영 확인 항목입니다.
 
 ---
@@ -224,7 +224,7 @@
 ### Issue 11. 프론트 테스트 전략 결정
 
 - 목적: 기능을 많이 쌓은 뒤 작은 수정으로 기존 흐름이 깨지는 위험을 줄입니다.
-- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-11 기준 `npm.cmd test`에서 테스트 파일 148개, 테스트 689개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
+- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-11 기준 `npm.cmd test`에서 테스트 파일 150개, 테스트 695개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
 - 왜 필요한가: `status/statusIds`, discovery links, production kanban, Cloud/localStorage fallback처럼 깨지면 사용자가 바로 불편한 계산이 늘었습니다.
 - 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`, `src/utils/productionKanbanData.js`, `src/utils/videoCollection.js`, `src/utils/video.js`, `src/utils/creatorOsMetrics.js`, `src/utils/channels.js`, `src/utils/channelScanDisplay.js`, `src/utils/channelScanSummaryBoxProps.js`, `src/utils/channelListItemProps.js`, `src/utils/channelListItemActionsProps.js`, `src/utils/channelListItemMetaProps.js`, `src/utils/channelMetadataControlsProps.js`, `src/utils/channelTagSelectorProps.js`, `src/utils/channelCategoryChipProps.js`, `src/utils/channelAddFormProps.js`, `src/utils/channelAddActions.js`, `src/utils/channelActions.js`, `src/utils/channelNotesModal.js`, `src/utils/clipboard.js`, `src/utils/dates.js`, `src/utils/urls.js`, `src/utils/formatters.js`, `src/utils/discoveryLinks.js`, `src/utils/discoveryLinksRouteProps.js`, `src/utils/discoveryLinksWorkspaceProps.js`, `src/utils/scrapbook.js`, `src/utils/scrapbookHeaderActions.js`, `src/utils/prompts.js`, `src/utils/radarCandidates.js`, `src/utils/productionVideoCard.js`, `src/utils/productionKanbanColumn.js`, `src/utils/productionKanbanProps.js`, `src/utils/productionKanbanActions.js`, `src/utils/videoCard.js`, `src/utils/videoDashboardControls.js`, `src/utils/videoToolbarProps.js`, `src/utils/videoToolbarFiltersProps.js`, `src/utils/videoListTableProps.js`, `src/utils/videoListTableRowProps.js`, `src/utils/videoListRowBadgesProps.js`, `src/utils/videoListRowContentProps.js`, `src/utils/videoListRowMetaActionsProps.js`, `src/utils/videoListRowCandidateActionProps.js`, `src/utils/videoListRowStatsProps.js`, `src/utils/appLayoutProps.js`, `src/utils/appRouteProps.js`, `src/utils/homeRouteProps.js`, `src/utils/legacyWorkspaceRouteProps.js`, `src/utils/routesProps.js`, `src/utils/productionSchedule.js`, `src/utils/homeActionShortcuts.js`, `src/utils/discoveryLinkActionCopy.js`, `src/utils/creatorHomeViewProps.js`, `src/utils/legacyWorkspaceProps.js`, `src/utils/legacyAsideProps.js`, `src/utils/legacyWorkPanelIntroProps.js`, `src/utils/legacyChannelPanelProps.js`, `src/utils/legacyMainPanelProps.js`, `src/utils/legacyWorkspaceMainPanelViewProps.js`, `src/utils/legacyDashboardTabViewProps.js`, `src/utils/legacyVaultTabViewProps.js`, `src/utils/legacyChannelPanelViewProps.js`, `src/utils/discoveryLinksCopy.js`, `src/utils/productionVideoStatusProps.js`, `src/utils/radarCandidateStateProps.js`, `src/utils/scrapbookHeaderProps.js`, `src/utils/selectedVideosActionBarProps.js`, `src/utils/productionDiscoveryLinkActionProps.js`, `src/utils/radarDecisionViewProps.js`의 순수 함수 테스트입니다.
 - 건드린 파일: `package.json`, `package-lock.json`, `src/utils/*.test.js`, `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`.
@@ -238,6 +238,7 @@
 - 추가 완료 5: 홈 다음 행동 영향 안내, 홈 지표 hover 설명, 제작 후보함 요약 카드 hover 설명도 컴포넌트 렌더링 테스트로 보강했습니다.
 - 추가 완료 6: 공통 URL 복사 버튼의 로컬 클립보드 안내, 비활성 상태, 접근성 문구도 컴포넌트 렌더링 테스트로 보강했습니다.
 - 추가 완료 7: 준비중 화면의 미연결 설계 자리 안내와 홈 이동 버튼 안전 문구도 컴포넌트 렌더링 테스트로 보강했습니다.
+- 추가 완료 8: 저장 영상 불러오기 버튼과 새 영상 수집 버튼의 DB 조회/YouTube API 호출 구분도 컴포넌트 렌더링 테스트로 보강했습니다.
 - 사용자 판단 필요 여부: 현재 없음. React Testing Library나 Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
