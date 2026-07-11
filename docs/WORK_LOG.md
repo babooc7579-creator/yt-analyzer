@@ -1812,3 +1812,26 @@ App 구조가 여러 hook으로 나뉜 뒤에도 채널, 수집, 발견함, 영�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 60. 2026-07-11 Azure 구독 이전 후 프론트 배포 확인 문서 갱신
+
+Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프론트엔드 main 브랜치 배포가 실제로 여러 차례 성공한 상태를 `docs/CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md`에 반영했습니다.
+
+완료한 작업:
+
+- 기존의 "다음 GitHub Actions 배포 확인 필요" 문구를 현재 확인 결과로 갱신했습니다.
+- PR #845, #846, #847, #848 병합 후 Build와 Azure Static Web Apps CI/CD가 성공했고 공개 앱 루트가 `200 OK`였다는 사실을 기록했습니다.
+- 이동 제외 관리 ID는 별도 영향 검토 없이 삭제하지 않는 기준으로 정리했습니다.
+- 남은 확인 항목을 backend Function App 배포 확인과 Sponsorship 비용 반영 확인으로 좁혔습니다.
+
+검증:
+
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 변경 없음
+- Azure 리소스 변경 없음
+- GitHub Actions workflow 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음

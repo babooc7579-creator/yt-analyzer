@@ -2,13 +2,17 @@
 
 검토일: 2026-07-08 KST
 
+업데이트: 2026-07-11 KST
+
 ## 결론
 
 Creator OS의 프론트엔드/백엔드/DB 핵심 리소스는 잘못 연결된 청구 구독에서 Microsoft Azure Sponsorship 구독으로 이동했다.
 
 이동 직후 앱 접속과 저장 영상 불러오기는 정상 확인되었다. 따라서 프론트엔드, 백엔드 API, Cosmos DB 조회 흐름은 1차 정상으로 판단한다.
 
-다만 다음 GitHub Actions 배포가 성공하는지 아직 별도로 확인해야 한다. 이동 대상에서 제외된 사용자 할당 관리 ID가 배포 인증 또는 OIDC 구성에 영향을 줄 수 있기 때문이다.
+2026-07-11 기준으로 `yt-analyzer` 프론트엔드 main 브랜치 배포도 여러 차례 성공했다. 따라서 Static Web Apps 배포 token/OIDC 흐름은 현재 프론트엔드 운영에 문제 없는 것으로 판단한다.
+
+백엔드 `yt-analyzer-functions` Function App 배포는 별도 main push 또는 workflow 재실행 때 확인 대상으로 남겨둔다.
 
 ## 이동 결과 요약
 
@@ -22,7 +26,8 @@ Creator OS의 프론트엔드/백엔드/DB 핵심 리소스는 잘못 연결된 
 | 제외 이유 | Microsoft.ManagedIdentity/userAssignedIdentities는 리소스 이동 미지원 |
 | 앱 접속 | 정상 확인 |
 | 저장 영상 불러오기 | 정상 확인 |
-| 남은 핵심 확인 | 다음 GitHub Actions 배포 성공 여부 |
+| 프론트엔드 GitHub Actions 배포 | 정상 확인 |
+| 남은 핵심 확인 | 필요 시 백엔드 Function App 배포 확인, Sponsorship 비용 반영 확인 |
 
 ## 이동 완료 리소스
 
@@ -48,7 +53,7 @@ Azure Portal 유효성 검사에서 아래 사유로 이동 대상에서 제외�
 Microsoft.ManagedIdentity/userAssignedIdentities 리소스 이동 미지원
 ```
 
-이 리소스는 삭제하지 않고, 다음 배포 성공 여부를 확인한 뒤 정리 여부를 판단한다.
+이 리소스는 삭제하지 않는다. 프론트엔드 배포는 정상 확인되었지만, 백엔드 OIDC/RBAC 또는 다른 자동화에서 참조할 가능성이 남아 있으므로 별도 영향 검토 없이 정리하지 않는다.
 
 ## 이동 후 확인 완료
 
@@ -57,14 +62,16 @@ Microsoft.ManagedIdentity/userAssignedIdentities 리소스 이동 미지원
 - Creator OS 앱 URL 접속 정상 확인
 - 저장 영상 불러오기 정상 확인
 - 프론트엔드에서 백엔드 API와 Cosmos DB 조회 흐름이 동작하는 것 확인
+- `yt-analyzer` main 브랜치 GitHub Actions `Build` workflow 성공 확인
+- `yt-analyzer` main 브랜치 GitHub Actions `Azure Static Web Apps CI/CD` workflow 성공 확인
+- PR #845, #846, #847, #848 병합 후 공개 앱 루트 `200 OK` 확인
 
 ## 이동 후 남은 확인
 
-1. `main` 브랜치 push 또는 PR merge 후 Static Web Apps 배포 성공 여부
-2. GitHub Actions `Azure Static Web Apps CI/CD` 워크플로 성공 여부
-3. 배포 실패 시 Static Web Apps deployment token 또는 OIDC/RBAC 설정 재확인
-4. 하루 정도 지난 뒤 MCPP Subscription 비용 증가가 멈추는지 확인
-5. Sponsorship 사용량에 새 리소스 비용이 반영되는지 확인
+1. 필요 시 `yt-analyzer-functions` backend workflow 재실행 또는 main push 후 Function App 배포 성공 여부
+2. backend 배포 실패 시 Azure login secret, subscription ID, OIDC/RBAC 설정 재확인
+3. 하루 정도 지난 뒤 MCPP Subscription 비용 증가가 멈추는지 확인
+4. Sponsorship 사용량에 새 리소스 비용이 반영되는지 확인
 
 ## 구조 메모
 
@@ -276,14 +283,16 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 5. 나머지 핵심 7개 리소스 이동 실행
 6. 앱 URL 접속 확인
 7. 저장 영상 불러오기 확인
+8. 프론트엔드 main 브랜치 Build workflow 성공 확인
+9. 프론트엔드 Azure Static Web Apps CI/CD workflow 성공 확인
+10. 공개 앱 루트 `200 OK` 확인
 
 ## 남은 진행 순서
 
-1. GitHub Actions frontend 배포 확인
-2. 필요 시 backend 배포 확인
-3. Cost Management에서 Sponsorship 크레딧 차감 확인
-4. MCPP Subscription 비용 증가가 멈추는지 확인
-5. 이동 제외 관리 ID 정리 여부 판단
+1. 필요 시 backend Function App 배포 확인
+2. Cost Management에서 Sponsorship 크레딧 차감 확인
+3. MCPP Subscription 비용 증가가 멈추는지 확인
+4. 이동 제외 관리 ID가 실제 자동화에서 더 이상 참조되지 않는지 장기 검토
 
 ## 위험도 판단
 
@@ -292,7 +301,7 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 | Static Web Apps 이동 | 낮음~중간 | 이동 자체보다 GitHub deployment token 확인이 중요 |
 | Function App 이동 | 중간 | App Service plan, storage, Application Insights와 함께 움직여야 함 |
 | Cosmos DB 이동 | 중간 | 데이터 원장이므로 이동 전 백업/연결 문자열 확인 필요 |
-| GitHub Actions | 중간 | backend는 subscription-id/RBAC 영향 가능 |
+| GitHub Actions | 낮음~중간 | frontend는 배포 성공 확인됨. backend는 subscription-id/RBAC 영향 가능 |
 | Custom domain | 낮음 | 현재 Creator OS에서 별도 커스텀 도메인 흔적은 확인되지 않음 |
 | 비용 | 중간 | Sponsorship 크레딧 소진/만료 시 서비스 중단 위험 |
 
@@ -300,9 +309,11 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 
 현재 구조 기준으로는 Microsoft Azure Sponsorship 구독 이동 후 치명적인 앱 동작 문제는 발견되지 않았다.
 
-다만 다음 조건까지 확인해야 이동 후 운영 상태를 최종 정상으로 판단할 수 있다.
+프론트엔드 앱 접속, 저장 영상 조회, main 브랜치 Build, Azure Static Web Apps CI/CD 배포, 공개 앱 루트 `200 OK`는 정상 확인됐다.
+
+다만 다음 조건은 계속 운영 확인 대상으로 남긴다.
 
 ```text
-GitHub Actions secret과 RBAC를 이동 후 검증한다.
+backend Function App 배포가 필요할 때 GitHub Actions secret과 RBAC를 검증한다.
 Sponsorship 크레딧/만료/지출 제한을 모니터링한다.
 ```
