@@ -32,4 +32,27 @@ describe('HomeRadarWorkflowSection', () => {
     expect(html).toContain('제작 후보함');
     expect(html).toContain('발견함');
   });
+
+  it('renders rights-warning candidates as the next action after visible radar candidates are done', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarWorkflowSection
+        discoveryCandidateCount={2}
+        discoveryRightsWarningCount={1}
+        loadedVideoCount={12}
+        onLoadStoredVideos={noop}
+        onOpenAddChannel={noop}
+        onOpenDiscoveryLinks={noop}
+        onOpenProductionCandidates={noop}
+        onOpenSelectedScan={noop}
+        onOpenVault={noop}
+        openRadarCandidateCount={0}
+        productionCandidateCount={3}
+        savedChannelCount={5}
+        selectedChannelCount={2}
+      />,
+    );
+
+    expect(html).toContain('권리 확인 필요한 후보를 먼저 정리하세요');
+    expect(html).toContain('권리 확인 1개');
+  });
 });

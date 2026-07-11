@@ -36,4 +36,25 @@ describe('HomeNextActionPanel', () => {
     expect(html).toContain('3개 남음');
     expect(html).not.toContain('<button');
   });
+
+  it('renders rights-warning candidates as the next action after radar review is done', () => {
+    const html = renderToStaticMarkup(
+      <HomeNextActionPanel
+        discoveryCandidateCount={4}
+        discoveryRightsWarningCount={2}
+        savedChannelCount={5}
+        selectedChannelCount={2}
+        loadedVideoCount={10}
+        openRadarCandidateCount={0}
+        productionCandidateCount={1}
+        onOpenProductionCandidates={() => 'open production candidates'}
+      />,
+    );
+
+    expect(html).toContain('권리 확인 필요한 후보를 먼저 정리하세요');
+    expect(html).toContain('권리 확인 2개');
+    expect(html).toContain('후보함에서 확인');
+    expect(html).toContain('저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다');
+    expect(html).toContain('권리 상태 변경은 후보함이나 발견함에서 직접 선택할 때 Cloud에 저장됩니다');
+  });
 });

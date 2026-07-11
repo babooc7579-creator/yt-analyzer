@@ -2438,3 +2438,34 @@ PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성�
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 새 라이브러리 추가 없음
+
+### 90. 2026-07-12 홈 다음 행동 권리 확인 우선순위 보강
+
+홈의 "다음 추천 행동"이 오늘 레이더 후보 검토가 끝난 뒤 권리 확인이 필요한 발견 링크 후보를 일반 제작 후보보다 먼저 안내하도록 보강했습니다.
+
+완료한 작업:
+
+- 홈 다음 행동 계산에 `discoveryRightsWarningCount`를 반영했습니다.
+- 레이더 후보가 남아 있으면 기존처럼 오늘 후보 판단을 먼저 안내합니다.
+- 레이더 후보가 없고 권리 확인이 필요한 발견 링크 후보가 있으면 "권리 확인 필요한 후보를 먼저 정리하세요"를 표시합니다.
+- 해당 버튼은 제작 후보함으로 이동만 하며, 이동만으로 YouTube API 호출이나 저장 작업을 실행하지 않습니다.
+- 관련 유틸/컴포넌트 렌더링 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\homeNextAction.test.js src\components\HomeNextActionPanel.test.jsx src\components\HomeRadarWorkflowSection.test.jsx --reporter=dot`
+  - 3개 테스트 파일, 13개 테스트 통과
+- `npm.cmd test -- --reporter=dot`
+  - 168개 테스트 파일, 739개 테스트 통과
+- `npm.cmd run build`
+  - Vite production build 통과
+- `npm.cmd audit --omit=dev`
+  - 취약점 0개
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음

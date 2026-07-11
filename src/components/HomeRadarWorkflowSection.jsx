@@ -50,6 +50,7 @@ export default function HomeRadarWorkflowSection({
       </div>
       <HomeNextActionPanel
         discoveryCandidateCount={discoveryCandidateCount}
+        discoveryRightsWarningCount={discoveryRightsWarningCount}
         loadedVideoCount={loadedVideoCount}
         onLoadStoredVideos={onLoadStoredVideos}
         onOpenAddChannel={onOpenAddChannel}
