@@ -2209,3 +2209,27 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
+
+### 74. 2026-07-11 제작 후보 카드 작업 준비 체크 추가
+
+제작 후보함에서 영상 후보를 볼 때 바로 작업 준비 상태를 판단할 수 있도록 표시 전용 체크리스트를 추가했습니다.
+
+완료한 작업:
+
+- 제작 후보 영상 카드에 원본 링크, 제목 초안, 제작 메모, 업로드 예정일 준비 여부를 표시했습니다.
+- 작업 준비 체크는 화면 표시만 담당하며 저장, DB 쓰기, YouTube API 호출을 실행하지 않도록 안내 문구와 테스트를 보강했습니다.
+- 발견함 링크 후보 섹션에는 외부 링크 후보 개수 배지를 추가해 저장 영상 후보와 발견 링크 후보를 분리해서 볼 수 있게 했습니다.
+- 제작 후보 카드 준비 체크와 발견함 링크 후보 개수 표시의 렌더링/계산 테스트를 추가했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\productionVideoCard.test.js src\components\ProductionVideoReadinessChecklist.test.jsx src\utils\productionDiscoveryLinksSection.test.js src\components\ProductionKanbanFlowStates.test.jsx --reporter=dot` 통과, 4개 파일 / 17개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 165개 파일 / 731개 테스트
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음

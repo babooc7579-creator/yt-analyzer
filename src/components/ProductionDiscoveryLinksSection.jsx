@@ -14,7 +14,9 @@ export default function ProductionDiscoveryLinksSection({
   onMoveLink,
 }) {
   const linkList = getProductionDiscoveryLinkList(links);
-  const headerProps = getProductionDiscoveryLinksSectionHeaderProps();
+  const headerProps = getProductionDiscoveryLinksSectionHeaderProps({
+    linkCount: linkList.length,
+  });
   const { openDiscoveryLinksButtonProps } = getProductionDiscoveryLinksSectionActions({
     onOpenDiscoveryLinks,
   });
@@ -30,6 +32,12 @@ export default function ProductionDiscoveryLinksSection({
           <p className="inline-flex items-center gap-2 text-sm font-extrabold text-amber-700">
             <LinkIcon className="h-4 w-4" />
             {headerProps.eyebrow}
+            <span
+              className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-extrabold text-amber-700"
+              title={headerProps.badgeTitle}
+            >
+              {headerProps.badgeText}
+            </span>
           </p>
           <h3 className="mt-1 text-lg font-extrabold text-slate-900">{headerProps.title}</h3>
           <p className="mt-1 text-xs text-slate-500">

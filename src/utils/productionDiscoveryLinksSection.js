@@ -6,7 +6,9 @@ const isLinkObject = (link) => link && typeof link === 'object';
 
 export const getProductionDiscoveryLinkList = (links) => toArray(links).filter(isLinkObject);
 
-export const getProductionDiscoveryLinksSectionHeaderProps = () => ({
+export const getProductionDiscoveryLinksSectionHeaderProps = ({ linkCount = 0 } = {}) => ({
+  badgeText: `링크 후보 ${linkCount}개`,
+  badgeTitle: 'Cloud 발견함에서 제작 후보로 표시한 외부 링크 수입니다. 영상 후보와 별도로 표시합니다.',
   eyebrow: '발견함 링크 후보',
   title: '외부에서 저장한 제작 후보 링크',
   description:
