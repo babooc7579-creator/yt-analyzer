@@ -1914,3 +1914,26 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
+
+### 64. 2026-07-11 다음 구현 이슈 계획의 안정화 기준 갱신
+
+빈 화면 액션 버튼과 단계 안내 카드 공통화가 완료된 상태를 다음 구현 계획 문서에 반영했습니다.
+
+완료한 작업:
+
+- 현재 기준에 `EmptyStateActions`, `EmptyStateSteps` 공통화 완료 사실을 추가했습니다.
+- 전체 테스트 기준을 `142개 파일 / 679개 테스트` 통과 상태로 갱신했습니다.
+- Issue 2와 Issue 11에 빈 화면 공통 렌더링 정리와 관련 테스트 보강 완료 상태를 반영했습니다.
+- Codex 추천 진행 순서에 빈 화면 공통 렌더링 정리 완료 상태를 추가했습니다.
+
+검증:
+
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
