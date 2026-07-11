@@ -41,7 +41,8 @@
 
 - 2026-07-09 제작 후보함 빈 상태에서 홈의 오늘 레이더로 돌아가는 버튼을 추가했습니다. 이 이동은 화면 전환만 수행하며 YouTube API 호출, Cloud DB 변경, localStorage 변경을 만들지 않습니다.
 - 2026-07-11 스크랩북/참고 보관함 빈 화면과 필터 결과 없음 화면의 다음 행동 흐름을 보강했습니다. 스크랩북/참고 보관함 버튼은 화면 이동만 수행하고, 필터 초기화는 검색어/조회수 조건/영상 길이/터또터 모드만 기본값으로 돌립니다. 이 흐름은 Cloud 저장, DB 쓰기, YouTube API 호출을 직접 실행하지 않습니다.
-- 2026-07-11 기준 `npm.cmd test -- --reporter=dot`은 테스트 파일 140개, 테스트 675개 통과 상태입니다.
+- 2026-07-11 빈 화면 액션 버튼과 단계 안내 카드 렌더링을 `EmptyStateActions`, `EmptyStateSteps` 공통 컴포넌트로 정리했습니다. 화면 문구와 버튼 동작은 유지했고, API/DB/localStorage/YouTube API 호출 조건은 변경하지 않았습니다.
+- 2026-07-11 기준 `npm.cmd test -- --reporter=dot`은 테스트 파일 142개, 테스트 679개 통과 상태입니다.
 - 2026-07-11 Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤 프론트엔드 Build와 Azure Static Web Apps CI/CD가 여러 차례 성공했고 공개 앱 루트는 200 OK로 확인됐습니다. backend Function App 배포와 Sponsorship 비용 반영은 남은 운영 확인 항목입니다.
 
 ---
@@ -108,6 +109,7 @@
 - 추가 상태 4: 2026-07-06 후속 작업으로 발견 링크 제작 후보 전환, 사용 금지 링크 경고, 권리 상태 표시, 영상 필터 라벨, 채널 통계/언어 라벨의 혼동 가능 문구를 정리했습니다.
 - 추가 상태 5: 2026-07-08 후속 작업으로 홈 빠른 작업 버튼이 채널 저장, YouTube API 수집, Cloud DB 조회, 수동 URL 저장을 더 명확히 구분하도록 정리했습니다.
 - 추가 상태 6: 2026-07-11 후속 작업으로 스크랩북/참고 보관함 빈 화면에는 이동 전용 버튼을, 필터 결과 없음 화면에는 조건 초기화 버튼을 추가했습니다. 모두 Cloud 저장, DB 쓰기, YouTube API 호출을 직접 실행하지 않습니다.
+- 추가 상태 7: 2026-07-11 후속 작업으로 빈 화면 액션 버튼과 단계 안내 카드 렌더링을 공통 컴포넌트로 정리했습니다. 화면별 색상, 간격, 문구, 버튼 동작은 유지했습니다.
 - 왜 필요한가: YouTube API 호출은 비용과 quota가 걸릴 수 있어 버튼을 누르기 전 의미가 명확해야 합니다.
 - 작업 범위: 버튼명, 보조 설명, 안내 문구를 점검하고 필요한 곳만 작게 수정합니다.
 - 건드릴 파일 예상: `src/App.jsx`, 관련 컴포넌트, 필요 시 `src/constants`.
@@ -221,7 +223,7 @@
 ### Issue 11. 프론트 테스트 전략 결정
 
 - 목적: 기능을 많이 쌓은 뒤 작은 수정으로 기존 흐름이 깨지는 위험을 줄입니다.
-- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-11 기준 `npm.cmd test`에서 테스트 파일 140개, 테스트 675개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
+- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-11 기준 `npm.cmd test`에서 테스트 파일 142개, 테스트 679개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
 - 왜 필요한가: `status/statusIds`, discovery links, production kanban, Cloud/localStorage fallback처럼 깨지면 사용자가 바로 불편한 계산이 늘었습니다.
 - 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`, `src/utils/productionKanbanData.js`, `src/utils/videoCollection.js`, `src/utils/video.js`, `src/utils/creatorOsMetrics.js`, `src/utils/channels.js`, `src/utils/channelScanDisplay.js`, `src/utils/channelScanSummaryBoxProps.js`, `src/utils/channelListItemProps.js`, `src/utils/channelListItemActionsProps.js`, `src/utils/channelListItemMetaProps.js`, `src/utils/channelMetadataControlsProps.js`, `src/utils/channelTagSelectorProps.js`, `src/utils/channelCategoryChipProps.js`, `src/utils/channelAddFormProps.js`, `src/utils/channelAddActions.js`, `src/utils/channelActions.js`, `src/utils/channelNotesModal.js`, `src/utils/clipboard.js`, `src/utils/dates.js`, `src/utils/urls.js`, `src/utils/formatters.js`, `src/utils/discoveryLinks.js`, `src/utils/discoveryLinksRouteProps.js`, `src/utils/discoveryLinksWorkspaceProps.js`, `src/utils/scrapbook.js`, `src/utils/scrapbookHeaderActions.js`, `src/utils/prompts.js`, `src/utils/radarCandidates.js`, `src/utils/productionVideoCard.js`, `src/utils/productionKanbanColumn.js`, `src/utils/productionKanbanProps.js`, `src/utils/productionKanbanActions.js`, `src/utils/videoCard.js`, `src/utils/videoDashboardControls.js`, `src/utils/videoToolbarProps.js`, `src/utils/videoToolbarFiltersProps.js`, `src/utils/videoListTableProps.js`, `src/utils/videoListTableRowProps.js`, `src/utils/videoListRowBadgesProps.js`, `src/utils/videoListRowContentProps.js`, `src/utils/videoListRowMetaActionsProps.js`, `src/utils/videoListRowCandidateActionProps.js`, `src/utils/videoListRowStatsProps.js`, `src/utils/appLayoutProps.js`, `src/utils/appRouteProps.js`, `src/utils/homeRouteProps.js`, `src/utils/legacyWorkspaceRouteProps.js`, `src/utils/routesProps.js`, `src/utils/productionSchedule.js`, `src/utils/homeActionShortcuts.js`, `src/utils/discoveryLinkActionCopy.js`, `src/utils/creatorHomeViewProps.js`, `src/utils/legacyWorkspaceProps.js`, `src/utils/legacyAsideProps.js`, `src/utils/legacyWorkPanelIntroProps.js`, `src/utils/legacyChannelPanelProps.js`, `src/utils/legacyMainPanelProps.js`, `src/utils/legacyWorkspaceMainPanelViewProps.js`, `src/utils/legacyDashboardTabViewProps.js`, `src/utils/legacyVaultTabViewProps.js`, `src/utils/legacyChannelPanelViewProps.js`, `src/utils/discoveryLinksCopy.js`, `src/utils/productionVideoStatusProps.js`, `src/utils/radarCandidateStateProps.js`, `src/utils/scrapbookHeaderProps.js`, `src/utils/selectedVideosActionBarProps.js`, `src/utils/productionDiscoveryLinkActionProps.js`, `src/utils/radarDecisionViewProps.js`의 순수 함수 테스트입니다.
 - 건드린 파일: `package.json`, `package-lock.json`, `src/utils/*.test.js`, `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`.
@@ -231,6 +233,7 @@
 - 추가 완료: 기존 작업 화면 안내 문구와 선택 영상 바 문구도 순수 유틸 테스트로 보강했습니다.
 - 추가 완료 2: 홈 다음 행동에서 저장 영상/채널 목록으로 이동하는 흐름과 발견함에서 제작 후보함으로 이동하는 흐름도 테스트로 보강했습니다.
 - 추가 완료 3: 스크랩북/참고 보관함 빈 화면 이동 흐름과 필터 결과 없음 화면의 조건 초기화 흐름도 테스트로 보강했습니다.
+- 추가 완료 4: 빈 화면 액션 버튼과 단계 안내 카드의 공통 렌더링 컴포넌트도 테스트로 보강했습니다.
 - 사용자 판단 필요 여부: 현재 없음. React Testing Library나 Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
@@ -247,7 +250,7 @@
 
 이 순서가 안전한 이유:
 
-- 문서 기준, UI 문구 감사, 주요 화면 문구 안정화, 빈 화면 다음 행동, 저장 영상 페이지네이션 감사, scan/API 사용 기록 모델, discovery MVP 범위 검토, 제작 후보 MVP 범위 검토는 완료됐습니다.
+- 문서 기준, UI 문구 감사, 주요 화면 문구 안정화, 빈 화면 다음 행동, 빈 화면 공통 렌더링 정리, 저장 영상 페이지네이션 감사, scan/API 사용 기록 모델, discovery MVP 범위 검토, 제작 후보 MVP 범위 검토는 완료됐습니다.
 - discovery links 1차 MVP는 `/discovery-links`와 `docType: discovery_link` 방식으로 부분 구현되었습니다.
 - 이후에는 이미 구현된 발견함을 안정화한 뒤, local assets와 별도 제작 프로젝트 모델처럼 데이터 의미가 커지는 작업을 별도 판단으로 넘깁니다.
 - DB/API 변경은 계속 별도 판단을 받고 진행합니다.
