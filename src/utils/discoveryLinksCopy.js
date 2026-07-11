@@ -93,7 +93,7 @@ export const getDiscoveryLinksHeaderActionsViewProps = ({
 });
 
 export const getDiscoveryLinksLoadingStateViewProps = () => ({
-  message: 'Cloud 발견함을 불러오는 중입니다.',
+  message: 'Cloud 발견함을 불러오는 중입니다. 외부 사이트 수집이나 자동 업로드는 실행하지 않습니다.',
 });
 
 export const getDiscoveryLinksActiveFilterSummaryViewProps = ({ filteredLinkCount = 0 } = {}) => ({

@@ -81,7 +81,9 @@ describe('discoveryLinksCopy utils', () => {
       inputPlaceholder: '제목, 메모, URL 검색',
     });
     expect(getDiscoveryLinkSearchBoxViewProps().clearButtonProps.title).toBe('검색어 지우기');
-    expect(getDiscoveryLinksLoadingStateViewProps().message).toBe('Cloud 발견함을 불러오는 중입니다.');
+    expect(getDiscoveryLinksLoadingStateViewProps().message).toBe(
+      'Cloud 발견함을 불러오는 중입니다. 외부 사이트 수집이나 자동 업로드는 실행하지 않습니다.'
+    );
     expect(getDiscoveryLinksActiveFilterSummaryViewProps({ filteredLinkCount: 4 }).message).toBe(
       '현재 조건에 맞는 링크 4개를 보고 있습니다.'
     );

@@ -136,9 +136,15 @@ Azure 구독, 비용, Static Web Apps 배포 연결, 이동 제외 리소스, �
 
 `package.json`, `package-lock.json`, GitHub Actions test step을 바꾸기 전에 확인해야 합니다.
 
+19. `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md`
+
+main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 전용 절차입니다.
+
+저장, 삭제, 새 영상 수집, YouTube API 호출 없이 프론트 배포 상태만 확인할 때 봅니다.
+
 ### 6단계. 실행 순서 확인
 
-19. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
+20. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
 
 위 문서들을 바탕으로 다음 작업을 작은 Issue 단위로 쪼갠 실행 계획입니다.
 
@@ -169,6 +175,7 @@ Azure 구독, 비용, Static Web Apps 배포 연결, 이동 제외 리소스, �
 | `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` | GitHub Actions/Azure 배포 경고 선택지 | 예 | 일부 | 배포 workflow 수정 전 필수 |
 | `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md` | Azure 구독 이동/비용/배포 연결 확인 | 예 | 일부 | 구독/배포/비용 확인 전 필수 |
 | `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` | 프론트 테스트 도입 선택지 | 예 | 일부 | test/package 변경 전 필수 |
+| `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md` | 공개 앱 최소 응답 확인 절차 | 예 | 아니오 | 배포 확인 전 참고 |
 | `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md` | 다음 구현 Issue 순서 | 예 | 예 | 필수 |
 
 ---
