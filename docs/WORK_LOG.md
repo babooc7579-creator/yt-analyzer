@@ -1994,6 +1994,36 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
 
+### 72. 2026-07-11 주요 화면 흐름 렌더링 테스트 묶음 보강
+
+홈 화면에서 오늘 레이더와 제작 후보함으로 이어지는 흐름, 발견함 빈 상태와 필터 상태, 스크랩북/참고 보관함, 제작 후보함, 채널 안전 버튼, 영상 카드/리스트 액션, 댓글 Top 10 모달 상태 문구를 한 묶음으로 테스트 보강했습니다.
+
+완료한 작업:
+
+- `HomeRadarWorkflowSection`이 저장 영상 조회, 오늘 후보 판단, 제작 후보함/발견함 이동을 Cloud DB/Cloud 판단 기록/YouTube API 경계와 함께 렌더링하는지 확인했습니다.
+- `DiscoveryLinksEmptyState`, `DiscoveryLinksFilteredEmptyState`, `DiscoveryLinksHeaderActions`가 수동 링크 저장, 필터 초기화, 후보함 이동, Cloud 재조회, URL 복사를 구분하는지 확인했습니다.
+- `ScrapbookEmptyState`, `ReferenceVaultEmptyState`, `ScrapbookVideoFooterActions`가 안전한 화면 이동, Cloud DB 조회, URL 복사, 댓글 API 호출, Cloud 스크랩북 해제를 구분하는지 확인했습니다.
+- `ProductionKanbanEmptyState`, `ProductionVideoMoveStatus`, `ProductionVideoSaveStatus`가 빈 후보함 다음 행동과 Cloud 저장 성공/실패 문구를 렌더링하는지 확인했습니다.
+- `ChannelListItemActions`, `ChannelTagSelector`가 채널 URL 복사, Cloud 채널 삭제, 태그 선택의 API/저장 경계를 유지하는지 확인했습니다.
+- `VideoCardPrimaryActions`, `VideoCardMetaActions`, `VideoListRowCandidateAction`이 스크랩/제작 후보/댓글 조회/URL 복사 경계를 유지하는지 확인했습니다.
+- `TopCommentsModal`이 로딩/오류/빈 상태를 명확히 렌더링하는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/HomeRadarWorkflowSection.test.jsx src/components/DiscoveryLinksFlowStates.test.jsx src/components/ScrapbookReferenceFlow.test.jsx src/components/ProductionKanbanFlowStates.test.jsx src/components/ChannelSafetyControls.test.jsx src/components/VideoActionSafetyControls.test.jsx src/components/TopCommentsModalStates.test.jsx --reporter=dot` 통과, 7개 파일 / 16개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 160개 파일 / 720개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
+
 ### 71. 2026-07-11 발견함 저장/제작 후보 이동 버튼 렌더링 테스트 보강
 
 발견함 수동 링크 저장 버튼과 제작 후보함의 영상/발견 링크 상태 이동 버튼이 Cloud 저장과 외부 수집 없음 기준을 실제 화면 HTML에 렌더링하는지 테스트를 보강했습니다.
