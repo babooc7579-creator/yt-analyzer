@@ -18,6 +18,7 @@ import {
   getDiscoveryStatusFilterButtonProps,
   getDiscoveryStatusFilterGroupViewProps,
   getDiscoveryLinksActiveFilterSummaryViewProps,
+  getDiscoveryLinksErrorNoticeViewProps,
   getDiscoveryLinksFilteredEmptyStateViewProps,
   getDiscoveryLinksHeaderActionsViewProps,
   getDiscoveryLinksHeaderTitleViewProps,
@@ -55,6 +56,8 @@ describe('discoveryLinksCopy utils', () => {
     expect(props.title).toContain('Cloud 발견함 목록');
     expect(props.title).toContain('외부 사이트 수집이나 저장 변경은 없습니다');
     expect(props['aria-label']).toContain('외부 수집이나 저장 변경 없음');
+    expect(getDiscoveryLinksErrorNoticeViewProps().recoveryText).toContain('localStorage와 자동 병합');
+    expect(getDiscoveryLinksErrorNoticeViewProps().recoveryText).toContain('자동 업로드하지 않습니다');
   });
 
   it('builds discovery form guidance without implying crawling or downloads', () => {

@@ -13,6 +13,31 @@ export const getProductionDiscoveryLinkBadgesViewProps = ({ sourceHost } = {}) =
   sourceLabel: `출처 ${sourceHost}`,
 });
 
+export const getProductionDiscoveryLinkReviewHintProps = ({
+  rightsWarning,
+} = {}) => ({
+  items: [
+    {
+      key: 'source',
+      label: '원본 확인',
+      text: '원본 열기나 링크 복사로 직접 확인합니다. 외부 자동 수집이나 다운로드는 실행하지 않습니다.',
+    },
+    {
+      key: 'rights',
+      label: '권리 상태',
+      text: rightsWarning
+        ? `${rightsWarning.title}: ${rightsWarning.description}`
+        : '권리 상태를 확인한 뒤 제작에 쓸지 판단합니다.',
+    },
+    {
+      key: 'candidate',
+      label: '후보 처리',
+      text: '후보 제외 또는 발견함으로 되돌리기는 Cloud 발견함 상태만 바꾸며 링크 기록은 삭제하지 않습니다.',
+    },
+  ],
+  title: '링크 후보 확인 순서',
+});
+
 export const getProductionDiscoveryLinkMoveButtonViewProps = ({
   isMoving = false,
   label,

@@ -25,8 +25,11 @@ export default function HomeRadarSummary({
       <HomeRadarHero />
 
       <HomeRadarStatsGrid
+        discoveryCandidateCount={discoveryCandidateCount}
+        discoveryRightsWarningCount={discoveryRightsWarningCount}
         latestScanText={latestScanText}
         loadedVideoCount={loadedVideoCount}
+        productionCandidateCount={productionCandidateCount}
         savedChannelCount={savedChannelCount}
         savedVideoCount={savedVideoCount}
         ttoTtoAssetCount={ttoTtoAssetCount}

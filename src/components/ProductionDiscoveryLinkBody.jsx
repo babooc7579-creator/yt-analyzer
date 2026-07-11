@@ -1,4 +1,5 @@
 import ProductionDiscoveryLinkRightsWarning from './ProductionDiscoveryLinkRightsWarning';
+import ProductionDiscoveryLinkReviewHint from './ProductionDiscoveryLinkReviewHint';
 
 export default function ProductionDiscoveryLinkBody({
   link,
@@ -12,6 +13,7 @@ export default function ProductionDiscoveryLinkBody({
       </h4>
       <p className="mt-1 break-all text-xs text-slate-500">{link.url}</p>
       <ProductionDiscoveryLinkRightsWarning rightsWarning={rightsWarning} />
+      <ProductionDiscoveryLinkReviewHint rightsWarning={rightsWarning} />
       {link.memo ? (
         <p className="mt-3 line-clamp-3 rounded-lg bg-white p-3 text-xs leading-relaxed text-slate-600">
           {link.memo}

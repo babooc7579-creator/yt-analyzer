@@ -12,8 +12,11 @@ describe('creatorHomeViewProps utils', () => {
     const heroProps = getHomeRadarHeroViewProps();
     const guidelinesProps = getHomeOperatingGuidelinesViewProps();
     const statsProps = getHomeRadarStatsGridViewProps({
+      discoveryCandidateCount: 6,
+      discoveryRightsWarningCount: 1,
       latestScanText: 'just now',
       loadedVideoCount: 10,
+      productionCandidateCount: 5,
       savedChannelCount: 2,
       savedVideoCount: 3,
       ttoTtoAssetCount: 4,
@@ -37,16 +40,23 @@ describe('creatorHomeViewProps utils', () => {
       ['스크랩북 보관', 3],
       ['마지막 수집 기록', 'just now'],
       ['또터또 후보', 4],
+      ['제작 후보', 5],
+      ['발견 링크 후보', 6],
     ]);
     expect(statsProps.cards[2].description).toContain('Cloud 스크랩북에 보관한 영상');
     expect(statsProps.cards[0].description).toContain('YouTube API를 호출하지 않습니다');
     expect(statsProps.cards[1].description).toContain('새 YouTube API 호출 수가 아닙니다');
     expect(statsProps.cards[3].description).toContain('현재 새 수집이 실행 중이라는 뜻은 아닙니다');
     expect(statsProps.cards[4].description).toContain('판단 보조 신호');
+    expect(statsProps.cards[5].description).toContain('Cloud 판단 기록');
+    expect(statsProps.cards[5].description).toContain('저장이나 API 호출은 실행하지 않습니다');
+    expect(statsProps.cards[6].description).toContain('권리 확인 필요 1개');
     expect(statsProps.cards[2].description).not.toContain('제작 후보로 표시한 영상');
     expect(statsProps.cards[2].description).not.toContain('제작 후보로 남긴');
     expect(statsProps.cards[3].className).toContain('emerald');
     expect(statsProps.cards[4].className).toContain('rose');
+    expect(statsProps.cards[5].className).toContain('indigo');
+    expect(statsProps.cards[6].className).toContain('amber');
   });
 
   it('builds home summary counts and dashboard metrics from provided lists', () => {

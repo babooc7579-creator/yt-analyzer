@@ -1,6 +1,9 @@
 import { CheckCircle2, RefreshCw } from 'lucide-react';
 
-import { getDiscoveryLinksRefreshButtonProps } from '../utils/discoveryLinksCopy';
+import {
+  getDiscoveryLinksErrorNoticeViewProps,
+  getDiscoveryLinksRefreshButtonProps,
+} from '../utils/discoveryLinksCopy';
 
 export default function DiscoveryLinksNotices({
   error,
@@ -9,6 +12,7 @@ export default function DiscoveryLinksNotices({
   onRefresh,
   savingMessage,
 }) {
+  const errorNoticeProps = getDiscoveryLinksErrorNoticeViewProps();
   const refreshButtonProps = getDiscoveryLinksRefreshButtonProps();
 
   return (
@@ -16,7 +20,12 @@ export default function DiscoveryLinksNotices({
       {error ? (
         <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <p className="leading-relaxed">{error}</p>
+            <div>
+              <p className="leading-relaxed">{error}</p>
+              <p className="mt-1 text-xs font-bold leading-relaxed text-red-600">
+                {errorNoticeProps.recoveryText}
+              </p>
+            </div>
             {onRefresh ? (
               <button
                 type="button"

@@ -31,8 +31,11 @@ export const getHomeRadarHeroViewProps = () => ({
 });
 
 export const getHomeRadarStatsGridViewProps = ({
+  discoveryCandidateCount = 0,
+  discoveryRightsWarningCount = 0,
   latestScanText,
   loadedVideoCount,
+  productionCandidateCount = 0,
   savedChannelCount,
   savedVideoCount,
   ttoTtoAssetCount,
@@ -69,6 +72,24 @@ export const getHomeRadarStatsGridViewProps = ({
       className: 'border-rose-500/20 bg-rose-950/30',
       labelClassName: 'text-rose-300',
       descriptionClassName: 'text-rose-100/70',
+    },
+    {
+      label: '제작 후보',
+      value: productionCandidateCount,
+      description: 'Cloud 판단 기록에서 제작 후보로 표시한 저장 영상입니다. 숫자 확인만으로 저장이나 API 호출은 실행하지 않습니다.',
+      className: 'border-indigo-500/20 bg-indigo-950/30',
+      labelClassName: 'text-indigo-300',
+      descriptionClassName: 'text-indigo-100/70',
+    },
+    {
+      label: '발견 링크 후보',
+      value: discoveryCandidateCount,
+      description: discoveryRightsWarningCount > 0
+        ? `Cloud 발견함에서 제작 후보로 표시한 링크입니다. 권리 확인 필요 ${discoveryRightsWarningCount}개를 먼저 확인하세요.`
+        : 'Cloud 발견함에서 제작 후보로 표시한 링크입니다. 외부 자동 수집이나 다운로드 결과가 아닙니다.',
+      className: 'border-amber-500/20 bg-amber-950/30',
+      labelClassName: 'text-amber-300',
+      descriptionClassName: 'text-amber-100/70',
     },
   ],
 });

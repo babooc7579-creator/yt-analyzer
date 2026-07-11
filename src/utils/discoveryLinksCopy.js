@@ -22,6 +22,10 @@ export const getDiscoveryLinksRefreshButtonProps = () => ({
   'aria-label': 'Cloud 발견함 다시 조회, 외부 수집이나 저장 변경 없음',
 });
 
+export const getDiscoveryLinksErrorNoticeViewProps = () => ({
+  recoveryText: 'Cloud 발견함 재조회만 실행합니다. localStorage와 자동 병합하거나 링크를 자동 업로드하지 않습니다.',
+});
+
 export const getDiscoveryLinkFormHeaderViewProps = () => ({
   title: '수동 링크 저장',
   description: '링크와 메모만 Cloud에 저장합니다. 외부 사이트 자동 수집, 다운로드, AI 분석은 실행하지 않습니다.',
