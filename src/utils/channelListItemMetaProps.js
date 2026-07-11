@@ -15,6 +15,7 @@ export const getChannelListItemMetaViewProps = ({
   gradeBadgeProps: {
     className: `rounded-full border px-2 py-0.5 text-[9px] font-extrabold ${CHANNEL_GRADE_TONES[grade]}`,
     label: `등급 ${CHANNEL_GRADE_LABELS[grade]}`,
+    title: `채널 중요도 등급 ${CHANNEL_GRADE_LABELS[grade]}입니다. 채널을 고를 때 보는 표시이며, 이 배지만으로 YouTube API를 호출하지 않습니다.`,
   },
   languageLabel: getLanguageLabel(channel.language),
   stats: channel.stats ? [
@@ -34,5 +35,6 @@ export const getChannelListItemMetaViewProps = ({
   statusBadgeProps: {
     className: `rounded-full border px-2 py-0.5 text-[9px] font-extrabold ${CHANNEL_STATUS_TONES[status]}`,
     label: CHANNEL_STATUS_LABELS[status],
+    title: `채널 상태 ${CHANNEL_STATUS_LABELS[status]}입니다. 새 영상 수집 대상 여부를 구분하는 표시이며, 이 배지만으로 YouTube API를 호출하지 않습니다.`,
   },
 });

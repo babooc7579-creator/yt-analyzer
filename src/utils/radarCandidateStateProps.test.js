@@ -17,6 +17,7 @@ describe('radarCandidateStateProps utils', () => {
     expect(props.titleText).toBe('오늘 볼 후보를 모두 처리했습니다');
     expect(props.descriptionText).toContain('Cloud 판단 기록');
     expect(props.descriptionText).toContain('오늘의 레이더에서 숨겨집니다');
+    expect(props.descriptionText).toContain('제작 후보함');
     expect(props.openVaultButtonProps).toMatchObject({
       label: '레퍼런스 금고 열기',
       title: '저장된 영상 조회 화면으로 이동',
@@ -60,6 +61,8 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(decisionProps.descriptionText).toContain('Cloud 판단 기록');
+    expect(decisionProps.descriptionText).toContain('좋으면 제작 후보로');
+    expect(decisionProps.descriptionText).toContain('아니면 제외');
     expect(decisionProps.descriptionText).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(saveProps).toMatchObject({
       buttonText: '소재 보관',

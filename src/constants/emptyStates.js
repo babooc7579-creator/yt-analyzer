@@ -29,7 +29,7 @@ export const REFERENCE_VAULT_EMPTY_STATE = {
 
 export const SCRAPBOOK_EMPTY_STATE = {
   title: '스크랩된 영상이 없습니다',
-  description: '스크랩북은 나중에 다시 볼 영상을 모아두는 보관함입니다. 별표로 저장한 영상만 이곳에 표시됩니다.',
+  description: '스크랩북은 나중에 다시 볼 레퍼런스 영상을 모아두는 보관함입니다. 별표로 저장한 영상만 이곳에 표시되며, 제작 후보와는 별도로 관리합니다.',
   steps: [
     {
       title: '1. 채널 저장',
@@ -77,7 +77,7 @@ export const DISCOVERY_LINKS_EMPTY_STATE = {
 
 export const PRODUCTION_KANBAN_EMPTY_STATE = {
   title: '아직 제작 후보가 없습니다',
-  description: '스크랩북에 저장된 모든 영상이 자동으로 제작 후보가 되지는 않습니다. 레이더, 레퍼런스 금고, 발견함에서 만들 만한 항목만 제작 후보로 표시하면 이곳에 보입니다.',
+  description: '제작 후보함은 오늘 무엇을 만들지 고르는 작업 공간입니다. 스크랩북에 저장된 모든 영상이 자동으로 제작 후보가 되지는 않습니다. 레이더, 레퍼런스 금고, 발견함에서 만들 만한 항목만 제작 후보로 표시하면 이곳에 보입니다.',
   steps: [
     {
       title: '1. 오늘 레이더에서 고르기',

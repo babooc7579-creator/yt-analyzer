@@ -7,9 +7,9 @@ export const getProductionKanbanSummaryHeaderProps = ({
   videoCount = 0,
 } = {}) => ({
   eyebrow: '제작 칸반',
-  title: '제작 후보만 다음 행동으로 정리합니다',
+  title: '제작 후보를 실제 작업 순서로 정리합니다',
   description:
-    '스크랩북 전체가 아니라, 레이더와 발견함에서 제작 후보로 표시한 항목만 보여줍니다. 저장된 데이터 기준이며 YouTube API를 새로 호출하지 않습니다.',
+    '레이더와 발견함에서 제작 후보로 표시한 항목만 모아 오늘 무엇을 만들지 정리하는 화면입니다. 스크랩북 전체를 자동으로 끌어오지 않고, 저장된 데이터 기준이며 YouTube API를 새로 호출하지 않습니다.',
   metric: `영상 ${videoCount}개 관리 · 링크 ${discoveryLinkCandidateCount}개 후보`,
 });
 
