@@ -1,15 +1,28 @@
+const getProductionCandidateActionTitle = ({ hasCandidates, hasRightsWarning }) => {
+  if (hasRightsWarning) {
+    return '제작 후보함에서 권리 확인이 필요한 링크 후보를 먼저 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.';
+  }
+
+  if (hasCandidates) {
+    return '제작 후보함에서 영상과 링크 후보를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.';
+  }
+
+  return '제작 후보함을 열어 빈 상태 안내와 다음 행동을 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.';
+};
+
 export const getHomeCandidateWorkflowActions = ({
   hasCandidates,
+  hasRightsWarning,
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
 }) => ({
   productionCandidates: {
-    label: '후보함',
+    label: hasRightsWarning ? '권리 확인' : '후보함',
     onClick: onOpenProductionCandidates,
-    title: hasCandidates
-      ? '제작 후보함에서 영상과 링크 후보를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.'
-      : '제작 후보함을 열어 빈 상태 안내와 다음 행동을 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
-    ariaLabel: '제작 후보함 열기, 저장된 후보 조회이며 YouTube API 호출 없음',
+    title: getProductionCandidateActionTitle({ hasCandidates, hasRightsWarning }),
+    ariaLabel: hasRightsWarning
+      ? '제작 후보함에서 권리 확인 후보 보기, 저장된 후보 조회이며 YouTube API 호출 없음'
+      : '제작 후보함 열기, 저장된 후보 조회이며 YouTube API 호출 없음',
   },
   discoveryLinks: {
     label: '발견함',

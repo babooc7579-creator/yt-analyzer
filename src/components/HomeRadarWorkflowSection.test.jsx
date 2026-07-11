@@ -30,6 +30,7 @@ describe('HomeRadarWorkflowSection', () => {
     expect(html).toContain('Cloud DB');
     expect(html).toContain('YouTube API');
     expect(html).toContain('제작 후보함');
+    expect(html).toContain('권리 확인');
     expect(html).toContain('발견함');
   });
 

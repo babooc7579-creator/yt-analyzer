@@ -2022,6 +2022,36 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - YouTube API 호출 조건/횟수 변경 없음
 - 새 라이브러리 추가 없음
 
+### 91. 2026-07-12 홈 제작 후보 카드 권리 확인 버튼 문구 보강
+
+홈의 제작 후보 작업 카드에서 권리 확인이 필요한 발견 링크 후보가 있을 때 일반 "후보함" 버튼 대신 "권리 확인" 버튼 문구를 표시하도록 보강했습니다.
+
+완료한 작업:
+
+- `hasRightsWarning` 값을 홈 제작 후보 액션 버튼까지 전달했습니다.
+- 권리 확인 후보가 있으면 버튼 label을 "권리 확인"으로 바꿨습니다.
+- 버튼 title/aria-label도 저장된 후보 조회이며 YouTube API를 새로 호출하지 않는다는 설명을 유지했습니다.
+- 관련 유틸/컴포넌트 렌더링 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\homeCandidateWorkflowActions.test.js src\components\HomeRadarWorkflowSection.test.jsx --reporter=dot`
+  - 2개 테스트 파일, 7개 테스트 통과
+- `npm.cmd test -- --reporter=dot`
+  - 168개 테스트 파일, 740개 테스트 통과
+- `npm.cmd run build`
+  - Vite production build 통과
+- `npm.cmd audit --omit=dev`
+  - 취약점 0개
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음
+
 ### 75. 2026-07-11 제작 후보함/발견함/홈 흐름 2차 보강
 
 제작 후보함, 발견함, 홈 화면에서 사용자가 다음에 볼 항목을 더 쉽게 판단할 수 있도록 표시 전용 안내를 추가했습니다.

@@ -4,11 +4,13 @@ import { getHomeCandidateWorkflowActions } from '../utils/homeCandidateWorkflowA
 
 export default function HomeCandidateWorkflowActions({
   hasCandidates,
+  hasRightsWarning,
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
 }) {
   const actions = getHomeCandidateWorkflowActions({
     hasCandidates,
+    hasRightsWarning,
     onOpenDiscoveryLinks,
     onOpenProductionCandidates,
   });
