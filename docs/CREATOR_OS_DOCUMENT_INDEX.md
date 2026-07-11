@@ -263,8 +263,8 @@ discovery links/local assets MVP 범위 검토도 2026-07-02에 완료됐고, �
 
 | 문서 | 용도 |
 |---|---|
-| `APP_BLUEPRINT.md` | 초기 앱 구조와 화면 방향 참고 |
-| `ARCHITECTURE.md` | 이전 구조 분석과 리팩터링 배경 참고 |
+| `APP_BLUEPRINT.md` | 현재 제품 방향, 화면 흐름, 구현 기준 참고 |
+| `ARCHITECTURE.md` | 현재 폴더 구조와 장기 구조 방향 참고 |
 | `V22_STATE_AND_MODEL_MAP.md` | v2.2 목표 상태/모델 초안 참고 |
 | `HANDOFF.md` | 과거 인수인계 및 작업 맥락 참고 |
 | `WORK_LOG.md` | 진행 기록 참고 |

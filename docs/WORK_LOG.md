@@ -2261,3 +2261,28 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 새 라이브러리 추가 없음
+
+### 76. 2026-07-11 앱 설계도와 구조 설계서 현재 상태 반영
+
+초기 설계 시절 표현이 남아 있던 `APP_BLUEPRINT`와 `ARCHITECTURE`를 현재 Creator OS 구현 상태에 맞게 문서만 갱신했습니다.
+
+완료한 작업:
+
+- 앱 기본 흐름을 홈/오늘 레이더, 저장 영상 DB 조회, 수동 발견함, 제작 후보함 중심으로 갱신했습니다.
+- 현재 화면 구조에 발견함/링크 수집, 스크랩북/참고 보관함, 제작 후보함, 준비중 메뉴를 반영했습니다.
+- `App.jsx`가 이미 얇은 연결 파일이고, hooks/components/services/utils 구조로 분리된 현재 상태를 구조 문서에 반영했습니다.
+- discovery links는 `docType: discovery_link`, 제작 후보는 별도 `production_candidates` 저장소 없이 `videoUserRecords`와 발견함 상태값을 사용한다는 현재 기준을 명시했습니다.
+- Phase 문구를 초기 구현 계획이 아니라 현재 구조 안정화 완료와 화면 흐름 안정화 진행 기준으로 정리했습니다.
+- 문서 인덱스에서 `APP_BLUEPRINT`와 `ARCHITECTURE`의 설명을 현재 제품/구조 기준 문서에 맞게 갱신했습니다.
+
+검증:
+
+- 문서 변경만 수행했습니다.
+
+보존한 것:
+
+- 코드 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
