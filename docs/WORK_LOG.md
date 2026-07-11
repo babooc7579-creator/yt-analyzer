@@ -2016,3 +2016,29 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 68. 2026-07-11 URL 복사 버튼 렌더링 테스트 보강
+
+공통 `CopyUrlButton`이 기본 안내 문구와 비활성 상태, 접근성 문구를 안전하게 렌더링하는지 테스트를 보강했습니다.
+
+완료한 작업:
+
+- 기본 URL 복사 버튼이 브라우저 로컬 클립보드 복사, API 호출 없음, 저장 작업 없음 안내를 title로 제공하는지 확인했습니다.
+- 복사할 URL이 없을 때 버튼이 비활성화되는지 확인했습니다.
+- 사용자 지정 aria-label을 쓸 때도 화면 표시용 복사 상태 문구가 숨김 텍스트로 유지되는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src/components/CopyUrlButton.test.jsx --reporter=dot` 통과, 1개 파일 / 3개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 147개 파일 / 687개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 동작 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- 저장/수집/YouTube API 호출 조건 변경 없음
