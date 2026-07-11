@@ -19,10 +19,14 @@ describe('channelListItemMetaProps utils', () => {
     expect(props.gradeBadgeProps).toMatchObject({
       label: '등급 S',
     });
+    expect(props.gradeBadgeProps.title).toContain('채널 중요도 등급 S');
+    expect(props.gradeBadgeProps.title).toContain('YouTube API를 호출하지 않습니다');
     expect(props.gradeBadgeProps.className).toContain('rose');
     expect(props.statusBadgeProps).toMatchObject({
       label: '활성',
     });
+    expect(props.statusBadgeProps.title).toContain('새 영상 수집 대상 여부');
+    expect(props.statusBadgeProps.title).toContain('YouTube API를 호출하지 않습니다');
     expect(props.statusBadgeProps.className).toContain('emerald');
     expect(props.languageLabel).toBe('EN');
   });

@@ -208,11 +208,14 @@ describe('videoCard utils', () => {
     });
 
     expect(badges.map((badge) => badge.label)).toEqual([
-      '소재 보관됨',
-      '후보 표시됨',
+      '스크랩북 보관',
+      '제작 후보',
       'AI 요청문 선택',
     ]);
     expect(badges.map((badge) => badge.label)).not.toContain('후보함 등록');
+    expect(badges[0].title).toContain('Cloud 스크랩북');
+    expect(badges[1].title).toContain('제작 후보함');
+    expect(badges[2].title).toContain('AI 요청문');
     expect(badges.every((badge) => badge.isVisible)).toBe(true);
   });
 

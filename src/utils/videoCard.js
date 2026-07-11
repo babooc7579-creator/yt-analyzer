@@ -50,17 +50,20 @@ export const getVideoCardStatusBadgeItems = ({
   {
     className: 'rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700',
     isVisible: isSaved,
-    label: '소재 보관됨',
+    label: '스크랩북 보관',
+    title: 'Cloud 스크랩북에 보관된 영상입니다. 제작 후보 여부와는 별도입니다.',
   },
   {
     className: 'rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700',
     isVisible: isProductionCandidate,
-    label: '후보 표시됨',
+    label: '제작 후보',
+    title: 'Cloud 판단 기록에서 제작 후보로 표시된 영상입니다. 제작 후보함에 표시됩니다.',
   },
   {
     className: 'rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700',
     isVisible: isChecked,
     label: 'AI 요청문 선택',
+    title: 'AI 요청문에 포함할 영상으로 화면에서 선택한 상태입니다.',
   },
 ];
 

@@ -1994,6 +1994,35 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
 
+### 71. 2026-07-11 화면 상태 배지와 후보 흐름 문구 정리
+
+오늘 레이더, 저장 영상 카드, 채널 목록, 발견함, 제작 후보함에서 사용자가 다음 행동을 더 쉽게 구분할 수 있도록 상태 배지와 후보 흐름 안내 문구를 정리했습니다.
+
+완료한 작업:
+
+- 오늘 레이더 처리 완료 문구에 저장 영상 탐색과 제작 후보함으로 이어지는 다음 행동을 명시했습니다.
+- 오늘 레이더 판단 안내에 제작 후보, 소재 보관, 나중에 보기, 제외의 사용 기준을 더 쉽게 표시했습니다.
+- 저장 영상 카드의 상태 배지를 `스크랩북 보관`, `제작 후보`, `AI 요청문 선택`으로 정리하고 hover 안내를 추가했습니다.
+- 채널 등급/상태 배지에 "이 배지만으로 YouTube API를 호출하지 않는다"는 안내를 추가했습니다.
+- 발견함의 제작 후보 버튼이 후보함에서 확인되는 흐름과 권리 확인 별도 원칙을 더 분명히 표시했습니다.
+- 스크랩북과 제작 후보함 빈 화면 문구에서 "보관"과 "제작 후보"가 별도 개념임을 보강했습니다.
+- 상태 배지 렌더링 테스트 2개 파일을 추가했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\radarCandidateStateProps.test.js src\utils\productionKanbanSummary.test.js src\utils\videoCard.test.js src\utils\channelListItemMetaProps.test.js src\utils\discoveryLinkActionProps.test.js src\constants\emptyStates.test.js src\components\VideoCardStatusBadges.test.jsx src\components\ChannelListItemMeta.test.jsx --reporter=dot` 통과, 8개 파일 / 36개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 162개 파일 / 723개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음
+
 ### 72. 2026-07-11 주요 화면 흐름 렌더링 테스트 묶음 보강
 
 홈 화면에서 오늘 레이더와 제작 후보함으로 이어지는 흐름, 발견함 빈 상태와 필터 상태, 스크랩북/참고 보관함, 제작 후보함, 채널 안전 버튼, 영상 카드/리스트 액션, 댓글 Top 10 모달 상태 문구를 한 묶음으로 테스트 보강했습니다.

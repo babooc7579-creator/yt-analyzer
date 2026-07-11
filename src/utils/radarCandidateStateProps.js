@@ -8,7 +8,7 @@ const toVideoObject = (video) => (
 
 export const getRadarCandidateCompletedStateViewProps = () => ({
   titleText: '오늘 볼 후보를 모두 처리했습니다',
-  descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 Cloud 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있습니다.',
+  descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 Cloud 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있고, 다음 작업은 저장 영상 탐색이나 제작 후보함에서 이어갈 수 있습니다.',
   openVaultButtonProps: {
     label: '레퍼런스 금고 열기',
     title: '저장된 영상 조회 화면으로 이동',
@@ -61,7 +61,7 @@ export const getRadarCandidateProductionButtonActionProps = ({
 };
 
 export const getRadarCandidateDecisionActionsViewProps = () => ({
-  descriptionText: '2. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.',
+  descriptionText: '2. 좋으면 제작 후보로, 다시 볼 영상은 소재 보관, 애매하면 나중에 보기, 아니면 제외로 정리하세요. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.',
 });
 
 export const getRadarCandidateScrapButtonProps = ({
