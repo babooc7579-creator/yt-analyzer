@@ -3,6 +3,7 @@ import { Home, Search, Star } from 'lucide-react';
 import { SCRAPBOOK_EMPTY_STATE } from '../constants/emptyStates';
 import { getScrapbookEmptyStateActions } from '../utils/scrapbook';
 import EmptyStateActions from './EmptyStateActions';
+import EmptyStateSteps from './EmptyStateSteps';
 
 const ACTION_ICONS = {
   home: Home,
@@ -18,7 +19,6 @@ export default function ScrapbookEmptyState({
   onOpenHome,
   onOpenReferenceVault,
 }) {
-  const [saveChannelStep, loadStoredStep, saveScrapStep] = SCRAPBOOK_EMPTY_STATE.steps;
   const actionButtons = getScrapbookEmptyStateActions({
     onOpenHome,
     onOpenReferenceVault,
@@ -31,20 +31,13 @@ export default function ScrapbookEmptyState({
       <p className="mx-auto max-w-xl text-sm text-slate-500">
         {SCRAPBOOK_EMPTY_STATE.description}
       </p>
-      <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-3 mt-5 text-left">
-        <div className="bg-white border border-slate-200 rounded-xl p-4">
-          <p className="text-sm font-bold text-slate-700">{saveChannelStep.title}</p>
-          <p className="text-xs text-slate-500 mt-2">{saveChannelStep.description}</p>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4">
-          <p className="text-sm font-bold text-slate-700">{loadStoredStep.title}</p>
-          <p className="text-xs text-slate-500 mt-2">{loadStoredStep.description}</p>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4">
-          <p className="text-sm font-bold text-slate-700">{saveScrapStep.title}</p>
-          <p className="text-xs text-slate-500 mt-2">{saveScrapStep.description}</p>
-        </div>
-      </div>
+      <EmptyStateSteps
+        className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-3 mt-5 text-left"
+        defaultDescriptionClassName="text-xs text-slate-500 mt-2"
+        defaultStepClassName="bg-white border border-slate-200 rounded-xl p-4"
+        defaultTitleClassName="text-sm font-bold text-slate-700"
+        steps={SCRAPBOOK_EMPTY_STATE.steps}
+      />
       <EmptyStateActions
         actions={actionButtons}
         buttonBaseClassName="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-colors"
