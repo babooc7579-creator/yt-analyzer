@@ -2309,3 +2309,24 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - DB schema 변경 없음
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
+
+### 78. 2026-07-11 인수인계서 메뉴와 localStorage 기준 최신화
+
+`HANDOFF.md`에 남아 있던 초기 메뉴명과 localStorage 분리 예정 문구를 현재 구현 기준에 맞게 문서만 갱신했습니다.
+
+완료한 작업:
+
+- UI 메뉴 이름 섹션을 대시보드/영상 발굴/또터또 모드 중심의 초기 제안에서 오늘 레이더, 저장 영상, 발견함, 스크랩북/참고 보관함, 제작 후보함 중심의 현재 화면 흐름으로 바꿨습니다.
+- localStorage는 기준 저장소가 아니라 Cloud 실패 시 임시 fallback이며, `services/storage.js`와 hook 흐름 안에서 관리한다는 현재 원칙으로 정리했습니다.
+
+검증:
+
+- 문서 변경만 수행했습니다.
+
+보존한 것:
+
+- 코드 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
