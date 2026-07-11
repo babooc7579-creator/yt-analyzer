@@ -1,9 +1,27 @@
-import { Star } from 'lucide-react';
+import { Home, Search, Star } from 'lucide-react';
 
 import { SCRAPBOOK_EMPTY_STATE } from '../constants/emptyStates';
+import { getScrapbookEmptyStateActions } from '../utils/scrapbook';
 
-export default function ScrapbookEmptyState() {
+const ACTION_ICONS = {
+  home: Home,
+  referenceVault: Search,
+};
+
+const ACTION_CLASSES = {
+  indigo: 'bg-indigo-600 text-white hover:bg-indigo-700',
+  secondary: 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50',
+};
+
+export default function ScrapbookEmptyState({
+  onOpenHome,
+  onOpenReferenceVault,
+}) {
   const [saveChannelStep, loadStoredStep, saveScrapStep] = SCRAPBOOK_EMPTY_STATE.steps;
+  const actionButtons = getScrapbookEmptyStateActions({
+    onOpenHome,
+    onOpenReferenceVault,
+  });
 
   return (
     <div className="text-center py-20 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 px-6">
@@ -26,6 +44,27 @@ export default function ScrapbookEmptyState() {
           <p className="text-xs text-slate-500 mt-2">{saveScrapStep.description}</p>
         </div>
       </div>
+      {actionButtons.length > 0 && (
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
+          {actionButtons.map((action) => {
+            const ActionIcon = ACTION_ICONS[action.iconKey] || Search;
+            const actionClassName = ACTION_CLASSES[action.variant] || ACTION_CLASSES.secondary;
+
+            return (
+              <button
+                key={action.key}
+                type="button"
+                onClick={action.onClick}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-colors ${actionClassName}`}
+                title={action.title}
+                aria-label={action.ariaLabel}
+              >
+                <ActionIcon className="h-4 w-4" /> {action.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

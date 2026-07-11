@@ -1,4 +1,5 @@
 import { PRODUCTION_STATUSES, hasAnyProductionStatus } from '../constants/status';
+import { SCRAPBOOK_EMPTY_STATE } from '../constants/emptyStates';
 import { formatNumberedUrlList, getYouTubeVideoUrl } from './urls';
 
 const toVideoObject = (video) => (
@@ -26,6 +27,8 @@ const toNumber = (value) => {
   const numericValue = Number(value || 0);
   return Number.isFinite(numericValue) ? numericValue : 0;
 };
+
+const isFunction = (value) => typeof value === 'function';
 
 export const getCloudScrapbookVideos = (videos) => (
   Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
@@ -127,6 +130,30 @@ export const getProductionScopedVideos = (savedVideos = [], videoUserRecords = {
   ));
 };
 
+export const getScrapbookEmptyStateActions = ({
+  onOpenHome,
+  onOpenReferenceVault,
+} = {}) => [
+  {
+    key: 'home',
+    iconKey: 'home',
+    label: SCRAPBOOK_EMPTY_STATE.homeButton.label,
+    title: SCRAPBOOK_EMPTY_STATE.homeButton.title,
+    ariaLabel: SCRAPBOOK_EMPTY_STATE.homeButton.ariaLabel,
+    onClick: onOpenHome,
+    variant: 'secondary',
+  },
+  {
+    key: 'reference-vault',
+    iconKey: 'referenceVault',
+    label: SCRAPBOOK_EMPTY_STATE.referenceVaultButton.label,
+    title: SCRAPBOOK_EMPTY_STATE.referenceVaultButton.title,
+    ariaLabel: SCRAPBOOK_EMPTY_STATE.referenceVaultButton.ariaLabel,
+    onClick: onOpenReferenceVault,
+    variant: 'indigo',
+  },
+].filter((action) => isFunction(action.onClick));
+
 export const getScrapbookWorkspaceViewProps = ({
   creatorView,
   discoveryLinks,
@@ -167,6 +194,10 @@ export const getScrapbookWorkspaceViewProps = ({
     },
     isProductionView,
     isScrapbookEmpty: savedVideoList.length === 0,
+    scrapbookEmptyStateProps: {
+      onOpenHome,
+      onOpenReferenceVault,
+    },
     productionKanbanProps: {
       discoveryLinks,
       videos: savedVideoList,
