@@ -90,33 +90,49 @@ describe('productionKanbanSummary utils', () => {
       productionSummary: { discoveryRightsWarningCount: 2 },
     })).toMatchObject({
       badge: '권리 확인',
+      nextAction: '오늘 순서: 원본 링크 열기 → 출처/권리 확인 → 사용 가능 또는 제외로 정리',
       tone: 'warning',
     });
 
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { overdueCount: 1 },
     }).title).toContain('지난 업로드 예정일');
+    expect(getProductionKanbanPriorityGuideProps({
+      productionSummary: { overdueCount: 1 },
+    }).nextAction).toContain('완료/일정 변경/후보 제외');
 
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { activeWithoutDate: 3 },
     }).description).toContain('일정이 없는 영상 3개');
+    expect(getProductionKanbanPriorityGuideProps({
+      productionSummary: { activeWithoutDate: 3 },
+    }).nextAction).toContain('업로드 예정일 입력');
 
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { activeCount: 2 },
     })).toMatchObject({
       badge: '제작 진행',
+      nextAction: '오늘 순서: 제작 중 후보 하나 선택 → 부족한 준비 항목 채우기 → 업로드 완료로 이동',
       tone: 'ready',
     });
 
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { candidateCount: 4 },
     }).description).toContain('영상 후보 4개');
+    expect(getProductionKanbanPriorityGuideProps({
+      productionSummary: { candidateCount: 4 },
+    }).nextAction).toContain('하나만 제작 중으로 이동');
 
     expect(getProductionKanbanPriorityGuideProps({
       discoveryLinkCandidateCount: 5,
       productionSummary: {},
     }).description).toContain('링크 후보 5개');
+    expect(getProductionKanbanPriorityGuideProps({
+      discoveryLinkCandidateCount: 5,
+      productionSummary: {},
+    }).nextAction).toContain('영상 후보와 따로 판단');
 
     expect(getProductionKanbanPriorityGuideProps().description).toContain('새 YouTube API 호출');
+    expect(getProductionKanbanPriorityGuideProps().nextAction).toContain('오늘 레이더');
   });
 });

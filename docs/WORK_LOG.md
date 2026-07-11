@@ -2363,3 +2363,37 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - localStorage key 변경 없음
 - YouTube API 호출 조건/횟수 변경 없음
 - 새 라이브러리 추가 없음
+
+### 88. 2026-07-11 후속 추천 1~3번 안정화
+
+사용자가 승인한 다음 추천 작업 1~3번에 맞춰 GitHub Actions 경고 최소 정리, 제작 후보함의 오늘 처리 순서 안내, 발견 링크 권리 상태 안내를 보강했습니다.
+
+완료한 작업:
+
+- Azure Static Web Apps workflow에서 `Azure/static-web-apps-deploy@v1`이 지원하지 않는 `github_id_token` 입력을 제거했습니다.
+- 이전에 실패했던 token 방식 전체 단순화와 다르게, OIDC 단계 전체 삭제나 Azure 인증 방식 변경은 하지 않았습니다.
+- 제작 후보함 우선 확인 안내에 "오늘 순서" 문구를 추가했습니다.
+- 발견 링크 권리 경고에 "다음 행동" 문구를 추가해 권리 확인 필요/사용 금지 링크를 어떻게 처리할지 더 명확히 했습니다.
+- 발견함 안전 안내에 권리 상태가 사용 허가나 자동 권리 확인을 의미하지 않는다는 설명을 보강했습니다.
+- 관련 유틸/컴포넌트 렌더링 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\productionKanbanSummary.test.js src\components\ProductionKanbanPriorityGuide.test.jsx src\utils\discoveryLinksCopy.test.js src\components\ProductionKanbanFlowStates.test.jsx --reporter=dot`
+  - 4개 테스트 파일, 18개 테스트 통과
+- `npm.cmd test -- --reporter=dot`
+  - 168개 테스트 파일, 736개 테스트 통과
+- `npm.cmd run build`
+  - Vite production build 통과
+- `npm.cmd audit --omit=dev`
+  - 취약점 0개
+- `git diff --check`
+  - 패치 오류 없음
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음

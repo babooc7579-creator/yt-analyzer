@@ -44,7 +44,7 @@ export const getDiscoveryLinkRiskyCandidateHintViewProps = () => ({
 
 export const getDiscoveryLinkSafetyNoticeViewProps = () => ({
   title: '안전 기준',
-  description: '저장 영상 조회와 같은 Cloud DB 작업입니다. 선택 채널 새 영상 수집이나 외부 사이트 크롤링을 실행하지 않습니다.',
+  description: '저장 영상 조회와 같은 Cloud DB 작업입니다. 선택 채널 새 영상 수집이나 외부 사이트 크롤링을 실행하지 않습니다. 권리 상태는 사용자가 남기는 검토 표시이며, 사용 허가나 자동 권리 확인을 의미하지 않습니다.',
 });
 
 export const getDiscoveryLinkSearchBoxViewProps = () => ({
