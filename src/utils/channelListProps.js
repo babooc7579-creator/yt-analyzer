@@ -58,7 +58,7 @@ export const getChannelListUrlExportPanelViewProps = ({
 };
 
 export const getChannelListLoadingStateViewProps = () => ({
-  label: 'Cloud에서 채널 불러오는 중...',
+  label: 'Cloud 채널 목록을 불러오는 중입니다. 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
 });
 
 export const getChannelListBodyProps = ({
