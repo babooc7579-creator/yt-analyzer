@@ -1,7 +1,7 @@
 # 타임머신 CRM - 구조 설계서
 
-> 이 문서는 타임머신 CRM의 장기 구조를 잡기 위한 집 설계도입니다.
-> 기존 코드는 핵심 기능만 보존하고, 새 구조는 수정과 확장이 쉬운 Creator OS형 구조를 목표로 합니다.
+> 이 문서는 타임머신 CRM / Creator OS의 현재 구조와 장기 구조 방향을 함께 정리한 설계서입니다.
+> 기존 기능은 보존하고, 수정과 확장이 쉬운 Creator OS형 구조를 유지하는 것이 목표입니다.
 
 ---
 
@@ -12,7 +12,7 @@
 핵심 흐름은 다음과 같습니다.
 
 ```txt
-채널 등록 → 데이터 수집 → 영상 발굴 → 또터또 판단 → 스크랩 → 리메이크 기획
+채널 등록 → 데이터 수집 → 영상 발굴 → 또터또 판단 → 스크랩/발견함 → 제작 후보 → 리메이크 기획
 ```
 
 앞으로의 개발은 기존 기능을 버리는 것이 아니라, 이 흐름에 맞게 역할을 나누고 화면을 재배치하는 방식으로 진행합니다.
@@ -24,7 +24,7 @@
 - 채널 등록
 - 채널 미리보기
 - 채널 일괄 추가
-- 태그/카테고리/언어 관리
+- 태그/카테고리/언어/채널 등급/운영 상태 관리
 - Azure Function API 연동
 - 클라우드 채널 목록 불러오기
 - 채널 스캔 요청
@@ -33,32 +33,26 @@
 - 조회수/성과배수/일조회수/좋아요 비율 정렬
 - 6개월 이상 지난 영상 기반 또터또 발굴
 - 댓글 Top 10 조회
-- 영상 스크랩
+- Cloud 기준 영상 스크랩
+- 영상별 사용자 판단 기록
+- 발견 링크 수동 저장
+- 발견 링크 제작 후보 연결
+- 제작 후보함
 - AI 리메이크 프롬프트 복사
 
 ---
 
-## 3. 최종 목표 폴더 구조
+## 3. 현재 폴더 구조 기준
+
+현재 프론트엔드는 이미 `App.jsx` 중심 구조에서 많이 분리되어 있습니다.
 
 ```txt
 src/
-├─ app/
-│  ├─ App.jsx
-│  ├─ AppLayout.jsx
-│  ├─ routes.js
-│  └─ navigation.js
-│
-├─ config/
-│  └─ index.js
-│
-├─ features/
-│  ├─ dashboard/
-│  ├─ channels/
-│  ├─ videos/
-│  ├─ ttotto/
-│  ├─ scrapbook/
-│  └─ settings/
-│
+├─ App.jsx
+├─ main.jsx
+├─ config.js
+├─ constants/
+├─ hooks/
 ├─ services/
 │  ├─ channelApi.js
 │  ├─ discoveryLinksApi.js
@@ -71,28 +65,20 @@ src/
 │  └─ storage.js
 │
 ├─ components/
-│  ├─ layout/
-│  └─ common/
-│
-├─ constants/
-│  ├─ categories.js
-│  ├─ languages.js
-│  └─ sortOptions.js
-│
-├─ hooks/
-│  ├─ useChannels.js
-│  ├─ useVideos.js
-│  ├─ useScrapbook.js
-│  └─ useLocalStorage.js
-│
 ├─ utils/
-│  ├─ formatters.js
-│  ├─ dates.js
-│  └─ prompts.js
-│
-├─ main.jsx
 └─ index.css
 ```
+
+현재 기준:
+
+- `src/App.jsx`는 얇은 연결 파일입니다.
+- `src/hooks`는 채널, 영상, 스크랩북, 발견함, 제작 후보, 라우트 조립 같은 상태 흐름을 담당합니다.
+- `src/components`는 실제 화면 조각을 담당합니다.
+- `src/utils`는 화면 props, 문구, 계산, 분류, 포맷팅을 담당합니다.
+- `src/services`는 Cloud Function, YouTube API, localStorage 보조 저장 접근을 담당합니다.
+- `src/constants`는 메뉴, 상태값, 옵션, 문구 상수를 담당합니다.
+
+장기적으로 `features/` 폴더를 도입할 수는 있지만, 지금은 이미 작동하는 구조를 크게 옮기지 않고 현재 분리 방향을 유지합니다.
 
 ---
 
@@ -107,7 +93,7 @@ src/
 - 공통 알림/에러 표시
 - 전역 상태 최소 연결
 
-App.jsx에서 제거해야 할 책임은 다음과 같습니다.
+현재 기준으로 App.jsx에서 큰 책임은 대부분 제거되었습니다. 앞으로도 App.jsx에 다시 아래 책임이 쌓이지 않도록 주의합니다.
 
 - API 호출
 - 영상 필터링/정렬
@@ -125,12 +111,13 @@ Topbar
 └─ 앱 이름 / 현재 작업 / 연결 상태 / 빠른 실행
 
 Sidebar
-├─ 대시보드
-├─ 채널 관리
-├─ 영상 발굴
-├─ 또터또 모드
-├─ 스크랩북
-└─ 설정
+├─ 오늘 레이더 / 홈
+├─ 채널 목록 / 채널 등록
+├─ 저장 영상
+├─ 발견함 / 링크 수집
+├─ 스크랩북 / 참고 보관함
+├─ 제작 후보함
+└─ 준비중 메뉴
 
 Main Content
 └─ 선택된 기능 화면
@@ -140,16 +127,16 @@ Main Content
 
 ## 6. 화면별 역할
 
-### 대시보드
+### 오늘 레이더 / 홈
 
-앱의 관제실입니다.
+앱의 관제실입니다. 오늘 볼 후보, 저장된 데이터 현황, 제작 후보와 발견 링크 후보를 빠르게 보여줍니다.
 
 - 등록 채널 수
 - 수집 영상 수
-- 최근 스캔 상태
-- 또터또 후보 수
-- 최근 스크랩 수
-- 오늘 볼 만한 후보
+- 오늘 레이더 후보
+- 제작 후보 수
+- 발견 링크 후보 수
+- 다음 행동 버튼
 
 ### 채널 관리
 
@@ -188,14 +175,33 @@ Main Content
 
 ### 스크랩북
 
-발굴한 소재를 저장하고 제작 후보로 관리합니다.
+발굴한 소재를 저장하고 제작 후보로 이어갑니다.
 
 - 스크랩 영상 목록
 - 메모
-- 상태값: 미검토 / 분석중 / 대본화 / 제작완료
-- 태그
 - 원본 바로가기
 - AI 프롬프트 복사
+- 제작 후보로 표시
+
+### 발견함
+
+외부에서 찾은 URL을 수동 저장합니다.
+
+- URL 수동 저장
+- 제목/메모
+- 발견 링크 상태
+- 권리 상태
+- 제작 후보함 연결
+- 자동 크롤링/자동 다운로드 없음
+
+### 제작 후보함
+
+실제로 만들 후보를 확인합니다.
+
+- 저장 영상 후보
+- 발견 링크 후보
+- 원본 링크, 제목 초안, 제작 메모, 업로드 예정일 준비 여부
+- 권리 확인/일정/후보 수 기준 우선 확인 안내
 
 ### 설정
 
@@ -223,6 +229,12 @@ ChannelsPage → useCloudChannels / useChannelActions → services/channelApi.js
 VideosPage → useVideoCollectionActions / useVideoUserRecords → services/videoRecordsApi.js 또는 services/scanApi.js → Azure Function → Cosmos DB
 ```
 
+중요:
+
+- 저장 영상 불러오기는 Cloud DB 조회입니다.
+- 새 영상 수집은 YouTube API 호출과 DB 갱신이 발생할 수 있습니다.
+- 채널 선택만으로 YouTube API를 새로 호출하지 않는 방향을 유지합니다.
+
 ### 댓글 데이터
 
 ```txt
@@ -239,19 +251,35 @@ ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function �
 
 `localStorage`는 기준 저장소가 아니라 Cloud 연결 실패 시 임시 fallback과 기존 데이터 보호 용도로만 유지합니다. Cloud 조회가 성공하면 Cloud 응답이 기준이며, localStorage와 자동 병합하지 않습니다.
 
+### 발견 링크 데이터
+
+```txt
+DiscoveryLinksPage → useDiscoveryLinks → services/discoveryLinksApi.js → Azure Function → Cosmos DB
+```
+
+현재 발견 링크는 별도 `discovery_links` container가 아니라 기존 Cloud DB의 `videos` container 안에 `docType: discovery_link` 문서로 저장합니다.
+
+### 제작 후보 데이터
+
+```txt
+ProductionKanban → videoUserRecords + discovery links status:candidate
+```
+
+현재 별도 `production_candidates` 저장소는 없습니다. 저장 영상 후보는 영상별 판단 기록을 사용하고, 발견 링크 후보는 발견함 상태값을 사용합니다.
+
 ---
 
 ## 8. 리팩터링 순서
 
 한 번에 갈아엎지 않고 아래 순서로 진행합니다.
 
-1. 설정 분리
-2. 상수 분리
-3. 유틸 함수 분리
-4. API 서비스 분리
-5. 공통 UI 분리
-6. 기능 화면 분리
-7. App.jsx 얇게 정리
+1. 완료된 분리 구조를 유지합니다.
+2. 새로운 로직은 먼저 `utils` 또는 작은 hook으로 분리합니다.
+3. 새 화면 조합은 관련 테스트를 먼저 보강합니다.
+4. 공통 UI는 반복이 실제로 생겼을 때만 분리합니다.
+5. `App.jsx`를 다시 두껍게 만들지 않습니다.
+6. DB/API/localStorage 의미가 바뀌는 작업은 별도 선택지 보고 후 진행합니다.
+7. 전체 폴더 대이동은 지금 하지 않습니다.
 
 ---
 
@@ -264,6 +292,8 @@ ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function �
 - 프롬프트 문장을 UI 코드 안에 길게 작성
 - 또터또 판단 기준을 화면 코드에 섞어둠
 - localStorage를 여러 컴포넌트에서 직접 만짐
+- 발견 링크, 제작 후보, 스크랩북을 실제 저장소 구조와 다르게 표현
+- 준비중 기능을 실제 동작하는 기능처럼 표현
 
 ---
 
@@ -276,9 +306,10 @@ ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function �
 3. 오래됐지만 다시 쓸 수 있는 또터또 소재는 무엇인가?
 4. 이 소재를 한국형 쇼츠/롱폼으로 바꾸면 어떤 제목과 대본이 나오는가?
 5. 내가 저장한 소재 중 제작할 것은 무엇인가?
+6. 외부에서 발견한 링크 중 제작 후보로 검토할 것은 무엇인가?
 
 ---
 
 ## 한 줄 결론
 
-기존 핵심 기능은 보존하고, App.jsx 중심 구조에서 벗어나 기능별 폴더, 서비스 계층, 공통 UI, 명확한 화면 흐름을 갖춘 Creator OS형 구조로 재설계합니다.
+기존 핵심 기능은 보존하고, 현재의 hooks/components/services/utils 분리 구조를 깨지 않으면서 Cloud 기준 데이터, 안전한 화면 흐름, 명확한 버튼 문구를 쌓아 Creator OS형 구조로 발전시킵니다.
