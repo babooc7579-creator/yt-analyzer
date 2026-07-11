@@ -30,10 +30,11 @@ Unexpected input(s) 'github_id_token'
   - 실패 메시지: `No matching Static Web App was found or the api key was invalid.`
   - 뜻: 현재 `azure_static_web_apps_api_token`만으로는 배포가 되지 않고, 기존 OIDC token 흐름이 실제 배포 성공에 필요합니다.
   - 따라서 우선 기존 OIDC 흐름으로 복구하고, 경고 제거는 Azure token/인증 설정을 다시 확인한 뒤 진행해야 합니다.
-- 2026-07-11 후속 안정화에서는 선택지 B처럼 OIDC 단계를 모두 제거하지 않고, `Azure/static-web-apps-deploy@v1`이 지원하지 않는 `github_id_token` 입력 1줄만 제거하는 최소 정리로 범위를 줄였습니다.
-  - `azure_static_web_apps_api_token` secret은 유지합니다.
-  - `Get Id Token` 단계와 `id-token: write` 권한은 이번 작업에서 제거하지 않습니다.
-  - 목적은 배포 인증 방식을 바꾸는 것이 아니라, action이 무시하던 잘못된 입력으로 생기는 warning을 먼저 없애는 것입니다.
+- 2026-07-11 후속 안정화에서 선택지 B처럼 OIDC 단계를 모두 제거하지 않고, `github_id_token` 입력 1줄만 제거하는 최소 정리를 실제 main 배포로 검증했습니다.
+  - 결과: Azure Static Web Apps CI/CD가 실패했습니다.
+  - 실패 메시지: `No matching Static Web App was found or the api key was invalid.`
+  - 따라서 현재 Azure 배포에서는 warning이 있더라도 `github_id_token` 입력을 유지해야 합니다.
+  - 경고 제거보다 배포 성공을 우선합니다.
 
 ---
 
@@ -129,7 +130,7 @@ Unexpected input(s) 'github_id_token'
 
 현재 상태에서는 OIDC 단계를 모두 제거하는 전체 단순화는 더 이상 추천하지 않습니다. 이 선택지를 다시 시도하려면 먼저 Azure Static Web Apps deployment token secret을 재발급하거나, Azure Portal의 배포 인증 설정을 확인해야 합니다.
 
-다만 2026-07-11에는 전체 단순화가 아니라 `github_id_token` unsupported input만 제거하는 최소 정리를 별도 후속 작업으로 진행했습니다. 이 방식은 deployment token/OIDC 인증 구조를 크게 바꾸지 않는 범위입니다.
+2026-07-11에는 전체 단순화가 아니라 `github_id_token` unsupported input만 제거하는 최소 정리도 검증했지만, main Azure 배포에서 실패했습니다. 따라서 현재 repo에서는 이 최소 정리도 유지하지 않습니다.
 
 ---
 
@@ -197,7 +198,7 @@ Azure `github_id_token` 경고와 분리해서 다루는 것이 좋습니다.
 1. 우선 기존 OIDC 흐름으로 복구해 배포 성공 상태를 되돌립니다.
 2. Azure Portal 또는 GitHub secret에서 deployment token이 올바른지 확인합니다.
 3. token을 재발급하거나 인증 방식을 확정한 뒤 다시 선택지 B 또는 C를 검토합니다.
-4. `github_id_token` unsupported input warning은 입력값 1줄 제거로 먼저 정리합니다.
+4. `github_id_token` unsupported input warning은 현재 배포 성공을 위해 보류합니다.
 5. Node 버전 경고가 남아 있으면 선택지 D를 별도 PR로 검토합니다.
 
 추천 이유:
@@ -205,7 +206,7 @@ Azure `github_id_token` 경고와 분리해서 다루는 것이 좋습니다.
 - 현재 앱은 개인용 실사용 안정화 단계입니다.
 - 배포 성공이 경고 제거보다 우선입니다.
 - 선택지 B처럼 OIDC 단계를 모두 제거하는 방식은 실제 배포에서 실패했으므로, 성공하는 흐름을 유지합니다.
-- 다만 action이 지원하지 않는 `github_id_token` 입력은 배포 성공에 쓰이지 않는 warning 원인이므로, 최소 제거 대상으로 분리할 수 있습니다.
+- `github_id_token` 입력은 action warning을 만들지만, 현재 Azure 배포에서는 제거하면 실패하므로 유지합니다.
 - OIDC를 깔끔하게 정리하는 것은 Azure 설정 확인 이후에 다시 판단합니다.
 
 ---
@@ -216,13 +217,13 @@ Azure `github_id_token` 경고와 분리해서 다루는 것이 좋습니다.
 
 현재 추천 결정:
 
-- **OIDC 흐름은 유지하고, unsupported input만 최소 제거**
+- **배포 성공을 위해 기존 OIDC 흐름과 `github_id_token` 입력을 유지**
 
 진행한다면 Codex는 아래 원칙으로 작업합니다.
 
 - 앱 코드 수정 없음
 - API/DB/localStorage 수정 없음
-- Azure workflow의 `github_id_token` unsupported input만 최소 수정
+- Azure workflow의 `github_id_token` 입력 복구
 - PR에서 배포 성공 확인
 - OIDC 단계 제거나 deployment token 단독 전환은 Azure 인증 설정을 확인한 뒤 별도 Issue로 진행
 

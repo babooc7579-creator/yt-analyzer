@@ -2370,7 +2370,8 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 
 완료한 작업:
 
-- Azure Static Web Apps workflow에서 `Azure/static-web-apps-deploy@v1`이 지원하지 않는 `github_id_token` 입력을 제거했습니다.
+- Azure Static Web Apps workflow에서 `Azure/static-web-apps-deploy@v1`이 지원하지 않는 `github_id_token` 입력 제거를 검증했습니다.
+- main Azure 배포에서 `No matching Static Web App was found or the api key was invalid.` 오류가 발생해, 해당 입력은 별도 복구 작업에서 되돌리기로 했습니다.
 - 이전에 실패했던 token 방식 전체 단순화와 다르게, OIDC 단계 전체 삭제나 Azure 인증 방식 변경은 하지 않았습니다.
 - 제작 후보함 우선 확인 안내에 "오늘 순서" 문구를 추가했습니다.
 - 발견 링크 권리 경고에 "다음 행동" 문구를 추가해 권리 확인 필요/사용 금지 링크를 어떻게 처리할지 더 명확히 했습니다.
@@ -2392,6 +2393,42 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 
 보존한 것:
 
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음
+
+### 89. 2026-07-11 Azure Static Web Apps workflow 입력 복구
+
+PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성공을 우선하기 위해 `github_id_token` 입력을 복구했습니다.
+
+확인한 사실:
+
+- Build workflow는 성공했습니다.
+- Azure Static Web Apps CI/CD는 `Build And Deploy` 단계에서 실패했습니다.
+- 실패 메시지는 `No matching Static Web App was found or the api key was invalid.`였습니다.
+- 같은 실패는 2026-07-03 token 방식 단순화 검증 때도 확인된 적이 있습니다.
+- 따라서 현재 Azure 설정에서는 `github_id_token` warning이 남더라도 기존 입력을 유지해야 합니다.
+
+완료한 작업:
+
+- `.github/workflows/azure-static-web-apps-lively-dune-0af1d2a00.yml`에 `github_id_token: ${{ steps.idtoken.outputs.result }}` 입력을 복구했습니다.
+- 배포 warning 선택지 문서와 다음 구현 이슈 문서에 "경고보다 배포 성공 우선" 기준을 반영했습니다.
+
+검증:
+
+- `npm.cmd test -- --reporter=dot`
+  - 168개 테스트 파일, 736개 테스트 통과
+- `npm.cmd run build`
+  - Vite production build 통과
+- `git diff --check`
+  - 패치 오류 없음
+- main Azure Static Web Apps 배포는 복구 PR 병합 후 확인 필요
+
+보존한 것:
+
+- 앱 코드 변경 없음
 - API endpoint 변경 없음
 - DB schema 변경 없음
 - localStorage key 변경 없음

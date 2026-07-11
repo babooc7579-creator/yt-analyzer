@@ -252,7 +252,7 @@
 - 추가 완료 14: 제작 후보 영상 카드의 작업 준비 체크와 발견함 링크 후보 개수 배지를 추가하고, 저장/API 호출 없는 표시 전용 흐름을 테스트로 보강했습니다.
 - 추가 완료 15: 제작 후보함 우선 확인 안내, 발견 링크 후보 확인 순서, 홈 제작 후보/발견 링크 후보 지표, 발견함 오류 복구 안내를 표시 전용 흐름으로 추가하고 관련 테스트를 보강했습니다.
 - 추가 완료 16: `WORK_LOG` 번호를 문서 순서 기준으로 정리했고, 채널 목록/발견함 로딩 문구를 Cloud 조회와 API 미호출 기준으로 보강했습니다. 관련 컴포넌트 렌더링 테스트도 추가했습니다.
-- 추가 완료 17: GitHub Actions Azure Static Web Apps workflow의 `github_id_token` unsupported input을 제거하는 최소 정리를 진행했고, 제작 후보함 우선 안내에 "오늘 순서"를 추가했으며, 발견 링크 권리 경고에 다음 행동 문구를 보강했습니다.
+- 추가 완료 17: 제작 후보함 우선 안내에 "오늘 순서"를 추가했고, 발견 링크 권리 경고에 다음 행동 문구를 보강했습니다. GitHub Actions Azure Static Web Apps workflow의 `github_id_token` unsupported input 제거도 검증했지만 main 배포가 실패해 즉시 복구했습니다.
 - 사용자 판단 필요 여부: 현재 없음. React Testing Library나 Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
@@ -264,7 +264,7 @@
 1. 구조 안정화 후속 작업은 작은 hook/utility 분리와 테스트 보강 중심으로 진행합니다. DB/API/localStorage 의미가 바뀌는 작업은 이 문서의 판단 필요 항목으로 분리합니다.
 2. 화면 흐름 개선은 저장/수집/삭제를 직접 실행하지 않는 이동 버튼, 필터 초기화, 복사 편의처럼 되돌리기 쉬운 단위부터 진행합니다.
 3. 실제 기능 확장 전에는 선택지가 필요한 항목을 먼저 분리합니다. local assets, 별도 제작 프로젝트 모델, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정합니다.
-4. GitHub Actions와 Azure Static Web Apps `github_id_token` 경고는 2026-07-11 후속 작업에서 unsupported input 1줄 제거로 최소 정리했습니다. OIDC 단계 전체 삭제, deployment token 단독 전환, Azure 인증 방식 변경은 여전히 별도 판단 후 진행합니다.
+4. GitHub Actions와 Azure Static Web Apps `github_id_token` 경고는 2026-07-11 후속 작업에서 unsupported input 1줄 제거까지 검증했지만 main 배포가 실패해 복구했습니다. 현재는 경고가 남더라도 배포 성공을 우선하며, OIDC 단계 전체 삭제, deployment token 단독 전환, Azure 인증 방식 변경은 별도 판단 후 진행합니다.
 5. Azure Sponsorship 이전 후 frontend 배포는 정상 확인됐습니다. backend Function App 배포와 비용 반영은 운영 확인 항목으로 남깁니다.
 6. 공개 앱 smoke check는 `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md` 기준으로 main Build, Azure Static Web Apps 배포, 공개 앱 루트 200 OK를 확인합니다. 저장/삭제/수집 버튼은 누르지 않습니다.
 
