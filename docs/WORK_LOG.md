@@ -1835,3 +1835,27 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - GitHub Actions workflow 변경 없음
 - API endpoint 변경 없음
 - DB schema 변경 없음
+
+### 61. 2026-07-11 다음 구현 이슈 계획 최신화
+
+최근 완료된 빈 화면 흐름 개선, 테스트 기준, Azure Sponsorship 이전 후 프론트 배포 확인 상태를 `docs/CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`에 반영했습니다.
+
+완료한 작업:
+
+- 현재 기준에 스크랩북/참고 보관함 빈 화면 이동과 필터 결과 없음 초기화 흐름을 추가했습니다.
+- 현재 테스트 기준을 `140개 파일 / 675개 테스트` 통과 상태로 갱신했습니다.
+- Azure Sponsorship 이전 후 frontend Build와 Azure Static Web Apps CI/CD가 정상 확인됐고, backend 배포와 비용 반영은 남은 운영 확인 항목으로 분리했습니다.
+- Issue 2와 Issue 11의 완료 상태에 빈 화면 다음 행동과 관련 테스트 보강을 반영했습니다.
+- Codex 추천 진행 순서를 작은 hook/utility 안정화와 되돌리기 쉬운 화면 흐름 개선 중심으로 갱신했습니다.
+
+검증:
+
+- `git diff --check` 통과
+
+보존한 것:
+
+- 코드 변경 없음
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
