@@ -2424,7 +2424,11 @@ PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성�
   - Vite production build 통과
 - `git diff --check`
   - 패치 오류 없음
-- main Azure Static Web Apps 배포는 복구 PR 병합 후 확인 필요
+- PR #871 병합 후 main Build 통과
+- PR #871 병합 후 main Azure Static Web Apps CI/CD 통과
+- 공개 앱 루트 `200 OK` 확인
+- 배포 번들에 "오늘 순서", "다음 행동: 원본 링크 열기", "사용 허가나 자동 권리 확인을 의미하지 않습니다" 문구 포함 확인
+- `github_id_token` warning은 남아 있지만 배포는 정상 통과
 
 보존한 것:
 
