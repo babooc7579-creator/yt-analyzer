@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import DiscoveryLinksEmptyState from './DiscoveryLinksEmptyState';
 import DiscoveryLinksFilteredEmptyState from './DiscoveryLinksFilteredEmptyState';
 import DiscoveryLinksHeaderActions from './DiscoveryLinksHeaderActions';
+import DiscoveryLinksNotices from './DiscoveryLinksNotices';
 
 const noop = () => {};
 
@@ -46,5 +47,20 @@ describe('DiscoveryLinks flow states', () => {
     expect(html).toContain('외부 사이트 수집이나 저장 작업은 없습니다.');
     expect(html).toContain('새 YouTube API 호출이나 외부 수집은 없습니다.');
     expect(html).toContain('Cloud 발견함 목록을 다시 조회합니다. 외부 사이트를 새로 수집하지 않습니다.');
+  });
+
+  it('renders discovery link Cloud errors without implying localStorage merge', () => {
+    const html = renderToStaticMarkup(
+      <DiscoveryLinksNotices
+        error="Cloud 연결 실패"
+        loading={false}
+        onRefresh={noop}
+      />,
+    );
+
+    expect(html).toContain('Cloud 연결 실패');
+    expect(html).toContain('Cloud 발견함 재조회만 실행합니다');
+    expect(html).toContain('localStorage와 자동 병합');
+    expect(html).toContain('링크를 자동 업로드하지 않습니다');
   });
 });

@@ -1,5 +1,6 @@
 import ProductionKanbanSummaryLegend from './ProductionKanbanSummaryLegend';
 import ProductionKanbanSummaryMetrics from './ProductionKanbanSummaryMetrics';
+import ProductionKanbanPriorityGuide from './ProductionKanbanPriorityGuide';
 import { getProductionKanbanSummaryHeaderProps } from '../utils/productionKanbanSummary';
 
 export default function ProductionKanbanSummary({
@@ -27,6 +28,10 @@ export default function ProductionKanbanSummary({
         </p>
       </div>
       <ProductionKanbanSummaryMetrics
+        discoveryLinkCandidateCount={discoveryLinkCandidateCount}
+        productionSummary={productionSummary}
+      />
+      <ProductionKanbanPriorityGuide
         discoveryLinkCandidateCount={discoveryLinkCandidateCount}
         productionSummary={productionSummary}
       />

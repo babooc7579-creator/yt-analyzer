@@ -51,7 +51,7 @@ describe('Production kanban flow states', () => {
       <ProductionDiscoveryLinksSection
         linkMoveStates={{}}
         links={[
-          { id: 'link-1', title: '첫 번째 링크', url: 'https://example.com/1' },
+          { id: 'link-1', rightsStatus: 'needs_check', title: '첫 번째 링크', url: 'https://example.com/1' },
           { id: 'link-2', title: '두 번째 링크', url: 'https://example.com/2' },
         ]}
         onMoveLink={noop}
@@ -63,5 +63,9 @@ describe('Production kanban flow states', () => {
     expect(html).toContain('Cloud 발견함에서 제작 후보로 표시한 외부 링크 수입니다. 영상 후보와 별도로 표시합니다.');
     expect(html).toContain('별도 제작 DB');
     expect(html).toContain('자동 수집이나 다운로드는 실행하지 않습니다.');
+    expect(html).toContain('링크 후보 확인 순서');
+    expect(html).toContain('원본 열기나 링크 복사로 직접 확인합니다');
+    expect(html).toContain('권리 확인 후 사용');
+    expect(html).toContain('링크 기록은 삭제하지 않습니다');
   });
 });

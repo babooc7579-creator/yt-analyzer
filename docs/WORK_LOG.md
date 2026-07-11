@@ -2022,6 +2022,34 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - YouTube API 호출 조건/횟수 변경 없음
 - 새 라이브러리 추가 없음
 
+### 75. 2026-07-11 제작 후보함/발견함/홈 흐름 2차 보강
+
+제작 후보함, 발견함, 홈 화면에서 사용자가 다음에 볼 항목을 더 쉽게 판단할 수 있도록 표시 전용 안내를 추가했습니다.
+
+완료한 작업:
+
+- 제작 후보함 상단에 우선 확인 안내를 추가했습니다. 권리 확인 필요 링크, 지난 일정, 일정 없는 제작 중 후보, 제작 중 후보, 영상 후보, 링크 후보 순으로 표시합니다.
+- 발견함 링크 후보 카드에 원본 확인, 권리 상태, 후보 처리 순서를 추가했습니다. 외부 자동 수집이나 다운로드 없이 사용자가 직접 확인하는 흐름을 강조합니다.
+- 홈 지표에 제작 후보와 발견 링크 후보 숫자를 추가했습니다. 숫자 확인만으로 저장이나 API 호출은 실행되지 않습니다.
+- 발견함 Cloud 오류 안내에 localStorage 자동 병합과 링크 자동 업로드를 하지 않는다는 복구 기준을 추가했습니다.
+- 관련 유틸/컴포넌트 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\productionKanbanSummary.test.js src\components\ProductionKanbanPriorityGuide.test.jsx src\components\ProductionKanbanFlowStates.test.jsx src\utils\creatorHomeViewProps.test.js src\utils\discoveryLinksCopy.test.js src\components\DiscoveryLinksFlowStates.test.jsx --reporter=dot` 통과, 6개 파일 / 27개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 166개 파일 / 734개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과. Windows 줄끝 변환 경고만 표시됐고 diff 오류는 없습니다.
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음
+
 ### 71. 2026-07-11 화면 상태 배지와 후보 흐름 문구 정리
 
 오늘 레이더, 저장 영상 카드, 채널 목록, 발견함, 제작 후보함에서 사용자가 다음 행동을 더 쉽게 구분할 수 있도록 상태 배지와 후보 흐름 안내 문구를 정리했습니다.

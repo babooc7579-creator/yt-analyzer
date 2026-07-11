@@ -92,3 +92,69 @@ export const getProductionKanbanScheduleSummaryViewProps = ({
     ? `제작 중 ${formatProductionCount(productionSummary.activeWithoutDate)} 일정 미정`
     : '',
 });
+
+export const getProductionKanbanPriorityGuideProps = ({
+  discoveryLinkCandidateCount = 0,
+  productionSummary = {},
+} = {}) => {
+  if (productionSummary.discoveryRightsWarningCount > 0) {
+    return {
+      badge: '권리 확인',
+      title: '링크 후보의 권리 상태를 먼저 확인하세요',
+      description: `권리 확인이 필요한 링크 후보 ${formatProductionCount(productionSummary.discoveryRightsWarningCount)}가 있습니다. 제작 후보로 보기 전에 원본과 출처를 확인하는 단계입니다.`,
+      tone: 'warning',
+    };
+  }
+
+  if (productionSummary.overdueCount > 0) {
+    return {
+      badge: '일정 확인',
+      title: '지난 업로드 예정일을 먼저 정리하세요',
+      description: `지난 일정 ${formatProductionCount(productionSummary.overdueCount)}가 있습니다. 완료 처리, 일정 변경, 후보 제외 중 하나로 정리하면 다음 작업이 선명해집니다.`,
+      tone: 'danger',
+    };
+  }
+
+  if (productionSummary.activeWithoutDate > 0) {
+    return {
+      badge: '일정 미정',
+      title: '제작 중인 후보에 업로드 예정일을 붙이세요',
+      description: `제작 중이지만 일정이 없는 영상 ${formatProductionCount(productionSummary.activeWithoutDate)}가 있습니다. 날짜를 정하면 제작 순서를 잡기 쉬워집니다.`,
+      tone: 'warning',
+    };
+  }
+
+  if (productionSummary.activeCount > 0) {
+    return {
+      badge: '제작 진행',
+      title: '제작 중 후보를 완성 쪽으로 밀어주세요',
+      description: `현재 제작 중 영상 ${formatProductionCount(productionSummary.activeCount)}가 있습니다. 제목, 메모, 일정이 채워졌는지 확인하고 업로드 완료까지 이어가면 됩니다.`,
+      tone: 'ready',
+    };
+  }
+
+  if (productionSummary.candidateCount > 0) {
+    return {
+      badge: '후보 선택',
+      title: '영상 후보 중 오늘 만들 하나를 고르세요',
+      description: `영상 후보 ${formatProductionCount(productionSummary.candidateCount)}가 있습니다. 가장 만들기 쉬운 후보를 제작 중으로 옮기면 됩니다.`,
+      tone: 'info',
+    };
+  }
+
+  if (discoveryLinkCandidateCount > 0) {
+    return {
+      badge: '링크 검토',
+      title: '발견 링크 후보를 영상 후보와 분리해서 검토하세요',
+      description: `링크 후보 ${formatProductionCount(discoveryLinkCandidateCount)}가 있습니다. 원본 확인과 권리 상태를 본 뒤 제작에 쓸지 정리하세요.`,
+      tone: 'info',
+    };
+  }
+
+  return {
+    badge: '후보 없음',
+    title: '오늘 레이더나 발견함에서 후보를 먼저 채우세요',
+    description: '이 안내는 저장된 Cloud 후보 기록을 읽어 표시만 합니다. 새 YouTube API 호출, 외부 자동 수집, Cloud 저장은 실행하지 않습니다.',
+    tone: 'idle',
+  };
+};
