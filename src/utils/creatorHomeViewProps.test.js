@@ -33,10 +33,10 @@ describe('creatorHomeViewProps utils', () => {
     expect(guidelinesProps.guidelines[0].description).toContain('YouTube API');
     expect(statsProps.cards.map(card => [card.label, card.value])).toEqual([
       ['저장된 채널', 2],
-      ['불러온 영상', 10],
-      ['스크랩 소재', 3],
-      ['최근 수집 상태', 'just now'],
-      ['터또터 후보', 4],
+      ['현재 화면 영상', 10],
+      ['스크랩북 보관', 3],
+      ['마지막 수집 기록', 'just now'],
+      ['또터또 후보', 4],
     ]);
     expect(statsProps.cards[2].description).toContain('Cloud 스크랩북에 보관한 영상');
     expect(statsProps.cards[0].description).toContain('YouTube API를 호출하지 않습니다');
@@ -130,6 +130,7 @@ describe('creatorHomeViewProps utils', () => {
     props.actionShortcutsProps.onOpenDiscoveryLinks();
     props.actionShortcutsProps.onOpenSelectedScan();
     props.actionShortcutsProps.onOpenVault();
+    props.radarCandidateStripProps.onOpenProductionCandidates();
     props.radarCandidateStripProps.onOpenScrapbook();
     props.radarCandidateStripProps.onOpenVault();
     props.radarSummaryProps.onOpenAddChannel();
@@ -143,6 +144,7 @@ describe('creatorHomeViewProps utils', () => {
       'vault-sources',
       'ops-selected-scan',
       'vault-all',
+      'studio-candidates',
       'studio-scrapbook',
       'vault-all',
       'ops-add-channel',

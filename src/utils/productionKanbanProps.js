@@ -52,6 +52,32 @@ export const getProductionKanbanEmptyStateActions = ({
   },
 ].filter((action) => isFunction(action.onClick));
 
+export const getProductionKanbanNextActions = ({
+  discoveryLinkCandidateCount = 0,
+  onOpenDiscoveryLinks,
+  onOpenReferenceVault,
+  videoCount = 0,
+} = {}) => [
+  {
+    key: 'reference-vault',
+    iconKey: 'referenceVault',
+    label: '저장 영상 더 보기',
+    title: `저장 영상 탐색 화면을 엽니다. 현재 제작 후보 영상 ${videoCount}개와 별도로 Cloud DB에 저장된 영상을 조회하며 YouTube API를 새로 호출하지 않습니다.`,
+    ariaLabel: '저장 영상 탐색 화면 열기, Cloud DB 조회이며 YouTube API 호출 없음',
+    onClick: onOpenReferenceVault,
+    variant: 'indigo',
+  },
+  {
+    key: 'discovery-links',
+    iconKey: 'discoveryLinks',
+    label: '발견함 링크 정리',
+    title: `발견함을 열어 링크 후보 ${discoveryLinkCandidateCount}개를 확인하거나 새 링크를 수동 저장합니다. 외부 자동 수집이나 다운로드는 실행하지 않습니다.`,
+    ariaLabel: '발견함 열기, 외부 자동 수집이나 다운로드 없음',
+    onClick: onOpenDiscoveryLinks,
+    variant: 'secondary',
+  },
+].filter((action) => isFunction(action.onClick));
+
 export const getProductionKanbanContentProps = ({
   discoveryLinkCandidates,
   draftRecords,
@@ -62,6 +88,7 @@ export const getProductionKanbanContentProps = ({
   moveStates,
   moveVideo,
   onOpenDiscoveryLinks,
+  onOpenReferenceVault,
   productionSummary,
   saveDraftRecord,
   saveStates,
@@ -80,6 +107,7 @@ export const getProductionKanbanContentProps = ({
     moveStates,
     moveVideo,
     onOpenDiscoveryLinks,
+    onOpenReferenceVault,
     productionSummary: summary,
     saveDraftRecord,
     saveStates,
@@ -99,6 +127,7 @@ export const getProductionKanbanContentChildProps = ({
   moveStates,
   moveVideo,
   onOpenDiscoveryLinks,
+  onOpenReferenceVault,
   productionSummary,
   saveDraftRecord,
   saveStates,
@@ -127,6 +156,14 @@ export const getProductionKanbanContentChildProps = ({
       links: discoveryLinkCandidateList,
       onMoveLink: moveDiscoveryLink,
       onOpenDiscoveryLinks,
+    },
+    nextActionsProps: {
+      actions: getProductionKanbanNextActions({
+        discoveryLinkCandidateCount: discoveryLinkCandidateList.length,
+        onOpenDiscoveryLinks,
+        onOpenReferenceVault,
+        videoCount,
+      }),
     },
     summaryProps: {
       discoveryLinkCandidateCount: discoveryLinkCandidateList.length,

@@ -41,13 +41,19 @@ export const getScrapbookRemoveButtonProps = ({
 
 export const getScrapbookVideoFooterActionsViewProps = ({
   confirmFn,
+  isProductionCandidate = false,
   onFetchComments,
+  onPromoteToProduction,
   onRemoveScrap,
   video,
   videoTitle,
   videoUrl,
 } = {}) => {
   const displayTitle = getSafeVideoTitle({ video, videoTitle });
+  const safeVideo = getSafeVideo(video);
+  const canPromoteToProduction = Boolean(safeVideo.videoId)
+    && typeof onPromoteToProduction === 'function'
+    && !isProductionCandidate;
 
   return {
     commentsButtonProps: getCommentApiButtonProps({
@@ -64,6 +70,25 @@ export const getScrapbookVideoFooterActionsViewProps = ({
       title: 'YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
       url: videoUrl,
     },
+    productionButtonProps: {
+      'aria-label': isProductionCandidate
+        ? `${displayTitle} 이미 Cloud 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됨`
+        : `${displayTitle} Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 관리, YouTube API 호출 없음`,
+      className: `inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors ${
+        canPromoteToProduction
+          ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
+          : 'cursor-not-allowed bg-indigo-50 text-indigo-300'
+      }`,
+      disabled: !canPromoteToProduction,
+      onClick: canPromoteToProduction ? () => onPromoteToProduction(safeVideo) : undefined,
+      title: isProductionCandidate
+        ? '이미 Cloud 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됩니다. YouTube API를 새로 호출하지 않습니다.'
+        : canPromoteToProduction
+          ? 'Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.'
+          : '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
+      type: 'button',
+    },
+    productionButtonText: isProductionCandidate ? '후보 표시됨' : '제작 후보로',
     removeButtonProps: getScrapbookRemoveButtonProps({
       confirmFn,
       onRemoveScrap,

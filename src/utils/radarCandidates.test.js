@@ -145,6 +145,7 @@ describe('radarCandidates utils', () => {
       loadedDecisionCount: 1,
       onClearDecisions: () => 'clear',
       onMarkVideoStatus: () => 'status',
+      onOpenProductionCandidates: () => 'production view',
       onOpenScrapbook: () => 'scrapbook',
       onOpenVault: () => 'vault',
       onPromoteToProduction: () => 'production',
@@ -166,6 +167,9 @@ describe('radarCandidates utils', () => {
       savedVideoCount: 1,
       queueSummary: { open: 1 },
     });
+    expect(activeProps.completedStateProps.onOpenProductionCandidates).toBe(
+      baseProps.onOpenProductionCandidates
+    );
     expect(activeProps.gridProps.candidates).toEqual([radarVideo]);
 
     expect(getRadarCandidateStripViewProps({ ...baseProps, candidates: [] }).isCompleted).toBe(true);

@@ -44,17 +44,17 @@ export const getHomeRadarStatsGridViewProps = ({
       description: 'Cloud에 저장된 채널 자산입니다. 숫자 확인만으로 YouTube API를 호출하지 않습니다.',
     },
     {
-      label: '불러온 영상',
+      label: '현재 화면 영상',
       value: loadedVideoCount,
       description: '현재 화면에 불러온 저장 영상 수입니다. 새 YouTube API 호출 수가 아닙니다.',
     },
     {
-      label: '스크랩 소재',
+      label: '스크랩북 보관',
       value: savedVideoCount,
       description: 'Cloud 스크랩북에 보관한 영상입니다. 원본 영상이나 저장 영상 데이터 삭제와 다릅니다.',
     },
     {
-      label: '최근 수집 상태',
+      label: '마지막 수집 기록',
       value: latestScanText,
       description: '채널의 마지막 수집 기록 기준입니다. 현재 새 수집이 실행 중이라는 뜻은 아닙니다.',
       className: 'border-emerald-500/20 bg-emerald-950/30',
@@ -63,7 +63,7 @@ export const getHomeRadarStatsGridViewProps = ({
       valueClassName: 'text-lg',
     },
     {
-      label: '터또터 후보',
+      label: '또터또 후보',
       value: ttoTtoAssetCount,
       description: '현재 불러온 저장 영상 기준의 오래된 반응 후보입니다. 예측 점수가 아니라 판단 보조 신호입니다.',
       className: 'border-rose-500/20 bg-rose-950/30',
@@ -119,6 +119,7 @@ export const getCreatorHomeViewProps = ({
       selectedChannelCount,
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
       onOpenScrapbook: () => onOpenView({ id: 'studio-scrapbook' }),
+      onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
     },
     radarSummaryProps: {
       savedChannelCount: channelList.length,

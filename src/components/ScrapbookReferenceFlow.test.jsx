@@ -46,6 +46,7 @@ describe('Scrapbook and reference vault flow', () => {
     const html = renderToStaticMarkup(
       <ScrapbookVideoFooterActions
         onFetchComments={noop}
+        onPromoteToProduction={noop}
         onRemoveScrap={noop}
         video={{ videoId: 'video-1', title: '보관 영상' }}
         videoTitle="보관 영상"
@@ -56,6 +57,8 @@ describe('Scrapbook and reference vault flow', () => {
     expect(html).toContain('YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.');
     expect(html).toContain('댓글 Top 10 보기 - 버튼을 누를 때만 YouTube API로 댓글을 조회합니다.');
     expect(html).toContain('조회 결과를 Cloud에 저장하지 않습니다.');
+    expect(html).toContain('제작 후보로');
+    expect(html).toContain('Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.');
     expect(html).toContain('Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 저장 영상 데이터는 삭제하지 않습니다.');
   });
 });

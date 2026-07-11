@@ -27,7 +27,7 @@ export default function VideoListRowBadges({
   return (
     <div className="flex flex-wrap items-center gap-2 mb-2">
       {badgeItems.filter((item) => item.isVisible).map((item) => (
-        <span key={item.icon} className={item.className}>
+        <span key={item.icon} className={item.className} title={item.title}>
           {BADGE_ICONS[item.icon]} {item.label}
         </span>
       ))}

@@ -1,4 +1,4 @@
-import { Bookmark, CheckCircle2 } from 'lucide-react';
+import { Bookmark, CheckCircle2, Rocket } from 'lucide-react';
 
 import { getRadarCandidateCompletedStateViewProps } from '../utils/radarCandidateStateProps';
 import RadarDecisionPanel from './RadarDecisionPanel';
@@ -8,12 +8,14 @@ export default function RadarCandidateCompletedState({
   decisionSummary,
   loadedDecisionCount,
   onClearDecisions,
+  onOpenProductionCandidates,
   onOpenVault,
   onRestoreVideo,
 }) {
   const {
     clearDecisionsButtonProps,
     descriptionText,
+    openProductionButtonProps,
     openVaultButtonProps,
     titleText,
   } = getRadarCandidateCompletedStateViewProps();
@@ -32,6 +34,17 @@ export default function RadarCandidateCompletedState({
         >
           <Bookmark className="h-4 w-4" /> {openVaultButtonProps.label}
         </button>
+        {onOpenProductionCandidates && (
+          <button
+            type="button"
+            onClick={onOpenProductionCandidates}
+            className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/20 bg-indigo-500/10 px-4 py-2 text-xs font-bold text-indigo-100 hover:bg-indigo-500/15"
+            title={openProductionButtonProps.title}
+            aria-label={openProductionButtonProps['aria-label']}
+          >
+            <Rocket className="h-4 w-4" /> {openProductionButtonProps.label}
+          </button>
+        )}
         <button
           type="button"
           onClick={onClearDecisions}

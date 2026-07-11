@@ -22,6 +22,11 @@ describe('radarCandidateStateProps utils', () => {
       label: '레퍼런스 금고 열기',
       title: '저장된 영상 조회 화면으로 이동',
     });
+    expect(props.openProductionButtonProps).toMatchObject({
+      label: '제작 후보함 열기',
+      title: '제작 후보로 표시한 영상과 발견함 링크를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
+    });
+    expect(props.openProductionButtonProps['aria-label']).toContain('YouTube API 호출 없음');
     expect(props.clearDecisionsButtonProps['aria-label']).toContain('Cloud에 저장된');
   });
 

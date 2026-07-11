@@ -1,10 +1,12 @@
-import { MessageSquareText, Trash2 } from 'lucide-react';
+import { MessageSquareText, Rocket, Trash2 } from 'lucide-react';
 
 import { getScrapbookVideoFooterActionsViewProps } from '../utils/scrapbookVideoFooterActions';
 import CopyUrlButton from './CopyUrlButton';
 
 export default function ScrapbookVideoFooterActions({
   onFetchComments,
+  isProductionCandidate,
+  onPromoteToProduction,
   onRemoveScrap,
   video,
   videoTitle,
@@ -13,10 +15,14 @@ export default function ScrapbookVideoFooterActions({
   const {
     commentsButtonProps,
     copyUrlButtonProps,
+    productionButtonProps,
+    productionButtonText,
     removeButtonProps,
   } = getScrapbookVideoFooterActionsViewProps({
     confirmFn: (message) => window.confirm(message),
+    isProductionCandidate,
     onFetchComments,
+    onPromoteToProduction,
     onRemoveScrap,
     video,
     videoTitle,
@@ -28,6 +34,10 @@ export default function ScrapbookVideoFooterActions({
       <CopyUrlButton {...copyUrlButtonProps} />
       <button {...commentsButtonProps}>
         <MessageSquareText className="w-4 h-4" />
+      </button>
+      <button {...productionButtonProps}>
+        <Rocket className="w-4 h-4" />
+        {productionButtonText}
       </button>
       <button {...removeButtonProps}>
         <Trash2 className="w-4 h-4" />

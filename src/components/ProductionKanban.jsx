@@ -66,6 +66,7 @@ export default function ProductionKanban({
     moveStates,
     moveVideo,
     onOpenDiscoveryLinks,
+    onOpenReferenceVault,
     productionSummary,
     saveDraftRecord,
     saveStates,

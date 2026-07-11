@@ -1994,6 +1994,34 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - localStorage key 변경 없음
 - 저장/수집/YouTube API 호출 조건 변경 없음
 
+### 73. 2026-07-11 레이더/스크랩북/제작 후보함 다음 행동 연결
+
+오늘 레이더에서 판단을 마친 뒤 제작 후보함으로 이어지고, 스크랩북 영상 카드에서 제작 후보 표시를 할 수 있으며, 제작 후보함 안에서도 저장 영상 탐색과 발견함 정리로 이어질 수 있도록 다음 행동 흐름을 보강했습니다.
+
+완료한 작업:
+
+- 오늘 레이더 완료 상태에 `제작 후보함 열기` 버튼을 추가했습니다. 저장된 후보 조회 화면 이동이며 YouTube API를 새로 호출하지 않습니다.
+- 스크랩북 영상 카드에 `제작 후보로` 버튼을 추가했습니다. 기존 Cloud 판단 기록에 제작 후보로 표시하는 흐름을 사용하고, 이미 후보인 영상은 `후보 표시됨`으로 비활성 표시합니다.
+- 제작 후보함 상단에 `다음 행동` 영역을 추가했습니다. `저장 영상 더 보기`와 `발견함 링크 정리`는 화면 이동만 수행하며 외부 자동 수집이나 다운로드를 실행하지 않습니다.
+- 홈 지표와 영상 리스트 배지 문구를 `현재 화면 영상`, `스크랩북 보관`, `마지막 수집 기록`, `또터또 후보`처럼 더 명확한 표현으로 맞췄습니다.
+- 관련 유틸/컴포넌트 테스트를 보강해 Cloud 기록, DB 조회, YouTube API 호출 없음 안내가 렌더링되는지 확인했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\radarCandidateStateProps.test.js src\utils\radarCandidates.test.js src\utils\creatorHomeViewProps.test.js src\utils\scrapbookVideoFooterActions.test.js src\utils\scrapbook.test.js src\components\ScrapbookReferenceFlow.test.jsx src\utils\videoListRowBadgesProps.test.js src\components\VideoListRowBadges.test.jsx src\utils\productionKanbanProps.test.js src\components\ProductionKanbanNextActions.test.jsx src\components\ProductionKanbanFlowStates.test.jsx --reporter=dot` 통과, 11개 파일 / 54개 테스트
+- `npm.cmd test -- --reporter=dot` 통과, 164개 파일 / 728개 테스트
+- `npm.cmd run build` 통과
+- `npm.cmd audit --omit=dev` 통과, 취약점 0개
+- `git diff --check` 통과. Windows 줄끝 변환 경고만 표시됐고 diff 오류는 없습니다.
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음
+
 ### 71. 2026-07-11 화면 상태 배지와 후보 흐름 문구 정리
 
 오늘 레이더, 저장 영상 카드, 채널 목록, 발견함, 제작 후보함에서 사용자가 다음 행동을 더 쉽게 구분할 수 있도록 상태 배지와 후보 흐름 안내 문구를 정리했습니다.
