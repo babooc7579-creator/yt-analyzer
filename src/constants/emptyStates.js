@@ -15,6 +15,16 @@ export const REFERENCE_VAULT_EMPTY_STATE = {
       description: 'Cloud DB에 이미 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.',
     },
   ],
+  homeButton: {
+    label: '오늘 레이더로',
+    title: '오늘 레이더로 이동합니다. 화면 이동만으로 YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '오늘 레이더 화면 열기, 이동만으로 YouTube API 호출 없음',
+  },
+  addChannelButton: {
+    label: '새 채널 등록',
+    title: '새 채널 등록 화면으로 이동합니다. 이동만으로 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
+    ariaLabel: '새 채널 등록 화면 열기, 이동만으로 영상 수집이나 YouTube API 호출 없음',
+  },
 };
 
 export const SCRAPBOOK_EMPTY_STATE = {

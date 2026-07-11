@@ -3,6 +3,7 @@ const toArray = (items) => (Array.isArray(items) ? items : []);
 const toVideoList = (videos) => (
   toArray(videos).filter(video => video && typeof video === 'object')
 );
+const isFunction = (value) => typeof value === 'function';
 
 export const LEGACY_DASHBOARD_COMMENT_NOTICE = '댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.';
 
@@ -19,6 +20,7 @@ export function getLegacyDashboardTabViewProps({
   isScanning,
   isVideoSaved,
   lengthFilter,
+  openCreatorView,
   promoteVideoToProduction,
   promptCopyError,
   savedChannels,
@@ -52,6 +54,7 @@ export function getLegacyDashboardTabViewProps({
   const selectedChannels = toArray(selectedChannelIds);
   const videoList = toVideoList(videos);
   const selectedVideos = videoList.filter(video => checkedVideoIds.includes(video.videoId));
+  const canOpenCreatorView = isFunction(openCreatorView);
 
   return {
     commentApiNotice: LEGACY_DASHBOARD_COMMENT_NOTICE,
@@ -94,6 +97,8 @@ export function getLegacyDashboardTabViewProps({
       isProductionCandidate,
       isVideoSaved,
       onFetchComments: fetchTopComments,
+      onOpenAddChannel: canOpenCreatorView ? () => openCreatorView({ id: 'ops-add-channel' }) : undefined,
+      onOpenHome: canOpenCreatorView ? () => openCreatorView({ id: 'home' }) : undefined,
       onPromoteToProduction: promoteVideoToProduction,
       onToggleCheck: toggleCheckVideo,
       onToggleScrap: toggleScrapVideo,

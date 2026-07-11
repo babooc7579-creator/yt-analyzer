@@ -72,6 +72,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
     const handleManualScan = () => 'scan';
     const isProductionCandidate = () => true;
     const isVideoSaved = () => true;
+    const openCreatorView = () => 'open';
     const promoteVideoToProduction = () => 'promote';
     const setLengthFilter = () => 'length';
     const setSearchKeyword = () => 'search';
@@ -89,6 +90,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
       handleManualScan,
       isProductionCandidate,
       isVideoSaved,
+      openCreatorView,
       promoteVideoToProduction,
       setLengthFilter,
       setSearchKeyword,
@@ -106,6 +108,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
     expect(props.dashboardTabProps.handleManualScan).toBe(handleManualScan);
     expect(props.dashboardTabProps.isProductionCandidate).toBe(isProductionCandidate);
     expect(props.dashboardTabProps.isVideoSaved).toBe(isVideoSaved);
+    expect(props.dashboardTabProps.openCreatorView).toBe(openCreatorView);
     expect(props.dashboardTabProps.promoteVideoToProduction).toBe(promoteVideoToProduction);
     expect(props.dashboardTabProps.setLengthFilter).toBe(setLengthFilter);
     expect(props.dashboardTabProps.setSearchKeyword).toBe(setSearchKeyword);

@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { getVideoResultsPanelViewProps } from './videoResultsPanelProps';
+import {
+  getReferenceVaultEmptyStateActions,
+  getVideoResultsPanelViewProps,
+} from './videoResultsPanelProps';
 
 describe('videoResultsPanelProps utils', () => {
   const video = { videoId: 'video-1', title: 'First video' };
@@ -98,5 +101,56 @@ describe('videoResultsPanelProps utils', () => {
     expect(props.videoList).toEqual([video]);
     expect(props.filteredVideoList).toEqual([]);
     expect(props.listTableProps.videos).toEqual([]);
+  });
+
+  it('builds reference vault empty-state navigation actions without scan or save side effects', () => {
+    const onOpenAddChannel = () => 'open add channel';
+    const onOpenHome = () => 'open home';
+
+    const actions = getReferenceVaultEmptyStateActions({
+      onOpenAddChannel,
+      onOpenHome,
+    });
+
+    expect(actions).toHaveLength(2);
+    expect(actions.map(action => action.key)).toEqual(['home', 'add-channel']);
+    expect(actions[0]).toMatchObject({
+      iconKey: 'home',
+      label: '오늘 레이더로',
+      onClick: onOpenHome,
+    });
+    expect(actions[1]).toMatchObject({
+      iconKey: 'add-channel',
+      label: '새 채널 등록',
+      onClick: onOpenAddChannel,
+    });
+    expect(actions[0].title).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(actions[1].title).toContain('영상 수집이나 YouTube API 호출은 실행하지 않습니다');
+  });
+
+  it('omits reference vault actions when navigation handlers are unavailable', () => {
+    expect(getReferenceVaultEmptyStateActions()).toEqual([]);
+    expect(getReferenceVaultEmptyStateActions({ onOpenHome: () => 'home' })).toHaveLength(1);
+    expect(getReferenceVaultEmptyStateActions({ onOpenAddChannel: () => 'add channel' })).toHaveLength(1);
+  });
+
+  it('passes reference vault empty-state actions through video results panel props', () => {
+    const onOpenAddChannel = () => 'open add channel';
+    const onOpenHome = () => 'open home';
+
+    const props = getVideoResultsPanelViewProps({
+      ...baseHandlers,
+      checkedVideos: [],
+      filteredVideos: [],
+      onOpenAddChannel,
+      onOpenHome,
+      showWorkPanel: false,
+      videos: [],
+    });
+
+    expect(props.referenceVaultEmptyStateProps.actions.map(action => action.key)).toEqual([
+      'home',
+      'add-channel',
+    ]);
   });
 });
