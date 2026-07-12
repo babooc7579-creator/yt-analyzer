@@ -2,6 +2,7 @@ import { Link as LinkIcon } from 'lucide-react';
 import {
   getProductionDiscoveryLinkCardProps,
   getProductionDiscoveryLinkList,
+  getProductionDiscoveryRightsWarningCount,
   getProductionDiscoveryLinksSectionActions,
   getProductionDiscoveryLinksSectionHeaderProps,
 } from '../utils/productionDiscoveryLinksSection';
@@ -14,8 +15,10 @@ export default function ProductionDiscoveryLinksSection({
   onMoveLink,
 }) {
   const linkList = getProductionDiscoveryLinkList(links);
+  const rightsWarningCount = getProductionDiscoveryRightsWarningCount(linkList);
   const headerProps = getProductionDiscoveryLinksSectionHeaderProps({
     linkCount: linkList.length,
+    rightsWarningCount,
   });
   const { openDiscoveryLinksButtonProps } = getProductionDiscoveryLinksSectionActions({
     onOpenDiscoveryLinks,
@@ -43,6 +46,14 @@ export default function ProductionDiscoveryLinksSection({
           <p className="mt-1 text-xs text-slate-500">
             {headerProps.description}
           </p>
+          {headerProps.warningText ? (
+            <p
+              className="mt-2 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700"
+              title={headerProps.warningTitle}
+            >
+              {headerProps.warningText}
+            </p>
+          ) : null}
         </div>
         <button
           className="inline-flex h-9 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-extrabold text-slate-700 transition hover:bg-slate-100"
