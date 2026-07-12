@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   getProductionDiscoveryLinkCardProps,
   getProductionDiscoveryLinkList,
+  getProductionDiscoveryRightsWarningCount,
   getProductionDiscoveryLinksSectionActions,
   getProductionDiscoveryLinksSectionHeaderProps,
 } from './productionDiscoveryLinksSection';
@@ -22,6 +23,25 @@ describe('productionDiscoveryLinksSection utils', () => {
       { id: 'link-1' },
       { id: 'link-2' },
     ]);
+  });
+
+  it('sorts risky discovery link candidates before regular link candidates', () => {
+    const links = [
+      { id: 'safe-new', rightsStatus: 'cleared', updatedAt: '2026-07-12T00:00:00.000Z' },
+      { id: 'check-old', rightsStatus: 'needs_check', updatedAt: '2026-07-10T00:00:00.000Z' },
+      { id: 'unknown', updatedAt: '2026-07-11T00:00:00.000Z' },
+      { id: 'blocked', rightsStatus: 'do_not_use', updatedAt: '2026-07-09T00:00:00.000Z' },
+      { id: 'check-new', rightsStatus: 'needs_check', updatedAt: '2026-07-12T00:00:00.000Z' },
+    ];
+
+    expect(getProductionDiscoveryLinkList(links).map(link => link.id)).toEqual([
+      'blocked',
+      'check-new',
+      'check-old',
+      'unknown',
+      'safe-new',
+    ]);
+    expect(getProductionDiscoveryRightsWarningCount(links)).toBe(3);
   });
 
   it('builds card props with move state and forwarded handlers', () => {
@@ -79,7 +99,10 @@ describe('productionDiscoveryLinksSection utils', () => {
   });
 
   it('explains discovery link candidates as Cloud discovery records, not a separate production DB', () => {
-    const headerProps = getProductionDiscoveryLinksSectionHeaderProps({ linkCount: 3 });
+    const headerProps = getProductionDiscoveryLinksSectionHeaderProps({
+      linkCount: 3,
+      rightsWarningCount: 2,
+    });
 
     expect(headerProps.badgeText).toBe('링크 후보 3개');
     expect(headerProps.badgeTitle).toContain('영상 후보와 별도');
@@ -90,5 +113,7 @@ describe('productionDiscoveryLinksSection utils', () => {
     expect(headerProps.description).toContain('별도 제작 DB');
     expect(headerProps.description).toContain('자동 수집이나 다운로드는 실행하지 않습니다');
     expect(headerProps.openButtonLabel).toBe('발견함 열기');
+    expect(headerProps.warningText).toBe('먼저 처리할 권리 확인 링크 2개가 위에 표시됩니다.');
+    expect(headerProps.warningTitle).toContain('화면 표시 순서만 바꾸며 저장이나 API 호출은 없습니다');
   });
 });

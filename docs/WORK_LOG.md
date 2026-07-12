@@ -2022,6 +2022,38 @@ Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤, 프�
 - YouTube API 호출 조건/횟수 변경 없음
 - 새 라이브러리 추가 없음
 
+### 92. 2026-07-12 제작 후보함 발견 링크 권리 확인 우선순위 보강
+
+제작 후보함 안에서 권리 확인이 필요한 발견 링크 후보를 더 빨리 찾을 수 있도록 링크 후보 목록 표시 순서를 보강했습니다.
+
+완료한 작업:
+
+- 발견 링크 후보 목록에서 `do_not_use` 링크를 가장 위에 표시합니다.
+- 그 다음 `needs_check`, `unknown`, `cleared` 순서로 표시합니다.
+- 같은 권리 상태 안에서는 최신 수정/생성 순서가 먼저 보입니다.
+- 섹션 헤더에 "먼저 처리할 권리 확인 링크 N개가 위에 표시됩니다" 안내를 추가했습니다.
+- 이 변경은 화면 표시 순서만 바꾸며 저장, 삭제, YouTube API 호출은 실행하지 않습니다.
+- 관련 유틸/컴포넌트 렌더링 테스트를 보강했습니다.
+
+검증:
+
+- `npm.cmd test -- src\utils\productionDiscoveryLinksSection.test.js src\components\ProductionKanbanFlowStates.test.jsx --reporter=dot`
+  - 2개 테스트 파일, 12개 테스트 통과
+- `npm.cmd test -- --reporter=dot`
+  - 168개 테스트 파일, 741개 테스트 통과
+- `npm.cmd run build`
+  - Vite production build 통과
+- `npm.cmd audit --omit=dev`
+  - 취약점 0개
+
+보존한 것:
+
+- API endpoint 변경 없음
+- DB schema 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건/횟수 변경 없음
+- 새 라이브러리 추가 없음
+
 ### 91. 2026-07-12 홈 제작 후보 카드 권리 확인 버튼 문구 보강
 
 홈의 제작 후보 작업 카드에서 권리 확인이 필요한 발견 링크 후보가 있을 때 일반 "후보함" 버튼 대신 "권리 확인" 버튼 문구를 표시하도록 보강했습니다.
