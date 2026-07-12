@@ -2,6 +2,22 @@
 
 작성일: 2026-07-12 KST
 
+## 0. 적용 완료 상태
+
+2026-07-12 KST 기준으로 개인용 접근 보호를 운영 환경에 적용하고 확인했다.
+
+- Azure Static Web Apps 요금제: Standard
+- Production API: `yt-analyzer-func` Function App 연결
+- 운영 프론트 API 경로: 같은 도메인의 `/api`
+- 소유자 계정: `hy.lee@kaion.co.kr`
+- 소유자 역할: `creator_owner`
+- Microsoft Entra 로그인 후 Creator OS 화면 진입 확인
+- 로그아웃 상태의 앱과 `/api/channels`: Microsoft 로그인으로 이동 확인
+- Function App 직접 URL의 익명 요청: `401 Unauthorized` 확인
+- GitHub Build와 Azure Static Web Apps 배포: 성공
+
+Chrome에서는 `identity.7.azurestaticapps.net` 완료 주소가 브라우저 확장 또는 보안 필터에 의해 차단되는 현상이 있었다. 동일한 초대 링크를 Microsoft Edge에서 열어 동의와 역할 등록을 완료했다. 이는 앱 또는 DB 장애가 아니며, 현재 Edge에서 보호된 Creator OS 화면과 Cloud 데이터 조회가 정상 동작한다.
+
 ## 1. 결정
 
 현재 개인용 Creator OS는 Azure Static Web Apps Standard와 Microsoft Entra ID 로그인을 사용해 보호한다.
