@@ -2,7 +2,7 @@
 
 검토일: 2026-07-08 KST
 
-업데이트: 2026-07-11 KST
+업데이트: 2026-07-13 KST
 
 ## 결론
 
@@ -12,7 +12,7 @@ Creator OS의 프론트엔드/백엔드/DB 핵심 리소스는 잘못 연결된 
 
 2026-07-11 기준으로 `yt-analyzer` 프론트엔드 main 브랜치 배포도 여러 차례 성공했다. 따라서 Static Web Apps 배포 token/OIDC 흐름은 현재 프론트엔드 운영에 문제 없는 것으로 판단한다.
 
-백엔드 `yt-analyzer-functions` Function App 배포는 별도 main push 또는 workflow 재실행 때 확인 대상으로 남겨둔다.
+2026-07-13 기준으로 Sponsorship 구독 안에 백엔드 배포 전용 관리 ID를 새로 만들고, GitHub Actions OIDC와 최소 RBAC 권한을 연결했다. 새 인증 경로로 `yt-analyzer-functions` Function App 배포가 실제 성공했으므로 프론트엔드와 백엔드의 자동 배포 경로가 모두 Sponsorship 구독 기준으로 전환되었다.
 
 ## 이동 결과 요약
 
@@ -22,18 +22,20 @@ Creator OS의 프론트엔드/백엔드/DB 핵심 리소스는 잘못 연결된 
 | 대상 구독 | Microsoft Azure 스폰서십 |
 | 대상 리소스 그룹 | yt-analyzer-rg |
 | 이동 성공 리소스 수 | 7 |
+| 새로 생성한 배포 리소스 | yt-analyzer-github-oidc |
 | 이동 제외 리소스 | oidc-msi-8ae4 |
 | 제외 이유 | Microsoft.ManagedIdentity/userAssignedIdentities는 리소스 이동 미지원 |
 | 앱 접속 | 정상 확인 |
 | 저장 영상 불러오기 | 정상 확인 |
 | 프론트엔드 GitHub Actions 배포 | 정상 확인 |
-| 남은 핵심 확인 | 필요 시 백엔드 Function App 배포 확인, Sponsorship 비용 반영 확인 |
+| 백엔드 GitHub Actions 배포 | 새 Sponsorship OIDC 경로로 정상 확인 |
+| 남은 핵심 확인 | Sponsorship 비용 반영 확인, 이전 MCPP 관리 ID 최종 정리 |
 
 ## 이동 완료 리소스
 
 ```text
 Application Insights Smart Detection
-ASP-ytanalyzer-rg-b241
+ASP-ytanalyzerrg-b241
 yt-analyzer
 yt-analyzer-db
 yt-analyzer-func
@@ -53,7 +55,7 @@ Azure Portal 유효성 검사에서 아래 사유로 이동 대상에서 제외�
 Microsoft.ManagedIdentity/userAssignedIdentities 리소스 이동 미지원
 ```
 
-이 리소스는 삭제하지 않는다. 프론트엔드 배포는 정상 확인되었지만, 백엔드 OIDC/RBAC 또는 다른 자동화에서 참조할 가능성이 남아 있으므로 별도 영향 검토 없이 정리하지 않는다.
+이전 관리 ID는 현재 백엔드 GitHub Actions 인증 경로에서 새 Sponsorship 관리 ID로 교체되었고, 현재 역할 할당도 없는 것으로 확인했다. 다만 삭제는 되돌리기 어려우므로 새 경로의 실제 배포 성공과 비용 반영을 확인한 뒤 명시적 승인으로 정리한다.
 
 ## 이동 후 확인 완료
 
@@ -65,13 +67,20 @@ Microsoft.ManagedIdentity/userAssignedIdentities 리소스 이동 미지원
 - `yt-analyzer` main 브랜치 GitHub Actions `Build` workflow 성공 확인
 - `yt-analyzer` main 브랜치 GitHub Actions `Azure Static Web Apps CI/CD` workflow 성공 확인
 - PR #845, #846, #847, #848 병합 후 공개 앱 루트 `200 OK` 확인
+- Sponsorship 구독에 백엔드 배포 전용 관리 ID `yt-analyzer-github-oidc` 생성 확인
+- GitHub main 브랜치용 federated credential `github-main-yt-analyzer-functions` 생성 확인
+- 새 관리 ID에 Function App 단일 리소스 범위의 `Website Contributor` 역할만 부여한 것 확인
+- 백엔드 GitHub Actions의 client ID와 subscription ID를 Sponsorship 기준으로 교체한 것 확인
+- `yt-analyzer-functions` workflow run [#29199000797](https://github.com/babooc7579-creator/yt-analyzer-functions/actions/runs/29199000797)에서 Azure 로그인과 Function App 배포 성공 확인
+- Function App `yt-analyzer-func`가 `Running`, HTTPS 전용 상태인 것 확인
+- 무로그인 직접 Function API 접근은 `401 Unauthorized`, Static Web Apps API 접근은 Entra ID 로그인으로 `302 Redirect`되는 것 확인
 
 ## 이동 후 남은 확인
 
-1. 필요 시 `yt-analyzer-functions` backend workflow 재실행 또는 main push 후 Function App 배포 성공 여부
-2. backend 배포 실패 시 Azure login secret, subscription ID, OIDC/RBAC 설정 재확인
-3. 하루 정도 지난 뒤 MCPP Subscription 비용 증가가 멈추는지 확인
-4. Sponsorship 사용량에 새 리소스 비용이 반영되는지 확인
+1. Cost Management 데이터 반영 지연을 고려해 MCPP Subscription 비용 증가가 멈추는지 확인
+2. Sponsorship 사용량에 새 리소스 비용이 반영되는지 확인
+3. 새 백엔드 배포 경로가 안정적으로 유지되는 것을 확인한 뒤 이전 MCPP 관리 ID 삭제 여부를 최종 승인
+4. 이전 관리 ID 삭제 후 비어 있는 MCPP의 `yt-analyzer-rg` 리소스 그룹 정리 여부 확인
 
 ## 구조 메모
 
@@ -154,6 +163,31 @@ AZUREAPPSERVICE_CLIENTID_079665AAE1D64EDF8882A4742229CE57
 AZUREAPPSERVICE_TENANTID_106C6E88AE5643279A92B64A57E72EB9
 AZUREAPPSERVICE_SUBSCRIPTIONID_6066B5E459774B328AF5C4880650D0FC
 ```
+
+### Backend OIDC 전환 결과
+
+Sponsorship 구독에 이동할 수 없었던 이전 관리 ID를 복제하지 않고, 백엔드 배포만 담당하는 새 관리 ID를 만들었다.
+
+```text
+Managed identity: yt-analyzer-github-oidc
+Federated credential: github-main-yt-analyzer-functions
+GitHub subject: repo:babooc7579-creator/yt-analyzer-functions:ref:refs/heads/main
+Role: Website Contributor
+Role scope: Function App yt-analyzer-func 단일 리소스
+```
+
+기존 GitHub secret 이름은 유지하고 값만 새 관리 ID와 Sponsorship 구독 기준으로 교체했다. 따라서 workflow 파일과 배포 명령은 바꾸지 않고 인증 대상만 안전하게 전환했다.
+
+검증 결과:
+
+```text
+GitHub Actions run: 29199000797
+Build: success
+Azure login: success
+Function App deploy: success
+```
+
+이전 MCPP 관리 ID `oidc-msi-8ae4`는 현재 역할 할당이 없고 새 배포 경로에서도 사용하지 않는다. 최종 삭제 전까지는 복구용 안전망으로만 보존한다.
 
 Function App 환경 변수:
 
@@ -286,13 +320,19 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 8. 프론트엔드 main 브랜치 Build workflow 성공 확인
 9. 프론트엔드 Azure Static Web Apps CI/CD workflow 성공 확인
 10. 공개 앱 루트 `200 OK` 확인
+11. Sponsorship 구독에 새 backend OIDC 관리 ID 생성
+12. GitHub main 브랜치용 federated credential 생성
+13. Function App 단일 범위 `Website Contributor` 권한 연결
+14. backend GitHub Actions secret을 Sponsorship 기준으로 교체
+15. 새 OIDC 경로로 backend Build/Azure login/Function App 배포 성공 확인
+16. Function App 실행 상태와 무로그인 접근 보호 확인
 
 ## 남은 진행 순서
 
-1. 필요 시 backend Function App 배포 확인
-2. Cost Management에서 Sponsorship 크레딧 차감 확인
-3. MCPP Subscription 비용 증가가 멈추는지 확인
-4. 이동 제외 관리 ID가 실제 자동화에서 더 이상 참조되지 않는지 장기 검토
+1. Cost Management에서 Sponsorship 크레딧 차감 확인
+2. MCPP Subscription 비용 증가가 멈추는지 확인
+3. 비용 데이터 반영 후 이전 MCPP 관리 ID 삭제 최종 승인
+4. 이전 관리 ID 삭제 후 비어 있는 MCPP 리소스 그룹 정리
 
 ## 위험도 판단
 
@@ -301,7 +341,8 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 | Static Web Apps 이동 | 낮음~중간 | 이동 자체보다 GitHub deployment token 확인이 중요 |
 | Function App 이동 | 중간 | App Service plan, storage, Application Insights와 함께 움직여야 함 |
 | Cosmos DB 이동 | 중간 | 데이터 원장이므로 이동 전 백업/연결 문자열 확인 필요 |
-| GitHub Actions | 낮음~중간 | frontend는 배포 성공 확인됨. backend는 subscription-id/RBAC 영향 가능 |
+| GitHub Actions | 낮음 | frontend와 backend 모두 새 구독 기준 실제 배포 성공 확인됨 |
+| 이전 관리 ID 정리 | 낮음 | 새 OIDC 배포 성공과 역할 범위 확인 완료. 삭제 전 최종 승인만 필요 |
 | Custom domain | 낮음 | 현재 Creator OS에서 별도 커스텀 도메인 흔적은 확인되지 않음 |
 | 비용 | 중간 | Sponsorship 크레딧 소진/만료 시 서비스 중단 위험 |
 
@@ -309,11 +350,13 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 
 현재 구조 기준으로는 Microsoft Azure Sponsorship 구독 이동 후 치명적인 앱 동작 문제는 발견되지 않았다.
 
-프론트엔드 앱 접속, 저장 영상 조회, main 브랜치 Build, Azure Static Web Apps CI/CD 배포, 공개 앱 루트 `200 OK`는 정상 확인됐다.
+프론트엔드 앱 접속, 저장 영상 조회, main 브랜치 Build, Azure Static Web Apps CI/CD 배포, backend GitHub OIDC 로그인, Function App 배포는 모두 정상 확인됐다.
+
+Function App은 `Running` 및 HTTPS 전용 상태이며, 무로그인 접근은 의도대로 차단된다. 따라서 구독 이동으로 인한 앱 실행 또는 자동 배포의 치명적인 문제는 현재 발견되지 않았다.
 
 다만 다음 조건은 계속 운영 확인 대상으로 남긴다.
 
 ```text
-backend Function App 배포가 필요할 때 GitHub Actions secret과 RBAC를 검증한다.
 Sponsorship 크레딧/만료/지출 제한을 모니터링한다.
+비용 데이터 반영 후 이전 MCPP 관리 ID와 빈 리소스 그룹의 삭제를 최종 승인한다.
 ```
