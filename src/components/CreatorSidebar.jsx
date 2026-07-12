@@ -1,4 +1,5 @@
 import { CREATOR_OS_PRODUCT_MAP } from '../constants/creatorOs';
+import CreatorAccessControl from './CreatorAccessControl';
 import CreatorSidebarHeader from './CreatorSidebarHeader';
 import CreatorSidebarSection from './CreatorSidebarSection';
 
@@ -17,6 +18,8 @@ export default function CreatorSidebar({ activeView, onOpenView }) {
           />
         ))}
       </div>
+
+      <CreatorAccessControl />
     </aside>
   );
 }

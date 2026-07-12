@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Creator OS 접근 권한 없음</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, Pretendard, "Noto Sans KR", system-ui, sans-serif;
+        background: #020617;
+        color: #e2e8f0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      main {
+        width: min(100%, 520px);
+        border: 1px solid #334155;
+        border-radius: 8px;
+        background: #0f172a;
+        padding: 32px;
+        box-shadow: 0 24px 64px rgb(0 0 0 / 35%);
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: #a5b4fc;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 8px 0 0;
+        font-size: 28px;
+      }
+
+      p {
+        margin: 14px 0 0;
+        color: #cbd5e1;
+        line-height: 1.7;
+      }
+
+      a {
+        display: inline-flex;
+        margin-top: 24px;
+        border-radius: 8px;
+        background: #4f46e5;
+        padding: 12px 18px;
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      a:focus-visible {
+        outline: 3px solid #a5b4fc;
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">CREATOR OS</p>
+      <h1>이 계정에는 접근 권한이 없습니다.</h1>
+      <p>초대받은 Microsoft 계정으로 다시 로그인해 주세요. 앱 데이터는 변경되지 않았습니다.</p>
+      <a href="/.auth/logout?post_logout_redirect_uri=/">다른 계정으로 로그인</a>
+    </main>
+  </body>
+</html>

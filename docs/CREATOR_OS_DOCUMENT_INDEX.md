@@ -130,13 +130,19 @@ Azure 리소스를 MCPP Subscription에서 Microsoft Azure 스폰서십으로 �
 
 Azure 구독, 비용, Static Web Apps 배포 연결, 이동 제외 리소스, 스폰서십 크레딧 반영 여부를 확인할 때 봅니다.
 
-18. `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`
+18. `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md`
+
+Microsoft 계정 로그인, 개인 owner 역할, 연결된 Function API를 이용한 접근 보호 기준을 정리합니다.
+
+Static Web Apps Standard, API 연결, 역할 부여, 인증 배포 또는 롤백 전에 확인합니다.
+
+19. `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`
 
 프론트 테스트 도구를 도입할지, 도입한다면 어디서부터 시작할지 정리합니다.
 
 `package.json`, `package-lock.json`, GitHub Actions test step을 바꾸기 전에 확인해야 합니다.
 
-19. `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md`
+20. `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md`
 
 main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 전용 절차입니다.
 
@@ -144,7 +150,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 
 ### 6단계. 실행 순서 확인
 
-20. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
+21. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
 
 위 문서들을 바탕으로 다음 작업을 작은 Issue 단위로 쪼갠 실행 계획입니다.
 
@@ -174,6 +180,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 | `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md` | Cloud/localStorage sync 선택지 | 예 | 예 | sync 작업 전 필수 |
 | `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` | GitHub Actions/Azure 배포 경고 선택지 | 예 | 일부 | 배포 workflow 수정 전 필수 |
 | `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md` | Azure 구독 이동/비용/배포 연결 확인 | 예 | 일부 | 구독/배포/비용 확인 전 필수 |
+| `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md` | 개인 owner 로그인과 연결 API 보호 기준 | 예 | 일부 | 인증/권한/Standard 변경 전 필수 |
 | `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` | 프론트 테스트 도입 선택지 | 예 | 일부 | test/package 변경 전 필수 |
 | `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md` | 공개 앱 최소 응답 확인 절차 | 예 | 아니오 | 배포 확인 전 참고 |
 | `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md` | 다음 구현 Issue 순서 | 예 | 예 | 필수 |
@@ -197,6 +204,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 | 새 DB container 추가 | `CREATOR_OS_DATA_OWNERSHIP.md`, 관련 선택지 문서 |
 | GitHub Actions 또는 Azure 배포 workflow 수정 | `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` |
 | Azure 구독, 비용, 스폰서십 크레딧, 배포 연결 확인 | `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md`, `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` |
+| 개인용 로그인, 역할, API 접근 보호 적용 | `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md`, `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md` |
 | 테스트 도구 또는 `package.json` test script 추가 | `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` |
 
 ---
@@ -229,6 +237,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 - `scan_logs`, `api_quota_logs` container를 만들지
 - `/videos` pagination을 어떤 방식으로 구현할지
 - Azure Static Web Apps 배포 workflow 경고를 token 방식 단순화로 정리할지
+- Static Web Apps 접근 역할, 로그인 공급자, API 연결 방식을 바꿀지
 - 테스트 도구를 추가하고 `package.json` / CI test step을 바꿀지
 
 ---
