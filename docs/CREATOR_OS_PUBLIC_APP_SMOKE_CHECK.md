@@ -1,8 +1,8 @@
-# Creator OS 공개 앱 Smoke Check 절차
+# Creator OS 보호 앱 Smoke Check 절차
 
 작성일: 2026-07-11
 
-이 문서는 프론트엔드 변경을 main에 병합한 뒤 공개 앱이 최소한 정상 응답하는지 확인하는 절차입니다.
+이 문서는 프론트엔드 변경을 main에 병합한 뒤 로그인으로 보호된 앱이 최소한 정상 응답하는지 확인하는 절차입니다.
 
 목적은 "배포가 됐다"와 "사용자가 앱 URL에 접속할 수 있다"를 구분하는 것입니다.
 
@@ -16,7 +16,7 @@
 
 ## 1. 확인 대상
 
-현재 공개 앱 URL:
+현재 운영 앱 URL:
 
 ```txt
 https://lively-dune-0af1d2a00.7.azurestaticapps.net/
@@ -51,47 +51,45 @@ gh run list --branch main --limit 6 --json databaseId,name,status,conclusion,cre
 
 ---
 
-## 3. 공개 앱 루트 응답 확인
+## 3. 로그아웃 상태의 접근 보호 확인
 
 PowerShell에서 아래 명령을 실행합니다.
 
 ```powershell
 $url = 'https://lively-dune-0af1d2a00.7.azurestaticapps.net/?verify=' + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-$response = Invoke-WebRequest -Uri $url -Headers @{ 'Cache-Control' = 'no-cache'; 'Pragma' = 'no-cache' } -UseBasicParsing
+try {
+  $response = Invoke-WebRequest -Uri $url -Headers @{ 'Cache-Control' = 'no-cache'; 'Pragma' = 'no-cache' } -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop
+} catch {
+  $response = $_.Exception.Response
+}
 [pscustomobject]@{
   StatusCode = $response.StatusCode
-  Length = $response.Content.Length
-  HasRoot = $response.Content.Contains('<div id="root">')
+  Location = $response.Headers.Location
 } | ConvertTo-Json
 ```
 
 통과 기준:
 
-```json
-{
-  "StatusCode": 200,
-  "HasRoot": true
-}
-```
+- 익명 루트 요청이 Microsoft 로그인으로 이동합니다.
+- 익명 `/api/channels` 요청도 로그인으로 이동합니다.
+- 앱 HTML이 익명 요청에 `200 OK`로 직접 노출되면 통과가 아닙니다.
 
-`Length`는 배포 결과에 따라 달라질 수 있으므로 고정값으로 보지 않습니다.
+PowerShell 버전에 따라 리디렉션 응답이 예외로 표시될 수 있습니다. 이 경우 상태 코드와 `Location` 헤더가 로그인 경로를 가리키는지 확인합니다.
 
 ---
 
-## 4. 정적 번들 문구 확인이 필요한 경우
+## 4. 소유자 로그인 화면 확인
 
-특정 화면 문구가 실제 배포 번들에 들어갔는지 확인해야 할 때만 사용합니다.
+Microsoft Edge에서 운영 앱 URL을 엽니다.
 
-```powershell
-$base = 'https://lively-dune-0af1d2a00.7.azurestaticapps.net/'
-$url = $base + '?verify=' + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-$response = Invoke-WebRequest -Uri $url -Headers @{ 'Cache-Control' = 'no-cache'; 'Pragma' = 'no-cache' } -UseBasicParsing
-$asset = [regex]::Matches($response.Content, 'assets/index-[^"'' ]+\.js')[-1].Value
-$bundle = (Invoke-WebRequest -Uri ($base + $asset + '?verify=' + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()) -Headers @{ 'Cache-Control' = 'no-cache'; 'Pragma' = 'no-cache' } -UseBasicParsing).Content
-$bundle.Contains('확인할 문구')
-```
+통과 기준:
 
-이 확인은 화면 클릭 테스트가 아니라 배포 파일 기준 확인입니다.
+- `creator_owner` 역할이 있는 Microsoft 계정으로 앱 화면이 열립니다.
+- 사이드바에 Microsoft 계정 보호 안내와 로그아웃 동작이 보입니다.
+- 저장 영상 불러오기가 정상 동작합니다.
+- 읽기 확인 중에는 새 영상 수집, 저장, 삭제 버튼을 누르지 않습니다.
+
+Chrome에서는 Azure Static Web Apps 초대 동의 완료 주소가 확장 또는 보안 필터에 의해 차단된 이력이 있으므로, 현재 운영 확인은 정상 동작이 검증된 Edge를 우선 사용합니다.
 
 ---
 
@@ -119,7 +117,9 @@ backend Function App 배포 확인과 Azure Sponsorship 비용 반영 확인은 
 ```txt
 - Build: 성공/실패
 - Azure Static Web Apps CI/CD: 성공/실패
-- 공개 앱 루트: 200 OK / 실패
+- 익명 루트와 `/api`: Microsoft 로그인 이동 / 실패
+- `creator_owner` 로그인: 앱 진입 성공 / 실패
+- 저장 영상 DB 조회: 성공 / 미확인 / 실패
 - 알려진 경고: github_id_token warning 유지 여부
 - 데이터 변경 버튼 클릭 여부: 없음
 ```
@@ -128,4 +128,4 @@ backend Function App 배포 확인과 Azure Sponsorship 비용 반영 확인은 
 
 ## 한 줄 기준
 
-프론트엔드 안정화 작업의 기본 smoke check는 "main Build 성공, Azure Static Web Apps 배포 성공, 공개 앱 루트 200 OK"까지입니다.
+프론트엔드 안정화 작업의 기본 smoke check는 "main Build 성공, Azure Static Web Apps 배포 성공, 익명 접근은 로그인으로 이동, owner 로그인 후 앱 진입"까지입니다.

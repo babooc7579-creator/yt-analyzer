@@ -53,6 +53,9 @@
 - 2026-07-12 홈 다음 추천 행동에서 오늘 레이더 후보 검토가 끝난 뒤 권리 확인이 필요한 발견 링크 후보를 일반 제작 후보보다 먼저 안내하도록 보강했습니다. 화면 이동과 기존 Cloud 상태 변경 흐름만 사용하며 endpoint, DB schema, localStorage key, YouTube API 호출 조건은 변경하지 않았습니다.
 - 2026-07-12 홈 제작 후보 작업 카드도 권리 확인 후보가 있을 때 "권리 확인" 버튼 문구를 우선 표시하도록 보강했습니다. 버튼은 제작 후보함으로 이동만 하며 저장된 후보 조회와 기존 Cloud 상태 변경 흐름을 그대로 사용합니다.
 - 2026-07-12 제작 후보함의 발견 링크 후보 목록에서 사용 금지/권리 확인 필요 링크를 일반 링크보다 먼저 표시하도록 보강했습니다. 화면 표시 순서와 안내 문구만 바꾸며 저장 구조, endpoint, YouTube API 호출 조건은 변경하지 않았습니다.
+- 2026-07-12 Azure Static Web Apps Standard, 연결 Function API, Microsoft Entra 로그인을 이용한 개인용 접근 보호를 적용했습니다. 익명 앱/API 요청은 로그인으로 이동하고, `creator_owner` 계정은 Edge에서 앱 진입과 저장 영상 조회가 정상 동작하며, Function App 직접 익명 요청은 401로 차단됩니다.
+- 2026-07-12 제작 칸반의 장기 상태 호환 정책을 고정했습니다. 현재 화면은 제작 후보/제작 중/업로드 완료 3단계만 생성하고, 기존 `production_reviewing`, `production_decided`, `production_on_hold` 값은 저장값을 바꾸지 않은 채 제작 후보 칼럼에 표시해 누락을 막습니다.
+- 2026-07-12 전체 검증 기준은 테스트 파일 171개, 테스트 747개 통과와 프로덕션 빌드 성공입니다.
 
 ---
 
@@ -269,7 +272,7 @@
 3. 실제 기능 확장 전에는 선택지가 필요한 항목을 먼저 분리합니다. local assets, 별도 제작 프로젝트 모델, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정합니다.
 4. GitHub Actions와 Azure Static Web Apps `github_id_token` 경고는 2026-07-11 후속 작업에서 unsupported input 1줄 제거까지 검증했지만 main 배포가 실패해 복구했습니다. 현재는 경고가 남더라도 배포 성공을 우선하며, OIDC 단계 전체 삭제, deployment token 단독 전환, Azure 인증 방식 변경은 별도 판단 후 진행합니다.
 5. Azure Sponsorship 이전 후 frontend 배포는 정상 확인됐습니다. backend Function App 배포와 비용 반영은 운영 확인 항목으로 남깁니다.
-6. 공개 앱 smoke check는 `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md` 기준으로 main Build, Azure Static Web Apps 배포, 공개 앱 루트 200 OK를 확인합니다. 저장/삭제/수집 버튼은 누르지 않습니다.
+6. 보호 앱 smoke check는 `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md` 기준으로 main Build, Azure Static Web Apps 배포, 익명 요청의 로그인 이동, `creator_owner` 로그인 후 앱 진입을 확인합니다. 저장/삭제/수집 버튼은 누르지 않습니다.
 
 이 순서가 안전한 이유:
 
