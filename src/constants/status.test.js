@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  PRODUCTION_STATUS,
+  PRODUCTION_STATUS_LABELS,
+  VIDEO_STATUS,
+  VIDEO_STATUS_LABELS,
   isProductionStatus,
   isRadarHiddenRecord,
   isVideoReviewStatus,
@@ -18,5 +22,18 @@ describe('status compatibility policy', () => {
     expect(isVideoReviewStatus('new')).toBe(false);
     expect(isProductionStatus('new')).toBe(false);
     expect(isRadarHiddenRecord(record)).toBe(false);
+  });
+
+  it('keeps review and production labels distinct across app surfaces', () => {
+    expect(VIDEO_STATUS_LABELS[VIDEO_STATUS.REVIEWED]).toBe('봤음');
+    expect(VIDEO_STATUS_LABELS[VIDEO_STATUS.WATCH_LATER]).toBe('나중에 보기');
+    expect(VIDEO_STATUS_LABELS[VIDEO_STATUS.LEGACY_LATER]).toBe('나중에 보기');
+    expect(VIDEO_STATUS_LABELS[VIDEO_STATUS.PRODUCTION_CANDIDATE]).toBe('제작 후보');
+    expect(PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.CANDIDATE]).toBe('제작 후보');
+    expect(VIDEO_STATUS_LABELS[VIDEO_STATUS.USED]).toBe('사용함');
+    expect(PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.DONE]).toBe('업로드 완료');
+    expect(VIDEO_STATUS_LABELS[VIDEO_STATUS.USED]).not.toBe(
+      PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.DONE]
+    );
   });
 });

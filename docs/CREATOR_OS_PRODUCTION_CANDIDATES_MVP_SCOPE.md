@@ -76,9 +76,13 @@
 | `production_candidate` | 제작 후보 | 예 |
 | `production_active` | 제작 중 | 예 |
 | `uploaded` | 업로드 완료 | 예 |
-| `production_reviewing` | 검토 중 | 상수는 있으나 칸반 기본 칼럼 아님 |
-| `production_decided` | 제작 결정 | 상수는 있으나 칸반 기본 칼럼 아님 |
-| `production_on_hold` | 보류 | 상수는 있으나 칸반 기본 칼럼 아님 |
+| `production_reviewing` | 검토 중 | 새로 생성하지 않음. 기존 값은 제작 후보 칼럼에 표시 |
+| `production_decided` | 제작 결정 | 새로 생성하지 않음. 기존 값은 제작 후보 칼럼에 표시 |
+| `production_on_hold` | 보류 | 새로 생성하지 않음. 기존 값은 제작 후보 칼럼에 표시 |
+
+1차 MVP의 3개 칼럼은 표시 구조입니다. 기존 Cloud record의 장기 상태 후보를
+자동 변경하거나 마이그레이션하지 않으며, 화면에서 누락되지 않게 제작 후보
+칼럼에 모아 보여줍니다. 칼럼 확장은 1차 완성 이후 별도 제품 결정으로 검토합니다.
 
 ### 2.3 제작 메모/일정 저장
 

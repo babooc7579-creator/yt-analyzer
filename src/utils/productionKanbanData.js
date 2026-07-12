@@ -42,8 +42,17 @@ const createEmptyProductionVideoGroups = () => ({
   [PRODUCTION_STATUS.DONE]: [],
 });
 
-const getProductionGroupStatus = (recordStatus, grouped) => (
-  grouped[recordStatus] ? recordStatus : PRODUCTION_STATUS.CANDIDATE
+const PRODUCTION_KANBAN_STATUS_GROUPS = {
+  [PRODUCTION_STATUS.CANDIDATE]: PRODUCTION_STATUS.CANDIDATE,
+  [PRODUCTION_STATUS.REVIEWING]: PRODUCTION_STATUS.CANDIDATE,
+  [PRODUCTION_STATUS.DECIDED]: PRODUCTION_STATUS.CANDIDATE,
+  [PRODUCTION_STATUS.ON_HOLD]: PRODUCTION_STATUS.CANDIDATE,
+  [PRODUCTION_STATUS.ACTIVE]: PRODUCTION_STATUS.ACTIVE,
+  [PRODUCTION_STATUS.DONE]: PRODUCTION_STATUS.DONE,
+};
+
+export const getProductionKanbanGroupStatus = (recordStatus) => (
+  PRODUCTION_KANBAN_STATUS_GROUPS[recordStatus] || PRODUCTION_STATUS.CANDIDATE
 );
 
 const sortProductionVideoGroups = (grouped, videoUserRecords) => {
@@ -86,7 +95,7 @@ export const groupProductionVideos = (videos, videoUserRecords) => {
     if (!hasAnyProductionStatus(record, PRODUCTION_STATUSES)) return acc;
 
     const recordStatus = getProductionStatusFromRecord(record);
-    const status = getProductionGroupStatus(recordStatus, acc);
+    const status = getProductionKanbanGroupStatus(recordStatus);
     acc[status].push(video);
     return acc;
   }, createEmptyProductionVideoGroups());

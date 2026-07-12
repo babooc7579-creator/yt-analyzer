@@ -6,6 +6,7 @@ import {
   countDiscoveryRightsWarnings,
   countGroupedProductionVideos,
   getDiscoveryLinkCandidates,
+  getProductionKanbanGroupStatus,
   getProductionKanbanDataModel,
   getProductionSummary,
   getScheduledProductionVideos,
@@ -59,6 +60,33 @@ describe('productionKanbanData utils', () => {
     expect(grouped[PRODUCTION_STATUS.CANDIDATE].map(video => video.videoId)).toEqual(['v4', 'v1']);
     expect(grouped[PRODUCTION_STATUS.ACTIVE].map(video => video.videoId)).toEqual(['v2']);
     expect(grouped[PRODUCTION_STATUS.DONE].map(video => video.videoId)).toEqual(['v3']);
+  });
+
+  it('keeps long-term production statuses visible in the three-column MVP board', () => {
+    expect(getProductionKanbanGroupStatus(PRODUCTION_STATUS.REVIEWING)).toBe(PRODUCTION_STATUS.CANDIDATE);
+    expect(getProductionKanbanGroupStatus(PRODUCTION_STATUS.DECIDED)).toBe(PRODUCTION_STATUS.CANDIDATE);
+    expect(getProductionKanbanGroupStatus(PRODUCTION_STATUS.ON_HOLD)).toBe(PRODUCTION_STATUS.CANDIDATE);
+    expect(getProductionKanbanGroupStatus(PRODUCTION_STATUS.ACTIVE)).toBe(PRODUCTION_STATUS.ACTIVE);
+    expect(getProductionKanbanGroupStatus(PRODUCTION_STATUS.DONE)).toBe(PRODUCTION_STATUS.DONE);
+
+    const legacyVideos = [
+      { videoId: 'reviewing', multiplier: 3 },
+      { videoId: 'decided', multiplier: 2 },
+      { videoId: 'on-hold', multiplier: 1 },
+    ];
+    const grouped = groupProductionVideos(legacyVideos, {
+      reviewing: { statusIds: [PRODUCTION_STATUS.REVIEWING] },
+      decided: { statusIds: [PRODUCTION_STATUS.DECIDED] },
+      'on-hold': { statusIds: [PRODUCTION_STATUS.ON_HOLD] },
+    });
+
+    expect(grouped[PRODUCTION_STATUS.CANDIDATE].map(video => video.videoId)).toEqual([
+      'reviewing',
+      'decided',
+      'on-hold',
+    ]);
+    expect(grouped[PRODUCTION_STATUS.ACTIVE]).toEqual([]);
+    expect(grouped[PRODUCTION_STATUS.DONE]).toEqual([]);
   });
 
   it('builds scheduled videos from draft records before saved records', () => {
