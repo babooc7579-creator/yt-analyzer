@@ -23,14 +23,15 @@ Creator OS의 프론트엔드/백엔드/DB 핵심 리소스는 잘못 연결된 
 | 대상 리소스 그룹 | yt-analyzer-rg |
 | 이동 성공 리소스 수 | 7 |
 | 새로 생성한 배포 리소스 | yt-analyzer-github-oidc |
-| 이동 제외 리소스 | oidc-msi-8ae4 |
+| 이동 제외 후 삭제한 리소스 | oidc-msi-8ae4 |
 | 제외 이유 | Microsoft.ManagedIdentity/userAssignedIdentities는 리소스 이동 미지원 |
 | 앱 접속 | 정상 확인 |
 | 저장 영상 불러오기 | 정상 확인 |
 | 프론트엔드 GitHub Actions 배포 | 정상 확인 |
 | 백엔드 GitHub Actions 배포 | 새 Sponsorship OIDC 경로로 정상 확인 |
 | MCPP 비용 증가 중단 | 2026-07-08~12 추가 비용 없음 |
-| 남은 핵심 확인 | Sponsorship 크레딧 반영 확인, 이전 MCPP 관리 ID 최종 정리 |
+| 이전 MCPP 정리 | 관리 ID와 빈 yt-analyzer-rg 삭제 완료 |
+| 남은 운영 확인 | Sponsorship 크레딧 반영 모니터링 |
 
 ## 이동 완료 리소스
 
@@ -44,7 +45,7 @@ yt-analyzer-func Application Insights
 ytanalyzerrga05b
 ```
 
-## 이동 제외 리소스
+## 이동 제외 후 정리 완료한 리소스
 
 ```text
 oidc-msi-8ae4
@@ -56,7 +57,7 @@ Azure Portal 유효성 검사에서 아래 사유로 이동 대상에서 제외�
 Microsoft.ManagedIdentity/userAssignedIdentities 리소스 이동 미지원
 ```
 
-이전 관리 ID는 현재 백엔드 GitHub Actions 인증 경로에서 새 Sponsorship 관리 ID로 교체되었고, 현재 역할 할당도 없는 것으로 확인했다. 다만 삭제는 되돌리기 어려우므로 새 경로의 실제 배포 성공과 비용 반영을 확인한 뒤 명시적 승인으로 정리한다.
+이전 관리 ID는 백엔드 GitHub Actions 인증 경로에서 새 Sponsorship 관리 ID로 교체했고, 역할 할당이 없는 것을 확인했다. 새 OIDC로 실제 백엔드 배포가 성공하고 MCPP 비용 증가가 멈춘 것도 확인한 뒤 2026-07-13에 삭제했다. 이어서 비어 있는 MCPP의 `yt-analyzer-rg` 리소스 그룹도 삭제했다.
 
 ## 이동 후 확인 완료
 
@@ -76,6 +77,9 @@ Microsoft.ManagedIdentity/userAssignedIdentities 리소스 이동 미지원
 - Function App `yt-analyzer-func`가 `Running`, HTTPS 전용 상태인 것 확인
 - 무로그인 직접 Function API 접근은 `401 Unauthorized`, Static Web Apps API 접근은 Entra ID 로그인으로 `302 Redirect`되는 것 확인
 - 2026-07-13 Cost Management 조회에서 MCPP `yt-analyzer-rg` 비용은 7월 7일까지만 발생하고 7월 8~12일 추가 비용이 없는 것 확인
+- 이전 MCPP 관리 ID `oidc-msi-8ae4` 삭제 완료
+- 비어 있는 MCPP `yt-analyzer-rg` 리소스 그룹 삭제 완료
+- 삭제 후 MCPP 관련 리소스 0개, Sponsorship 운영/배포 리소스 8개, Function App `Running` 상태 재확인
 
 ## 비용 반영 확인
 
@@ -95,9 +99,7 @@ Azure Cost Management 데이터는 구독 유형과 서비스에 따라 늦게 �
 
 ## 이동 후 남은 확인
 
-1. Sponsorship 전용 잔액 화면에 새 리소스 사용량이 반영되는지 확인
-2. 이전 MCPP 관리 ID 삭제 여부를 최종 승인
-3. 이전 관리 ID 삭제 후 비어 있는 MCPP의 `yt-analyzer-rg` 리소스 그룹 정리 여부 확인
+1. Sponsorship 전용 잔액 화면에 새 리소스 사용량이 반영되는지 주기적으로 확인
 
 ## 구조 메모
 
@@ -204,7 +206,7 @@ Azure login: success
 Function App deploy: success
 ```
 
-이전 MCPP 관리 ID `oidc-msi-8ae4`는 현재 역할 할당이 없고 새 배포 경로에서도 사용하지 않는다. 최종 삭제 전까지는 복구용 안전망으로만 보존한다.
+이전 MCPP 관리 ID `oidc-msi-8ae4`는 역할 할당이 없고 새 배포 경로에서도 사용하지 않는 것을 확인한 뒤 삭제했다. 현재 backend 배포 인증은 Sponsorship의 `yt-analyzer-github-oidc`만 사용한다.
 
 Function App 환경 변수:
 
@@ -344,12 +346,13 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 15. 새 OIDC 경로로 backend Build/Azure login/Function App 배포 성공 확인
 16. Function App 실행 상태와 무로그인 접근 보호 확인
 17. MCPP Subscription의 7월 8~12일 추가 운영 비용이 없는 것 확인
+18. 이전 MCPP 관리 ID `oidc-msi-8ae4` 삭제
+19. 비어 있는 MCPP `yt-analyzer-rg` 리소스 그룹 삭제
+20. MCPP 관련 리소스 0개와 Sponsorship 운영/배포 리소스 정상 상태 재확인
 
 ## 남은 진행 순서
 
-1. Sponsorship 전용 잔액 화면에서 크레딧 차감 반영 확인
-2. 이전 MCPP 관리 ID 삭제 최종 승인
-3. 이전 관리 ID 삭제 후 비어 있는 MCPP 리소스 그룹 정리
+1. Sponsorship 전용 잔액 화면에서 크레딧 차감 반영을 주기적으로 확인
 
 ## 위험도 판단
 
@@ -359,13 +362,13 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 | Function App 이동 | 중간 | App Service plan, storage, Application Insights와 함께 움직여야 함 |
 | Cosmos DB 이동 | 중간 | 데이터 원장이므로 이동 전 백업/연결 문자열 확인 필요 |
 | GitHub Actions | 낮음 | frontend와 backend 모두 새 구독 기준 실제 배포 성공 확인됨 |
-| 이전 관리 ID 정리 | 낮음 | 새 OIDC 배포 성공, 역할 범위, MCPP 비용 증가 중단 확인 완료. 삭제 전 최종 승인만 필요 |
+| 이전 관리 ID 정리 | 완료 | 새 OIDC 배포 성공, 역할 범위, MCPP 비용 증가 중단 확인 후 삭제 완료 |
 | Custom domain | 낮음 | 현재 Creator OS에서 별도 커스텀 도메인 흔적은 확인되지 않음 |
 | 비용 | 중간 | Sponsorship 크레딧 소진/만료 시 서비스 중단 위험 |
 
 ## 최종 판단
 
-현재 구조 기준으로는 Microsoft Azure Sponsorship 구독 이동 후 치명적인 앱 동작 문제는 발견되지 않았다.
+현재 구조 기준으로 Microsoft Azure Sponsorship 구독 이동과 이전 MCPP 리소스 정리는 완료되었으며, 치명적인 앱 동작 문제는 발견되지 않았다.
 
 프론트엔드 앱 접속, 저장 영상 조회, main 브랜치 Build, Azure Static Web Apps CI/CD 배포, backend GitHub OIDC 로그인, Function App 배포는 모두 정상 확인됐다.
 
@@ -376,5 +379,4 @@ Function App은 `Running` 및 HTTPS 전용 상태이며, 무로그인 접근은 
 ```text
 Sponsorship 크레딧/만료/지출 제한을 모니터링한다.
 Sponsorship 전용 잔액 화면의 사용량 반영을 확인한다.
-이전 MCPP 관리 ID와 빈 리소스 그룹의 삭제를 최종 승인한다.
 ```
