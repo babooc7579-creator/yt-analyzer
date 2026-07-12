@@ -29,7 +29,8 @@ Creator OS의 프론트엔드/백엔드/DB 핵심 리소스는 잘못 연결된 
 | 저장 영상 불러오기 | 정상 확인 |
 | 프론트엔드 GitHub Actions 배포 | 정상 확인 |
 | 백엔드 GitHub Actions 배포 | 새 Sponsorship OIDC 경로로 정상 확인 |
-| 남은 핵심 확인 | Sponsorship 비용 반영 확인, 이전 MCPP 관리 ID 최종 정리 |
+| MCPP 비용 증가 중단 | 2026-07-08~12 추가 비용 없음 |
+| 남은 핵심 확인 | Sponsorship 크레딧 반영 확인, 이전 MCPP 관리 ID 최종 정리 |
 
 ## 이동 완료 리소스
 
@@ -74,13 +75,29 @@ Microsoft.ManagedIdentity/userAssignedIdentities 리소스 이동 미지원
 - `yt-analyzer-functions` workflow run [#29199000797](https://github.com/babooc7579-creator/yt-analyzer-functions/actions/runs/29199000797)에서 Azure 로그인과 Function App 배포 성공 확인
 - Function App `yt-analyzer-func`가 `Running`, HTTPS 전용 상태인 것 확인
 - 무로그인 직접 Function API 접근은 `401 Unauthorized`, Static Web Apps API 접근은 Entra ID 로그인으로 `302 Redirect`되는 것 확인
+- 2026-07-13 Cost Management 조회에서 MCPP `yt-analyzer-rg` 비용은 7월 7일까지만 발생하고 7월 8~12일 추가 비용이 없는 것 확인
+
+## 비용 반영 확인
+
+2026-07-13 KST에 두 구독의 2026-07-07~12 비용을 일별로 조회했다.
+
+| 구독 | 조회 결과 | 판단 |
+| --- | --- | --- |
+| MCPP Subscription | `yt-analyzer-rg`는 7월 7일 14.359467044원, 7월 8~12일 추가 비용 없음 | 운영 리소스 비용 증가가 중단됨 |
+| Microsoft Azure Sponsorship | 일반 Cost Management Query 결과 행 없음 | Sponsorship 전용 잔액 화면에서 별도 반영 확인 필요 |
+
+Azure Cost Management 데이터는 구독 유형과 서비스에 따라 늦게 반영될 수 있다. Microsoft 공식 문서는 일반적으로 8~24시간, 일부 종량제 구독은 최대 72시간 지연될 수 있다고 안내한다. 이번 확인은 이동 후 72시간 이상 지난 구간을 포함한다.
+
+- [Understand Cost Management data](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/understand-cost-mgt-data)
+- [Microsoft Entra licensing - Managed identities](https://learn.microsoft.com/en-us/entra/fundamentals/licensing#managed-identities)
+
+관리 ID는 별도 라이선스나 추가 비용 없이 사용할 수 있는 인증 리소스다. 따라서 이전 `oidc-msi-8ae4`를 잠시 보존한 것이 13원, 17원 수준의 운영 비용 원인은 아니다.
 
 ## 이동 후 남은 확인
 
-1. Cost Management 데이터 반영 지연을 고려해 MCPP Subscription 비용 증가가 멈추는지 확인
-2. Sponsorship 사용량에 새 리소스 비용이 반영되는지 확인
-3. 새 백엔드 배포 경로가 안정적으로 유지되는 것을 확인한 뒤 이전 MCPP 관리 ID 삭제 여부를 최종 승인
-4. 이전 관리 ID 삭제 후 비어 있는 MCPP의 `yt-analyzer-rg` 리소스 그룹 정리 여부 확인
+1. Sponsorship 전용 잔액 화면에 새 리소스 사용량이 반영되는지 확인
+2. 이전 MCPP 관리 ID 삭제 여부를 최종 승인
+3. 이전 관리 ID 삭제 후 비어 있는 MCPP의 `yt-analyzer-rg` 리소스 그룹 정리 여부 확인
 
 ## 구조 메모
 
@@ -326,13 +343,13 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 14. backend GitHub Actions secret을 Sponsorship 기준으로 교체
 15. 새 OIDC 경로로 backend Build/Azure login/Function App 배포 성공 확인
 16. Function App 실행 상태와 무로그인 접근 보호 확인
+17. MCPP Subscription의 7월 8~12일 추가 운영 비용이 없는 것 확인
 
 ## 남은 진행 순서
 
-1. Cost Management에서 Sponsorship 크레딧 차감 확인
-2. MCPP Subscription 비용 증가가 멈추는지 확인
-3. 비용 데이터 반영 후 이전 MCPP 관리 ID 삭제 최종 승인
-4. 이전 관리 ID 삭제 후 비어 있는 MCPP 리소스 그룹 정리
+1. Sponsorship 전용 잔액 화면에서 크레딧 차감 반영 확인
+2. 이전 MCPP 관리 ID 삭제 최종 승인
+3. 이전 관리 ID 삭제 후 비어 있는 MCPP 리소스 그룹 정리
 
 ## 위험도 판단
 
@@ -342,7 +359,7 @@ Sponsorship 구독은 크레딧 기반이므로 아래를 확인한다.
 | Function App 이동 | 중간 | App Service plan, storage, Application Insights와 함께 움직여야 함 |
 | Cosmos DB 이동 | 중간 | 데이터 원장이므로 이동 전 백업/연결 문자열 확인 필요 |
 | GitHub Actions | 낮음 | frontend와 backend 모두 새 구독 기준 실제 배포 성공 확인됨 |
-| 이전 관리 ID 정리 | 낮음 | 새 OIDC 배포 성공과 역할 범위 확인 완료. 삭제 전 최종 승인만 필요 |
+| 이전 관리 ID 정리 | 낮음 | 새 OIDC 배포 성공, 역할 범위, MCPP 비용 증가 중단 확인 완료. 삭제 전 최종 승인만 필요 |
 | Custom domain | 낮음 | 현재 Creator OS에서 별도 커스텀 도메인 흔적은 확인되지 않음 |
 | 비용 | 중간 | Sponsorship 크레딧 소진/만료 시 서비스 중단 위험 |
 
@@ -358,5 +375,6 @@ Function App은 `Running` 및 HTTPS 전용 상태이며, 무로그인 접근은 
 
 ```text
 Sponsorship 크레딧/만료/지출 제한을 모니터링한다.
-비용 데이터 반영 후 이전 MCPP 관리 ID와 빈 리소스 그룹의 삭제를 최종 승인한다.
+Sponsorship 전용 잔액 화면의 사용량 반영을 확인한다.
+이전 MCPP 관리 ID와 빈 리소스 그룹의 삭제를 최종 승인한다.
 ```
