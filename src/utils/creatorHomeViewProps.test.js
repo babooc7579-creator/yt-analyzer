@@ -17,6 +17,7 @@ describe('creatorHomeViewProps utils', () => {
       latestScanText: 'just now',
       loadedVideoCount: 10,
       productionCandidateCount: 5,
+      productionFocusCount: 2,
       savedChannelCount: 2,
       savedVideoCount: 3,
       ttoTtoAssetCount: 4,
@@ -41,6 +42,7 @@ describe('creatorHomeViewProps utils', () => {
       ['마지막 수집 기록', 'just now'],
       ['또터또 후보', 4],
       ['제작 후보', 5],
+      ['오늘 집중', 2],
       ['발견 링크 후보', 6],
     ]);
     expect(statsProps.cards[2].description).toContain('Cloud 스크랩북에 보관한 영상');
@@ -50,13 +52,16 @@ describe('creatorHomeViewProps utils', () => {
     expect(statsProps.cards[4].description).toContain('판단 보조 신호');
     expect(statsProps.cards[5].description).toContain('Cloud 판단 기록');
     expect(statsProps.cards[5].description).toContain('저장이나 API 호출은 실행하지 않습니다');
-    expect(statsProps.cards[6].description).toContain('권리 확인 필요 1개');
+    expect(statsProps.cards[6].description).toContain('오늘 집중으로 고정한 영상');
+    expect(statsProps.cards[6].description).toContain('YouTube API 호출은 실행하지 않습니다');
+    expect(statsProps.cards[7].description).toContain('권리 확인 필요 1개');
     expect(statsProps.cards[2].description).not.toContain('제작 후보로 표시한 영상');
     expect(statsProps.cards[2].description).not.toContain('제작 후보로 남긴');
     expect(statsProps.cards[3].className).toContain('emerald');
     expect(statsProps.cards[4].className).toContain('rose');
     expect(statsProps.cards[5].className).toContain('indigo');
-    expect(statsProps.cards[6].className).toContain('amber');
+    expect(statsProps.cards[6].className).toContain('cyan');
+    expect(statsProps.cards[7].className).toContain('amber');
   });
 
   it('builds home summary counts and dashboard metrics from provided lists', () => {
@@ -66,6 +71,7 @@ describe('creatorHomeViewProps utils', () => {
       latestScanText: 'just now',
       openRadarCandidateCount: 5,
       productionCandidateCount: 3,
+      productionFocusCount: 2,
       savedChannels: [{ id: 'channel1' }, { id: 'channel2' }],
       savedVideos: [{ videoId: 'saved1' }],
       selectedChannelCount: 2,
@@ -81,6 +87,7 @@ describe('creatorHomeViewProps utils', () => {
       loadedVideoCount: 2,
       openRadarCandidateCount: 5,
       productionCandidateCount: 3,
+      productionFocusCount: 2,
       savedChannelCount: 2,
       savedVideoCount: 1,
       selectedChannelCount: 2,

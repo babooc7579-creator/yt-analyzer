@@ -8,6 +8,7 @@ import {
   countLoadedRadarDecisions,
   countOpenRadarCandidates,
   countProductionCandidates,
+  countProductionFocusCandidates,
   countScannableChannels,
   countTtoTtoAssets,
   countVisibleScraps,
@@ -32,7 +33,11 @@ describe('creatorOsMetrics utils', () => {
 
   const videoUserRecords = {
     v1: { videoId: 'v1', statusIds: [VIDEO_STATUS.REVIEWED] },
-    v2: { videoId: 'v2', statusIds: [PRODUCTION_STATUS.CANDIDATE] },
+    v2: {
+      videoId: 'v2',
+      focusPinnedAt: '2026-07-13T09:00:00.000Z',
+      statusIds: [PRODUCTION_STATUS.CANDIDATE],
+    },
     v3: { videoId: 'v3', statusIds: [VIDEO_STATUS.EXCLUDED] },
     v4: { videoId: 'v4', statusIds: [] },
   };
@@ -73,11 +78,15 @@ describe('creatorOsMetrics utils', () => {
   });
 
   it('counts production candidates from saved videos and user records', () => {
-    expect(countProductionCandidates([
+    const savedVideos = [
       { videoId: 'v1' },
       { videoId: 'v2' },
       { videoId: 'v4' },
-    ], videoUserRecords)).toBe(1);
+    ];
+
+    expect(countProductionCandidates(savedVideos, videoUserRecords)).toBe(1);
+    expect(countProductionFocusCandidates(savedVideos, videoUserRecords)).toBe(1);
+    expect(countProductionFocusCandidates(null, null)).toBe(0);
   });
 
   it('counts discovery candidates and rights warnings only for candidate links', () => {
@@ -121,6 +130,7 @@ describe('creatorOsMetrics utils', () => {
       discoveryRightsWarningCount: 1,
       openRadarCandidateCount: 1,
       productionCandidateCount: 1,
+      productionFocusCount: 1,
       scannableChannelCount: 2,
       ttoTtoAssetCount: 2,
       visibleScrapCount: 2,

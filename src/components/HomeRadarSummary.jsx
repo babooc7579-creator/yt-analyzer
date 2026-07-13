@@ -18,6 +18,7 @@ export default function HomeRadarSummary({
   onOpenSelectedScan,
   onOpenVault,
   productionCandidateCount,
+  productionFocusCount,
   selectedChannelCount,
 }) {
   return (
@@ -30,6 +31,7 @@ export default function HomeRadarSummary({
         latestScanText={latestScanText}
         loadedVideoCount={loadedVideoCount}
         productionCandidateCount={productionCandidateCount}
+        productionFocusCount={productionFocusCount}
         savedChannelCount={savedChannelCount}
         savedVideoCount={savedVideoCount}
         ttoTtoAssetCount={ttoTtoAssetCount}
@@ -47,6 +49,7 @@ export default function HomeRadarSummary({
         onOpenVault={onOpenVault}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
+        productionFocusCount={productionFocusCount}
         savedChannelCount={savedChannelCount}
         selectedChannelCount={selectedChannelCount}
       />

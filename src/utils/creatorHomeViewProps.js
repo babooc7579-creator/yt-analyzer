@@ -36,6 +36,7 @@ export const getHomeRadarStatsGridViewProps = ({
   latestScanText,
   loadedVideoCount,
   productionCandidateCount = 0,
+  productionFocusCount = 0,
   savedChannelCount,
   savedVideoCount,
   ttoTtoAssetCount,
@@ -82,6 +83,14 @@ export const getHomeRadarStatsGridViewProps = ({
       descriptionClassName: 'text-indigo-100/70',
     },
     {
+      label: '오늘 집중',
+      value: productionFocusCount,
+      description: 'Cloud 판단 기록에서 오늘 집중으로 고정한 영상입니다. 숫자 확인만으로 저장이나 YouTube API 호출은 실행하지 않습니다.',
+      className: 'border-cyan-500/20 bg-cyan-950/30',
+      labelClassName: 'text-cyan-300',
+      descriptionClassName: 'text-cyan-100/70',
+    },
+    {
       label: '발견 링크 후보',
       value: discoveryCandidateCount,
       description: discoveryRightsWarningCount > 0
@@ -105,6 +114,7 @@ export const getCreatorHomeViewProps = ({
   onOpenView,
   openRadarCandidateCount,
   productionCandidateCount,
+  productionFocusCount,
   promoteVideoToProduction,
   restoreVideoToRadar,
   savedChannels,
@@ -159,6 +169,7 @@ export const getCreatorHomeViewProps = ({
       onOpenSelectedScan: () => onOpenView({ id: 'ops-selected-scan' }),
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
       productionCandidateCount,
+      productionFocusCount,
     },
   };
 };

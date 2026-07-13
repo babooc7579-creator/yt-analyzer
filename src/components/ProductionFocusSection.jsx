@@ -33,7 +33,10 @@ export default function ProductionFocusSection({
             </p>
           </div>
         </div>
-        <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-extrabold text-amber-800 shadow-sm">
+        <span
+          aria-label={`오늘 집중 영상 ${videoList.length}개`}
+          className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-extrabold text-amber-800 shadow-sm"
+        >
           {videoList.length}
         </span>
       </div>

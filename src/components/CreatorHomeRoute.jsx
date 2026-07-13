@@ -11,6 +11,7 @@ export default function CreatorHomeRoute({
   onOpenView,
   openRadarCandidateCount,
   productionCandidateCount,
+  productionFocusCount,
   promoteVideoToProduction,
   restoreVideoToRadar,
   savedChannels,
@@ -33,6 +34,7 @@ export default function CreatorHomeRoute({
       discoveryRightsWarningCount={discoveryRightsWarningCount}
       onOpenView={onOpenView}
       productionCandidateCount={productionCandidateCount}
+      productionFocusCount={productionFocusCount}
       promoteVideoToProduction={promoteVideoToProduction}
       restoreVideoToRadar={restoreVideoToRadar}
       savedChannels={savedChannels}

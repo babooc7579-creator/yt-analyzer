@@ -7,6 +7,7 @@ export default function HomeRadarStatsGrid({
   latestScanText,
   loadedVideoCount,
   productionCandidateCount,
+  productionFocusCount,
   savedChannelCount,
   savedVideoCount,
   ttoTtoAssetCount,
@@ -17,13 +18,14 @@ export default function HomeRadarStatsGrid({
     latestScanText,
     loadedVideoCount,
     productionCandidateCount,
+    productionFocusCount,
     savedChannelCount,
     savedVideoCount,
     ttoTtoAssetCount,
   });
 
   return (
-    <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-7">
+    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {viewProps.cards.map(card => (
         <HomeSummaryCard key={card.label} {...card} />
       ))}

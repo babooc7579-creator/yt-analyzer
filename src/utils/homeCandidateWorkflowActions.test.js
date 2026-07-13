@@ -59,11 +59,25 @@ describe('homeCandidateWorkflowActions utils', () => {
     expect(actions.productionCandidates.ariaLabel).toContain('YouTube API 호출 없음');
   });
 
+  it('uses a direct today-focus action when pinned candidates are waiting', () => {
+    const actions = getHomeCandidateWorkflowActions({
+      hasCandidates: true,
+      hasFocusCandidates: true,
+    });
+
+    expect(actions.productionCandidates.label).toBe('오늘 집중 보기');
+    expect(actions.productionCandidates.title).toContain('오늘 집중 영역');
+    expect(actions.productionCandidates.title).toContain('저장된 후보 조회');
+    expect(actions.productionCandidates.ariaLabel).toContain('오늘 집중 후보 보기');
+    expect(actions.productionCandidates.ariaLabel).toContain('YouTube API 호출 없음');
+  });
+
   it('builds candidate workflow card and status copy from video and link counts', () => {
     const normalCard = getHomeCandidateWorkflowCardViewProps({
       discoveryCandidateCount: 2,
       discoveryRightsWarningCount: 0,
       productionCandidateCount: 1,
+      productionFocusCount: 2,
     });
     const warningCard = getHomeCandidateWorkflowCardViewProps({
       discoveryCandidateCount: 1,
@@ -73,6 +87,7 @@ describe('homeCandidateWorkflowActions utils', () => {
     const normalStatus = getHomeCandidateWorkflowStatusViewProps({
       discoveryCandidateCount: 2,
       productionCandidateCount: 1,
+      productionFocusCount: 2,
     });
     const warningStatus = getHomeCandidateWorkflowStatusViewProps({
       discoveryCandidateCount: 1,
@@ -83,15 +98,15 @@ describe('homeCandidateWorkflowActions utils', () => {
 
     expect(normalCard).toMatchObject({
       hasCandidates: true,
+      hasFocusCandidates: true,
       hasRightsWarning: false,
-      titleText: '3. 제작 후보로 표시하기',
+      titleText: '3. 오늘 집중 후보 이어가기',
     });
     expect(normalCard.titleText).not.toContain('넘기기');
     expect(warningCard.hasRightsWarning).toBe(true);
-    expect(normalStatus.descriptionText).toContain('제작 후보로 표시하고');
-    expect(normalStatus.descriptionText).not.toContain('제작 후보로 모으고');
-    expect(normalStatus.metricText).toBe('영상 1개 · 링크 2개');
+    expect(normalStatus.descriptionText).toContain('오늘 집중으로 고정한 영상 2개');
+    expect(normalStatus.metricText).toBe('오늘 집중 2개 · 영상 1개 · 링크 2개');
     expect(warningStatus.descriptionText).toContain('권리 확인이 필요한 항목 3개');
-    expect(warningStatus.metricText).toBe('영상 0개 · 링크 1개');
+    expect(warningStatus.metricText).toBe('오늘 집중 0개 · 영상 0개 · 링크 1개');
   });
 });

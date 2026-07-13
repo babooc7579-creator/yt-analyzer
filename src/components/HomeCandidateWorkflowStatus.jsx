@@ -5,12 +5,14 @@ export default function HomeCandidateWorkflowStatus({
   discoveryRightsWarningCount,
   hasRightsWarning,
   productionCandidateCount,
+  productionFocusCount,
 }) {
   const viewProps = getHomeCandidateWorkflowStatusViewProps({
     discoveryCandidateCount,
     discoveryRightsWarningCount,
     hasRightsWarning,
     productionCandidateCount,
+    productionFocusCount,
   });
 
   return (
