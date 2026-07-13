@@ -11,11 +11,13 @@ export function useCreatorWorkspaceNavigation() {
 
   const {
     activeCreatorItem,
+    isChannelWatchlistView,
     isComingSoonView,
     isDiscoveryLinksView,
     isHomeView,
     isLegacyWorkspaceView,
     isReferenceVaultView,
+    isTtoTtoView,
   } = getCreatorWorkspaceViewModel(creatorView);
 
   const openCreatorView = (item) => {
@@ -34,11 +36,13 @@ export function useCreatorWorkspaceNavigation() {
     activeCreatorItem,
     activeTab,
     creatorView,
+    isChannelWatchlistView,
     isComingSoonView,
     isDiscoveryLinksView,
     isHomeView,
     isLegacyWorkspaceView,
     isReferenceVaultView,
+    isTtoTtoView,
     openCreatorView,
     setActiveTab,
     setShowWorkPanel,

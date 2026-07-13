@@ -5,9 +5,9 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
       { id: 'discovery-trends', label: '트렌드 스캐너', status: 'soon', summary: '외부 트렌드와 급상승 신호를 연결할 예정입니다.' },
-      { id: 'discovery-ttotto', label: '터또터 탐색', status: 'soon', summary: '시간이 지나 노출이 멈춘 검증된 후보를 전용 화면으로 분리할 예정입니다.' },
+      { id: 'discovery-ttotto', label: '터또터 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 저장 영상을 전용 화면에서 검토합니다.' },
       { id: 'discovery-keywords', label: '키워드 탐색', status: 'soon', summary: '키워드별 소재 흐름을 모아볼 예정입니다.' },
-      { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'soon', summary: '오늘 다시 확인할 채널 묶음을 준비 중입니다.' },
+      { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'live', summary: '운영중 채널을 등급과 마지막 수집일 기준으로 정렬하고 오늘 확인할 범위를 고릅니다.' },
     ],
   },
   {

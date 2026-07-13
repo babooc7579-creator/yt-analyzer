@@ -14,10 +14,12 @@ export default function HomeRadarWorkflowSection({
   discoveryRightsWarningCount,
   loadedVideoCount,
   onOpenAddChannel,
+  onOpenChannelWatchlist,
   onLoadStoredVideos,
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   onOpenSelectedScan,
+  onOpenTtoTto,
   onOpenVault,
   openRadarCandidateCount,
   productionCandidateCount,
@@ -55,6 +57,7 @@ export default function HomeRadarWorkflowSection({
         loadedVideoCount={loadedVideoCount}
         onLoadStoredVideos={onLoadStoredVideos}
         onOpenAddChannel={onOpenAddChannel}
+        onOpenChannelWatchlist={onOpenChannelWatchlist}
         onOpenProductionCandidates={onOpenProductionCandidates}
         onOpenSelectedScan={onOpenSelectedScan}
         onOpenVault={onOpenVault}
@@ -85,6 +88,10 @@ export default function HomeRadarWorkflowSection({
           description={judgeRadarCandidatesCard.description}
           value={judgeRadarCandidatesCard.value}
           icon={Sparkles}
+          actionLabel="터또터 탐색 열기"
+          actionTitle="현재 불러온 Cloud 저장 영상에서 터또터 후보를 검색·필터·정렬합니다. YouTube API 호출은 없습니다."
+          actionAriaLabel="터또터 탐색 전용 화면 열기, 새 YouTube API 호출 없음"
+          onAction={onOpenTtoTto}
           className="border-rose-400/20 bg-rose-500/10"
           titleClassName="text-rose-100"
           iconClassName="text-rose-200"

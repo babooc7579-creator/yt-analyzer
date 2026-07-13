@@ -8,11 +8,13 @@ import {
 describe('creator workspace navigation utils', () => {
   it('identifies home, legacy, discovery link, and reference vault views', () => {
     expect(getCreatorWorkspaceViewModel('home')).toMatchObject({
+      isChannelWatchlistView: false,
       isComingSoonView: false,
       isDiscoveryLinksView: false,
       isHomeView: true,
       isLegacyWorkspaceView: false,
       isReferenceVaultView: false,
+      isTtoTtoView: false,
     });
 
     expect(getCreatorWorkspaceViewModel('vault-all')).toMatchObject({
@@ -25,6 +27,18 @@ describe('creator workspace navigation utils', () => {
       isDiscoveryLinksView: true,
       isLegacyWorkspaceView: false,
       isReferenceVaultView: false,
+    });
+
+    expect(getCreatorWorkspaceViewModel('discovery-ttotto')).toMatchObject({
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
+      isTtoTtoView: true,
+    });
+
+    expect(getCreatorWorkspaceViewModel('discovery-watchlist')).toMatchObject({
+      isChannelWatchlistView: true,
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
     });
   });
 

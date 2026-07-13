@@ -1,11 +1,14 @@
 import { useProductionKanbanActions } from '../hooks/useProductionKanbanActions';
 import { useProductionKanbanData } from '../hooks/useProductionKanbanData';
+import { useProductionKanbanFilters } from '../hooks/useProductionKanbanFilters';
 import {
   getProductionKanbanContentProps,
   shouldShowProductionKanbanEmptyState,
 } from '../utils/productionKanbanProps';
 import ProductionKanbanContent from './ProductionKanbanContent';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
+import ProductionKanbanFilteredEmptyState from './ProductionKanbanFilteredEmptyState';
+import ProductionKanbanFilters from './ProductionKanbanFilters';
 
 export default function ProductionKanban({
   discoveryLinks = [],
@@ -36,16 +39,29 @@ export default function ProductionKanban({
     videoUserRecords,
   });
 
-  const {
-    discoveryLinkCandidates,
-    focusVideos,
-    groupedVideos,
-    productionSummary,
-  } = useProductionKanbanData({
+  const dataModel = useProductionKanbanData({
     discoveryLinks,
     draftRecords,
     videoUserRecords,
     videos,
+  });
+  const {
+    discoveryLinkCandidates,
+    productionSummary,
+  } = dataModel;
+
+  const {
+    filterMode,
+    filterSummary,
+    filteredDataModel,
+    resetFilters,
+    searchQuery,
+    setFilterMode,
+    setSearchQuery,
+  } = useProductionKanbanFilters({
+    dataModel,
+    draftRecords,
+    videoUserRecords,
   });
 
   if (shouldShowProductionKanbanEmptyState({ discoveryLinkCandidates, productionSummary })) {
@@ -58,11 +74,11 @@ export default function ProductionKanban({
     );
   }
 
-  const contentProps = getProductionKanbanContentProps({
-    discoveryLinkCandidates,
+  const filteredContentProps = getProductionKanbanContentProps({
+    discoveryLinkCandidates: filteredDataModel.discoveryLinkCandidates,
     draftRecords,
-    focusVideos,
-    groupedVideos,
+    focusVideos: filteredDataModel.focusVideos,
+    groupedVideos: filteredDataModel.groupedVideos,
     hasUnsavedChanges,
     linkMoveStates,
     moveDiscoveryLink,
@@ -70,7 +86,7 @@ export default function ProductionKanban({
     moveVideo,
     onOpenDiscoveryLinks,
     onOpenReferenceVault,
-    productionSummary,
+    productionSummary: filteredDataModel.productionSummary,
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
@@ -79,6 +95,20 @@ export default function ProductionKanban({
   });
 
   return (
-    <ProductionKanbanContent {...contentProps} />
+    <div className="space-y-4">
+      <ProductionKanbanFilters
+        filterMode={filterMode}
+        filterSummary={filterSummary}
+        onFilterModeChange={setFilterMode}
+        onReset={resetFilters}
+        onSearchQueryChange={setSearchQuery}
+        searchQuery={searchQuery}
+      />
+      {filterSummary.visibleCount === 0 ? (
+        <ProductionKanbanFilteredEmptyState onReset={resetFilters} />
+      ) : (
+        <ProductionKanbanContent {...filteredContentProps} />
+      )}
+    </div>
   );
 }

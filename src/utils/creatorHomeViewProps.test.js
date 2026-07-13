@@ -151,9 +151,11 @@ describe('creatorHomeViewProps utils', () => {
     props.radarCandidateStripProps.onOpenScrapbook();
     props.radarCandidateStripProps.onOpenVault();
     props.radarSummaryProps.onOpenAddChannel();
+    props.radarSummaryProps.onOpenChannelWatchlist();
     props.radarSummaryProps.onOpenDiscoveryLinks();
     props.radarSummaryProps.onOpenProductionCandidates();
     props.radarSummaryProps.onOpenSelectedScan();
+    props.radarSummaryProps.onOpenTtoTto();
     props.radarSummaryProps.onOpenVault();
 
     expect(openedViews).toEqual([
@@ -165,9 +167,11 @@ describe('creatorHomeViewProps utils', () => {
       'studio-scrapbook',
       'vault-all',
       'ops-add-channel',
+      'discovery-watchlist',
       'vault-sources',
       'studio-candidates',
       'ops-selected-scan',
+      'discovery-ttotto',
       'vault-all',
     ]);
   });

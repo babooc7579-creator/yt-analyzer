@@ -12,10 +12,12 @@ export default function HomeRadarSummary({
   discoveryCandidateCount,
   discoveryRightsWarningCount,
   onOpenAddChannel,
+  onOpenChannelWatchlist,
   onLoadStoredVideos,
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   onOpenSelectedScan,
+  onOpenTtoTto,
   onOpenVault,
   productionCandidateCount,
   productionFocusCount,
@@ -42,10 +44,12 @@ export default function HomeRadarSummary({
         discoveryRightsWarningCount={discoveryRightsWarningCount}
         loadedVideoCount={loadedVideoCount}
         onOpenAddChannel={onOpenAddChannel}
+        onOpenChannelWatchlist={onOpenChannelWatchlist}
         onLoadStoredVideos={onLoadStoredVideos}
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
         onOpenProductionCandidates={onOpenProductionCandidates}
         onOpenSelectedScan={onOpenSelectedScan}
+        onOpenTtoTto={onOpenTtoTto}
         onOpenVault={onOpenVault}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}

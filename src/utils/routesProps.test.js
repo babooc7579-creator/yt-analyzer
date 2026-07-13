@@ -8,30 +8,40 @@ import {
 describe('routesProps utils', () => {
   it('builds route props from the current view flags and route data', () => {
     const activeCreatorItem = { id: 'today' };
+    const channelWatchlistRouteProps = { channels: [] };
     const discoveryLinksRouteProps = { links: [] };
     const homeRouteProps = { selectedChannelCount: 2 };
     const legacyWorkspaceRouteProps = { totalVideoCount: 3 };
+    const ttoTtoRouteProps = { videos: [] };
 
     const props = buildRoutesProps({
       activeCreatorItem,
+      channelWatchlistRouteProps,
       discoveryLinksRouteProps,
       homeRouteProps,
       isComingSoonView: false,
+      isChannelWatchlistView: true,
       isDiscoveryLinksView: true,
       isHomeView: false,
       isLegacyWorkspaceView: false,
+      isTtoTtoView: true,
       legacyWorkspaceRouteProps,
+      ttoTtoRouteProps,
     });
 
     expect(props).toMatchObject({
       activeCreatorItem,
+      channelWatchlistRouteProps,
       discoveryLinksRouteProps,
       homeRouteProps,
       isComingSoonView: false,
+      isChannelWatchlistView: true,
       isDiscoveryLinksView: true,
       isHomeView: false,
       isLegacyWorkspaceView: false,
+      isTtoTtoView: true,
       legacyWorkspaceRouteProps,
+      ttoTtoRouteProps,
     });
   });
 

@@ -41,6 +41,20 @@ describe('creatorOs constants', () => {
     expect(itemsById['vault-videos'].summary).not.toContain('YouTube API');
   });
 
+  it('exposes tteotteotto exploration as a live stored-video workflow', () => {
+    expect(itemsById['discovery-ttotto']).toMatchObject({
+      status: 'live',
+    });
+    expect(itemsById['discovery-ttotto'].summary).toContain('저장 영상');
+    expect(itemsById['discovery-ttotto'].summary).toContain('6개월');
+  });
+
+  it('exposes today channel watchlist as a live selection workflow', () => {
+    expect(itemsById['discovery-watchlist']).toMatchObject({ status: 'live' });
+    expect(itemsById['discovery-watchlist'].summary).toContain('등급');
+    expect(itemsById['discovery-watchlist'].summary).toContain('오늘 확인할 범위');
+  });
+
   it('keeps live view groups aligned with channel and scrapbook workflows', () => {
     expect(READY_CREATOR_VIEWS).toEqual(expect.arrayContaining([
       'vault-videos',

@@ -29,7 +29,13 @@ export default function ProductionVideoStatusActions({
         videoTitle={videoTitle}
       />
       <ProductionVideoMoveStatus columnId={columnId} moveState={moveState} uploadedAt={record.uploadedAt} />
-      <ProductionVideoExternalActions videoTitle={videoTitle} videoUrl={videoUrl} />
+      <ProductionVideoExternalActions
+        columnId={columnId}
+        record={record}
+        video={video}
+        videoTitle={videoTitle}
+        videoUrl={videoUrl}
+      />
     </div>
   );
 }

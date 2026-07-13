@@ -93,7 +93,7 @@ export const filterAndSortVideos = ({
   if (minimumViews > 0) result = result.filter((video) => toNumber(video.view_count) >= minimumViews);
   if (lengthFilter === 'shorts') result = result.filter((video) => video.isShorts);
   else if (lengthFilter === 'long') result = result.filter((video) => !video.isShorts);
-  if (ttoTtoMode) result = result.filter((video) => toNumber(video.daysOld) >= TTOTTO_MIN_DAYS_OLD);
+  if (ttoTtoMode) result = result.filter(isTtoTtoCandidate);
 
   if (sortType === 'date') result.sort((a, b) => toNumber(a.daysOld) - toNumber(b.daysOld));
   else if (sortType === 'views') result.sort((a, b) => toNumber(b.view_count) - toNumber(a.view_count));

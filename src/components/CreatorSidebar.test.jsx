@@ -14,11 +14,13 @@ describe('CreatorSidebar', () => {
     );
 
     expect(html).toContain('오늘의 레이더');
+    expect(html).toContain('터또터 탐색');
+    expect(html).toContain('오늘 볼 채널');
     expect(html).toContain('발견 링크 저장');
     expect(html).toContain('제작 후보함');
     expect(html).toContain('선택 채널 새 영상 수집');
     expect(html).toContain('향후 기능');
-    expect(html).toContain('21개');
+    expect(html).toContain('19개');
     expect(html).toContain('aria-expanded="false"');
     expect(html).not.toContain('트렌드 스캐너');
     expect(html).not.toContain('후킹 분석');
@@ -45,6 +47,6 @@ describe('CreatorSidebar', () => {
     expect(html).toContain('트렌드 스캐너');
     expect(html).toContain('후킹 분석');
     expect(html).toContain('성과 리포트');
-    expect(html.match(/data-testid="creator-sidebar-item-/g)).toHaveLength(21);
+    expect(html.match(/data-testid="creator-sidebar-item-/g)).toHaveLength(19);
   });
 });
