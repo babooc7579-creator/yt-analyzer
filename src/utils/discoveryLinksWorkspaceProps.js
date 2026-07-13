@@ -2,6 +2,7 @@ const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export const getDiscoveryLinksFiltersChildProps = ({
   filteredLinkCount,
+  onClearFilters,
   rightsFilter,
   rightsFilterOptions,
   searchQuery,
@@ -13,6 +14,7 @@ export const getDiscoveryLinksFiltersChildProps = ({
 }) => ({
   activeFilterSummaryProps: {
     filteredLinkCount,
+    onClearFilters,
   },
   rightsFilterProps: {
     rightsFilter,
@@ -109,6 +111,7 @@ export const getDiscoveryLinksWorkspaceViewProps = ({
     filtersProps: {
       filteredLinkCount: filteredLinkList.length,
       hasActiveFilters: hasActiveDiscoveryFilters,
+      onClearFilters: clearDiscoveryFilters,
       rightsFilter,
       rightsFilterOptions,
       searchQuery,

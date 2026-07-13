@@ -81,6 +81,33 @@ describe('radarCandidateStateProps utils', () => {
     expect(getRadarCandidateScrapButtonProps()['aria-label']).toContain('이 영상');
   });
 
+  it('describes and locks radar actions while a Cloud save is pending', () => {
+    const productionPending = getRadarCandidateDecisionActionsViewProps({
+      pendingAction: 'production',
+    });
+    const statusPending = getRadarCandidateDecisionActionsViewProps({
+      pendingAction: 'status',
+    });
+    const promotionProps = getRadarCandidateProductionButtonActionProps({
+      onPromoteToProduction: vi.fn(),
+      saving: true,
+      video: { videoId: 'video-1' },
+    });
+    const scrapbookProps = getRadarCandidateScrapButtonActionProps({
+      onToggleScrap: vi.fn(),
+      saving: true,
+      video: { videoId: 'video-1' },
+    });
+
+    expect(productionPending.pendingText).toContain('제작 후보 표시를 Cloud에 저장하는 중');
+    expect(statusPending.pendingText).toContain('영상 판단 기록을 Cloud에 저장하는 중');
+    expect(getRadarCandidateDecisionActionsViewProps().pendingText).toBe('');
+    expect(promotionProps.disabled).toBe(true);
+    expect(scrapbookProps.disabled).toBe(true);
+    expect(promotionProps.title).toContain('저장이 끝날 때까지');
+    expect(scrapbookProps.title).toContain('저장이 끝날 때까지');
+  });
+
   it('guards radar production promotion action when video id or handler is missing', () => {
     const onPromoteToProduction = vi.fn();
     const enabledProps = getRadarCandidateProductionButtonActionProps({

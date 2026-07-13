@@ -5,12 +5,14 @@ import { getRadarCandidateScrapButtonActionProps } from '../utils/radarCandidate
 export default function RadarCandidateScrapButton({
   isSaved,
   onToggleScrap,
+  saving,
   video,
   videoTitle,
 }) {
   const buttonProps = getRadarCandidateScrapButtonActionProps({
     isSaved,
     onToggleScrap,
+    saving,
     video,
     videoTitle,
   });

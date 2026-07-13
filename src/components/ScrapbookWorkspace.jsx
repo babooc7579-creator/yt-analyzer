@@ -48,7 +48,7 @@ export default function ScrapbookWorkspace({
   const savedVideoList = getCloudScrapbookVideos(savedVideos);
 
   return (
-    <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-6 flex-1 overflow-y-auto min-h-[600px] animate-in fade-in duration-300">
+    <div className="min-h-[600px] flex-1 animate-in overflow-y-auto rounded-2xl border border-slate-300 bg-slate-100 p-4 shadow-sm fade-in duration-300 sm:p-6">
       <ScrapbookHeader {...headerProps} />
 
       {isProductionView ? (

@@ -4,11 +4,13 @@ import { getRadarCandidateProductionButtonActionProps } from '../utils/radarCand
 
 export default function RadarCandidateProductionButton({
   onPromoteToProduction,
+  saving,
   video,
   videoTitle,
 }) {
   const buttonProps = getRadarCandidateProductionButtonActionProps({
     onPromoteToProduction,
+    saving,
     video,
     videoTitle,
   });

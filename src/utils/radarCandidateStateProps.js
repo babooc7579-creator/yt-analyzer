@@ -48,25 +48,35 @@ export const getRadarCandidateProductionButtonProps = ({ videoTitle } = {}) => {
 
 export const getRadarCandidateProductionButtonActionProps = ({
   onPromoteToProduction,
+  saving = false,
   video,
   videoTitle,
 } = {}) => {
   const safeVideo = toVideoObject(video);
   const copy = getRadarCandidateProductionButtonProps({ videoTitle });
-  const canPromote = Boolean(safeVideo.videoId) && typeof onPromoteToProduction === 'function';
+  const canPromote = Boolean(safeVideo.videoId)
+    && typeof onPromoteToProduction === 'function'
+    && !saving;
 
   return {
     ...copy,
     disabled: !canPromote,
     onClick: canPromote ? () => onPromoteToProduction(safeVideo) : noop,
-    title: canPromote
-      ? copy.title
-      : '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
+    title: saving
+      ? '다른 Cloud 기록 저장이 끝날 때까지 기다려 주세요.'
+      : canPromote
+        ? copy.title
+        : '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
   };
 };
 
-export const getRadarCandidateDecisionActionsViewProps = () => ({
+export const getRadarCandidateDecisionActionsViewProps = ({ pendingAction } = {}) => ({
   descriptionText: '2. 좋으면 제작 후보로, 다시 볼 영상은 소재 보관, 애매하면 나중에 보기, 아니면 제외로 정리하세요. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.',
+  pendingText: {
+    production: '스크랩북 보관과 제작 후보 표시를 Cloud에 저장하는 중입니다.',
+    scrapbook: '스크랩북 보관 상태를 Cloud에 저장하는 중입니다.',
+    status: '영상 판단 기록을 Cloud에 저장하는 중입니다.',
+  }[pendingAction] || '',
 });
 
 export const getRadarCandidateScrapButtonProps = ({
@@ -89,19 +99,24 @@ export const getRadarCandidateScrapButtonProps = ({
 export const getRadarCandidateScrapButtonActionProps = ({
   isSaved = false,
   onToggleScrap,
+  saving = false,
   video,
   videoTitle,
 } = {}) => {
   const safeVideo = toVideoObject(video);
   const copy = getRadarCandidateScrapButtonProps({ isSaved, videoTitle });
-  const canToggleScrap = Boolean(safeVideo.videoId) && typeof onToggleScrap === 'function';
+  const canToggleScrap = Boolean(safeVideo.videoId)
+    && typeof onToggleScrap === 'function'
+    && !saving;
 
   return {
     ...copy,
     disabled: !canToggleScrap,
     onClick: canToggleScrap ? () => onToggleScrap(safeVideo) : noop,
-    title: canToggleScrap
-      ? copy.title
-      : '보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.',
+    title: saving
+      ? '다른 Cloud 기록 저장이 끝날 때까지 기다려 주세요.'
+      : canToggleScrap
+        ? copy.title
+        : '보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.',
   };
 };

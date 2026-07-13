@@ -46,6 +46,7 @@ describe('discoveryLinksWorkspaceProps utils', () => {
     expect(viewProps.filtersProps).toMatchObject({
       filteredLinkCount: 1,
       hasActiveFilters: true,
+      onClearFilters: baseProps.clearDiscoveryFilters,
       rightsFilter: 'needs_check',
       searchQuery: 'clip',
       statusFilter: 'candidate',
@@ -98,11 +99,13 @@ describe('discoveryLinksWorkspaceProps utils', () => {
     const props = getDiscoveryLinksFiltersChildProps({
       ...baseProps,
       filteredLinkCount: 3,
+      onClearFilters: baseProps.clearDiscoveryFilters,
     });
 
     expect(props).toMatchObject({
       activeFilterSummaryProps: {
         filteredLinkCount: 3,
+        onClearFilters: baseProps.clearDiscoveryFilters,
       },
       rightsFilterProps: {
         rightsFilter: 'needs_check',

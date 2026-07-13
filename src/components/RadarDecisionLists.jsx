@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 
 import { getRadarDecisionListsViewProps } from '../utils/radarDecisionViewProps';
@@ -7,11 +8,26 @@ export default function RadarDecisionLists({
   loadedDecisionCount,
   onRestoreVideo,
 }) {
+  const restoreLockRef = useRef(false);
+  const [restoringVideoId, setRestoringVideoId] = useState('');
   const viewProps = getRadarDecisionListsViewProps({
     groups,
     loadedDecisionCount,
   });
   if (!viewProps) return null;
+
+  const handleRestoreVideo = async (videoId) => {
+    if (restoreLockRef.current || typeof onRestoreVideo !== 'function') return false;
+
+    restoreLockRef.current = true;
+    setRestoringVideoId(videoId);
+    try {
+      return await onRestoreVideo(videoId);
+    } finally {
+      restoreLockRef.current = false;
+      setRestoringVideoId('');
+    }
+  };
 
   return (
     <div className="mt-3 rounded-2xl border border-slate-700 bg-slate-950/50 p-3">
@@ -41,12 +57,14 @@ export default function RadarDecisionLists({
                       </a>
                       <button
                         type="button"
-                        onClick={() => onRestoreVideo(item.video.videoId)}
-                        className="mt-1 inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-200 hover:text-white"
-                        title={item.restoreButtonProps.title}
+                        onClick={() => handleRestoreVideo(item.video.videoId)}
+                        disabled={Boolean(restoringVideoId)}
+                        className="mt-1 inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-200 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                        title={restoringVideoId ? 'Cloud 판단 기록 저장이 끝날 때까지 기다려 주세요.' : item.restoreButtonProps.title}
                         aria-label={item.restoreButtonProps['aria-label']}
                       >
-                        <RotateCcw className="h-3 w-3" /> {item.restoreButtonProps.label}
+                        <RotateCcw className="h-3 w-3" />{' '}
+                        {restoringVideoId === item.video.videoId ? '되돌리는 중' : item.restoreButtonProps.label}
                       </button>
                     </div>
                   ))}

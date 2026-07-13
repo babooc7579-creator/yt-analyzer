@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+
 import { useRadarCandidateData } from '../hooks/useRadarCandidateData';
 import { getRadarCandidateStripViewProps } from '../utils/radarCandidates';
 import RadarCandidateCompletedState from './RadarCandidateCompletedState';
@@ -22,6 +24,22 @@ export default function RadarCandidateStrip({
   onOpenProductionCandidates,
   selectedChannelCount,
 }) {
+  const clearLockRef = useRef(false);
+  const [clearDecisionsPending, setClearDecisionsPending] = useState(false);
+
+  const handleClearDecisions = async () => {
+    if (clearLockRef.current || typeof onClearDecisions !== 'function') return false;
+
+    clearLockRef.current = true;
+    setClearDecisionsPending(true);
+    try {
+      return await onClearDecisions();
+    } finally {
+      clearLockRef.current = false;
+      setClearDecisionsPending(false);
+    }
+  };
+
   const {
     allDecisionCount,
     candidates,
@@ -47,7 +65,7 @@ export default function RadarCandidateStrip({
     decisionSummary,
     isVideoSaved,
     loadedDecisionCount,
-    onClearDecisions,
+    onClearDecisions: handleClearDecisions,
     onMarkVideoStatus,
     onOpenScrapbook,
     onOpenProductionCandidates,
@@ -72,13 +90,19 @@ export default function RadarCandidateStrip({
 
   if (isCompleted) {
     return (
-      <RadarCandidateCompletedState {...completedStateProps} />
+      <RadarCandidateCompletedState
+        {...completedStateProps}
+        clearDecisionsPending={clearDecisionsPending}
+      />
     );
   }
 
   return (
     <div className="mt-6 rounded-2xl border border-rose-400/20 bg-rose-500/10 p-5">
-      <RadarCandidateStripHeader {...headerProps} />
+      <RadarCandidateStripHeader
+        {...headerProps}
+        clearDecisionsPending={clearDecisionsPending}
+      />
 
       <RadarDecisionPanel {...decisionPanelProps} />
 

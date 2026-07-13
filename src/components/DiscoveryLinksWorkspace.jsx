@@ -89,7 +89,7 @@ export default function DiscoveryLinksWorkspace({
     <div data-testid="creator-route-discovery-links" className="grid grid-cols-1 gap-4 2xl:grid-cols-[420px_minmax(0,1fr)]">
       <DiscoveryLinkForm {...formProps} />
 
-      <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-100 p-5 shadow-xl shadow-slate-950/20">
+      <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-100 p-3 shadow-xl shadow-slate-950/20 sm:p-5">
         <DiscoveryLinksHeader {...headerProps} />
 
         <DiscoveryLinksFilters {...filtersProps} />

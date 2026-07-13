@@ -40,12 +40,15 @@ const getStatusAriaLabel = ({ label, videoTitle }) => {
 
 export const getRadarCandidateStatusActionProps = ({
   onMarkVideoStatus,
+  saving = false,
   video,
   videoTitle,
 }) => {
   const sourceVideo = toVideoObject(video);
   const displayTitle = videoTitle || sourceVideo.title || '이 영상';
-  const canMarkStatus = Boolean(sourceVideo.videoId) && typeof onMarkVideoStatus === 'function';
+  const canMarkStatus = Boolean(sourceVideo.videoId)
+    && typeof onMarkVideoStatus === 'function'
+    && !saving;
 
   return RADAR_STATUS_ACTION_ITEMS.map((item) => ({
     ariaLabel: getStatusAriaLabel({
@@ -60,8 +63,10 @@ export const getRadarCandidateStatusActionProps = ({
       ? () => onMarkVideoStatus(sourceVideo.videoId, item.status)
       : noop,
     status: item.status,
-    title: canMarkStatus
-      ? item.title
-      : '저장할 영상 ID가 없어 Cloud 판단 기록을 저장할 수 없습니다.',
+    title: saving
+      ? '다른 Cloud 기록 저장이 끝날 때까지 기다려 주세요.'
+      : canMarkStatus
+        ? item.title
+        : '저장할 영상 ID가 없어 Cloud 판단 기록을 저장할 수 없습니다.',
   }));
 };

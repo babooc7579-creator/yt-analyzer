@@ -288,6 +288,7 @@ export const getRadarCandidateDataModel = ({
 export const getRadarCandidateCardViewProps = ({
   index,
   isSaved,
+  pendingAction,
   video,
   onMarkVideoStatus,
   onPromoteToProduction,
@@ -309,6 +310,7 @@ export const getRadarCandidateCardViewProps = ({
     },
     decisionActionsProps: {
       isSaved,
+      pendingAction,
       onMarkVideoStatus,
       onPromoteToProduction,
       onToggleScrap,

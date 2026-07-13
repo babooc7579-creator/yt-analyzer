@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import DiscoveryLinksEmptyState from './DiscoveryLinksEmptyState';
 import DiscoveryLinksFilteredEmptyState from './DiscoveryLinksFilteredEmptyState';
+import DiscoveryLinksFilters from './DiscoveryLinksFilters';
 import DiscoveryLinksHeaderActions from './DiscoveryLinksHeaderActions';
 import DiscoveryLinksNotices from './DiscoveryLinksNotices';
 
@@ -62,5 +63,35 @@ describe('DiscoveryLinks flow states', () => {
     expect(html).toContain('Cloud 발견함 재조회만 실행합니다');
     expect(html).toContain('localStorage와 자동 병합');
     expect(html).toContain('링크를 자동 업로드하지 않습니다');
+  });
+
+  it('renders active discovery filters with accessible selected states and a safe reset button', () => {
+    const html = renderToStaticMarkup(
+      <DiscoveryLinksFilters
+        filteredLinkCount={2}
+        hasActiveFilters
+        onClearFilters={noop}
+        rightsFilter="needs_check"
+        rightsFilterOptions={[
+          { count: 4, label: '권리 전체', value: 'all' },
+          { count: 2, label: '권리 확인 필요', value: 'needs_check' },
+        ]}
+        searchQuery="table"
+        setRightsFilter={noop}
+        setSearchQuery={noop}
+        setStatusFilter={noop}
+        statusFilter="candidate"
+        statusFilterOptions={[
+          { count: 4, label: '전체', value: 'all' },
+          { count: 2, label: '제작 후보', value: 'candidate' },
+        ]}
+      />,
+    );
+
+    expect(html).toContain('현재 조건에 맞는 링크 2개를 보고 있습니다');
+    expect(html).toContain('필터 초기화');
+    expect(html).toContain('Cloud 저장 데이터 변경 없음');
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('role="group"');
   });
 });

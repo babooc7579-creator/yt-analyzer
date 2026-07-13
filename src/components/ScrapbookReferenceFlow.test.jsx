@@ -60,5 +60,6 @@ describe('Scrapbook and reference vault flow', () => {
     expect(html).toContain('제작 후보로');
     expect(html).toContain('Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.');
     expect(html).toContain('Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 저장 영상 데이터는 삭제하지 않습니다.');
+    expect(html).toContain('flex-wrap');
   });
 });

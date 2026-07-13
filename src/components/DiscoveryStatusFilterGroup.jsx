@@ -18,7 +18,7 @@ export default function DiscoveryStatusFilterGroup({
       <p className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
         {title}
       </p>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div aria-label={title} className="mt-2 flex flex-wrap gap-2" role="group">
         {filterOptions.map((option) => {
           const isActive = statusFilter === option.value;
           const buttonProps = getDiscoveryStatusFilterButtonProps({ option });
@@ -33,6 +33,7 @@ export default function DiscoveryStatusFilterGroup({
               onClick={() => setStatusFilter(option.value)}
               title={buttonProps.title}
               aria-label={buttonProps['aria-label']}
+              aria-pressed={isActive}
               type="button"
             >
               <span>{option.label}</span>

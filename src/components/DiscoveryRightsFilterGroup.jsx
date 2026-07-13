@@ -19,7 +19,7 @@ export default function DiscoveryRightsFilterGroup({
       <p className="mt-4 text-[11px] font-extrabold uppercase tracking-wide text-slate-500">
         {title}
       </p>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div aria-label={title} className="mt-2 flex flex-wrap gap-2" role="group">
         {filterOptions.map((option) => {
           const isActive = rightsFilter === option.value;
           const rightsTone = DISCOVERY_RIGHTS_TONES[option.value];
@@ -36,6 +36,7 @@ export default function DiscoveryRightsFilterGroup({
               onClick={() => setRightsFilter(option.value)}
               title={buttonProps.title}
               aria-label={buttonProps['aria-label']}
+              aria-pressed={isActive}
               type="button"
             >
               <span>{option.label}</span>
