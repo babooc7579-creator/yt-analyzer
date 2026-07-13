@@ -1,7 +1,10 @@
 export { buildDiscoveryLinksRouteProps } from './discoveryLinksRouteProps';
 export { buildChannelWatchlistRouteProps } from './channelWatchlistRouteProps';
 export { buildHomeRouteProps } from './homeRouteProps';
+export { buildKeywordExplorerRouteProps } from './keywordExplorerRouteProps';
 export { buildLayoutProps } from './appLayoutProps';
 export { buildLegacyWorkspaceRouteProps } from './legacyWorkspaceRouteProps';
+export { buildTagVaultRouteProps } from './tagVaultRouteProps';
 export { buildTtoTtoRouteProps } from './ttoTtoRouteProps';
+export { buildUploadCalendarRouteProps } from './uploadCalendarRouteProps';
 export { buildRoutesProps } from './routesProps';

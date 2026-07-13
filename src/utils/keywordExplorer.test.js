@@ -1,0 +1,67 @@
+import { describe, expect, it } from 'vitest';
+
+import {
+  KEYWORD_EXPLORER_RESULT_LIMIT,
+  filterKeywordExplorerVideos,
+  getKeywordExplorerEmptyState,
+  getKeywordExplorerSummary,
+  getKeywordSuggestions,
+  tokenizeKeywordText,
+} from './keywordExplorer';
+
+const videos = [
+  { videoId: 'v1', title: 'Amazing Cake Table Build', channel_title: 'Maker Lab', daysOld: 200, view_count: 200000, multiplier: 4, isShorts: true },
+  { videoId: 'v2', title: 'Chocolate Cake Recipe', channel_title: 'Food Lab', daysOld: 20, view_count: 50000, multiplier: 2, isShorts: false },
+  { videoId: 'v3', title: 'Old Table Restoration', channel_title: 'Maker Lab', daysOld: 400, view_count: 900000, multiplier: 6, isShorts: false },
+];
+
+describe('keywordExplorer utils', () => {
+  it('tokenizes useful words and drops simple stop words', () => {
+    expect(tokenizeKeywordText('This AMAZING cake-video 2026')).toEqual(['amazing', 'cake']);
+  });
+
+  it('builds frequent title suggestions without counting duplicates in one title twice', () => {
+    const suggestions = getKeywordSuggestions([
+      ...videos,
+      { title: 'Cake cake design' },
+    ]);
+
+    expect(suggestions[0]).toEqual({ label: 'cake', count: 3 });
+    expect(suggestions.some(item => item.label === 'video')).toBe(false);
+  });
+
+  it('searches title and channel text and applies view, length, and age filters', () => {
+    expect(filterKeywordExplorerVideos({ videos, searchQuery: 'cake' }).map(video => video.videoId)).toEqual(['v1', 'v2']);
+    expect(filterKeywordExplorerVideos({ videos, searchQuery: 'maker', ageFilter: 'legacy180', lengthFilter: 'long' }).map(video => video.videoId)).toEqual(['v3']);
+    expect(filterKeywordExplorerVideos({ videos, searchQuery: 'table', minimumViews: 500000 }).map(video => video.videoId)).toEqual(['v3']);
+  });
+
+  it('sorts results by the selected stored-video signal', () => {
+    expect(filterKeywordExplorerVideos({ videos, searchQuery: 'lab', sortType: 'views' }).map(video => video.videoId)).toEqual(['v3', 'v1', 'v2']);
+    expect(filterKeywordExplorerVideos({ videos, searchQuery: 'lab', sortType: 'newest' }).map(video => video.videoId)).toEqual(['v2', 'v1', 'v3']);
+  });
+
+  it('summarizes matched videos without changing the result limit', () => {
+    const summary = getKeywordExplorerSummary({
+      matchedVideos: videos,
+      shownVideoCount: 2,
+      videos: [...videos, { videoId: 'v4' }],
+    });
+
+    expect(KEYWORD_EXPLORER_RESULT_LIMIT).toBe(60);
+    expect(summary).toMatchObject({
+      averageViews: 383333,
+      channelCount: 2,
+      loadedVideoCount: 4,
+      matchedVideoCount: 3,
+      shownVideoCount: 2,
+      strongestMultiplier: 6,
+    });
+  });
+
+  it('separates not-loaded, waiting-for-query, and no-match empty states', () => {
+    expect(getKeywordExplorerEmptyState({ loadedVideoCount: 0, selectedChannelCount: 2 })).toMatchObject({ action: 'load' });
+    expect(getKeywordExplorerEmptyState({ loadedVideoCount: 10, hasQuery: false })).toMatchObject({ action: 'none' });
+    expect(getKeywordExplorerEmptyState({ loadedVideoCount: 10, hasQuery: true })).toMatchObject({ action: 'reset' });
+  });
+});

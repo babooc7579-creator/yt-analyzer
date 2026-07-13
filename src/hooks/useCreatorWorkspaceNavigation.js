@@ -15,9 +15,12 @@ export function useCreatorWorkspaceNavigation() {
     isComingSoonView,
     isDiscoveryLinksView,
     isHomeView,
+    isKeywordExplorerView,
     isLegacyWorkspaceView,
     isReferenceVaultView,
+    isTagVaultView,
     isTtoTtoView,
+    isUploadCalendarView,
   } = getCreatorWorkspaceViewModel(creatorView);
 
   const openCreatorView = (item) => {
@@ -40,9 +43,12 @@ export function useCreatorWorkspaceNavigation() {
     isComingSoonView,
     isDiscoveryLinksView,
     isHomeView,
+    isKeywordExplorerView,
     isLegacyWorkspaceView,
     isReferenceVaultView,
+    isTagVaultView,
     isTtoTtoView,
+    isUploadCalendarView,
     openCreatorView,
     setActiveTab,
     setShowWorkPanel,

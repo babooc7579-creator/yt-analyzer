@@ -2,8 +2,11 @@ import CreatorComingSoonRoute from './CreatorComingSoonRoute';
 import CreatorChannelWatchlistRoute from './CreatorChannelWatchlistRoute';
 import CreatorDiscoveryLinksRoute from './CreatorDiscoveryLinksRoute';
 import CreatorHomeRoute from './CreatorHomeRoute';
+import CreatorKeywordExplorerRoute from './CreatorKeywordExplorerRoute';
 import CreatorLegacyWorkspaceRoute from './CreatorLegacyWorkspaceRoute';
+import CreatorTagVaultRoute from './CreatorTagVaultRoute';
 import CreatorTtoTtoRoute from './CreatorTtoTtoRoute';
+import CreatorUploadCalendarRoute from './CreatorUploadCalendarRoute';
 
 export default function CreatorAppRoutes({
   activeCreatorItem,
@@ -14,14 +17,32 @@ export default function CreatorAppRoutes({
   isChannelWatchlistView,
   isDiscoveryLinksView,
   isHomeView,
+  isKeywordExplorerView,
   isLegacyWorkspaceView,
+  isTagVaultView,
   isTtoTtoView,
+  isUploadCalendarView,
+  keywordExplorerRouteProps,
   legacyWorkspaceRouteProps,
   onOpenHome,
   ttoTtoRouteProps,
+  tagVaultRouteProps,
+  uploadCalendarRouteProps,
 }) {
   if (isHomeView) {
     return <CreatorHomeRoute {...homeRouteProps} />;
+  }
+
+  if (isKeywordExplorerView) {
+    return <CreatorKeywordExplorerRoute {...keywordExplorerRouteProps} />;
+  }
+
+  if (isTagVaultView) {
+    return <CreatorTagVaultRoute {...tagVaultRouteProps} />;
+  }
+
+  if (isUploadCalendarView) {
+    return <CreatorUploadCalendarRoute {...uploadCalendarRouteProps} />;
   }
 
   if (isComingSoonView) {

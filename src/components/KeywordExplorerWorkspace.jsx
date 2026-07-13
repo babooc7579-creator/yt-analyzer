@@ -1,0 +1,94 @@
+import { useKeywordExplorerState } from '../hooks/useKeywordExplorerState';
+import { getKeywordExplorerEmptyState } from '../utils/keywordExplorer';
+import KeywordExplorerFilters from './KeywordExplorerFilters';
+import KeywordExplorerHeader from './KeywordExplorerHeader';
+import KeywordExplorerSummary from './KeywordExplorerSummary';
+import KeywordSuggestionChips from './KeywordSuggestionChips';
+import StoredVideoActionGrid from './StoredVideoActionGrid';
+
+export default function KeywordExplorerWorkspace({
+  checkedVideos,
+  isProductionCandidate,
+  isVideoSaved,
+  onFetchComments,
+  onLoadStoredVideos,
+  onOpenVault,
+  onPromoteToProduction,
+  onToggleCheck,
+  onToggleScrap,
+  selectedChannelCount,
+  videos,
+}) {
+  const state = useKeywordExplorerState({ videos });
+  const emptyState = getKeywordExplorerEmptyState({
+    hasQuery: state.hasQuery,
+    loadedVideoCount: state.summary.loadedVideoCount,
+    selectedChannelCount,
+  });
+  const handleEmptyAction = emptyState.action === 'load'
+    ? onLoadStoredVideos
+    : emptyState.action === 'vault'
+      ? onOpenVault
+      : state.resetFilters;
+
+  return (
+    <section data-testid="creator-route-keyword-explorer" className="min-w-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
+      <KeywordExplorerHeader
+        onLoadStoredVideos={onLoadStoredVideos}
+        onOpenVault={onOpenVault}
+        selectedChannelCount={selectedChannelCount}
+      />
+
+      <div className="mt-5 space-y-4">
+        <KeywordExplorerSummary summary={state.summary} />
+        <KeywordExplorerFilters
+          ageFilter={state.ageFilter}
+          hasActiveFilters={state.hasActiveFilters}
+          lengthFilter={state.lengthFilter}
+          minimumViews={state.minimumViews}
+          onChangeAgeFilter={state.setAgeFilter}
+          onChangeLengthFilter={state.setLengthFilter}
+          onChangeMinimumViews={state.setMinimumViews}
+          onChangeSearchQuery={state.setSearchQuery}
+          onChangeSortType={state.setSortType}
+          onReset={state.resetFilters}
+          searchQuery={state.searchQuery}
+          sortType={state.sortType}
+        />
+        <KeywordSuggestionChips onSelect={state.setSearchQuery} suggestions={state.suggestions} />
+
+        {state.displayedVideos.length > 0 ? (
+          <>
+            <p className="text-xs text-slate-400">
+              전체 검색 결과 {state.summary.matchedVideoCount.toLocaleString()}개 중 {state.summary.shownVideoCount.toLocaleString()}개를 표시합니다.
+            </p>
+            <StoredVideoActionGrid
+              checkedVideos={checkedVideos}
+              isProductionCandidate={isProductionCandidate}
+              isVideoSaved={isVideoSaved}
+              onFetchComments={onFetchComments}
+              onPromoteToProduction={onPromoteToProduction}
+              onToggleCheck={onToggleCheck}
+              onToggleScrap={onToggleScrap}
+              videos={state.displayedVideos}
+            />
+          </>
+        ) : (
+          <div className="border border-dashed border-slate-700 bg-slate-950/40 px-5 py-12 text-center">
+            <h3 className="text-base font-extrabold text-white">{emptyState.title}</h3>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-400">{emptyState.description}</p>
+            {emptyState.action !== 'none' && (
+              <button
+                type="button"
+                onClick={handleEmptyAction}
+                className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950"
+              >
+                {emptyState.actionLabel}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}

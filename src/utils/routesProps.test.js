@@ -12,7 +12,10 @@ describe('routesProps utils', () => {
     const discoveryLinksRouteProps = { links: [] };
     const homeRouteProps = { selectedChannelCount: 2 };
     const legacyWorkspaceRouteProps = { totalVideoCount: 3 };
+    const keywordExplorerRouteProps = { videos: [] };
+    const tagVaultRouteProps = { channels: [] };
     const ttoTtoRouteProps = { videos: [] };
+    const uploadCalendarRouteProps = { videoUserRecords: {} };
 
     const props = buildRoutesProps({
       activeCreatorItem,
@@ -23,10 +26,16 @@ describe('routesProps utils', () => {
       isChannelWatchlistView: true,
       isDiscoveryLinksView: true,
       isHomeView: false,
+      isKeywordExplorerView: true,
       isLegacyWorkspaceView: false,
+      isTagVaultView: true,
       isTtoTtoView: true,
+      isUploadCalendarView: true,
+      keywordExplorerRouteProps,
       legacyWorkspaceRouteProps,
+      tagVaultRouteProps,
       ttoTtoRouteProps,
+      uploadCalendarRouteProps,
     });
 
     expect(props).toMatchObject({
@@ -38,10 +47,16 @@ describe('routesProps utils', () => {
       isChannelWatchlistView: true,
       isDiscoveryLinksView: true,
       isHomeView: false,
+      isKeywordExplorerView: true,
       isLegacyWorkspaceView: false,
+      isTagVaultView: true,
       isTtoTtoView: true,
+      isUploadCalendarView: true,
+      keywordExplorerRouteProps,
       legacyWorkspaceRouteProps,
+      tagVaultRouteProps,
       ttoTtoRouteProps,
+      uploadCalendarRouteProps,
     });
   });
 

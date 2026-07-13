@@ -4,20 +4,26 @@ vi.mock('../utils/appRouteProps', () => ({
   buildChannelWatchlistRouteProps: vi.fn(() => ({ route: 'channel-watchlist' })),
   buildDiscoveryLinksRouteProps: vi.fn(() => ({ route: 'discovery-links' })),
   buildHomeRouteProps: vi.fn(() => ({ route: 'home' })),
+  buildKeywordExplorerRouteProps: vi.fn(() => ({ route: 'keyword-explorer' })),
   buildLayoutProps: vi.fn(() => ({ shell: 'layout' })),
   buildLegacyWorkspaceRouteProps: vi.fn(() => ({ route: 'legacy-workspace' })),
   buildRoutesProps: vi.fn(() => ({ routes: 'creator-os' })),
+  buildTagVaultRouteProps: vi.fn(() => ({ route: 'tag-vault' })),
   buildTtoTtoRouteProps: vi.fn(() => ({ route: 'ttotto' })),
+  buildUploadCalendarRouteProps: vi.fn(() => ({ route: 'upload-calendar' })),
 }));
 
 import {
   buildChannelWatchlistRouteProps,
   buildDiscoveryLinksRouteProps,
   buildHomeRouteProps,
+  buildKeywordExplorerRouteProps,
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
   buildRoutesProps,
+  buildTagVaultRouteProps,
   buildTtoTtoRouteProps,
+  buildUploadCalendarRouteProps,
 } from '../utils/appRouteProps';
 import { useCreatorAppViewProps } from './useCreatorAppViewProps';
 
@@ -33,8 +39,11 @@ describe('useCreatorAppViewProps', () => {
       isComingSoonView: false,
       isDiscoveryLinksView: false,
       isHomeView: true,
+      isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isTagVaultView: false,
       isTtoTtoView: false,
+      isUploadCalendarView: false,
       openCreatorView: vi.fn(),
     };
 
@@ -44,8 +53,11 @@ describe('useCreatorAppViewProps', () => {
     expect(buildLayoutProps).toHaveBeenCalledWith(props);
     expect(buildHomeRouteProps).toHaveBeenCalledWith(props);
     expect(buildDiscoveryLinksRouteProps).toHaveBeenCalledWith(props);
+    expect(buildKeywordExplorerRouteProps).toHaveBeenCalledWith(props);
     expect(buildLegacyWorkspaceRouteProps).toHaveBeenCalledWith(props);
+    expect(buildTagVaultRouteProps).toHaveBeenCalledWith(props);
     expect(buildTtoTtoRouteProps).toHaveBeenCalledWith(props);
+    expect(buildUploadCalendarRouteProps).toHaveBeenCalledWith(props);
     expect(buildRoutesProps).toHaveBeenCalledWith({
       activeCreatorItem: props.activeCreatorItem,
       channelWatchlistRouteProps: { route: 'channel-watchlist' },
@@ -55,11 +67,17 @@ describe('useCreatorAppViewProps', () => {
       isChannelWatchlistView: false,
       isDiscoveryLinksView: false,
       isHomeView: true,
+      isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isTagVaultView: false,
       isTtoTtoView: false,
+      isUploadCalendarView: false,
+      keywordExplorerRouteProps: { route: 'keyword-explorer' },
       legacyWorkspaceRouteProps: { route: 'legacy-workspace' },
       onOpenHome: expect.any(Function),
       ttoTtoRouteProps: { route: 'ttotto' },
+      tagVaultRouteProps: { route: 'tag-vault' },
+      uploadCalendarRouteProps: { route: 'upload-calendar' },
     });
     expect(viewProps).toEqual({
       layoutProps: { shell: 'layout' },
@@ -76,8 +94,11 @@ describe('useCreatorAppViewProps', () => {
       isComingSoonView: true,
       isDiscoveryLinksView: false,
       isHomeView: false,
+      isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isTagVaultView: false,
       isTtoTtoView: false,
+      isUploadCalendarView: false,
       openCreatorView,
     });
 
