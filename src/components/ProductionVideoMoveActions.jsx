@@ -1,8 +1,11 @@
-import { CheckCircle2, Clock } from 'lucide-react';
+import { CheckCircle2, Clock, Pin, PinOff } from 'lucide-react';
 
+import { PRODUCTION_FOCUS_COLUMN_ID } from '../constants/productionKanban';
 import { PRODUCTION_STATUS } from '../constants/status';
 import { getIsoTodayDate } from '../utils/dates';
 import {
+  getProductionVideoFocusActionCopy,
+  getProductionVideoFocusHandler,
   getProductionVideoMoveActionCopy,
   getProductionVideoMoveHandler,
 } from '../utils/productionVideoStatusProps';
@@ -11,13 +14,16 @@ import ProductionVideoMoveButton from './ProductionVideoMoveButton';
 export default function ProductionVideoMoveActions({
   columnId,
   isMoving,
+  onFocus,
   onMove,
   record,
   video,
   videoTitle,
 }) {
   const videoId = video?.videoId;
+  const canFocus = Boolean(videoId) && typeof onFocus === 'function';
   const canMove = Boolean(videoId) && typeof onMove === 'function';
+  const isFocused = columnId === PRODUCTION_FOCUS_COLUMN_ID;
   const candidateCopy = getProductionVideoMoveActionCopy({
     targetStatus: PRODUCTION_STATUS.CANDIDATE,
     videoTitle,
@@ -30,10 +36,40 @@ export default function ProductionVideoMoveActions({
     targetStatus: PRODUCTION_STATUS.DONE,
     videoTitle,
   });
+  const focusCopy = getProductionVideoFocusActionCopy({ isFocused, videoTitle });
 
   return (
     <>
-      {columnId !== PRODUCTION_STATUS.CANDIDATE && (
+      {columnId === PRODUCTION_STATUS.CANDIDATE && (
+        <ProductionVideoMoveButton
+          activeClassName="bg-amber-100 text-amber-900 hover:bg-amber-200"
+          ariaLabel={focusCopy.ariaLabel}
+          disabled={!canFocus}
+          icon={Pin}
+          isMoving={isMoving}
+          label={focusCopy.label}
+          onClick={getProductionVideoFocusHandler({ onFocus, videoId })}
+          title={focusCopy.title}
+        />
+      )}
+      {isFocused && (
+        <ProductionVideoMoveButton
+          activeClassName="bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+          ariaLabel={focusCopy.ariaLabel}
+          baseClassName="block text-center"
+          disabled={!canFocus}
+          icon={PinOff}
+          isMoving={isMoving}
+          label={focusCopy.label}
+          onClick={getProductionVideoFocusHandler({
+            focusPinnedAt: record?.focusPinnedAt,
+            onFocus,
+            videoId,
+          })}
+          title={focusCopy.title}
+        />
+      )}
+      {columnId !== PRODUCTION_STATUS.CANDIDATE && !isFocused && (
         <ProductionVideoMoveButton
           activeClassName="bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
           ariaLabel={candidateCopy.ariaLabel}
@@ -44,6 +80,7 @@ export default function ProductionVideoMoveActions({
           onClick={getProductionVideoMoveHandler({
             onMove,
             targetStatus: PRODUCTION_STATUS.CANDIDATE,
+            updates: { focusPinnedAt: '' },
             videoId,
           })}
           title={candidateCopy.title}
@@ -60,6 +97,7 @@ export default function ProductionVideoMoveActions({
           onClick={getProductionVideoMoveHandler({
             onMove,
             targetStatus: PRODUCTION_STATUS.ACTIVE,
+            updates: { focusPinnedAt: '' },
             videoId,
           })}
           title={activeCopy.title}
@@ -76,7 +114,10 @@ export default function ProductionVideoMoveActions({
           onClick={getProductionVideoMoveHandler({
             onMove,
             targetStatus: PRODUCTION_STATUS.DONE,
-            updates: { uploadedAt: record?.uploadedAt || getIsoTodayDate() },
+            updates: {
+              focusPinnedAt: '',
+              uploadedAt: record?.uploadedAt || getIsoTodayDate(),
+            },
             videoId,
           })}
           title={doneCopy.title}

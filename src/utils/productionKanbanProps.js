@@ -81,6 +81,7 @@ export const getProductionKanbanNextActions = ({
 export const getProductionKanbanContentProps = ({
   discoveryLinkCandidates,
   draftRecords,
+  focusVideos,
   groupedVideos,
   hasUnsavedChanges,
   linkMoveStates,
@@ -93,6 +94,7 @@ export const getProductionKanbanContentProps = ({
   saveDraftRecord,
   saveStates,
   updateDraftRecord,
+  updateVideoFocus,
   videoUserRecords,
 }) => {
   const summary = toSummaryObject(productionSummary);
@@ -100,6 +102,7 @@ export const getProductionKanbanContentProps = ({
   return {
     discoveryLinkCandidates: toArray(discoveryLinkCandidates),
     draftRecords,
+    focusVideos: toArray(focusVideos),
     groupedVideos,
     hasUnsavedChanges,
     linkMoveStates,
@@ -112,6 +115,7 @@ export const getProductionKanbanContentProps = ({
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
+    updateVideoFocus,
     videoCount: summary.videoCount || 0,
     videoUserRecords,
   };
@@ -120,6 +124,7 @@ export const getProductionKanbanContentProps = ({
 export const getProductionKanbanContentChildProps = ({
   discoveryLinkCandidates,
   draftRecords,
+  focusVideos,
   groupedVideos,
   hasUnsavedChanges,
   linkMoveStates,
@@ -132,10 +137,12 @@ export const getProductionKanbanContentChildProps = ({
   saveDraftRecord,
   saveStates,
   updateDraftRecord,
+  updateVideoFocus,
   videoCount,
   videoUserRecords,
 }) => {
   const discoveryLinkCandidateList = toArray(discoveryLinkCandidates);
+  const focusVideoList = toArray(focusVideos);
 
   return {
     boardProps: {
@@ -145,6 +152,7 @@ export const getProductionKanbanContentChildProps = ({
       groupedVideos,
       hasUnsavedChanges,
       moveStates,
+      onFocus: updateVideoFocus,
       onMove: moveVideo,
       onSave: saveDraftRecord,
       onUpdateDraft: updateDraftRecord,
@@ -156,6 +164,19 @@ export const getProductionKanbanContentChildProps = ({
       links: discoveryLinkCandidateList,
       onMoveLink: moveDiscoveryLink,
       onOpenDiscoveryLinks,
+    },
+    focusSectionProps: {
+      draftRecords,
+      getScheduleSignal: getProductionScheduleSignal,
+      hasUnsavedChanges,
+      moveStates,
+      onFocus: updateVideoFocus,
+      onMove: moveVideo,
+      onSave: saveDraftRecord,
+      onUpdateDraft: updateDraftRecord,
+      saveStates,
+      videoUserRecords,
+      videos: focusVideoList,
     },
     nextActionsProps: {
       actions: getProductionKanbanNextActions({

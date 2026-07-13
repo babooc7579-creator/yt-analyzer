@@ -5,6 +5,8 @@ import {
   PRODUCTION_VIDEO_STATUS_HELP_TEXT,
   getProductionVideoDraftSaveButtonProps,
   getProductionVideoDraftSaveHandler,
+  getProductionVideoFocusActionCopy,
+  getProductionVideoFocusHandler,
   getProductionVideoMoveActionCopy,
   getProductionVideoMoveButtonViewProps,
   getProductionVideoMoveHandler,
@@ -41,6 +43,21 @@ describe('productionVideoStatusProps utils', () => {
       targetStatus: PRODUCTION_STATUS.DONE,
       videoTitle: '',
     }).ariaLabel).toBe('이 영상 업로드 완료 상태로 변경, Cloud 판단 기록 저장, YouTube API 호출 없음');
+  });
+
+  it('builds focus and unfocus copy without changing production status semantics', () => {
+    expect(getProductionVideoFocusActionCopy({
+      videoTitle: 'Clip',
+    })).toMatchObject({
+      label: '오늘 집중',
+    });
+    expect(getProductionVideoFocusActionCopy({
+      isFocused: true,
+      videoTitle: 'Clip',
+    })).toMatchObject({
+      label: '집중 해제',
+    });
+    expect(getProductionVideoFocusActionCopy({ videoTitle: 'Clip' }).title).toContain('직접 해제하거나 제작 상태를 옮길 때까지 유지');
   });
 
   it('builds draft save button copy from dirty and saving state', () => {
@@ -155,6 +172,31 @@ describe('productionVideoStatusProps utils', () => {
     })();
 
     expect(onMove).toHaveBeenCalledTimes(1);
+  });
+
+  it('builds a focus handler with an explicit Cloud focus timestamp', () => {
+    const onFocus = vi.fn();
+    const focusVideo = getProductionVideoFocusHandler({
+      getNow: () => '2026-07-13T09:30:00.000Z',
+      onFocus,
+      videoId: 'video-1',
+    });
+
+    focusVideo();
+
+    expect(onFocus).toHaveBeenCalledWith('video-1', '2026-07-13T09:30:00.000Z');
+
+    getProductionVideoFocusHandler({
+      focusPinnedAt: '2026-07-13T09:30:00.000Z',
+      onFocus,
+      videoId: 'video-1',
+    })();
+
+    expect(onFocus).toHaveBeenLastCalledWith('video-1', '');
+
+    getProductionVideoFocusHandler({ onFocus })();
+    getProductionVideoFocusHandler({ videoId: 'video-2' })();
+    expect(onFocus).toHaveBeenCalledTimes(2);
   });
 
   it('builds move and save status messages without pretending failed saves succeeded', () => {

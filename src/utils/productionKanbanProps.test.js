@@ -98,6 +98,7 @@ describe('productionKanbanProps utils', () => {
     const props = {
       discoveryLinkCandidates: [{ id: 'link-1' }],
       draftRecords: { video1: { memo: 'draft' } },
+      focusVideos: [{ videoId: 'focus-video' }],
       groupedVideos: { production_candidate: [{ videoId: 'video1' }] },
       hasUnsavedChanges: () => false,
       linkMoveStates: { link1: 'saving' },
@@ -110,12 +111,14 @@ describe('productionKanbanProps utils', () => {
       saveDraftRecord: () => 'save',
       saveStates: { video1: 'idle' },
       updateDraftRecord: () => 'update',
+      updateVideoFocus: () => 'focus',
       videoUserRecords: { video1: { status: 'production_candidate' } },
     };
 
     expect(getProductionKanbanContentProps(props)).toMatchObject({
       discoveryLinkCandidates: [{ id: 'link-1' }],
       draftRecords: props.draftRecords,
+      focusVideos: props.focusVideos,
       groupedVideos: props.groupedVideos,
       linkMoveStates: props.linkMoveStates,
       moveStates: props.moveStates,
@@ -155,6 +158,7 @@ describe('productionKanbanProps utils', () => {
     const props = {
       discoveryLinkCandidates: [{ id: 'link-1' }],
       draftRecords: { video1: { memo: 'draft' } },
+      focusVideos: [{ videoId: 'focus-video' }],
       groupedVideos: { production_candidate: [{ videoId: 'video1' }] },
       hasUnsavedChanges: () => true,
       linkMoveStates: { link1: 'saving' },
@@ -167,6 +171,7 @@ describe('productionKanbanProps utils', () => {
       saveDraftRecord: () => 'save',
       saveStates: { video1: 'idle' },
       updateDraftRecord: () => 'update',
+      updateVideoFocus: () => 'focus',
       videoCount: 1,
       videoUserRecords: { video1: { status: 'production_candidate' } },
     };
@@ -184,6 +189,18 @@ describe('productionKanbanProps utils', () => {
       onMoveLink: props.moveDiscoveryLink,
       onOpenDiscoveryLinks: props.onOpenDiscoveryLinks,
     });
+    expect(viewProps.focusSectionProps).toMatchObject({
+      draftRecords: props.draftRecords,
+      moveStates: props.moveStates,
+      onMove: props.moveVideo,
+      onFocus: props.updateVideoFocus,
+      onSave: props.saveDraftRecord,
+      onUpdateDraft: props.updateDraftRecord,
+      saveStates: props.saveStates,
+      videoUserRecords: props.videoUserRecords,
+      videos: props.focusVideos,
+    });
+    expect(typeof viewProps.focusSectionProps.getScheduleSignal).toBe('function');
     expect(viewProps.nextActionsProps.actions.map((action) => action.key)).toEqual([
       'reference-vault',
       'discovery-links',
@@ -194,6 +211,7 @@ describe('productionKanbanProps utils', () => {
       hasUnsavedChanges: props.hasUnsavedChanges,
       moveStates: props.moveStates,
       onMove: props.moveVideo,
+      onFocus: props.updateVideoFocus,
       onSave: props.saveDraftRecord,
       onUpdateDraft: props.updateDraftRecord,
       saveStates: props.saveStates,
@@ -228,6 +246,7 @@ describe('productionKanbanProps utils', () => {
     });
 
     expect(viewProps.summaryProps.discoveryLinkCandidateCount).toBe(0);
+    expect(viewProps.focusSectionProps.videos).toEqual([]);
     expect(viewProps.discoveryLinksSectionProps.links).toEqual([]);
     expect(viewProps.nextActionsProps.actions).toHaveLength(2);
   });

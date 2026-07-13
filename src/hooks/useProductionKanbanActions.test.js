@@ -180,6 +180,24 @@ describe('useProductionKanbanActions', () => {
     expect(runStateUpdater(stateSetters[2], { video1: 'saved' }, 2)).toEqual({});
   });
 
+  it('updates only the focus field without moving the production status', async () => {
+    const deps = createDeps();
+    const kanbanActions = useProductionKanbanActions(deps);
+
+    await kanbanActions.updateVideoFocus('video1', '2026-07-13T09:30:00.000Z');
+
+    expect(runStateUpdater(stateSetters[2], {}, 0)).toEqual({ video1: 'saving' });
+    expect(deps.onUpdateVideoRecord).toHaveBeenCalledWith('video1', {
+      focusPinnedAt: '2026-07-13T09:30:00.000Z',
+    });
+    expect(deps.onMoveVideo).not.toHaveBeenCalled();
+    expect(runStateUpdater(stateSetters[2], { video1: 'saving' }, 1)).toEqual({ video1: 'saved' });
+
+    vi.advanceTimersByTime(1600);
+
+    expect(runStateUpdater(stateSetters[2], { video1: 'saved' }, 2)).toEqual({});
+  });
+
   it('does not move a discovery link when no Cloud update handler is provided', async () => {
     const deps = createDeps({ onUpdateDiscoveryLink: null });
     const kanbanActions = useProductionKanbanActions(deps);

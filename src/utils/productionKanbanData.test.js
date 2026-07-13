@@ -6,11 +6,13 @@ import {
   countDiscoveryRightsWarnings,
   countGroupedProductionVideos,
   getDiscoveryLinkCandidates,
+  getProductionFocusVideos,
   getProductionKanbanGroupStatus,
   getProductionKanbanDataModel,
   getProductionSummary,
   getScheduledProductionVideos,
   groupProductionVideos,
+  isProductionFocusRecord,
 } from './productionKanbanData';
 
 describe('productionKanbanData utils', () => {
@@ -58,6 +60,29 @@ describe('productionKanbanData utils', () => {
     });
 
     expect(grouped[PRODUCTION_STATUS.CANDIDATE].map(video => video.videoId)).toEqual(['v4', 'v1']);
+    expect(grouped[PRODUCTION_STATUS.ACTIVE].map(video => video.videoId)).toEqual(['v2']);
+    expect(grouped[PRODUCTION_STATUS.DONE].map(video => video.videoId)).toEqual(['v3']);
+  });
+
+  it('separates manually focused candidate videos and keeps their pin order', () => {
+    const focusedRecords = {
+      ...records,
+      v1: {
+        ...records.v1,
+        focusPinnedAt: '2026-07-13T09:30:00.000Z',
+      },
+      v4: {
+        ...records.v4,
+        focusPinnedAt: '2026-07-13T08:30:00.000Z',
+      },
+    };
+
+    expect(isProductionFocusRecord(focusedRecords.v1)).toBe(true);
+    expect(isProductionFocusRecord(records.v2)).toBe(false);
+    expect(getProductionFocusVideos(videos, focusedRecords).map(video => video.videoId)).toEqual(['v4', 'v1']);
+
+    const grouped = groupProductionVideos(videos, focusedRecords);
+    expect(grouped[PRODUCTION_STATUS.CANDIDATE]).toEqual([]);
     expect(grouped[PRODUCTION_STATUS.ACTIVE].map(video => video.videoId)).toEqual(['v2']);
     expect(grouped[PRODUCTION_STATUS.DONE].map(video => video.videoId)).toEqual(['v3']);
   });
@@ -135,6 +160,7 @@ describe('productionKanbanData utils', () => {
       draftRecords: {
         v6: {},
       },
+      focusVideos: [{ videoId: 'focus-1', title: 'Focused candidate' }],
       groupedVideos,
       today: '2026-07-06',
       videoUserRecords: {
@@ -143,8 +169,9 @@ describe('productionKanbanData utils', () => {
         v3: { uploadedAt: '2026-07-05T00:00:00.000Z' },
       },
     })).toMatchObject({
-      videoCount: 4,
-      candidateCount: 1,
+      videoCount: 5,
+      candidateCount: 2,
+      focusCount: 1,
       activeCount: 2,
       uploadedCount: 1,
       nextScheduled: {
@@ -207,6 +234,7 @@ describe('productionKanbanData utils', () => {
     });
 
     expect(model.discoveryLinkCandidates.map(link => link.id)).toEqual(['new-link', 'old-link']);
+    expect(model.focusVideos).toEqual([]);
     expect(model.groupedVideos[PRODUCTION_STATUS.CANDIDATE].map(video => video.videoId)).toEqual(['v4', 'v1']);
     expect(model.groupedVideos[PRODUCTION_STATUS.ACTIVE].map(video => video.videoId)).toEqual(['v2']);
     expect(model.productionSummary).toMatchObject({
@@ -219,6 +247,28 @@ describe('productionKanbanData utils', () => {
     expect(model.productionSummary.nextScheduled).toMatchObject({
       date: '2026-07-10',
       video: videos[1],
+    });
+  });
+
+  it('keeps focused videos in the summary while removing duplicates from the candidate column', () => {
+    const model = getProductionKanbanDataModel({
+      discoveryLinks: [],
+      videoUserRecords: {
+        ...records,
+        v1: {
+          ...records.v1,
+          focusPinnedAt: '2026-07-13T08:00:00.000Z',
+        },
+      },
+      videos,
+    });
+
+    expect(model.focusVideos.map(video => video.videoId)).toEqual(['v1']);
+    expect(model.groupedVideos[PRODUCTION_STATUS.CANDIDATE].map(video => video.videoId)).toEqual(['v4']);
+    expect(model.productionSummary).toMatchObject({
+      candidateCount: 2,
+      focusCount: 1,
+      videoCount: 4,
     });
   });
 });

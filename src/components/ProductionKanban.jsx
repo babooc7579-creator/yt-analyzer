@@ -28,6 +28,7 @@ export default function ProductionKanban({
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
+    updateVideoFocus,
   } = useProductionKanbanActions({
     onMoveVideo,
     onUpdateDiscoveryLink,
@@ -37,6 +38,7 @@ export default function ProductionKanban({
 
   const {
     discoveryLinkCandidates,
+    focusVideos,
     groupedVideos,
     productionSummary,
   } = useProductionKanbanData({
@@ -59,6 +61,7 @@ export default function ProductionKanban({
   const contentProps = getProductionKanbanContentProps({
     discoveryLinkCandidates,
     draftRecords,
+    focusVideos,
     groupedVideos,
     hasUnsavedChanges,
     linkMoveStates,
@@ -71,6 +74,7 @@ export default function ProductionKanban({
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
+    updateVideoFocus,
     videoUserRecords,
   });
 

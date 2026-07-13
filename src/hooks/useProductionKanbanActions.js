@@ -62,6 +62,16 @@ export function useProductionKanbanActions({
     }
   };
 
+  const updateVideoFocus = async (videoId, focusPinnedAt) => {
+    setMoveStates(prev => ({ ...prev, [videoId]: 'saving' }));
+    const didUpdate = await onUpdateVideoRecord(videoId, { focusPinnedAt });
+    setMoveStates(prev => ({ ...prev, [videoId]: didUpdate ? 'saved' : 'error' }));
+
+    if (didUpdate) {
+      clearSavedStateAfterDelay(setMoveStates, videoId, 1600);
+    }
+  };
+
   const moveDiscoveryLink = async (linkId, status) => {
     if (!onUpdateDiscoveryLink) return;
 
@@ -84,5 +94,6 @@ export function useProductionKanbanActions({
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
+    updateVideoFocus,
   };
 }
