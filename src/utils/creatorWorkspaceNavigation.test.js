@@ -12,9 +12,12 @@ describe('creator workspace navigation utils', () => {
       isComingSoonView: false,
       isDiscoveryLinksView: false,
       isHomeView: true,
+      isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
       isReferenceVaultView: false,
+      isTagVaultView: false,
       isTtoTtoView: false,
+      isUploadCalendarView: false,
     });
 
     expect(getCreatorWorkspaceViewModel('vault-all')).toMatchObject({
@@ -39,6 +42,24 @@ describe('creator workspace navigation utils', () => {
       isChannelWatchlistView: true,
       isComingSoonView: false,
       isLegacyWorkspaceView: false,
+    });
+
+    expect(getCreatorWorkspaceViewModel('discovery-keywords')).toMatchObject({
+      isComingSoonView: false,
+      isKeywordExplorerView: true,
+      isLegacyWorkspaceView: false,
+    });
+
+    expect(getCreatorWorkspaceViewModel('vault-tags')).toMatchObject({
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
+      isTagVaultView: true,
+    });
+
+    expect(getCreatorWorkspaceViewModel('studio-calendar')).toMatchObject({
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
+      isUploadCalendarView: true,
     });
   });
 

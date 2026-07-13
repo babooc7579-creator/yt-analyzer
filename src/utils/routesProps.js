@@ -7,11 +7,17 @@ export function buildRoutesProps({
   isChannelWatchlistView,
   isDiscoveryLinksView,
   isHomeView,
+  isKeywordExplorerView,
   isLegacyWorkspaceView,
+  isTagVaultView,
   isTtoTtoView,
+  isUploadCalendarView,
+  keywordExplorerRouteProps,
   legacyWorkspaceRouteProps,
   onOpenHome,
   ttoTtoRouteProps,
+  tagVaultRouteProps,
+  uploadCalendarRouteProps,
 }) {
   return {
     activeCreatorItem,
@@ -22,11 +28,17 @@ export function buildRoutesProps({
     isChannelWatchlistView,
     isDiscoveryLinksView,
     isHomeView,
+    isKeywordExplorerView,
     isLegacyWorkspaceView,
+    isTagVaultView,
     isTtoTtoView,
+    isUploadCalendarView,
+    keywordExplorerRouteProps,
     legacyWorkspaceRouteProps,
     onOpenHome,
     ttoTtoRouteProps,
+    tagVaultRouteProps,
+    uploadCalendarRouteProps,
   };
 }
 

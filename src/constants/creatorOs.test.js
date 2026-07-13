@@ -55,6 +55,15 @@ describe('creatorOs constants', () => {
     expect(itemsById['discovery-watchlist'].summary).toContain('오늘 확인할 범위');
   });
 
+  it('exposes keyword, tag vault, and upload calendar as live Cloud-data workflows', () => {
+    expect(itemsById['discovery-keywords']).toMatchObject({ status: 'live' });
+    expect(itemsById['discovery-keywords'].summary).toContain('Cloud');
+    expect(itemsById['vault-tags']).toMatchObject({ status: 'live' });
+    expect(itemsById['vault-tags'].summary).toContain('채널 태그');
+    expect(itemsById['studio-calendar']).toMatchObject({ status: 'live' });
+    expect(itemsById['studio-calendar'].summary).toContain('목표 업로드 날짜');
+  });
+
   it('keeps live view groups aligned with channel and scrapbook workflows', () => {
     expect(READY_CREATOR_VIEWS).toEqual(expect.arrayContaining([
       'vault-videos',
@@ -69,6 +78,7 @@ describe('creatorOs constants', () => {
     expect(SCRAPBOOK_CREATOR_VIEWS).toEqual(expect.arrayContaining([
       'studio-candidates',
       'studio-scrapbook',
+      'studio-calendar',
     ]));
   });
 

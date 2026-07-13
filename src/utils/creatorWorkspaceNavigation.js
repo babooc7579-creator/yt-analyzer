@@ -15,9 +15,12 @@ export const getCreatorWorkspaceViewModel = (creatorView) => {
     isChannelWatchlistView: creatorView === 'discovery-watchlist',
     isDiscoveryLinksView: creatorView === 'vault-sources',
     isHomeView: creatorView === 'home',
+    isKeywordExplorerView: creatorView === 'discovery-keywords',
     isLegacyWorkspaceView: READY_CREATOR_VIEWS.includes(creatorView),
     isReferenceVaultView: REFERENCE_VAULT_VIEWS.includes(creatorView),
+    isTagVaultView: creatorView === 'vault-tags',
     isTtoTtoView: creatorView === 'discovery-ttotto',
+    isUploadCalendarView: creatorView === 'studio-calendar',
   };
 };
 

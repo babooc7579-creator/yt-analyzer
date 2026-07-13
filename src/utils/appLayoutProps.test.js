@@ -110,8 +110,8 @@ describe('appLayoutProps utils', () => {
   it('separates live navigation from the future roadmap without dropping items', () => {
     const groups = getCreatorSidebarNavigationGroups(CREATOR_OS_PRODUCT_MAP);
 
-    expect(groups.liveItemCount).toBe(12);
-    expect(groups.roadmapItemCount).toBe(19);
+    expect(groups.liveItemCount).toBe(15);
+    expect(groups.roadmapItemCount).toBe(16);
     expect(groups.liveItemCount + groups.roadmapItemCount).toBe(31);
     expect(groups.liveSections.flatMap((section) => section.items).every((item) => item.status !== 'soon')).toBe(true);
     expect(groups.roadmapSections.flatMap((section) => section.items).every((item) => item.status === 'soon')).toBe(true);
