@@ -15,6 +15,7 @@ export const getHomeNextAction = ({
   onOpenVault,
   openRadarCandidateCount,
   productionCandidateCount,
+  productionFocusCount,
   savedChannelCount,
   selectedChannelCount,
 }) => {
@@ -23,6 +24,7 @@ export const getHomeNextAction = ({
   const loadedVideos = toCount(loadedVideoCount);
   const radarCandidates = toCount(openRadarCandidateCount);
   const productionCandidates = toCount(productionCandidateCount);
+  const productionFocusCandidates = toCount(productionFocusCount);
   const discoveryCandidates = toCount(discoveryCandidateCount);
   const rightsWarnings = toCount(discoveryRightsWarningCount);
   const candidateTotal = productionCandidates + discoveryCandidates;
@@ -84,7 +86,7 @@ export const getHomeNextAction = ({
     };
   }
 
-  if (candidateTotal > 0) {
+  if (candidateTotal > 0 || productionFocusCandidates > 0) {
     if (rightsWarnings > 0) {
       return {
         tone: 'amber',
@@ -96,6 +98,21 @@ export const getHomeNextAction = ({
         actionLabel: '후보함에서 확인',
         actionTitle: '제작 후보함에서 권리 확인이 필요한 발견 링크 후보를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
         impactText: '화면 이동만 합니다. 권리 상태 변경은 후보함이나 발견함에서 직접 선택할 때 Cloud에 저장됩니다.',
+        onAction: onOpenProductionCandidates,
+      };
+    }
+
+    if (productionFocusCandidates > 0) {
+      return {
+        tone: 'emerald',
+        iconKey: 'rocket',
+        title: '오늘 집중 후보부터 이어서 결정하세요',
+        description: '직접 고정한 영상만 모아둔 오늘 집중 영역에서 다음 제작 행동을 정합니다.',
+        badge: '오늘 집중',
+        metric: `${productionFocusCandidates}개`,
+        actionLabel: '오늘 집중 보기',
+        actionTitle: '제작 후보함의 오늘 집중 영역을 엽니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
+        impactText: '화면 이동만 합니다. 집중 해제나 제작 상태 변경은 후보함 안에서 직접 선택할 때 Cloud에 저장됩니다.',
         onAction: onOpenProductionCandidates,
       };
     }

@@ -21,6 +21,7 @@ export default function HomeRadarWorkflowSection({
   onOpenVault,
   openRadarCandidateCount,
   productionCandidateCount,
+  productionFocusCount,
   savedChannelCount = 0,
   selectedChannelCount = 0,
 }) {
@@ -59,6 +60,7 @@ export default function HomeRadarWorkflowSection({
         onOpenVault={onOpenVault}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
+        productionFocusCount={productionFocusCount}
         savedChannelCount={savedChannelCount}
         selectedChannelCount={selectedChannelCount}
       />
@@ -94,6 +96,7 @@ export default function HomeRadarWorkflowSection({
           onOpenDiscoveryLinks={onOpenDiscoveryLinks}
           onOpenProductionCandidates={onOpenProductionCandidates}
           productionCandidateCount={productionCandidateCount}
+          productionFocusCount={productionFocusCount}
         />
       </div>
     </div>

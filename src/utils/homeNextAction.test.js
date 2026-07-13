@@ -122,6 +122,7 @@ describe('homeNextAction utils', () => {
       loadedVideoCount: 100,
       openRadarCandidateCount: 0,
       productionCandidateCount: 2,
+      productionFocusCount: 1,
       discoveryCandidateCount: 3,
       discoveryRightsWarningCount: 2,
       onOpenProductionCandidates,
@@ -136,6 +137,31 @@ describe('homeNextAction utils', () => {
     expect(action.actionTitle).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(action.impactText).toContain('화면 이동만');
     expect(action.impactText).toContain('Cloud에 저장');
+    expect(action.onAction).toBe(onOpenProductionCandidates);
+  });
+
+  it('opens today focus before the general candidate list when no rights warning remains', () => {
+    const onOpenProductionCandidates = () => 'open production candidates';
+
+    const action = getHomeNextAction({
+      savedChannelCount: 12,
+      selectedChannelCount: 3,
+      loadedVideoCount: 100,
+      openRadarCandidateCount: 0,
+      productionCandidateCount: 4,
+      productionFocusCount: 2,
+      discoveryCandidateCount: 1,
+      discoveryRightsWarningCount: 0,
+      onOpenProductionCandidates,
+    });
+
+    expect(action.badge).toBe('오늘 집중');
+    expect(action.metric).toBe('2개');
+    expect(action.title).toContain('오늘 집중 후보');
+    expect(action.actionLabel).toBe('오늘 집중 보기');
+    expect(action.actionTitle).toContain('저장된 후보 조회');
+    expect(action.actionTitle).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(action.impactText).toContain('화면 이동만');
     expect(action.onAction).toBe(onOpenProductionCandidates);
   });
 

@@ -20,6 +20,7 @@ describe('HomeRadarWorkflowSection', () => {
         onOpenVault={noop}
         openRadarCandidateCount={4}
         productionCandidateCount={3}
+        productionFocusCount={2}
         savedChannelCount={5}
         selectedChannelCount={2}
       />,
@@ -31,6 +32,7 @@ describe('HomeRadarWorkflowSection', () => {
     expect(html).toContain('YouTube API');
     expect(html).toContain('제작 후보함');
     expect(html).toContain('권리 확인');
+    expect(html).toContain('오늘 집중 2개');
     expect(html).toContain('발견함');
   });
 
@@ -48,6 +50,7 @@ describe('HomeRadarWorkflowSection', () => {
         onOpenVault={noop}
         openRadarCandidateCount={0}
         productionCandidateCount={3}
+        productionFocusCount={2}
         savedChannelCount={5}
         selectedChannelCount={2}
       />,

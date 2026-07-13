@@ -10,6 +10,7 @@ const {
 
 vi.mock('react', () => ({
   useEffect: vi.fn((effect) => effect()),
+  useRef: vi.fn((initialValue) => ({ current: initialValue })),
   useState: vi.fn((initialValue) => {
     const setter = vi.fn();
     stateSetters.push(setter);
@@ -196,6 +197,38 @@ describe('useProductionKanbanActions', () => {
     vi.advanceTimersByTime(1600);
 
     expect(runStateUpdater(stateSetters[2], { video1: 'saved' }, 2)).toEqual({});
+  });
+
+  it('prevents duplicate focus or move requests for the same video while Cloud saving is pending', async () => {
+    let resolveUpdate;
+    const deps = createDeps({
+      onUpdateVideoRecord: vi.fn(() => new Promise((resolve) => {
+        resolveUpdate = resolve;
+      })),
+    });
+    const kanbanActions = useProductionKanbanActions(deps);
+
+    const firstRequest = kanbanActions.updateVideoFocus('video1', '2026-07-13T09:30:00.000Z');
+    const duplicateResult = await kanbanActions.moveVideo('video1', 'production_active');
+
+    expect(duplicateResult).toBe(false);
+    expect(deps.onUpdateVideoRecord).toHaveBeenCalledTimes(1);
+    expect(deps.onMoveVideo).not.toHaveBeenCalled();
+
+    resolveUpdate(true);
+    await expect(firstRequest).resolves.toBe(true);
+  });
+
+  it('shows an error state instead of leaving a rejected Cloud update pending', async () => {
+    const deps = createDeps({
+      onUpdateVideoRecord: vi.fn(() => Promise.reject(new Error('network failed'))),
+    });
+    const kanbanActions = useProductionKanbanActions(deps);
+
+    await expect(kanbanActions.updateVideoFocus('video1', '2026-07-13T09:30:00.000Z')).resolves.toBe(false);
+
+    expect(runStateUpdater(stateSetters[2], {}, 0)).toEqual({ video1: 'saving' });
+    expect(runStateUpdater(stateSetters[2], { video1: 'saving' }, 1)).toEqual({ video1: 'error' });
   });
 
   it('does not move a discovery link when no Cloud update handler is provided', async () => {

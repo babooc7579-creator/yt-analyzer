@@ -10,11 +10,13 @@ export default function HomeCandidateWorkflowCard({
   onOpenDiscoveryLinks,
   onOpenProductionCandidates,
   productionCandidateCount,
+  productionFocusCount,
 }) {
   const viewProps = getHomeCandidateWorkflowCardViewProps({
     discoveryCandidateCount,
     discoveryRightsWarningCount,
     productionCandidateCount,
+    productionFocusCount,
   });
 
   return (
@@ -28,10 +30,12 @@ export default function HomeCandidateWorkflowCard({
         discoveryRightsWarningCount={discoveryRightsWarningCount}
         hasRightsWarning={viewProps.hasRightsWarning}
         productionCandidateCount={productionCandidateCount}
+        productionFocusCount={productionFocusCount}
       />
       <HomeCandidateWorkflowActions
         hasCandidates={viewProps.hasCandidates}
         hasRightsWarning={viewProps.hasRightsWarning}
+        hasFocusCandidates={viewProps.hasFocusCandidates}
         onOpenDiscoveryLinks={onOpenDiscoveryLinks}
         onOpenProductionCandidates={onOpenProductionCandidates}
       />

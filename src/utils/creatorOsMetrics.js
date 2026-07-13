@@ -11,6 +11,7 @@ import {
 } from '../constants/status';
 import { formatRelativeTime } from './channelScanDisplay';
 import { getCloudOnlyTags, getLatestChannelScanDate } from './channels';
+import { getProductionFocusVideos } from './productionKanbanData';
 import { isTtoTtoCandidate } from './video';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
@@ -77,6 +78,10 @@ export const countProductionCandidates = (savedVideos = [], videoUserRecords = {
   )).length
 );
 
+export const countProductionFocusCandidates = (savedVideos = [], videoUserRecords = {}) => (
+  getProductionFocusVideos(savedVideos, videoUserRecords).length
+);
+
 export const countDiscoveryCandidates = (discoveryLinks = []) => (
   toArray(discoveryLinks).filter((link) => getDiscoveryLinkStatusValue(link) === 'candidate').length
 );
@@ -109,6 +114,7 @@ export const getCreatorOsMetricsModel = ({
       : '수집 기록 없음',
     openRadarCandidateCount: countOpenRadarCandidates(videos, videoUserRecords),
     productionCandidateCount: countProductionCandidates(savedVideos, videoUserRecords),
+    productionFocusCount: countProductionFocusCandidates(savedVideos, videoUserRecords),
     scannableChannelCount: countScannableChannels(savedChannels),
     ttoTtoAssetCount: countTtoTtoAssets(videos),
     visibleScrapCount: countVisibleScraps(videos, savedVideos),
