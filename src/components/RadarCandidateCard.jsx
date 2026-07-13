@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+
 import { getRadarCandidateCardViewProps } from '../utils/radarCandidates';
 import RadarCandidateBadges from './RadarCandidateBadges';
 import RadarCandidateDecisionActions from './RadarCandidateDecisionActions';
@@ -15,6 +17,31 @@ export default function RadarCandidateCard({
   onPromoteToProduction,
   onToggleScrap,
 }) {
+  const actionLockRef = useRef(false);
+  const [pendingAction, setPendingAction] = useState('');
+
+  const runCloudAction = async (actionKey, action, ...args) => {
+    if (actionLockRef.current || typeof action !== 'function') return false;
+
+    actionLockRef.current = true;
+    setPendingAction(actionKey);
+    try {
+      return await action(...args);
+    } finally {
+      actionLockRef.current = false;
+      setPendingAction('');
+    }
+  };
+
+  const handleMarkVideoStatus = typeof onMarkVideoStatus === 'function'
+    ? (videoId, status) => runCloudAction('status', onMarkVideoStatus, videoId, status)
+    : onMarkVideoStatus;
+  const handlePromoteToProduction = typeof onPromoteToProduction === 'function'
+    ? (targetVideo) => runCloudAction('production', onPromoteToProduction, targetVideo)
+    : onPromoteToProduction;
+  const handleToggleScrap = typeof onToggleScrap === 'function'
+    ? (targetVideo) => runCloudAction('scrapbook', onToggleScrap, targetVideo)
+    : onToggleScrap;
   const {
     badgesProps,
     decisionActionsProps,
@@ -26,14 +53,18 @@ export default function RadarCandidateCard({
   } = getRadarCandidateCardViewProps({
     index,
     isSaved,
+    pendingAction,
     video,
-    onMarkVideoStatus,
-    onPromoteToProduction,
-    onToggleScrap,
+    onMarkVideoStatus: handleMarkVideoStatus,
+    onPromoteToProduction: handlePromoteToProduction,
+    onToggleScrap: handleToggleScrap,
   });
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80">
+    <article
+      aria-busy={Boolean(pendingAction)}
+      className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80"
+    >
       <RadarCandidateThumbnail {...thumbnailProps} />
       <div className="p-4">
         <RadarCandidateBadges {...badgesProps} />

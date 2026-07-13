@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { MessageSquareText, Rocket, Trash2 } from 'lucide-react';
 
 import { getScrapbookVideoFooterActionsViewProps } from '../utils/scrapbookVideoFooterActions';
@@ -12,6 +13,23 @@ export default function ScrapbookVideoFooterActions({
   videoTitle,
   videoUrl,
 }) {
+  const productionLockRef = useRef(false);
+  const [productionSaving, setProductionSaving] = useState(false);
+
+  const handlePromoteToProduction = typeof onPromoteToProduction === 'function'
+    ? async (targetVideo) => {
+      if (productionLockRef.current) return false;
+
+      productionLockRef.current = true;
+      setProductionSaving(true);
+      try {
+        return await onPromoteToProduction(targetVideo);
+      } finally {
+        productionLockRef.current = false;
+        setProductionSaving(false);
+      }
+    }
+    : onPromoteToProduction;
   const {
     commentsButtonProps,
     copyUrlButtonProps,
@@ -22,15 +40,16 @@ export default function ScrapbookVideoFooterActions({
     confirmFn: (message) => window.confirm(message),
     isProductionCandidate,
     onFetchComments,
-    onPromoteToProduction,
+    onPromoteToProduction: handlePromoteToProduction,
     onRemoveScrap,
+    productionSaving,
     video,
     videoTitle,
     videoUrl,
   });
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap items-center justify-end gap-2">
       <CopyUrlButton {...copyUrlButtonProps} />
       <button {...commentsButtonProps}>
         <MessageSquareText className="w-4 h-4" />

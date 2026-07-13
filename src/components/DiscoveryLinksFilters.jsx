@@ -7,6 +7,7 @@ import DiscoveryStatusFilterGroup from './DiscoveryStatusFilterGroup';
 export default function DiscoveryLinksFilters({
   filteredLinkCount,
   hasActiveFilters,
+  onClearFilters,
   rightsFilter,
   rightsFilterOptions,
   searchQuery,
@@ -23,6 +24,7 @@ export default function DiscoveryLinksFilters({
     statusFilterProps,
   } = getDiscoveryLinksFiltersChildProps({
     filteredLinkCount,
+    onClearFilters,
     rightsFilter,
     rightsFilterOptions,
     searchQuery,

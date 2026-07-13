@@ -16,11 +16,14 @@ export default function ProductionKanbanScheduleSummary({ productionSummary }) {
       <p className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-amber-700">
         <CalendarDays className="h-3 w-3" /> {label}
       </p>
-      <p className="mt-1 truncate text-sm font-black text-amber-950">
+      <p className="mt-1 text-sm font-black text-amber-950">
         {nextScheduledText}
       </p>
       {nextScheduledTitle && (
-        <p className="mt-1 line-clamp-1 text-[10px] font-bold text-amber-800">
+        <p
+          className="mt-1 line-clamp-2 break-words text-[10px] font-bold text-amber-800"
+          title={nextScheduledTitle}
+        >
           {nextScheduledTitle}
         </p>
       )}

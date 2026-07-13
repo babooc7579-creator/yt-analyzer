@@ -79,6 +79,22 @@ describe('scrapbookVideoFooterActions utils', () => {
     expect(viewProps.productionButtonProps.onClick).toBeUndefined();
   });
 
+  it('locks the scrapbook production action while Cloud saving is in progress', () => {
+    const onPromoteToProduction = vi.fn();
+    const viewProps = getScrapbookVideoFooterActionsViewProps({
+      onPromoteToProduction,
+      productionSaving: true,
+      video,
+      videoTitle: 'Display title',
+    });
+
+    expect(viewProps.productionButtonText).toBe('Cloud 저장 중');
+    expect(viewProps.productionButtonProps.disabled).toBe(true);
+    expect(viewProps.productionButtonProps['aria-label']).toContain('Cloud에 저장하는 중');
+    expect(viewProps.productionButtonProps.title).toContain('완료될 때까지');
+    expect(viewProps.productionButtonProps.onClick).toBeUndefined();
+  });
+
   it('confirms before removing a Cloud scrapbook marker', () => {
     const confirmFn = vi.fn(() => true);
     const onRemoveScrap = vi.fn();

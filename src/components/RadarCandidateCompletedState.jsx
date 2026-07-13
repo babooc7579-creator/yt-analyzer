@@ -4,6 +4,7 @@ import { getRadarCandidateCompletedStateViewProps } from '../utils/radarCandidat
 import RadarDecisionPanel from './RadarDecisionPanel';
 
 export default function RadarCandidateCompletedState({
+  clearDecisionsPending,
   decisionGroups,
   decisionSummary,
   loadedDecisionCount,
@@ -48,11 +49,12 @@ export default function RadarCandidateCompletedState({
         <button
           type="button"
           onClick={onClearDecisions}
-          className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-100 hover:bg-emerald-500/15"
-          title={clearDecisionsButtonProps.title}
+          disabled={clearDecisionsPending}
+          className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-100 hover:bg-emerald-500/15 disabled:cursor-not-allowed disabled:opacity-50"
+          title={clearDecisionsPending ? 'Cloud 판단 기록 초기화가 끝날 때까지 기다려 주세요.' : clearDecisionsButtonProps.title}
           aria-label={clearDecisionsButtonProps['aria-label']}
         >
-          <CheckCircle2 className="h-4 w-4" /> {clearDecisionsButtonProps.label}
+          <CheckCircle2 className="h-4 w-4" /> {clearDecisionsPending ? '초기화 중' : clearDecisionsButtonProps.label}
         </button>
       </div>
       <RadarDecisionPanel

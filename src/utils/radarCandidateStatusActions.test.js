@@ -81,4 +81,20 @@ describe('radarCandidateStatusActions utils', () => {
 
     expect(onMarkVideoStatus).not.toHaveBeenCalled();
   });
+
+  it('disables every decision button while another Cloud record is saving', () => {
+    const onMarkVideoStatus = vi.fn();
+    const actions = getRadarCandidateStatusActionProps({
+      onMarkVideoStatus,
+      saving: true,
+      video: { videoId: 'radar-1' },
+      videoTitle: 'Saving video',
+    });
+
+    expect(actions.every(action => action.disabled)).toBe(true);
+    expect(actions.every(action => action.title.includes('저장이 끝날 때까지'))).toBe(true);
+
+    actions.forEach(action => action.onClick());
+    expect(onMarkVideoStatus).not.toHaveBeenCalled();
+  });
 });

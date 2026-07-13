@@ -49,13 +49,14 @@
 - 2026-07-11 오늘 레이더 완료 상태에서 제작 후보함으로 이동하는 버튼, 스크랩북 카드에서 제작 후보로 표시하는 버튼, 제작 후보함의 저장 영상/발견함 다음 행동 버튼을 추가했습니다. 모두 화면 이동 또는 기존 Cloud 판단 기록 저장 흐름을 사용하며 endpoint, DB schema, localStorage key, YouTube API 호출 조건은 변경하지 않았습니다.
 - 2026-07-11 제작 후보 영상 카드에 작업 준비 체크를 추가했습니다. 원본 링크, 제목 초안, 제작 메모, 업로드 예정일의 준비 여부를 표시만 하며, 저장이나 API 호출은 실행하지 않습니다. 발견함 링크 후보 섹션에는 외부 링크 후보 개수 배지를 추가해 영상 후보와 별도로 보이게 했습니다.
 - 2026-07-11 제작 후보함 상단에 우선 확인 안내를 추가했습니다. 권리 확인 필요 링크, 지난 일정, 일정 없는 제작 중 후보, 제작 중/후보/링크 후보를 순서대로 안내하며 표시만 하고 저장이나 API 호출은 실행하지 않습니다. 홈 지표에는 제작 후보와 발견 링크 후보 숫자를 추가했고, 발견함 오류 화면에는 localStorage 자동 병합/자동 업로드 없음 안내를 추가했습니다.
-- 2026-07-11 Azure 리소스가 Microsoft Azure Sponsorship 구독으로 이동된 뒤 프론트엔드 Build와 Azure Static Web Apps CI/CD가 여러 차례 성공했고 공개 앱 루트는 200 OK로 확인됐습니다. backend Function App 배포와 Sponsorship 비용 반영은 남은 운영 확인 항목입니다.
+- 2026-07-13 프론트엔드, Function App, Cosmos DB 등 핵심 리소스와 백엔드 GitHub OIDC 배포 경로가 Microsoft Azure Sponsorship 구독 기준으로 전환됐습니다. 백엔드 Function App 배포 성공, 앱 접속, 저장 영상 조회, 무로그인 차단을 확인했고 이전 MCPP 관리 ID와 빈 `yt-analyzer-rg`는 삭제했습니다. 남은 운영 항목은 Sponsorship 잔액 화면의 크레딧 반영 모니터링입니다.
 - 2026-07-12 홈 다음 추천 행동에서 오늘 레이더 후보 검토가 끝난 뒤 권리 확인이 필요한 발견 링크 후보를 일반 제작 후보보다 먼저 안내하도록 보강했습니다. 화면 이동과 기존 Cloud 상태 변경 흐름만 사용하며 endpoint, DB schema, localStorage key, YouTube API 호출 조건은 변경하지 않았습니다.
 - 2026-07-12 홈 제작 후보 작업 카드도 권리 확인 후보가 있을 때 "권리 확인" 버튼 문구를 우선 표시하도록 보강했습니다. 버튼은 제작 후보함으로 이동만 하며 저장된 후보 조회와 기존 Cloud 상태 변경 흐름을 그대로 사용합니다.
 - 2026-07-12 제작 후보함의 발견 링크 후보 목록에서 사용 금지/권리 확인 필요 링크를 일반 링크보다 먼저 표시하도록 보강했습니다. 화면 표시 순서와 안내 문구만 바꾸며 저장 구조, endpoint, YouTube API 호출 조건은 변경하지 않았습니다.
 - 2026-07-12 Azure Static Web Apps Standard, 연결 Function API, Microsoft Entra 로그인을 이용한 개인용 접근 보호를 적용했습니다. 익명 앱/API 요청은 로그인으로 이동하고, `creator_owner` 계정은 Edge에서 앱 진입과 저장 영상 조회가 정상 동작하며, Function App 직접 익명 요청은 401로 차단됩니다.
 - 2026-07-12 제작 칸반의 장기 상태 호환 정책을 고정했습니다. 현재 화면은 제작 후보/제작 중/업로드 완료 3단계만 생성하고, 기존 `production_reviewing`, `production_decided`, `production_on_hold` 값은 저장값을 바꾸지 않은 채 제작 후보 칼럼에 표시해 누락을 막습니다.
-- 2026-07-12 전체 검증 기준은 테스트 파일 171개, 테스트 747개 통과와 프로덕션 빌드 성공입니다.
+- 2026-07-13 레이더/스크랩북 Cloud 작업 중복 실행 방지, 발견함 필터 초기화와 선택 상태 접근성, 모바일 좌측 메뉴/작업 화면, 제작 일정 긴 제목 표시를 보강했습니다. endpoint, DB schema, localStorage key, YouTube API 호출 조건은 변경하지 않았습니다.
+- 2026-07-13 전체 검증 기준은 테스트 파일 171개, 테스트 751개 통과와 프로덕션 빌드 성공입니다.
 
 ---
 
@@ -235,7 +236,7 @@
 ### Issue 11. 프론트 테스트 전략 결정
 
 - 목적: 기능을 많이 쌓은 뒤 작은 수정으로 기존 흐름이 깨지는 위험을 줄입니다.
-- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-11 기준 `npm.cmd test`에서 테스트 파일 166개, 테스트 734개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
+- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-13 기준 `npm.cmd test`에서 테스트 파일 171개, 테스트 751개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
 - 왜 필요한가: `status/statusIds`, discovery links, production kanban, Cloud/localStorage fallback처럼 깨지면 사용자가 바로 불편한 계산이 늘었습니다.
 - 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`, `src/utils/productionKanbanData.js`, `src/utils/videoCollection.js`, `src/utils/video.js`, `src/utils/creatorOsMetrics.js`, `src/utils/channels.js`, `src/utils/channelScanDisplay.js`, `src/utils/channelScanSummaryBoxProps.js`, `src/utils/channelListItemProps.js`, `src/utils/channelListItemActionsProps.js`, `src/utils/channelListItemMetaProps.js`, `src/utils/channelMetadataControlsProps.js`, `src/utils/channelTagSelectorProps.js`, `src/utils/channelCategoryChipProps.js`, `src/utils/channelAddFormProps.js`, `src/utils/channelAddActions.js`, `src/utils/channelActions.js`, `src/utils/channelNotesModal.js`, `src/utils/clipboard.js`, `src/utils/dates.js`, `src/utils/urls.js`, `src/utils/formatters.js`, `src/utils/discoveryLinks.js`, `src/utils/discoveryLinksRouteProps.js`, `src/utils/discoveryLinksWorkspaceProps.js`, `src/utils/scrapbook.js`, `src/utils/scrapbookHeaderActions.js`, `src/utils/prompts.js`, `src/utils/radarCandidates.js`, `src/utils/productionVideoCard.js`, `src/utils/productionKanbanColumn.js`, `src/utils/productionKanbanProps.js`, `src/utils/productionKanbanActions.js`, `src/utils/videoCard.js`, `src/utils/videoDashboardControls.js`, `src/utils/videoToolbarProps.js`, `src/utils/videoToolbarFiltersProps.js`, `src/utils/videoListTableProps.js`, `src/utils/videoListTableRowProps.js`, `src/utils/videoListRowBadgesProps.js`, `src/utils/videoListRowContentProps.js`, `src/utils/videoListRowMetaActionsProps.js`, `src/utils/videoListRowCandidateActionProps.js`, `src/utils/videoListRowStatsProps.js`, `src/utils/appLayoutProps.js`, `src/utils/appRouteProps.js`, `src/utils/homeRouteProps.js`, `src/utils/legacyWorkspaceRouteProps.js`, `src/utils/routesProps.js`, `src/utils/productionSchedule.js`, `src/utils/homeActionShortcuts.js`, `src/utils/discoveryLinkActionCopy.js`, `src/utils/creatorHomeViewProps.js`, `src/utils/legacyWorkspaceProps.js`, `src/utils/legacyAsideProps.js`, `src/utils/legacyWorkPanelIntroProps.js`, `src/utils/legacyChannelPanelProps.js`, `src/utils/legacyMainPanelProps.js`, `src/utils/legacyWorkspaceMainPanelViewProps.js`, `src/utils/legacyDashboardTabViewProps.js`, `src/utils/legacyVaultTabViewProps.js`, `src/utils/legacyChannelPanelViewProps.js`, `src/utils/discoveryLinksCopy.js`, `src/utils/productionVideoStatusProps.js`, `src/utils/radarCandidateStateProps.js`, `src/utils/scrapbookHeaderProps.js`, `src/utils/selectedVideosActionBarProps.js`, `src/utils/productionDiscoveryLinkActionProps.js`, `src/utils/radarDecisionViewProps.js`의 순수 함수 테스트입니다.
 - 건드린 파일: `package.json`, `package-lock.json`, `src/utils/*.test.js`, `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`.
@@ -259,6 +260,7 @@
 - 추가 완료 15: 제작 후보함 우선 확인 안내, 발견 링크 후보 확인 순서, 홈 제작 후보/발견 링크 후보 지표, 발견함 오류 복구 안내를 표시 전용 흐름으로 추가하고 관련 테스트를 보강했습니다.
 - 추가 완료 16: `WORK_LOG` 번호를 문서 순서 기준으로 정리했고, 채널 목록/발견함 로딩 문구를 Cloud 조회와 API 미호출 기준으로 보강했습니다. 관련 컴포넌트 렌더링 테스트도 추가했습니다.
 - 추가 완료 17: 제작 후보함 우선 안내에 "오늘 순서"를 추가했고, 발견 링크 권리 경고에 다음 행동 문구를 보강했습니다. GitHub Actions Azure Static Web Apps workflow의 `github_id_token` unsupported input 제거도 검증했지만 main 배포가 실패해 즉시 복구했습니다.
+- 추가 완료 18: 레이더와 스크랩북의 Cloud 저장 중 중복 실행 방지, 발견함 필터 초기화와 `aria-pressed`, 모바일 좌측 메뉴/작업 화면 배치, 제작 일정 긴 제목 표시, React `key` 경고 제거를 완료했습니다. 관련 유틸/컴포넌트 테스트와 모바일·데스크톱 브라우저 확인을 보강했습니다.
 - 사용자 판단 필요 여부: 현재 없음. React Testing Library나 Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
@@ -271,7 +273,7 @@
 2. 화면 흐름 개선은 저장/수집/삭제를 직접 실행하지 않는 이동 버튼, 필터 초기화, 복사 편의처럼 되돌리기 쉬운 단위부터 진행합니다.
 3. 실제 기능 확장 전에는 선택지가 필요한 항목을 먼저 분리합니다. local assets, 별도 제작 프로젝트 모델, 별도 `discovery_links` container 분리 여부는 별도 선택지 보고 후 결정합니다.
 4. GitHub Actions와 Azure Static Web Apps `github_id_token` 경고는 2026-07-11 후속 작업에서 unsupported input 1줄 제거까지 검증했지만 main 배포가 실패해 복구했습니다. 현재는 경고가 남더라도 배포 성공을 우선하며, OIDC 단계 전체 삭제, deployment token 단독 전환, Azure 인증 방식 변경은 별도 판단 후 진행합니다.
-5. Azure Sponsorship 이전 후 frontend 배포는 정상 확인됐습니다. backend Function App 배포와 비용 반영은 운영 확인 항목으로 남깁니다.
+5. Azure Sponsorship 이전, frontend/backend 자동 배포, 이전 MCPP 리소스 정리는 완료됐습니다. Sponsorship 잔액 화면의 크레딧 반영만 운영 모니터링 항목으로 남깁니다.
 6. 보호 앱 smoke check는 `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md` 기준으로 main Build, Azure Static Web Apps 배포, 익명 요청의 로그인 이동, `creator_owner` 로그인 후 앱 진입을 확인합니다. 저장/삭제/수집 버튼은 누르지 않습니다.
 
 이 순서가 안전한 이유:
@@ -283,10 +285,10 @@
 
 다음 기능 개선 후보:
 
-1. 스크랩북/참고 보관함에서 제작 후보로 이어지는 버튼과 설명을 더 다듬습니다. 기존 Cloud 판단 기록 저장 흐름만 사용합니다.
-2. 홈/오늘 레이더에서 다음 행동 버튼의 우선순위를 더 명확히 합니다. 화면 이동과 기존 Cloud 조회만 사용합니다.
-3. 제작 후보함의 "오늘 순서" 안내를 실제 카드 정렬이나 필터로 확장할지 검토합니다. 정렬 기준이나 저장 구조가 바뀌면 별도 판단이 필요합니다.
-4. 발견함 권리 상태 안내를 필터/카드 배지/후보함 경고까지 더 촘촘히 연결할지 검토합니다. `rightsStatus` 의미는 유지합니다.
+1. 실제 사용 중 레이더/스크랩북 Cloud 저장 실패와 중복 클릭 안내가 충분한지 관찰합니다. 현재 저장 구조는 유지합니다.
+2. 제작 후보함의 "오늘 순서"를 실제 카드 정렬이나 필터로 확장할지 제품 결정을 준비합니다. 정렬 기준이나 저장 구조가 바뀌면 별도 판단이 필요합니다.
+3. `/videos` 페이지네이션과 scan/API 사용 기록은 기존 감사 문서를 기준으로 백엔드 선택지를 준비합니다. endpoint나 저장 구조를 바로 바꾸지 않습니다.
+4. local assets와 별도 제작 프로젝트 모델은 1차 실사용 후 필요성이 확인될 때 다시 검토합니다.
 5. 위 항목 중 DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀌는 순간에는 별도 선택지 보고 후 멈춥니다.
 
 ---

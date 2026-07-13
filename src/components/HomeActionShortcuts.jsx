@@ -28,9 +28,9 @@ export default function HomeActionShortcuts({
 
   return (
     <div className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
-      {shortcuts.map((shortcut) => (
+      {shortcuts.map(({ key, ...shortcut }) => (
         <HomeActionShortcutButton
-          key={shortcut.key}
+          key={key}
           {...shortcut}
           icon={HOME_ACTION_SHORTCUT_ICONS[shortcut.iconName]}
         />

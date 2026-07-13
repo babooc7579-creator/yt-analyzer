@@ -97,6 +97,11 @@ export const getDiscoveryLinksLoadingStateViewProps = () => ({
 });
 
 export const getDiscoveryLinksActiveFilterSummaryViewProps = ({ filteredLinkCount = 0 } = {}) => ({
+  clearButtonProps: {
+    'aria-label': '발견함 검색어와 상태 필터 모두 초기화, Cloud 저장 데이터 변경 없음',
+    label: '필터 초기화',
+    title: '검색어와 상태 필터를 모두 초기화합니다. Cloud 저장 데이터는 바꾸지 않습니다.',
+  },
   message: `현재 조건에 맞는 링크 ${filteredLinkCount}개를 보고 있습니다.`,
 });
 

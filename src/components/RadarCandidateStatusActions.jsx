@@ -11,11 +11,13 @@ const STATUS_ICONS = {
 
 export default function RadarCandidateStatusActions({
   onMarkVideoStatus,
+  saving,
   video,
   videoTitle,
 }) {
   const statusActionProps = getRadarCandidateStatusActionProps({
     onMarkVideoStatus,
+    saving,
     video,
     videoTitle,
   });
