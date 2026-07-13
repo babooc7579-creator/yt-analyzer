@@ -12,10 +12,12 @@ export const getCreatorWorkspaceViewModel = (creatorView) => {
   return {
     activeCreatorItem,
     isComingSoonView: activeCreatorItem?.status === 'soon',
+    isChannelWatchlistView: creatorView === 'discovery-watchlist',
     isDiscoveryLinksView: creatorView === 'vault-sources',
     isHomeView: creatorView === 'home',
     isLegacyWorkspaceView: READY_CREATOR_VIEWS.includes(creatorView),
     isReferenceVaultView: REFERENCE_VAULT_VIEWS.includes(creatorView),
+    isTtoTtoView: creatorView === 'discovery-ttotto',
   };
 };
 

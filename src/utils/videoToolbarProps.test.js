@@ -171,7 +171,7 @@ describe('videoToolbarProps utils', () => {
       ttoTtoMode: true,
     })).toMatchObject({
       ariaLabel: '터또터 발굴 모드 끄기, 화면 필터만 변경하며 YouTube API 호출 없음',
-      label: '터또터 발굴 (6개월+)',
+      label: '터또터 발굴 (6개월+ · 1.5배+)',
     });
     expect(getVideoToolbarTtoTtoButtonViewProps({
       ttoTtoMode: true,

@@ -10,6 +10,7 @@ export const getHomeNextAction = ({
   loadedVideoCount,
   onLoadStoredVideos,
   onOpenAddChannel,
+  onOpenChannelWatchlist,
   onOpenProductionCandidates,
   onOpenSelectedScan,
   onOpenVault,
@@ -48,14 +49,14 @@ export const getHomeNextAction = ({
     return {
       tone: 'amber',
       iconKey: 'listChecks',
-      title: '왼쪽에서 오늘 볼 채널을 체크하세요',
+      title: '오늘 볼 채널을 먼저 고르세요',
       description: '채널 선택만으로는 YouTube API를 호출하지 않습니다. 볼 범위를 먼저 정하는 단계입니다.',
       badge: '선택 필요',
       metric: `${savedChannels}개 채널 보유`,
-      actionLabel: '저장 영상/채널 목록 열기',
-      actionTitle: '저장 영상 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다.',
+      actionLabel: '오늘 볼 채널 열기',
+      actionTitle: '오늘 볼 채널 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다.',
       impactText: '화면 이동만 합니다. 채널 체크는 수집 실행이 아니라 볼 범위를 고르는 단계입니다.',
-      onAction: onOpenVault,
+      onAction: onOpenChannelWatchlist || onOpenVault,
     };
   }
 

@@ -8,6 +8,7 @@ import {
   getProductionVideoExternalActionsViewProps,
   getProductionVideoMetaBadgesViewProps,
   getProductionVideoReadinessChecklist,
+  getProductionWorkPacketText,
 } from './productionVideoCard';
 
 describe('productionVideoCard utils', () => {
@@ -151,6 +152,9 @@ describe('productionVideoCard utils', () => {
     });
 
     expect(getProductionVideoExternalActionsViewProps({
+      columnId: 'production_active',
+      record: { draftTitle: 'My clip', note: 'Hook first', targetPublishDate: '2026-07-20' },
+      video: { ...video, channelTitle: 'Channel' },
       videoTitle: 'Clip',
       videoUrl: 'https://youtube.com/watch?v=clip',
     })).toMatchObject({
@@ -163,6 +167,10 @@ describe('productionVideoCard utils', () => {
       openButtonProps: {
         'aria-label': 'Clip YouTube 원본 보기',
       },
+      workPacketCopyButtonProps: {
+        ariaLabel: 'Clip 제작 작업 묶음 복사',
+        label: '작업 묶음 복사',
+      },
     });
 
     expect(getProductionVideoMetaBadgesViewProps({
@@ -171,6 +179,34 @@ describe('productionVideoCard utils', () => {
       channelLabel: 'Channel',
       multiplierLabel: '대박 지수 3.3x',
     });
+  });
+
+  it('builds a copyable production work packet from the current card values', () => {
+    const packet = getProductionWorkPacketText({
+      columnId: 'production_active',
+      record: {
+        draftTitle: 'My title',
+        note: 'Start with the result',
+        targetPublishDate: '2026-07-20',
+      },
+      video: {
+        channel_title: 'Source channel',
+        multiplier: 3.25,
+        title: 'Source title',
+        videoId: 'video-1',
+      },
+    });
+
+    expect(packet).toContain('[Creator OS 제작 작업 묶음]');
+    expect(packet).toContain('진행 단계: 제작 중');
+    expect(packet).toContain('원본 제목: Source title');
+    expect(packet).toContain('내가 만들 제목: My title');
+    expect(packet).toContain('채널: Source channel');
+    expect(packet).toContain('원본 URL: https://youtube.com/watch?v=video-1');
+    expect(packet).toContain('대박 지수: 3.3x');
+    expect(packet).toContain('업로드 예정일: 2026-07-20');
+    expect(packet).toContain('준비 상태: 4/4 준비');
+    expect(packet).toContain('Start with the result');
   });
 
   it('builds safe draft field handlers', () => {

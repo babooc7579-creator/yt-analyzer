@@ -1,24 +1,32 @@
 export function buildRoutesProps({
   activeCreatorItem,
+  channelWatchlistRouteProps,
   discoveryLinksRouteProps,
   homeRouteProps,
   isComingSoonView,
+  isChannelWatchlistView,
   isDiscoveryLinksView,
   isHomeView,
   isLegacyWorkspaceView,
+  isTtoTtoView,
   legacyWorkspaceRouteProps,
   onOpenHome,
+  ttoTtoRouteProps,
 }) {
   return {
     activeCreatorItem,
+    channelWatchlistRouteProps,
     discoveryLinksRouteProps,
     homeRouteProps,
     isComingSoonView,
+    isChannelWatchlistView,
     isDiscoveryLinksView,
     isHomeView,
     isLegacyWorkspaceView,
+    isTtoTtoView,
     legacyWorkspaceRouteProps,
     onOpenHome,
+    ttoTtoRouteProps,
   };
 }
 

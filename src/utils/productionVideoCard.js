@@ -3,6 +3,8 @@ import {
   getRadarReasons,
   getRadarScore,
 } from './radarCandidates';
+import { PRODUCTION_FOCUS_COLUMN_ID } from '../constants/productionKanban';
+import { PRODUCTION_STATUS_LABELS } from '../constants/status';
 import { getYouTubeVideoUrl } from './urls';
 
 const noop = () => {};
@@ -173,6 +175,9 @@ export const getProductionVideoDraftFieldProps = ({
 };
 
 export const getProductionVideoExternalActionsViewProps = ({
+  columnId,
+  record,
+  video,
   videoTitle = '이 영상',
   videoUrl,
 } = {}) => ({
@@ -188,7 +193,59 @@ export const getProductionVideoExternalActionsViewProps = ({
     'aria-label': `${videoTitle} YouTube 원본 보기`,
   },
   openButtonLabel: '원본 보기',
+  workPacketCopyButtonProps: {
+    url: getProductionWorkPacketText({
+      columnId,
+      record,
+      video,
+      videoUrl,
+    }),
+    label: '작업 묶음 복사',
+    copiedLabel: '묶음 복사 완료',
+    ariaLabel: `${videoTitle} 제작 작업 묶음 복사`,
+    title: '현재 카드의 원본, 제목 초안, 메모, 일정 정보를 클립보드에 복사합니다. Cloud 저장이나 YouTube API 호출은 없습니다.',
+  },
 });
+
+const getProductionColumnLabel = (columnId) => (
+  columnId === PRODUCTION_FOCUS_COLUMN_ID
+    ? '오늘 집중'
+    : PRODUCTION_STATUS_LABELS[columnId] || '제작 후보'
+);
+
+const getWorkPacketValue = (value, fallback = '미작성') => {
+  const text = String(value || '').trim();
+  return text || fallback;
+};
+
+export const getProductionWorkPacketText = ({
+  columnId,
+  record = {},
+  video = {},
+  videoUrl,
+} = {}) => {
+  const sourceTitle = getWorkPacketValue(video.title, '제목 없는 영상');
+  const channelTitle = getWorkPacketValue(video.channel_title || video.channelTitle, '채널 정보 없음');
+  const multiplier = video.multiplier !== undefined
+    ? `${Number(video.multiplier || 0).toFixed(1)}x`
+    : '정보 없음';
+  const readiness = getProductionVideoReadinessChecklist({ record, video });
+
+  return [
+    '[Creator OS 제작 작업 묶음]',
+    `진행 단계: ${getProductionColumnLabel(columnId)}`,
+    `원본 제목: ${sourceTitle}`,
+    `내가 만들 제목: ${getWorkPacketValue(record.draftTitle)}`,
+    `채널: ${channelTitle}`,
+    `원본 URL: ${getWorkPacketValue(videoUrl || getYouTubeVideoUrl(video.videoId), '원본 URL 없음')}`,
+    `대박 지수: ${multiplier}`,
+    `업로드 예정일: ${getWorkPacketValue(record.targetPublishDate, '미정')}`,
+    `준비 상태: ${readiness.summaryText}`,
+    '',
+    '[제작 메모]',
+    getWorkPacketValue(record.note),
+  ].join('\n');
+};
 
 export const getProductionVideoMetaBadgesViewProps = ({ video = {} } = {}) => ({
   channelLabel: video.channel_title || video.channelTitle || '채널 정보 없음',

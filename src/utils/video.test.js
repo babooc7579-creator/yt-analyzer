@@ -161,6 +161,15 @@ describe('video utils', () => {
       ttoTtoMode: true,
       sortType: 'date',
     }).map(video => video.videoId)).toEqual(['old-steady-long']);
+
+    expect(filterAndSortVideos({
+      videos: [
+        { videoId: 'old-low-reaction', daysOld: 300, multiplier: 1.4 },
+        { videoId: 'old-validated', daysOld: 300, multiplier: 1.5 },
+      ],
+      ttoTtoMode: true,
+      sortType: 'multiplier',
+    }).map(video => video.videoId)).toEqual(['old-validated']);
   });
 
   it('sorts videos by date, views, multiplier, viral speed, and like ratio', () => {
