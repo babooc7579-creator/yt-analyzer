@@ -2841,3 +2841,33 @@ PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성�
   - 아이콘 묶음 약 30 kB
 - 모든 JS 묶음이 500 kB 아래로 내려가 기존 대형 chunk 경고가 사라졌습니다.
 - 화면 기능, API endpoint, Cloud 저장 구조, localStorage, YouTube API 호출 조건은 바뀌지 않았습니다.
+
+### 101. 2026-07-14 실사용 흐름 안정화 배포 확인
+
+캘린더·제작 후보함·레이더 흐름 보강과 번들 분리를 `main`에 반영하고 배포 상태를 확인했습니다.
+
+완료한 확인:
+
+- GitHub PR `#892`를 squash merge했습니다.
+- GitHub Actions `Build`가 성공했습니다.
+- Azure Static Web Apps `Build and Deploy`가 성공했습니다.
+- 배포 주소의 익명 접근이 Microsoft 로그인 화면으로 이동해 개인용 접근 보호가 유지되는 것을 확인했습니다.
+- 이번 자동 확인에서는 owner 로그인 뒤 Cloud 데이터 저장·삭제·새 영상 수집 동작을 실행하지 않았습니다.
+
+최종 검증:
+
+- `npm.cmd test -- --reporter=dot`
+  - 195개 테스트 파일, 836개 테스트 통과
+- `npm.cmd run build`
+  - Vite production build 통과
+  - 앱 약 418 kB, React 약 134 kB, 아이콘 약 30 kB로 분리
+- `npm.cmd audit --omit=dev`
+  - 취약점 0건
+- `git diff --check`
+  - 패치 오류 없음
+
+남은 경계:
+
+- Azure 배포는 성공하지만 workflow의 `github_id_token` unsupported input 경고가 남습니다.
+- 이전에 해당 입력을 제거했을 때 main 배포가 실패해 복구한 이력이 있으므로, 인증 방식 변경은 자동 수정하지 않습니다.
+- `/videos` 페이지네이션, scan/API 사용 기록 저장, local assets, 별도 제작 프로젝트 모델, 브라우저 테스트 도구 추가는 별도 선택 후 진행합니다.
