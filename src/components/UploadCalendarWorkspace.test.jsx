@@ -1,10 +1,19 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PRODUCTION_STATUS } from '../constants/status';
 import UploadCalendarWorkspace from './UploadCalendarWorkspace';
 
 describe('UploadCalendarWorkspace', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-07-14T12:00:00Z'));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('renders saved schedule records as an operational calendar', () => {
     const html = renderToStaticMarkup(
       <UploadCalendarWorkspace
