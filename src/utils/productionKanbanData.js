@@ -27,6 +27,10 @@ const getProductionVideoGroup = (grouped, status) => toArray(grouped[status]);
 
 const getItemTimestamp = (item) => new Date(item.updatedAt || item.createdAt || 0).getTime();
 
+const getFocusPinnedAt = (record) => (
+  typeof record?.focusPinnedAt === 'string' ? record.focusPinnedAt.trim() : ''
+);
+
 const getProductionRecord = (video, draftRecords, videoUserRecords) => {
   const videoId = getVideoId(video);
   if (!videoId) return {};
@@ -54,6 +58,30 @@ const PRODUCTION_KANBAN_STATUS_GROUPS = {
 export const getProductionKanbanGroupStatus = (recordStatus) => (
   PRODUCTION_KANBAN_STATUS_GROUPS[recordStatus] || PRODUCTION_STATUS.CANDIDATE
 );
+
+export const isProductionFocusRecord = (record = {}) => Boolean(getFocusPinnedAt(record));
+
+export const getProductionFocusVideos = (videos, videoUserRecords) => {
+  const records = toRecordMap(videoUserRecords);
+
+  return toArray(videos)
+    .filter((video) => {
+      const record = records[getVideoId(video)];
+      if (!hasAnyProductionStatus(record, PRODUCTION_STATUSES)) return false;
+
+      return (
+        getProductionKanbanGroupStatus(getProductionStatusFromRecord(record)) === PRODUCTION_STATUS.CANDIDATE
+        && isProductionFocusRecord(record)
+      );
+    })
+    .sort((left, right) => {
+      const leftPinnedAt = getFocusPinnedAt(records[getVideoId(left)]);
+      const rightPinnedAt = getFocusPinnedAt(records[getVideoId(right)]);
+      const pinnedOrder = leftPinnedAt.localeCompare(rightPinnedAt);
+
+      return pinnedOrder || Number(right.multiplier || 0) - Number(left.multiplier || 0);
+    });
+};
 
 const sortProductionVideoGroups = (grouped, videoUserRecords) => {
   const records = toRecordMap(videoUserRecords);
@@ -96,6 +124,7 @@ export const groupProductionVideos = (videos, videoUserRecords) => {
 
     const recordStatus = getProductionStatusFromRecord(record);
     const status = getProductionKanbanGroupStatus(recordStatus);
+    if (status === PRODUCTION_STATUS.CANDIDATE && isProductionFocusRecord(record)) return acc;
     acc[status].push(video);
     return acc;
   }, createEmptyProductionVideoGroups());
@@ -132,6 +161,7 @@ export const countActiveVideosWithoutDate = (activeVideos, draftRecords, videoUs
 export const getProductionSummary = ({
   discoveryLinkCandidates,
   draftRecords,
+  focusVideos,
   groupedVideos,
   today,
   videoUserRecords,
@@ -140,12 +170,14 @@ export const getProductionSummary = ({
     ...createEmptyProductionVideoGroups(),
     ...toRecordMap(groupedVideos),
   };
-  const productionVideos = Object.values(grouped).flatMap(toArray);
+  const focusVideoList = toArray(focusVideos);
+  const productionVideos = [...Object.values(grouped).flatMap(toArray), ...focusVideoList];
   const scheduledVideos = getScheduledProductionVideos(productionVideos, draftRecords, videoUserRecords);
 
   return {
-    videoCount: countGroupedProductionVideos(grouped),
-    candidateCount: getProductionVideoGroup(grouped, PRODUCTION_STATUS.CANDIDATE).length,
+    videoCount: countGroupedProductionVideos(grouped) + focusVideoList.length,
+    candidateCount: getProductionVideoGroup(grouped, PRODUCTION_STATUS.CANDIDATE).length + focusVideoList.length,
+    focusCount: focusVideoList.length,
     activeCount: getProductionVideoGroup(grouped, PRODUCTION_STATUS.ACTIVE).length,
     uploadedCount: getProductionVideoGroup(grouped, PRODUCTION_STATUS.DONE).length,
     nextScheduled: scheduledVideos.find(item => item.date >= today) || scheduledVideos[0],
@@ -167,10 +199,12 @@ export const getProductionKanbanDataModel = ({
   videos,
 } = {}) => {
   const discoveryLinkCandidates = getDiscoveryLinkCandidates(discoveryLinks);
+  const focusVideos = getProductionFocusVideos(videos, videoUserRecords);
   const groupedVideos = groupProductionVideos(videos, videoUserRecords);
   const productionSummary = getProductionSummary({
     discoveryLinkCandidates,
     draftRecords,
+    focusVideos,
     groupedVideos,
     today,
     videoUserRecords,
@@ -178,6 +212,7 @@ export const getProductionKanbanDataModel = ({
 
   return {
     discoveryLinkCandidates,
+    focusVideos,
     groupedVideos,
     productionSummary,
   };

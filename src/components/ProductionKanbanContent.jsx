@@ -1,5 +1,6 @@
 import { getProductionKanbanContentChildProps } from '../utils/productionKanbanProps';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
+import ProductionFocusSection from './ProductionFocusSection';
 import ProductionKanbanBoard from './ProductionKanbanBoard';
 import ProductionKanbanNextActions from './ProductionKanbanNextActions';
 import ProductionKanbanSummary from './ProductionKanbanSummary';
@@ -7,6 +8,7 @@ import ProductionKanbanSummary from './ProductionKanbanSummary';
 export default function ProductionKanbanContent({
   discoveryLinkCandidates,
   draftRecords,
+  focusVideos,
   groupedVideos,
   hasUnsavedChanges,
   linkMoveStates,
@@ -19,17 +21,20 @@ export default function ProductionKanbanContent({
   saveDraftRecord,
   saveStates,
   updateDraftRecord,
+  updateVideoFocus,
   videoCount,
   videoUserRecords,
 }) {
   const {
     boardProps,
     discoveryLinksSectionProps,
+    focusSectionProps,
     nextActionsProps,
     summaryProps,
   } = getProductionKanbanContentChildProps({
     discoveryLinkCandidates,
     draftRecords,
+    focusVideos,
     groupedVideos,
     hasUnsavedChanges,
     linkMoveStates,
@@ -42,6 +47,7 @@ export default function ProductionKanbanContent({
     saveDraftRecord,
     saveStates,
     updateDraftRecord,
+    updateVideoFocus,
     videoCount,
     videoUserRecords,
   });
@@ -49,6 +55,8 @@ export default function ProductionKanbanContent({
   return (
     <div className="space-y-4">
       <ProductionKanbanSummary {...summaryProps} />
+
+      <ProductionFocusSection {...focusSectionProps} />
 
       <ProductionKanbanNextActions {...nextActionsProps} />
 

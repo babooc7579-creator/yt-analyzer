@@ -1,5 +1,16 @@
 import { PRODUCTION_STATUS, PRODUCTION_STATUS_LABELS } from './status';
 
+export const PRODUCTION_FOCUS_COLUMN_ID = 'today_focus';
+
+export const PRODUCTION_FOCUS_COLUMN = {
+  id: PRODUCTION_FOCUS_COLUMN_ID,
+  title: '오늘 집중',
+  description: '오늘 만들 항목으로 직접 고정한 영상입니다. 날짜가 바뀌어도 자동으로 사라지지 않습니다.',
+  emptyTitle: '아직 오늘 집중으로 고정한 영상이 없습니다',
+  emptyDescription: '아래 제작 후보 카드에서 오늘 집중을 누르면 이곳에 고정됩니다.',
+  tone: 'border-amber-200 bg-amber-50',
+};
+
 export const PRODUCTION_KANBAN_COLUMNS = [
   {
     id: PRODUCTION_STATUS.CANDIDATE,

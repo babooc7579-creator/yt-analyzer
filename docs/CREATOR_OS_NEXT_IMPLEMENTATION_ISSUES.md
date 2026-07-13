@@ -57,6 +57,7 @@
 - 2026-07-12 제작 칸반의 장기 상태 호환 정책을 고정했습니다. 현재 화면은 제작 후보/제작 중/업로드 완료 3단계만 생성하고, 기존 `production_reviewing`, `production_decided`, `production_on_hold` 값은 저장값을 바꾸지 않은 채 제작 후보 칼럼에 표시해 누락을 막습니다.
 - 2026-07-13 레이더/스크랩북 Cloud 작업 중복 실행 방지, 발견함 필터 초기화와 선택 상태 접근성, 모바일 좌측 메뉴/작업 화면, 제작 일정 긴 제목 표시를 보강했습니다. endpoint, DB schema, localStorage key, YouTube API 호출 조건은 변경하지 않았습니다.
 - 2026-07-13 전체 검증 기준은 테스트 파일 171개, 테스트 751개 통과와 프로덕션 빌드 성공입니다.
+- 2026-07-13 제작 후보함에 수동 `오늘 집중` 흐름을 추가했습니다. 기존 `/video-records` 문서의 선택적 `focusPinnedAt` 필드로 고정 시각을 Cloud에 보존하고, 일반 제작 후보와 분리해 고정 순서대로 표시합니다. 기존 `status/statusIds`, 3단계 제작 상태, endpoint, container, localStorage key, YouTube API 호출 조건은 유지합니다.
 
 ---
 

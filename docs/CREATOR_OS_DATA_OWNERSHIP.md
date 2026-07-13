@@ -49,7 +49,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 |---|---|---|---|---|---|---|---|---|
 | `channels` | Cloud DB | Cloud DB | Cosmos `channels` container | Cosmos `channels` container | 원칙상 기준 아님 | 채널 목록, 태그, 언어, 등급, 상태, 마지막 수집 요약 저장 | 구현됨 | 낮음. 기존 데이터에 필드가 없어도 기본값 보정 필요 |
 | `videos` | Cloud DB | Cloud DB | Cosmos `videos` container | Cosmos `videos` container | 원칙상 기준 아님 | YouTube에서 수집한 영상 목록과 통계 저장 | 구현됨 | 중간. 페이지네이션 없이 전체 조회 구조 |
-| `videoUserRecords` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: video_user_record` | 장기적으로 Cloud DB 기준. 현재 단계는 대표 `status` 유지 + 호환용 `statusIds` 보존 | Cloud 성공 캐시/장애 시 임시 fallback | 영상별 사용자 판단 상태, 노트, 제작 관련 필드 저장 | 부분 구현 | 중간. Cloud 저장 실패 시 화면 임시 기록과 Cloud 기준이 달라질 수 있음 |
+| `videoUserRecords` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: video_user_record` | 장기적으로 Cloud DB 기준. 현재 단계는 대표 `status` 유지 + 호환용 `statusIds`, 수동 집중 표시 `focusPinnedAt` 보존 | Cloud 성공 캐시/장애 시 임시 fallback | 영상별 사용자 판단 상태, 노트, 제작 관련 필드, 오늘 집중 고정 시각 저장 | 부분 구현 | 중간. Cloud 저장 실패 시 화면 임시 기록과 Cloud 기준이 달라질 수 있음 |
 | `scrapbook` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: scrapbook` | Cloud DB. 별도 container 여부는 나중에 판단 | Cloud 성공 캐시/장애 시 임시 fallback | 별표/스크랩 저장 영상 목록 저장 | 부분 구현 | 중간. 별도 컨테이너가 아니라 `videos`와 섞여 있음 |
 | `production candidates` | `videoUserRecords`에 얹힌 상태 | 미정 | 별도 저장소 없음. 프론트는 `videoUserRecords` 상태로 표현 | v1에서는 `videoUserRecords` 유지 가능. 장기적으로 별도 모델 검토 | 기준 아님 | 현재는 `/video-records`가 사실상 후보 상태를 저장 | 별도 저장소 미구현 | 높음. 영상 상태와 제작 프로젝트 상태가 섞일 수 있음 |
 | `discovery links` | Cloud DB | Cloud DB | Cosmos `videos` container 안의 `docType: discovery_link` | MVP는 기존 Cloud DB에 `docType: discovery_link` 방식 유지. 장기적으로 별도 container 재검토 | 기준 아님 | 수동 저장 링크, 메모, 발견함 상태, 권리 상태 저장 | 부분 구현 | 중간. `/videos` 조회에 discovery link 문서가 섞이지 않도록 API 경계 유지 필요 |
@@ -131,6 +131,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 
 - 백엔드: `videos` container 안의 `docType: video_user_record`
 - 백엔드 저장: 기존 대표 상태 `status`와 복수 판단 보존용 `statusIds`
+- 제작 후보 수동 집중 표시: 선택적인 `focusPinnedAt`
 - 프론트: `status`와 `statusIds`를 함께 해석
 - localStorage key: Cloud 성공 캐시/Cloud 장애 fallback 역할
 
@@ -139,6 +140,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 - 장기 기준은 Cloud DB입니다.
 - 현재 단계에서는 `status`를 대표 상태로 유지하고, `statusIds`는 복수 판단 보존용 호환 필드로 유지합니다.
 - `statusIds`는 최종 상태 설계가 아닙니다.
+- `focusPinnedAt`은 제작 상태가 아니라 사용자가 고른 집중 후보와 고정 순서를 보존하는 보조 필드입니다.
 - 장기적으로는 `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 분리를 별도 설계로 검토할 수 있습니다.
 
 충돌 위험:
@@ -176,6 +178,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 현재 구조:
 
 - 프론트 제작 칸반은 `videoUserRecords`의 상태값을 사용합니다.
+- 영상 제작 후보의 `focusPinnedAt`을 읽어 오늘 집중 목록을 일반 후보와 분리합니다.
 - 백엔드에 `production_candidates` endpoint나 container는 없습니다.
 
 목표 방향:
@@ -183,6 +186,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 - MVP 단계에서는 `videoUserRecords` 기반으로 유지할 수 있습니다.
 - 실제 제작 프로젝트, 일정, 업로드 결과, 원본/변형 관계가 커지면 별도 모델을 검토합니다.
 - 1차 MVP 범위는 `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md`를 기준으로 봅니다.
+- 집중 고정은 자동 날짜 초기화 없이 사용자가 해제하거나 제작 상태를 이동할 때까지 유지합니다.
 
 충돌 위험:
 
@@ -386,6 +390,31 @@ localStorage는 지금 당장 제거하지 않습니다.
 - 전체 상태 모델 재설계는 하지 않습니다.
 
 장기적으로는 `lifecycleStatus`, `usagePurposeTags`, `productionStatus` 분리를 별도 설계로 검토할 수 있습니다.
+
+---
+
+## 2026-07-13 결정 기록: 제작 후보 오늘 집중 Cloud 보존
+
+레이더는 현재 우선 후보를 계속 갱신하고, 사용자가 제작 후보함에서 고른 영상만 `오늘 집중`으로 고정하는 혼합 방식을 사용합니다.
+
+저장 원칙:
+
+- 기존 `/video-records` endpoint와 `docType: video_user_record` 문서를 그대로 사용합니다.
+- 선택적인 `focusPinnedAt` 문자열 필드에 Cloud 고정 시각을 저장합니다.
+- 기존 `status`와 `statusIds`의 의미나 저장 규칙은 바꾸지 않습니다.
+- 기존 record에 `focusPinnedAt`이 없으면 고정되지 않은 후보로 처리합니다.
+- 이전 프론트가 `focusPinnedAt`을 보내지 않아도 기존 Cloud 고정값은 보존합니다.
+- 빈 문자열을 명시적으로 저장하면 고정만 해제하고 제작 후보 상태는 유지합니다.
+- 날짜가 바뀌어도 자동 초기화하지 않습니다. 사용자가 해제하거나 제작 중/업로드 완료로 이동할 때 해제합니다.
+- 고정 목록은 `focusPinnedAt`이 빠른 순서대로 표시합니다.
+
+범위 제한:
+
+- 새 `production_candidates` container나 endpoint를 만들지 않습니다.
+- `production_decided`를 오늘 집중 상태로 재해석하지 않습니다.
+- discovery link의 오늘 집중 고정은 이번 범위에 포함하지 않습니다.
+- 수동 드래그 순서와 `focusOrder` 필드는 이번 범위에 포함하지 않습니다.
+- YouTube API 호출이나 localStorage key 변경을 추가하지 않습니다.
 
 ---
 

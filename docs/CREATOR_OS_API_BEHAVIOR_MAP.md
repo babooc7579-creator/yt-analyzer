@@ -25,7 +25,7 @@
 - `GET /channel-preview?handle=...`는 저장 전 미리보기이지만 YouTube API 조회가 필요합니다.
 - `POST /channels`, `POST /channels/bulk`는 채널을 Cloud DB에 저장하며, 채널 정보 확인을 위해 YouTube API 조회가 필요합니다.
 - `/scrapbook`은 Cloud DB에 저장되지만 별도 container가 아니라 `videos` container 안의 `docType: scrapbook`입니다.
-- `/video-records`는 Cloud DB에 저장되며 기존 `status`를 대표 상태로 유지합니다. 선택지 B 승인 이후 `statusIds`는 복수 판단 보존용 보조 필드로 저장/조회됩니다.
+- `/video-records`는 Cloud DB에 저장되며 기존 `status`를 대표 상태로 유지합니다. `statusIds`는 복수 판단 보존용 보조 필드로, `focusPinnedAt`은 제작 후보 수동 집중 고정 시각으로 저장/조회됩니다.
 - `/discovery-links`는 Cloud DB에 저장되며 기존 `videos` container 안의 `docType: discovery_link` 문서를 조회/저장/수정/삭제합니다.
 - 2026-07-03 배포 환경 읽기 전용 확인에서 `GET /discovery-links`는 200으로 성공했고 현재 링크 목록은 0개였습니다.
 - 2026-07-03 사용자 승인 후 `POST /discovery-links`, `PATCH /discovery-links/{id}`, `DELETE /discovery-links/{id}` smoke test를 완료했습니다. 임시 링크 생성, 상태/권리 상태 수정, 제목/메모 수정, 삭제가 모두 200으로 성공했고, 재조회에서 임시 링크가 남지 않았습니다.
@@ -69,7 +69,7 @@
 | 스크랩북 저장 | `saveScrapbookVideos` | `POST /scrapbook` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | Cloud 실패 시 동기화 차이 가능 |
 | 스크랩북 삭제 | `deleteScrapbookVideo` | `DELETE /scrapbook/{videoId}` | DB 변경 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | Cloud 실패 시 화면/DB 차이 가능 |
 | 영상 판단 기록 불러오기 | `fetchVideoUserRecords` | `GET /video-records` | DB 조회 | 아니오 | 예 | 아니오 | localStorage 보조 | 가능 | localStorage와 Cloud 차이 가능 |
-| 영상 판단 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 기존 `status` 유지 + `statusIds` 보존. 2026-07-02 배포 smoke 확인 |
+| 영상 판단 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 기존 `status` 유지 + `statusIds` 보존 + 선택적 `focusPinnedAt` 보존. 상태/집중 저장 모두 YouTube API 호출 없음 |
 | 영상 판단 기록 전체 삭제 | `clearVideoUserRecords` | `DELETE /video-records` | DB 변경 | 아니오 | 아니오 | 예 | 예 | 가능 | 큰 변경. 사용자 확인 필요 |
 | 발견 링크 불러오기 | `fetchDiscoveryLinks` | `GET /discovery-links` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 기존 `videos` container의 `docType: discovery_link` 조회. 2026-07-03 배포 읽기 확인 성공 |
 | 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태와 URL 추정 `platform` 저장. 백엔드도 허용 `platform`을 보존하며, 없거나 잘못되면 URL로 재추정. 자동 크롤링 없음. 2026-07-03 smoke 성공 |
@@ -197,14 +197,16 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - 단순 조회처럼 보이지 않게 합니다.
 - 나중에 백엔드 변경 기회가 있으면 `PATCH` 또는 `POST` 전환을 검토합니다.
 
-### 5.3 `/video-records` status 구조 불일치
+### 5.3 `/video-records` 대표 상태와 보조 필드
 
-프론트는 `statusIds`를 일부 사용하지만 백엔드는 단일 `status` 중심입니다.
+백엔드는 기존 대표 `status`와 복수 판단 보존용 `statusIds`를 함께 저장합니다. 제작 후보의 수동 오늘 집중 고정은 상태값이 아닌 선택적 `focusPinnedAt`으로 분리합니다.
 
 운영 기준:
 
 - 상태 저장 화면에서는 과도한 복수 상태 기능을 확장하지 않습니다.
 - 현재 단계에서는 `status`를 대표 상태로 말하고, `statusIds`는 복수 판단 보존용 보조 필드로 말합니다.
+- `focusPinnedAt`은 사용자가 직접 고른 제작 후보의 고정 시각이며, 기존 제작 상태를 변경하지 않습니다.
+- 필드가 없는 기존 record는 고정되지 않은 상태로 읽고, 필드를 보내지 않은 저장에서는 기존 Cloud 고정값을 보존합니다.
 
 ### 5.4 `/videos` 페이지네이션 없음
 
@@ -249,7 +251,7 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 | 오늘의 레이더 | 저장된 데이터 기반 추천/요약, 원본 URL 복사 | 기본 없음 | 판단 저장 시 있음 | 새 수집과 분리. URL 복사는 로컬 클립보드 동작 |
 | 채널 관리 | 채널 조회/저장/상태 변경 | 미리보기/저장 시 YouTube API 가능 | 있음 | 저장과 스캔을 분리 |
 | 영상 찾기/보관함 | 저장 영상 조회, 필터, 정렬 | 댓글 조회 제외 기본 없음 | 스크랩/상태 저장 시 있음 | 조회와 저장을 분리 |
-| 제작 후보/칸반 | `videoUserRecords` 기반 상태 관리 | 없음 | 있음 | 제작 상태와 영상 상태 혼동 주의 |
+| 제작 후보/칸반 | `videoUserRecords` 기반 상태 관리 + `focusPinnedAt` 수동 집중 고정 | 없음 | 있음 | 집중 고정은 제작 상태와 분리. 발견 링크 고정은 현재 범위 아님 |
 | 스크랩북 | 스크랩 조회/저장/삭제 | 없음 | 있음 | Cloud 우선, localStorage 보조 |
 | 수집/스캔 | 새 영상 확인 | 있음 | 있음 | 비용성 작업으로 명확히 표시 |
 | 준비중 화면 | 안내 | 없음 | 없음 | 클릭해도 변경 없어야 함 |
@@ -275,7 +277,7 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 
 - `GET /scan`을 `POST /scan` 중심으로 바꿀지 여부
 - `GET /tags/rename`을 `PATCH` 또는 `POST`로 바꿀지 여부
-- `/video-records`에 `statusIds`를 추가할지 여부
+- `/video-records`의 장기 상태 모델을 명시 필드로 분리할지 여부
 - `/videos` 페이지네이션을 어떤 방식으로 구현할지 여부
 - `scan_logs` 또는 `api_quota_logs` endpoint 추가 여부
 - `local_assets` API 추가 여부 또는 `discovery_links` 별도 container 분리 여부

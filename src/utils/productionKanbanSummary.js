@@ -9,7 +9,7 @@ export const getProductionKanbanSummaryHeaderProps = ({
   eyebrow: '제작 칸반',
   title: '제작 후보를 실제 작업 순서로 정리합니다',
   description:
-    '레이더와 발견함에서 제작 후보로 표시한 항목만 모아 오늘 무엇을 만들지 정리하는 화면입니다. 스크랩북 전체를 자동으로 끌어오지 않고, 저장된 데이터 기준이며 YouTube API를 새로 호출하지 않습니다.',
+    '스크랩북 전체를 자동으로 끌어오지 않고, 레이더와 발견함에서 제작 후보로 표시한 항목만 모아 오늘 무엇을 만들지 정리하는 화면입니다. 영상 후보는 오늘 집중으로 직접 고정할 수 있으며, 저장된 데이터 기준이라 YouTube API를 새로 호출하지 않습니다.',
   metric: `영상 ${videoCount}개 관리 · 링크 ${discoveryLinkCandidateCount}개 후보`,
 });
 
@@ -42,7 +42,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     value: formatProductionCount(productionSummary.candidateCount),
     valueClassName: 'text-lg text-indigo-900',
     wrapperClassName: 'border-indigo-100 bg-indigo-50',
-    title: 'Cloud 판단 기록에서 제작 후보 상태로 표시된 저장 영상 수입니다. YouTube API를 새로 호출하지 않습니다.',
+    title: 'Cloud 판단 기록에서 제작 후보 상태로 표시된 저장 영상 수입니다. 오늘 집중으로 고정한 영상도 포함하며 YouTube API를 새로 호출하지 않습니다.',
   },
   {
     key: 'active',
@@ -133,6 +133,16 @@ export const getProductionKanbanPriorityGuideProps = ({
       title: '제작 중 후보를 완성 쪽으로 밀어주세요',
       description: `현재 제작 중 영상 ${formatProductionCount(productionSummary.activeCount)}가 있습니다. 제목, 메모, 일정이 채워졌는지 확인하고 업로드 완료까지 이어가면 됩니다.`,
       nextAction: '오늘 순서: 제작 중 후보 하나 선택 → 부족한 준비 항목 채우기 → 업로드 완료로 이동',
+      tone: 'ready',
+    };
+  }
+
+  if (productionSummary.focusCount > 0) {
+    return {
+      badge: '오늘 집중',
+      title: '직접 고정한 영상부터 제작 여부를 확정하세요',
+      description: `오늘 집중으로 고정한 영상 ${formatProductionCount(productionSummary.focusCount)}가 있습니다. 고정한 순서대로 확인하고 제작 중으로 옮기거나 고정을 해제하면 됩니다.`,
+      nextAction: '오늘 순서: 첫 번째 고정 영상 확인 → 제작 중으로 이동 또는 집중 해제',
       tone: 'ready',
     };
   }

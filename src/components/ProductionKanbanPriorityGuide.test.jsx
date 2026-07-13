@@ -23,4 +23,21 @@ describe('ProductionKanbanPriorityGuide', () => {
     expect(html).toContain('YouTube API 호출');
     expect(html).toContain('Cloud 저장은 실행하지 않습니다');
   });
+
+  it('prioritizes a manually pinned focus video before unpinned candidates', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanbanPriorityGuide
+        discoveryLinkCandidateCount={0}
+        productionSummary={{
+          activeCount: 0,
+          candidateCount: 3,
+          focusCount: 1,
+        }}
+      />,
+    );
+
+    expect(html).toContain('오늘 집중');
+    expect(html).toContain('직접 고정한 영상부터 제작 여부를 확정하세요');
+    expect(html).toContain('첫 번째 고정 영상 확인');
+  });
 });

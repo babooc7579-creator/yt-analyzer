@@ -7,6 +7,7 @@ export default function ProductionVideoStatusActions({
   columnId,
   isMoving,
   moveState,
+  onFocus,
   onMove,
   record,
   video,
@@ -21,6 +22,7 @@ export default function ProductionVideoStatusActions({
       <ProductionVideoMoveActions
         columnId={columnId}
         isMoving={isMoving}
+        onFocus={onFocus}
         onMove={onMove}
         record={record}
         video={video}

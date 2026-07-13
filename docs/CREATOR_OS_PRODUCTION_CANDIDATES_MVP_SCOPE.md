@@ -100,8 +100,25 @@
 | `note` | 제작/검토 메모 | 예 |
 | `targetPublishDate` | 업로드 예정일 | 예 |
 | `uploadedAt` | 업로드 완료일 | 예 |
+| `focusPinnedAt` | 오늘 집중으로 수동 고정한 시각 | 예. 제작 상태와 별도 |
 
-### 2.4 발견 링크 후보 표시
+### 2.4 오늘 집중 고정
+
+```txt
+제작 후보 카드에서 오늘 집중 선택
+→ 기존 /video-records 문서의 focusPinnedAt 저장
+→ 일반 제작 후보 목록에서 오늘 집중 영역으로 분리
+→ 고정 시각이 빠른 항목부터 표시
+```
+
+- 레이더 후보 계산은 계속 갱신됩니다.
+- 오늘 집중은 사용자가 직접 고른 영상만 표시합니다.
+- 날짜가 바뀌어도 자동으로 해제하지 않습니다.
+- 집중 해제 또는 제작 중/업로드 완료 이동 시 `focusPinnedAt`을 비웁니다.
+- `status`, `statusIds`, 제작 칸반 3단계의 의미는 변경하지 않습니다.
+- 발견 링크 후보는 이번 오늘 집중 고정 범위에 포함하지 않습니다.
+
+### 2.5 발견 링크 후보 표시
 
 ```txt
 Cloud 발견함에 링크 저장
@@ -300,7 +317,7 @@ production_candidate = {
 추천 이유:
 
 1. 지금 이미 작동하는 제작 후보/칸반 흐름이 있습니다.
-2. Cloud DB에 `status`, `statusIds`, `draftTitle`, `note`, `targetPublishDate`, `uploadedAt`이 저장됩니다.
+2. Cloud DB에 `status`, `statusIds`, `draftTitle`, `note`, `targetPublishDate`, `uploadedAt`, 선택적인 `focusPinnedAt`이 저장됩니다.
 3. 1인 사용 MVP에서는 YouTube 영상 기반 제작 후보만으로도 실사용 가치가 있습니다.
 4. `production_candidates` 별도 DB는 아직 과합니다. discovery links는 후보 참고 목록으로만 연결하고, local assets는 아직 구현하지 않습니다.
 5. 현재 필요한 것은 DB 추가가 아니라 화면과 문서에서 "영상 제작 후보"와 "링크 후보 참고 목록"을 명확히 구분하는 것입니다.
@@ -313,6 +330,7 @@ production_candidate = {
 - 발견 링크 후보는 Cloud 발견함의 `status: candidate` 기록을 참고 목록으로 함께 보여줍니다.
 - 별도 `production_candidates` 저장소는 만들지 않습니다.
 - 제작 메모/일정은 기존 필드를 유지합니다.
+- 오늘 집중 고정은 기존 영상 판단 기록의 `focusPinnedAt` 보조 필드를 사용합니다.
 - `uploaded`와 `used`는 구분합니다.
 
 ---
@@ -322,6 +340,7 @@ production_candidate = {
 현재 구조로 가능한 작업:
 
 - 영상 하나를 제작 후보로 표시하기
+- 제작 후보를 오늘 집중으로 고정하거나 해제하기
 - 제작 후보를 제작 중 상태로 변경
 - 제작 중 후보를 업로드 완료 상태로 변경
 - 제목 초안 저장

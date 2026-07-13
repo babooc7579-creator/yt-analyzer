@@ -4,7 +4,7 @@ const getDisplayVideoTitle = (videoTitle) => videoTitle || '이 영상';
 const noop = () => {};
 
 export const PRODUCTION_VIDEO_STATUS_HELP_TEXT =
-  '아래 상태 버튼은 이 영상의 제작 진행 상태를 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.';
+  '오늘 집중과 제작 상태 변경은 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.';
 
 const MOVE_ACTION_COPY = {
   [PRODUCTION_STATUS.CANDIDATE]: {
@@ -33,6 +33,22 @@ export const getProductionVideoMoveActionCopy = ({ targetStatus, videoTitle } = 
     label: copy.label,
     title: copy.title,
   };
+};
+
+export const getProductionVideoFocusActionCopy = ({ isFocused = false, videoTitle } = {}) => {
+  const displayTitle = getDisplayVideoTitle(videoTitle);
+
+  return isFocused
+    ? {
+      ariaLabel: `${displayTitle} 오늘 집중 고정 해제, Cloud 판단 기록 저장, YouTube API 호출 없음`,
+      label: '집중 해제',
+      title: '오늘 집중 고정만 해제하고 제작 후보 상태는 유지합니다. Cloud 판단 기록에 저장하며 YouTube API를 새로 호출하지 않습니다.',
+    }
+    : {
+      ariaLabel: `${displayTitle} 오늘 집중으로 고정, Cloud 판단 기록 저장, YouTube API 호출 없음`,
+      label: '오늘 집중',
+      title: '이 제작 후보를 오늘 집중 영역에 고정합니다. 직접 해제하거나 제작 상태를 옮길 때까지 유지되며 YouTube API를 새로 호출하지 않습니다.',
+    };
 };
 
 export const getProductionVideoDraftSaveButtonProps = ({
@@ -125,5 +141,16 @@ export const getProductionVideoMoveHandler = ({
 } = {}) => (
   videoId && typeof onMove === 'function'
     ? () => onMove(videoId, targetStatus, updates)
+    : noop
+);
+
+export const getProductionVideoFocusHandler = ({
+  focusPinnedAt,
+  getNow = () => new Date().toISOString(),
+  onFocus,
+  videoId,
+} = {}) => (
+  videoId && typeof onFocus === 'function'
+    ? () => onFocus(videoId, focusPinnedAt ? '' : getNow())
     : noop
 );
