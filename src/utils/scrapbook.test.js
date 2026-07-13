@@ -165,7 +165,7 @@ describe('scrapbook utils', () => {
       ...handlers,
       copiedPrompt: 'copied',
       creatorView: 'studio-candidates',
-      creatorViewIntent: { searchQuery: '예약 영상' },
+      creatorViewIntent: { searchQuery: '예약 영상', source: 'upload-calendar', targetVideoId: 'video-1' },
       discoveryLinks: [{ id: 'link-1' }],
       promptCopyError: '',
       savedVideos: [savedVideo, secondVideo],
@@ -192,6 +192,8 @@ describe('scrapbook utils', () => {
       onOpenHome: handlers.onOpenHome,
       onOpenUploadCalendar: handlers.onOpenUploadCalendar,
       initialSearchQuery: '예약 영상',
+      initialSearchSource: 'upload-calendar',
+      initialTargetVideoId: 'video-1',
     });
     const savedCardProps = productionProps.getScrapbookVideoCardProps(savedVideo);
     const secondCardProps = productionProps.getScrapbookVideoCardProps(secondVideo);

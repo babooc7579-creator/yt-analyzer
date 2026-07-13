@@ -1,10 +1,11 @@
-import { Bookmark, Database } from 'lucide-react';
+import { Bookmark, Database, ListChecks } from 'lucide-react';
 
 import { getLoadStoredVideosActionProps } from '../utils/loadStoredVideosActionProps';
 import { getRadarCandidateEmptyStateViewProps } from '../utils/radarCandidateStateProps';
 
 export default function RadarCandidateEmptyState({
   onLoadStoredVideos,
+  onOpenChannelWatchlist,
   onOpenVault,
   selectedChannelCount = 0,
 }) {
@@ -19,10 +20,11 @@ export default function RadarCandidateEmptyState({
     selectedChannelCount,
   });
   const {
+    channelWatchlistButtonProps,
     descriptionText,
     openVaultButtonProps,
     titleText,
-  } = getRadarCandidateEmptyStateViewProps();
+  } = getRadarCandidateEmptyStateViewProps({ selectedChannelCount });
 
   return (
     <div className="mt-6 rounded-2xl border border-dashed border-slate-700 bg-slate-950/70 p-5">
@@ -31,6 +33,17 @@ export default function RadarCandidateEmptyState({
         {descriptionText}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
+        {channelWatchlistButtonProps.show && typeof onOpenChannelWatchlist === 'function' ? (
+          <button
+            type="button"
+            onClick={onOpenChannelWatchlist}
+            className="inline-flex items-center gap-2 rounded-xl bg-blue-500 px-4 py-2 text-xs font-bold text-white hover:bg-blue-400"
+            title={channelWatchlistButtonProps.title}
+            aria-label={channelWatchlistButtonProps['aria-label']}
+          >
+            <ListChecks className="h-4 w-4" /> {channelWatchlistButtonProps.label}
+          </button>
+        ) : null}
         {onLoadStoredVideos && (
           <button
             type="button"

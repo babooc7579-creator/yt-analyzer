@@ -7,8 +7,10 @@ export default function ProductionKanbanFilters({
   filterSummary,
   onFilterModeChange,
   onReset,
+  onReturnToSearchSource,
   onSearchQueryChange,
   searchQuery,
+  searchContext,
 }) {
   return (
     <section className="border-y border-slate-200 bg-white px-4 py-4">
@@ -62,6 +64,35 @@ export default function ProductionKanbanFilters({
           초기화
         </button>
       </div>
+
+      {searchContext ? (
+        <div className="mt-3 flex flex-col gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <p className="text-xs font-extrabold text-amber-800">{searchContext.label}</p>
+            <p className="mt-0.5 break-words text-xs leading-relaxed text-amber-700">{searchContext.description}</p>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            {typeof onReturnToSearchSource === 'function' ? (
+              <button
+                type="button"
+                onClick={onReturnToSearchSource}
+                className="inline-flex h-8 items-center justify-center rounded-lg border border-amber-300 bg-amber-100 px-3 text-xs font-extrabold text-amber-900 hover:bg-amber-200"
+                title="업로드 캘린더로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다."
+              >
+                {searchContext.returnLabel}
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={onReset}
+              className="inline-flex h-8 items-center justify-center rounded-lg border border-amber-300 bg-white px-3 text-xs font-extrabold text-amber-800 hover:bg-amber-100"
+              title="캘린더에서 가져온 화면 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다."
+            >
+              {searchContext.resetLabel}
+            </button>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

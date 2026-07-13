@@ -13,6 +13,8 @@ import ProductionKanbanFilters from './ProductionKanbanFilters';
 export default function ProductionKanban({
   discoveryLinks = [],
   initialSearchQuery = '',
+  initialSearchSource = '',
+  initialTargetVideoId = '',
   videos,
   videoUserRecords,
   onMoveVideo,
@@ -58,12 +60,15 @@ export default function ProductionKanban({
     filteredDataModel,
     resetFilters,
     searchQuery,
+    searchContext,
     setFilterMode,
     setSearchQuery,
   } = useProductionKanbanFilters({
     dataModel,
     draftRecords,
     initialSearchQuery,
+    initialSearchSource,
+    initialTargetVideoId,
     videoUserRecords,
   });
 
@@ -105,8 +110,10 @@ export default function ProductionKanban({
         filterSummary={filterSummary}
         onFilterModeChange={setFilterMode}
         onReset={resetFilters}
+        onReturnToSearchSource={searchContext ? onOpenUploadCalendar : undefined}
         onSearchQueryChange={setSearchQuery}
         searchQuery={searchQuery}
+        searchContext={searchContext}
       />
       {filterSummary.visibleCount === 0 ? (
         <ProductionKanbanFilteredEmptyState onReset={resetFilters} />

@@ -19,6 +19,7 @@ export default function RadarCandidateStrip({
   onRestoreVideo,
   onClearDecisions,
   onLoadStoredVideos,
+  onOpenChannelWatchlist,
   onOpenVault,
   onOpenScrapbook,
   onOpenProductionCandidates,
@@ -82,6 +83,7 @@ export default function RadarCandidateStrip({
     return (
       <RadarCandidateEmptyState
         onLoadStoredVideos={onLoadStoredVideos}
+        onOpenChannelWatchlist={onOpenChannelWatchlist}
         onOpenVault={onOpenVault}
         selectedChannelCount={selectedChannelCount}
       />

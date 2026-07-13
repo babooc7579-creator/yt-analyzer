@@ -20,6 +20,23 @@ export const PRODUCTION_KANBAN_FILTER_OPTIONS = [
   { value: PRODUCTION_KANBAN_FILTER.LINKS, label: '발견 링크' },
 ];
 
+export const getProductionKanbanSearchContext = ({
+  searchQuery = '',
+  source = '',
+  targetVideoId = '',
+} = {}) => {
+  const normalizedQuery = String(searchQuery || '').trim();
+
+  if (source !== 'upload-calendar' || !normalizedQuery) return null;
+
+  return {
+    description: `업로드 캘린더에서 선택한 "${normalizedQuery}" ${targetVideoId ? '영상 한 건을' : '항목을'} 찾고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
+    label: '캘린더에서 가져온 검색',
+    resetLabel: '전체 작업 보기',
+    returnLabel: '캘린더로 돌아가기',
+  };
+};
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 const toRecordMap = (items) => (items && typeof items === 'object' ? items : {});
 
@@ -69,7 +86,10 @@ export const matchesProductionLinkSearch = ({ link, searchQuery } = {}) => {
 };
 
 const filterVideos = (videos, options) => (
-  toArray(videos).filter((video) => matchesProductionVideoSearch({ ...options, video }))
+  toArray(videos).filter((video) => (
+    (!options.targetVideoId || video?.videoId === options.targetVideoId)
+    && matchesProductionVideoSearch({ ...options, video })
+  ))
 );
 
 const createEmptyGroups = () => ({
@@ -83,12 +103,13 @@ export const getFilteredProductionKanbanData = ({
   draftRecords,
   filterMode = PRODUCTION_KANBAN_FILTER.ALL,
   searchQuery = '',
+  targetVideoId = '',
   today = getIsoTodayDate(),
   videoUserRecords,
 } = {}) => {
   const source = dataModel && typeof dataModel === 'object' ? dataModel : {};
   const sourceGroups = toRecordMap(source.groupedVideos);
-  const filterOptions = { draftRecords, searchQuery, videoUserRecords };
+  const filterOptions = { draftRecords, searchQuery, targetVideoId, videoUserRecords };
   const focusVideos = filterVideos(source.focusVideos, filterOptions);
   const groupedVideos = createEmptyGroups();
 
@@ -96,9 +117,11 @@ export const getFilteredProductionKanbanData = ({
     groupedVideos[status] = filterVideos(sourceGroups[status], filterOptions);
   });
 
-  const discoveryLinkCandidates = toArray(source.discoveryLinkCandidates).filter((link) => (
-    matchesProductionLinkSearch({ link, searchQuery })
-  ));
+  const discoveryLinkCandidates = targetVideoId
+    ? []
+    : toArray(source.discoveryLinkCandidates).filter((link) => (
+      matchesProductionLinkSearch({ link, searchQuery })
+    ));
 
   if (filterMode !== PRODUCTION_KANBAN_FILTER.ALL) {
     if (filterMode !== PRODUCTION_KANBAN_FILTER.FOCUS) {

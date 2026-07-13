@@ -1,11 +1,36 @@
 import { describe, expect, it } from 'vitest';
 
+import { CREATOR_OS_ITEMS } from '../constants/creatorOs';
 import {
   getCreatorWorkspaceNavigationState,
   getCreatorWorkspaceViewModel,
 } from './creatorWorkspaceNavigation';
 
 describe('creator workspace navigation utils', () => {
+  it('maps every live Creator OS menu to exactly one render route', () => {
+    const routeFlags = [
+      'isChannelWatchlistView',
+      'isDiscoveryLinksView',
+      'isHomeView',
+      'isKeywordExplorerView',
+      'isLegacyWorkspaceView',
+      'isTagVaultView',
+      'isTtoTtoView',
+      'isUploadCalendarView',
+    ];
+    const liveItems = CREATOR_OS_ITEMS.filter((item) => item.status === 'live');
+
+    expect(liveItems).toHaveLength(15);
+    liveItems.forEach((item) => {
+      const model = getCreatorWorkspaceViewModel(item.id);
+      const activeRouteCount = routeFlags.filter((flag) => model[flag]).length;
+
+      expect(model.activeCreatorItem.id).toBe(item.id);
+      expect(model.isComingSoonView).toBe(false);
+      expect(activeRouteCount, `${item.id} should have exactly one render route`).toBe(1);
+    });
+  });
+
   it('identifies home, legacy, discovery link, and reference vault views', () => {
     expect(getCreatorWorkspaceViewModel('home')).toMatchObject({
       isChannelWatchlistView: false,

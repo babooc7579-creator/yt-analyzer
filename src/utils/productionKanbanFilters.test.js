@@ -5,6 +5,7 @@ import {
   PRODUCTION_KANBAN_FILTER,
   getFilteredProductionKanbanData,
   getProductionKanbanFilterSummary,
+  getProductionKanbanSearchContext,
   matchesProductionLinkSearch,
   matchesProductionVideoSearch,
 } from './productionKanbanFilters';
@@ -34,6 +35,26 @@ const videoUserRecords = {
 };
 
 describe('productionKanbanFilters', () => {
+  it('labels a calendar-originated search without changing production data', () => {
+    expect(getProductionKanbanSearchContext({
+      searchQuery: '예약 영상',
+      source: 'upload-calendar',
+    })).toEqual({
+      description: '업로드 캘린더에서 선택한 "예약 영상" 항목을 찾고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.',
+      label: '캘린더에서 가져온 검색',
+      resetLabel: '전체 작업 보기',
+      returnLabel: '캘린더로 돌아가기',
+    });
+    expect(getProductionKanbanSearchContext({ searchQuery: '예약 영상' })).toBeNull();
+    expect(getProductionKanbanSearchContext({ source: 'upload-calendar' })).toBeNull();
+
+    expect(getProductionKanbanSearchContext({
+      searchQuery: '예약 영상',
+      source: 'upload-calendar',
+      targetVideoId: 'video-1',
+    })?.description).toContain('영상 한 건을');
+  });
+
   it('searches source metadata and current production draft values', () => {
     expect(matchesProductionVideoSearch({
       searchQuery: 'build lab',
@@ -100,6 +121,25 @@ describe('productionKanbanFilters', () => {
     expect(focus.productionSummary.videoCount).toBe(1);
     expect(links.productionSummary.videoCount).toBe(0);
     expect(links.discoveryLinkCandidates).toHaveLength(1);
+  });
+
+  it('limits a calendar-originated lookup to the selected video id', () => {
+    const duplicateTitleModel = createDataModel();
+    duplicateTitleModel.groupedVideos[PRODUCTION_STATUS.CANDIDATE] = [
+      { videoId: 'first', title: '같은 제목' },
+      { videoId: 'second', title: '같은 제목' },
+    ];
+
+    const filtered = getFilteredProductionKanbanData({
+      dataModel: duplicateTitleModel,
+      searchQuery: '같은 제목',
+      targetVideoId: 'second',
+    });
+
+    expect(filtered.groupedVideos[PRODUCTION_STATUS.CANDIDATE]).toEqual([
+      { videoId: 'second', title: '같은 제목' },
+    ]);
+    expect(filtered.discoveryLinkCandidates).toEqual([]);
   });
 
   it('reports visible work counts and active filter state', () => {

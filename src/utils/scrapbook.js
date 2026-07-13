@@ -213,6 +213,8 @@ export const getScrapbookWorkspaceViewProps = ({
     productionKanbanProps: {
       discoveryLinks,
       initialSearchQuery: creatorViewIntent?.searchQuery || '',
+      initialSearchSource: creatorViewIntent?.source || '',
+      initialTargetVideoId: creatorViewIntent?.targetVideoId || '',
       videos: savedVideoList,
       videoUserRecords,
       onMoveVideo,
