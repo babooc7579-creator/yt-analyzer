@@ -141,7 +141,7 @@ export const getTagVaultEmptyState = ({
       actionLabel: selectedChannelCount > 0 ? '선택 채널 저장 영상 불러오기' : '이 태그 채널 선택',
       description: selectedChannelCount > 0
         ? '현재 선택된 채널의 Cloud 저장 영상을 불러오세요. 이 작업은 YouTube API를 호출하지 않습니다.'
-        : '먼저 이 태그에 속한 채널을 선택한 다음, Cloud 저장 영상을 불러오세요.',
+        : '1. 이 태그에 속한 채널을 선택한 뒤, 2. 상단의 저장 영상 불러오기를 누르세요. 선택만으로 YouTube API를 호출하지 않습니다.',
       title: '불러온 저장 영상이 없습니다',
     };
   }

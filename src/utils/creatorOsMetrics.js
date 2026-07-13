@@ -5,13 +5,18 @@ import {
 } from '../constants/discoveryLinks';
 import {
   PRODUCTION_STATUS,
-  hasProductionStatus,
+  PRODUCTION_STATUSES,
+  getProductionStatusFromRecord,
+  hasAnyProductionStatus,
   isChannelScannable,
   isRadarHiddenRecord,
 } from '../constants/status';
 import { formatRelativeTime } from './channelScanDisplay';
 import { getCloudOnlyTags, getLatestChannelScanDate } from './channels';
-import { getProductionFocusVideos } from './productionKanbanData';
+import {
+  getProductionFocusVideos,
+  getProductionKanbanGroupStatus,
+} from './productionKanbanData';
 import { isTtoTtoCandidate } from './video';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
@@ -72,10 +77,11 @@ export const countOpenRadarCandidates = (videos = [], videoUserRecords = {}) => 
 };
 
 export const countProductionCandidates = (savedVideos = [], videoUserRecords = {}) => (
-  toArray(savedVideos).filter(video => hasProductionStatus(
-    toRecordMap(videoUserRecords)[getVideoId(video)],
-    PRODUCTION_STATUS.CANDIDATE,
-  )).length
+  toArray(savedVideos).filter((video) => {
+    const record = toRecordMap(videoUserRecords)[getVideoId(video)];
+    return hasAnyProductionStatus(record, PRODUCTION_STATUSES)
+      && getProductionKanbanGroupStatus(getProductionStatusFromRecord(record)) === PRODUCTION_STATUS.CANDIDATE;
+  }).length
 );
 
 export const countProductionFocusCandidates = (savedVideos = [], videoUserRecords = {}) => (

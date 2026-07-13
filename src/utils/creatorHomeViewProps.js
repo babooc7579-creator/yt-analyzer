@@ -77,7 +77,7 @@ export const getHomeRadarStatsGridViewProps = ({
     {
       label: '제작 후보',
       value: productionCandidateCount,
-      description: 'Cloud 판단 기록에서 제작 후보로 표시한 저장 영상입니다. 숫자 확인만으로 저장이나 API 호출은 실행하지 않습니다.',
+      description: 'Cloud 판단 기록에서 아직 제작 중·완료 전인 후보 단계 저장 영상입니다. 오늘 집중 영상도 이 숫자에 포함되며, 숫자 확인만으로 저장이나 API 호출은 실행하지 않습니다.',
       className: 'border-indigo-500/20 bg-indigo-950/30',
       labelClassName: 'text-indigo-300',
       descriptionClassName: 'text-indigo-100/70',

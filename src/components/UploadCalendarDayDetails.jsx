@@ -1,8 +1,13 @@
-import { ExternalLink, PencilLine } from 'lucide-react';
+import { ExternalLink, ListTodo, PencilLine } from 'lucide-react';
 
 import { getYouTubeVideoUrl } from '../utils/urls';
 
-export default function UploadCalendarDayDetails({ items, onOpenProductionCandidates, selectedDate }) {
+export default function UploadCalendarDayDetails({
+  items,
+  onOpenProductionCandidate,
+  onOpenProductionCandidates,
+  selectedDate,
+}) {
   return (
     <section className="border border-slate-800 bg-slate-950/45 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -24,7 +29,19 @@ export default function UploadCalendarDayDetails({ items, onOpenProductionCandid
                   {!item.sourceLoaded && <span className="border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-200">영상 정보 미불러옴</span>}
                 </div>
                 <p className="mt-1.5 line-clamp-2 text-sm font-extrabold text-white">{item.title}</p>
-                <a href={getYouTubeVideoUrl(item.videoId)} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-cyan-300 hover:text-cyan-200"><ExternalLink className="h-3.5 w-3.5" /> 원본 열기</a>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {typeof onOpenProductionCandidate === 'function' && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenProductionCandidate(item)}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 hover:text-amber-200"
+                      title="제작 후보함을 열고 이 항목의 제목으로 화면 검색합니다. Cloud 데이터는 바꾸지 않습니다."
+                    >
+                      <ListTodo className="h-3.5 w-3.5" /> 후보함에서 찾기
+                    </button>
+                  )}
+                  <a href={getYouTubeVideoUrl(item.videoId)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] font-bold text-cyan-300 hover:text-cyan-200"><ExternalLink className="h-3.5 w-3.5" /> 원본 열기</a>
+                </div>
               </div>
             </article>
           ))}

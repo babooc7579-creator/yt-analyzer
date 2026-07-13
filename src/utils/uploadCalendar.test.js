@@ -4,6 +4,7 @@ import { PRODUCTION_STATUS } from '../constants/status';
 import {
   filterUploadCalendarItems,
   getUploadCalendarEmptyState,
+  getUploadCalendarFilterEmptyState,
   getUploadCalendarGridDays,
   getUploadCalendarItems,
   getUploadCalendarSummary,
@@ -60,5 +61,14 @@ describe('uploadCalendar utils', () => {
   it('explains both missing candidates and missing schedule dates', () => {
     expect(getUploadCalendarEmptyState({ productionRecordCount: 0 })).toMatchObject({ title: '아직 제작 후보가 없습니다' });
     expect(getUploadCalendarEmptyState({ productionRecordCount: 3, scheduledCount: 0 })).toMatchObject({ title: '날짜가 정해진 제작 후보가 없습니다' });
+  });
+
+  it('explains a status filter with no matching schedules without changing data', () => {
+    expect(getUploadCalendarFilterEmptyState({ statusFilter: 'active', visibleCount: 0 })).toMatchObject({
+      actionLabel: '전체 제작 상태 보기',
+      title: '선택한 상태의 일정이 없습니다',
+    });
+    expect(getUploadCalendarFilterEmptyState({ statusFilter: 'all', visibleCount: 0 })).toBeNull();
+    expect(getUploadCalendarFilterEmptyState({ statusFilter: 'active', visibleCount: 1 })).toBeNull();
   });
 });

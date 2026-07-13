@@ -89,6 +89,25 @@ describe('creatorOsMetrics utils', () => {
     expect(countProductionFocusCandidates(null, null)).toBe(0);
   });
 
+  it('uses the same pre-production candidate grouping as the production kanban', () => {
+    const savedVideos = [
+      { videoId: 'candidate' },
+      { videoId: 'reviewing' },
+      { videoId: 'on-hold' },
+      { videoId: 'active' },
+      { videoId: 'done' },
+    ];
+    const records = {
+      candidate: { statusIds: [PRODUCTION_STATUS.CANDIDATE] },
+      reviewing: { statusIds: [PRODUCTION_STATUS.REVIEWING] },
+      'on-hold': { statusIds: [PRODUCTION_STATUS.ON_HOLD] },
+      active: { statusIds: [PRODUCTION_STATUS.ACTIVE] },
+      done: { statusIds: [PRODUCTION_STATUS.DONE] },
+    };
+
+    expect(countProductionCandidates(savedVideos, records)).toBe(3);
+  });
+
   it('counts discovery candidates and rights warnings only for candidate links', () => {
     const links = [
       { id: 'candidate-safe', status: 'candidate', rightsStatus: 'cleared' },

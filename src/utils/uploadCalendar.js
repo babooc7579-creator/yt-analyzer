@@ -158,3 +158,19 @@ export const getUploadCalendarEmptyState = ({ productionRecordCount = 0, schedul
 
   return null;
 };
+
+export const getUploadCalendarFilterEmptyState = ({
+  statusFilter = 'all',
+  visibleCount = 0,
+} = {}) => {
+  if (statusFilter === 'all' || visibleCount > 0) return null;
+
+  const statusLabel = UPLOAD_CALENDAR_STATUS_OPTIONS.find((option) => option.value === statusFilter)?.label
+    || '선택한 제작 상태';
+
+  return {
+    actionLabel: '전체 제작 상태 보기',
+    description: `${statusLabel}에 해당하는 일정이 없습니다. 전체 상태로 돌아가면 저장된 다른 일정을 다시 볼 수 있습니다. 화면 필터만 초기화하며 Cloud 데이터는 바꾸지 않습니다.`,
+    title: '선택한 상태의 일정이 없습니다',
+  };
+};

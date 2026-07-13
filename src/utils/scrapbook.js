@@ -156,6 +156,7 @@ export const getScrapbookEmptyStateActions = ({
 
 export const getScrapbookWorkspaceViewProps = ({
   creatorView,
+  creatorViewIntent,
   discoveryLinks,
   copiedPrompt,
   promptCopyError,
@@ -167,6 +168,7 @@ export const getScrapbookWorkspaceViewProps = ({
   onOpenDiscoveryLinks,
   onOpenHome,
   onOpenReferenceVault,
+  onOpenUploadCalendar,
   onRemoveScrap,
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
@@ -210,6 +212,7 @@ export const getScrapbookWorkspaceViewProps = ({
     },
     productionKanbanProps: {
       discoveryLinks,
+      initialSearchQuery: creatorViewIntent?.searchQuery || '',
       videos: savedVideoList,
       videoUserRecords,
       onMoveVideo,
@@ -218,6 +221,7 @@ export const getScrapbookWorkspaceViewProps = ({
       onUpdateDiscoveryLink,
       onUpdateVideoRecord,
       onOpenReferenceVault,
+      onOpenUploadCalendar,
     },
   };
 };

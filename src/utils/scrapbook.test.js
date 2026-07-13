@@ -155,6 +155,7 @@ describe('scrapbook utils', () => {
       onOpenDiscoveryLinks: () => 'open links',
       onOpenHome: () => 'open home',
       onOpenReferenceVault: () => 'open vault',
+      onOpenUploadCalendar: () => 'open calendar',
       onRemoveScrap: () => 'remove',
       onUpdateDiscoveryLink: () => 'update link',
       onUpdateVideoRecord: () => 'update video',
@@ -164,6 +165,7 @@ describe('scrapbook utils', () => {
       ...handlers,
       copiedPrompt: 'copied',
       creatorView: 'studio-candidates',
+      creatorViewIntent: { searchQuery: '예약 영상' },
       discoveryLinks: [{ id: 'link-1' }],
       promptCopyError: '',
       savedVideos: [savedVideo, secondVideo],
@@ -188,6 +190,8 @@ describe('scrapbook utils', () => {
         'video-1': { statusIds: [PRODUCTION_STATUS.ACTIVE] },
       },
       onOpenHome: handlers.onOpenHome,
+      onOpenUploadCalendar: handlers.onOpenUploadCalendar,
+      initialSearchQuery: '예약 영상',
     });
     const savedCardProps = productionProps.getScrapbookVideoCardProps(savedVideo);
     const secondCardProps = productionProps.getScrapbookVideoCardProps(secondVideo);

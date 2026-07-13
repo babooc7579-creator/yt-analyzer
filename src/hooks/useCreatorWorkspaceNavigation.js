@@ -8,6 +8,7 @@ export function useCreatorWorkspaceNavigation() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showWorkPanel, setShowWorkPanel] = useState(false);
   const [creatorView, setCreatorView] = useState('home');
+  const [creatorViewIntent, setCreatorViewIntent] = useState(null);
 
   const {
     activeCreatorItem,
@@ -29,8 +30,12 @@ export function useCreatorWorkspaceNavigation() {
       itemId: item.id,
       showWorkPanel,
     });
+    const nextIntent = item?.intent && typeof item.intent === 'object'
+      ? item.intent
+      : null;
 
     setCreatorView(nextState.creatorView);
+    setCreatorViewIntent(nextIntent);
     setActiveTab(nextState.activeTab);
     setShowWorkPanel(nextState.showWorkPanel);
   };
@@ -39,6 +44,7 @@ export function useCreatorWorkspaceNavigation() {
     activeCreatorItem,
     activeTab,
     creatorView,
+    creatorViewIntent,
     isChannelWatchlistView,
     isComingSoonView,
     isDiscoveryLinksView,

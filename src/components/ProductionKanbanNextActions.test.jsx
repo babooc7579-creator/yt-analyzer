@@ -11,6 +11,15 @@ describe('ProductionKanbanNextActions', () => {
       <ProductionKanbanNextActions
         actions={[
           {
+            ariaLabel: '업로드 캘린더 열기, Cloud 저장 일정 조회이며 YouTube API 호출 없음',
+            iconKey: 'uploadCalendar',
+            key: 'upload-calendar',
+            label: '업로드 일정 보기',
+            onClick: noop,
+            title: '업로드 캘린더를 열어 Cloud에 저장된 목표 날짜를 확인합니다. YouTube API를 호출하지 않습니다.',
+            variant: 'amber',
+          },
+          {
             ariaLabel: '저장 영상 탐색 화면 열기, Cloud DB 조회이며 YouTube API 호출 없음',
             iconKey: 'referenceVault',
             key: 'reference-vault',
@@ -34,6 +43,8 @@ describe('ProductionKanbanNextActions', () => {
 
     expect(html).toContain('다음 행동');
     expect(html).toContain('화면 이동만으로 YouTube API나 외부 자동 수집은 실행하지 않습니다.');
+    expect(html).toContain('업로드 일정 보기');
+    expect(html).toContain('Cloud에 저장된 목표 날짜');
     expect(html).toContain('저장 영상 더 보기');
     expect(html).toContain('Cloud DB에 저장된 영상을 조회하며 YouTube API를 새로 호출하지 않습니다.');
     expect(html).toContain('발견함 링크 정리');

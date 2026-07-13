@@ -60,6 +60,7 @@ describe('keywordExplorer utils', () => {
   });
 
   it('separates not-loaded, waiting-for-query, and no-match empty states', () => {
+    expect(getKeywordExplorerEmptyState({ loadedVideoCount: 0, selectedChannelCount: 0 })).toMatchObject({ action: 'channels' });
     expect(getKeywordExplorerEmptyState({ loadedVideoCount: 0, selectedChannelCount: 2 })).toMatchObject({ action: 'load' });
     expect(getKeywordExplorerEmptyState({ loadedVideoCount: 10, hasQuery: false })).toMatchObject({ action: 'none' });
     expect(getKeywordExplorerEmptyState({ loadedVideoCount: 10, hasQuery: true })).toMatchObject({ action: 'reset' });

@@ -71,11 +71,13 @@ describe('legacyVaultTabViewProps utils', () => {
     props.scrapbookWorkspaceProps.onOpenHome();
     props.scrapbookWorkspaceProps.onOpenDiscoveryLinks();
     props.scrapbookWorkspaceProps.onOpenReferenceVault();
+    props.scrapbookWorkspaceProps.onOpenUploadCalendar();
 
     expect(openedViews).toEqual([
       { id: 'home' },
       { id: 'vault-sources' },
       { id: 'vault-all' },
+      { id: 'studio-calendar' },
     ]);
   });
 });

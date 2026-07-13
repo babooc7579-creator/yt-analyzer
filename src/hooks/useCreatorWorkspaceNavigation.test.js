@@ -38,9 +38,11 @@ describe('useCreatorWorkspaceNavigation', () => {
     expect(useState).toHaveBeenNthCalledWith(1, 'dashboard');
     expect(useState).toHaveBeenNthCalledWith(2, false);
     expect(useState).toHaveBeenNthCalledWith(3, 'home');
+    expect(useState).toHaveBeenNthCalledWith(4, null);
     expect(navigation).toMatchObject({
       activeTab: 'dashboard',
       creatorView: 'home',
+      creatorViewIntent: null,
       isHomeView: true,
       isLegacyWorkspaceView: false,
       showWorkPanel: false,
@@ -56,6 +58,7 @@ describe('useCreatorWorkspaceNavigation', () => {
     expect(stateSetters[2]).toHaveBeenCalledWith('ops-add-channel');
     expect(stateSetters[0]).toHaveBeenCalledWith('dashboard');
     expect(stateSetters[1]).toHaveBeenCalledWith(true);
+    expect(stateSetters[3]).toHaveBeenCalledWith(null);
   });
 
   it('opens production workspaces on the scrapbook tab without the legacy work panel', () => {
@@ -67,6 +70,16 @@ describe('useCreatorWorkspaceNavigation', () => {
     expect(stateSetters[2]).toHaveBeenCalledWith('studio-candidates');
     expect(stateSetters[0]).toHaveBeenCalledWith('scrapbook');
     expect(stateSetters[1]).toHaveBeenCalledWith(false);
+    expect(stateSetters[3]).toHaveBeenCalledWith(null);
+  });
+
+  it('forwards a one-time view intent when opening a specific production candidate', () => {
+    const navigation = useCreatorWorkspaceNavigation();
+    const intent = { searchQuery: '예약 영상', source: 'upload-calendar' };
+
+    navigation.openCreatorView({ id: 'studio-candidates', intent });
+
+    expect(stateSetters[3]).toHaveBeenCalledWith(intent);
   });
 
   it('keeps passive views from changing the current tab or work panel state', () => {
