@@ -150,6 +150,7 @@ describe('creatorHomeViewProps utils', () => {
     props.actionShortcutsProps.onOpenVault();
     props.radarCandidateStripProps.onOpenProductionCandidates();
     props.radarCandidateStripProps.onOpenScrapbook();
+    props.radarCandidateStripProps.onOpenChannelWatchlist();
     props.radarCandidateStripProps.onOpenVault();
     props.radarSummaryProps.onOpenAddChannel();
     props.radarSummaryProps.onOpenChannelWatchlist();
@@ -169,6 +170,7 @@ describe('creatorHomeViewProps utils', () => {
       'vault-all',
       'studio-candidates',
       'studio-scrapbook',
+      'discovery-watchlist',
       'vault-all',
       'ops-add-channel',
       'discovery-watchlist',

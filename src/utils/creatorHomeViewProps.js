@@ -148,6 +148,7 @@ export const getCreatorHomeViewProps = ({
       onClearDecisions: clearRadarDecisions,
       onLoadStoredVideos: loadStoredVideosForSelectedChannels,
       selectedChannelCount,
+      onOpenChannelWatchlist: () => onOpenView({ id: 'discovery-watchlist' }),
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
       onOpenScrapbook: () => onOpenView({ id: 'studio-scrapbook' }),
       onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),

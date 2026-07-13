@@ -11,6 +11,7 @@ export function buildUploadCalendarRouteProps({ openCreatorView, videoUserRecord
       intent: {
         searchQuery: getUploadCalendarProductionSearchQuery(item),
         source: 'upload-calendar',
+        targetVideoId: String(item?.videoId || '').trim(),
       },
     }),
     onOpenProductionCandidates: () => openCreatorView({ id: 'studio-candidates' }),

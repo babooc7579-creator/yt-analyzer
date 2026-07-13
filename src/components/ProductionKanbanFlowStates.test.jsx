@@ -81,6 +81,8 @@ describe('Production kanban flow states', () => {
     const html = renderToStaticMarkup(
       <ProductionKanban
         initialSearchQuery="예약 영상"
+        initialSearchSource="upload-calendar"
+        initialTargetVideoId="v1"
         onMoveVideo={noop}
         onOpenDiscoveryLinks={noop}
         onOpenHome={noop}
@@ -94,13 +96,16 @@ describe('Production kanban flow states', () => {
         }}
         videos={[
           { videoId: 'v1', title: '예약 영상' },
-          { videoId: 'v2', title: '다른 후보' },
+          { videoId: 'v2', title: '예약 영상' },
         ]}
       />,
     );
 
     expect(html).toContain('value="예약 영상"');
-    expect(html).toContain('예약 영상');
-    expect(html).not.toContain('다른 후보');
+    expect(html).toContain('캘린더에서 가져온 검색');
+    expect(html).toContain('영상 한 건을 찾고 있습니다');
+    expect(html).toContain('캘린더로 돌아가기');
+    expect((html.match(/예약 영상/g) || []).length).toBeGreaterThan(0);
+    expect(html).not.toContain('video-2');
   });
 });

@@ -31,11 +31,25 @@ describe('radarCandidateStateProps utils', () => {
   });
 
   it('describes the empty radar state as stored-video lookup guidance', () => {
-    const props = getRadarCandidateEmptyStateViewProps();
+    const props = getRadarCandidateEmptyStateViewProps({ selectedChannelCount: 2 });
 
     expect(props.titleText).toBe('오늘 볼 후보');
-    expect(props.descriptionText).toContain('저장된 영상');
+    expect(props.descriptionText).toContain('저장 영상');
+    expect(props.descriptionText).toContain('선택한 채널 2개');
+    expect(props.descriptionText).toContain('YouTube API는 호출하지 않습니다');
+    expect(props.channelWatchlistButtonProps.show).toBe(false);
     expect(props.openVaultButtonProps.label).toBe('레퍼런스 금고 열기');
+  });
+
+  it('guides users without selected channels to the channel watchlist first', () => {
+    const props = getRadarCandidateEmptyStateViewProps();
+
+    expect(props.descriptionText).toContain('아직 선택한 채널이 없습니다');
+    expect(props.descriptionText).toContain('채널 선택만으로 YouTube API를 호출하지 않습니다');
+    expect(props.channelWatchlistButtonProps).toMatchObject({
+      label: '오늘 볼 채널 고르기',
+      show: true,
+    });
   });
 
   it('builds production promotion button copy without implying a YouTube API call', () => {

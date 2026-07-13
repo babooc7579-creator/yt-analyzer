@@ -26,9 +26,17 @@ export const getRadarCandidateCompletedStateViewProps = () => ({
   },
 });
 
-export const getRadarCandidateEmptyStateViewProps = () => ({
+export const getRadarCandidateEmptyStateViewProps = ({ selectedChannelCount = 0 } = {}) => ({
   titleText: '오늘 볼 후보',
-  descriptionText: '아직 화면에 불러온 영상이 없습니다. 선택한 채널의 저장된 영상을 불러오면 여기에서 오늘 먼저 볼 후보를 보여줍니다.',
+  descriptionText: selectedChannelCount > 0
+    ? `선택한 채널 ${selectedChannelCount}개의 영상이 아직 화면에 없습니다. 저장 영상 불러오기를 누르면 Cloud DB에서 조회해 오늘 먼저 볼 후보를 보여줍니다. YouTube API는 호출하지 않습니다.`
+    : '아직 선택한 채널이 없습니다. 오늘 볼 채널에서 채널을 먼저 고른 뒤 저장 영상을 불러오면 오늘 후보를 보여줍니다. 채널 선택만으로 YouTube API를 호출하지 않습니다.',
+  channelWatchlistButtonProps: {
+    label: '오늘 볼 채널 고르기',
+    title: '오늘 볼 채널 화면으로 이동합니다. 이동과 채널 선택만으로 YouTube API를 호출하지 않습니다.',
+    'aria-label': '오늘 볼 채널 화면 열기, 이동과 채널 선택만으로 YouTube API 호출 없음',
+    show: selectedChannelCount === 0,
+  },
   openVaultButtonProps: {
     label: '레퍼런스 금고 열기',
     title: '저장된 영상 조회 화면으로 이동',
