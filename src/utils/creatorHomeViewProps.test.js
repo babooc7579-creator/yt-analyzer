@@ -157,6 +157,9 @@ describe('creatorHomeViewProps utils', () => {
     props.radarSummaryProps.onOpenSelectedScan();
     props.radarSummaryProps.onOpenTtoTto();
     props.radarSummaryProps.onOpenVault();
+    props.workspaceShortcutsProps.onOpenKeywordExplorer();
+    props.workspaceShortcutsProps.onOpenTagVault();
+    props.workspaceShortcutsProps.onOpenUploadCalendar();
 
     expect(openedViews).toEqual([
       'ops-add-channel',
@@ -173,6 +176,9 @@ describe('creatorHomeViewProps utils', () => {
       'ops-selected-scan',
       'discovery-ttotto',
       'vault-all',
+      'discovery-keywords',
+      'vault-tags',
+      'studio-calendar',
     ]);
   });
 
