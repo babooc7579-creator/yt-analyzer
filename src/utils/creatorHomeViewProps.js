@@ -173,5 +173,10 @@ export const getCreatorHomeViewProps = ({
       productionCandidateCount,
       productionFocusCount,
     },
+    workspaceShortcutsProps: {
+      onOpenKeywordExplorer: () => onOpenView({ id: 'discovery-keywords' }),
+      onOpenTagVault: () => onOpenView({ id: 'vault-tags' }),
+      onOpenUploadCalendar: () => onOpenView({ id: 'studio-calendar' }),
+    },
   };
 };

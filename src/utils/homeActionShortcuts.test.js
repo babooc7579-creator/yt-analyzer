@@ -1,7 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { HOME_ACTION_SHORTCUTS } from '../constants/homeActionShortcuts';
-import { getHomeActionShortcutItems } from './homeActionShortcuts';
+import {
+  HOME_ACTION_SHORTCUTS,
+  HOME_WORKSPACE_SHORTCUTS,
+} from '../constants/homeActionShortcuts';
+import {
+  getHomeActionShortcutItems,
+  getHomeWorkspaceShortcutItems,
+} from './homeActionShortcuts';
 
 describe('homeActionShortcuts utils', () => {
   it('keeps the shortcut item order and public fields from the constants', () => {
@@ -84,5 +90,34 @@ describe('homeActionShortcuts utils', () => {
     expect(shortcutsByKey['discovery-links'].description).not.toContain('제작 후보로 보냅니다');
     expect(shortcutsByKey['discovery-links'].hint).toContain('자동 수집 없이 URL만 저장');
     expect(shortcutsByKey['discovery-links'].dataFlowLabels).toEqual(['Cloud 링크 저장', '자동 수집 없음']);
+  });
+
+  it('maps the three practical workspace shortcuts without invoking handlers', () => {
+    const handlers = {
+      onOpenKeywordExplorer: vi.fn(),
+      onOpenTagVault: vi.fn(),
+      onOpenUploadCalendar: vi.fn(),
+    };
+
+    const items = getHomeWorkspaceShortcutItems(handlers);
+
+    expect(items.map((item) => item.key)).toEqual(HOME_WORKSPACE_SHORTCUTS.map((item) => item.key));
+    expect(items.find((item) => item.key === 'keyword-explorer')?.onClick).toBe(handlers.onOpenKeywordExplorer);
+    expect(items.find((item) => item.key === 'tag-vault')?.onClick).toBe(handlers.onOpenTagVault);
+    expect(items.find((item) => item.key === 'upload-calendar')?.onClick).toBe(handlers.onOpenUploadCalendar);
+    expect(Object.values(handlers).every((handler) => handler.mock.calls.length === 0)).toBe(true);
+  });
+
+  it('states that practical workspace shortcuts do not automatically collect or change data', () => {
+    const itemsByKey = Object.fromEntries(
+      getHomeWorkspaceShortcutItems({}).map((item) => [item.key, item]),
+    );
+
+    expect(itemsByKey['keyword-explorer'].description).toContain('Cloud 저장 영상');
+    expect(itemsByKey['keyword-explorer'].dataFlowLabels).toContain('YouTube API 호출 없음');
+    expect(itemsByKey['tag-vault'].description).toContain('기존 채널 태그');
+    expect(itemsByKey['tag-vault'].dataFlowLabels).toContain('자동 수집 없음');
+    expect(itemsByKey['upload-calendar'].description).toContain('Cloud 제작 기록');
+    expect(itemsByKey['upload-calendar'].dataFlowLabels).toContain('데이터 변경 없음');
   });
 });

@@ -2,6 +2,7 @@ import { getCreatorHomeViewProps } from '../utils/creatorHomeViewProps';
 import HomeActionShortcuts from './HomeActionShortcuts';
 import HomeOperatingGuidelines from './HomeOperatingGuidelines';
 import HomeRadarSummary from './HomeRadarSummary';
+import HomeWorkspaceShortcuts from './HomeWorkspaceShortcuts';
 import RadarCandidateStrip from './RadarCandidateStrip';
 
 export default function CreatorHomeView({
@@ -30,6 +31,7 @@ export default function CreatorHomeView({
     actionShortcutsProps,
     radarCandidateStripProps,
     radarSummaryProps,
+    workspaceShortcutsProps,
   } = getCreatorHomeViewProps({
     clearRadarDecisions,
     discoveryCandidateCount,
@@ -61,6 +63,8 @@ export default function CreatorHomeView({
         <RadarCandidateStrip {...radarCandidateStripProps} />
 
         <HomeActionShortcuts {...actionShortcutsProps} />
+
+        <HomeWorkspaceShortcuts {...workspaceShortcutsProps} />
       </section>
 
       <HomeOperatingGuidelines />
