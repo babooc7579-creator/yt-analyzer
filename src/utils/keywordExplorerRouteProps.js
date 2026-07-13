@@ -19,6 +19,7 @@ export function buildKeywordExplorerRouteProps({
     isVideoSaved,
     onFetchComments: fetchTopComments,
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
+    onOpenChannelWatchlist: () => openCreatorView({ id: 'discovery-watchlist' }),
     onOpenVault: () => openCreatorView({ id: 'vault-videos' }),
     onPromoteToProduction: promoteVideoToProduction,
     onToggleCheck: toggleCheckVideo,

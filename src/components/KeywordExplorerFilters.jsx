@@ -23,8 +23,8 @@ export default function KeywordExplorerFilters({
 }) {
   return (
     <section className="border-y border-slate-800 bg-slate-950/55 px-4 py-4">
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-[minmax(260px,1fr)_150px_160px_150px_150px_auto]">
-        <label className="relative block">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
+        <label className="relative block xl:col-span-2">
           <span className="sr-only">영상 제목 또는 채널 키워드 검색</span>
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           <input

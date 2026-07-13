@@ -12,6 +12,7 @@ export default function KeywordExplorerWorkspace({
   isVideoSaved,
   onFetchComments,
   onLoadStoredVideos,
+  onOpenChannelWatchlist,
   onOpenVault,
   onPromoteToProduction,
   onToggleCheck,
@@ -27,8 +28,8 @@ export default function KeywordExplorerWorkspace({
   });
   const handleEmptyAction = emptyState.action === 'load'
     ? onLoadStoredVideos
-    : emptyState.action === 'vault'
-      ? onOpenVault
+    : emptyState.action === 'channels'
+      ? onOpenChannelWatchlist
       : state.resetFilters;
 
   return (

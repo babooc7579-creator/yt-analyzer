@@ -1,14 +1,16 @@
-import { Link as LinkIcon, Rocket } from 'lucide-react';
+import { CalendarDays, Link as LinkIcon, Rocket } from 'lucide-react';
 
 import EmptyStateActions from './EmptyStateActions';
 
 const ACTION_ICONS = {
   discoveryLinks: LinkIcon,
   referenceVault: Rocket,
+  uploadCalendar: CalendarDays,
 };
 
 const ACTION_CLASSES = {
   indigo: 'border border-indigo-100 bg-indigo-50 text-indigo-700 hover:bg-indigo-100',
+  amber: 'border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100',
   secondary: 'border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100',
 };
 
@@ -21,7 +23,7 @@ export default function ProductionKanbanNextActions({ actions = [] }) {
         <div>
           <p className="text-sm font-extrabold text-slate-800">다음 행동</p>
           <p className="mt-1 text-xs leading-relaxed text-slate-500">
-            후보를 더 찾거나 외부 링크 후보를 정리합니다. 화면 이동만으로 YouTube API나 외부 자동 수집은 실행하지 않습니다.
+            후보를 더 찾고, 외부 링크를 정리하고, 목표 업로드 일정을 확인합니다. 화면 이동만으로 YouTube API나 외부 자동 수집은 실행하지 않습니다.
           </p>
         </div>
         <EmptyStateActions

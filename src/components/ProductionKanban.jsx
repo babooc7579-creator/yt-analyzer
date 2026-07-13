@@ -12,11 +12,13 @@ import ProductionKanbanFilters from './ProductionKanbanFilters';
 
 export default function ProductionKanban({
   discoveryLinks = [],
+  initialSearchQuery = '',
   videos,
   videoUserRecords,
   onMoveVideo,
   onOpenDiscoveryLinks,
   onOpenHome,
+  onOpenUploadCalendar,
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
   onOpenReferenceVault,
@@ -61,6 +63,7 @@ export default function ProductionKanban({
   } = useProductionKanbanFilters({
     dataModel,
     draftRecords,
+    initialSearchQuery,
     videoUserRecords,
   });
 
@@ -86,6 +89,7 @@ export default function ProductionKanban({
     moveVideo,
     onOpenDiscoveryLinks,
     onOpenReferenceVault,
+    onOpenUploadCalendar,
     productionSummary: filteredDataModel.productionSummary,
     saveDraftRecord,
     saveStates,

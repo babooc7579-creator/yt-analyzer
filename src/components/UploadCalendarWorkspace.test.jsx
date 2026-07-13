@@ -1,13 +1,23 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PRODUCTION_STATUS } from '../constants/status';
 import UploadCalendarWorkspace from './UploadCalendarWorkspace';
 
 describe('UploadCalendarWorkspace', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-07-14T12:00:00Z'));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('renders saved schedule records as an operational calendar', () => {
     const html = renderToStaticMarkup(
       <UploadCalendarWorkspace
+        onOpenProductionCandidate={vi.fn()}
         onOpenProductionCandidates={vi.fn()}
         videoUserRecords={{
           v1: { status: PRODUCTION_STATUS.ACTIVE, statusIds: [PRODUCTION_STATUS.ACTIVE], targetPublishDate: '2026-07-14' },
@@ -19,5 +29,6 @@ describe('UploadCalendarWorkspace', () => {
     expect(html).toContain('업로드 캘린더');
     expect(html).toContain('제작 후보함에서 일정 수정');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
+    expect(html).toContain('후보함에서 찾기');
   });
 });

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { PRODUCTION_STATUS } from '../constants/status';
 import ProductionDiscoveryLinksSection from './ProductionDiscoveryLinksSection';
+import ProductionKanban from './ProductionKanban';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
 import ProductionVideoMoveStatus from './ProductionVideoMoveStatus';
 import ProductionVideoSaveStatus from './ProductionVideoSaveStatus';
@@ -74,5 +75,32 @@ describe('Production kanban flow states', () => {
     expect(html).toContain('링크 기록은 삭제하지 않습니다');
     expect(html.indexOf('세 번째 링크')).toBeLessThan(html.indexOf('첫 번째 링크'));
     expect(html.indexOf('첫 번째 링크')).toBeLessThan(html.indexOf('두 번째 링크'));
+  });
+
+  it('opens with a calendar item search without changing production records', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanban
+        initialSearchQuery="예약 영상"
+        onMoveVideo={noop}
+        onOpenDiscoveryLinks={noop}
+        onOpenHome={noop}
+        onOpenReferenceVault={noop}
+        onOpenUploadCalendar={noop}
+        onUpdateDiscoveryLink={noop}
+        onUpdateVideoRecord={noop}
+        videoUserRecords={{
+          v1: { statusIds: [PRODUCTION_STATUS.CANDIDATE] },
+          v2: { statusIds: [PRODUCTION_STATUS.CANDIDATE] },
+        }}
+        videos={[
+          { videoId: 'v1', title: '예약 영상' },
+          { videoId: 'v2', title: '다른 후보' },
+        ]}
+      />,
+    );
+
+    expect(html).toContain('value="예약 영상"');
+    expect(html).toContain('예약 영상');
+    expect(html).not.toContain('다른 후보');
   });
 });

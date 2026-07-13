@@ -19,6 +19,7 @@ describe('TagVaultWorkspace', () => {
 
     expect(html).toContain('태그별 금고');
     expect(html).toContain('태그 채널 선택');
+    expect(html).toContain('상단의 저장 영상 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
   });
 });

@@ -9,10 +9,11 @@ import {
 export function useProductionKanbanFilters({
   dataModel,
   draftRecords,
+  initialSearchQuery = '',
   videoUserRecords,
 }) {
   const [filterMode, setFilterMode] = useState(PRODUCTION_KANBAN_FILTER.ALL);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => String(initialSearchQuery || '').trim());
 
   const filteredDataModel = useMemo(() => getFilteredProductionKanbanData({
     dataModel,

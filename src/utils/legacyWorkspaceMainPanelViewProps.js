@@ -11,6 +11,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
   copiedPrompt,
   copyPromptForVideos,
   creatorView,
+  creatorViewIntent,
   discoveryLinks,
   fetchTopComments,
   filteredAndSortedVideos,
@@ -103,6 +104,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
     },
     vaultTabProps: {
       creatorView,
+      creatorViewIntent,
       discoveryLinks,
       copiedPrompt,
       copyPromptForVideos,

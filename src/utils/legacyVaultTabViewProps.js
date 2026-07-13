@@ -4,6 +4,7 @@ export function getLegacyVaultTabViewProps({
   copiedPrompt,
   copyPromptForVideos,
   creatorView,
+  creatorViewIntent,
   discoveryLinks,
   fetchTopComments,
   markRadarVideoStatus,
@@ -20,6 +21,7 @@ export function getLegacyVaultTabViewProps({
   return {
     scrapbookWorkspaceProps: {
       creatorView,
+      creatorViewIntent,
       discoveryLinks,
       copiedPrompt,
       promptCopyError,
@@ -31,6 +33,7 @@ export function getLegacyVaultTabViewProps({
       onOpenDiscoveryLinks: () => openCreatorView({ id: 'vault-sources' }),
       onOpenHome: () => openCreatorView({ id: 'home' }),
       onOpenReferenceVault: () => openCreatorView({ id: 'vault-all' }),
+      onOpenUploadCalendar: () => openCreatorView({ id: 'studio-calendar' }),
       onRemoveScrap: toggleScrapVideo,
       onUpdateDiscoveryLink: updateDiscoveryLink,
       onUpdateVideoRecord: updateVideoUserRecord,

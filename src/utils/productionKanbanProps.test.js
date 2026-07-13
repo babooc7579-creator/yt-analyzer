@@ -68,15 +68,18 @@ describe('productionKanbanProps utils', () => {
   it('builds next action shortcuts for stored videos and discovery links without data changes', () => {
     const onOpenDiscoveryLinks = () => 'open discovery';
     const onOpenReferenceVault = () => 'open vault';
+    const onOpenUploadCalendar = () => 'open calendar';
     const actions = getProductionKanbanNextActions({
       discoveryLinkCandidateCount: 2,
       onOpenDiscoveryLinks,
       onOpenReferenceVault,
+      onOpenUploadCalendar,
       videoCount: 3,
     });
 
     expect(actions.map((action) => action.key)).toEqual([
       'reference-vault',
+      'upload-calendar',
       'discovery-links',
     ]);
     expect(actions[0]).toMatchObject({
@@ -87,11 +90,18 @@ describe('productionKanbanProps utils', () => {
     expect(actions[0].title).toContain('Cloud DB');
     expect(actions[0].title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(actions[1]).toMatchObject({
+      label: '업로드 일정 보기',
+      onClick: onOpenUploadCalendar,
+      variant: 'amber',
+    });
+    expect(actions[1].title).toContain('Cloud에 저장된 목표 날짜');
+    expect(actions[1].title).toContain('YouTube API를 호출하지 않습니다');
+    expect(actions[2]).toMatchObject({
       label: '발견함 링크 정리',
       onClick: onOpenDiscoveryLinks,
       variant: 'secondary',
     });
-    expect(actions[1].title).toContain('외부 자동 수집이나 다운로드는 실행하지 않습니다');
+    expect(actions[2].title).toContain('외부 자동 수집이나 다운로드는 실행하지 않습니다');
   });
 
   it('builds kanban content props with summary video count and forwarded handlers', () => {
@@ -107,6 +117,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onOpenUploadCalendar: () => 'open calendar',
       productionSummary: { videoCount: 1, activeCount: 1 },
       saveDraftRecord: () => 'save',
       saveStates: { video1: 'idle' },
@@ -167,6 +178,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onOpenUploadCalendar: () => 'open calendar',
       productionSummary: { videoCount: 1, activeCount: 1 },
       saveDraftRecord: () => 'save',
       saveStates: { video1: 'idle' },
@@ -203,6 +215,7 @@ describe('productionKanbanProps utils', () => {
     expect(typeof viewProps.focusSectionProps.getScheduleSignal).toBe('function');
     expect(viewProps.nextActionsProps.actions.map((action) => action.key)).toEqual([
       'reference-vault',
+      'upload-calendar',
       'discovery-links',
     ]);
     expect(viewProps.boardProps).toMatchObject({

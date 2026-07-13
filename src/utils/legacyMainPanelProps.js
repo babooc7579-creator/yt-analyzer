@@ -6,6 +6,7 @@ export function getLegacyMainPanelProps(props) {
     copiedPrompt: props.copiedPrompt,
     copyPromptForVideos: props.copyPromptForVideos,
     creatorView: props.creatorView,
+    creatorViewIntent: props.creatorViewIntent,
     discoveryLinks: props.discoveryLinks,
     fetchTopComments: props.fetchTopComments,
     filteredAndSortedVideos: props.filteredAndSortedVideos,

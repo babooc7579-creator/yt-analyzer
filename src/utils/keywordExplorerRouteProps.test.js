@@ -19,7 +19,11 @@ describe('keywordExplorerRouteProps', () => {
     });
     expect(openCreatorView).not.toHaveBeenCalled();
 
+    props.onOpenChannelWatchlist();
     props.onOpenVault();
-    expect(openCreatorView).toHaveBeenCalledWith({ id: 'vault-videos' });
+    expect(openCreatorView.mock.calls).toEqual([
+      [{ id: 'discovery-watchlist' }],
+      [{ id: 'vault-videos' }],
+    ]);
   });
 });

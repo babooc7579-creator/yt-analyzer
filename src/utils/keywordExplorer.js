@@ -182,11 +182,11 @@ export const getKeywordExplorerEmptyState = ({
 } = {}) => {
   if (loadedVideoCount === 0) {
     return {
-      action: selectedChannelCount > 0 ? 'load' : 'vault',
-      actionLabel: selectedChannelCount > 0 ? '선택 채널 저장 영상 불러오기' : '저장 영상 화면 열기',
+      action: selectedChannelCount > 0 ? 'load' : 'channels',
+      actionLabel: selectedChannelCount > 0 ? '선택 채널 저장 영상 불러오기' : '오늘 볼 채널 열기',
       description: selectedChannelCount > 0
         ? `선택한 채널 ${selectedChannelCount}개의 Cloud 저장 영상을 불러오면 키워드 검색을 시작할 수 있습니다.`
-        : '먼저 채널을 선택하고 Cloud에 저장된 영상을 불러오세요.',
+        : '1. 오늘 볼 채널에서 채널을 선택한 뒤, 2. 이 화면으로 돌아와 Cloud 저장 영상을 불러오세요. 채널을 여는 것만으로 YouTube API를 호출하지 않습니다.',
       title: '검색할 저장 영상이 없습니다',
     };
   }

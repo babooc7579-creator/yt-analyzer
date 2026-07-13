@@ -66,8 +66,8 @@
 - 2026-07-14 `키워드 탐색`을 정식 실사용 화면으로 전환했습니다. 현재 불러온 Cloud 저장 영상의 제목과 채널명을 검색하고, 자주 등장한 제목 단어 추천, 길이·기간·조회수 필터와 정렬을 지원합니다. 화면의 검색·필터·정렬은 YouTube API를 호출하지 않습니다.
 - 2026-07-14 `태그별 금고`를 정식 실사용 화면으로 전환했습니다. 기존 채널의 `tags`와 `category`를 태그 묶음으로 사용하고, 선택한 태그의 채널을 고른 뒤 기존 저장 영상 불러오기 흐름으로 Cloud DB를 조회합니다. 새 태그 저장소나 endpoint는 추가하지 않았습니다.
 - 2026-07-14 `업로드 캘린더`를 정식 실사용 화면으로 전환했습니다. 기존 Cloud `videoUserRecords.targetPublishDate`를 읽어 제작 후보, 제작 중, 업로드 완료 일정을 월별로 표시하며, 편집은 기존 제작 후보함으로 연결합니다. 새 일정 저장소나 DB schema는 추가하지 않았습니다.
-- 2026-07-14 전체 검증은 테스트 파일 190개, 테스트 814개와 production build를 통과했습니다. 세 화면은 데스크톱과 390px 모바일에서 가로 넘침이 없고 브라우저 console warning/error가 없음을 확인했습니다.
-- 2026-07-14 홈에 `실사용 도구` 영역을 추가해 키워드 탐색, 태그별 금고, 업로드 캘린더로 바로 이동하도록 연결했습니다. 세 버튼은 화면만 이동하며 자동 수집, Cloud 저장, 상태 변경을 실행하지 않습니다. 전체 검증은 테스트 파일 191개, 테스트 817개와 production build를 통과했습니다.
+- 2026-07-14 전체 검증은 테스트 파일 191개, 테스트 822개와 production build를 통과했습니다. 실사용 메뉴 15개를 데스크톱에서 열고 핵심 5개 화면을 390px 모바일에서 확인했으며, 가로 넘침과 브라우저 console error가 없음을 확인했습니다.
+- 2026-07-14 홈에 `실사용 도구` 영역을 추가해 키워드 탐색, 태그별 금고, 업로드 캘린더로 바로 이동하도록 연결했습니다. 세 버튼은 화면만 이동하며 자동 수집, Cloud 저장, 상태 변경을 실행하지 않습니다. 전체 검증은 테스트 파일 191개, 테스트 822개와 production build를 통과했습니다.
 
 ---
 
@@ -247,7 +247,7 @@
 ### Issue 11. 프론트 테스트 전략 결정
 
 - 목적: 기능을 많이 쌓은 뒤 작은 수정으로 기존 흐름이 깨지는 위험을 줄입니다.
-- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-14 기준 `npm.cmd test`에서 테스트 파일 191개, 테스트 817개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
+- 현재 상태: 2026-07-06 사용자 승인 후 `vitest`와 `test: vitest run` 스크립트를 추가했습니다. 2026-07-14 기준 `npm.cmd test`에서 테스트 파일 191개, 테스트 822개가 통과합니다. GitHub Actions `Build` workflow는 `npm test` 후 `npm run build`를 실행합니다.
 - 왜 필요한가: `status/statusIds`, discovery links, production kanban, Cloud/localStorage fallback처럼 깨지면 사용자가 바로 불편한 계산이 늘었습니다.
 - 작업 범위: 1차는 `src/utils/discoveryLinkForm.js`, `src/utils/discoveryLinkCollection.js`, `src/utils/videoUserRecords.js`, `src/utils/productionKanbanData.js`, `src/utils/videoCollection.js`, `src/utils/video.js`, `src/utils/creatorOsMetrics.js`, `src/utils/channels.js`, `src/utils/channelScanDisplay.js`, `src/utils/channelScanSummaryBoxProps.js`, `src/utils/channelListItemProps.js`, `src/utils/channelListItemActionsProps.js`, `src/utils/channelListItemMetaProps.js`, `src/utils/channelMetadataControlsProps.js`, `src/utils/channelTagSelectorProps.js`, `src/utils/channelCategoryChipProps.js`, `src/utils/channelAddFormProps.js`, `src/utils/channelAddActions.js`, `src/utils/channelActions.js`, `src/utils/channelNotesModal.js`, `src/utils/clipboard.js`, `src/utils/dates.js`, `src/utils/urls.js`, `src/utils/formatters.js`, `src/utils/discoveryLinks.js`, `src/utils/discoveryLinksRouteProps.js`, `src/utils/discoveryLinksWorkspaceProps.js`, `src/utils/scrapbook.js`, `src/utils/scrapbookHeaderActions.js`, `src/utils/prompts.js`, `src/utils/radarCandidates.js`, `src/utils/productionVideoCard.js`, `src/utils/productionKanbanColumn.js`, `src/utils/productionKanbanProps.js`, `src/utils/productionKanbanActions.js`, `src/utils/videoCard.js`, `src/utils/videoDashboardControls.js`, `src/utils/videoToolbarProps.js`, `src/utils/videoToolbarFiltersProps.js`, `src/utils/videoListTableProps.js`, `src/utils/videoListTableRowProps.js`, `src/utils/videoListRowBadgesProps.js`, `src/utils/videoListRowContentProps.js`, `src/utils/videoListRowMetaActionsProps.js`, `src/utils/videoListRowCandidateActionProps.js`, `src/utils/videoListRowStatsProps.js`, `src/utils/appLayoutProps.js`, `src/utils/appRouteProps.js`, `src/utils/homeRouteProps.js`, `src/utils/legacyWorkspaceRouteProps.js`, `src/utils/routesProps.js`, `src/utils/productionSchedule.js`, `src/utils/homeActionShortcuts.js`, `src/utils/discoveryLinkActionCopy.js`, `src/utils/creatorHomeViewProps.js`, `src/utils/legacyWorkspaceProps.js`, `src/utils/legacyAsideProps.js`, `src/utils/legacyWorkPanelIntroProps.js`, `src/utils/legacyChannelPanelProps.js`, `src/utils/legacyMainPanelProps.js`, `src/utils/legacyWorkspaceMainPanelViewProps.js`, `src/utils/legacyDashboardTabViewProps.js`, `src/utils/legacyVaultTabViewProps.js`, `src/utils/legacyChannelPanelViewProps.js`, `src/utils/discoveryLinksCopy.js`, `src/utils/productionVideoStatusProps.js`, `src/utils/radarCandidateStateProps.js`, `src/utils/scrapbookHeaderProps.js`, `src/utils/selectedVideosActionBarProps.js`, `src/utils/productionDiscoveryLinkActionProps.js`, `src/utils/radarDecisionViewProps.js`의 순수 함수 테스트입니다.
 - 건드린 파일: `package.json`, `package-lock.json`, `src/utils/*.test.js`, `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`.
@@ -274,6 +274,7 @@
 - 추가 완료 18: 레이더와 스크랩북의 Cloud 저장 중 중복 실행 방지, 발견함 필터 초기화와 `aria-pressed`, 모바일 좌측 메뉴/작업 화면 배치, 제작 일정 긴 제목 표시, React `key` 경고 제거를 완료했습니다. 관련 유틸/컴포넌트 테스트와 모바일·데스크톱 브라우저 확인을 보강했습니다.
 - 추가 완료 19: 제작 후보함의 수동 `오늘 집중` 고정과 Cloud 보존, 홈 `오늘 집중` 지표와 바로가기, 제작 후보 저장 중 동일 영상 중복 요청 차단, 네트워크 예외 실패 복구, 긴 제목·복수 집중 후보 렌더링 테스트를 보강했습니다.
 - 추가 완료 20: 홈의 기존 4단계 데이터 흐름은 유지하고, 키워드 탐색·태그별 금고·업로드 캘린더를 별도 `실사용 도구` 영역으로 연결했습니다. 세 버튼의 이동 경로와 자동 수집·Cloud 저장·상태 변경 없음 문구를 유틸 및 렌더링 테스트로 보강했습니다.
+- 추가 완료 21: 키워드 탐색의 채널 선택 안내, 태그별 금고의 명시적 저장 영상 조회 안내, 업로드 캘린더 필터 빈 상태와 `후보함에서 찾기`, 제작 후보함의 캘린더 다음 행동, 홈 제작 후보 지표 일치를 보강했습니다. 화면 간 검색 의도는 일회성 화면 상태로만 전달하며 Cloud 저장, endpoint, DB schema, localStorage key, YouTube API 호출 조건은 바꾸지 않았습니다.
 - 사용자 판단 필요 여부: 현재 없음. React Testing Library나 Playwright 테스트를 도입하는 단계는 별도 판단 필요.
 
 ---
