@@ -4,9 +4,12 @@ import {
   buildLayoutProps,
   getCreatorSidebarHeaderViewProps,
   getCreatorSidebarItemViewProps,
+  getCreatorSidebarNavigationGroups,
+  getCreatorSidebarRoadmapViewProps,
   getCreatorWorkspaceHeaderStatCards,
   getWorkspaceTabsViewProps,
 } from './appLayoutProps';
+import { CREATOR_OS_PRODUCT_MAP } from '../constants/creatorOs';
 
 describe('appLayoutProps utils', () => {
   it('builds layout counts from channel, video, and selected channel lists', () => {
@@ -102,6 +105,35 @@ describe('appLayoutProps utils', () => {
       isComingSoon: true,
       statusLabel: '준비중',
     });
+  });
+
+  it('separates live navigation from the future roadmap without dropping items', () => {
+    const groups = getCreatorSidebarNavigationGroups(CREATOR_OS_PRODUCT_MAP);
+
+    expect(groups.liveItemCount).toBe(10);
+    expect(groups.roadmapItemCount).toBe(21);
+    expect(groups.liveItemCount + groups.roadmapItemCount).toBe(31);
+    expect(groups.liveSections.flatMap((section) => section.items).every((item) => item.status !== 'soon')).toBe(true);
+    expect(groups.roadmapSections.flatMap((section) => section.items).every((item) => item.status === 'soon')).toBe(true);
+    expect(groups.liveSections.some((section) => section.title === 'AI 공방')).toBe(false);
+    expect(groups.roadmapSections.some((section) => section.title === 'AI 공방')).toBe(true);
+  });
+
+  it('builds accessible roadmap toggle copy without implying data work', () => {
+    expect(getCreatorSidebarRoadmapViewProps({
+      isOpen: false,
+      roadmapItemCount: 21,
+    })).toEqual({
+      ariaLabel: '향후 기능 21개 펼치기, 화면 표시만 변경하며 API 호출이나 데이터 변경 없음',
+      countLabel: '21개',
+      description: '계획된 기능',
+      title: '향후 기능',
+    });
+
+    expect(getCreatorSidebarRoadmapViewProps({
+      isOpen: true,
+      roadmapItemCount: 21,
+    }).ariaLabel).toContain('접기');
   });
 
   it('builds workspace header stat card copy in display order', () => {

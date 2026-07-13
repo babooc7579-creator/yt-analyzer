@@ -16,6 +16,43 @@ export const getCreatorSidebarItemViewProps = ({ item }) => {
   };
 };
 
+const filterSidebarSections = (sections, predicate) => (
+  toArray(sections)
+    .map((section) => ({
+      ...section,
+      items: toArray(section?.items).filter(predicate),
+    }))
+    .filter((section) => section.items.length > 0)
+);
+
+export const getCreatorSidebarNavigationGroups = (sections) => {
+  const liveSections = filterSidebarSections(
+    sections,
+    (item) => item?.status !== 'soon',
+  );
+  const roadmapSections = filterSidebarSections(
+    sections,
+    (item) => item?.status === 'soon',
+  );
+
+  return {
+    liveItemCount: liveSections.reduce((total, section) => total + section.items.length, 0),
+    liveSections,
+    roadmapItemCount: roadmapSections.reduce((total, section) => total + section.items.length, 0),
+    roadmapSections,
+  };
+};
+
+export const getCreatorSidebarRoadmapViewProps = ({
+  isOpen,
+  roadmapItemCount,
+}) => ({
+  ariaLabel: `향후 기능 ${roadmapItemCount}개 ${isOpen ? '접기' : '펼치기'}, 화면 표시만 변경하며 API 호출이나 데이터 변경 없음`,
+  countLabel: `${roadmapItemCount}개`,
+  description: '계획된 기능',
+  title: '향후 기능',
+});
+
 export const getCreatorWorkspaceHeaderStatCards = ({
   channelCount,
   discoveryCandidateCount,
