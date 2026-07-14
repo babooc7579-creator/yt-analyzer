@@ -1,12 +1,14 @@
 import { getScrapbookVideoThumbnailViewProps } from '../utils/scrapbook';
+import YouTubeThumbnailImage from './YouTubeThumbnailImage';
 
 export default function ScrapbookVideoThumbnail({ video, videoTitle }) {
   const viewProps = getScrapbookVideoThumbnailViewProps({ video, videoTitle });
 
   return (
     <div className="relative">
-      <img
+      <YouTubeThumbnailImage
         src={viewProps.imageProps.src}
+        videoId={video.videoId}
         alt={viewProps.imageProps.alt}
         className="w-full aspect-video object-cover"
       />
