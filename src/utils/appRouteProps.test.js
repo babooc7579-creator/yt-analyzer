@@ -8,6 +8,7 @@ import { buildHomeRouteProps } from './homeRouteProps';
 import { buildKeywordExplorerRouteProps } from './keywordExplorerRouteProps';
 import { buildLegacyWorkspaceRouteProps } from './legacyWorkspaceRouteProps';
 import { buildRoutesProps } from './routesProps';
+import { buildSettingsRouteProps } from './settingsRouteProps';
 import { buildTagVaultRouteProps } from './tagVaultRouteProps';
 import { buildTtoTtoRouteProps } from './ttoTtoRouteProps';
 import { buildUploadCalendarRouteProps } from './uploadCalendarRouteProps';
@@ -22,6 +23,7 @@ describe('appRouteProps barrel exports', () => {
       'buildLayoutProps',
       'buildLegacyWorkspaceRouteProps',
       'buildRoutesProps',
+      'buildSettingsRouteProps',
       'buildTagVaultRouteProps',
       'buildTtoTtoRouteProps',
       'buildUploadCalendarRouteProps',
@@ -36,6 +38,7 @@ describe('appRouteProps barrel exports', () => {
     expect(appRouteProps.buildLayoutProps).toBe(buildLayoutProps);
     expect(appRouteProps.buildLegacyWorkspaceRouteProps).toBe(buildLegacyWorkspaceRouteProps);
     expect(appRouteProps.buildRoutesProps).toBe(buildRoutesProps);
+    expect(appRouteProps.buildSettingsRouteProps).toBe(buildSettingsRouteProps);
     expect(appRouteProps.buildTagVaultRouteProps).toBe(buildTagVaultRouteProps);
     expect(appRouteProps.buildTtoTtoRouteProps).toBe(buildTtoTtoRouteProps);
     expect(appRouteProps.buildUploadCalendarRouteProps).toBe(buildUploadCalendarRouteProps);

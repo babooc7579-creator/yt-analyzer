@@ -4,6 +4,7 @@ import CreatorDiscoveryLinksRoute from './CreatorDiscoveryLinksRoute';
 import CreatorHomeRoute from './CreatorHomeRoute';
 import CreatorKeywordExplorerRoute from './CreatorKeywordExplorerRoute';
 import CreatorLegacyWorkspaceRoute from './CreatorLegacyWorkspaceRoute';
+import CreatorSettingsRoute from './CreatorSettingsRoute';
 import CreatorTagVaultRoute from './CreatorTagVaultRoute';
 import CreatorTtoTtoRoute from './CreatorTtoTtoRoute';
 import CreatorUploadCalendarRoute from './CreatorUploadCalendarRoute';
@@ -19,12 +20,14 @@ export default function CreatorAppRoutes({
   isHomeView,
   isKeywordExplorerView,
   isLegacyWorkspaceView,
+  isSettingsView,
   isTagVaultView,
   isTtoTtoView,
   isUploadCalendarView,
   keywordExplorerRouteProps,
   legacyWorkspaceRouteProps,
   onOpenHome,
+  settingsRouteProps,
   ttoTtoRouteProps,
   tagVaultRouteProps,
   uploadCalendarRouteProps,
@@ -43,6 +46,10 @@ export default function CreatorAppRoutes({
 
   if (isUploadCalendarView) {
     return <CreatorUploadCalendarRoute {...uploadCalendarRouteProps} />;
+  }
+
+  if (isSettingsView) {
+    return <CreatorSettingsRoute {...settingsRouteProps} />;
   }
 
   if (isComingSoonView) {

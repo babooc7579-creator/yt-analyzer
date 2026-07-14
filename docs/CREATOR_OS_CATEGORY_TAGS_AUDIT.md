@@ -266,6 +266,8 @@ categories container 또는 settings document
 3. 카테고리 이름 변경은 DB 변경 작업이므로 더 강한 확인 UI가 필요합니다.
 4. `category`가 partition key로 쓰이는 구조이므로 이름 변경 로직은 백엔드에서 더 신중히 검토해야 합니다.
 
+2026-07-15에는 이 단기 원칙을 설명하고 기존 카테고리 관리 기능을 모아 보여주는 독립 `설정` 화면을 연결했습니다. 저장 구조, localStorage key, `/tags/rename` 동작과 장기 선택지 C의 데이터 모델은 변경하지 않았습니다.
+
 ---
 
 ## 10. 지금 결정하지 말아야 할 것

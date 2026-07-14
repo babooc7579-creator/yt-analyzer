@@ -6,6 +6,7 @@ import {
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
   buildRoutesProps,
+  buildSettingsRouteProps,
   buildTagVaultRouteProps,
   buildTtoTtoRouteProps,
   buildUploadCalendarRouteProps,
@@ -18,6 +19,7 @@ export function useCreatorAppViewProps(props) {
   const discoveryLinksRouteProps = buildDiscoveryLinksRouteProps(props);
   const keywordExplorerRouteProps = buildKeywordExplorerRouteProps(props);
   const legacyWorkspaceRouteProps = buildLegacyWorkspaceRouteProps(props);
+  const settingsRouteProps = buildSettingsRouteProps(props);
   const tagVaultRouteProps = buildTagVaultRouteProps(props);
   const ttoTtoRouteProps = buildTtoTtoRouteProps(props);
   const uploadCalendarRouteProps = buildUploadCalendarRouteProps(props);
@@ -33,12 +35,14 @@ export function useCreatorAppViewProps(props) {
     isHomeView: props.isHomeView,
     isKeywordExplorerView: props.isKeywordExplorerView,
     isLegacyWorkspaceView: props.isLegacyWorkspaceView,
+    isSettingsView: props.isSettingsView,
     isTagVaultView: props.isTagVaultView,
     isTtoTtoView: props.isTtoTtoView,
     isUploadCalendarView: props.isUploadCalendarView,
     keywordExplorerRouteProps,
     legacyWorkspaceRouteProps,
     onOpenHome: () => props.openCreatorView({ id: 'home' }),
+    settingsRouteProps,
     ttoTtoRouteProps,
     tagVaultRouteProps,
     uploadCalendarRouteProps,

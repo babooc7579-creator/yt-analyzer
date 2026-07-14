@@ -64,6 +64,15 @@ describe('creatorOs constants', () => {
     expect(itemsById['studio-calendar'].summary).toContain('목표 업로드 날짜');
   });
 
+  it('exposes settings as a live operations workspace', () => {
+    expect(itemsById['ops-settings']).toMatchObject({
+      label: '설정',
+      status: 'live',
+    });
+    expect(itemsById['ops-settings'].summary).toContain('채널 분야');
+    expect(itemsById['ops-settings'].summary).toContain('데이터 연결');
+  });
+
   it('keeps live view groups aligned with channel and scrapbook workflows', () => {
     expect(READY_CREATOR_VIEWS).toEqual(expect.arrayContaining([
       'vault-videos',
