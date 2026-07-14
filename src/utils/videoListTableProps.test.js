@@ -20,6 +20,7 @@ describe('videoListTableProps utils', () => {
       'days-old',
     ]);
     expect(VIDEO_LIST_TABLE_HEADERS.every(header => header.label && header.className)).toBe(true);
+    expect(VIDEO_LIST_TABLE_HEADERS.find(header => header.key === 'days-old')?.label).toBe('게시일 · 경과');
   });
 
   it('builds row props with selection, saved, and production candidate state', () => {

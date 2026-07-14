@@ -30,6 +30,21 @@ export const formatKoreanDateTime = (value, fallback = '') => {
   }).format(date);
 };
 
+export const formatShortKoreanDate = (value, fallback = '게시일 미상') => {
+  if (!value) return fallback;
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  const dateOnlyMatch = String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  const year = dateOnlyMatch ? Number(dateOnlyMatch[1]) : date.getFullYear();
+  const month = dateOnlyMatch ? Number(dateOnlyMatch[2]) : date.getMonth() + 1;
+  const day = dateOnlyMatch ? Number(dateOnlyMatch[3]) : date.getDate();
+
+  return `${String(year).slice(-2)}년 ${month}월 ${day}일`;
+};
+
 export const getDateDistanceFromToday = (date) => {
   if (!date) return null;
 

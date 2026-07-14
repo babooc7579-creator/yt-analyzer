@@ -1,13 +1,14 @@
 import { TTOTTO_MIN_DAYS_OLD, TTOTTO_MIN_MULTIPLIER } from './video';
+import { formatShortKoreanDate } from './dates';
 
 export const getVideoListRowStatsViewProps = ({ isStrongReaction, video }) => ({
   daysOldCellProps: {
     className: video.daysOld >= TTOTTO_MIN_DAYS_OLD ? 'bg-orange-50 border-orange-100 text-orange-700' : 'bg-white/80 border-slate-200 text-slate-600',
-    label: '경과일',
+    label: '게시일',
     minWidthClassName: 'min-w-[120px]',
     roundedRight: true,
   },
-  daysOldText: `${video.daysOld}일`,
+  daysOldText: formatShortKoreanDate(video.upload_date),
   engagementCellProps: {
     label: '참여율',
   },
@@ -21,7 +22,7 @@ export const getVideoListRowStatsViewProps = ({ isStrongReaction, video }) => ({
   },
   multiplierText: `${video.multiplier.toFixed(1)}x`,
   showTrendingIcon: isStrongReaction,
-  uploadDateText: `(${video.upload_date})`,
+  uploadDateText: `(${video.daysOld}일 경과)`,
   viewCountCellProps: {
     label: '총 조회수',
     minWidthClassName: 'min-w-[120px]',

@@ -10,16 +10,16 @@ export default function VideoCardPrimaryActions({
   videoTitle,
 }) {
   return (
-    <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-      <VideoCardScrapButton
-        isSaved={isSaved}
-        onToggleScrap={onToggleScrap}
-        video={video}
-        videoTitle={videoTitle}
-      />
+    <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
       <VideoCardProductionButton
         isProductionCandidate={isProductionCandidate}
         onPromoteToProduction={onPromoteToProduction}
+        video={video}
+        videoTitle={videoTitle}
+      />
+      <VideoCardScrapButton
+        isSaved={isSaved}
+        onToggleScrap={onToggleScrap}
         video={video}
         videoTitle={videoTitle}
       />
