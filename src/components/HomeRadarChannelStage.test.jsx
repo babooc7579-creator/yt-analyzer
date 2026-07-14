@@ -23,6 +23,8 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('STAGE 1–2');
     expect(html).toContain('채널 이름 또는 태그 검색');
     expect(html).toContain('채널 검색어 지우기');
+    expect(html).toContain('aria-label="채널 이름 또는 태그 검색"');
+    expect(html).toContain('aria-label="채널 검색어 지우기"');
     expect(html).toContain('분야 전체');
     expect(html).toContain('등급 전체');
     expect(html).toContain('수집일 전체');
