@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   formatDateWithDots,
   formatKoreanDateTime,
+  formatShortKoreanDate,
   getDateDistanceFromToday,
   getDaysDiff,
   getIsoTodayDate,
@@ -47,6 +48,13 @@ describe('dates utils', () => {
     expect(formatKoreanDateTime(value, '기록 없음')).toBe(expected);
     expect(formatKoreanDateTime('', '기록 없음')).toBe('기록 없음');
     expect(formatKoreanDateTime('bad-date', '기록 없음')).toBe('기록 없음');
+  });
+
+  it('formats compact Korean publish dates without changing the source date', () => {
+    expect(formatShortKoreanDate('2026-04-01')).toBe('26년 4월 1일');
+    expect(formatShortKoreanDate('2026-04-01T23:30:00.000Z')).toBe('26년 4월 1일');
+    expect(formatShortKoreanDate('', '게시일 없음')).toBe('게시일 없음');
+    expect(formatShortKoreanDate('bad-date', '게시일 없음')).toBe('게시일 없음');
   });
 
   it('calculates date distance from today using date-only values', () => {

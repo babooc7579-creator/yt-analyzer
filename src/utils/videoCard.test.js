@@ -54,16 +54,15 @@ describe('videoCard utils', () => {
     });
 
     expect(props.cardClassName).toContain('border-indigo-300');
-    expect(props.contentClassName).toBe('p-5');
+    expect(props.contentClassName).toBe('p-4');
     expect(props.videoTitle).toBe('Old viral idea');
     expect(props.videoUrl).toBe('https://youtube.com/watch?v=video%201');
     expect(props.thumbnailProps).toMatchObject({
       isCandidate: true,
       isChecked: true,
-      isSaved: true,
       isStrongReaction: true,
       rank: 2,
-      thumbnailHeightClass: 'min-h-[360px]',
+      thumbnailHeightClass: 'h-[260px]',
       video,
       videoTitle: 'Old viral idea',
     });
@@ -110,9 +109,8 @@ describe('videoCard utils', () => {
     expect(props.thumbnailProps).toMatchObject({
       isCandidate: true,
       isChecked: false,
-      isSaved: false,
       isStrongReaction: false,
-      thumbnailHeightClass: 'min-h-[420px]',
+      thumbnailHeightClass: 'h-[300px]',
     });
     expect(props.statsGridProps).toMatchObject({
       isStrongReaction: false,
@@ -144,7 +142,8 @@ describe('videoCard utils', () => {
     expect(getVideoCardCandidateReasonsViewProps({
       candidateReasons: ['평균 대비 3.2배', '200일 지난 소재'],
     })).toEqual({
-      joinedReasons: '평균 대비 3.2배 · 200일 지난 소재',
+      description: '평균 대비 3.2배 · 200일 지난 소재',
+      isCandidate: true,
       reasonList: ['평균 대비 3.2배', '200일 지난 소재'],
       shouldShow: true,
       title: '후보 이유',
@@ -152,7 +151,12 @@ describe('videoCard utils', () => {
 
     expect(getVideoCardCandidateReasonsViewProps({
       candidateReasons: null,
-    }).shouldShow).toBe(false);
+    })).toMatchObject({
+      description: '현재 또터또 기준에는 해당하지 않는 비교 참고 영상입니다.',
+      isCandidate: false,
+      shouldShow: true,
+      title: '비교 참고',
+    });
   });
 
   it('builds copy URL button props without API confusion', () => {
@@ -228,6 +232,7 @@ describe('videoCard utils', () => {
         like_count: 1234,
         like_ratio: 4.5,
         multiplier: 3.2,
+        upload_date: '2026-04-01',
         view_count: 987654,
       },
     });
@@ -235,11 +240,12 @@ describe('videoCard utils', () => {
     expect(props.viewCountTileProps.label).toBe('총 조회수');
     expect(props.multiplierTileProps.label).toBe('대박 지수');
     expect(props.engagementTileProps.label).toBe('참여율');
-    expect(props.daysOldTileProps.label).toBe('경과일');
+    expect(props.daysOldTileProps.label).toBe('게시일');
     expect(props.viewCountText).toBe('987,654');
     expect(props.engagementLikeText).toBe('좋아요 1,234');
-    expect(props.daysOldText).toBe('200일');
-    expect(props.multiplierTileProps.className).toContain('bg-rose-600');
+    expect(props.publishedDateText).toBe('26년 4월 1일');
+    expect(props.daysOldText).toBe('(200일 경과)');
+    expect(props.multiplierTileProps.className).toContain('bg-rose-50');
   });
 
   it('builds thumbnail badge items and generic media copy', () => {

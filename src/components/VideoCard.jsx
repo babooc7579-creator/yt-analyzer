@@ -52,9 +52,8 @@ export default function VideoCard({
         <VideoCardStatusBadges {...statusBadgeProps} />
         <VideoCardMetaActions {...metaActionsProps} />
 
-        <VideoCardPrimaryActions {...primaryActionsProps} />
-
         <VideoCardStatsGrid {...statsGridProps} />
+        <VideoCardPrimaryActions {...primaryActionsProps} />
       </div>
     </div>
   );

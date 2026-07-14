@@ -8,7 +8,7 @@ export default function VideoCardTitleLink({ videoTitle, videoUrl }) {
       href={videoUrl}
       target="_blank"
       rel="noreferrer"
-      className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600"
+      className="line-clamp-2 min-h-11 text-base font-extrabold leading-snug text-slate-900 hover:text-indigo-600"
       title={videoTitle}
       aria-label={ariaLabel}
     >

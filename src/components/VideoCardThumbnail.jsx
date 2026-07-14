@@ -5,10 +5,8 @@ import VideoCardThumbnailBadges from './VideoCardThumbnailBadges';
 export default function VideoCardThumbnail({
   isCandidate,
   isChecked,
-  isSaved,
   isStrongReaction,
   onToggleCheck,
-  onToggleScrap,
   rank,
   thumbnailHeightClass,
   video,
@@ -28,9 +26,7 @@ export default function VideoCardThumbnail({
       />
       <VideoCardThumbnailActions
         isChecked={isChecked}
-        isSaved={isSaved}
         onToggleCheck={onToggleCheck}
-        onToggleScrap={onToggleScrap}
         video={video}
         videoTitle={videoTitle}
       />
