@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getCreatorHomeViewProps } from '../utils/creatorHomeViewProps';
 import HomeActionShortcuts from './HomeActionShortcuts';
 import HomeOperatingGuidelines from './HomeOperatingGuidelines';
+import HomeRadarFinishStage from './HomeRadarFinishStage';
 import HomeRadarSummary from './HomeRadarSummary';
 import HomeWorkspaceShortcuts from './HomeWorkspaceShortcuts';
 import RadarCandidateStrip from './RadarCandidateStrip';
@@ -23,8 +24,10 @@ export default function CreatorHomeView({
   restoreVideoToRadar,
   savedChannels,
   savedVideos,
+  selectedChannelIds,
   selectedChannelCount,
   selectedChannelKey,
+  toggleChannelSelection,
   toggleScrapVideo,
   ttoTtoAssetCount,
   videoUserRecords,
@@ -63,8 +66,10 @@ export default function CreatorHomeView({
     restoreVideoToRadar,
     savedChannels,
     savedVideos,
+    selectedChannelIds,
     selectedChannelCount,
     storedVideoLoadResult,
+    toggleChannelSelection,
     toggleScrapVideo,
     ttoTtoAssetCount,
     videoUserRecords,
@@ -72,18 +77,38 @@ export default function CreatorHomeView({
   });
 
   return (
-    <div data-testid="creator-route-home" className="grid grid-cols-1 gap-4 2xl:grid-cols-[1.2fr_0.8fr]">
+    <div data-testid="creator-route-home" className="space-y-4">
       <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
         <HomeRadarSummary {...radarSummaryProps} />
 
         <RadarCandidateStrip {...radarCandidateStripProps} />
 
-        <HomeActionShortcuts {...actionShortcutsProps} />
+        <HomeRadarFinishStage
+          onOpenProductionCandidates={() => onOpenView({ id: 'studio-candidates' })}
+          productionCandidateCount={productionCandidateCount}
+          productionFocusCount={productionFocusCount}
+        />
 
-        <HomeWorkspaceShortcuts {...workspaceShortcutsProps} />
+        <details className="mt-6 border-t border-slate-800 pt-5">
+          <summary className="cursor-pointer text-sm font-extrabold text-slate-300 hover:text-white">
+            다른 탐색·관리 도구 보기
+          </summary>
+          <p className="mt-2 text-xs text-slate-500">
+            오늘의 소재 판단과 직접 관계없는 도구는 필요할 때만 펼쳐 사용합니다.
+          </p>
+          <HomeActionShortcuts {...actionShortcutsProps} />
+          <HomeWorkspaceShortcuts {...workspaceShortcutsProps} />
+        </details>
       </section>
 
-      <HomeOperatingGuidelines />
+      <details>
+        <summary className="cursor-pointer px-1 text-xs font-bold text-slate-500 hover:text-slate-300">
+          데이터 조회와 API 사용 기준 보기
+        </summary>
+        <div className="mt-3">
+          <HomeOperatingGuidelines />
+        </div>
+      </details>
     </div>
   );
 }

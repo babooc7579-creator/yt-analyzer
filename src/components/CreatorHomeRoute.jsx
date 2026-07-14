@@ -16,8 +16,10 @@ export default function CreatorHomeRoute({
   restoreVideoToRadar,
   savedChannels,
   savedVideos,
+  selectedChannelIds,
   selectedChannelCount,
   selectedChannelKey,
+  toggleChannelSelection,
   toggleScrapVideo,
   ttoTtoAssetCount,
   videoUserRecords,
@@ -40,8 +42,10 @@ export default function CreatorHomeRoute({
       restoreVideoToRadar={restoreVideoToRadar}
       savedChannels={savedChannels}
       savedVideos={savedVideos}
+      selectedChannelIds={selectedChannelIds}
       selectedChannelCount={selectedChannelCount}
       selectedChannelKey={selectedChannelKey}
+      toggleChannelSelection={toggleChannelSelection}
       toggleScrapVideo={toggleScrapVideo}
       ttoTtoAssetCount={ttoTtoAssetCount}
       videoUserRecords={videoUserRecords}

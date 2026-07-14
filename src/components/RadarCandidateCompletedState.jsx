@@ -23,6 +23,7 @@ export default function RadarCandidateCompletedState({
 
   return (
     <div className="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-5">
+      <p className="text-[11px] font-extrabold text-emerald-300">STAGE 3 · 후보 판정 완료</p>
       <p className="text-sm font-extrabold text-emerald-100">{titleText}</p>
       <p className="mt-2 text-xs leading-relaxed text-emerald-100/70">{descriptionText}</p>
       <div className="mt-4 flex flex-wrap gap-2">

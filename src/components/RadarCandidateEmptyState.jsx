@@ -32,6 +32,7 @@ export default function RadarCandidateEmptyState({
 
   return (
     <div className="mt-6 rounded-2xl border border-dashed border-slate-700 bg-slate-950/70 p-5">
+      <p className="text-[11px] font-extrabold text-rose-300">STAGE 3 · 오늘 후보 판단</p>
       <p className="text-sm font-extrabold text-white">{titleText}</p>
       <p className="mt-2 text-xs leading-relaxed text-slate-400">
         {descriptionText}

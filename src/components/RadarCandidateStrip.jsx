@@ -83,28 +83,32 @@ export default function RadarCandidateStrip({
 
   if (isEmpty) {
     return (
-      <RadarCandidateEmptyState
-        onLoadStoredVideos={onLoadStoredVideos}
-        onOpenChannelWatchlist={onOpenChannelWatchlist}
-        onOpenSelectedScan={onOpenSelectedScan}
-        onOpenVault={onOpenVault}
-        selectedChannelCount={selectedChannelCount}
-        storedVideoLoadResult={storedVideoLoadResult}
-      />
+      <div id="today-radar-candidates" className="scroll-mt-5">
+        <RadarCandidateEmptyState
+          onLoadStoredVideos={onLoadStoredVideos}
+          onOpenChannelWatchlist={onOpenChannelWatchlist}
+          onOpenSelectedScan={onOpenSelectedScan}
+          onOpenVault={onOpenVault}
+          selectedChannelCount={selectedChannelCount}
+          storedVideoLoadResult={storedVideoLoadResult}
+        />
+      </div>
     );
   }
 
   if (isCompleted) {
     return (
-      <RadarCandidateCompletedState
-        {...completedStateProps}
-        clearDecisionsPending={clearDecisionsPending}
-      />
+      <div id="today-radar-candidates" className="scroll-mt-5">
+        <RadarCandidateCompletedState
+          {...completedStateProps}
+          clearDecisionsPending={clearDecisionsPending}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="mt-6 rounded-2xl border border-rose-400/20 bg-rose-500/10 p-5">
+    <div id="today-radar-candidates" className="mt-6 scroll-mt-5 rounded-2xl border border-rose-400/20 bg-rose-500/10 p-5">
       <RadarCandidateStripHeader
         {...headerProps}
         clearDecisionsPending={clearDecisionsPending}
