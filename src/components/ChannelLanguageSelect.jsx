@@ -11,7 +11,7 @@ export default function ChannelLanguageSelect({
     <select
       value={language}
       onChange={(event) => setLanguage(event.target.value)}
-      className="w-full text-sm px-2 py-2 bg-white border border-indigo-200 rounded-lg outline-none cursor-pointer font-medium"
+      className="w-full cursor-pointer rounded-lg border border-indigo-200 bg-white px-2 py-2 text-sm font-medium text-slate-900 outline-none focus:border-indigo-400"
       title={copy.title}
       aria-label={copy.ariaLabel}
     >

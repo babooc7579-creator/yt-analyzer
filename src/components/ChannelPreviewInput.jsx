@@ -17,7 +17,7 @@ export default function ChannelPreviewInput({
           value={newChannelInput}
           onChange={(event) => setNewChannelInput(event.target.value)}
           placeholder={copy.inputPlaceholder}
-          className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none"
+          className="w-full rounded-lg border border-indigo-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-400"
           aria-label={copy.inputAriaLabel}
           title={copy.inputTitle}
           onKeyDown={(event) => event.key === 'Enter' && handlePreviewChannel()}

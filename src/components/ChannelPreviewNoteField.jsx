@@ -11,7 +11,7 @@ export default function ChannelPreviewNoteField({
       value={note}
       onChange={(event) => setNote(event.target.value)}
       placeholder={copy.placeholder}
-      className="w-full text-sm px-3 py-2 border border-indigo-200 rounded-lg outline-none resize-none"
+      className="w-full resize-none rounded-lg border border-indigo-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-400"
       rows={2}
       aria-label={copy.ariaLabel}
     />
