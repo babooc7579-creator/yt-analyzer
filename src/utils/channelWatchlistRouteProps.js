@@ -10,17 +10,12 @@ export function buildChannelWatchlistRouteProps({
   setSelectedChannelIds,
   toggleChannelSelection,
 } = {}) {
-  const loadStoredVideosAndOpenRadar = async () => {
-    const result = await loadStoredVideosForSelectedChannels();
-    if (result?.success) openCreatorView({ id: 'home' });
-    return result;
-  };
-
   return {
     channels: toArray(savedChannels),
     channelsLoading: Boolean(channelsLoading),
-    onLoadStoredVideos: loadStoredVideosAndOpenRadar,
+    onLoadStoredVideos: loadStoredVideosForSelectedChannels,
     onOpenChannelList: () => openCreatorView({ id: 'ops-channels' }),
+    onOpenRadar: () => openCreatorView({ id: 'home' }),
     onOpenStoredVideos: () => openCreatorView({ id: 'vault-videos' }),
     onOpenSelectedScan: () => openCreatorView({ id: 'ops-selected-scan' }),
     onOpenTtoTto: () => openCreatorView({ id: 'discovery-ttotto' }),

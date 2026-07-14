@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { useChannelWatchlistState } from '../hooks/useChannelWatchlistState';
 import ChannelWatchlistCard from './ChannelWatchlistCard';
 import ChannelWatchlistFilters from './ChannelWatchlistFilters';
 import ChannelWatchlistHeader from './ChannelWatchlistHeader';
+import ChannelWatchlistNextStep from './ChannelWatchlistNextStep';
 import { getChannelWatchBulkSelection } from '../utils/channelWatchlist';
 
 const SUMMARY_ITEMS = [
@@ -18,6 +20,7 @@ export default function ChannelWatchlistWorkspace({
   channelsLoading,
   onLoadStoredVideos,
   onOpenChannelList,
+  onOpenRadar,
   onOpenStoredVideos,
   onOpenSelectedScan,
   onOpenTtoTto,
@@ -26,6 +29,15 @@ export default function ChannelWatchlistWorkspace({
   onToggleSelection,
   selectedChannelIds,
 }) {
+  const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
+  const selectedChannelKey = [...(Array.isArray(selectedChannelIds) ? selectedChannelIds : [])]
+    .sort()
+    .join('|');
+
+  useEffect(() => {
+    setStoredVideoLoadResult(null);
+  }, [selectedChannelKey]);
+
   const {
     filteredChannels,
     gradeFilter,
@@ -59,16 +71,29 @@ export default function ChannelWatchlistWorkspace({
     }));
   };
 
+  const loadStoredVideos = async () => {
+    setStoredVideoLoadResult(null);
+    const result = await onLoadStoredVideos?.();
+    if (result?.success) setStoredVideoLoadResult(result);
+    return result;
+  };
+
   return (
     <section data-testid="creator-route-channel-watchlist" className="min-w-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
       <ChannelWatchlistHeader
         channelsLoading={channelsLoading}
-        onLoadStoredVideos={onLoadStoredVideos}
+        onLoadStoredVideos={loadStoredVideos}
         onOpenStoredVideos={onOpenStoredVideos}
         onOpenSelectedScan={onOpenSelectedScan}
         onOpenTtoTto={onOpenTtoTto}
         onRefreshChannels={onRefreshChannels}
         selectedChannelCount={summary.selectedChannelCount}
+      />
+
+      <ChannelWatchlistNextStep
+        loadResult={storedVideoLoadResult}
+        onOpenRadar={onOpenRadar}
+        onOpenSelectedScan={onOpenSelectedScan}
       />
 
       <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">

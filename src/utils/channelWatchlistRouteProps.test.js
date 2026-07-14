@@ -32,21 +32,22 @@ describe('channelWatchlistRouteProps utils', () => {
 
     await props.onLoadStoredVideos();
     props.onOpenChannelList();
+    props.onOpenRadar();
     props.onOpenStoredVideos();
     props.onOpenSelectedScan();
     props.onOpenTtoTto();
 
     expect(onLoad).toHaveBeenCalledTimes(1);
     expect(openCreatorView.mock.calls).toEqual([
-      [{ id: 'home' }],
       [{ id: 'ops-channels' }],
+      [{ id: 'home' }],
       [{ id: 'vault-videos' }],
       [{ id: 'ops-selected-scan' }],
       [{ id: 'discovery-ttotto' }],
     ]);
   });
 
-  it('stays on the channel screen when stored video lookup fails', async () => {
+  it('returns stored video lookup failures without navigating automatically', async () => {
     const openCreatorView = vi.fn();
     const onLoad = vi.fn().mockResolvedValue({ success: false, videoCount: 0 });
     const props = buildChannelWatchlistRouteProps({
@@ -54,8 +55,9 @@ describe('channelWatchlistRouteProps utils', () => {
       openCreatorView,
     });
 
-    await props.onLoadStoredVideos();
+    const result = await props.onLoadStoredVideos();
 
+    expect(result).toEqual({ success: false, videoCount: 0 });
     expect(onLoad).toHaveBeenCalledTimes(1);
     expect(openCreatorView).not.toHaveBeenCalled();
   });

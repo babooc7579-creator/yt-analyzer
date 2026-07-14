@@ -17,6 +17,7 @@ describe('ChannelWatchlistWorkspace', () => {
         channelsLoading={false}
         onLoadStoredVideos={() => {}}
         onOpenChannelList={() => {}}
+        onOpenRadar={() => {}}
         onOpenStoredVideos={() => {}}
         onOpenSelectedScan={() => {}}
         onOpenTtoTto={() => {}}
@@ -30,7 +31,7 @@ describe('ChannelWatchlistWorkspace', () => {
     expect(html).toContain('data-testid="creator-route-channel-watchlist"');
     expect(html).toContain('Priority Channel');
     expect(html).toContain('S 등급 핵심 채널');
-    expect(html).toContain('저장 영상 불러오고 레이더 보기');
+    expect(html).toContain('선택 채널 저장 영상 불러오기');
     expect(html).toContain('Cloud DB에서 조회');
     expect(html).toContain('새 영상 수집 화면');
     expect(html).toContain('실제 실행 시 YouTube API');
