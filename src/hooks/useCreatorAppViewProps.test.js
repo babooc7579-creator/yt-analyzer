@@ -8,6 +8,7 @@ vi.mock('../utils/appRouteProps', () => ({
   buildLayoutProps: vi.fn(() => ({ shell: 'layout' })),
   buildLegacyWorkspaceRouteProps: vi.fn(() => ({ route: 'legacy-workspace' })),
   buildRoutesProps: vi.fn(() => ({ routes: 'creator-os' })),
+  buildSettingsRouteProps: vi.fn(() => ({ route: 'settings' })),
   buildTagVaultRouteProps: vi.fn(() => ({ route: 'tag-vault' })),
   buildTtoTtoRouteProps: vi.fn(() => ({ route: 'ttotto' })),
   buildUploadCalendarRouteProps: vi.fn(() => ({ route: 'upload-calendar' })),
@@ -21,6 +22,7 @@ import {
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
   buildRoutesProps,
+  buildSettingsRouteProps,
   buildTagVaultRouteProps,
   buildTtoTtoRouteProps,
   buildUploadCalendarRouteProps,
@@ -41,6 +43,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: true,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,
@@ -55,6 +58,7 @@ describe('useCreatorAppViewProps', () => {
     expect(buildDiscoveryLinksRouteProps).toHaveBeenCalledWith(props);
     expect(buildKeywordExplorerRouteProps).toHaveBeenCalledWith(props);
     expect(buildLegacyWorkspaceRouteProps).toHaveBeenCalledWith(props);
+    expect(buildSettingsRouteProps).toHaveBeenCalledWith(props);
     expect(buildTagVaultRouteProps).toHaveBeenCalledWith(props);
     expect(buildTtoTtoRouteProps).toHaveBeenCalledWith(props);
     expect(buildUploadCalendarRouteProps).toHaveBeenCalledWith(props);
@@ -69,12 +73,14 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: true,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,
       keywordExplorerRouteProps: { route: 'keyword-explorer' },
       legacyWorkspaceRouteProps: { route: 'legacy-workspace' },
       onOpenHome: expect.any(Function),
+      settingsRouteProps: { route: 'settings' },
       ttoTtoRouteProps: { route: 'ttotto' },
       tagVaultRouteProps: { route: 'tag-vault' },
       uploadCalendarRouteProps: { route: 'upload-calendar' },
@@ -96,6 +102,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: false,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,

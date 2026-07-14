@@ -205,13 +205,14 @@ Main Content
 
 ### 설정
 
-기술 설정과 연결 상태를 모읍니다.
+기술 설정과 연결 상태를 모읍니다. 2026-07-15 기준 독립 설정 메뉴의 1차 화면이 연결됐습니다.
 
-- YouTube API Key 안내
+- 채널 분야 목록 관리
+- localStorage 화면 목록과 Cloud 채널 태그의 차이 안내
 - Azure Function API Base URL
-- CORS 오류 안내
-- 로컬 실행 안내
-- 배포 상태 안내
+- 저장 영상 DB 조회와 YouTube API 수집 구분
+
+YouTube API Key, CORS, 로컬 실행, 배포 상태를 한 화면에서 점검하는 진단 기능은 후속 범위입니다.
 
 ---
 

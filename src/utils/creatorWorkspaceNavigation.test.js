@@ -14,13 +14,14 @@ describe('creator workspace navigation utils', () => {
       'isHomeView',
       'isKeywordExplorerView',
       'isLegacyWorkspaceView',
+      'isSettingsView',
       'isTagVaultView',
       'isTtoTtoView',
       'isUploadCalendarView',
     ];
     const liveItems = CREATOR_OS_ITEMS.filter((item) => item.status === 'live');
 
-    expect(liveItems).toHaveLength(15);
+    expect(liveItems).toHaveLength(16);
     liveItems.forEach((item) => {
       const model = getCreatorWorkspaceViewModel(item.id);
       const activeRouteCount = routeFlags.filter((flag) => model[flag]).length;
@@ -40,6 +41,7 @@ describe('creator workspace navigation utils', () => {
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
       isReferenceVaultView: false,
+      isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,
@@ -85,6 +87,12 @@ describe('creator workspace navigation utils', () => {
       isComingSoonView: false,
       isLegacyWorkspaceView: false,
       isUploadCalendarView: true,
+    });
+
+    expect(getCreatorWorkspaceViewModel('ops-settings')).toMatchObject({
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
+      isSettingsView: true,
     });
   });
 

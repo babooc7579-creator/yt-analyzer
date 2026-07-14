@@ -1,0 +1,96 @@
+import { Cloud, Database, FolderCog, KeyRound } from 'lucide-react';
+
+import ChannelCategorySettings from './ChannelCategorySettings';
+
+const settingCards = [
+  {
+    icon: Database,
+    title: 'Cloud DB가 기준 데이터입니다',
+    description: '채널, 저장 영상, 판단 기록과 스크랩북은 Cloud 데이터를 기준으로 사용합니다.',
+    tone: 'border-blue-400/25 bg-blue-500/10 text-blue-200',
+  },
+  {
+    icon: FolderCog,
+    title: '화면 분야 목록은 브라우저 설정입니다',
+    description: '분야 추가와 숨김은 이 브라우저의 표시 목록만 바꿉니다. Cloud 채널 태그를 삭제하지 않습니다.',
+    tone: 'border-amber-400/25 bg-amber-500/10 text-amber-200',
+  },
+  {
+    icon: KeyRound,
+    title: '새 영상 수집만 YouTube API를 사용합니다',
+    description: '채널 선택과 저장 영상 불러오기는 YouTube API 호출 작업이 아닙니다.',
+    tone: 'border-emerald-400/25 bg-emerald-500/10 text-emerald-200',
+  },
+];
+
+export default function SettingsWorkspace({
+  categorySettingsProps,
+  functionApiBase,
+  savedChannelCount,
+}) {
+  return (
+    <section data-testid="creator-route-settings" className="min-w-0 space-y-4">
+      <div className="border border-indigo-400/25 bg-indigo-500/10 p-5">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-indigo-200 text-indigo-950">
+            <FolderCog className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-xs font-extrabold text-indigo-300">운영 설정</p>
+            <h3 className="mt-1 text-lg font-black text-white">앱의 기준과 채널 분야를 관리합니다</h3>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
+              화면 표시 설정과 Cloud 데이터 변경을 구분합니다. 이름 변경은 Cloud 채널 태그를 바꾸지만, 추가와 숨김은 현재 브라우저의 화면 목록만 바꿉니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+        {settingCards.map(({ description, icon: Icon, title, tone }) => (
+          <article className={`border p-4 ${tone}`} key={title}>
+            <Icon className="h-5 w-5" />
+            <h4 className="mt-3 text-sm font-extrabold text-white">{title}</h4>
+            <p className="mt-2 text-xs leading-5 text-slate-300">{description}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 2xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)]">
+        <section className="border border-slate-700 bg-slate-900/90 p-5" aria-labelledby="settings-category-title">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-extrabold text-cyan-300">채널 분야 관리</p>
+              <h3 id="settings-category-title" className="mt-1 text-lg font-black text-white">분야 목록 추가·숨김·이름 변경</h3>
+              <p className="mt-2 text-xs leading-5 text-slate-400">
+                레이더의 분야 필터는 실제 Cloud 채널에 붙은 태그를 자동 집계합니다. 새 분야는 채널에 적용된 뒤 레이더에 나타납니다.
+              </p>
+            </div>
+            <span className="shrink-0 border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-slate-300">Cloud 채널 {savedChannelCount}개</span>
+          </div>
+          <ChannelCategorySettings {...categorySettingsProps} />
+        </section>
+
+        <aside className="border border-slate-700 bg-slate-900/90 p-5" aria-labelledby="settings-connection-title">
+          <div className="flex items-center gap-2 text-cyan-300">
+            <Cloud className="h-5 w-5" />
+            <h3 id="settings-connection-title" className="text-base font-black text-white">연결 기준</h3>
+          </div>
+          <dl className="mt-4 space-y-4 text-xs">
+            <div className="border-b border-slate-800 pb-4">
+              <dt className="font-bold text-slate-500">Function API 경로</dt>
+              <dd className="mt-1 break-all font-mono text-slate-200">{functionApiBase}</dd>
+            </div>
+            <div className="border-b border-slate-800 pb-4">
+              <dt className="font-bold text-slate-500">저장 영상 불러오기</dt>
+              <dd className="mt-1 font-bold text-blue-200">Cloud DB 조회 · YouTube API 호출 없음</dd>
+            </div>
+            <div>
+              <dt className="font-bold text-slate-500">선택 채널 새 영상 수집</dt>
+              <dd className="mt-1 font-bold text-emerald-200">YouTube API 호출 가능 · 필요할 때만 실행</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+  );
+}

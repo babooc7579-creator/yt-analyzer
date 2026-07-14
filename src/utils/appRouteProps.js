@@ -4,6 +4,7 @@ export { buildHomeRouteProps } from './homeRouteProps';
 export { buildKeywordExplorerRouteProps } from './keywordExplorerRouteProps';
 export { buildLayoutProps } from './appLayoutProps';
 export { buildLegacyWorkspaceRouteProps } from './legacyWorkspaceRouteProps';
+export { buildSettingsRouteProps } from './settingsRouteProps';
 export { buildTagVaultRouteProps } from './tagVaultRouteProps';
 export { buildTtoTtoRouteProps } from './ttoTtoRouteProps';
 export { buildUploadCalendarRouteProps } from './uploadCalendarRouteProps';

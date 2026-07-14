@@ -18,6 +18,7 @@ export const getCreatorWorkspaceViewModel = (creatorView) => {
     isKeywordExplorerView: creatorView === 'discovery-keywords',
     isLegacyWorkspaceView: READY_CREATOR_VIEWS.includes(creatorView),
     isReferenceVaultView: REFERENCE_VAULT_VIEWS.includes(creatorView),
+    isSettingsView: creatorView === 'ops-settings',
     isTagVaultView: creatorView === 'vault-tags',
     isTtoTtoView: creatorView === 'discovery-ttotto',
     isUploadCalendarView: creatorView === 'studio-calendar',
