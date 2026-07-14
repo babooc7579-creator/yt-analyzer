@@ -15,7 +15,7 @@ export default function ChannelCategoryAddInput({
 
   return (
     <div className="flex gap-1 mb-2">
-      <input type="text" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder={inputPlaceholder} className="w-full text-xs px-2 py-1.5 border border-slate-200 rounded" aria-label={inputAriaLabel} />
+      <input type="text" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder={inputPlaceholder} className="w-full rounded border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-400" aria-label={inputAriaLabel} />
       <button
         type="button"
         onClick={onAddCategory}

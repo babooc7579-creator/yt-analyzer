@@ -32,7 +32,7 @@ export const getChannelCategoryChipViewProps = ({
   },
   renameInputProps: {
     autoFocus: true,
-    className: 'text-[10px] px-1 py-0.5 w-16 border border-slate-200 rounded outline-none',
+    className: 'w-16 rounded border border-slate-200 bg-white px-1 py-0.5 text-[10px] text-slate-900 outline-none focus:border-indigo-400',
     onChange: (event) => setRenameValue(event.target.value),
     onKeyDown: (event) => {
       if (event.key === 'Enter') confirmRenameCategory();
