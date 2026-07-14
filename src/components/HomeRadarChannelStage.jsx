@@ -76,13 +76,13 @@ export default function HomeRadarChannelStage({
       ) : (
         <>
           <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
-            <label className="relative min-w-0">
-              <span className="sr-only">채널 이름 또는 태그 검색</span>
+            <div className="relative min-w-0">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
               <input
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
+                aria-label="채널 이름 또는 태그 검색"
                 placeholder="채널 이름 또는 태그 검색"
                 className="h-10 w-full border border-slate-700 bg-slate-950 pl-9 pr-10 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-400"
               />
@@ -96,7 +96,7 @@ export default function HomeRadarChannelStage({
               >
                 <X className="h-4 w-4" />
               </button>
-            </label>
+            </div>
             <select value={tagFilter} onChange={(event) => setTagFilter(event.target.value)} aria-label="오늘 탐색 분야" className="h-10 border border-slate-700 bg-slate-950 px-3 text-sm font-bold text-slate-200 outline-none focus:border-cyan-400">
               <option value="all">분야 전체</option>
               {tagOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
