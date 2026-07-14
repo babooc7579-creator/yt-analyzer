@@ -15,9 +15,10 @@ export default function VideoToolbarTtoTtoButton({
     <button
       type="button"
       onClick={() => setTtoTtoMode(!ttoTtoMode)}
-      className={`flex items-center gap-2 px-4 py-2 rounded-xl font-extrabold transition-all duration-300 shadow-sm ${ttoTtoMode ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-rose-200 ring-2 ring-rose-200 ring-offset-1 scale-105' : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200'}`}
+      className={`flex items-center gap-2 rounded-xl border px-4 py-2 font-extrabold shadow-sm transition-all duration-300 ${ttoTtoMode ? 'scale-105 border-orange-500 bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-rose-200 ring-2 ring-rose-200 ring-offset-1' : 'border-orange-300 bg-orange-100 text-orange-800 hover:border-orange-400 hover:bg-orange-200'}`}
       title={title}
       aria-label={ariaLabel}
+      aria-pressed={ttoTtoMode}
     >
       <Rocket className={`w-5 h-5 ${ttoTtoMode ? 'animate-bounce' : ''}`} />
       {label}
