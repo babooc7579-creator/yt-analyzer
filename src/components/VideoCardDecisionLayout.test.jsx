@@ -24,8 +24,7 @@ describe('VideoCard decision-first layout', () => {
     );
 
     expect(html).toContain('게시일');
-    expect(html).toContain('26년 4월 1일');
-    expect(html).toContain('(150일 경과)');
+    expect(html).toContain('26.04.01 · 150일');
   });
 
   it('keeps a neutral comparison reason when candidate reasons are empty', () => {

@@ -3,7 +3,6 @@ import VideoCardStatTile from './VideoCardStatTile';
 
 export default function VideoCardStatsGrid({ isStrongReaction, showWorkPanel, video }) {
   const {
-    daysOldText,
     daysOldTileProps,
     engagementLikeText,
     engagementText,
@@ -11,7 +10,7 @@ export default function VideoCardStatsGrid({ isStrongReaction, showWorkPanel, vi
     engagementTileProps,
     multiplierText,
     multiplierTileProps,
-    publishedDateText,
+    publishedAgeText,
     viewCountText,
     viewCountTileProps,
   } = getVideoCardStatsGridViewProps({
@@ -32,8 +31,7 @@ export default function VideoCardStatsGrid({ isStrongReaction, showWorkPanel, vi
         <p className={engagementTextClassName}>{engagementText} <span className="text-[10px] font-medium text-slate-400">{engagementLikeText}</span></p>
       </VideoCardStatTile>
       <VideoCardStatTile {...daysOldTileProps}>
-        <p className="text-sm font-extrabold">{publishedDateText}</p>
-        <p className="text-[10px] font-semibold text-slate-500">{daysOldText}</p>
+        <p className="text-sm font-extrabold">{publishedAgeText}</p>
       </VideoCardStatTile>
     </div>
   );

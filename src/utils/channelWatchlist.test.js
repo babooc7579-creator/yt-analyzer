@@ -4,6 +4,8 @@ import { CHANNEL_GRADE, CHANNEL_STATUS } from '../constants/status';
 import {
   filterAndSortChannelWatchlist,
   getChannelDaysSinceScan,
+  getChannelWatchBulkSelection,
+  getChannelWatchTagOptions,
   getChannelWatchlistCardViewProps,
   getChannelWatchlistSummary,
   getChannelWatchReasons,
@@ -59,6 +61,40 @@ describe('channelWatchlist utils', () => {
       scanFilter: 'overdue30',
       searchQuery: 'history',
     }).map(channel => channel.id)).toEqual(['a-old']);
+  });
+
+  it('builds active-channel tag options and filters by tag and selection state', () => {
+    expect(getChannelWatchTagOptions(channels)).toEqual([
+      { value: '경제', count: 1, label: '경제 (1)' },
+      { value: 'history', count: 1, label: 'history (1)' },
+    ]);
+
+    expect(filterAndSortChannelWatchlist({
+      channels,
+      selectedChannelIds: ['a-old'],
+      selectionFilter: 'selected',
+      tagFilter: 'history',
+    }).map(channel => channel.id)).toEqual(['a-old']);
+
+    expect(filterAndSortChannelWatchlist({
+      channels,
+      selectedChannelIds: ['a-old'],
+      selectionFilter: 'unselected',
+    }).map(channel => channel.id)).not.toContain('a-old');
+  });
+
+  it('bulk-selects only current results while preserving selections outside the filter', () => {
+    expect(getChannelWatchBulkSelection({
+      channels: [channels[0], channels[1]],
+      selectedChannelIds: ['outside'],
+      shouldSelect: true,
+    })).toEqual(['outside', 's-never', 'a-old']);
+
+    expect(getChannelWatchBulkSelection({
+      channels: [channels[0], channels[1]],
+      selectedChannelIds: ['outside', 's-never', 'a-old'],
+      shouldSelect: false,
+    })).toEqual(['outside']);
   });
 
   it('summarizes active, high-grade, never-scanned, selected, and visible channels', () => {

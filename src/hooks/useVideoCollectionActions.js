@@ -68,7 +68,7 @@ export function useVideoCollectionActions({
   const loadStoredVideosForSelectedChannels = async () => {
     if (selectedChannelIds.length === 0) {
       setError(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE);
-      return;
+      return { success: false, videoCount: 0 };
     }
 
     prepareStoredVideoLoad();
@@ -80,9 +80,11 @@ export function useVideoCollectionActions({
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
       finishStoredVideoLoad(mapped);
+      return { success: true, videoCount: mapped.length };
     } catch (err) {
       setError(getStoredVideoLoadErrorMessage(err));
       setProgressMsg('');
+      return { success: false, videoCount: 0 };
     } finally {
       setLoading(false);
     }

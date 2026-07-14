@@ -1,5 +1,5 @@
 import { getLanguageLabel } from '../constants/languages';
-import { formatShortKoreanDate } from './dates';
+import { formatPublishedAge } from './dates';
 import {
   hasStrongReaction,
   isTtoTtoCandidate,
@@ -85,7 +85,7 @@ export const getVideoCardStatsGridViewProps = ({
       label: '게시일',
       paddingClassName: statPaddingClass,
     },
-    daysOldText: `(${video.daysOld}일 경과)`,
+    publishedAgeText: formatPublishedAge(video.upload_date, video.daysOld),
     engagementLikeText: `좋아요 ${video.like_count.toLocaleString()}`,
     engagementText: `${video.like_ratio}%`,
     engagementTextClassName: `text-sm font-extrabold ${video.like_ratio >= 3 ? 'text-rose-600' : 'text-slate-800'}`,
@@ -100,7 +100,6 @@ export const getVideoCardStatsGridViewProps = ({
       labelClassName: isStrongReaction ? 'text-rose-500' : 'text-slate-400',
       paddingClassName: statPaddingClass,
     },
-    publishedDateText: formatShortKoreanDate(video.upload_date),
     viewCountText: video.view_count.toLocaleString(),
     viewCountTileProps: {
       label: '총 조회수',
