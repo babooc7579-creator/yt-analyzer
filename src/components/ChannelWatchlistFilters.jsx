@@ -59,23 +59,23 @@ export default function ChannelWatchlistFilters({
       </select>
 
       <select
-        value={selectionFilter}
-        onChange={(event) => onChangeSelectionFilter(event.target.value)}
-        aria-label="채널 선택 상태 필터"
-        className="h-10 rounded-lg border border-slate-700 bg-slate-950 px-3 text-sm font-bold text-slate-200 outline-none focus:border-cyan-400"
-      >
-        {CHANNEL_WATCH_SELECTION_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
-        ))}
-      </select>
-
-      <select
         value={scanFilter}
         onChange={(event) => onChangeScanFilter(event.target.value)}
         aria-label="마지막 수집일 필터"
         className="h-10 rounded-lg border border-slate-700 bg-slate-950 px-3 text-sm font-bold text-slate-200 outline-none focus:border-cyan-400"
       >
         {CHANNEL_WATCH_SCAN_OPTIONS.map((option) => (
+          <option key={option.value} value={option.value}>{option.label}</option>
+        ))}
+      </select>
+
+      <select
+        value={selectionFilter}
+        onChange={(event) => onChangeSelectionFilter(event.target.value)}
+        aria-label="채널 선택 상태 필터"
+        className="h-10 rounded-lg border border-slate-700 bg-slate-950 px-3 text-sm font-bold text-slate-200 outline-none focus:border-cyan-400"
+      >
+        {CHANNEL_WATCH_SELECTION_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>{option.label}</option>
         ))}
       </select>
