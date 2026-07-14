@@ -15,11 +15,14 @@ export default function StoredVideoGuide() {
         const Icon = ICONS[card.icon];
 
         return (
-          <div key={card.key} className={card.cardClassName}>
+          <div key={card.key} className={card.cardClassName} role="note">
             <div className="flex items-start gap-4">
               <Icon className={card.iconClassName} />
-              <div>
-                <p className={card.titleClassName}>{card.title}</p>
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={card.badgeClassName}>안내</span>
+                  <p className={card.titleClassName}>{card.title}</p>
+                </div>
                 <p className="text-xs text-slate-600 mt-1">{card.description}</p>
               </div>
             </div>
