@@ -50,4 +50,22 @@ describe('RadarCandidateEmptyState', () => {
     expect(html).not.toContain('오늘 볼 채널 고르기</button>');
     expect(html).toContain('레퍼런스 금고 열기');
   });
+
+  it('replaces the retry button with channel and scan paths after a successful empty lookup', () => {
+    const html = renderToStaticMarkup(
+      <RadarCandidateEmptyState
+        onLoadStoredVideos={noop}
+        onOpenChannelWatchlist={noop}
+        onOpenSelectedScan={noop}
+        onOpenVault={noop}
+        selectedChannelCount={2}
+        storedVideoLoadResult={{ success: true, videoCount: 0 }}
+      />,
+    );
+
+    expect(html).toContain('조회는 정상적으로 끝났지만 저장된 영상이 없습니다');
+    expect(html).toContain('다른 채널 고르기');
+    expect(html).toContain('새 영상 수집 준비');
+    expect(html).not.toContain('>저장 영상 불러오기</button>');
+  });
 });

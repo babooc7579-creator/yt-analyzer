@@ -22,6 +22,7 @@ export default function HomeRadarSummary({
   productionCandidateCount,
   productionFocusCount,
   selectedChannelCount,
+  storedVideoLoadResult,
 }) {
   return (
     <>
@@ -56,6 +57,7 @@ export default function HomeRadarSummary({
         productionFocusCount={productionFocusCount}
         savedChannelCount={savedChannelCount}
         selectedChannelCount={selectedChannelCount}
+        storedVideoLoadResult={storedVideoLoadResult}
       />
     </>
   );

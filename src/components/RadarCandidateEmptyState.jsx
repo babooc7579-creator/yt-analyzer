@@ -1,4 +1,4 @@
-import { Bookmark, Database, ListChecks } from 'lucide-react';
+import { Bookmark, Database, ListChecks, RefreshCw } from 'lucide-react';
 
 import { getLoadStoredVideosActionProps } from '../utils/loadStoredVideosActionProps';
 import { getRadarCandidateEmptyStateViewProps } from '../utils/radarCandidateStateProps';
@@ -6,8 +6,10 @@ import { getRadarCandidateEmptyStateViewProps } from '../utils/radarCandidateSta
 export default function RadarCandidateEmptyState({
   onLoadStoredVideos,
   onOpenChannelWatchlist,
+  onOpenSelectedScan,
   onOpenVault,
   selectedChannelCount = 0,
+  storedVideoLoadResult,
 }) {
   const {
     actionAriaLabel: loadStoredVideosAriaLabel,
@@ -22,9 +24,11 @@ export default function RadarCandidateEmptyState({
   const {
     channelWatchlistButtonProps,
     descriptionText,
+    hideLoadButton,
     openVaultButtonProps,
+    selectedScanButtonProps,
     titleText,
-  } = getRadarCandidateEmptyStateViewProps({ selectedChannelCount });
+  } = getRadarCandidateEmptyStateViewProps({ selectedChannelCount, storedVideoLoadResult });
 
   return (
     <div className="mt-6 rounded-2xl border border-dashed border-slate-700 bg-slate-950/70 p-5">
@@ -44,7 +48,7 @@ export default function RadarCandidateEmptyState({
             <ListChecks className="h-4 w-4" /> {channelWatchlistButtonProps.label}
           </button>
         ) : null}
-        {onLoadStoredVideos && (
+        {onLoadStoredVideos && !hideLoadButton && (
           <button
             type="button"
             onClick={onLoadStoredVideos}
@@ -60,6 +64,17 @@ export default function RadarCandidateEmptyState({
             <Database className="h-4 w-4" /> {loadStoredVideosLabel}
           </button>
         )}
+        {selectedScanButtonProps.show && typeof onOpenSelectedScan === 'function' ? (
+          <button
+            type="button"
+            onClick={onOpenSelectedScan}
+            className="inline-flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-100 hover:bg-emerald-500/15"
+            title={selectedScanButtonProps.title}
+            aria-label={selectedScanButtonProps['aria-label']}
+          >
+            <RefreshCw className="h-4 w-4" /> {selectedScanButtonProps.label}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={onOpenVault}

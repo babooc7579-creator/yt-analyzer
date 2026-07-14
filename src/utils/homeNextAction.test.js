@@ -68,6 +68,29 @@ describe('homeNextAction utils', () => {
     expect(action.onAction).toBe(onLoadStoredVideos);
   });
 
+  it('offers two explicit paths after a successful lookup returns zero videos', () => {
+    const onOpenChannelWatchlist = () => 'open channel watchlist';
+    const onOpenSelectedScan = () => 'open selected scan';
+
+    const action = getHomeNextAction({
+      savedChannelCount: 12,
+      selectedChannelCount: 3,
+      loadedVideoCount: 0,
+      storedVideoLoadResult: { success: true, videoCount: 0 },
+      onOpenChannelWatchlist,
+      onOpenSelectedScan,
+    });
+
+    expect(action.title).toBe('선택한 채널에는 저장된 영상이 없습니다');
+    expect(action.actionLabel).toBe('다른 채널 고르기');
+    expect(action.onAction).toBe(onOpenChannelWatchlist);
+    expect(action.secondaryActions).toEqual([expect.objectContaining({
+      label: '새 영상 수집 준비',
+      onAction: onOpenSelectedScan,
+    })]);
+    expect(action.impactText).toContain('실제 수집 버튼을 누르기 전');
+  });
+
   it('prioritizes open radar candidates before stored production candidates', () => {
     const action = getHomeNextAction({
       savedChannelCount: 12,

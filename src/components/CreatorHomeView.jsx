@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { getCreatorHomeViewProps } from '../utils/creatorHomeViewProps';
 import HomeActionShortcuts from './HomeActionShortcuts';
 import HomeOperatingGuidelines from './HomeOperatingGuidelines';
@@ -22,11 +24,24 @@ export default function CreatorHomeView({
   savedChannels,
   savedVideos,
   selectedChannelCount,
+  selectedChannelKey,
   toggleScrapVideo,
   ttoTtoAssetCount,
   videoUserRecords,
   videos,
 }) {
+  const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
+
+  useEffect(() => {
+    setStoredVideoLoadResult(null);
+  }, [selectedChannelKey]);
+
+  const loadStoredVideos = async () => {
+    const result = await loadStoredVideosForSelectedChannels?.();
+    setStoredVideoLoadResult(result || { success: false, videoCount: 0 });
+    return result;
+  };
+
   const {
     actionShortcutsProps,
     radarCandidateStripProps,
@@ -38,7 +53,7 @@ export default function CreatorHomeView({
     discoveryRightsWarningCount,
     isVideoSaved,
     latestScanText,
-    loadStoredVideosForSelectedChannels,
+    loadStoredVideosForSelectedChannels: loadStoredVideos,
     markRadarVideoStatus,
     onOpenView,
     openRadarCandidateCount,
@@ -49,6 +64,7 @@ export default function CreatorHomeView({
     savedChannels,
     savedVideos,
     selectedChannelCount,
+    storedVideoLoadResult,
     toggleScrapVideo,
     ttoTtoAssetCount,
     videoUserRecords,

@@ -7,6 +7,7 @@ import {
 } from '../utils/homeRadarWorkflowSection';
 import HomeCandidateWorkflowCard from './HomeCandidateWorkflowCard';
 import HomeNextActionPanel from './HomeNextActionPanel';
+import HomeRadarJourney from './HomeRadarJourney';
 import HomeWorkflowCard from './HomeWorkflowCard';
 
 export default function HomeRadarWorkflowSection({
@@ -26,6 +27,7 @@ export default function HomeRadarWorkflowSection({
   productionFocusCount,
   savedChannelCount = 0,
   selectedChannelCount = 0,
+  storedVideoLoadResult,
 }) {
   const {
     actionAriaLabel: loadStoredVideosActionAriaLabel,
@@ -51,6 +53,13 @@ export default function HomeRadarWorkflowSection({
         </div>
         <p className="text-[11px] font-bold text-emerald-200">{headerProps.safetyNote}</p>
       </div>
+      <HomeRadarJourney
+        loadedVideoCount={loadedVideoCount}
+        openRadarCandidateCount={openRadarCandidateCount}
+        productionCandidateCount={productionCandidateCount}
+        selectedChannelCount={selectedChannelCount}
+        storedVideoLoadResult={storedVideoLoadResult}
+      />
       <HomeNextActionPanel
         discoveryCandidateCount={discoveryCandidateCount}
         discoveryRightsWarningCount={discoveryRightsWarningCount}
@@ -66,6 +75,7 @@ export default function HomeRadarWorkflowSection({
         productionFocusCount={productionFocusCount}
         savedChannelCount={savedChannelCount}
         selectedChannelCount={selectedChannelCount}
+        storedVideoLoadResult={storedVideoLoadResult}
       />
       <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
         <HomeWorkflowCard

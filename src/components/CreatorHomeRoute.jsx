@@ -17,6 +17,7 @@ export default function CreatorHomeRoute({
   savedChannels,
   savedVideos,
   selectedChannelCount,
+  selectedChannelKey,
   toggleScrapVideo,
   ttoTtoAssetCount,
   videoUserRecords,
@@ -40,6 +41,7 @@ export default function CreatorHomeRoute({
       savedChannels={savedChannels}
       savedVideos={savedVideos}
       selectedChannelCount={selectedChannelCount}
+      selectedChannelKey={selectedChannelKey}
       toggleScrapVideo={toggleScrapVideo}
       ttoTtoAssetCount={ttoTtoAssetCount}
       videoUserRecords={videoUserRecords}

@@ -57,4 +57,22 @@ describe('HomeNextActionPanel', () => {
     expect(html).toContain('저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다');
     expect(html).toContain('권리 상태 변경은 후보함이나 발견함에서 직접 선택할 때 Cloud에 저장됩니다');
   });
+
+  it('renders both recovery paths after a successful zero-video lookup', () => {
+    const html = renderToStaticMarkup(
+      <HomeNextActionPanel
+        savedChannelCount={5}
+        selectedChannelCount={2}
+        loadedVideoCount={0}
+        storedVideoLoadResult={{ success: true, videoCount: 0 }}
+        onOpenChannelWatchlist={() => 'open channels'}
+        onOpenSelectedScan={() => 'open scan'}
+      />,
+    );
+
+    expect(html).toContain('선택한 채널에는 저장된 영상이 없습니다');
+    expect(html).toContain('다른 채널 고르기');
+    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('이동만으로 수집은 실행되지 않으며');
+  });
 });

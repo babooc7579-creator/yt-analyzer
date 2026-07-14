@@ -41,6 +41,7 @@ export function buildHomeRouteProps({
     savedChannels,
     savedVideos,
     selectedChannelCount: selectedChannels.length,
+    selectedChannelKey: [...selectedChannels].sort().join('|'),
     toggleScrapVideo,
     ttoTtoAssetCount,
     videoUserRecords,

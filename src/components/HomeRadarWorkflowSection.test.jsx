@@ -27,6 +27,9 @@ describe('HomeRadarWorkflowSection', () => {
     );
 
     expect(html).toContain('오늘 레이더');
+    expect(html).toContain('오늘의 레이더 진행 단계');
+    expect(html).toContain('오늘 볼 채널 고르기');
+    expect(html).toContain('제작 후보 결정');
     expect(html).toContain('선택 채널 2개 저장 영상 불러오기, DB 조회이며 YouTube API 호출 없음');
     expect(html).toContain('Cloud DB');
     expect(html).toContain('YouTube API');

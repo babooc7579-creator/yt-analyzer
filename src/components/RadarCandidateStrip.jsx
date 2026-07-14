@@ -20,10 +20,12 @@ export default function RadarCandidateStrip({
   onClearDecisions,
   onLoadStoredVideos,
   onOpenChannelWatchlist,
+  onOpenSelectedScan,
   onOpenVault,
   onOpenScrapbook,
   onOpenProductionCandidates,
   selectedChannelCount,
+  storedVideoLoadResult,
 }) {
   const clearLockRef = useRef(false);
   const [clearDecisionsPending, setClearDecisionsPending] = useState(false);
@@ -84,8 +86,10 @@ export default function RadarCandidateStrip({
       <RadarCandidateEmptyState
         onLoadStoredVideos={onLoadStoredVideos}
         onOpenChannelWatchlist={onOpenChannelWatchlist}
+        onOpenSelectedScan={onOpenSelectedScan}
         onOpenVault={onOpenVault}
         selectedChannelCount={selectedChannelCount}
+        storedVideoLoadResult={storedVideoLoadResult}
       />
     );
   }
