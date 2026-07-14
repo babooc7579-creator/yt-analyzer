@@ -3,10 +3,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { buildChannelWatchlistRouteProps } from './channelWatchlistRouteProps';
 
 describe('channelWatchlistRouteProps utils', () => {
-  it('connects selection, stored lookup, refresh, and navigation without running them', () => {
+  it('connects selection, stored lookup, refresh, and navigation without running them', async () => {
     const openCreatorView = vi.fn();
-    const onLoad = vi.fn();
+    const onLoad = vi.fn().mockResolvedValue({ success: true, videoCount: 3 });
     const onRefresh = vi.fn();
+    const onSetSelected = vi.fn();
     const onToggle = vi.fn();
     const props = buildChannelWatchlistRouteProps({
       channelsLoading: true,
@@ -15,25 +16,49 @@ describe('channelWatchlistRouteProps utils', () => {
       openCreatorView,
       savedChannels: [{ id: 'channel-1' }],
       selectedChannelIds: ['channel-1'],
+      setSelectedChannelIds: onSetSelected,
       toggleChannelSelection: onToggle,
     });
 
     expect(props).toMatchObject({
       channels: [{ id: 'channel-1' }],
       channelsLoading: true,
-      onLoadStoredVideos: onLoad,
       onRefreshChannels: onRefresh,
+      onSetSelectedChannelIds: onSetSelected,
       onToggleSelection: onToggle,
       selectedChannelIds: ['channel-1'],
     });
     expect(openCreatorView).not.toHaveBeenCalled();
 
+    await props.onLoadStoredVideos();
     props.onOpenChannelList();
+    props.onOpenRadar();
+    props.onOpenStoredVideos();
     props.onOpenSelectedScan();
+    props.onOpenTtoTto();
 
+    expect(onLoad).toHaveBeenCalledTimes(1);
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'ops-channels' }],
+      [{ id: 'home' }],
+      [{ id: 'vault-videos' }],
       [{ id: 'ops-selected-scan' }],
+      [{ id: 'discovery-ttotto' }],
     ]);
+  });
+
+  it('returns stored video lookup failures without navigating automatically', async () => {
+    const openCreatorView = vi.fn();
+    const onLoad = vi.fn().mockResolvedValue({ success: false, videoCount: 0 });
+    const props = buildChannelWatchlistRouteProps({
+      loadStoredVideosForSelectedChannels: onLoad,
+      openCreatorView,
+    });
+
+    const result = await props.onLoadStoredVideos();
+
+    expect(result).toEqual({ success: false, videoCount: 0 });
+    expect(onLoad).toHaveBeenCalledTimes(1);
+    expect(openCreatorView).not.toHaveBeenCalled();
   });
 });

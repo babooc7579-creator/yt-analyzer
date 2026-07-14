@@ -76,6 +76,7 @@ describe('creatorHomeViewProps utils', () => {
       savedChannels: [{ id: 'channel1' }, { id: 'channel2' }],
       savedVideos: [{ videoId: 'saved1' }],
       selectedChannelCount: 2,
+      selectedChannelIds: ['channel1'],
       ttoTtoAssetCount: 7,
       videos: [{ videoId: 'video1' }, { videoId: 'video2' }],
       onOpenView: () => {},
@@ -91,6 +92,7 @@ describe('creatorHomeViewProps utils', () => {
       productionFocusCount: 2,
       savedChannelCount: 2,
       savedVideoCount: 1,
+      selectedChannelIds: ['channel1'],
       selectedChannelCount: 2,
       ttoTtoAssetCount: 7,
     });

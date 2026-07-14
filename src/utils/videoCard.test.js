@@ -243,8 +243,7 @@ describe('videoCard utils', () => {
     expect(props.daysOldTileProps.label).toBe('게시일');
     expect(props.viewCountText).toBe('987,654');
     expect(props.engagementLikeText).toBe('좋아요 1,234');
-    expect(props.publishedDateText).toBe('26년 4월 1일');
-    expect(props.daysOldText).toBe('(200일 경과)');
+    expect(props.publishedAgeText).toBe('26.04.01, 200일');
     expect(props.multiplierTileProps.className).toContain('bg-rose-50');
   });
 

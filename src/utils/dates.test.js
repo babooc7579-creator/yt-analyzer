@@ -2,7 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   formatDateWithDots,
+  formatCompactPublishedDate,
   formatKoreanDateTime,
+  formatPublishedAge,
   formatShortKoreanDate,
   getDateDistanceFromToday,
   getDaysDiff,
@@ -55,6 +57,12 @@ describe('dates utils', () => {
     expect(formatShortKoreanDate('2026-04-01T23:30:00.000Z')).toBe('26년 4월 1일');
     expect(formatShortKoreanDate('', '게시일 없음')).toBe('게시일 없음');
     expect(formatShortKoreanDate('bad-date', '게시일 없음')).toBe('게시일 없음');
+  });
+
+  it('formats the shared compact publish date and elapsed-day label', () => {
+    expect(formatCompactPublishedDate('2026-07-13')).toBe('26.07.13');
+    expect(formatPublishedAge('2026-07-13', 78)).toBe('26.07.13, 78일');
+    expect(formatPublishedAge('', 78)).toBe('게시일 미상, 78일');
   });
 
   it('calculates date distance from today using date-only values', () => {

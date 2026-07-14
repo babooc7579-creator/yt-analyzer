@@ -9,6 +9,7 @@ import {
   isRadarHiddenRecord,
 } from '../constants/status';
 import { hasStrongReaction, isTtoTtoCandidate } from './video';
+import { formatPublishedAge } from './dates';
 import { getYouTubeVideoUrl } from './urls';
 
 export const RADAR_TODAY_CANDIDATE_LIMIT = 6;
@@ -159,7 +160,7 @@ export const getRadarCandidateMetricsViewProps = (video) => {
   return {
     items: [
       { label: '대박 지수', value: `${toNumber(sourceVideo.multiplier).toFixed(1)}x` },
-      { label: '경과', value: `${toNumber(sourceVideo.daysOld)}일` },
+      { label: '게시일 · 경과', value: formatPublishedAge(sourceVideo.upload_date, sourceVideo.daysOld) },
       { label: '참여율', value: `${toNumber(sourceVideo.like_ratio)}%` },
     ],
   };

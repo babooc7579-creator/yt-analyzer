@@ -7,6 +7,7 @@ export function buildChannelWatchlistRouteProps({
   openCreatorView,
   savedChannels,
   selectedChannelIds,
+  setSelectedChannelIds,
   toggleChannelSelection,
 } = {}) {
   return {
@@ -14,8 +15,12 @@ export function buildChannelWatchlistRouteProps({
     channelsLoading: Boolean(channelsLoading),
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
     onOpenChannelList: () => openCreatorView({ id: 'ops-channels' }),
+    onOpenRadar: () => openCreatorView({ id: 'home' }),
+    onOpenStoredVideos: () => openCreatorView({ id: 'vault-videos' }),
     onOpenSelectedScan: () => openCreatorView({ id: 'ops-selected-scan' }),
+    onOpenTtoTto: () => openCreatorView({ id: 'discovery-ttotto' }),
     onRefreshChannels: loadChannelsFromCloud,
+    onSetSelectedChannelIds: setSelectedChannelIds,
     onToggleSelection: toggleChannelSelection,
     selectedChannelIds: toArray(selectedChannelIds),
   };

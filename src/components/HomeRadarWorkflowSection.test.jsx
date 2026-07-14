@@ -21,22 +21,29 @@ describe('HomeRadarWorkflowSection', () => {
         openRadarCandidateCount={4}
         productionCandidateCount={3}
         productionFocusCount={2}
+        savedChannels={[
+          { id: 'channel-1', title: '랭킹 연구소', category: '랭킹형', status: 'active', grade: 'S' },
+          { id: 'channel-2', title: '영화 기록실', category: '영화', status: 'active', grade: 'A' },
+        ]}
         savedChannelCount={5}
+        selectedChannelIds={['channel-1', 'channel-2']}
         selectedChannelCount={2}
       />,
     );
 
-    expect(html).toContain('오늘 레이더');
-    expect(html).toContain('선택 채널 2개 저장 영상 불러오기, DB 조회이며 YouTube API 호출 없음');
+    expect(html).toContain('오늘 작업 흐름');
+    expect(html).toContain('오늘의 레이더 진행 단계');
+    expect(html).toContain('오늘 볼 채널 고르기');
+    expect(html).toContain('제작 후보 결정');
+    expect(html).toContain('STAGE 1–2');
+    expect(html).toContain('채널 이름 또는 태그 검색');
+    expect(html).toContain('오늘 선택');
+    expect(html).toContain('저장 영상 불러오기');
     expect(html).toContain('Cloud DB');
     expect(html).toContain('YouTube API');
-    expect(html).toContain('제작 후보함');
-    expect(html).toContain('권리 확인');
-    expect(html).toContain('오늘 집중 2개');
-    expect(html).toContain('발견함');
   });
 
-  it('renders rights-warning candidates as the next action after visible radar candidates are done', () => {
+  it('shows the direct candidate-start action after stored videos are loaded', () => {
     const html = renderToStaticMarkup(
       <HomeRadarWorkflowSection
         discoveryCandidateCount={2}
@@ -51,12 +58,15 @@ describe('HomeRadarWorkflowSection', () => {
         openRadarCandidateCount={0}
         productionCandidateCount={3}
         productionFocusCount={2}
+        savedChannels={[{ id: 'channel-1', title: '랭킹 연구소', status: 'active' }]}
         savedChannelCount={5}
-        selectedChannelCount={2}
+        selectedChannelIds={['channel-1']}
+        selectedChannelCount={1}
+        storedVideoLoadResult={{ success: true, videoCount: 12 }}
       />,
     );
 
-    expect(html).toContain('권리 확인 필요한 후보를 먼저 정리하세요');
-    expect(html).toContain('권리 확인 1개');
+    expect(html).toContain('저장 영상 12개가 판정대에 준비됐습니다');
+    expect(html).toContain('후보 판정 시작');
   });
 });

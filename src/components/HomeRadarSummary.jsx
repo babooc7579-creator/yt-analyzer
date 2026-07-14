@@ -21,23 +21,15 @@ export default function HomeRadarSummary({
   onOpenVault,
   productionCandidateCount,
   productionFocusCount,
+  savedChannels,
+  selectedChannelIds,
   selectedChannelCount,
+  storedVideoLoadResult,
+  toggleChannelSelection,
 }) {
   return (
     <>
       <HomeRadarHero />
-
-      <HomeRadarStatsGrid
-        discoveryCandidateCount={discoveryCandidateCount}
-        discoveryRightsWarningCount={discoveryRightsWarningCount}
-        latestScanText={latestScanText}
-        loadedVideoCount={loadedVideoCount}
-        productionCandidateCount={productionCandidateCount}
-        productionFocusCount={productionFocusCount}
-        savedChannelCount={savedChannelCount}
-        savedVideoCount={savedVideoCount}
-        ttoTtoAssetCount={ttoTtoAssetCount}
-      />
 
       <HomeRadarWorkflowSection
         discoveryCandidateCount={discoveryCandidateCount}
@@ -54,9 +46,30 @@ export default function HomeRadarSummary({
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
         productionFocusCount={productionFocusCount}
+        savedChannels={savedChannels}
         savedChannelCount={savedChannelCount}
+        selectedChannelIds={selectedChannelIds}
         selectedChannelCount={selectedChannelCount}
+        storedVideoLoadResult={storedVideoLoadResult}
+        toggleChannelSelection={toggleChannelSelection}
       />
+
+      <details className="mt-4 border border-slate-800 bg-slate-950/40 p-3">
+        <summary className="cursor-pointer text-xs font-extrabold text-slate-400 hover:text-white">
+          오늘 현황 숫자 보기
+        </summary>
+        <HomeRadarStatsGrid
+          discoveryCandidateCount={discoveryCandidateCount}
+          discoveryRightsWarningCount={discoveryRightsWarningCount}
+          latestScanText={latestScanText}
+          loadedVideoCount={loadedVideoCount}
+          productionCandidateCount={productionCandidateCount}
+          productionFocusCount={productionFocusCount}
+          savedChannelCount={savedChannelCount}
+          savedVideoCount={savedVideoCount}
+          ttoTtoAssetCount={ttoTtoAssetCount}
+        />
+      </details>
     </>
   );
 }

@@ -33,7 +33,9 @@ describe('homeRouteProps utils', () => {
       productionFocusCount: 2,
       savedChannels,
       savedVideos,
+      selectedChannelIds: ['channel1', 'channel2'],
       selectedChannelCount: 2,
+      selectedChannelKey: 'channel1|channel2',
       ttoTtoAssetCount: 7,
       videoUserRecords,
       videos,
@@ -49,6 +51,7 @@ describe('homeRouteProps utils', () => {
     const promoteVideoToProduction = () => 'promote';
     const restoreVideoToRadar = () => 'restore';
     const toggleScrapVideo = () => 'toggle';
+    const toggleChannelSelection = () => 'toggle-channel';
 
     const props = buildHomeRouteProps({
       clearRadarDecisions,
@@ -58,6 +61,7 @@ describe('homeRouteProps utils', () => {
       openCreatorView,
       promoteVideoToProduction,
       restoreVideoToRadar,
+      toggleChannelSelection,
       toggleScrapVideo,
     });
 
@@ -68,6 +72,7 @@ describe('homeRouteProps utils', () => {
     expect(props.onOpenView).toBe(openCreatorView);
     expect(props.promoteVideoToProduction).toBe(promoteVideoToProduction);
     expect(props.restoreVideoToRadar).toBe(restoreVideoToRadar);
+    expect(props.toggleChannelSelection).toBe(toggleChannelSelection);
     expect(props.toggleScrapVideo).toBe(toggleScrapVideo);
   });
 
@@ -77,5 +82,14 @@ describe('homeRouteProps utils', () => {
     });
 
     expect(props.selectedChannelCount).toBe(0);
+    expect(props.selectedChannelKey).toBe('');
+  });
+
+  it('builds a stable selection key even when channel order changes', () => {
+    const props = buildHomeRouteProps({
+      selectedChannelIds: ['channel-b', 'channel-a'],
+    });
+
+    expect(props.selectedChannelKey).toBe('channel-a|channel-b');
   });
 });

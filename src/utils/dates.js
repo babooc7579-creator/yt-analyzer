@@ -45,6 +45,26 @@ export const formatShortKoreanDate = (value, fallback = '게시일 미상') => {
   return `${String(year).slice(-2)}년 ${month}월 ${day}일`;
 };
 
+export const formatCompactPublishedDate = (value, fallback = '게시일 미상') => {
+  if (!value) return fallback;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  const dateOnlyMatch = String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  const year = dateOnlyMatch ? dateOnlyMatch[1] : String(date.getFullYear());
+  const month = dateOnlyMatch ? dateOnlyMatch[2] : String(date.getMonth() + 1).padStart(2, '0');
+  const day = dateOnlyMatch ? dateOnlyMatch[3] : String(date.getDate()).padStart(2, '0');
+
+  return `${year.slice(-2)}.${month}.${day}`;
+};
+
+export const formatPublishedAge = (value, daysOld, fallback = '게시일 미상') => {
+  const numericDays = Number(daysOld);
+  const ageText = Number.isFinite(numericDays) ? `${Math.max(0, Math.round(numericDays))}일` : '경과일 미상';
+  return `${formatCompactPublishedDate(value, fallback)}, ${ageText}`;
+};
+
 export const getDateDistanceFromToday = (date) => {
   if (!date) return null;
 

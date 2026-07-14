@@ -1,3 +1,5 @@
+import { hasEmptyStoredVideoLoad } from './homeRadarJourney';
+
 const toCount = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
 
 export const getHomeNextActionPanelViewProps = () => ({
@@ -19,6 +21,7 @@ export const getHomeNextAction = ({
   productionFocusCount,
   savedChannelCount,
   selectedChannelCount,
+  storedVideoLoadResult,
 }) => {
   const savedChannels = toCount(savedChannelCount);
   const selectedChannels = toCount(selectedChannelCount);
@@ -57,6 +60,28 @@ export const getHomeNextAction = ({
       actionTitle: '오늘 볼 채널 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다.',
       impactText: '화면 이동만 합니다. 채널 체크는 수집 실행이 아니라 볼 범위를 고르는 단계입니다.',
       onAction: onOpenChannelWatchlist || onOpenVault,
+    };
+  }
+
+  if (hasEmptyStoredVideoLoad(storedVideoLoadResult)) {
+    return {
+      tone: 'amber',
+      iconKey: 'listChecks',
+      title: '선택한 채널에는 저장된 영상이 없습니다',
+      description: '조회는 정상적으로 끝났습니다. 다른 채널을 골라 다시 조회하거나, 선택 채널의 새 영상 수집 화면으로 이동하세요.',
+      badge: '다음 경로 선택',
+      metric: `선택 ${selectedChannels}개 · 영상 0개`,
+      actionLabel: '다른 채널 고르기',
+      actionTitle: '오늘 볼 채널 화면으로 이동해 다른 채널을 선택합니다. 이동과 선택만으로 YouTube API를 호출하지 않습니다.',
+      impactText: '새 영상 수집 준비는 화면 이동만 합니다. 실제 수집 버튼을 누르기 전에는 YouTube API를 호출하지 않습니다.',
+      onAction: onOpenChannelWatchlist || onOpenVault,
+      secondaryActions: [
+        {
+          label: '새 영상 수집 준비',
+          title: '선택 채널 새 영상 수집 화면으로 이동합니다. 이동만으로 수집은 실행되지 않으며, 실제 수집 버튼에서 YouTube API를 사용할 수 있습니다.',
+          onAction: onOpenSelectedScan,
+        },
+      ].filter((action) => typeof action.onAction === 'function'),
     };
   }
 

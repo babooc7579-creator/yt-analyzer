@@ -35,6 +35,7 @@ describe('radarCandidates utils', () => {
     view_count: 1500000,
     like_ratio: 5,
     multiplier: 4,
+    upload_date: '2025-09-16',
   };
 
   it('calculates radar score, reasons, and priority labels from video signals', () => {
@@ -92,7 +93,7 @@ describe('radarCandidates utils', () => {
     }).badges.map(badge => badge.label)).toEqual(['또터또', '강한 반응']);
     expect(getRadarCandidateMetricsViewProps(radarVideo).items).toEqual([
       { label: '대박 지수', value: '4.0x' },
-      { label: '경과', value: '300일' },
+      { label: '게시일 · 경과', value: '25.09.16, 300일' },
       { label: '참여율', value: '5%' },
     ]);
     expect(getRadarCandidatePrimaryActionsViewProps({

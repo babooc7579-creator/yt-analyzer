@@ -6,15 +6,14 @@ import VideoListRowStatCell from './VideoListRowStatCell';
 export default function VideoListRowStatsCells({ isStrongReaction, video }) {
   const {
     daysOldCellProps,
-    daysOldText,
     engagementCellProps,
     engagementText,
     engagementTextClassName,
     likeCountText,
     multiplierCellProps,
     multiplierText,
+    publishedAgeText,
     showTrendingIcon,
-    uploadDateText,
     viewCountCellProps,
     viewCountText,
   } = getVideoListRowStatsViewProps({
@@ -38,8 +37,7 @@ export default function VideoListRowStatsCells({ isStrongReaction, video }) {
         <span className="text-[10px] text-slate-400">{likeCountText}</span>
       </VideoListRowStatCell>
       <VideoListRowStatCell {...daysOldCellProps}>
-        <span className="text-base font-extrabold">{daysOldText}</span>
-        <span className="text-[10px] text-slate-400 font-normal">{uploadDateText}</span>
+        <span className="text-sm font-extrabold">{publishedAgeText}</span>
       </VideoListRowStatCell>
     </>
   );

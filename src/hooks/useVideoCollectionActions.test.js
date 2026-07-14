@@ -88,8 +88,9 @@ describe('useVideoCollectionActions', () => {
     const deps = createDeps({ selectedChannelIds: [] });
     const actions = useVideoCollectionActions(deps);
 
-    await actions.loadStoredVideosForSelectedChannels();
+    const result = await actions.loadStoredVideosForSelectedChannels();
 
+    expect(result).toEqual({ success: false, videoCount: 0 });
     expect(deps.setError).toHaveBeenCalledWith(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE);
     expect(fetchStoredVideosByChannelIds).not.toHaveBeenCalled();
     expect(deps.setLoading).not.toHaveBeenCalled();
@@ -101,8 +102,9 @@ describe('useVideoCollectionActions', () => {
     const deps = createDeps({ selectedChannelIds: ['active-1', 'active-2'] });
     const actions = useVideoCollectionActions(deps);
 
-    await actions.loadStoredVideosForSelectedChannels();
+    const result = await actions.loadStoredVideosForSelectedChannels();
 
+    expect(result).toEqual({ success: true, videoCount: 1 });
     expect(deps.setLoading).toHaveBeenNthCalledWith(1, true);
     expect(deps.setError).toHaveBeenCalledWith('');
     expect(deps.setVideos).toHaveBeenNthCalledWith(1, []);
@@ -139,8 +141,9 @@ describe('useVideoCollectionActions', () => {
     const deps = createDeps();
     const actions = useVideoCollectionActions(deps);
 
-    await actions.loadStoredVideosForSelectedChannels();
+    const result = await actions.loadStoredVideosForSelectedChannels();
 
+    expect(result).toEqual({ success: false, videoCount: 0 });
     expect(deps.setError).toHaveBeenCalledWith(
       'Cloud unavailable Cloud DB 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );

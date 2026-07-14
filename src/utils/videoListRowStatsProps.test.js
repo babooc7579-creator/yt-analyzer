@@ -19,8 +19,8 @@ describe('videoListRowStatsProps utils', () => {
     });
 
     expect(props.daysOldCellProps.className).toContain('bg-orange-50');
-    expect(props.daysOldCellProps.label).toBe('게시일');
-    expect(props.daysOldText).toBe('26년 1월 1일');
+    expect(props.daysOldCellProps.label).toBe('게시일 · 경과');
+    expect(props.publishedAgeText).toBe('26.01.01, 200일');
     expect(props.engagementTextClassName).toContain('text-rose-600');
     expect(props.engagementText).toBe('4.5%');
     expect(props.likeCountText).toContain('12,345');
@@ -28,7 +28,6 @@ describe('videoListRowStatsProps utils', () => {
     expect(props.multiplierCellProps.labelClassName).toContain('text-rose-100');
     expect(props.multiplierText).toBe('3.2x');
     expect(props.showTrendingIcon).toBe(true);
-    expect(props.uploadDateText).toBe('(200일 경과)');
     expect(props.viewCountText).toBe('987,654');
   });
 

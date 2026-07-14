@@ -25,6 +25,7 @@ export default function RadarCandidateStripHeader({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div className="min-w-0">
+        <p className="text-[11px] font-extrabold text-rose-300">STAGE 3 · 오늘 후보 판단</p>
         <p className="text-sm font-extrabold text-rose-100">{title}</p>
         <p className="mt-1 text-xs leading-relaxed text-rose-100/70">
           {description}
