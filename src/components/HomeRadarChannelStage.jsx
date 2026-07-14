@@ -1,4 +1,4 @@
-import { Check, Database, ExternalLink, Search, Square, Users } from 'lucide-react';
+import { Check, Database, ExternalLink, Search, Square, Users, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import {
@@ -84,8 +84,18 @@ export default function HomeRadarChannelStage({
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="채널 이름 또는 태그 검색"
-                className="h-10 w-full border border-slate-700 bg-slate-950 pl-9 pr-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-400"
+                className="h-10 w-full border border-slate-700 bg-slate-950 pl-9 pr-10 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-400"
               />
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                disabled={!searchQuery}
+                title="채널 검색어 지우기"
+                aria-label="채널 검색어 지우기"
+                className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center text-slate-400 hover:text-white disabled:pointer-events-none disabled:opacity-0"
+              >
+                <X className="h-4 w-4" />
+              </button>
             </label>
             <select value={tagFilter} onChange={(event) => setTagFilter(event.target.value)} aria-label="오늘 탐색 분야" className="h-10 border border-slate-700 bg-slate-950 px-3 text-sm font-bold text-slate-200 outline-none focus:border-cyan-400">
               <option value="all">분야 전체</option>
