@@ -1,6 +1,7 @@
 import { ExternalLink, ListTodo, PencilLine } from 'lucide-react';
 
 import { getYouTubeVideoUrl } from '../utils/urls';
+import YouTubeThumbnailImage from './YouTubeThumbnailImage';
 
 export default function UploadCalendarDayDetails({
   items,
@@ -22,7 +23,15 @@ export default function UploadCalendarDayDetails({
         <div className="mt-4 grid grid-cols-1 gap-2 lg:grid-cols-2">
           {items.map((item) => (
             <article key={`${item.date}-${item.videoId}`} className="flex min-w-0 gap-3 border border-slate-800 bg-slate-900 p-3">
-              {item.thumbnail ? <img src={item.thumbnail} alt="" className="h-16 w-24 shrink-0 object-cover" /> : <div className="flex h-16 w-24 shrink-0 items-center justify-center bg-slate-800 text-[10px] font-bold text-slate-600">영상 정보</div>}
+              {item.thumbnail ? (
+                <YouTubeThumbnailImage
+                  src={item.thumbnail}
+                  videoId={item.videoId}
+                  preferredQuality="standard"
+                  alt=""
+                  className="h-16 w-24 shrink-0 object-cover"
+                />
+              ) : <div className="flex h-16 w-24 shrink-0 items-center justify-center bg-slate-800 text-[10px] font-bold text-slate-600">영상 정보</div>}
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-[10px] font-bold text-slate-300">{item.statusLabel}</span>

@@ -2899,3 +2899,30 @@ PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성�
 - 저장·스크랩북·제작 후보 상태 의미 변경 없음
 - YouTube API 호출 조건과 횟수 변경 없음
 - 새 라이브러리 추가 없음
+
+### 103. 2026-07-14 영상 썸네일 화질 개선
+
+저장된 낮은 해상도 주소를 큰 카드에서 확대해 보이던 흐림을 줄이기 위해, 영상 ID로 제공되는 YouTube 고화질 썸네일을 우선 표시하도록 개선했습니다.
+
+완료한 작업:
+
+- 큰 영상 카드, 오늘 레이더, 스크랩북, 제작 후보함은 `maxresdefault`를 먼저 사용합니다.
+- 최대 해상도가 없는 영상은 `sddefault`, `hqdefault`, 기존 저장 URL 순서로 자동 대체됩니다.
+- 작은 리스트와 업로드 달력은 화면 크기에 맞는 `sddefault`부터 사용해 불필요하게 큰 이미지 다운로드를 줄였습니다.
+- 새 영상 수집이나 YouTube Data API 호출 없이 기존 `videoId`만 사용합니다.
+
+검증:
+
+- `npm.cmd test -- --reporter=dot`
+  - 198개 테스트 파일, 846개 테스트 통과
+- `npm.cmd run build`
+  - Vite production build 통과
+- `git diff --check`
+  - 패치 오류 없음
+
+보존한 것:
+
+- API endpoint, DB schema, Cloud 저장 데이터 변경 없음
+- localStorage key 변경 없음
+- YouTube API 호출 조건과 횟수 변경 없음
+- 새 라이브러리 추가 없음

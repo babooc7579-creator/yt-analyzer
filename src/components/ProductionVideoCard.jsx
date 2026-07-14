@@ -4,6 +4,7 @@ import ProductionVideoDraftForm from './ProductionVideoDraftForm';
 import ProductionVideoMetaBadges from './ProductionVideoMetaBadges';
 import ProductionVideoReadinessChecklist from './ProductionVideoReadinessChecklist';
 import ProductionVideoStatusActions from './ProductionVideoStatusActions';
+import YouTubeThumbnailImage from './YouTubeThumbnailImage';
 
 export default function ProductionVideoCard({
   columnId,
@@ -44,7 +45,12 @@ export default function ProductionVideoCard({
 
   return (
     <article className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-      <img src={video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`} alt={thumbnailAlt} className="aspect-video w-full object-cover bg-slate-100" />
+      <YouTubeThumbnailImage
+        src={video.thumbnail}
+        videoId={video.videoId}
+        alt={thumbnailAlt}
+        className="aspect-video w-full object-cover bg-slate-100"
+      />
       <div className="p-3">
         <a href={videoUrl} target="_blank" rel="noreferrer" className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-600" title={videoTitle} aria-label={titleLinkAriaLabel}>
           {videoTitle}
