@@ -21,6 +21,7 @@ export default function HomeRadarWorkflowSection({
   savedChannelCount = 0,
   selectedChannelIds,
   selectedChannelCount = 0,
+  selectedLoadedVideoCount = 0,
   storedVideoLoadResult,
   toggleChannelSelection,
 }) {
@@ -49,6 +50,7 @@ export default function HomeRadarWorkflowSection({
         onOpenSelectedScan={onOpenSelectedScan}
         savedChannels={savedChannels}
         selectedChannelIds={selectedChannelIds}
+        selectedLoadedVideoCount={selectedLoadedVideoCount}
         storedVideoLoadResult={storedVideoLoadResult}
         toggleChannelSelection={toggleChannelSelection}
       />

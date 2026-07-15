@@ -61,4 +61,17 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('저장된 영상이 없는 채널 조합입니다');
     expect(html).toContain('새 영상 수집 준비');
   });
+
+  it('continues to candidate review after returning to radar with matching loaded videos', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarChannelStage
+        savedChannels={channels}
+        selectedChannelIds={['channel-1']}
+        selectedLoadedVideoCount={8}
+      />,
+    );
+
+    expect(html).toContain('저장 영상 8개가 판정대에 준비됐습니다');
+    expect(html).toContain('후보 판정 시작');
+  });
 });

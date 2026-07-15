@@ -190,16 +190,18 @@ UX 원칙:
 현재 연결 항목:
 
 - 채널 분야 추가, 화면에서 숨김, Cloud 태그 이름 변경
+- 숨긴 기본 분야와 Cloud 태그를 브라우저 화면 목록에 다시 표시
 - Azure Function API Base URL 확인
 - 데이터 저장 위치 안내
 - 저장 영상 조회와 YouTube API 수집 작업 구분
 - 댓글 Top 10용 사용자 YouTube API Key 입력 상태 확인
 - Cloud 판단 기록/스크랩북 동기화 경고와 현재 화면 오류 확인
+- Cloud 채널 목록 수동 재조회와 오류 유형별 다음 행동 안내
 - GitHub Actions 배포 상태 확인 경로
 
 후속 항목:
 
-- CORS 오류 안내
+- CORS 원인 자동 판별
 - 로컬 실행 안내
 - Azure 리소스 상태를 앱 안에서 자동 진단하는 기능
 

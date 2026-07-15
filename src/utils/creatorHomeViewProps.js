@@ -1,3 +1,5 @@
+import { getLoadedVideoCountForSelectedChannels } from './homeRadarJourney';
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export const getHomeOperatingGuidelinesViewProps = () => ({
@@ -131,6 +133,11 @@ export const getCreatorHomeViewProps = ({
   const channelList = toArray(savedChannels);
   const savedVideoList = toArray(savedVideos);
   const videoList = toArray(videos);
+  const selectedLoadedVideoCount = getLoadedVideoCountForSelectedChannels({
+    savedChannels: channelList,
+    selectedChannelIds,
+    videos: videoList,
+  });
 
   return {
     actionShortcutsProps: {
@@ -179,6 +186,7 @@ export const getCreatorHomeViewProps = ({
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
       savedChannels: channelList,
       selectedChannelIds: toArray(selectedChannelIds),
+      selectedLoadedVideoCount,
       toggleChannelSelection,
       productionCandidateCount,
       productionFocusCount,

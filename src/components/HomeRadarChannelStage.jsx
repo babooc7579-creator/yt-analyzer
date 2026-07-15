@@ -21,6 +21,7 @@ export default function HomeRadarChannelStage({
   onOpenSelectedScan,
   savedChannels,
   selectedChannelIds,
+  selectedLoadedVideoCount = 0,
   storedVideoLoadResult,
   toggleChannelSelection,
 }) {
@@ -41,8 +42,12 @@ export default function HomeRadarChannelStage({
     tagFilter,
   }), [channelList, gradeFilter, scanFilter, searchQuery, selectedIds, tagFilter]);
   const visibleChannels = filteredChannels.slice(0, VISIBLE_CHANNEL_LIMIT);
-  const loadSucceeded = storedVideoLoadResult?.success === true;
-  const loadedVideoCount = Math.max(0, Number(storedVideoLoadResult?.videoCount) || 0);
+  const explicitLoadSucceeded = storedVideoLoadResult?.success === true;
+  const inheritedLoadedVideoCount = Math.max(0, Number(selectedLoadedVideoCount) || 0);
+  const loadedVideoCount = explicitLoadSucceeded
+    ? Math.max(0, Number(storedVideoLoadResult?.videoCount) || 0)
+    : inheritedLoadedVideoCount;
+  const loadSucceeded = explicitLoadSucceeded || inheritedLoadedVideoCount > 0;
   const emptyLoad = hasEmptyStoredVideoLoad(storedVideoLoadResult);
   const canLoad = selectedIds.length > 0 && typeof onLoadStoredVideos === 'function';
 
