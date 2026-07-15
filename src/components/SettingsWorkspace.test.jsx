@@ -7,6 +7,7 @@ describe('SettingsWorkspace', () => {
   it('explains category, Cloud, and API boundaries in one settings screen', () => {
     const html = renderToStaticMarkup(
       <SettingsWorkspace
+        apiKey=""
         categorySettingsProps={{
           categories: ['랭킹형', '영화'],
           cloudOnlyTags: ['예능'],
@@ -14,7 +15,14 @@ describe('SettingsWorkspace', () => {
           setCategories: vi.fn(),
           setNewCategoryName: vi.fn(),
         }}
+        deploymentStatusUrl="https://github.com/babooc7579-creator/yt-analyzer/actions"
+        diagnostics={{
+          apiKeyConfigured: false,
+          runtimeError: '',
+          syncWarnings: [],
+        }}
         functionApiBase="/api"
+        onChangeApiKey={vi.fn()}
         savedChannelCount={10}
       />,
     );
@@ -27,5 +35,34 @@ describe('SettingsWorkspace', () => {
     expect(html).toContain('저장 영상 불러오기');
     expect(html).toContain('YouTube API 호출 없음');
     expect(html).toContain('/api');
+    expect(html).toContain('댓글 Top 10용 YouTube API Key');
+    expect(html).toContain('새로고침하면 사라지며 Cloud DB, localStorage, 저장소에 저장하지 않습니다');
+    expect(html).toContain('현재 영상 판단 기록과 스크랩북 동기화 경고가 없습니다');
+    expect(html).toContain('현재 화면에서 보고된 오류가 없습니다');
+    expect(html).toContain('GitHub Actions에서 배포 상태 확인');
+  });
+
+  it('shows Cloud sync warnings and the current runtime error without making requests', () => {
+    const html = renderToStaticMarkup(
+      <SettingsWorkspace
+        apiKey="configured-key"
+        categorySettingsProps={{ categories: [], cloudOnlyTags: [] }}
+        deploymentStatusUrl="https://github.com/babooc7579-creator/yt-analyzer/actions"
+        diagnostics={{
+          apiKeyConfigured: true,
+          runtimeError: '저장 영상 요청 실패',
+          syncWarnings: ['Cloud 연결 실패로 임시 기록 표시 중'],
+        }}
+        functionApiBase="/api"
+        onChangeApiKey={vi.fn()}
+        savedChannelCount={0}
+      />,
+    );
+
+    expect(html).toContain('입력됨');
+    expect(html).toContain('Cloud 연결 실패로 임시 기록 표시 중');
+    expect(html).toContain('저장 영상 요청 실패');
+    expect(html).toContain('type="password"');
+    expect(html).toContain('새로고침하면 사라지며 Cloud DB, localStorage, 저장소에 저장하지 않습니다');
   });
 });
