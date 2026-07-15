@@ -21,6 +21,13 @@ export const getCategoriesAfterLocalAdd = (categories, newCategoryName) => (
     : getChannelCategoryList(categories)
 );
 
+export const getRestorableCategories = (categories, candidates) => {
+  const visibleCategories = new Set(getChannelCategoryList(categories));
+
+  return [...new Set(getChannelCategoryList(candidates).filter(Boolean))]
+    .filter((category) => !visibleCategories.has(category));
+};
+
 export const getChannelCategorySettingsProps = ({
   cancelRenameCategory,
   categories,

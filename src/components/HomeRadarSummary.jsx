@@ -24,6 +24,7 @@ export default function HomeRadarSummary({
   savedChannels,
   selectedChannelIds,
   selectedChannelCount,
+  selectedLoadedVideoCount,
   storedVideoLoadResult,
   toggleChannelSelection,
 }) {
@@ -50,6 +51,7 @@ export default function HomeRadarSummary({
         savedChannelCount={savedChannelCount}
         selectedChannelIds={selectedChannelIds}
         selectedChannelCount={selectedChannelCount}
+        selectedLoadedVideoCount={selectedLoadedVideoCount}
         storedVideoLoadResult={storedVideoLoadResult}
         toggleChannelSelection={toggleChannelSelection}
       />

@@ -78,7 +78,7 @@ describe('creatorHomeViewProps utils', () => {
       selectedChannelCount: 2,
       selectedChannelIds: ['channel1'],
       ttoTtoAssetCount: 7,
-      videos: [{ videoId: 'video1' }, { videoId: 'video2' }],
+      videos: [{ videoId: 'video1', channel_id: 'channel1' }, { videoId: 'video2', channel_id: 'channel2' }],
       onOpenView: () => {},
     });
 
@@ -94,6 +94,7 @@ describe('creatorHomeViewProps utils', () => {
       savedVideoCount: 1,
       selectedChannelIds: ['channel1'],
       selectedChannelCount: 2,
+      selectedLoadedVideoCount: 1,
       ttoTtoAssetCount: 7,
     });
   });

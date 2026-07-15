@@ -11,9 +11,13 @@ export function useCloudChannels({ onError } = {}) {
     try {
       const data = await fetchChannels();
       if (!data.success) throw new Error(data.error || CHANNEL_LOAD_FAILED_MESSAGE);
-      setSavedChannels(data.channels || []);
+      const channels = data.channels || [];
+      setSavedChannels(channels);
+      return { success: true, channels };
     } catch (err) {
-      onError?.(getChannelLoadErrorMessage(err));
+      const message = getChannelLoadErrorMessage(err);
+      onError?.(message);
+      return { success: false, error: message };
     } finally {
       setChannelsLoading(false);
     }

@@ -10,6 +10,7 @@ import {
   getChannelCategoryList,
   getChannelCategorySettingsProps,
   getChannelCloudOnlyTagsNoticeViewProps,
+  getRestorableCategories,
 } from './channelCategorySettingsProps';
 
 describe('channelCategorySettingsProps utils', () => {
@@ -32,6 +33,14 @@ describe('channelCategorySettingsProps utils', () => {
     expect(canAddCategoryToLocalList(categories, '')).toBe(false);
     expect(getCategoriesAfterLocalAdd(categories, '미분류')).toEqual(['해외', '예능', '미분류']);
     expect(getCategoriesAfterLocalAdd(categories, '해외')).toEqual(categories);
+  });
+
+  it('offers hidden defaults and Cloud-only tags once without changing Cloud data', () => {
+    expect(getRestorableCategories(
+      ['해외', '영화'],
+      ['해외', '예능', '예능', 'Cloud 전용'],
+    )).toEqual(['예능', 'Cloud 전용']);
+    expect(getRestorableCategories(null, null)).toEqual([]);
   });
 
   it('builds category settings child props with forwarded handlers', () => {

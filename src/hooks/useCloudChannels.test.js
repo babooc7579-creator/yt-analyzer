@@ -149,11 +149,24 @@ describe('useCloudChannels', () => {
     });
     const channelsHook = useCloudChannels({ onError: vi.fn() });
 
-    await channelsHook.loadChannelsFromCloud();
+    const result = await channelsHook.loadChannelsFromCloud();
 
     expect(fetchChannels).toHaveBeenCalledTimes(2);
     expect(stateSetters[1]).toHaveBeenNthCalledWith(1, true);
     expect(stateSetters[0]).toHaveBeenCalledWith([channelA]);
     expect(stateSetters[1]).toHaveBeenLastCalledWith(false);
+    expect(result).toEqual({ success: true, channels: [channelA] });
+  });
+
+  it('returns a failure result so settings can explain a manual reload failure', async () => {
+    fetchChannelsMock.mockResolvedValueOnce({ success: false, error: 'Cloud unavailable' });
+    const channelsHook = useCloudChannels({ onError: vi.fn() });
+    await flushPromises();
+
+    fetchChannelsMock.mockResolvedValueOnce({ success: false, error: 'Cloud unavailable again' });
+    const result = await channelsHook.loadChannelsFromCloud();
+
+    expect(result).toMatchObject({ success: false });
+    expect(result.error).toContain('Cloud unavailable again');
   });
 });

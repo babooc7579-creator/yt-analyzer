@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { getHomeRadarJourneyStages, hasEmptyStoredVideoLoad } from './homeRadarJourney';
+import {
+  getHomeRadarJourneyStages,
+  getLoadedVideoCountForSelectedChannels,
+  hasEmptyStoredVideoLoad,
+} from './homeRadarJourney';
 
 describe('homeRadarJourney', () => {
   it('distinguishes an untouched empty screen from a successful zero-video lookup', () => {
@@ -35,5 +39,21 @@ describe('homeRadarJourney', () => {
       value: '저장 영상 0개',
       warning: true,
     });
+  });
+
+  it('counts only loaded videos that belong to the currently selected channels', () => {
+    expect(getLoadedVideoCountForSelectedChannels({
+      savedChannels: [
+        { id: 'c1', title: '채널 하나' },
+        { id: 'c2', title: '채널 둘' },
+      ],
+      selectedChannelIds: ['c2'],
+      videos: [
+        { videoId: 'v1', channel_id: 'c1' },
+        { videoId: 'v2', channelId: 'c2' },
+        { videoId: 'v3', channel_title: '채널 둘' },
+      ],
+    })).toBe(2);
+    expect(getLoadedVideoCountForSelectedChannels({ selectedChannelIds: [], videos: [{ channel_id: 'c1' }] })).toBe(0);
   });
 });

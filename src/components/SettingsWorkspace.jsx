@@ -1,4 +1,5 @@
-import { AlertTriangle, CheckCircle2, Cloud, Database, ExternalLink, FolderCog, KeyRound } from 'lucide-react';
+import { useState } from 'react';
+import { AlertTriangle, CheckCircle2, Cloud, Database, ExternalLink, FolderCog, KeyRound, RefreshCw } from 'lucide-react';
 
 import ChannelCategorySettings from './ChannelCategorySettings';
 
@@ -30,13 +31,25 @@ export default function SettingsWorkspace({
   diagnostics,
   functionApiBase,
   onChangeApiKey,
+  onClearError,
+  onRefreshChannels,
+  refreshingChannels,
   savedChannelCount,
 }) {
+  const [refreshResult, setRefreshResult] = useState(null);
   const {
     apiKeyConfigured = false,
+    errorGuidance = null,
     runtimeError = '',
     syncWarnings = [],
   } = diagnostics || {};
+  const refreshChannels = async () => {
+    if (typeof onRefreshChannels !== 'function' || refreshingChannels) return;
+    setRefreshResult(null);
+    const result = await onRefreshChannels();
+    if (result?.success === true) onClearError?.();
+    setRefreshResult(result?.success === true ? 'success' : 'error');
+  };
 
   return (
     <section data-testid="creator-route-settings" className="min-w-0 space-y-4">
@@ -157,15 +170,35 @@ export default function SettingsWorkspace({
             <p className={`mt-3 text-xs leading-5 ${runtimeError ? 'text-rose-200' : 'text-emerald-200'}`}>
               {runtimeError || '현재 화면에서 보고된 오류가 없습니다.'}
             </p>
-            <a
-              className="mt-4 inline-flex items-center gap-2 border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-200 hover:border-indigo-400 hover:text-white"
-              href={deploymentStatusUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              GitHub Actions에서 배포 상태 확인
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
+            {errorGuidance && (
+              <div className="mt-3 border-l-2 border-rose-300/50 bg-rose-500/5 px-3 py-2">
+                <p className="text-xs font-extrabold text-rose-100">{errorGuidance.title}</p>
+                <p className="mt-1 text-[11px] leading-4 text-slate-400">{errorGuidance.description}</p>
+              </div>
+            )}
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              <button
+                type="button"
+                onClick={refreshChannels}
+                disabled={refreshingChannels || typeof onRefreshChannels !== 'function'}
+                className="inline-flex w-full items-center justify-center gap-2 border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                title="Cloud DB에서 채널 목록만 다시 조회합니다. YouTube API는 호출하지 않습니다."
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${refreshingChannels ? 'animate-spin' : ''}`} />
+                {refreshingChannels ? 'Cloud 채널 조회 중' : 'Cloud 채널 다시 불러오기'}
+              </button>
+              <a
+                className="inline-flex w-full items-center justify-center gap-2 border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-200 hover:border-indigo-400 hover:text-white sm:w-auto"
+                href={deploymentStatusUrl}
+                rel="noreferrer"
+                target="_blank"
+              >
+                GitHub Actions에서 배포 상태 확인
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+            {refreshResult === 'success' && <p role="status" className="mt-3 text-xs font-bold text-emerald-200">Cloud 채널 목록을 다시 불러왔습니다.</p>}
+            {refreshResult === 'error' && <p role="status" className="mt-3 text-xs font-bold text-rose-200">다시 불러오지 못했습니다. 위 오류와 배포 상태를 확인해 주세요.</p>}
           </article>
         </div>
       </section>

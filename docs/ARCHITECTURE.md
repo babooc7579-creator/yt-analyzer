@@ -208,13 +208,15 @@ Main Content
 기술 설정과 연결 상태를 모읍니다. 2026-07-15 기준 독립 설정 메뉴의 1차 화면이 연결됐습니다.
 
 - 채널 분야 목록 관리
+- 숨긴 기본 분야/Cloud 태그의 브라우저 화면 목록 복원
 - localStorage 화면 목록과 Cloud 채널 태그의 차이 안내
 - Azure Function API Base URL
 - 저장 영상 DB 조회와 YouTube API 수집 구분
 - 댓글 Top 10용 사용자 YouTube API Key 입력과 메모리 보관 원칙
 - Cloud 기록 동기화 경고, 현재 화면 오류, GitHub Actions 배포 확인 경로
+- 기존 `GET /channels`를 이용한 수동 재조회와 오류 유형별 다음 행동 안내
 
-CORS 원인 판별, 로컬 실행 진단, Azure 리소스 상태 자동 확인은 후속 범위입니다.
+CORS의 정확한 원인 자동 판별, 로컬 실행 진단, Azure 리소스 상태 자동 확인은 후속 범위입니다.
 
 ---
 

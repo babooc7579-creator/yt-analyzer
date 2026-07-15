@@ -4,6 +4,27 @@ export const hasEmptyStoredVideoLoad = (storedVideoLoadResult) => (
   storedVideoLoadResult?.success === true && toCount(storedVideoLoadResult.videoCount) === 0
 );
 
+export const getLoadedVideoCountForSelectedChannels = ({
+  savedChannels = [],
+  selectedChannelIds = [],
+  videos = [],
+} = {}) => {
+  const selectedIds = new Set(Array.isArray(selectedChannelIds) ? selectedChannelIds : []);
+  if (selectedIds.size === 0 || !Array.isArray(videos)) return 0;
+
+  const selectedTitles = new Set((Array.isArray(savedChannels) ? savedChannels : [])
+    .filter((channel) => selectedIds.has(channel?.id || channel?.channelId))
+    .map((channel) => String(channel?.title || channel?.channel_title || '').trim())
+    .filter(Boolean));
+
+  return videos.filter((video) => {
+    const channelId = String(video?.channel_id || video?.channelId || '').trim();
+    const channelTitle = String(video?.channel_title || video?.channelTitle || '').trim();
+    return (channelId && selectedIds.has(channelId))
+      || (!channelId && channelTitle && selectedTitles.has(channelTitle));
+  }).length;
+};
+
 export const getHomeRadarJourneyStages = ({
   loadedVideoCount = 0,
   openRadarCandidateCount = 0,
