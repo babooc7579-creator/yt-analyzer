@@ -211,8 +211,10 @@ Main Content
 - localStorage 화면 목록과 Cloud 채널 태그의 차이 안내
 - Azure Function API Base URL
 - 저장 영상 DB 조회와 YouTube API 수집 구분
+- 댓글 Top 10용 사용자 YouTube API Key 입력과 메모리 보관 원칙
+- Cloud 기록 동기화 경고, 현재 화면 오류, GitHub Actions 배포 확인 경로
 
-YouTube API Key, CORS, 로컬 실행, 배포 상태를 한 화면에서 점검하는 진단 기능은 후속 범위입니다.
+CORS 원인 판별, 로컬 실행 진단, Azure 리소스 상태 자동 확인은 후속 범위입니다.
 
 ---
 

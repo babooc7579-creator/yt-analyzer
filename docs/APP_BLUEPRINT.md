@@ -193,13 +193,15 @@ UX 원칙:
 - Azure Function API Base URL 확인
 - 데이터 저장 위치 안내
 - 저장 영상 조회와 YouTube API 수집 작업 구분
+- 댓글 Top 10용 사용자 YouTube API Key 입력 상태 확인
+- Cloud 판단 기록/스크랩북 동기화 경고와 현재 화면 오류 확인
+- GitHub Actions 배포 상태 확인 경로
 
 후속 항목:
 
-- YouTube Data API Key 입력/저장 방식 안내
 - CORS 오류 안내
 - 로컬 실행 안내
-- 배포 상태 확인
+- Azure 리소스 상태를 앱 안에서 자동 진단하는 기능
 
 준비중 메뉴는 실제 기능처럼 보이면 안 됩니다. 클릭 시 API 호출이나 DB 변경 없이 안내 화면만 보여야 합니다.
 

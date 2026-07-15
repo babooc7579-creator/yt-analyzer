@@ -1,4 +1,4 @@
-import { Cloud, Database, FolderCog, KeyRound } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Cloud, Database, ExternalLink, FolderCog, KeyRound } from 'lucide-react';
 
 import ChannelCategorySettings from './ChannelCategorySettings';
 
@@ -24,10 +24,20 @@ const settingCards = [
 ];
 
 export default function SettingsWorkspace({
+  apiKey,
   categorySettingsProps,
+  deploymentStatusUrl,
+  diagnostics,
   functionApiBase,
+  onChangeApiKey,
   savedChannelCount,
 }) {
+  const {
+    apiKeyConfigured = false,
+    runtimeError = '',
+    syncWarnings = [],
+  } = diagnostics || {};
+
   return (
     <section data-testid="creator-route-settings" className="min-w-0 space-y-4">
       <div className="border border-indigo-400/25 bg-indigo-500/10 p-5">
@@ -91,6 +101,74 @@ export default function SettingsWorkspace({
           </dl>
         </aside>
       </div>
+
+      <section className="border border-slate-700 bg-slate-900/90 p-5" aria-labelledby="settings-diagnostics-title">
+        <div>
+          <p className="text-xs font-extrabold text-cyan-300">연결 및 진단</p>
+          <h3 id="settings-diagnostics-title" className="mt-1 text-lg font-black text-white">필요한 설정과 현재 경고를 확인합니다</h3>
+          <p className="mt-2 text-xs leading-5 text-slate-400">
+            이 영역은 상태를 보여주거나 API Key를 현재 실행 중인 화면에만 보관합니다. 진단 확인만으로 API 호출이나 데이터 저장은 실행되지 않습니다.
+          </p>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-3 xl:grid-cols-3">
+          <article className="border border-slate-700 bg-slate-950/70 p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-extrabold text-white">댓글 Top 10용 YouTube API Key</p>
+                <p className="mt-1 text-xs leading-5 text-slate-400">댓글을 직접 확인할 때만 사용합니다. 채널 수집용 서버 키와 다른 사용자 입력값입니다.</p>
+              </div>
+              <span className={`shrink-0 border px-2 py-1 text-[11px] font-bold ${apiKeyConfigured ? 'border-emerald-400/30 bg-emerald-500/10 text-emerald-200' : 'border-amber-400/30 bg-amber-500/10 text-amber-200'}`}>
+                {apiKeyConfigured ? '입력됨' : '미입력'}
+              </span>
+            </div>
+            <input
+              aria-label="댓글 Top 10 조회용 YouTube API Key"
+              autoComplete="off"
+              className="mt-3 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-indigo-400"
+              onChange={(event) => onChangeApiKey?.(event.target.value)}
+              placeholder="댓글 조회가 필요할 때만 입력"
+              type="password"
+              value={apiKey || ''}
+            />
+            <p className="mt-2 text-[11px] leading-4 text-slate-500">새로고침하면 사라지며 Cloud DB, localStorage, 저장소에 저장하지 않습니다.</p>
+          </article>
+
+          <article className="border border-slate-700 bg-slate-950/70 p-4">
+            <div className="flex items-center gap-2">
+              {syncWarnings.length > 0 ? <AlertTriangle className="h-4 w-4 text-amber-300" /> : <CheckCircle2 className="h-4 w-4 text-emerald-300" />}
+              <p className="text-xs font-extrabold text-white">Cloud 기록 동기화</p>
+            </div>
+            {syncWarnings.length > 0 ? (
+              <ul className="mt-3 space-y-2 text-xs leading-5 text-amber-100">
+                {syncWarnings.map((warning) => <li key={warning}>{warning}</li>)}
+              </ul>
+            ) : (
+              <p className="mt-3 text-xs leading-5 text-emerald-200">현재 영상 판단 기록과 스크랩북 동기화 경고가 없습니다.</p>
+            )}
+            <p className="mt-2 text-[11px] leading-4 text-slate-500">경고가 없다는 표시는 전체 Azure 서비스 상태를 보증한다는 의미는 아닙니다.</p>
+          </article>
+
+          <article className="border border-slate-700 bg-slate-950/70 p-4">
+            <div className="flex items-center gap-2">
+              {runtimeError ? <AlertTriangle className="h-4 w-4 text-rose-300" /> : <CheckCircle2 className="h-4 w-4 text-emerald-300" />}
+              <p className="text-xs font-extrabold text-white">현재 화면 오류</p>
+            </div>
+            <p className={`mt-3 text-xs leading-5 ${runtimeError ? 'text-rose-200' : 'text-emerald-200'}`}>
+              {runtimeError || '현재 화면에서 보고된 오류가 없습니다.'}
+            </p>
+            <a
+              className="mt-4 inline-flex items-center gap-2 border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-200 hover:border-indigo-400 hover:text-white"
+              href={deploymentStatusUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              GitHub Actions에서 배포 상태 확인
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </article>
+        </div>
+      </section>
     </section>
   );
 }
