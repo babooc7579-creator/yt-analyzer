@@ -1,4 +1,7 @@
-import { getLoadedVideoCountForSelectedChannels } from './homeRadarJourney';
+import {
+  getLoadedVideoCountForSelectedChannels,
+  hasEmptyStoredVideoLoad,
+} from './homeRadarJourney';
 
 export const CHANNEL_OPERATION_STAGES = [
   {
@@ -40,6 +43,7 @@ export const getChannelOperationsJourney = ({
   isScanning = false,
   savedChannels = [],
   selectedChannelIds = [],
+  storedVideoLoadResult,
   videos = [],
 } = {}) => {
   const channelList = toArray(savedChannels);
@@ -103,6 +107,24 @@ export const getChannelOperationsJourney = ({
       primaryAction: null,
       stageStatusById,
       title: `선택 채널 ${selectedChannelCount}개를 수집 중입니다`,
+    };
+  }
+
+  if (hasEmptyStoredVideoLoad(storedVideoLoadResult)) {
+    return {
+      description: 'Cloud DB 조회 결과 선택 채널에 저장된 영상이 없습니다. 다른 채널을 고르거나 새 영상 수집 단계로 이동하세요.',
+      primaryAction: {
+        id: 'open-scan',
+        label: '새 영상 수집 단계',
+        title: '새 영상 수집 영역으로 이동만 합니다. 실제 수집 버튼을 누를 때만 YouTube API를 호출할 수 있습니다.',
+      },
+      secondaryAction: {
+        id: 'open-manage',
+        label: '채널 다시 선택',
+        title: '채널 목록으로 이동합니다. 채널 선택만으로 YouTube API 호출이나 데이터 저장은 실행되지 않습니다.',
+      },
+      stageStatusById,
+      title: '선택 채널에 저장된 영상이 없습니다',
     };
   }
 

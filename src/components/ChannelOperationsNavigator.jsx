@@ -34,6 +34,7 @@ export default function ChannelOperationsNavigator({
   onSelectStage,
   savedChannels = [],
   selectedChannelIds = [],
+  storedVideoLoadResult,
   videos = [],
 }) {
   const journey = getChannelOperationsJourney({
@@ -41,6 +42,7 @@ export default function ChannelOperationsNavigator({
     isScanning,
     savedChannels,
     selectedChannelIds,
+    storedVideoLoadResult,
     videos,
   });
 
