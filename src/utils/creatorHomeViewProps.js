@@ -141,9 +141,9 @@ export const getCreatorHomeViewProps = ({
 
   return {
     actionShortcutsProps: {
-      onOpenAddChannel: () => onOpenView({ id: 'ops-add-channel' }),
+      onOpenAddChannel: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'add' } }),
       onOpenDiscoveryLinks: () => onOpenView({ id: 'vault-sources' }),
-      onOpenSelectedScan: () => onOpenView({ id: 'ops-selected-scan' }),
+      onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
     },
     radarCandidateStripProps: {
@@ -160,7 +160,7 @@ export const getCreatorHomeViewProps = ({
       selectedChannelCount,
       storedVideoLoadResult,
       onOpenChannelWatchlist: () => onOpenView({ id: 'discovery-watchlist' }),
-      onOpenSelectedScan: () => onOpenView({ id: 'ops-selected-scan' }),
+      onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
       onOpenScrapbook: () => onOpenView({ id: 'studio-scrapbook' }),
       onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
@@ -170,7 +170,7 @@ export const getCreatorHomeViewProps = ({
       loadedVideoCount: videoList.length,
       savedVideoCount: savedVideoList.length,
       latestScanText,
-      onOpenAddChannel: () => onOpenView({ id: 'ops-add-channel' }),
+      onOpenAddChannel: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'add' } }),
       onOpenChannelWatchlist: () => onOpenView({ id: 'discovery-watchlist' }),
       onLoadStoredVideos: loadStoredVideosForSelectedChannels,
       selectedChannelCount,
@@ -181,7 +181,7 @@ export const getCreatorHomeViewProps = ({
       discoveryRightsWarningCount,
       onOpenDiscoveryLinks: () => onOpenView({ id: 'vault-sources' }),
       onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
-      onOpenSelectedScan: () => onOpenView({ id: 'ops-selected-scan' }),
+      onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
       onOpenTtoTto: () => onOpenView({ id: 'discovery-ttotto' }),
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
       savedChannels: channelList,

@@ -87,7 +87,7 @@ export default function ChannelAddForm({
   });
 
   return (
-    <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-4">
+    <div id="channel-operations-add" className="scroll-mt-5 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-4">
       <ChannelAddFormHeader {...headerProps} />
 
       {isEditingCategory && (

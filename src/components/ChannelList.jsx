@@ -45,7 +45,7 @@ export default function ChannelList({
   });
 
   return (
-    <div className="space-y-3">
+    <div id="channel-operations-manage" className="scroll-mt-5 space-y-3">
       {!channelsLoading && visibleChannels.length > 0 ? (
         <ChannelListUrlExportPanel {...exportPanelProps} />
       ) : null}

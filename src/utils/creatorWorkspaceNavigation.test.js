@@ -4,6 +4,7 @@ import { CREATOR_OS_ITEMS } from '../constants/creatorOs';
 import {
   getCreatorWorkspaceNavigationState,
   getCreatorWorkspaceViewModel,
+  normalizeCreatorWorkspaceItem,
 } from './creatorWorkspaceNavigation';
 
 describe('creator workspace navigation utils', () => {
@@ -113,6 +114,18 @@ describe('creator workspace navigation utils', () => {
       creatorView: 'ops-add-channel',
       showWorkPanel: true,
     });
+  });
+
+  it('keeps old channel shortcuts compatible with the unified operations stages', () => {
+    expect(normalizeCreatorWorkspaceItem({ id: 'ops-add-channel' })).toEqual({
+      id: 'ops-channels',
+      intent: { operationStage: 'add' },
+    });
+    expect(normalizeCreatorWorkspaceItem({ id: 'ops-selected-scan' })).toEqual({
+      id: 'ops-channels',
+      intent: { operationStage: 'scan' },
+    });
+    expect(normalizeCreatorWorkspaceItem({ id: 'home' })).toEqual({ id: 'home' });
   });
 
   it('opens production candidate workspaces on the scrapbook tab without the work panel', () => {

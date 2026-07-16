@@ -42,7 +42,7 @@ describe('channelWatchlistRouteProps utils', () => {
       [{ id: 'ops-channels' }],
       [{ id: 'home' }],
       [{ id: 'vault-videos' }],
-      [{ id: 'ops-selected-scan' }],
+      [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
       [{ id: 'discovery-ttotto' }],
     ]);
   });
