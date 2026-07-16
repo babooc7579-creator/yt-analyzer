@@ -104,4 +104,17 @@ describe('channel operations utils', () => {
     expect(journey.primaryAction).toMatchObject({ id: 'open-scan', label: '새 영상 수집 단계' });
     expect(journey.secondaryAction).toMatchObject({ id: 'open-manage', label: '채널 다시 선택' });
   });
+
+  it('moves forward when collection loads videos after an earlier empty lookup', () => {
+    const journey = getChannelOperationsJourney({
+      savedChannels: [{ id: 'channel-1' }],
+      selectedChannelIds: ['channel-1'],
+      storedVideoLoadResult: { success: true, videoCount: 0 },
+      videos: [{ videoId: 'new-video', channel_id: 'channel-1' }],
+    });
+
+    expect(journey.title).toBe('영상이 준비됐습니다');
+    expect(journey.primaryAction).toMatchObject({ id: 'open-videos', label: '저장 영상 1개 보기' });
+    expect(journey.secondaryAction.id).toBe('open-radar');
+  });
 });
