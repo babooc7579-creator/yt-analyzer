@@ -14,5 +14,23 @@ describe('ChannelOperationsNavigator', () => {
     expect(html).toContain('3. 새 영상 수집');
     expect(html).toContain('aria-current="step"');
     expect(html).toContain('채널 선택만으로 YouTube API는 호출되지 않습니다');
+    expect(html).toContain('다음 추천 행동');
+    expect(html).toContain('새 채널 등록하기');
+    expect(html).toContain('이동만으로 YouTube API 호출이나 Cloud 저장은 실행되지 않습니다');
+  });
+
+  it('shows stored-video and radar actions when videos are ready', () => {
+    const html = renderToStaticMarkup(
+      <ChannelOperationsNavigator
+        savedChannels={[{ id: 'channel-1' }]}
+        selectedChannelIds={['channel-1']}
+        videos={[{ videoId: 'video-1' }, { videoId: 'video-2' }]}
+      />,
+    );
+
+    expect(html).toContain('영상이 준비됐습니다');
+    expect(html).toContain('저장 영상 2개 보기');
+    expect(html).toContain('오늘의 레이더로');
+    expect(html).toContain('1개 선택');
   });
 });

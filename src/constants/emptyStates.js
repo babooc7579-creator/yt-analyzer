@@ -3,16 +3,16 @@ export const REFERENCE_VAULT_EMPTY_STATE = {
   description: '채널을 저장한 뒤, Cloud DB에 저장된 영상을 불러오면 금고에 제작 소재가 쌓입니다. 새 영상 수집은 필요할 때만 따로 실행합니다.',
   steps: [
     {
-      title: '1. 채널 저장',
-      description: '작업 패널에서 채널을 미리보기한 뒤 Cloud 채널 목록에 저장합니다. 이 단계만으로 영상 수집은 실행되지 않습니다.',
+      title: '1. 채널 등록·선택',
+      description: '채널을 Cloud 목록에 등록하고 오늘 확인할 채널을 선택합니다. 선택만으로 영상 수집은 실행되지 않습니다.',
     },
     {
-      title: '2. 선택 채널 새 영상 수집',
-      description: '새 데이터가 필요할 때만 실행합니다. 이 단계는 YouTube API를 호출할 수 있습니다.',
+      title: '2. 저장된 영상 불러오기',
+      description: 'Cloud DB에 이미 저장된 영상을 먼저 조회합니다. 새 YouTube API 호출은 없습니다.',
     },
     {
-      title: '3. 저장된 영상 불러오기',
-      description: 'Cloud DB에 이미 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.',
+      title: '3. 필요할 때 새 영상 수집',
+      description: '새 데이터가 필요할 때만 선택 채널을 수집합니다. 이 단계는 YouTube API를 호출할 수 있습니다.',
     },
   ],
   homeButton: {

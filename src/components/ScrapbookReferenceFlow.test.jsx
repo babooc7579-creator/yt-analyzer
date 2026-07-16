@@ -20,7 +20,7 @@ describe('Scrapbook and reference vault flow', () => {
     expect(html).toContain('Cloud 스크랩북에 보관합니다.');
   });
 
-  it('renders reference vault empty state as channel save, scan, and stored lookup steps', () => {
+  it('renders reference vault empty state as channel selection, stored lookup, then optional scan', () => {
     const html = renderToStaticMarkup(
       <ReferenceVaultEmptyState
         actions={[
@@ -37,8 +37,11 @@ describe('Scrapbook and reference vault flow', () => {
     );
 
     expect(html).toContain('레퍼런스 금고가 비어 있습니다');
-    expect(html).toContain('새 데이터가 필요할 때만 실행합니다. 이 단계는 YouTube API를 호출할 수 있습니다.');
-    expect(html).toContain('Cloud DB에 이미 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.');
+    expect(html).toContain('1. 채널 등록·선택');
+    expect(html).toContain('2. 저장된 영상 불러오기');
+    expect(html).toContain('Cloud DB에 이미 저장된 영상을 먼저 조회합니다. 새 YouTube API 호출은 없습니다.');
+    expect(html).toContain('3. 필요할 때 새 영상 수집');
+    expect(html).toContain('새 데이터가 필요할 때만 선택 채널을 수집합니다. 이 단계는 YouTube API를 호출할 수 있습니다.');
     expect(html).toContain('오늘 레이더로');
   });
 
