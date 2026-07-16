@@ -105,6 +105,12 @@ export const getRadarCandidateDecisionActionsViewProps = ({ pendingAction } = {}
   }[pendingAction] || '',
 });
 
+export const getRadarCandidateActionErrorMessage = (actionKey) => ({
+  production: '제작 후보 표시를 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
+  scrapbook: '소재 보관 상태를 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
+  status: '영상 판단을 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
+}[actionKey] || 'Cloud 저장을 완료하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 시도해 주세요.');
+
 export const getRadarCandidateScrapButtonProps = ({
   isSaved = false,
   videoTitle,

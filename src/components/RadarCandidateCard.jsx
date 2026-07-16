@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { getRadarCandidateCardViewProps } from '../utils/radarCandidates';
+import { getRadarCandidateActionErrorMessage } from '../utils/radarCandidateStateProps';
 import RadarCandidateBadges from './RadarCandidateBadges';
 import RadarCandidateDecisionActions from './RadarCandidateDecisionActions';
 import RadarCandidateMetrics from './RadarCandidateMetrics';
@@ -18,15 +19,24 @@ export default function RadarCandidateCard({
   onToggleScrap,
 }) {
   const actionLockRef = useRef(false);
+  const [actionError, setActionError] = useState('');
   const [pendingAction, setPendingAction] = useState('');
 
   const runCloudAction = async (actionKey, action, ...args) => {
     if (actionLockRef.current || typeof action !== 'function') return false;
 
     actionLockRef.current = true;
+    setActionError('');
     setPendingAction(actionKey);
     try {
-      return await action(...args);
+      const result = await action(...args);
+      if (result === false) {
+        setActionError(getRadarCandidateActionErrorMessage(actionKey));
+      }
+      return result;
+    } catch {
+      setActionError(getRadarCandidateActionErrorMessage(actionKey));
+      return false;
     } finally {
       actionLockRef.current = false;
       setPendingAction('');
@@ -73,6 +83,11 @@ export default function RadarCandidateCard({
         <RadarCandidateMetrics {...metricsProps} />
         <RadarCandidatePrimaryActions {...primaryActionsProps} />
         <RadarCandidateDecisionActions {...decisionActionsProps} />
+        {actionError ? (
+          <p className="mt-3 border border-rose-400/25 bg-rose-500/10 px-3 py-2 text-[11px] font-extrabold leading-5 text-rose-100" role="alert">
+            {actionError}
+          </p>
+        ) : null}
       </div>
     </article>
   );

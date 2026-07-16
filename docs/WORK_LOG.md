@@ -3004,3 +3004,21 @@ PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성�
   - 208개 테스트 파일, 884개 테스트 통과
 - `npm run build`
   - Vite production build 통과
+
+### 108. 2026-07-16 레이더 Cloud 저장 실패 안내 보강
+
+후보 카드에서 Cloud 저장이 실패했을 때 버튼 잠금만 풀리고 결과 안내가 없던 흐름을 보강했습니다.
+
+완료한 작업:
+
+- 제작 후보 표시, 소재 보관, 영상 판단 작업별 실패 메시지를 카드 안에 표시합니다.
+- 저장 함수가 명시적으로 실패를 반환하거나 예외가 발생한 경우에만 실패 안내를 표시합니다.
+- 실패한 작업은 성공한 것처럼 처리하지 않고 기존 Cloud 동기화 경고와 함께 재시도를 안내합니다.
+- DB schema, endpoint, 상태값, localStorage key, YouTube API 호출 조건은 변경하지 않았습니다.
+
+검증:
+
+- `npm test -- --run --reporter=dot`
+  - 208개 테스트 파일, 885개 테스트 통과
+- `npm run build`
+  - Vite production build 통과
