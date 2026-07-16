@@ -2970,3 +2970,20 @@ PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성�
 
 - `git diff --check`
   - 패치 오류 없음
+
+### 106. 2026-07-16 오늘의 레이더 후보 단계 안내 수정
+
+저장 영상을 불러온 뒤 실제 후보 판단 영역은 `STAGE 3`인데 안내 문구가 `STAGE 2`를 가리키던 불일치를 바로잡았습니다.
+
+완료한 작업:
+
+- 저장 영상 불러오기 성공 후 안내를 `아래 STAGE 3에서 오늘의 후보를 바로 판단할 수 있습니다.`로 수정했습니다.
+- 잘못된 `STAGE 2` 안내가 다시 들어오지 않도록 컴포넌트 테스트를 보강했습니다.
+- 기능 로직, API, DB, localStorage, YouTube API 호출 조건은 변경하지 않았습니다.
+
+검증:
+
+- `npm test -- --run --reporter=dot`
+  - 208개 테스트 파일, 884개 테스트 통과
+- `npm run build`
+  - Vite production build 통과
