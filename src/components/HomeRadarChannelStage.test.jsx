@@ -44,6 +44,8 @@ describe('HomeRadarChannelStage', () => {
     );
 
     expect(html).toContain('저장 영상 12개가 판정대에 준비됐습니다');
+    expect(html).toContain('아래 STAGE 3에서 오늘의 후보를 바로 판단할 수 있습니다.');
+    expect(html).not.toContain('아래 STAGE 2에서 오늘의 후보를 바로 판단할 수 있습니다.');
     expect(html).toContain('후보 판정 시작');
     expect(html).toContain('#today-radar-candidates');
   });

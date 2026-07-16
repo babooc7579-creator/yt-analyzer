@@ -171,7 +171,7 @@ export default function HomeRadarChannelStage({
                     : '먼저 오늘 볼 채널을 1개 이상 담아주세요'}
               </p>
               <p className="mt-1 text-[11px] font-bold text-slate-400">
-                {loadSucceeded && !emptyLoad ? '아래 STAGE 2에서 오늘의 후보를 바로 판단할 수 있습니다.' : '저장 영상 불러오기는 Cloud DB 조회이며 YouTube API를 호출하지 않습니다.'}
+                {loadSucceeded && !emptyLoad ? '아래 STAGE 3에서 오늘의 후보를 바로 판단할 수 있습니다.' : '저장 영상 불러오기는 Cloud DB 조회이며 YouTube API를 호출하지 않습니다.'}
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
