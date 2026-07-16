@@ -24,7 +24,10 @@ describe('ChannelOperationsNavigator', () => {
       <ChannelOperationsNavigator
         savedChannels={[{ id: 'channel-1' }]}
         selectedChannelIds={['channel-1']}
-        videos={[{ videoId: 'video-1' }, { videoId: 'video-2' }]}
+        videos={[
+          { videoId: 'video-1', channel_id: 'channel-1' },
+          { videoId: 'video-2', channel_id: 'channel-1' },
+        ]}
       />,
     );
 
