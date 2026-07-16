@@ -110,7 +110,7 @@ export const getChannelOperationsJourney = ({
     };
   }
 
-  if (hasEmptyStoredVideoLoad(storedVideoLoadResult)) {
+  if (videoCount === 0 && hasEmptyStoredVideoLoad(storedVideoLoadResult)) {
     return {
       description: 'Cloud DB 조회 결과 선택 채널에 저장된 영상이 없습니다. 다른 채널을 고르거나 새 영상 수집 단계로 이동하세요.',
       primaryAction: {
