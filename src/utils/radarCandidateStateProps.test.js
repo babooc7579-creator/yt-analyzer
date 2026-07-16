@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  getRadarCandidateActionErrorMessage,
   getRadarCandidateDecisionActionsViewProps,
   getRadarCandidateCompletedStateViewProps,
   getRadarCandidateEmptyStateViewProps,
@@ -120,6 +121,13 @@ describe('radarCandidateStateProps utils', () => {
     expect(scrapbookProps.disabled).toBe(true);
     expect(promotionProps.title).toContain('저장이 끝날 때까지');
     expect(scrapbookProps.title).toContain('저장이 끝날 때까지');
+  });
+
+  it('explains Cloud failures for each radar decision action', () => {
+    expect(getRadarCandidateActionErrorMessage('production')).toContain('제작 후보 표시');
+    expect(getRadarCandidateActionErrorMessage('scrapbook')).toContain('소재 보관 상태');
+    expect(getRadarCandidateActionErrorMessage('status')).toContain('영상 판단');
+    expect(getRadarCandidateActionErrorMessage('unknown')).toContain('Cloud 저장');
   });
 
   it('guards radar production promotion action when video id or handler is missing', () => {
