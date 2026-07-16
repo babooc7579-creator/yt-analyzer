@@ -16,7 +16,7 @@
 - `.github/workflows/build.yml`은 `npm ci` 후 `npm test`, `npm run build`를 실행합니다.
 - `package-lock.json`은 존재합니다.
 - 2026-07-08 기준 `npm.cmd test`는 테스트 파일 108개, 테스트 481개가 통과합니다.
-- 2026-07-14 최신 기준 `npm.cmd test`는 테스트 파일 198개, 테스트 846개가 통과합니다. 캘린더에서 제작 후보 한 건을 찾는 화면 의도, 홈 레이더 빈 상태의 다음 행동, 영상 카드의 게시일·경과일·후보 이유·주요 행동 순서와 고화질 썸네일 대체 순서도 hook, utility, component 렌더링 테스트에 포함됩니다.
+- 2026-07-15 최신 기준 `npm test -- --run --reporter=dot`는 테스트 파일 208개, 테스트 884개가 통과합니다. 캘린더에서 제작 후보 한 건을 찾는 화면 의도, 홈 레이더 빈 상태의 다음 행동, 영상 카드의 게시일·경과일·후보 이유·주요 행동 순서와 고화질 썸네일 대체 순서, 설정 복구와 레이더 복귀 흐름도 hook, utility, component 렌더링 테스트에 포함됩니다.
 - 현재 검증은 `npm.cmd test`, `npm.cmd run build`, `git diff --check`, GitHub Actions build check에 의존합니다.
 
 현재 의미:
