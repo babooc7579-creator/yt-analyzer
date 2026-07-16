@@ -13,8 +13,10 @@ describe('emptyStates constants', () => {
     expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('Cloud DB');
     expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('필요할 때만');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].description).toContain('영상 수집은 실행되지 않습니다');
-    expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].description).toContain('YouTube API');
-    expect(REFERENCE_VAULT_EMPTY_STATE.steps[2].description).toContain('새 YouTube API 호출은 없습니다');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].title).toContain('저장된 영상 불러오기');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[2].title).toContain('필요할 때 새 영상 수집');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[2].description).toContain('YouTube API');
     expect(REFERENCE_VAULT_EMPTY_STATE.homeButton.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(REFERENCE_VAULT_EMPTY_STATE.addChannelButton.title).toContain('영상 수집이나 YouTube API 호출은 실행하지 않습니다');
   });

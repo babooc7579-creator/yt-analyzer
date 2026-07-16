@@ -36,7 +36,15 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     mainPanelProps: getLegacyMainPanelProps(props),
     operationsNavProps: isChannelOperationsView ? {
       activeStage: activeOperationStage,
+      isLoading: props.loading,
+      isScanning: props.isScanning,
+      onLoadStoredVideos: props.loadStoredVideosForSelectedChannels,
+      onOpenHome: () => props.openCreatorView({ id: 'home' }),
+      onOpenStoredVideos: () => props.openCreatorView({ id: 'vault-videos' }),
       onSelectStage: scrollToOperationStage,
+      savedChannels: props.savedChannels,
+      selectedChannelIds: props.selectedChannelIds,
+      videos: props.videos,
     } : null,
     showWorkPanel: props.showWorkPanel,
   };
