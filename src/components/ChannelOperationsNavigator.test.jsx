@@ -36,4 +36,19 @@ describe('ChannelOperationsNavigator', () => {
     expect(html).toContain('오늘의 레이더로');
     expect(html).toContain('1개 선택');
   });
+
+  it('shows a clear next step after an empty Cloud lookup', () => {
+    const html = renderToStaticMarkup(
+      <ChannelOperationsNavigator
+        savedChannels={[{ id: 'channel-1' }]}
+        selectedChannelIds={['channel-1']}
+        storedVideoLoadResult={{ success: true, videoCount: 0 }}
+      />,
+    );
+
+    expect(html).toContain('선택 채널에 저장된 영상이 없습니다');
+    expect(html).toContain('채널 다시 선택');
+    expect(html).toContain('새 영상 수집 단계');
+    expect(html).toContain('Cloud DB 조회 결과');
+  });
 });

@@ -11,7 +11,11 @@ import { getChannelOperationStage } from '../utils/channelOperations';
 export default function CreatorLegacyWorkspaceRoute(props) {
   const requestedOperationStage = getChannelOperationStage(props.creatorViewIntent?.operationStage).id;
   const [activeOperationStage, setActiveOperationStage] = useState(requestedOperationStage);
+  const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
   const isChannelOperationsView = props.creatorView === 'ops-channels';
+  const selectedChannelKey = [...(Array.isArray(props.selectedChannelIds) ? props.selectedChannelIds : [])]
+    .sort()
+    .join('|');
 
   const scrollToOperationStage = (stageId, behavior = 'smooth') => {
     const stage = getChannelOperationStage(stageId);
@@ -30,6 +34,16 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     return () => window.clearTimeout(timerId);
   }, [isChannelOperationsView, props.creatorViewIntent?.operationStage, requestedOperationStage]);
 
+  useEffect(() => {
+    setStoredVideoLoadResult(null);
+  }, [selectedChannelKey]);
+
+  const loadStoredVideos = async () => {
+    const result = await props.loadStoredVideosForSelectedChannels?.();
+    setStoredVideoLoadResult(result || { success: false, videoCount: 0 });
+    return result;
+  };
+
   const legacyWorkspaceViewProps = {
     asideProps: getLegacyAsideProps(props),
     channelPanelProps: getLegacyChannelPanelProps(props),
@@ -38,12 +52,13 @@ export default function CreatorLegacyWorkspaceRoute(props) {
       activeStage: activeOperationStage,
       isLoading: props.loading,
       isScanning: props.isScanning,
-      onLoadStoredVideos: props.loadStoredVideosForSelectedChannels,
+      onLoadStoredVideos: loadStoredVideos,
       onOpenHome: () => props.openCreatorView({ id: 'home' }),
       onOpenStoredVideos: () => props.openCreatorView({ id: 'vault-videos' }),
       onSelectStage: scrollToOperationStage,
       savedChannels: props.savedChannels,
       selectedChannelIds: props.selectedChannelIds,
+      storedVideoLoadResult,
       videos: props.videos,
     } : null,
     showWorkPanel: props.showWorkPanel,

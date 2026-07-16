@@ -91,4 +91,17 @@ describe('channel operations utils', () => {
     expect(journey.primaryAction.id).toBe('load-stored');
     expect(journey.secondaryAction.id).toBe('open-scan');
   });
+
+  it('moves an empty Cloud lookup toward channel reselection or new collection', () => {
+    const journey = getChannelOperationsJourney({
+      savedChannels: [{ id: 'channel-1' }],
+      selectedChannelIds: ['channel-1'],
+      storedVideoLoadResult: { success: true, videoCount: 0 },
+    });
+
+    expect(journey.title).toBe('선택 채널에 저장된 영상이 없습니다');
+    expect(journey.description).toContain('Cloud DB 조회 결과');
+    expect(journey.primaryAction).toMatchObject({ id: 'open-scan', label: '새 영상 수집 단계' });
+    expect(journey.secondaryAction).toMatchObject({ id: 'open-manage', label: '채널 다시 선택' });
+  });
 });
