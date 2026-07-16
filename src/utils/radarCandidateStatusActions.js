@@ -31,6 +31,10 @@ const toVideoObject = (video) => (
 const noop = () => {};
 
 const getStatusAriaLabel = ({ label, videoTitle }) => {
+  if (label === '봤음') {
+    return `${videoTitle} Cloud 판단 기록에 봤음으로 저장`;
+  }
+
   if (label === '후보에서 제외') {
     return `${videoTitle} Cloud 판단 기록에 후보 제외로 저장`;
   }
