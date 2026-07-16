@@ -63,7 +63,10 @@ describe('channel operations utils', () => {
     const readyJourney = getChannelOperationsJourney({
       savedChannels: [{ id: 'channel-1', lastScanSummary: { scannedAt: '2026-07-16T00:00:00.000Z' } }],
       selectedChannelIds: ['channel-1'],
-      videos: [{ videoId: 'video-1' }, { videoId: 'video-2' }],
+      videos: [
+        { videoId: 'video-1', channel_id: 'channel-1' },
+        { videoId: 'video-2', channel_id: 'channel-1' },
+      ],
     });
 
     expect(scanningJourney.title).toContain('수집 중');
@@ -73,5 +76,19 @@ describe('channel operations utils', () => {
     expect(readyJourney.primaryAction).toMatchObject({ id: 'open-videos', label: '저장 영상 2개 보기' });
     expect(readyJourney.secondaryAction.id).toBe('open-radar');
     expect(readyJourney.stageStatusById.scan.label).toBe('1개 수집 기록');
+  });
+
+  it('does not treat videos from a previously selected channel as ready', () => {
+    const journey = getChannelOperationsJourney({
+      savedChannels: [{ id: 'channel-1' }, { id: 'channel-2' }],
+      selectedChannelIds: ['channel-2'],
+      videos: [
+        { videoId: 'old-video', channel_id: 'channel-1' },
+      ],
+    });
+
+    expect(journey.title).toBe('채널 1개 선택 완료');
+    expect(journey.primaryAction.id).toBe('load-stored');
+    expect(journey.secondaryAction.id).toBe('open-scan');
   });
 });

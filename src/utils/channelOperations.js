@@ -1,3 +1,5 @@
+import { getLoadedVideoCountForSelectedChannels } from './homeRadarJourney';
+
 export const CHANNEL_OPERATION_STAGES = [
   {
     id: 'manage',
@@ -42,11 +44,14 @@ export const getChannelOperationsJourney = ({
 } = {}) => {
   const channelList = toArray(savedChannels);
   const selectedChannels = toArray(selectedChannelIds);
-  const videoList = toArray(videos);
   const savedChannelCount = channelList.length;
   const selectedChannelCount = selectedChannels.length;
   const scannedChannelCount = channelList.filter(hasScanRecord).length;
-  const videoCount = videoList.length;
+  const videoCount = getLoadedVideoCountForSelectedChannels({
+    savedChannels: channelList,
+    selectedChannelIds: selectedChannels,
+    videos,
+  });
 
   const stageStatusById = {
     manage: selectedChannelCount > 0
