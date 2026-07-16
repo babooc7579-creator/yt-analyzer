@@ -143,7 +143,7 @@ describe('creatorHomeViewProps utils', () => {
 
   it('opens the expected Creator OS views from home shortcuts and summary actions', () => {
     const openedViews = [];
-    const onOpenView = (item) => openedViews.push(item.id);
+    const onOpenView = (item) => openedViews.push(item);
 
     const props = getCreatorHomeViewProps({ onOpenView });
 
@@ -167,24 +167,24 @@ describe('creatorHomeViewProps utils', () => {
     props.workspaceShortcutsProps.onOpenUploadCalendar();
 
     expect(openedViews).toEqual([
-      'ops-add-channel',
-      'vault-sources',
-      'ops-selected-scan',
-      'vault-all',
-      'studio-candidates',
-      'studio-scrapbook',
-      'discovery-watchlist',
-      'vault-all',
-      'ops-add-channel',
-      'discovery-watchlist',
-      'vault-sources',
-      'studio-candidates',
-      'ops-selected-scan',
-      'discovery-ttotto',
-      'vault-all',
-      'discovery-keywords',
-      'vault-tags',
-      'studio-calendar',
+      { id: 'ops-channels', intent: { operationStage: 'add' } },
+      { id: 'vault-sources' },
+      { id: 'ops-channels', intent: { operationStage: 'scan' } },
+      { id: 'vault-all' },
+      { id: 'studio-candidates' },
+      { id: 'studio-scrapbook' },
+      { id: 'discovery-watchlist' },
+      { id: 'vault-all' },
+      { id: 'ops-channels', intent: { operationStage: 'add' } },
+      { id: 'discovery-watchlist' },
+      { id: 'vault-sources' },
+      { id: 'studio-candidates' },
+      { id: 'ops-channels', intent: { operationStage: 'scan' } },
+      { id: 'discovery-ttotto' },
+      { id: 'vault-all' },
+      { id: 'discovery-keywords' },
+      { id: 'vault-tags' },
+      { id: 'studio-calendar' },
     ]);
   });
 

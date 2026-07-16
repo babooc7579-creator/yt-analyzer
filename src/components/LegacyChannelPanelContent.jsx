@@ -17,13 +17,13 @@ export default function LegacyChannelPanelContent({
       <div className="bg-slate-100 rounded-xl shadow-sm border border-slate-300 p-4">
         <LegacyWorkPanelIntro {...introProps} />
 
-        <ChannelAddForm {...channelAddFormProps} />
-
         <ChannelTagTabs {...tagTabsProps} />
 
-        <hr className="my-4 border-slate-100" />
-
         <ChannelList {...channelListProps} />
+
+        <hr className="my-5 border-slate-200" />
+
+        <ChannelAddForm {...channelAddFormProps} />
 
         <LegacyChannelPanelFooter {...footerProps} />
       </div>

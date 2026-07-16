@@ -17,7 +17,7 @@ export function buildChannelWatchlistRouteProps({
     onOpenChannelList: () => openCreatorView({ id: 'ops-channels' }),
     onOpenRadar: () => openCreatorView({ id: 'home' }),
     onOpenStoredVideos: () => openCreatorView({ id: 'vault-videos' }),
-    onOpenSelectedScan: () => openCreatorView({ id: 'ops-selected-scan' }),
+    onOpenSelectedScan: () => openCreatorView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
     onOpenTtoTto: () => openCreatorView({ id: 'discovery-ttotto' }),
     onRefreshChannels: loadChannelsFromCloud,
     onSetSelectedChannelIds: setSelectedChannelIds,

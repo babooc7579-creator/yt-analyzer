@@ -144,7 +144,7 @@ describe('legacyDashboardTabViewProps utils', () => {
     props.resultsPanelProps.onOpenAddChannel();
     expect(openedViews).toEqual([
       { id: 'home' },
-      { id: 'ops-add-channel' },
+      { id: 'ops-channels', intent: { operationStage: 'add' } },
     ]);
     expect(props.resultsPanelProps.onPromoteToProduction).toBe(promoteVideoToProduction);
     props.resultsPanelProps.onResetFilters();

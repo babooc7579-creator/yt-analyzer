@@ -18,7 +18,9 @@ describe('CreatorSidebar', () => {
     expect(html).toContain('오늘 볼 채널');
     expect(html).toContain('발견 링크 저장');
     expect(html).toContain('제작 후보함');
-    expect(html).toContain('선택 채널 새 영상 수집');
+    expect(html).toContain('채널 운영실');
+    expect(html).not.toContain('data-testid="creator-sidebar-item-ops-add-channel"');
+    expect(html).not.toContain('data-testid="creator-sidebar-item-ops-selected-scan"');
     expect(html).toContain('향후 기능');
     expect(html).toContain('16개');
     expect(html).toContain('aria-expanded="false"');

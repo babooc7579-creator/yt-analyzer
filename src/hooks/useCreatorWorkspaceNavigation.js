@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   getCreatorWorkspaceNavigationState,
   getCreatorWorkspaceViewModel,
+  normalizeCreatorWorkspaceItem,
 } from '../utils/creatorWorkspaceNavigation';
 
 export function useCreatorWorkspaceNavigation() {
@@ -26,13 +27,14 @@ export function useCreatorWorkspaceNavigation() {
   } = getCreatorWorkspaceViewModel(creatorView);
 
   const openCreatorView = (item) => {
+    const normalizedItem = normalizeCreatorWorkspaceItem(item);
     const nextState = getCreatorWorkspaceNavigationState({
       activeTab,
-      itemId: item.id,
+      itemId: normalizedItem.id,
       showWorkPanel,
     });
-    const nextIntent = item?.intent && typeof item.intent === 'object'
-      ? item.intent
+    const nextIntent = normalizedItem?.intent && typeof normalizedItem.intent === 'object'
+      ? normalizedItem.intent
       : null;
 
     setCreatorView(nextState.creatorView);

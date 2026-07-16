@@ -49,9 +49,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     title: '오퍼레이션 관제',
     description: '수집: 채널, 선택 수집, 운영 상태를 통제합니다.',
     items: [
-      { id: 'ops-channels', label: '채널 목록', status: 'live', summary: '기존 채널 목록과 마지막 수집 상태를 사용합니다.' },
-      { id: 'ops-add-channel', label: '새 채널 등록', status: 'live', summary: '기존 채널 미리보기와 저장 영역을 사용합니다.' },
-      { id: 'ops-selected-scan', label: '선택 채널 새 영상 수집', status: 'live', summary: '체크한 채널만 YouTube API로 새 영상 여부를 확인합니다.' },
+      { id: 'ops-channels', label: '채널 운영실', status: 'live', summary: '채널 관리, 새 채널 등록, 선택 채널 새 영상 수집을 한 흐름으로 진행합니다.' },
       { id: 'ops-scan-log', label: '수집 로그', status: 'soon', summary: '수집 이력과 실패 원인을 모아볼 예정입니다.' },
       { id: 'ops-api', label: 'API 사용량', status: 'soon', summary: 'YouTube API 호출량과 비용 위험을 볼 수 있게 할 예정입니다.' },
       { id: 'ops-settings', label: '설정', status: 'live', summary: '채널 분야와 데이터 연결 기준을 한곳에서 확인하고 관리합니다.' },
@@ -69,9 +67,20 @@ export const CREATOR_OS_PRODUCT_MAP = [
   },
 ];
 
-export const CREATOR_OS_ITEMS = CREATOR_OS_PRODUCT_MAP.flatMap((section) => (
+const CREATOR_OS_VISIBLE_ITEMS = CREATOR_OS_PRODUCT_MAP.flatMap((section) => (
   section.items.map((item) => ({ ...item, sectionTitle: section.title }))
 ));
+
+// Older shortcuts keep resolving while the sidebar exposes one unified channel workspace.
+export const LEGACY_CHANNEL_OPERATION_ITEMS = [
+  { id: 'ops-add-channel', label: '새 채널 등록', status: 'live', summary: '채널 운영실의 새 채널 등록 단계로 이동합니다.', sectionTitle: '오퍼레이션 관제' },
+  { id: 'ops-selected-scan', label: '선택 채널 새 영상 수집', status: 'live', summary: '채널 운영실의 YouTube API 수집 단계로 이동합니다.', sectionTitle: '오퍼레이션 관제' },
+];
+
+export const CREATOR_OS_ITEMS = [
+  ...CREATOR_OS_VISIBLE_ITEMS,
+  ...LEGACY_CHANNEL_OPERATION_ITEMS,
+];
 
 export const READY_CREATOR_VIEWS = [
   'vault-all',

@@ -55,10 +55,10 @@ describe('useCreatorWorkspaceNavigation', () => {
 
     navigation.openCreatorView({ id: 'ops-add-channel' });
 
-    expect(stateSetters[2]).toHaveBeenCalledWith('ops-add-channel');
+    expect(stateSetters[2]).toHaveBeenCalledWith('ops-channels');
     expect(stateSetters[0]).toHaveBeenCalledWith('dashboard');
     expect(stateSetters[1]).toHaveBeenCalledWith(true);
-    expect(stateSetters[3]).toHaveBeenCalledWith(null);
+    expect(stateSetters[3]).toHaveBeenCalledWith({ operationStage: 'add' });
   });
 
   it('opens production workspaces on the scrapbook tab without the legacy work panel', () => {
