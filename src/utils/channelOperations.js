@@ -1,3 +1,4 @@
+import { isChannelScannable } from '../constants/status';
 import {
   getLoadedVideoCountForSelectedChannels,
   hasEmptyStoredVideoLoad,
@@ -34,6 +35,8 @@ export const getChannelOperationStage = (stageId) => (
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
+const getChannelId = (channel = {}) => channel.id || channel.channelId || '';
+
 const hasScanRecord = (channel = {}) => Boolean(
   channel.lastScanSummary?.scannedAt || channel.lastScannedAt,
 );
@@ -50,7 +53,12 @@ export const getChannelOperationsJourney = ({
   const selectedChannels = toArray(selectedChannelIds);
   const savedChannelCount = channelList.length;
   const selectedChannelCount = selectedChannels.length;
-  const scannedChannelCount = channelList.filter(hasScanRecord).length;
+  const selectedIdSet = new Set(selectedChannels);
+  const selectedScannableChannels = channelList.filter((channel) => (
+    selectedIdSet.has(getChannelId(channel)) && isChannelScannable(channel)
+  ));
+  const selectedScannableChannelCount = selectedScannableChannels.length;
+  const selectedScannedChannelCount = selectedScannableChannels.filter(hasScanRecord).length;
   const videoCount = getLoadedVideoCountForSelectedChannels({
     savedChannels: channelList,
     selectedChannelIds: selectedChannels,
@@ -68,11 +76,15 @@ export const getChannelOperationsJourney = ({
       : { label: '첫 채널 필요', tone: 'ready' },
     scan: isScanning
       ? { label: '수집 중', tone: 'active' }
-      : scannedChannelCount > 0
-        ? { label: `${scannedChannelCount}개 수집 기록`, tone: 'complete' }
-        : selectedChannelCount > 0
-          ? { label: `${selectedChannelCount}개 수집 가능`, tone: 'ready' }
-          : { label: '채널 선택 필요', tone: 'waiting' },
+      : selectedChannelCount === 0
+        ? { label: '채널 선택 필요', tone: 'waiting' }
+        : selectedScannableChannelCount === 0
+          ? { label: '운영중 채널 필요', tone: 'waiting' }
+          : selectedScannedChannelCount === selectedScannableChannelCount
+            ? { label: `${selectedScannedChannelCount}개 수집 기록`, tone: 'complete' }
+            : selectedScannedChannelCount > 0
+              ? { label: `${selectedScannedChannelCount}/${selectedScannableChannelCount}개 기록`, tone: 'ready' }
+              : { label: `${selectedScannableChannelCount}개 수집 가능`, tone: 'ready' },
   };
 
   if (savedChannelCount === 0) {
@@ -111,6 +123,19 @@ export const getChannelOperationsJourney = ({
   }
 
   if (videoCount === 0 && hasEmptyStoredVideoLoad(storedVideoLoadResult)) {
+    if (selectedScannableChannelCount === 0) {
+      return {
+        description: 'Cloud DB 조회 결과 저장된 영상이 없고, 현재 선택은 보류·제외 채널이라 새 영상 수집 대상도 아닙니다.',
+        primaryAction: {
+          id: 'open-manage',
+          label: '운영중 채널 다시 선택',
+          title: '채널 목록으로 이동합니다. 채널 선택만으로 YouTube API 호출이나 데이터 저장은 실행되지 않습니다.',
+        },
+        stageStatusById,
+        title: '새 영상을 수집할 운영중 채널이 필요합니다',
+      };
+    }
+
     return {
       description: 'Cloud DB 조회 결과 선택 채널에 저장된 영상이 없습니다. 다른 채널을 고르거나 새 영상 수집 단계로 이동하세요.',
       primaryAction: {
@@ -147,18 +172,26 @@ export const getChannelOperationsJourney = ({
   }
 
   return {
-    description: '기존 Cloud 영상을 먼저 조회할 수 있습니다. 새 데이터가 필요할 때만 YouTube API 수집을 실행하세요.',
+    description: selectedScannableChannelCount > 0
+      ? '기존 Cloud 영상을 먼저 조회할 수 있습니다. 새 데이터가 필요할 때만 YouTube API 수집을 실행하세요.'
+      : '기존 Cloud 영상은 조회할 수 있지만, 현재 선택은 보류·제외 채널이라 새 영상 수집 대상은 아닙니다.',
     primaryAction: {
       disabled: isLoading,
       id: 'load-stored',
       label: isLoading ? '저장 영상 불러오는 중...' : '저장 영상 불러오기',
       title: '선택 채널의 기존 영상을 Cloud DB에서 조회합니다. YouTube API를 새로 호출하지 않습니다.',
     },
-    secondaryAction: {
-      id: 'open-scan',
-      label: '새 영상 수집 단계',
-      title: '새 영상 수집 영역으로 이동만 합니다. 실제 수집 버튼을 누를 때만 YouTube API를 호출할 수 있습니다.',
-    },
+    secondaryAction: selectedScannableChannelCount > 0
+      ? {
+          id: 'open-scan',
+          label: '새 영상 수집 단계',
+          title: '새 영상 수집 영역으로 이동만 합니다. 실제 수집 버튼을 누를 때만 YouTube API를 호출할 수 있습니다.',
+        }
+      : {
+          id: 'open-manage',
+          label: '운영중 채널 선택',
+          title: '채널 목록으로 이동합니다. 채널 선택만으로 YouTube API 호출이나 데이터 저장은 실행되지 않습니다.',
+        },
     stageStatusById,
     title: `채널 ${selectedChannelCount}개 선택 완료`,
   };
