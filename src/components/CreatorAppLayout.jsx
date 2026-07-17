@@ -1,4 +1,5 @@
 import ChannelNotesModal from './ChannelNotesModal';
+import CreatorActionFeedback from './CreatorActionFeedback';
 import CreatorSidebar from './CreatorSidebar';
 import CreatorWorkspaceHeader from './CreatorWorkspaceHeader';
 import SyncWarningBanner from './SyncWarningBanner';
@@ -11,12 +12,15 @@ export default function CreatorAppLayout({
   commentModal,
   creatorView,
   discoveryCandidateCount,
+  error,
   notesModal,
   onAddNote,
   onChangeNoteText,
   onCloseNotes,
   onCloseTopComments,
+  onClearError,
   onOpenCreatorView,
+  progressMessage,
   savedVideoCount,
   selectedChannelCount,
   syncWarnings,
@@ -53,6 +57,12 @@ export default function CreatorAppLayout({
           />
 
           <SyncWarningBanner messages={syncWarnings} />
+
+          <CreatorActionFeedback
+            error={error}
+            onClearError={onClearError}
+            progressMessage={progressMessage}
+          />
 
           {children}
         </div>

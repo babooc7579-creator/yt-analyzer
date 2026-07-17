@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   buildLayoutProps,
@@ -22,6 +22,7 @@ describe('appLayoutProps utils', () => {
       commentModal: { isOpen: true },
       creatorView: 'today',
       discoveryCandidateCount: 3,
+      error: 'Cloud error',
       notesModal: { isOpen: false },
       openCreatorView: () => 'open',
       savedChannels: [{ id: 'channel1' }, { id: 'channel2' }],
@@ -29,6 +30,7 @@ describe('appLayoutProps utils', () => {
       selectedChannelIds: ['channel1'],
       syncWarnings: ['warning'],
       videos: [{ videoId: 'video1' }, { videoId: 'video2' }],
+      progressMsg: 'Loading',
     });
 
     expect(props).toMatchObject({
@@ -37,7 +39,9 @@ describe('appLayoutProps utils', () => {
       commentModal: { isOpen: true },
       creatorView: 'today',
       discoveryCandidateCount: 3,
+      error: 'Cloud error',
       notesModal: { isOpen: false },
+      progressMessage: 'Loading',
       savedVideoCount: 1,
       selectedChannelCount: 1,
       syncWarnings: ['warning'],
@@ -51,6 +55,7 @@ describe('appLayoutProps utils', () => {
     const closeNotesModal = () => 'close notes';
     const closeTopCommentsModal = () => 'close comments';
     const openCreatorView = () => 'open';
+    const setError = vi.fn();
 
     const props = buildLayoutProps({
       addChannelNote,
@@ -58,6 +63,7 @@ describe('appLayoutProps utils', () => {
       closeNotesModal,
       closeTopCommentsModal,
       openCreatorView,
+      setError,
     });
 
     expect(props.onAddNote).toBe(addChannelNote);
@@ -65,6 +71,8 @@ describe('appLayoutProps utils', () => {
     expect(props.onCloseNotes).toBe(closeNotesModal);
     expect(props.onCloseTopComments).toBe(closeTopCommentsModal);
     expect(props.onOpenCreatorView).toBe(openCreatorView);
+    props.onClearError();
+    expect(setError).toHaveBeenCalledWith('');
   });
 
   it('uses safe zero counts for invalid list inputs', () => {
