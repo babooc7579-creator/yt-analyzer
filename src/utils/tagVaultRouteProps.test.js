@@ -8,6 +8,7 @@ describe('buildTagVaultRouteProps', () => {
     const setSelectedChannelIds = vi.fn();
     const props = buildTagVaultRouteProps({
       openCreatorView,
+      loading: true,
       savedChannels: [{ id: 'c1' }],
       selectedChannelIds: ['c2'],
       setSelectedChannelIds,
@@ -19,6 +20,6 @@ describe('buildTagVaultRouteProps', () => {
 
     expect(setSelectedChannelIds).toHaveBeenCalledWith(['c1']);
     expect(openCreatorView).toHaveBeenCalledWith({ id: 'ops-channels' });
-    expect(props).toMatchObject({ channels: [{ id: 'c1' }], selectedChannelIds: ['c2'], videos: [{ videoId: 'v1' }] });
+    expect(props).toMatchObject({ channels: [{ id: 'c1' }], loading: true, selectedChannelIds: ['c2'], videos: [{ videoId: 'v1' }] });
   });
 });

@@ -68,4 +68,18 @@ describe('RadarCandidateEmptyState', () => {
     expect(html).toContain('새 영상 수집 준비');
     expect(html).not.toContain('>저장 영상 불러오기</button>');
   });
+
+  it('shares the loading lock with the channel selection stage', () => {
+    const html = renderToStaticMarkup(
+      <RadarCandidateEmptyState
+        onLoadStoredVideos={noop}
+        onOpenVault={noop}
+        selectedChannelCount={2}
+        storedVideoLoadPending
+      />,
+    );
+
+    expect(html).toContain('Cloud DB에서 저장 영상 불러오는 중');
+    expect(html).toContain('disabled');
+  });
 });

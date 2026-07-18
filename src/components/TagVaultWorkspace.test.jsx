@@ -22,4 +22,22 @@ describe('TagVaultWorkspace', () => {
     expect(html).toContain('상단의 저장 영상 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
   });
+
+  it('disables duplicate stored-video lookup while Cloud data is loading', () => {
+    const html = renderToStaticMarkup(
+      <TagVaultWorkspace
+        channels={[{ id: 'c1', tags: ['공예'] }]}
+        checkedVideos={[]}
+        loading
+        onLoadStoredVideos={vi.fn()}
+        onOpenChannels={vi.fn()}
+        onSelectTagChannels={vi.fn()}
+        selectedChannelIds={['c1']}
+        videos={[]}
+      />,
+    );
+
+    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('disabled');
+  });
 });

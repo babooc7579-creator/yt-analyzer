@@ -48,4 +48,21 @@ describe('TtoTtoExplorerWorkspace', () => {
     expect(html).toContain('추천순');
     expect(html).toContain('현재 표시 1개');
   });
+
+  it('disables duplicate stored-video lookup while Cloud data is loading', () => {
+    const html = renderToStaticMarkup(
+      <TtoTtoExplorerWorkspace
+        isVideoSaved={() => false}
+        loading
+        onLoadStoredVideos={() => {}}
+        selectedChannelCount={2}
+        savedVideos={[]}
+        videoUserRecords={{}}
+        videos={[]}
+      />,
+    );
+
+    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('disabled');
+  });
 });

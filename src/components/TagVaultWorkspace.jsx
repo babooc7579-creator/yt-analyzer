@@ -10,6 +10,7 @@ export default function TagVaultWorkspace({
   checkedVideos,
   isProductionCandidate,
   isVideoSaved,
+  loading = false,
   onFetchComments,
   onLoadStoredVideos,
   onOpenChannels,
@@ -38,7 +39,7 @@ export default function TagVaultWorkspace({
 
   return (
     <section data-testid="creator-route-tag-vault" className="min-w-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
-      <TagVaultHeader onLoadStoredVideos={onLoadStoredVideos} onOpenChannels={onOpenChannels} selectedChannelCount={state.summary.selectedChannelCount} />
+      <TagVaultHeader loading={loading} onLoadStoredVideos={onLoadStoredVideos} onOpenChannels={onOpenChannels} selectedChannelCount={state.summary.selectedChannelCount} />
 
       <div className="mt-5 space-y-4">
         <TagVaultSummary summary={state.summary} />
@@ -80,7 +81,14 @@ export default function TagVaultWorkspace({
           <div className="border border-dashed border-slate-700 bg-slate-950/40 px-5 py-12 text-center">
             <h3 className="text-base font-extrabold text-white">{emptyState.title}</h3>
             <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-400">{emptyState.description}</p>
-            <button type="button" onClick={handleEmptyAction} className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950">{emptyState.actionLabel}</button>
+            <button
+              type="button"
+              onClick={handleEmptyAction}
+              disabled={emptyState.action === 'load' && loading}
+              className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+            >
+              {emptyState.action === 'load' && loading ? '저장 영상 불러오는 중...' : emptyState.actionLabel}
+            </button>
           </div>
         )}
       </div>

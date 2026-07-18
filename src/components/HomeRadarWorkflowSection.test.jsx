@@ -69,4 +69,19 @@ describe('HomeRadarWorkflowSection', () => {
     expect(html).toContain('저장 영상 12개가 판정대에 준비됐습니다');
     expect(html).toContain('후보 판정 시작');
   });
+
+  it('passes the loading lock to the channel stage', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarWorkflowSection
+        onLoadStoredVideos={noop}
+        savedChannels={[{ id: 'channel-1', title: '랭킹 연구소', status: 'active' }]}
+        selectedChannelIds={['channel-1']}
+        selectedChannelCount={1}
+        storedVideoLoadPending
+      />,
+    );
+
+    expect(html).toContain('Cloud DB에서 저장 영상을 불러오는 중입니다');
+    expect(html).toContain('저장 영상 불러오는 중...');
+  });
 });

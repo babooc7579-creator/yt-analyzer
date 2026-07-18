@@ -160,6 +160,7 @@ export const getCreatorHomeViewProps = ({
       onLoadStoredVideos: loadStoredVideosForSelectedChannels,
       selectedChannelCount,
       storedVideoLoadResult,
+      storedVideoLoadPending,
       onOpenChannelWatchlist: () => onOpenView({ id: 'discovery-watchlist' }),
       onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
       onOpenVault: () => onOpenView({ id: 'vault-all' }),

@@ -1,4 +1,4 @@
-import { Bookmark, Database, ListChecks, RefreshCw } from 'lucide-react';
+import { Bookmark, Database, ListChecks, Loader2, RefreshCw } from 'lucide-react';
 
 import { getLoadStoredVideosActionProps } from '../utils/loadStoredVideosActionProps';
 import { getRadarCandidateEmptyStateViewProps } from '../utils/radarCandidateStateProps';
@@ -10,14 +10,16 @@ export default function RadarCandidateEmptyState({
   onOpenVault,
   selectedChannelCount = 0,
   storedVideoLoadResult,
+  storedVideoLoadPending = false,
 }) {
   const {
-    actionAriaLabel: loadStoredVideosAriaLabel,
-    actionDisabled: loadStoredVideosDisabled,
-    emptyStateLabel: loadStoredVideosLabel,
+    buttonAriaLabel: loadStoredVideosAriaLabel,
+    buttonDisabled: loadStoredVideosDisabled,
+    buttonLabel: loadStoredVideosLabel,
     hasSelectedChannels,
     title: loadStoredVideosTitle,
   } = getLoadStoredVideosActionProps({
+    loading: storedVideoLoadPending,
     onLoad: onLoadStoredVideos,
     selectedChannelCount,
   });
@@ -55,14 +57,17 @@ export default function RadarCandidateEmptyState({
             onClick={onLoadStoredVideos}
             disabled={loadStoredVideosDisabled}
             className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold ${
-              hasSelectedChannels
+              hasSelectedChannels && !storedVideoLoadPending
                 ? 'bg-blue-500 text-white hover:bg-blue-400'
                 : 'cursor-not-allowed bg-slate-800 text-slate-500'
             }`}
             title={loadStoredVideosTitle}
             aria-label={loadStoredVideosAriaLabel}
           >
-            <Database className="h-4 w-4" /> {loadStoredVideosLabel}
+            {storedVideoLoadPending
+              ? <Loader2 className="h-4 w-4 animate-spin" />
+              : <Database className="h-4 w-4" />}
+            {loadStoredVideosLabel}
           </button>
         )}
         {selectedScanButtonProps.show && typeof onOpenSelectedScan === 'function' ? (

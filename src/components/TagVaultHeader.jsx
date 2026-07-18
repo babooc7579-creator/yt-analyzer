@@ -1,6 +1,6 @@
-import { Database, FolderOpen, Tags } from 'lucide-react';
+import { Database, FolderOpen, Loader2, Tags } from 'lucide-react';
 
-export default function TagVaultHeader({ onLoadStoredVideos, onOpenChannels, selectedChannelCount }) {
+export default function TagVaultHeader({ loading = false, onLoadStoredVideos, onOpenChannels, selectedChannelCount }) {
   return (
     <header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div className="flex min-w-0 gap-3">
@@ -23,11 +23,14 @@ export default function TagVaultHeader({ onLoadStoredVideos, onOpenChannels, sel
         <button
           type="button"
           onClick={onLoadStoredVideos}
-          disabled={selectedChannelCount === 0}
+          disabled={selectedChannelCount === 0 || loading}
           className="inline-flex h-10 items-center gap-2 rounded-lg bg-cyan-400 px-3 text-xs font-black text-slate-950 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-500"
           title="선택된 채널의 영상을 Cloud DB에서 조회합니다. YouTube API를 호출하지 않습니다."
         >
-          <Database className="h-4 w-4" /> 저장 영상 불러오기 ({selectedChannelCount})
+          {loading
+            ? <Loader2 className="h-4 w-4 animate-spin" />
+            : <Database className="h-4 w-4" />}
+          {loading ? '저장 영상 불러오는 중...' : `저장 영상 불러오기 (${selectedChannelCount})`}
         </button>
       </div>
     </header>
