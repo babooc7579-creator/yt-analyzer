@@ -8,6 +8,7 @@ export default function ChannelWatchlistHeader({
   onOpenTtoTto,
   onRefreshChannels,
   selectedChannelCount,
+  storedVideoLoadPending = false,
 }) {
   return (
     <header className="flex flex-col gap-4 border-b border-slate-800 pb-5 xl:flex-row xl:items-end xl:justify-between">
@@ -33,13 +34,16 @@ export default function ChannelWatchlistHeader({
         <button
           type="button"
           onClick={onLoadStoredVideos}
-          disabled={selectedChannelCount === 0}
+          disabled={selectedChannelCount === 0 || storedVideoLoadPending}
           className="inline-flex items-center gap-2 rounded-lg bg-blue-100 px-3 py-2 text-xs font-extrabold text-blue-950 hover:bg-white disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
           title={selectedChannelCount > 0
             ? `선택 채널 ${selectedChannelCount}개의 저장 영상을 Cloud DB에서 조회합니다. 완료되면 다음 단계 버튼이 표시됩니다. YouTube API 호출은 없습니다.`
             : '먼저 오늘 볼 채널을 선택하세요.'}
         >
-          <Database className="h-4 w-4" /> 선택 채널 저장 영상 불러오기
+          {storedVideoLoadPending
+            ? <RefreshCw className="h-4 w-4 animate-spin" />
+            : <Database className="h-4 w-4" />}
+          {storedVideoLoadPending ? '저장 영상 불러오는 중...' : '선택 채널 저장 영상 불러오기'}
         </button>
         <button
           type="button"

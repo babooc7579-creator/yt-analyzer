@@ -23,6 +23,7 @@ export default function HomeRadarWorkflowSection({
   selectedChannelCount = 0,
   selectedLoadedVideoCount = 0,
   storedVideoLoadResult,
+  storedVideoLoadPending,
   toggleChannelSelection,
 }) {
   const headerProps = getHomeRadarWorkflowSectionHeaderProps();
@@ -42,6 +43,7 @@ export default function HomeRadarWorkflowSection({
         productionCandidateCount={productionCandidateCount}
         selectedChannelCount={selectedChannelCount}
         storedVideoLoadResult={storedVideoLoadResult}
+        storedVideoLoadPending={storedVideoLoadPending}
       />
       <HomeRadarChannelStage
         onLoadStoredVideos={onLoadStoredVideos}

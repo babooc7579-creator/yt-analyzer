@@ -30,6 +30,7 @@ export default function ChannelWatchlistWorkspace({
   selectedChannelIds,
 }) {
   const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
+  const [storedVideoLoadPending, setStoredVideoLoadPending] = useState(false);
   const selectedChannelKey = [...(Array.isArray(selectedChannelIds) ? selectedChannelIds : [])]
     .sort()
     .join('|');
@@ -72,10 +73,22 @@ export default function ChannelWatchlistWorkspace({
   };
 
   const loadStoredVideos = async () => {
+    if (storedVideoLoadPending) return null;
+
+    setStoredVideoLoadPending(true);
     setStoredVideoLoadResult(null);
-    const result = await onLoadStoredVideos?.();
-    if (result?.success) setStoredVideoLoadResult(result);
-    return result;
+    try {
+      const result = await onLoadStoredVideos?.();
+      const nextResult = result || { success: false, videoCount: 0 };
+      setStoredVideoLoadResult(nextResult);
+      return nextResult;
+    } catch {
+      const failedResult = { success: false, videoCount: 0 };
+      setStoredVideoLoadResult(failedResult);
+      return failedResult;
+    } finally {
+      setStoredVideoLoadPending(false);
+    }
   };
 
   return (
@@ -88,12 +101,14 @@ export default function ChannelWatchlistWorkspace({
         onOpenTtoTto={onOpenTtoTto}
         onRefreshChannels={onRefreshChannels}
         selectedChannelCount={summary.selectedChannelCount}
+        storedVideoLoadPending={storedVideoLoadPending}
       />
 
       <ChannelWatchlistNextStep
         loadResult={storedVideoLoadResult}
         onOpenRadar={onOpenRadar}
         onOpenSelectedScan={onOpenSelectedScan}
+        onRetry={loadStoredVideos}
       />
 
       <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">

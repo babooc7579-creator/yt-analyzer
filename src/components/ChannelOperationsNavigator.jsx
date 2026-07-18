@@ -79,11 +79,11 @@ export default function ChannelOperationsNavigator({
   };
 
   return (
-    <section className="border border-cyan-400/20 bg-slate-950/80 p-4" aria-labelledby="channel-operations-title">
+    <section className="border border-cyan-400/20 bg-slate-950/80 p-4" aria-labelledby="channel-operations-journey-title">
       <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-extrabold text-cyan-300">오퍼레이션 관제</p>
-          <h2 id="channel-operations-title" className="mt-1 text-xl font-black text-white">채널 운영실</h2>
+          <h2 id="channel-operations-journey-title" className="mt-1 text-xl font-black text-white">오늘의 채널 운영 순서</h2>
           <p className="mt-1 text-xs leading-5 text-slate-400">채널을 등록하고 오늘 볼 채널을 고른 뒤, 저장 영상을 먼저 확인합니다.</p>
         </div>
         <p className="text-[11px] font-bold text-emerald-200">채널 선택만으로 YouTube API는 호출되지 않습니다.</p>

@@ -124,6 +124,7 @@ export const getCreatorHomeViewProps = ({
   selectedChannelIds,
   selectedChannelCount,
   storedVideoLoadResult,
+  storedVideoLoadPending,
   toggleChannelSelection,
   toggleScrapVideo,
   ttoTtoAssetCount,
@@ -190,6 +191,7 @@ export const getCreatorHomeViewProps = ({
       toggleChannelSelection,
       productionCandidateCount,
       productionFocusCount,
+      storedVideoLoadPending,
     },
     workspaceShortcutsProps: {
       onOpenKeywordExplorer: () => onOpenView({ id: 'discovery-keywords' }),

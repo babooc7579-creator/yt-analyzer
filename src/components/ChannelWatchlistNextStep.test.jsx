@@ -36,10 +36,25 @@ describe('ChannelWatchlistNextStep', () => {
   it('does not show a next step before a successful lookup', () => {
     expect(renderToStaticMarkup(
       <ChannelWatchlistNextStep
-        loadResult={{ success: false, videoCount: 0 }}
+        loadResult={null}
         onOpenRadar={() => {}}
         onOpenSelectedScan={() => {}}
       />,
     )).toBe('');
+  });
+
+  it('keeps a failed Cloud lookup visible with an in-place retry action', () => {
+    const html = renderToStaticMarkup(
+      <ChannelWatchlistNextStep
+        loadResult={{ success: false, videoCount: 0 }}
+        onOpenRadar={() => {}}
+        onOpenSelectedScan={() => {}}
+        onRetry={() => {}}
+      />,
+    );
+
+    expect(html).toContain('저장 영상을 불러오지 못했습니다');
+    expect(html).toContain('다시 불러오기');
+    expect(html).toContain('YouTube API를 호출하지 않습니다');
   });
 });
