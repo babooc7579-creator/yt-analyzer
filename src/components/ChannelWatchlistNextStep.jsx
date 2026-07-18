@@ -1,11 +1,39 @@
-import { ArrowRight, CheckCircle2, ScanSearch } from 'lucide-react';
+import { AlertTriangle, ArrowRight, CheckCircle2, RefreshCw, ScanSearch } from 'lucide-react';
 
 export default function ChannelWatchlistNextStep({
   loadResult,
   onOpenRadar,
   onOpenSelectedScan,
+  onRetry,
 }) {
-  if (!loadResult?.success) return null;
+  if (!loadResult) return null;
+
+  if (loadResult.success !== true) {
+    return (
+      <section
+        aria-label="저장 영상 불러오기 실패"
+        className="mt-4 flex flex-col gap-3 border border-rose-400/40 bg-rose-500/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-rose-300" />
+          <div>
+            <p className="text-sm font-extrabold text-white">저장 영상을 불러오지 못했습니다</p>
+            <p className="mt-1 text-xs leading-relaxed text-slate-300">
+              Cloud 연결 상태를 확인한 뒤 다시 시도하세요. 실패한 조회는 YouTube API를 호출하지 않습니다.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="inline-flex shrink-0 items-center justify-center gap-2 bg-rose-200 px-4 py-2.5 text-xs font-extrabold text-rose-950 hover:bg-rose-100"
+        >
+          <RefreshCw className="h-4 w-4" />
+          다시 불러오기
+        </button>
+      </section>
+    );
+  }
 
   const videoCount = Math.max(0, Number(loadResult.videoCount) || 0);
   const hasVideos = videoCount > 0;

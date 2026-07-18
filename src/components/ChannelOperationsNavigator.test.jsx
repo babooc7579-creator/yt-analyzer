@@ -8,7 +8,7 @@ describe('ChannelOperationsNavigator', () => {
   it('renders one workflow with three distinct operation stages', () => {
     const html = renderToStaticMarkup(<ChannelOperationsNavigator activeStage="add" />);
 
-    expect(html).toContain('채널 운영실');
+    expect(html).toContain('오늘의 채널 운영 순서');
     expect(html).toContain('1. 채널 관리');
     expect(html).toContain('2. 새 채널 등록');
     expect(html).toContain('3. 새 영상 수집');

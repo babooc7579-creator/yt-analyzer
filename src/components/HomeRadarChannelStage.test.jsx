@@ -76,4 +76,33 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('저장 영상 8개가 판정대에 준비됐습니다');
     expect(html).toContain('후보 판정 시작');
   });
+
+  it('shows an in-place loading state and blocks duplicate stored-video lookups', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarChannelStage
+        onLoadStoredVideos={() => {}}
+        savedChannels={channels}
+        selectedChannelIds={['channel-1']}
+        storedVideoLoadPending
+      />,
+    );
+
+    expect(html).toContain('Cloud DB에서 저장 영상을 불러오는 중입니다');
+    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('disabled');
+  });
+
+  it('shows a retry action after a failed Cloud lookup', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarChannelStage
+        onLoadStoredVideos={() => {}}
+        savedChannels={channels}
+        selectedChannelIds={['channel-1']}
+        storedVideoLoadResult={{ success: false, videoCount: 0 }}
+      />,
+    );
+
+    expect(html).toContain('저장 영상을 불러오지 못했습니다');
+    expect(html).toContain('저장 영상 다시 불러오기');
+  });
 });

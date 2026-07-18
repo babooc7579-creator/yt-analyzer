@@ -34,15 +34,29 @@ export default function CreatorHomeView({
   videos,
 }) {
   const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
+  const [storedVideoLoadPending, setStoredVideoLoadPending] = useState(false);
 
   useEffect(() => {
     setStoredVideoLoadResult(null);
   }, [selectedChannelKey]);
 
   const loadStoredVideos = async () => {
-    const result = await loadStoredVideosForSelectedChannels?.();
-    setStoredVideoLoadResult(result || { success: false, videoCount: 0 });
-    return result;
+    if (storedVideoLoadPending) return null;
+
+    setStoredVideoLoadPending(true);
+    setStoredVideoLoadResult(null);
+    try {
+      const result = await loadStoredVideosForSelectedChannels?.();
+      const nextResult = result || { success: false, videoCount: 0 };
+      setStoredVideoLoadResult(nextResult);
+      return nextResult;
+    } catch {
+      const failedResult = { success: false, videoCount: 0 };
+      setStoredVideoLoadResult(failedResult);
+      return failedResult;
+    } finally {
+      setStoredVideoLoadPending(false);
+    }
   };
 
   const {
@@ -69,6 +83,7 @@ export default function CreatorHomeView({
     selectedChannelIds,
     selectedChannelCount,
     storedVideoLoadResult,
+    storedVideoLoadPending,
     toggleChannelSelection,
     toggleScrapVideo,
     ttoTtoAssetCount,
