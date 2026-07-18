@@ -1,6 +1,7 @@
-import { BookOpen, Database, Search } from 'lucide-react';
+import { BookOpen, Database, Loader2, Search } from 'lucide-react';
 
 export default function KeywordExplorerHeader({
+  loading = false,
   onLoadStoredVideos,
   onOpenVault,
   selectedChannelCount,
@@ -34,13 +35,16 @@ export default function KeywordExplorerHeader({
         <button
           type="button"
           onClick={onLoadStoredVideos}
-          disabled={selectedChannelCount === 0}
+          disabled={selectedChannelCount === 0 || loading}
           className="inline-flex h-10 items-center gap-2 rounded-lg bg-cyan-300 px-3 text-xs font-black text-slate-950 hover:bg-cyan-200 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
           title={selectedChannelCount > 0
             ? `선택한 채널 ${selectedChannelCount}개의 저장 영상을 Cloud DB에서 조회합니다. YouTube API는 호출하지 않습니다.`
             : '먼저 오늘 볼 채널 또는 채널 목록에서 채널을 선택하세요.'}
         >
-          <Database className="h-4 w-4" /> 저장 영상 불러오기
+          {loading
+            ? <Loader2 className="h-4 w-4 animate-spin" />
+            : <Database className="h-4 w-4" />}
+          {loading ? '저장 영상 불러오는 중...' : '저장 영상 불러오기'}
         </button>
       </div>
     </header>

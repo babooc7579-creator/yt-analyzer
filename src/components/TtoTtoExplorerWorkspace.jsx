@@ -9,6 +9,7 @@ import TtoTtoExplorerSummary from './TtoTtoExplorerSummary';
 
 export default function TtoTtoExplorerWorkspace({
   isVideoSaved,
+  loading = false,
   onLoadStoredVideos,
   onMarkVideoStatus,
   onOpenProductionCandidates,
@@ -90,6 +91,7 @@ export default function TtoTtoExplorerWorkspace({
         ) : (
           <TtoTtoExplorerEmptyState
             emptyState={emptyState}
+            loading={loading && summary.loadedVideoCount === 0 && selectedChannelCount > 0}
             onAction={handleEmptyAction}
           />
         )}

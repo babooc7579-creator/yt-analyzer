@@ -8,6 +8,7 @@ describe('ttoTtoRouteProps utils', () => {
     const loadStoredVideosForSelectedChannels = vi.fn();
     const props = buildTtoTtoRouteProps({
       loadStoredVideosForSelectedChannels,
+      loading: true,
       openCreatorView,
       savedVideos: [{ videoId: 'saved-1' }],
       selectedChannelIds: ['channel-1', 'channel-2'],
@@ -16,6 +17,7 @@ describe('ttoTtoRouteProps utils', () => {
 
     expect(props).toMatchObject({
       onLoadStoredVideos: loadStoredVideosForSelectedChannels,
+      loading: true,
       selectedChannelCount: 2,
       savedVideos: [{ videoId: 'saved-1' }],
       videos: [{ videoId: 'video-1' }],

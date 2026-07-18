@@ -3,6 +3,7 @@ const toArray = (items) => (Array.isArray(items) ? items : []);
 export function buildTtoTtoRouteProps({
   isVideoSaved,
   loadStoredVideosForSelectedChannels,
+  loading,
   markRadarVideoStatus,
   openCreatorView,
   promoteVideoToProduction,
@@ -15,6 +16,7 @@ export function buildTtoTtoRouteProps({
 } = {}) {
   return {
     isVideoSaved,
+    loading: Boolean(loading),
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
     onMarkVideoStatus: markRadarVideoStatus,
     onOpenProductionCandidates: () => openCreatorView({ id: 'studio-candidates' }),

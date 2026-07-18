@@ -120,6 +120,7 @@ describe('creatorHomeViewProps utils', () => {
       restoreVideoToRadar,
       savedVideos,
       selectedChannelCount: 1,
+      storedVideoLoadPending: true,
       toggleScrapVideo,
       videoUserRecords,
       videos,
@@ -129,6 +130,7 @@ describe('creatorHomeViewProps utils', () => {
     expect(props.radarCandidateStripProps).toMatchObject({
       savedVideos,
       selectedChannelCount: 1,
+      storedVideoLoadPending: true,
       videoUserRecords,
       videos,
     });

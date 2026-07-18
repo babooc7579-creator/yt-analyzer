@@ -21,11 +21,13 @@ describe('radarDecisionViewProps utils', () => {
 
     expect(props.title).toBe('오늘 볼 후보');
     expect(props.description).toContain('새 YouTube 스캔이 아니라');
+    expect(props.queueHint).toContain('다음 미판단 후보가 자동으로 들어옵니다');
+    expect(props.queueHint).toContain('별도의 다음 버튼 없이');
     expect(props.summaryItems).toEqual([
-      { label: '대기 후보', value: '9개' },
-      { label: '오늘 표시', value: '3/6' },
+      { label: '남은 후보', value: '9개' },
+      { label: '화면 후보', value: '3/6' },
       { label: '우선 검토', value: '2개' },
-      { label: '숨긴 기록', value: '4개' },
+      { label: '판단 기록', value: '4개' },
     ]);
     expect(props.clearButtonProps).toMatchObject({
       label: '판단 초기화',

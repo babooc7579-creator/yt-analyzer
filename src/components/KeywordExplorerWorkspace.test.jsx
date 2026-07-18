@@ -44,4 +44,13 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('cake');
     expect(html).toContain('찾고 싶은 소재 키워드를 입력하세요');
   });
+
+  it('disables duplicate stored-video lookup while Cloud data is loading', () => {
+    const html = renderToStaticMarkup(
+      <KeywordExplorerWorkspace loading selectedChannelCount={2} videos={[]} />
+    );
+
+    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('disabled');
+  });
 });

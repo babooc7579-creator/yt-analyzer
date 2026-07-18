@@ -26,17 +26,18 @@ export const getRadarCandidateStripHeaderViewProps = ({
       show: allDecisionCount > 0,
       title: 'Cloud에 저장된 오늘 판단 기록을 초기화합니다',
     },
-    description: '저장된 영상 중 아직 판단하지 않은 항목을 점수순으로 정렬하고, 상위 후보를 오늘 검토 목록으로 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.',
+    description: '저장된 영상 중 아직 판단하지 않은 항목을 점수순으로 정렬하고, 상위 후보만 오늘 판정대에 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.',
+    queueHint: '한 건을 판단하면 다음 미판단 후보가 자동으로 들어옵니다. 별도의 다음 버튼 없이 현재 화면의 후보만 차례로 보면 됩니다.',
     scrapbookButtonProps: {
       'aria-label': `Cloud 스크랩북 화면으로 이동, 스크랩 ${savedVideoCount}개`,
       label: `스크랩 ${savedVideoCount}개`,
       title: 'Cloud 스크랩북 화면으로 이동',
     },
     summaryItems: [
-      { label: '대기 후보', value: `${visibleQueueCount}개` },
-      { label: '오늘 표시', value: `${shownCandidateCount}/${candidateLimit}` },
+      { label: '남은 후보', value: `${visibleQueueCount}개` },
+      { label: '화면 후보', value: `${shownCandidateCount}/${candidateLimit}` },
       { label: '우선 검토', value: `${highPriorityCount}개` },
-      { label: '숨긴 기록', value: `${hiddenDecisionCount}개` },
+      { label: '판단 기록', value: `${hiddenDecisionCount}개` },
     ],
     title: '오늘 볼 후보',
   };

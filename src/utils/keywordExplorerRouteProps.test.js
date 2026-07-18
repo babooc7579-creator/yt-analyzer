@@ -7,6 +7,7 @@ describe('keywordExplorerRouteProps', () => {
     const openCreatorView = vi.fn();
     const props = buildKeywordExplorerRouteProps({
       checkedVideos: ['v1'],
+      loading: true,
       openCreatorView,
       selectedChannelIds: ['c1', 'c2'],
       videos: [{ videoId: 'v1' }],
@@ -14,6 +15,7 @@ describe('keywordExplorerRouteProps', () => {
 
     expect(props).toMatchObject({
       checkedVideos: ['v1'],
+      loading: true,
       selectedChannelCount: 2,
       videos: [{ videoId: 'v1' }],
     });

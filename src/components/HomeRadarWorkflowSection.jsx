@@ -54,6 +54,7 @@ export default function HomeRadarWorkflowSection({
         selectedChannelIds={selectedChannelIds}
         selectedLoadedVideoCount={selectedLoadedVideoCount}
         storedVideoLoadResult={storedVideoLoadResult}
+        storedVideoLoadPending={storedVideoLoadPending}
         toggleChannelSelection={toggleChannelSelection}
       />
     </div>
