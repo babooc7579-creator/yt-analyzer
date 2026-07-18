@@ -1,5 +1,6 @@
 import { LogOut, ShieldCheck } from 'lucide-react';
 
+export const CREATOR_OS_LOGIN_PATH = '/.auth/login/aad?post_login_redirect_uri=/';
 export const CREATOR_OS_LOGOUT_PATH = '/.auth/logout?post_logout_redirect_uri=/';
 
 export default function CreatorAccessControl() {
