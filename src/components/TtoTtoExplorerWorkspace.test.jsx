@@ -65,4 +65,24 @@ describe('TtoTtoExplorerWorkspace', () => {
     expect(html).toContain('저장 영상 불러오는 중...');
     expect(html).toContain('disabled');
   });
+
+  it('offers safe next actions when a successful Cloud lookup returns zero videos', () => {
+    const html = renderToStaticMarkup(
+      <TtoTtoExplorerWorkspace
+        isVideoSaved={() => false}
+        loadResult={{ success: true, videoCount: 0 }}
+        onLoadStoredVideos={() => {}}
+        onOpenChannelWatchlist={() => {}}
+        onOpenSelectedScan={() => {}}
+        selectedChannelCount={2}
+        savedVideos={[]}
+        videoUserRecords={{}}
+        videos={[]}
+      />,
+    );
+
+    expect(html).toContain('조회는 정상 완료됐지만 저장된 영상이 없습니다');
+    expect(html).toContain('다른 채널 고르기');
+    expect(html).toContain('새 영상 수집 준비');
+  });
 });

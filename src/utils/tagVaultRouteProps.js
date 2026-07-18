@@ -16,6 +16,8 @@ export function buildTagVaultRouteProps({
   toggleScrapVideo,
   videos,
 } = {}) {
+  const normalizedSelectedChannelIds = toArray(selectedChannelIds);
+
   return {
     channels: toArray(savedChannels),
     checkedVideos: toArray(checkedVideos),
@@ -24,12 +26,18 @@ export function buildTagVaultRouteProps({
     loading: Boolean(loading),
     onFetchComments: fetchTopComments,
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
+    onOpenChannelWatchlist: () => openCreatorView({ id: 'discovery-watchlist' }),
     onOpenChannels: () => openCreatorView({ id: 'ops-channels' }),
+    onOpenSelectedScan: () => openCreatorView({
+      id: 'ops-channels',
+      intent: { operationStage: 'scan' },
+    }),
     onPromoteToProduction: promoteVideoToProduction,
     onSelectTagChannels: (channelIds) => setSelectedChannelIds(toArray(channelIds)),
     onToggleCheck: toggleCheckVideo,
     onToggleScrap: toggleScrapVideo,
-    selectedChannelIds: toArray(selectedChannelIds),
+    selectedChannelIds: normalizedSelectedChannelIds,
+    selectedChannelKey: [...normalizedSelectedChannelIds].sort().join('|'),
     videos: toArray(videos),
   };
 }

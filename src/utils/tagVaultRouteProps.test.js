@@ -17,9 +17,21 @@ describe('buildTagVaultRouteProps', () => {
 
     props.onSelectTagChannels(['c1']);
     props.onOpenChannels();
+    props.onOpenChannelWatchlist();
+    props.onOpenSelectedScan();
 
     expect(setSelectedChannelIds).toHaveBeenCalledWith(['c1']);
-    expect(openCreatorView).toHaveBeenCalledWith({ id: 'ops-channels' });
-    expect(props).toMatchObject({ channels: [{ id: 'c1' }], loading: true, selectedChannelIds: ['c2'], videos: [{ videoId: 'v1' }] });
+    expect(openCreatorView.mock.calls).toEqual([
+      [{ id: 'ops-channels' }],
+      [{ id: 'discovery-watchlist' }],
+      [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
+    ]);
+    expect(props).toMatchObject({
+      channels: [{ id: 'c1' }],
+      loading: true,
+      selectedChannelIds: ['c2'],
+      selectedChannelKey: 'c2',
+      videos: [{ videoId: 'v1' }],
+    });
   });
 });

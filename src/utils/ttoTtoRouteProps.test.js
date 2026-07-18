@@ -19,6 +19,7 @@ describe('ttoTtoRouteProps utils', () => {
       onLoadStoredVideos: loadStoredVideosForSelectedChannels,
       loading: true,
       selectedChannelCount: 2,
+      selectedChannelKey: 'channel-1|channel-2',
       savedVideos: [{ videoId: 'saved-1' }],
       videos: [{ videoId: 'video-1' }],
     });
@@ -26,11 +27,15 @@ describe('ttoTtoRouteProps utils', () => {
 
     props.onOpenProductionCandidates();
     props.onOpenScrapbook();
+    props.onOpenChannelWatchlist();
+    props.onOpenSelectedScan();
     props.onOpenVault();
 
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'studio-candidates' }],
       [{ id: 'studio-scrapbook' }],
+      [{ id: 'discovery-watchlist' }],
+      [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
       [{ id: 'vault-videos' }],
     ]);
   });

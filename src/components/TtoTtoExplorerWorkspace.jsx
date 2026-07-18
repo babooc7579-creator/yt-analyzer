@@ -2,6 +2,7 @@ import { useTtoTtoExplorerState } from '../hooks/useTtoTtoExplorerState';
 import { getTtoTtoExplorerEmptyState } from '../utils/ttoTtoExplorer';
 import RadarCandidateGrid from './RadarCandidateGrid';
 import RadarDecisionPanel from './RadarDecisionPanel';
+import StoredVideoLoadFeedback from './StoredVideoLoadFeedback';
 import TtoTtoExplorerEmptyState from './TtoTtoExplorerEmptyState';
 import TtoTtoExplorerFilters from './TtoTtoExplorerFilters';
 import TtoTtoExplorerHeader from './TtoTtoExplorerHeader';
@@ -9,11 +10,14 @@ import TtoTtoExplorerSummary from './TtoTtoExplorerSummary';
 
 export default function TtoTtoExplorerWorkspace({
   isVideoSaved,
+  loadResult,
   loading = false,
   onLoadStoredVideos,
   onMarkVideoStatus,
+  onOpenChannelWatchlist,
   onOpenProductionCandidates,
   onOpenScrapbook,
+  onOpenSelectedScan,
   onOpenVault,
   onPromoteToProduction,
   onRestoreVideo,
@@ -80,6 +84,16 @@ export default function TtoTtoExplorerWorkspace({
           현재 표시 {filteredCandidates.length}개 · 스크랩북 {Array.isArray(savedVideos) ? savedVideos.length : 0}개 · 판단 버튼은 Cloud 사용자 기록에 저장됩니다.
         </p>
 
+        {summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (
+          <StoredVideoLoadFeedback
+            loadResult={loadResult}
+            loading={loading}
+            onOpenChannelWatchlist={onOpenChannelWatchlist}
+            onOpenSelectedScan={onOpenSelectedScan}
+            onRetry={onLoadStoredVideos}
+          />
+        )}
+
         {filteredCandidates.length > 0 ? (
           <RadarCandidateGrid
             candidates={filteredCandidates}
@@ -87,6 +101,14 @@ export default function TtoTtoExplorerWorkspace({
             onMarkVideoStatus={onMarkVideoStatus}
             onPromoteToProduction={onPromoteToProduction}
             onToggleScrap={onToggleScrap}
+          />
+        ) : summary.loadedVideoCount === 0 && loadResult ? (
+          <StoredVideoLoadFeedback
+            loadResult={loadResult}
+            loading={loading}
+            onOpenChannelWatchlist={onOpenChannelWatchlist}
+            onOpenSelectedScan={onOpenSelectedScan}
+            onRetry={onLoadStoredVideos}
           />
         ) : (
           <TtoTtoExplorerEmptyState
