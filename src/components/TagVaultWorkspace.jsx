@@ -1,6 +1,7 @@
 import { useTagVaultState } from '../hooks/useTagVaultState';
 import { getTagVaultEmptyState } from '../utils/tagVault';
 import StoredVideoActionGrid from './StoredVideoActionGrid';
+import StoredVideoLoadFeedback from './StoredVideoLoadFeedback';
 import TagVaultFilters from './TagVaultFilters';
 import TagVaultHeader from './TagVaultHeader';
 import TagVaultSummary from './TagVaultSummary';
@@ -10,10 +11,13 @@ export default function TagVaultWorkspace({
   checkedVideos,
   isProductionCandidate,
   isVideoSaved,
+  loadResult,
   loading = false,
   onFetchComments,
   onLoadStoredVideos,
+  onOpenChannelWatchlist,
   onOpenChannels,
+  onOpenSelectedScan,
   onPromoteToProduction,
   onSelectTagChannels,
   onToggleCheck,
@@ -61,6 +65,16 @@ export default function TagVaultWorkspace({
           />
         )}
 
+        {state.summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (
+          <StoredVideoLoadFeedback
+            loadResult={loadResult}
+            loading={loading}
+            onOpenChannelWatchlist={onOpenChannelWatchlist}
+            onOpenSelectedScan={onOpenSelectedScan}
+            onRetry={onLoadStoredVideos}
+          />
+        )}
+
         {state.displayedVideos.length > 0 ? (
           <>
             <p className="text-xs text-slate-400">
@@ -77,6 +91,14 @@ export default function TagVaultWorkspace({
               videos={state.displayedVideos}
             />
           </>
+        ) : state.summary.loadedVideoCount === 0 && loadResult ? (
+          <StoredVideoLoadFeedback
+            loadResult={loadResult}
+            loading={loading}
+            onOpenChannelWatchlist={onOpenChannelWatchlist}
+            onOpenSelectedScan={onOpenSelectedScan}
+            onRetry={onLoadStoredVideos}
+          />
         ) : (
           <div className="border border-dashed border-slate-700 bg-slate-950/40 px-5 py-12 text-center">
             <h3 className="text-base font-extrabold text-white">{emptyState.title}</h3>

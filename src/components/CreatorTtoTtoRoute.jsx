@@ -1,5 +1,12 @@
 import TtoTtoExplorerWorkspace from './TtoTtoExplorerWorkspace';
+import { useStoredVideoLoadFeedback } from '../hooks/useStoredVideoLoadFeedback';
 
 export default function CreatorTtoTtoRoute(props) {
-  return <TtoTtoExplorerWorkspace {...props} />;
+  const feedback = useStoredVideoLoadFeedback({
+    loading: props.loading,
+    onLoad: props.onLoadStoredVideos,
+    selectionKey: props.selectedChannelKey,
+  });
+
+  return <TtoTtoExplorerWorkspace {...props} {...feedback} />;
 }

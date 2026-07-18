@@ -14,6 +14,8 @@ export function buildKeywordExplorerRouteProps({
   toggleScrapVideo,
   videos,
 } = {}) {
+  const normalizedSelectedChannelIds = toArray(selectedChannelIds);
+
   return {
     checkedVideos: toArray(checkedVideos),
     isProductionCandidate,
@@ -22,11 +24,16 @@ export function buildKeywordExplorerRouteProps({
     onFetchComments: fetchTopComments,
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
     onOpenChannelWatchlist: () => openCreatorView({ id: 'discovery-watchlist' }),
+    onOpenSelectedScan: () => openCreatorView({
+      id: 'ops-channels',
+      intent: { operationStage: 'scan' },
+    }),
     onOpenVault: () => openCreatorView({ id: 'vault-videos' }),
     onPromoteToProduction: promoteVideoToProduction,
     onToggleCheck: toggleCheckVideo,
     onToggleScrap: toggleScrapVideo,
-    selectedChannelCount: toArray(selectedChannelIds).length,
+    selectedChannelCount: normalizedSelectedChannelIds.length,
+    selectedChannelKey: [...normalizedSelectedChannelIds].sort().join('|'),
     videos: toArray(videos),
   };
 }

@@ -17,14 +17,17 @@ describe('keywordExplorerRouteProps', () => {
       checkedVideos: ['v1'],
       loading: true,
       selectedChannelCount: 2,
+      selectedChannelKey: 'c1|c2',
       videos: [{ videoId: 'v1' }],
     });
     expect(openCreatorView).not.toHaveBeenCalled();
 
     props.onOpenChannelWatchlist();
+    props.onOpenSelectedScan();
     props.onOpenVault();
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'discovery-watchlist' }],
+      [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
       [{ id: 'vault-videos' }],
     ]);
   });
