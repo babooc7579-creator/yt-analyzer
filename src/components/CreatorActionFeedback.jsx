@@ -1,4 +1,6 @@
-import { AlertCircle, LoaderCircle, X } from 'lucide-react';
+import { AlertCircle, LoaderCircle, LogIn, X } from 'lucide-react';
+
+import { CREATOR_OS_LOGIN_PATH } from './CreatorAccessControl';
 
 export default function CreatorActionFeedback({
   error,
@@ -13,8 +15,16 @@ export default function CreatorActionFeedback({
           <p className="text-xs font-extrabold text-red-100">작업을 완료하지 못했습니다</p>
           <p className="mt-1 text-xs font-semibold leading-relaxed text-red-50">{error}</p>
           <p className="mt-1 text-[11px] leading-relaxed text-red-100/80">
-            앱 화면은 열려 있어도 Microsoft 로그인 세션이 만료될 수 있습니다. 계속 실패하면 페이지를 새로고침해 다시 로그인한 뒤 시도해 주세요.
+            앱 화면은 열려 있어도 Microsoft 로그인 세션이 만료될 수 있습니다. 로그인 화면을 다시 연 뒤 같은 작업을 재시도해 주세요.
           </p>
+          <a
+            href={CREATOR_OS_LOGIN_PATH}
+            title="Microsoft 로그인 화면을 다시 엽니다. 이 동작은 Cloud 데이터를 변경하거나 YouTube API를 호출하지 않습니다."
+            className="mt-3 inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-red-200/40 bg-red-100 px-3 py-2 text-xs font-black text-red-950 transition-colors hover:bg-white"
+          >
+            <LogIn aria-hidden="true" className="h-4 w-4" />
+            Microsoft 로그인 다시 열기
+          </a>
         </div>
         {typeof onClearError === 'function' && (
           <button

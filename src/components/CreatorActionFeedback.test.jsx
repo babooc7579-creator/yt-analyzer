@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
+import { CREATOR_OS_LOGIN_PATH } from './CreatorAccessControl';
 import CreatorActionFeedback from './CreatorActionFeedback';
 
 describe('CreatorActionFeedback', () => {
@@ -16,6 +17,9 @@ describe('CreatorActionFeedback', () => {
     expect(html).toContain('role="alert"');
     expect(html).toContain('Cloud DB 조회 실패');
     expect(html).toContain('Microsoft 로그인 세션이 만료될 수 있습니다');
+    expect(html).toContain('Microsoft 로그인 다시 열기');
+    expect(html).toContain(`href="${CREATOR_OS_LOGIN_PATH.replaceAll('&', '&amp;')}"`);
+    expect(html).toContain('Cloud 데이터를 변경하거나 YouTube API를 호출하지 않습니다');
     expect(html).toContain('오류 안내 닫기');
     expect(html).not.toContain('불러오는 중');
   });

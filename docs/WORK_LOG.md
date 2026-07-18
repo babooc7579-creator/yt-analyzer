@@ -3074,3 +3074,30 @@ PR #870 병합 후 main의 Azure Static Web Apps CI/CD가 실패해, 배포 성�
   - 210개 테스트 파일, 894개 테스트 통과
 - `npm run build`
   - Vite production build 통과
+
+### 111. 2026-07-18 로그인 만료 복구 동선 보강
+
+Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사용자가 오류 원인을 확인하고 같은 화면에서 로그인 절차를 다시 시작할 수 있도록 전역 오류 안내를 보강했습니다.
+
+완료한 작업:
+
+- 전역 오류 안내에 `Microsoft 로그인 다시 열기` 버튼을 추가했습니다.
+- 버튼은 기존 Azure Static Web Apps Microsoft 로그인 경로만 열며, Cloud 데이터 변경이나 YouTube API 호출을 실행하지 않습니다.
+- 로그인과 로그아웃 경로 상수를 같은 접근 제어 컴포넌트에 모아 인증 주소가 화면마다 어긋나지 않도록 했습니다.
+- 오류 닫기와 기존 진행 상태 안내는 그대로 유지했습니다.
+
+보존한 것:
+
+- Azure Static Web Apps 역할과 접근 권한 설정 변경 없음
+- API endpoint, DB schema, 저장 필드, 상태값 변경 없음
+- localStorage key와 자동 마이그레이션 변경 없음
+- YouTube API 호출 조건과 횟수 변경 없음
+
+검증:
+
+- `npm test -- --run --reporter=dot`
+  - 211개 테스트 파일, 902개 테스트 통과
+- `npm run build`
+  - Vite production build 통과
+- `git diff --check`
+  - 패치 오류 없음
