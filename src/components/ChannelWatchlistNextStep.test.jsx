@@ -28,9 +28,9 @@ describe('ChannelWatchlistNextStep', () => {
       />,
     );
 
-    expect(html).toContain('선택 채널에 저장된 영상이 없습니다');
-    expect(html).toContain('다음: 새 영상 수집 화면');
-    expect(html).toContain('이동만으로 YouTube API 호출은 실행되지 않습니다.');
+    expect(html).toContain('조회는 정상 완료됐지만 저장된 영상이 없습니다');
+    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('화면 이동만으로 YouTube API를 호출하지 않습니다.');
   });
 
   it('does not show a next step before a successful lookup', () => {
@@ -53,8 +53,23 @@ describe('ChannelWatchlistNextStep', () => {
       />,
     );
 
-    expect(html).toContain('저장 영상을 불러오지 못했습니다');
+    expect(html).toContain('Cloud 저장 영상을 불러오지 못했습니다');
     expect(html).toContain('다시 불러오기');
-    expect(html).toContain('YouTube API를 호출하지 않습니다');
+    expect(html).toContain('YouTube API를 호출하지 않았습니다');
+  });
+
+  it('disables retry while the shared Cloud lookup is pending', () => {
+    const html = renderToStaticMarkup(
+      <ChannelWatchlistNextStep
+        loadResult={{ success: false, videoCount: 0 }}
+        loading
+        onOpenRadar={() => {}}
+        onOpenSelectedScan={() => {}}
+        onRetry={() => {}}
+      />,
+    );
+
+    expect(html).toContain('다시 불러오는 중...');
+    expect(html).toContain('disabled');
   });
 });

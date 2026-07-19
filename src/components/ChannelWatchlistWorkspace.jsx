@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useChannelWatchlistState } from '../hooks/useChannelWatchlistState';
+import { useStoredVideoLoadFeedback } from '../hooks/useStoredVideoLoadFeedback';
 import ChannelWatchlistCard from './ChannelWatchlistCard';
 import ChannelWatchlistFilters from './ChannelWatchlistFilters';
 import ChannelWatchlistHeader from './ChannelWatchlistHeader';
@@ -29,15 +29,17 @@ export default function ChannelWatchlistWorkspace({
   onToggleSelection,
   selectedChannelIds,
 }) {
-  const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
-  const [storedVideoLoadPending, setStoredVideoLoadPending] = useState(false);
   const selectedChannelKey = [...(Array.isArray(selectedChannelIds) ? selectedChannelIds : [])]
     .sort()
     .join('|');
-
-  useEffect(() => {
-    setStoredVideoLoadResult(null);
-  }, [selectedChannelKey]);
+  const {
+    loadResult: storedVideoLoadResult,
+    loading: storedVideoLoadPending,
+    onLoadStoredVideos: loadStoredVideos,
+  } = useStoredVideoLoadFeedback({
+    onLoad: onLoadStoredVideos,
+    selectionKey: selectedChannelKey,
+  });
 
   const {
     filteredChannels,
@@ -72,25 +74,6 @@ export default function ChannelWatchlistWorkspace({
     }));
   };
 
-  const loadStoredVideos = async () => {
-    if (storedVideoLoadPending) return null;
-
-    setStoredVideoLoadPending(true);
-    setStoredVideoLoadResult(null);
-    try {
-      const result = await onLoadStoredVideos?.();
-      const nextResult = result || { success: false, videoCount: 0 };
-      setStoredVideoLoadResult(nextResult);
-      return nextResult;
-    } catch {
-      const failedResult = { success: false, videoCount: 0 };
-      setStoredVideoLoadResult(failedResult);
-      return failedResult;
-    } finally {
-      setStoredVideoLoadPending(false);
-    }
-  };
-
   return (
     <section data-testid="creator-route-channel-watchlist" className="min-w-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
       <ChannelWatchlistHeader
@@ -106,6 +89,7 @@ export default function ChannelWatchlistWorkspace({
 
       <ChannelWatchlistNextStep
         loadResult={storedVideoLoadResult}
+        loading={storedVideoLoadPending}
         onOpenRadar={onOpenRadar}
         onOpenSelectedScan={onOpenSelectedScan}
         onRetry={loadStoredVideos}

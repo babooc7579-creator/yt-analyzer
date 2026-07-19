@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useStoredVideoLoadFeedback({
   loading = false,
@@ -7,29 +7,44 @@ export function useStoredVideoLoadFeedback({
 } = {}) {
   const [loadResult, setLoadResult] = useState(null);
   const [localPending, setLocalPending] = useState(false);
+  const pendingRef = useRef(false);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
+    requestIdRef.current += 1;
+    pendingRef.current = false;
+    setLocalPending(false);
     setLoadResult(null);
   }, [selectionKey]);
 
   const loadStoredVideos = useCallback(async () => {
-    if (loading || localPending || typeof onLoad !== 'function') return null;
+    if (loading || pendingRef.current || typeof onLoad !== 'function') return null;
 
+    const requestId = requestIdRef.current + 1;
+    requestIdRef.current = requestId;
+    pendingRef.current = true;
     setLocalPending(true);
     setLoadResult(null);
     try {
       const result = await onLoad();
       const nextResult = result || { success: false, videoCount: 0 };
-      setLoadResult(nextResult);
+      if (requestIdRef.current === requestId) {
+        setLoadResult(nextResult);
+      }
       return nextResult;
     } catch {
       const failedResult = { success: false, videoCount: 0 };
-      setLoadResult(failedResult);
+      if (requestIdRef.current === requestId) {
+        setLoadResult(failedResult);
+      }
       return failedResult;
     } finally {
-      setLocalPending(false);
+      if (requestIdRef.current === requestId) {
+        pendingRef.current = false;
+        setLocalPending(false);
+      }
     }
-  }, [loading, localPending, onLoad]);
+  }, [loading, onLoad]);
 
   return {
     loadResult,

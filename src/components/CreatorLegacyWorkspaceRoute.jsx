@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { useStoredVideoLoadFeedback } from '../hooks/useStoredVideoLoadFeedback';
 import LegacyWorkspaceView from './LegacyWorkspaceView';
 import {
   getLegacyAsideProps,
@@ -11,11 +12,19 @@ import { getChannelOperationStage } from '../utils/channelOperations';
 export default function CreatorLegacyWorkspaceRoute(props) {
   const requestedOperationStage = getChannelOperationStage(props.creatorViewIntent?.operationStage).id;
   const [activeOperationStage, setActiveOperationStage] = useState(requestedOperationStage);
-  const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
   const isChannelOperationsView = props.creatorView === 'ops-channels';
   const selectedChannelKey = [...(Array.isArray(props.selectedChannelIds) ? props.selectedChannelIds : [])]
     .sort()
     .join('|');
+  const {
+    loadResult: storedVideoLoadResult,
+    loading: storedVideoLoadPending,
+    onLoadStoredVideos: loadStoredVideos,
+  } = useStoredVideoLoadFeedback({
+    loading: props.loading,
+    onLoad: props.loadStoredVideosForSelectedChannels,
+    selectionKey: selectedChannelKey,
+  });
 
   const scrollToOperationStage = (stageId, behavior = 'smooth') => {
     const stage = getChannelOperationStage(stageId);
@@ -34,23 +43,13 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     return () => window.clearTimeout(timerId);
   }, [isChannelOperationsView, props.creatorViewIntent?.operationStage, requestedOperationStage]);
 
-  useEffect(() => {
-    setStoredVideoLoadResult(null);
-  }, [selectedChannelKey]);
-
-  const loadStoredVideos = async () => {
-    const result = await props.loadStoredVideosForSelectedChannels?.();
-    setStoredVideoLoadResult(result || { success: false, videoCount: 0 });
-    return result;
-  };
-
   const legacyWorkspaceViewProps = {
     asideProps: getLegacyAsideProps(props),
     channelPanelProps: getLegacyChannelPanelProps(props),
     mainPanelProps: getLegacyMainPanelProps(props),
     operationsNavProps: isChannelOperationsView ? {
       activeStage: activeOperationStage,
-      isLoading: props.loading,
+      isLoading: storedVideoLoadPending,
       isScanning: props.isScanning,
       onLoadStoredVideos: loadStoredVideos,
       onOpenHome: () => props.openCreatorView({ id: 'home' }),
