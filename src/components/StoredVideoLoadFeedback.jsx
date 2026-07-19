@@ -44,37 +44,43 @@ export default function StoredVideoLoadFeedback({
 
       <div className="mt-4 flex flex-wrap gap-2">
         {failed ? (
-          <button
-            type="button"
-            aria-label="Cloud 저장 영상 다시 불러오기"
-            onClick={onRetry}
-            disabled={loading}
-            className="inline-flex items-center gap-2 bg-rose-200 px-4 py-2.5 text-xs font-extrabold text-rose-950 hover:bg-rose-100 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
-            title="Cloud DB 저장 영상 조회를 다시 시도합니다. YouTube API를 호출하지 않습니다."
-          >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-            {loading ? '다시 불러오는 중...' : '다시 불러오기'}
-          </button>
+          typeof onRetry === 'function' && (
+            <button
+              type="button"
+              aria-label="Cloud 저장 영상 다시 불러오기"
+              onClick={onRetry}
+              disabled={loading}
+              className="inline-flex items-center gap-2 bg-rose-200 px-4 py-2.5 text-xs font-extrabold text-rose-950 hover:bg-rose-100 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+              title="Cloud DB 저장 영상 조회를 다시 시도합니다. YouTube API를 호출하지 않습니다."
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              {loading ? '다시 불러오는 중...' : '다시 불러오기'}
+            </button>
+          )
         ) : (
           <>
-            <button
-              type="button"
-              aria-label="오늘 볼 채널에서 다른 채널 고르기"
-              onClick={onOpenChannelWatchlist}
-              className="inline-flex items-center gap-2 bg-amber-200 px-4 py-2.5 text-xs font-extrabold text-amber-950 hover:bg-amber-100"
-              title="오늘 볼 채널 화면으로 이동합니다. 이동만으로 YouTube API를 호출하지 않습니다."
-            >
-              <ListChecks className="h-4 w-4" /> 다른 채널 고르기
-            </button>
-            <button
-              type="button"
-              aria-label="선택 채널 새 영상 수집 준비 화면 열기"
-              onClick={onOpenSelectedScan}
-              className="inline-flex items-center gap-2 border border-amber-300/30 bg-amber-500/10 px-4 py-2.5 text-xs font-extrabold text-amber-100 hover:bg-amber-500/20"
-              title="새 영상 수집 준비 화면으로 이동합니다. 이동만으로 수집은 시작되지 않습니다."
-            >
-              <ScanSearch className="h-4 w-4" /> 새 영상 수집 준비
-            </button>
+            {typeof onOpenChannelWatchlist === 'function' && (
+              <button
+                type="button"
+                aria-label="오늘 볼 채널에서 다른 채널 고르기"
+                onClick={onOpenChannelWatchlist}
+                className="inline-flex items-center gap-2 bg-amber-200 px-4 py-2.5 text-xs font-extrabold text-amber-950 hover:bg-amber-100"
+                title="오늘 볼 채널 화면으로 이동합니다. 이동만으로 YouTube API를 호출하지 않습니다."
+              >
+                <ListChecks className="h-4 w-4" /> 다른 채널 고르기
+              </button>
+            )}
+            {typeof onOpenSelectedScan === 'function' && (
+              <button
+                type="button"
+                aria-label="선택 채널 새 영상 수집 준비 화면 열기"
+                onClick={onOpenSelectedScan}
+                className="inline-flex items-center gap-2 border border-amber-300/30 bg-amber-500/10 px-4 py-2.5 text-xs font-extrabold text-amber-100 hover:bg-amber-500/20"
+                title="새 영상 수집 준비 화면으로 이동합니다. 이동만으로 수집은 시작되지 않습니다."
+              >
+                <ScanSearch className="h-4 w-4" /> 새 영상 수집 준비
+              </button>
+            )}
           </>
         )}
       </div>

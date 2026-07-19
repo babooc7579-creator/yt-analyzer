@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-
+import { useStoredVideoLoadFeedback } from '../hooks/useStoredVideoLoadFeedback';
 import { getCreatorHomeViewProps } from '../utils/creatorHomeViewProps';
 import HomeActionShortcuts from './HomeActionShortcuts';
 import HomeOperatingGuidelines from './HomeOperatingGuidelines';
@@ -33,31 +32,14 @@ export default function CreatorHomeView({
   videoUserRecords,
   videos,
 }) {
-  const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
-  const [storedVideoLoadPending, setStoredVideoLoadPending] = useState(false);
-
-  useEffect(() => {
-    setStoredVideoLoadResult(null);
-  }, [selectedChannelKey]);
-
-  const loadStoredVideos = async () => {
-    if (storedVideoLoadPending) return null;
-
-    setStoredVideoLoadPending(true);
-    setStoredVideoLoadResult(null);
-    try {
-      const result = await loadStoredVideosForSelectedChannels?.();
-      const nextResult = result || { success: false, videoCount: 0 };
-      setStoredVideoLoadResult(nextResult);
-      return nextResult;
-    } catch {
-      const failedResult = { success: false, videoCount: 0 };
-      setStoredVideoLoadResult(failedResult);
-      return failedResult;
-    } finally {
-      setStoredVideoLoadPending(false);
-    }
-  };
+  const {
+    loadResult: storedVideoLoadResult,
+    loading: storedVideoLoadPending,
+    onLoadStoredVideos: loadStoredVideos,
+  } = useStoredVideoLoadFeedback({
+    onLoad: loadStoredVideosForSelectedChannels,
+    selectionKey: selectedChannelKey,
+  });
 
   const {
     actionShortcutsProps,

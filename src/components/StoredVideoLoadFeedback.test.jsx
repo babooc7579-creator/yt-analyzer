@@ -40,4 +40,16 @@ describe('StoredVideoLoadFeedback', () => {
       <StoredVideoLoadFeedback loadResult={{ success: true, videoCount: 3 }} />,
     )).toBe('');
   });
+
+  it('only renders actions that are available in the current screen', () => {
+    const html = renderToStaticMarkup(
+      <StoredVideoLoadFeedback
+        loadResult={{ success: true, videoCount: 0 }}
+        onOpenSelectedScan={noop}
+      />,
+    );
+
+    expect(html).not.toContain('다른 채널 고르기');
+    expect(html).toContain('새 영상 수집 준비');
+  });
 });
