@@ -24,7 +24,11 @@ export default function HomeRadarJourney(props) {
       <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
         {stages.map((stage, index) => (
           <div key={stage.key} className="relative flex min-w-0 items-stretch">
-            <div className={`min-h-28 w-full rounded-lg border p-3 ${STATUS_STYLES[stage.status]} ${stage.warning ? 'border-rose-400/50 bg-rose-500/10' : ''}`}>
+            <a
+              href={stage.href}
+              className={`min-h-28 w-full rounded-lg border p-3 transition hover:-translate-y-0.5 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-cyan-300/50 ${STATUS_STYLES[stage.status]} ${stage.warning ? 'border-rose-400/50 bg-rose-500/10' : ''}`}
+              title={`${stage.number}단계 ${stage.title} 위치로 이동`}
+            >
               <div className="flex items-center justify-between gap-2">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full border border-current/30 text-[11px] font-black">
                   {stage.status === 'complete' ? <Check className="h-3.5 w-3.5" /> : stage.number}
@@ -34,7 +38,7 @@ export default function HomeRadarJourney(props) {
               <p className="mt-3 text-xs font-black">{stage.title}</p>
               <p className="mt-1 text-[11px] font-bold opacity-75">{stage.value}</p>
               <p className="mt-2 text-[10px] font-medium leading-4 opacity-60">{stage.hint}</p>
-            </div>
+            </a>
             {index < stages.length - 1 && (
               <ChevronRight className="absolute -right-3 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 rounded-full bg-slate-950 text-slate-500 md:block" />
             )}

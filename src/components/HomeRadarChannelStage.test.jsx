@@ -21,6 +21,8 @@ describe('HomeRadarChannelStage', () => {
     );
 
     expect(html).toContain('STAGE 1–2');
+    expect(html).toContain('id="today-radar-channels"');
+    expect(html).toContain('id="today-radar-load"');
     expect(html).toContain('채널 이름 또는 태그 검색');
     expect(html).toContain('채널 검색어 지우기');
     expect(html).toContain('aria-label="채널 이름 또는 태그 검색"');

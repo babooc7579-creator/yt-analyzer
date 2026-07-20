@@ -8,6 +8,7 @@ describe('HomeRadarFinishStage', () => {
     const html = renderToStaticMarkup(<HomeRadarFinishStage />);
 
     expect(html).toContain('STAGE 4');
+    expect(html).toContain('id="today-radar-finish"');
     expect(html).toContain('오늘 만들 한 가지');
     expect(html).toContain('후보 판정대로 이동');
   });
