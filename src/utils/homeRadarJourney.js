@@ -59,6 +59,7 @@ export const getHomeRadarJourneyStages = ({
     {
       key: 'channels',
       number: 1,
+      href: '#today-radar-channels',
       title: '오늘 볼 채널 고르기',
       value: selectedChannels > 0 ? `${selectedChannels}개 선택` : '선택 필요',
       hint: '분야·등급·수집일로 범위를 좁힙니다.',
@@ -67,6 +68,7 @@ export const getHomeRadarJourneyStages = ({
     {
       key: 'load',
       number: 2,
+      href: '#today-radar-load',
       title: '저장 영상 불러오기',
       value: emptyLoad ? '저장 영상 0개' : loadedVideos > 0 ? `${loadedVideos}개 준비` : 'Cloud DB 조회',
       hint: '저장 데이터만 조회하며 새 수집은 하지 않습니다.',
@@ -76,6 +78,7 @@ export const getHomeRadarJourneyStages = ({
     {
       key: 'review',
       number: 3,
+      href: '#today-radar-candidates',
       title: '오늘 후보 판단',
       value: radarCandidates > 0 ? `${radarCandidates}개 남음` : loadedVideos > 0 ? '판단 완료' : '영상 준비 후',
       hint: '상위 6개를 보고 다음 행동을 정합니다.',
@@ -84,6 +87,7 @@ export const getHomeRadarJourneyStages = ({
     {
       key: 'production',
       number: 4,
+      href: '#today-radar-finish',
       title: '제작 후보 결정',
       value: productionCandidates > 0 ? `${productionCandidates}개 후보` : '다음 소재 결정',
       hint: '오늘 집중과 업로드 일정으로 이어갑니다.',

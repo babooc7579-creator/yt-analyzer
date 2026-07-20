@@ -56,7 +56,7 @@ export default function HomeRadarChannelStage({
   const loadFailed = storedVideoLoadResult?.success === false;
 
   return (
-    <section className="mt-4 border border-cyan-400/25 bg-cyan-500/5 p-4" aria-labelledby="home-radar-channel-stage-title">
+    <section id="today-radar-channels" className="mt-4 scroll-mt-5 border border-cyan-400/25 bg-cyan-500/5 p-4" aria-labelledby="home-radar-channel-stage-title">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-[11px] font-extrabold text-cyan-300">STAGE 1–2 · 오늘의 탐색 범위와 저장 영상</p>
@@ -74,16 +74,17 @@ export default function HomeRadarChannelStage({
         </div>
       </div>
 
-      {channelList.length === 0 ? (
-        <div className="mt-4 border border-dashed border-slate-700 bg-slate-950/50 px-5 py-8 text-center">
-          <p className="font-extrabold text-white">먼저 소재를 찾을 채널이 필요합니다</p>
-          <p className="mt-2 text-xs text-slate-400">채널을 등록해도 새 영상 수집은 자동으로 시작되지 않습니다.</p>
-          <button type="button" onClick={onOpenAddChannel} className="mt-4 bg-indigo-200 px-4 py-2 text-xs font-extrabold text-indigo-950">
-            첫 채널 등록하기
-          </button>
-        </div>
-      ) : (
-        <>
+      <div id="today-radar-load" className="scroll-mt-5">
+        {channelList.length === 0 ? (
+          <div className="mt-4 border border-dashed border-slate-700 bg-slate-950/50 px-5 py-8 text-center">
+            <p className="font-extrabold text-white">먼저 소재를 찾을 채널이 필요합니다</p>
+            <p className="mt-2 text-xs text-slate-400">채널을 등록해도 새 영상 수집은 자동으로 시작되지 않습니다.</p>
+            <button type="button" onClick={onOpenAddChannel} className="mt-4 bg-indigo-200 px-4 py-2 text-xs font-extrabold text-indigo-950">
+              첫 채널 등록하기
+            </button>
+          </div>
+        ) : (
+          <>
           <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
             <div className="relative min-w-0">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
@@ -212,8 +213,9 @@ export default function HomeRadarChannelStage({
               )}
             </div>
           </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </section>
   );
 }

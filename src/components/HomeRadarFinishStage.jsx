@@ -11,7 +11,7 @@ export default function HomeRadarFinishStage({
   const hasCandidates = candidateCount > 0;
 
   return (
-    <section className={`mt-5 border p-4 ${hasCandidates ? 'border-emerald-400/30 bg-emerald-500/10' : 'border-indigo-400/25 bg-indigo-500/10'}`} aria-labelledby="home-radar-finish-title">
+    <section id="today-radar-finish" className={`mt-5 scroll-mt-5 border p-4 ${hasCandidates ? 'border-emerald-400/30 bg-emerald-500/10' : 'border-indigo-400/25 bg-indigo-500/10'}`} aria-labelledby="home-radar-finish-title">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className={`text-[11px] font-extrabold ${hasCandidates ? 'text-emerald-300' : 'text-indigo-300'}`}>STAGE 4 · 오늘의 제작 선택</p>

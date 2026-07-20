@@ -5,6 +5,7 @@ import { getRadarCandidateStripHeaderViewProps } from '../utils/radarDecisionVie
 export default function RadarCandidateStripHeader({
   allDecisionCount,
   clearDecisionsPending,
+  loadedDecisionCount,
   onClearDecisions,
   onOpenScrapbook,
   queueSummary = {},
@@ -20,6 +21,7 @@ export default function RadarCandidateStripHeader({
     title,
   } = getRadarCandidateStripHeaderViewProps({
     allDecisionCount,
+    loadedDecisionCount,
     queueSummary,
     savedVideoCount,
   });
