@@ -8,6 +8,7 @@ const getVideoTitle = (video) => toObject(video).title || '제목 없는 영상'
 
 export const getRadarCandidateStripHeaderViewProps = ({
   allDecisionCount,
+  loadedDecisionCount = 0,
   queueSummary = {},
   savedVideoCount = 0,
 } = {}) => {
@@ -18,6 +19,11 @@ export const getRadarCandidateStripHeaderViewProps = ({
     shownCandidateCount = 0,
     visibleQueueCount = 0,
   } = toObject(queueSummary);
+  const currentProcessedCount = Math.max(0, Number(loadedDecisionCount) || 0);
+  const currentTotalCount = currentProcessedCount + visibleQueueCount;
+  const progressPercent = currentTotalCount > 0
+    ? Math.min(100, Math.round((currentProcessedCount / currentTotalCount) * 100))
+    : 0;
 
   return {
     clearButtonProps: {
@@ -26,8 +32,14 @@ export const getRadarCandidateStripHeaderViewProps = ({
       show: allDecisionCount > 0,
       title: 'Cloud에 저장된 오늘 판단 기록을 초기화합니다',
     },
-    description: '저장된 영상 중 아직 판단하지 않은 항목을 점수순으로 정렬하고, 상위 후보만 오늘 판정대에 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.',
-    queueHint: '한 건을 판단하면 다음 미판단 후보가 자동으로 들어옵니다. 별도의 다음 버튼 없이 현재 화면의 후보만 차례로 보면 됩니다.',
+    description: `저장 영상 ${currentTotalCount}개를 한꺼번에 펼치지 않고 점수순 상위 ${candidateLimit}개만 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.`,
+    progressText: {
+      label: currentTotalCount > 0
+        ? `이번 목록 ${currentProcessedCount}/${currentTotalCount}개 판단`
+        : '판단할 목록 준비 중',
+      percent: progressPercent,
+    },
+    queueHint: `오늘 화면에는 최대 ${candidateLimit}개만 보입니다. 한 건을 판단하면 다음 미판단 후보가 자동으로 들어옵니다. 별도의 다음 버튼 없이 현재 카드만 차례로 보면 됩니다.`,
     scrapbookButtonProps: {
       'aria-label': `Cloud 스크랩북 화면으로 이동, 스크랩 ${savedVideoCount}개`,
       label: `스크랩 ${savedVideoCount}개`,

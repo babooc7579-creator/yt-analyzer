@@ -1,4 +1,5 @@
 import HomeRadarHero from './HomeRadarHero';
+import HomeNextActionPanel from './HomeNextActionPanel';
 import HomeRadarStatsGrid from './HomeRadarStatsGrid';
 import HomeRadarWorkflowSection from './HomeRadarWorkflowSection';
 
@@ -7,6 +8,7 @@ export default function HomeRadarSummary({
   loadedVideoCount,
   savedVideoCount,
   latestScanText,
+  nextActionProps,
   ttoTtoAssetCount,
   openRadarCandidateCount,
   discoveryCandidateCount,
@@ -31,7 +33,12 @@ export default function HomeRadarSummary({
 }) {
   return (
     <>
-      <HomeRadarHero />
+      <HomeRadarHero
+        openRadarCandidateCount={openRadarCandidateCount}
+        productionFocusCount={productionFocusCount}
+      />
+
+      <HomeNextActionPanel {...nextActionProps} />
 
       <HomeRadarWorkflowSection
         discoveryCandidateCount={discoveryCandidateCount}

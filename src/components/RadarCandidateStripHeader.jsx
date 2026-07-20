@@ -13,6 +13,7 @@ export default function RadarCandidateStripHeader({
   const {
     clearButtonProps,
     description,
+    progressText,
     queueHint,
     scrapbookButtonProps,
     summaryItems,
@@ -34,6 +35,18 @@ export default function RadarCandidateStripHeader({
         <p className="mt-2 border border-emerald-300/15 bg-emerald-500/10 px-3 py-2 text-[11px] font-bold leading-5 text-emerald-100">
           {queueHint}
         </p>
+        <div className="mt-3 flex items-center gap-3">
+          <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-slate-950/70">
+            <div
+              className="h-full rounded-full bg-rose-300 transition-all"
+              style={{ width: `${progressText.percent}%` }}
+              aria-hidden="true"
+            />
+          </div>
+          <p className="shrink-0 text-[10px] font-extrabold text-rose-100/70">
+            {progressText.label}
+          </p>
+        </div>
         <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {summaryItems.map((item) => (
             <div
