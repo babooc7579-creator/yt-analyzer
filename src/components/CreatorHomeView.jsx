@@ -43,6 +43,7 @@ export default function CreatorHomeView({
 
   const {
     actionShortcutsProps,
+    nextActionProps,
     radarCandidateStripProps,
     radarSummaryProps,
     workspaceShortcutsProps,
@@ -76,12 +77,16 @@ export default function CreatorHomeView({
   return (
     <div data-testid="creator-route-home" className="space-y-4">
       <section className="rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
-        <HomeRadarSummary {...radarSummaryProps} />
+        <HomeRadarSummary
+          {...radarSummaryProps}
+          nextActionProps={nextActionProps}
+        />
 
         <RadarCandidateStrip {...radarCandidateStripProps} />
 
         <HomeRadarFinishStage
           onOpenProductionCandidates={() => onOpenView({ id: 'studio-candidates' })}
+          onOpenUploadCalendar={() => onOpenView({ id: 'studio-calendar' })}
           productionCandidateCount={productionCandidateCount}
           productionFocusCount={productionFocusCount}
         />

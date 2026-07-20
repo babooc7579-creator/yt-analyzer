@@ -385,6 +385,7 @@ export const getRadarCandidateStripViewProps = ({
   },
   headerProps: {
     allDecisionCount,
+    loadedDecisionCount,
     onClearDecisions,
     onOpenScrapbook,
     queueSummary,

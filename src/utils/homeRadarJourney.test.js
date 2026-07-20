@@ -17,7 +17,9 @@ describe('homeRadarJourney', () => {
 
     const loadStages = getHomeRadarJourneyStages({ selectedChannelCount: 2 });
     expect(loadStages[0].status).toBe('complete');
+    expect(loadStages[0].hint).toContain('분야·등급·수집일');
     expect(loadStages[1].status).toBe('current');
+    expect(loadStages[1].hint).toContain('새 수집은 하지 않습니다');
 
     const reviewStages = getHomeRadarJourneyStages({
       loadedVideoCount: 30,
@@ -26,6 +28,7 @@ describe('homeRadarJourney', () => {
     });
     expect(reviewStages[1].status).toBe('complete');
     expect(reviewStages[2].status).toBe('current');
+    expect(reviewStages[2].hint).toContain('상위 6개');
   });
 
   it('marks a successful zero-video lookup as an actionable warning', () => {

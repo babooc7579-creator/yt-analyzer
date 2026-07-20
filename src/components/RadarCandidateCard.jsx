@@ -73,10 +73,10 @@ export default function RadarCandidateCard({
   return (
     <article
       aria-busy={Boolean(pendingAction)}
-      className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80"
+      className="flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/80"
     >
       <RadarCandidateThumbnail {...thumbnailProps} />
-      <div className="p-4">
+      <div className="flex flex-1 flex-col p-4">
         <RadarCandidateBadges {...badgesProps} />
         <RadarCandidateTitleLink {...titleLinkProps} />
         <RadarCandidateScorePanel {...scorePanelProps} />
