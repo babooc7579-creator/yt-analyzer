@@ -7,10 +7,12 @@ describe('RadarActionSuccessFeedback', () => {
   it('explains the successful Cloud save and offers the next workspace', () => {
     const html = renderToStaticMarkup(
       <RadarActionSuccessFeedback
+        actionLabel="제작 후보함 열기"
+        actionTitle="Cloud 제작 후보함을 엽니다. YouTube API를 호출하지 않습니다."
         title="제작 후보로 저장했습니다"
         message="다음 후보가 자동으로 표시됩니다."
+        onAction={() => {}}
         onDismiss={() => {}}
-        onOpenProductionCandidates={() => {}}
       />,
     );
 
@@ -23,5 +25,18 @@ describe('RadarActionSuccessFeedback', () => {
 
   it('renders nothing without a message', () => {
     expect(renderToStaticMarkup(<RadarActionSuccessFeedback />)).toBe('');
+  });
+
+  it('does not show a destination button for a status-only decision', () => {
+    const html = renderToStaticMarkup(
+      <RadarActionSuccessFeedback
+        title="봤음으로 정리했습니다"
+        message="다음 후보가 자동으로 표시됩니다."
+        onDismiss={() => {}}
+      />,
+    );
+
+    expect(html).toContain('봤음으로 정리했습니다');
+    expect(html).not.toContain('제작 후보함 열기');
   });
 });

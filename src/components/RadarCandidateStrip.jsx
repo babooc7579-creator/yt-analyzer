@@ -1,6 +1,11 @@
 import { useRef, useState } from 'react';
 
 import { useRadarCandidateData } from '../hooks/useRadarCandidateData';
+import {
+  getRadarProductionSuccessFeedback,
+  getRadarScrapbookSuccessFeedback,
+  getRadarStatusSuccessFeedback,
+} from '../utils/radarActionFeedback';
 import { getRadarCandidateStripViewProps } from '../utils/radarCandidates';
 import RadarCandidateCompletedState from './RadarCandidateCompletedState';
 import RadarCandidateEmptyState from './RadarCandidateEmptyState';
@@ -51,22 +56,50 @@ export default function RadarCandidateStrip({
 
     const saved = await onPromoteToProduction(video);
     if (saved !== false) {
-      const videoTitle = typeof video?.title === 'string' && video.title.trim()
-        ? video.title.trim()
-        : '선택한 영상';
-      setRecentActionFeedback({
-        title: '제작 후보로 저장했습니다',
-        message: `${videoTitle}을(를) Cloud 제작 후보로 표시했습니다. 다음 후보가 자동으로 표시됩니다. 후보함에서 오늘 집중과 일정을 이어서 정할 수 있습니다.`,
-      });
+      setRecentActionFeedback(getRadarProductionSuccessFeedback(video));
     }
     return saved;
+  };
+
+  const handleMarkVideoStatus = async (videoId, status) => {
+    if (typeof onMarkVideoStatus !== 'function') return false;
+
+    const saved = await onMarkVideoStatus(videoId, status);
+    if (saved !== false) {
+      setRecentActionFeedback(getRadarStatusSuccessFeedback({
+        status,
+        video: Array.isArray(videos)
+          ? videos.find(video => video.videoId === videoId)
+          : null,
+      }));
+    }
+    return saved;
+  };
+
+  const handleToggleScrap = async (video) => {
+    if (typeof onToggleScrap !== 'function') return false;
+
+    const removed = typeof isVideoSaved === 'function' && isVideoSaved(video?.videoId);
+    const saved = await onToggleScrap(video);
+    if (saved !== false) {
+      setRecentActionFeedback(getRadarScrapbookSuccessFeedback({ removed, video }));
+    }
+    return saved;
+  };
+
+  const handleFeedbackAction = () => {
+    if (recentActionFeedback?.destination === 'production') {
+      onOpenProductionCandidates?.();
+    } else if (recentActionFeedback?.destination === 'scrapbook') {
+      onOpenScrapbook?.();
+    }
   };
 
   const successFeedback = recentActionFeedback ? (
     <RadarActionSuccessFeedback
       {...recentActionFeedback}
       onDismiss={() => setRecentActionFeedback(null)}
-      onOpenProductionCandidates={onOpenProductionCandidates}
+      onAction={handleFeedbackAction}
     />
   ) : null;
 
@@ -96,13 +129,13 @@ export default function RadarCandidateStrip({
     isVideoSaved,
     loadedDecisionCount,
     onClearDecisions: handleClearDecisions,
-    onMarkVideoStatus,
+    onMarkVideoStatus: handleMarkVideoStatus,
     onOpenScrapbook,
     onOpenProductionCandidates,
     onOpenVault,
     onPromoteToProduction: handlePromoteToProduction,
     onRestoreVideo,
-    onToggleScrap,
+    onToggleScrap: handleToggleScrap,
     queueSummary,
     savedVideos,
     videos,
