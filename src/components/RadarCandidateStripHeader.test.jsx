@@ -20,7 +20,8 @@ describe('RadarCandidateStripHeader', () => {
       />,
     );
 
-    expect(html).toContain('이번 목록 3/12개 판단');
+    expect(html).toContain('3개 완료 · 9개 남음');
+    expect(html).toContain('aria-live="polite"');
     expect(html).toContain('width:25%');
   });
 });

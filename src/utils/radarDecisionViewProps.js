@@ -35,7 +35,7 @@ export const getRadarCandidateStripHeaderViewProps = ({
     description: `저장 영상 ${currentTotalCount}개를 한꺼번에 펼치지 않고 점수순 상위 ${candidateLimit}개만 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.`,
     progressText: {
       label: currentTotalCount > 0
-        ? `이번 목록 ${currentProcessedCount}/${currentTotalCount}개 판단`
+        ? `${currentProcessedCount}개 완료 · ${visibleQueueCount}개 남음`
         : '판단할 목록 준비 중',
       percent: progressPercent,
     },

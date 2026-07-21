@@ -45,7 +45,7 @@ export default function RadarCandidateStripHeader({
               aria-hidden="true"
             />
           </div>
-          <p className="shrink-0 text-[10px] font-extrabold text-rose-100/70">
+          <p className="shrink-0 text-[10px] font-extrabold text-rose-100/70" role="status" aria-live="polite">
             {progressText.label}
           </p>
         </div>

@@ -11,6 +11,7 @@ describe('ProductionFocusSection', () => {
     moveStates: {},
     onFocus: () => 'focus',
     onMove: () => 'move',
+    onOpenUploadCalendar: () => 'calendar',
     onSave: () => 'save',
     onUpdateDraft: () => 'update',
     saveStates: {},
@@ -49,6 +50,8 @@ describe('ProductionFocusSection', () => {
     expect(html).toContain('오늘 만들 영상');
     expect(html).toContain('집중 해제');
     expect(html).toContain('제작 중으로');
+    expect(html).toContain('일정 정하기');
+    expect(html).toContain('오늘 집중 후보 업로드 일정 정하기');
     expect(html).toContain('YouTube API를 새로 호출하지 않습니다');
   });
 
@@ -71,6 +74,7 @@ describe('ProductionFocusSection', () => {
     );
 
     expect(html).toContain('aria-label="오늘 집중 영상 2개"');
+    expect(html).toContain('sm:flex-row');
     expect(html).toContain('grid-cols-1');
     expect(html).toContain('xl:grid-cols-2');
     expect(html).toContain(firstTitle);

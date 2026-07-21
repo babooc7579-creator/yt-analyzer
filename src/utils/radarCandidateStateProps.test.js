@@ -81,8 +81,8 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(decisionProps.descriptionText).toContain('Cloud 판단 기록');
-    expect(decisionProps.descriptionText).toContain('좋으면 제작 후보로');
-    expect(decisionProps.descriptionText).toContain('아니면 제외');
+    expect(decisionProps.descriptionText).toContain('만들 만하면 제작 후보로');
+    expect(decisionProps.descriptionText).toContain('다음 후보가 자동으로 이어집니다');
     expect(decisionProps.descriptionText).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(saveProps).toMatchObject({
       buttonText: '소재 보관',

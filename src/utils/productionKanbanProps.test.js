@@ -206,6 +206,7 @@ describe('productionKanbanProps utils', () => {
       moveStates: props.moveStates,
       onMove: props.moveVideo,
       onFocus: props.updateVideoFocus,
+      onOpenUploadCalendar: props.onOpenUploadCalendar,
       onSave: props.saveDraftRecord,
       onUpdateDraft: props.updateDraftRecord,
       saveStates: props.saveStates,

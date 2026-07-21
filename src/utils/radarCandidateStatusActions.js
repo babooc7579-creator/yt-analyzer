@@ -16,7 +16,7 @@ export const RADAR_STATUS_ACTION_ITEMS = [
     title: 'Cloud 판단 기록에 나중에 보기로 저장하고 오늘 레이더에서 숨깁니다.',
   },
   {
-    className: 'inline-flex items-center justify-center gap-1 rounded-xl bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-800 sm:col-span-2',
+    className: 'inline-flex items-center justify-center gap-1 rounded-xl bg-slate-900 px-3 py-2 text-[11px] font-extrabold text-slate-300 ring-1 ring-slate-700 hover:bg-slate-800',
     iconName: 'excluded',
     label: '후보에서 제외',
     status: VIDEO_STATUS.EXCLUDED,

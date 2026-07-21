@@ -185,6 +185,7 @@ export const getProductionKanbanContentChildProps = ({
       moveStates,
       onFocus: updateVideoFocus,
       onMove: moveVideo,
+      onOpenUploadCalendar,
       onSave: saveDraftRecord,
       onUpdateDraft: updateDraftRecord,
       saveStates,

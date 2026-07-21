@@ -27,7 +27,7 @@ describe('radarDecisionViewProps utils', () => {
     expect(props.description).toContain('저장 영상 12개');
     expect(props.description).toContain('상위 6개');
     expect(props.progressText).toEqual({
-      label: '이번 목록 3/12개 판단',
+      label: '3개 완료 · 9개 남음',
       percent: 25,
     });
     expect(props.summaryItems).toEqual([
