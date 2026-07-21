@@ -6,6 +6,7 @@ import RadarCandidateCompletedState from './RadarCandidateCompletedState';
 import RadarCandidateEmptyState from './RadarCandidateEmptyState';
 import RadarCandidateGrid from './RadarCandidateGrid';
 import RadarCandidateStripHeader from './RadarCandidateStripHeader';
+import RadarActionSuccessFeedback from './RadarActionSuccessFeedback';
 import RadarDecisionPanel from './RadarDecisionPanel';
 
 export default function RadarCandidateStrip({
@@ -30,6 +31,7 @@ export default function RadarCandidateStrip({
 }) {
   const clearLockRef = useRef(false);
   const [clearDecisionsPending, setClearDecisionsPending] = useState(false);
+  const [recentActionFeedback, setRecentActionFeedback] = useState(null);
 
   const handleClearDecisions = async () => {
     if (clearLockRef.current || typeof onClearDecisions !== 'function') return false;
@@ -43,6 +45,30 @@ export default function RadarCandidateStrip({
       setClearDecisionsPending(false);
     }
   };
+
+  const handlePromoteToProduction = async (video) => {
+    if (typeof onPromoteToProduction !== 'function') return false;
+
+    const saved = await onPromoteToProduction(video);
+    if (saved !== false) {
+      const videoTitle = typeof video?.title === 'string' && video.title.trim()
+        ? video.title.trim()
+        : '선택한 영상';
+      setRecentActionFeedback({
+        title: '제작 후보로 저장했습니다',
+        message: `${videoTitle}을(를) Cloud 제작 후보로 표시했습니다. 다음 후보가 자동으로 표시됩니다. 후보함에서 오늘 집중과 일정을 이어서 정할 수 있습니다.`,
+      });
+    }
+    return saved;
+  };
+
+  const successFeedback = recentActionFeedback ? (
+    <RadarActionSuccessFeedback
+      {...recentActionFeedback}
+      onDismiss={() => setRecentActionFeedback(null)}
+      onOpenProductionCandidates={onOpenProductionCandidates}
+    />
+  ) : null;
 
   const {
     allDecisionCount,
@@ -74,7 +100,7 @@ export default function RadarCandidateStrip({
     onOpenScrapbook,
     onOpenProductionCandidates,
     onOpenVault,
-    onPromoteToProduction,
+    onPromoteToProduction: handlePromoteToProduction,
     onRestoreVideo,
     onToggleScrap,
     queueSummary,
@@ -101,6 +127,7 @@ export default function RadarCandidateStrip({
   if (isCompleted) {
     return (
       <div id="today-radar-candidates" className="scroll-mt-5">
+        {successFeedback}
         <RadarCandidateCompletedState
           {...completedStateProps}
           clearDecisionsPending={clearDecisionsPending}
@@ -117,6 +144,8 @@ export default function RadarCandidateStrip({
       />
 
       <RadarDecisionPanel {...decisionPanelProps} />
+
+      {successFeedback}
 
       <RadarCandidateGrid {...gridProps} />
     </div>
