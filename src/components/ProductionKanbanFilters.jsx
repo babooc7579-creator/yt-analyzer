@@ -77,7 +77,7 @@ export default function ProductionKanbanFilters({
                 type="button"
                 onClick={onReturnToSearchSource}
                 className="inline-flex h-8 items-center justify-center rounded-lg border border-amber-300 bg-amber-100 px-3 text-xs font-extrabold text-amber-900 hover:bg-amber-200"
-                title="업로드 캘린더로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다."
+                title={searchContext.returnTitle}
               >
                 {searchContext.returnLabel}
               </button>
@@ -86,7 +86,7 @@ export default function ProductionKanbanFilters({
               type="button"
               onClick={onReset}
               className="inline-flex h-8 items-center justify-center rounded-lg border border-amber-300 bg-white px-3 text-xs font-extrabold text-amber-800 hover:bg-amber-100"
-              title="캘린더에서 가져온 화면 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다."
+              title={searchContext.resetTitle}
             >
               {searchContext.resetLabel}
             </button>

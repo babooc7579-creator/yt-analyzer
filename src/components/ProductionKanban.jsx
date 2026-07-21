@@ -102,6 +102,11 @@ export default function ProductionKanban({
     updateVideoFocus,
     videoUserRecords,
   });
+  const onReturnToSearchSource = searchContext?.returnTarget === 'home'
+    ? onOpenHome
+    : searchContext?.returnTarget === 'upload-calendar'
+      ? onOpenUploadCalendar
+      : undefined;
 
   return (
     <div className="space-y-4">
@@ -110,7 +115,7 @@ export default function ProductionKanban({
         filterSummary={filterSummary}
         onFilterModeChange={setFilterMode}
         onReset={resetFilters}
-        onReturnToSearchSource={searchContext ? onOpenUploadCalendar : undefined}
+        onReturnToSearchSource={onReturnToSearchSource}
         onSearchQueryChange={setSearchQuery}
         searchQuery={searchQuery}
         searchContext={searchContext}

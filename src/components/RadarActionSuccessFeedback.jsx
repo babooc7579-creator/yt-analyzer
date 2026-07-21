@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { ArrowRight, CheckCircle2, X } from 'lucide-react';
 
 export default function RadarActionSuccessFeedback({
@@ -8,13 +9,21 @@ export default function RadarActionSuccessFeedback({
   onDismiss,
   title,
 }) {
+  const feedbackRef = useRef(null);
+
+  useEffect(() => {
+    if (message) feedbackRef.current?.focus();
+  }, [message]);
+
   if (!message) return null;
 
   return (
     <div
+      ref={feedbackRef}
       className="mt-4 flex flex-col gap-3 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 sm:flex-row sm:items-center"
       role="status"
       aria-live="polite"
+      tabIndex={-1}
     >
       <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-300" aria-hidden="true" />
       <div className="min-w-0 flex-1">

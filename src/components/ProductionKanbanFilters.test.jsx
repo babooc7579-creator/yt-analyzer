@@ -47,7 +47,9 @@ describe('ProductionKanbanFilters', () => {
           description: '업로드 캘린더에서 선택한 항목을 찾고 있습니다.',
           label: '캘린더에서 가져온 검색',
           resetLabel: '전체 작업 보기',
+          resetTitle: '캘린더에서 가져온 화면 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
           returnLabel: '캘린더로 돌아가기',
+          returnTitle: '업로드 캘린더로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
         }}
         searchQuery="예약 영상"
       />,
@@ -58,5 +60,31 @@ describe('ProductionKanbanFilters', () => {
     expect(html).toContain('전체 작업 보기');
     expect(html).toContain('캘린더로 돌아가기');
     expect(html).toContain('Cloud 데이터는 변경하지 않습니다.');
+  });
+
+  it('renders a radar return path for a newly promoted candidate', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanbanFilters
+        filterMode="all"
+        filterSummary={{ hasActiveFilters: true, metricText: '전체 5개 중 1개 표시' }}
+        onFilterModeChange={noop}
+        onReset={noop}
+        onReturnToSearchSource={noop}
+        onSearchQueryChange={noop}
+        searchContext={{
+          description: '오늘의 레이더에서 제작 후보로 표시한 영상을 보여주고 있습니다.',
+          label: '오늘의 레이더에서 이어온 후보',
+          resetLabel: '전체 작업 보기',
+          resetTitle: '오늘의 레이더에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+          returnLabel: '오늘의 레이더로 돌아가기',
+          returnTitle: '오늘의 레이더로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+        }}
+        searchQuery="오늘 만들 영상"
+      />,
+    );
+
+    expect(html).toContain('오늘의 레이더에서 이어온 후보');
+    expect(html).toContain('오늘의 레이더로 돌아가기');
+    expect(html).toContain('오늘의 레이더에서 이어온 후보 검색만 해제합니다.');
   });
 });

@@ -190,6 +190,22 @@ describe('creatorHomeViewProps utils', () => {
     ]);
   });
 
+  it('opens a newly promoted radar candidate as a focused production search', () => {
+    const openedViews = [];
+    const props = getCreatorHomeViewProps({
+      onOpenView: (item) => openedViews.push(item),
+    });
+    const intent = {
+      searchQuery: '오늘 만들 영상',
+      source: 'today-radar',
+      targetVideoId: 'video-1',
+    };
+
+    props.radarCandidateStripProps.onOpenProductionCandidates(intent);
+
+    expect(openedViews).toEqual([{ id: 'studio-candidates', intent }]);
+  });
+
   it('uses safe empty lists and zero counts for invalid list inputs', () => {
     const props = getCreatorHomeViewProps({
       savedChannels: null,

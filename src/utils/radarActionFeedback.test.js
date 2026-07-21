@@ -15,6 +15,11 @@ describe('radarActionFeedback', () => {
     expect(feedback.message).toContain('Strong idea');
     expect(feedback.message).toContain('다음 후보가 자동으로 표시됩니다');
     expect(feedback.destination).toBe('production');
+    expect(feedback.navigationIntent).toEqual({
+      searchQuery: 'Strong idea',
+      source: 'today-radar',
+      targetVideoId: '',
+    });
   });
 
   it.each([
@@ -30,6 +35,22 @@ describe('radarActionFeedback', () => {
     expect(feedback.title).toBe(title);
     expect(feedback.message).toContain('Cloud에 저장했습니다');
     expect(feedback.message).toContain('다음 후보가 자동으로 표시됩니다');
+    expect(feedback.message).toContain('처리 기록에서 레이더로 되돌릴 수 있습니다');
+    expect(feedback.actionLabel).toBe('처리 기록 보기');
+    expect(feedback.destination).toBe('decisions');
+  });
+
+  it('keeps the promoted video id in the production navigation intent', () => {
+    const feedback = getRadarProductionSuccessFeedback({
+      videoId: 'video-1',
+      title: '오늘 만들 영상',
+    });
+
+    expect(feedback.navigationIntent).toEqual({
+      searchQuery: '오늘 만들 영상',
+      source: 'today-radar',
+      targetVideoId: 'video-1',
+    });
   });
 
   it('keeps a scrapbook-only item in the radar decision queue', () => {
