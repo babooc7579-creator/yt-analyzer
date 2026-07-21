@@ -20,11 +20,11 @@ export default function RadarCandidateProductionButton({
       type="button"
       onClick={buttonProps.onClick}
       disabled={buttonProps.disabled}
-      className="inline-flex items-center justify-center gap-1 rounded-xl bg-indigo-500/15 px-3 py-2 text-[11px] font-extrabold text-indigo-100 ring-1 ring-indigo-400/20 hover:bg-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-indigo-500/15"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 px-3 py-2.5 text-xs font-extrabold text-white shadow-sm shadow-indigo-950/30 transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-indigo-500"
       title={buttonProps.title}
       aria-label={buttonProps['aria-label']}
     >
-      <Rocket className="h-3.5 w-3.5" /> {buttonProps.label}
+      <Rocket className="h-4 w-4" /> {buttonProps.label}
     </button>
   );
 }

@@ -97,7 +97,7 @@ export const getRadarCandidateProductionButtonActionProps = ({
 };
 
 export const getRadarCandidateDecisionActionsViewProps = ({ pendingAction } = {}) => ({
-  descriptionText: '2. 좋으면 제작 후보로, 다시 볼 영상은 소재 보관, 애매하면 나중에 보기, 아니면 제외로 정리하세요. 판단 결과는 Cloud 판단 기록에 저장되고 오늘 레이더에서 숨겨집니다. YouTube API를 새로 호출하지 않습니다.',
+  descriptionText: '만들 만하면 제작 후보로 표시하세요. 그 외 영상은 소재 보관, 봤음, 나중에 보기, 제외 중 하나로 정리하면 다음 후보가 자동으로 이어집니다. Cloud 판단 기록만 저장하며 YouTube API를 새로 호출하지 않습니다.',
   pendingText: {
     production: '스크랩북 보관과 제작 후보 표시를 Cloud에 저장하는 중입니다.',
     scrapbook: '스크랩북 보관 상태를 Cloud에 저장하는 중입니다.',
