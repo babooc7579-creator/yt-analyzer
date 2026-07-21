@@ -27,16 +27,21 @@ describe('RadarActionSuccessFeedback', () => {
     expect(renderToStaticMarkup(<RadarActionSuccessFeedback />)).toBe('');
   });
 
-  it('does not show a destination button for a status-only decision', () => {
+  it('offers the decision history after a status decision', () => {
     const html = renderToStaticMarkup(
       <RadarActionSuccessFeedback
+        actionLabel="처리 기록 보기"
+        actionTitle="처리 기록으로 이동합니다."
         title="봤음으로 정리했습니다"
         message="다음 후보가 자동으로 표시됩니다."
+        onAction={() => {}}
         onDismiss={() => {}}
       />,
     );
 
     expect(html).toContain('봤음으로 정리했습니다');
+    expect(html).toContain('처리 기록 보기');
     expect(html).not.toContain('제작 후보함 열기');
+    expect(html).toContain('tabindex="-1"');
   });
 });

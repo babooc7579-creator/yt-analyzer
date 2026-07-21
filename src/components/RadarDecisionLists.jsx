@@ -30,7 +30,11 @@ export default function RadarDecisionLists({
   };
 
   return (
-    <div className="mt-3 rounded-2xl border border-slate-700 bg-slate-950/50 p-3">
+    <div
+      id="today-radar-decision-history"
+      className="mt-3 scroll-mt-5 rounded-2xl border border-slate-700 bg-slate-950/50 p-3 outline-none focus-visible:ring-2 focus-visible:ring-rose-300"
+      tabIndex={-1}
+    >
       <div>
         <p className="text-xs font-extrabold text-white">{viewProps.title}</p>
         <p className="mt-0.5 text-[10px] text-slate-400">{viewProps.description}</p>

@@ -43,7 +43,10 @@ describe('productionKanbanFilters', () => {
       description: '업로드 캘린더에서 선택한 "예약 영상" 항목을 찾고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.',
       label: '캘린더에서 가져온 검색',
       resetLabel: '전체 작업 보기',
+      resetTitle: '캘린더에서 가져온 화면 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
       returnLabel: '캘린더로 돌아가기',
+      returnTarget: 'upload-calendar',
+      returnTitle: '업로드 캘린더로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
     });
     expect(getProductionKanbanSearchContext({ searchQuery: '예약 영상' })).toBeNull();
     expect(getProductionKanbanSearchContext({ source: 'upload-calendar' })).toBeNull();
@@ -53,6 +56,22 @@ describe('productionKanbanFilters', () => {
       source: 'upload-calendar',
       targetVideoId: 'video-1',
     })?.description).toContain('영상 한 건을');
+  });
+
+  it('labels a radar-originated candidate and keeps a route back to the radar', () => {
+    expect(getProductionKanbanSearchContext({
+      searchQuery: '오늘 만들 영상',
+      source: 'today-radar',
+      targetVideoId: 'video-1',
+    })).toEqual({
+      description: '오늘의 레이더에서 제작 후보로 표시한 "오늘 만들 영상" 영상 한 건을 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.',
+      label: '오늘의 레이더에서 이어온 후보',
+      resetLabel: '전체 작업 보기',
+      resetTitle: '오늘의 레이더에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+      returnLabel: '오늘의 레이더로 돌아가기',
+      returnTarget: 'home',
+      returnTitle: '오늘의 레이더로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+    });
   });
 
   it('searches source metadata and current production draft values', () => {

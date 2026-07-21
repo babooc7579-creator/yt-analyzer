@@ -182,7 +182,10 @@ export const getCreatorHomeViewProps = ({
       onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
       onOpenVault: () => onOpenView({ id: 'vault-all' }),
       onOpenScrapbook: () => onOpenView({ id: 'studio-scrapbook' }),
-      onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
+      onOpenProductionCandidates: (intent) => onOpenView({
+        id: 'studio-candidates',
+        ...(intent && typeof intent === 'object' ? { intent } : {}),
+      }),
     },
     radarSummaryProps: {
       savedChannelCount: channelList.length,

@@ -89,9 +89,13 @@ export default function RadarCandidateStrip({
 
   const handleFeedbackAction = () => {
     if (recentActionFeedback?.destination === 'production') {
-      onOpenProductionCandidates?.();
+      onOpenProductionCandidates?.(recentActionFeedback.navigationIntent);
     } else if (recentActionFeedback?.destination === 'scrapbook') {
       onOpenScrapbook?.();
+    } else if (recentActionFeedback?.destination === 'decisions') {
+      const decisionHistory = document.getElementById('today-radar-decision-history');
+      decisionHistory?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      decisionHistory?.focus({ preventScroll: true });
     }
   };
 
