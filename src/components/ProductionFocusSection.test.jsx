@@ -26,6 +26,9 @@ describe('ProductionFocusSection', () => {
     expect(html).toContain('오늘 집중');
     expect(html).toContain('날짜가 바뀌어도 자동으로 사라지지 않습니다');
     expect(html).toContain('아직 오늘 집중으로 고정한 영상이 없습니다');
+    expect(html).toContain('href="#production-kanban-board"');
+    expect(html).toContain('제작 후보에서 고르기');
+    expect(html).toContain('이동만으로 Cloud 데이터는 변경되지 않습니다');
   });
 
   it('renders focused video cards with release and production actions', () => {

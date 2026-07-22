@@ -36,7 +36,7 @@ export default function ProductionKanbanBoard({
   });
 
   return (
-    <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+    <div id="production-kanban-board" className="scroll-mt-5 grid grid-cols-1 gap-4 xl:grid-cols-3">
       {columnList.map((column) => (
         <ProductionKanbanColumn key={column.id} {...getColumnProps(column)} />
       ))}
