@@ -216,6 +216,7 @@ export const getScrapbookWorkspaceViewProps = ({
       discoveryLinks,
       initialSearchQuery: creatorViewIntent?.searchQuery || '',
       initialSearchSource: creatorViewIntent?.source || '',
+      initialTargetDiscoveryLinkId: creatorViewIntent?.targetDiscoveryLinkId || '',
       initialTargetVideoId: creatorViewIntent?.targetVideoId || '',
       videos: savedVideoList,
       videoUserRecords,

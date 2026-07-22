@@ -10,6 +10,7 @@ const getSafeLink = (link) => (
 );
 
 export const getDiscoveryLinkCandidateActionProps = ({
+  candidateSaveState = '',
   currentStatus,
   onSendToCandidate,
   saving = false,
@@ -17,6 +18,7 @@ export const getDiscoveryLinkCandidateActionProps = ({
 } = {}) => {
   const displayTitle = getSafeTitle(title);
   const isCandidate = currentStatus === 'candidate';
+  const isSavingCandidate = candidateSaveState === 'saving';
 
   return {
     buttonProps: {
@@ -26,7 +28,7 @@ export const getDiscoveryLinkCandidateActionProps = ({
       className: `inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3 text-xs font-extrabold transition disabled:cursor-not-allowed ${
         isCandidate ? candidateButtonClassNames.active : candidateButtonClassNames.enabled
       }`,
-      disabled: saving || isCandidate,
+      disabled: saving || isCandidate || isSavingCandidate,
       onClick: onSendToCandidate,
       title: isCandidate
         ? '이미 Cloud 발견함 기록에 제작 후보로 표시되어 제작 후보함에서 확인됩니다. 권리 확인 상태는 별도로 확인해야 합니다.'
@@ -34,8 +36,39 @@ export const getDiscoveryLinkCandidateActionProps = ({
       type: 'button',
     },
     isCandidate,
-    label: isCandidate ? '후보함 표시됨' : '제작 후보로',
+    label: isSavingCandidate ? 'Cloud 저장 중' : isCandidate ? '후보함 표시됨' : '제작 후보로',
   };
+};
+
+export const getDiscoveryLinkCandidateFeedbackProps = ({
+  candidateSaveState,
+  onOpenProductionCandidate,
+} = {}) => {
+  if (candidateSaveState === 'saved') {
+    return {
+      actionProps: typeof onOpenProductionCandidate === 'function' ? {
+        'aria-label': '방금 표시한 발견 링크를 제작 후보함에서 이어서 확인',
+        onClick: onOpenProductionCandidate,
+        title: '제작 후보함을 열고 방금 표시한 발견 링크 한 건을 바로 보여줍니다. 외부 수집이나 YouTube API 호출은 없습니다.',
+      } : null,
+      className: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+      message: 'Cloud 발견함에 제작 후보로 표시했습니다. 권리 상태는 별도로 확인해야 합니다.',
+      role: 'status',
+      tone: 'success',
+    };
+  }
+
+  if (candidateSaveState === 'error') {
+    return {
+      actionProps: null,
+      className: 'border-red-200 bg-red-50 text-red-700',
+      message: 'Cloud 후보 표시를 완료하지 못했습니다. 연결을 확인한 뒤 다시 눌러 주세요.',
+      role: 'alert',
+      tone: 'danger',
+    };
+  }
+
+  return null;
 };
 
 export const getDiscoveryLinkUtilityActionProps = ({

@@ -5,6 +5,7 @@ const toArray = (items) => (Array.isArray(items) ? items : []);
 export default function DiscoveryLinksGrid({
   filteredLinks,
   onDeleteLink,
+  onOpenProductionCandidates,
   onUpdateLink,
   saving,
 }) {
@@ -16,6 +17,7 @@ export default function DiscoveryLinksGrid({
         const rowProps = {
           link,
           onDelete: onDeleteLink,
+          onOpenProductionCandidates,
           onUpdate: onUpdateLink,
           saving,
         };

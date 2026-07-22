@@ -23,6 +23,7 @@ export const PRODUCTION_KANBAN_FILTER_OPTIONS = [
 export const getProductionKanbanSearchContext = ({
   searchQuery = '',
   source = '',
+  targetDiscoveryLinkId = '',
   targetVideoId = '',
 } = {}) => {
   const normalizedQuery = String(searchQuery || '').trim();
@@ -50,6 +51,18 @@ export const getProductionKanbanSearchContext = ({
       returnLabel: '스크랩북으로 돌아가기',
       returnTarget: 'reference-vault',
       returnTitle: '스크랩북으로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+    };
+  }
+
+  if (source === 'discovery-links') {
+    return {
+      description: `발견 링크 저장에서 제작 후보로 표시한 "${normalizedQuery}" ${targetDiscoveryLinkId ? '링크 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
+      label: '발견 링크에서 이어온 후보',
+      resetLabel: '전체 작업 보기',
+      resetTitle: '발견 링크에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+      returnLabel: '발견 링크 저장으로 돌아가기',
+      returnTarget: 'discovery-links',
+      returnTitle: '발견 링크 저장 화면으로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
     };
   }
 
@@ -132,6 +145,7 @@ export const getFilteredProductionKanbanData = ({
   draftRecords,
   filterMode = PRODUCTION_KANBAN_FILTER.ALL,
   searchQuery = '',
+  targetDiscoveryLinkId = '',
   targetVideoId = '',
   today = getIsoTodayDate(),
   videoUserRecords,
@@ -139,17 +153,18 @@ export const getFilteredProductionKanbanData = ({
   const source = dataModel && typeof dataModel === 'object' ? dataModel : {};
   const sourceGroups = toRecordMap(source.groupedVideos);
   const filterOptions = { draftRecords, searchQuery, targetVideoId, videoUserRecords };
-  const focusVideos = filterVideos(source.focusVideos, filterOptions);
+  const focusVideos = targetDiscoveryLinkId ? [] : filterVideos(source.focusVideos, filterOptions);
   const groupedVideos = createEmptyGroups();
 
   Object.keys(groupedVideos).forEach((status) => {
-    groupedVideos[status] = filterVideos(sourceGroups[status], filterOptions);
+    groupedVideos[status] = targetDiscoveryLinkId ? [] : filterVideos(sourceGroups[status], filterOptions);
   });
 
   const discoveryLinkCandidates = targetVideoId
     ? []
     : toArray(source.discoveryLinkCandidates).filter((link) => (
-      matchesProductionLinkSearch({ link, searchQuery })
+      (!targetDiscoveryLinkId || link?.id === targetDiscoveryLinkId)
+      && matchesProductionLinkSearch({ link, searchQuery })
     ));
 
   if (filterMode !== PRODUCTION_KANBAN_FILTER.ALL) {

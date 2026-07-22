@@ -90,6 +90,22 @@ describe('productionKanbanFilters', () => {
     });
   });
 
+  it('labels a discovery-link candidate and keeps a route back to the discovery inbox', () => {
+    expect(getProductionKanbanSearchContext({
+      searchQuery: '참고할 오프닝',
+      source: 'discovery-links',
+      targetDiscoveryLinkId: 'link-1',
+    })).toEqual({
+      description: '발견 링크 저장에서 제작 후보로 표시한 "참고할 오프닝" 링크 한 건을 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.',
+      label: '발견 링크에서 이어온 후보',
+      resetLabel: '전체 작업 보기',
+      resetTitle: '발견 링크에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+      returnLabel: '발견 링크 저장으로 돌아가기',
+      returnTarget: 'discovery-links',
+      returnTitle: '발견 링크 저장 화면으로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+    });
+  });
+
   it('searches source metadata and current production draft values', () => {
     expect(matchesProductionVideoSearch({
       searchQuery: 'build lab',
@@ -175,6 +191,27 @@ describe('productionKanbanFilters', () => {
       { videoId: 'second', title: '같은 제목' },
     ]);
     expect(filtered.discoveryLinkCandidates).toEqual([]);
+  });
+
+  it('limits a discovery handoff to the selected link id without showing video candidates', () => {
+    const dataModel = createDataModel();
+    dataModel.discoveryLinkCandidates.push({
+      id: 'link-2',
+      title: 'Instagram hook',
+      url: 'https://instagram.com/p/2',
+    });
+
+    const filtered = getFilteredProductionKanbanData({
+      dataModel,
+      searchQuery: 'Instagram hook',
+      targetDiscoveryLinkId: 'link-2',
+    });
+
+    expect(filtered.discoveryLinkCandidates).toEqual([
+      { id: 'link-2', title: 'Instagram hook', url: 'https://instagram.com/p/2' },
+    ]);
+    expect(filtered.focusVideos).toEqual([]);
+    expect(Object.values(filtered.groupedVideos).flat()).toEqual([]);
   });
 
   it('reports visible work counts and active filter state', () => {

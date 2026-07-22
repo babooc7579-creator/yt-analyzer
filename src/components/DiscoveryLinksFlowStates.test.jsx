@@ -6,6 +6,7 @@ import DiscoveryLinksFilteredEmptyState from './DiscoveryLinksFilteredEmptyState
 import DiscoveryLinksFilters from './DiscoveryLinksFilters';
 import DiscoveryLinksHeaderActions from './DiscoveryLinksHeaderActions';
 import DiscoveryLinksNotices from './DiscoveryLinksNotices';
+import DiscoveryLinkCandidateAction from './DiscoveryLinkCandidateAction';
 
 const noop = () => {};
 
@@ -93,5 +94,31 @@ describe('DiscoveryLinks flow states', () => {
     expect(html).toContain('Cloud 저장 데이터 변경 없음');
     expect(html).toContain('aria-pressed="true"');
     expect(html).toContain('role="group"');
+  });
+
+  it('renders per-link Cloud candidate success and failure without implying rights clearance', () => {
+    const successHtml = renderToStaticMarkup(
+      <DiscoveryLinkCandidateAction
+        candidateSaveState="saved"
+        currentStatus="candidate"
+        onOpenProductionCandidate={noop}
+        onSendToCandidate={noop}
+        title="참고 링크"
+      />,
+    );
+    const errorHtml = renderToStaticMarkup(
+      <DiscoveryLinkCandidateAction
+        candidateSaveState="error"
+        currentStatus="saved"
+        onSendToCandidate={noop}
+        title="참고 링크"
+      />,
+    );
+
+    expect(successHtml).toContain('Cloud 발견함에 제작 후보로 표시했습니다');
+    expect(successHtml).toContain('권리 상태는 별도로 확인해야 합니다');
+    expect(successHtml).toContain('후보함에서 이어서');
+    expect(errorHtml).toContain('Cloud 후보 표시를 완료하지 못했습니다');
+    expect(errorHtml).not.toContain('후보함에서 이어서');
   });
 });

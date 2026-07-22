@@ -110,6 +110,7 @@ export const getDiscoveryLinkRowMeta = (link = {}) => {
 
 export const getDiscoveryLinkRowViewProps = ({
   cancelEdit,
+  candidateSaveState,
   currentRightsStatus,
   currentStatus,
   draftMemo,
@@ -122,6 +123,7 @@ export const getDiscoveryLinkRowViewProps = ({
   isEditing,
   link,
   openEdit,
+  openProductionCandidate,
   platformLabel,
   rightsTone,
   saving,
@@ -133,10 +135,12 @@ export const getDiscoveryLinkRowViewProps = ({
   actionsProps: {
     currentRightsStatus,
     currentStatus,
+    candidateSaveState,
     isEditing,
     link,
     onDelete: handleDelete,
     onRightsStatusChange: handleRightsStatusChange,
+    onOpenProductionCandidate: openProductionCandidate,
     onSendToCandidate: handleSendToCandidate,
     onStatusChange: handleStatusChange,
     onToggleEdit: isEditing ? cancelEdit : openEdit,
