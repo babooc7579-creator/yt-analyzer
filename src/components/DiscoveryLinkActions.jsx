@@ -4,12 +4,14 @@ import DiscoveryLinkStatusControls from './DiscoveryLinkStatusControls';
 import DiscoveryLinkUtilityActions from './DiscoveryLinkUtilityActions';
 
 export default function DiscoveryLinkActions({
+  candidateSaveState,
   currentRightsStatus,
   currentStatus,
   isEditing,
   link,
   onDelete,
   onRightsStatusChange,
+  onOpenProductionCandidate,
   onSendToCandidate,
   onStatusChange,
   onToggleEdit,
@@ -33,7 +35,9 @@ export default function DiscoveryLinkActions({
       />
 
       <DiscoveryLinkCandidateAction
+        candidateSaveState={candidateSaveState}
         currentStatus={currentStatus}
+        onOpenProductionCandidate={onOpenProductionCandidate}
         onSendToCandidate={onSendToCandidate}
         saving={saving}
         title={title}

@@ -53,6 +53,7 @@ export const getDiscoveryLinksListViewProps = ({
   clearFilters,
   filteredLinks,
   onDeleteLink,
+  onOpenProductionCandidates,
   onUpdateLink,
   saving,
 }) => {
@@ -66,6 +67,7 @@ export const getDiscoveryLinksListViewProps = ({
     gridProps: {
       filteredLinks: linkList,
       onDeleteLink,
+      onOpenProductionCandidates,
       onUpdateLink,
       saving,
     },
@@ -146,6 +148,7 @@ export const getDiscoveryLinksWorkspaceViewProps = ({
       filteredLinks: filteredLinkList,
       loading,
       onDeleteLink,
+      onOpenProductionCandidates,
       onUpdateLink,
       saving,
     },

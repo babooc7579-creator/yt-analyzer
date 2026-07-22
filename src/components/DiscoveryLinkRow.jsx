@@ -6,6 +6,7 @@ import DiscoveryLinkRowContent from './DiscoveryLinkRowContent';
 export default function DiscoveryLinkRow({
   link,
   onDelete,
+  onOpenProductionCandidates,
   onUpdate,
   saving,
 }) {
@@ -20,6 +21,8 @@ export default function DiscoveryLinkRow({
     handleSaveEdit,
     handleSendToCandidate,
     handleStatusChange,
+    candidateSaveState,
+    openProductionCandidate,
     isEditing,
     openEdit,
     platformLabel,
@@ -31,6 +34,7 @@ export default function DiscoveryLinkRow({
   } = useDiscoveryLinkRow({
     link,
     onDelete,
+    onOpenProductionCandidates,
     onUpdate,
   });
   const {
@@ -48,9 +52,11 @@ export default function DiscoveryLinkRow({
     handleSaveEdit,
     handleSendToCandidate,
     handleStatusChange,
+    candidateSaveState,
     isEditing,
     link,
     openEdit,
+    openProductionCandidate,
     platformLabel,
     rightsTone,
     saving,

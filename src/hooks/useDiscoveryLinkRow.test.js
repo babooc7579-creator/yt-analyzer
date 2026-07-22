@@ -56,6 +56,7 @@ describe('useDiscoveryLinkRow', () => {
     expect(useState).toHaveBeenNthCalledWith(1, false);
     expect(useState).toHaveBeenNthCalledWith(2, 'Cake table');
     expect(useState).toHaveBeenNthCalledWith(3, 'Check source');
+    expect(useState).toHaveBeenNthCalledWith(4, '');
     expect(row).toMatchObject({
       currentRightsStatus: 'unknown',
       currentStatus: 'saved',
@@ -103,6 +104,7 @@ describe('useDiscoveryLinkRow', () => {
 
     expect(onUpdate).toHaveBeenNthCalledWith(1, 'link-1', { status: 'reviewing' });
     expect(onUpdate).toHaveBeenNthCalledWith(2, 'link-1', { rightsStatus: 'needs_check' });
+    expect(stateSetters[3]).toHaveBeenCalledWith('');
   });
 
   it('reverts risky status or rights changes when the user declines confirmation', () => {
@@ -144,8 +146,8 @@ describe('useDiscoveryLinkRow', () => {
     expect(confirm).toHaveBeenCalledTimes(2);
   });
 
-  it('marks a link as candidate only when it is not already a candidate and confirmation allows it', () => {
-    const onUpdate = vi.fn();
+  it('marks a link as candidate only when it is not already a candidate and confirmation allows it', async () => {
+    const onUpdate = vi.fn(() => Promise.resolve(true));
 
     const existingCandidateRow = useDiscoveryLinkRow({
       link: {
@@ -156,7 +158,7 @@ describe('useDiscoveryLinkRow', () => {
       onUpdate,
     });
 
-    existingCandidateRow.handleSendToCandidate();
+    await existingCandidateRow.handleSendToCandidate();
     expect(onUpdate).not.toHaveBeenCalled();
 
     const confirm = vi.fn(() => true);
@@ -170,10 +172,29 @@ describe('useDiscoveryLinkRow', () => {
       onUpdate,
     });
 
-    doNotUseRow.handleSendToCandidate();
+    await doNotUseRow.handleSendToCandidate();
 
     expect(confirm).toHaveBeenCalled();
     expect(onUpdate).toHaveBeenCalledWith('link-1', { status: 'candidate' });
+    expect(stateSetters[7]).toHaveBeenNthCalledWith(1, 'saving');
+    expect(stateSetters[7]).toHaveBeenNthCalledWith(2, 'saved');
+  });
+
+  it('keeps failed candidate saves visible and opens the saved link in the candidate view', async () => {
+    const onOpenProductionCandidates = vi.fn();
+    const row = useDiscoveryLinkRow({
+      link: baseLink,
+      onDelete: vi.fn(),
+      onOpenProductionCandidates,
+      onUpdate: vi.fn(() => Promise.resolve(false)),
+    });
+
+    expect(await row.handleSendToCandidate()).toBe(false);
+    expect(stateSetters[3]).toHaveBeenNthCalledWith(1, 'saving');
+    expect(stateSetters[3]).toHaveBeenNthCalledWith(2, 'error');
+
+    row.openProductionCandidate();
+    expect(onOpenProductionCandidates).toHaveBeenCalledWith(baseLink);
   });
 
   it('opens and cancels edit mode by resetting draft values from the current link', () => {

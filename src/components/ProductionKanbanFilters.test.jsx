@@ -113,4 +113,30 @@ describe('ProductionKanbanFilters', () => {
     expect(html).toContain('스크랩북으로 돌아가기');
     expect(html).toContain('스크랩북에서 이어온 후보 검색만 해제합니다.');
   });
+
+  it('renders a discovery-link return path for a newly promoted candidate', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanbanFilters
+        filterMode="all"
+        filterSummary={{ hasActiveFilters: true, metricText: '전체 5개 중 1개 표시' }}
+        onFilterModeChange={noop}
+        onReset={noop}
+        onReturnToSearchSource={noop}
+        onSearchQueryChange={noop}
+        searchContext={{
+          description: '발견 링크 저장에서 제작 후보로 표시한 링크를 보여주고 있습니다.',
+          label: '발견 링크에서 이어온 후보',
+          resetLabel: '전체 작업 보기',
+          resetTitle: '발견 링크에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+          returnLabel: '발견 링크 저장으로 돌아가기',
+          returnTitle: '발견 링크 저장 화면으로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+        }}
+        searchQuery="참고할 오프닝"
+      />,
+    );
+
+    expect(html).toContain('발견 링크에서 이어온 후보');
+    expect(html).toContain('발견 링크 저장으로 돌아가기');
+    expect(html).toContain('Cloud 데이터는 변경하지 않습니다.');
+  });
 });

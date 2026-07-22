@@ -10,6 +10,7 @@ export default function DiscoveryLinksList({
   filteredLinks,
   loading,
   onDeleteLink,
+  onOpenProductionCandidates,
   onUpdateLink,
   saving,
 }) {
@@ -22,6 +23,7 @@ export default function DiscoveryLinksList({
     clearFilters,
     filteredLinks,
     onDeleteLink,
+    onOpenProductionCandidates,
     onUpdateLink,
     saving,
   });

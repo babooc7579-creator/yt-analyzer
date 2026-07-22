@@ -14,6 +14,7 @@ export default function ProductionKanban({
   discoveryLinks = [],
   initialSearchQuery = '',
   initialSearchSource = '',
+  initialTargetDiscoveryLinkId = '',
   initialTargetVideoId = '',
   videos,
   videoUserRecords,
@@ -68,6 +69,7 @@ export default function ProductionKanban({
     draftRecords,
     initialSearchQuery,
     initialSearchSource,
+    initialTargetDiscoveryLinkId,
     initialTargetVideoId,
     videoUserRecords,
   });
@@ -103,6 +105,7 @@ export default function ProductionKanban({
     videoUserRecords,
   });
   const returnToSearchSourceHandlers = {
+    'discovery-links': onOpenDiscoveryLinks,
     home: onOpenHome,
     'reference-vault': onOpenReferenceVault,
     'upload-calendar': onOpenUploadCalendar,

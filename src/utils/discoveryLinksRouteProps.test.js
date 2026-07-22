@@ -38,11 +38,26 @@ describe('discoveryLinksRouteProps utils', () => {
   it('opens the production candidates view from discovery links without changing data', () => {
     const openedViews = [];
     const routeProps = buildDiscoveryLinksRouteProps({
-      openCreatorView: (item) => openedViews.push(item.id),
+      openCreatorView: (item) => openedViews.push(item),
     });
 
     routeProps.onOpenProductionCandidates();
+    routeProps.onOpenProductionCandidates({
+      id: 'link-1',
+      title: '참고할 오프닝',
+      url: 'https://example.com/link-1',
+    });
 
-    expect(openedViews).toEqual(['studio-candidates']);
+    expect(openedViews).toEqual([
+      { id: 'studio-candidates', intent: undefined },
+      {
+        id: 'studio-candidates',
+        intent: {
+          searchQuery: '참고할 오프닝',
+          source: 'discovery-links',
+          targetDiscoveryLinkId: 'link-1',
+        },
+      },
+    ]);
   });
 });

@@ -194,6 +194,7 @@ describe('scrapbook utils', () => {
       onOpenUploadCalendar: handlers.onOpenUploadCalendar,
       initialSearchQuery: '예약 영상',
       initialSearchSource: 'upload-calendar',
+      initialTargetDiscoveryLinkId: '',
       initialTargetVideoId: 'video-1',
     });
     const savedCardProps = productionProps.getScrapbookVideoCardProps(savedVideo);

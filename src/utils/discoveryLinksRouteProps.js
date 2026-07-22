@@ -12,7 +12,14 @@ export function buildDiscoveryLinksRouteProps({
   removeDiscoveryLink,
 }) {
   const onOpenProductionCandidates = typeof openCreatorView === 'function'
-    ? () => openCreatorView({ id: 'studio-candidates' })
+    ? (link = {}) => openCreatorView({
+      id: 'studio-candidates',
+      intent: link?.id ? {
+        searchQuery: link.title || link.url || '',
+        source: 'discovery-links',
+        targetDiscoveryLinkId: link.id,
+      } : undefined,
+    })
     : undefined;
 
   return {

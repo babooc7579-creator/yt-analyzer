@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   getDiscoveryLinkCandidateActionProps,
+  getDiscoveryLinkCandidateFeedbackProps,
   getDiscoveryLinkUtilityActionProps,
 } from './discoveryLinkActionProps';
 
@@ -27,6 +28,28 @@ describe('discoveryLinkActionProps utils', () => {
     expect(props.buttonProps.title).not.toContain('제작 후보로 저장');
   });
 
+  it('shows explicit Cloud candidate success and failure feedback', () => {
+    const onOpenProductionCandidate = vi.fn();
+    const saved = getDiscoveryLinkCandidateFeedbackProps({
+      candidateSaveState: 'saved',
+      onOpenProductionCandidate,
+    });
+    const failed = getDiscoveryLinkCandidateFeedbackProps({
+      candidateSaveState: 'error',
+    });
+
+    expect(saved).toMatchObject({
+      role: 'status',
+      tone: 'success',
+    });
+    expect(saved.message).toContain('Cloud 발견함에 제작 후보로 표시했습니다');
+    expect(saved.message).toContain('권리 상태는 별도로 확인');
+    expect(saved.actionProps.onClick).toBe(onOpenProductionCandidate);
+    expect(failed).toMatchObject({ role: 'alert', tone: 'danger' });
+    expect(failed.message).toContain('완료하지 못했습니다');
+    expect(getDiscoveryLinkCandidateFeedbackProps()).toBeNull();
+  });
+
   it('disables already-candidate discovery links', () => {
     const props = getDiscoveryLinkCandidateActionProps({
       currentStatus: 'candidate',
@@ -41,6 +64,13 @@ describe('discoveryLinkActionProps utils', () => {
     expect(props.buttonProps['aria-label']).toContain('후보함에서 확인 가능');
     expect(props.buttonProps.title).toContain('권리 확인 상태는 별도로 확인');
     expect(props.buttonProps.title).not.toContain('제작 후보로 저장');
+
+    const savingProps = getDiscoveryLinkCandidateActionProps({
+      candidateSaveState: 'saving',
+      currentStatus: 'saved',
+    });
+    expect(savingProps.label).toBe('Cloud 저장 중');
+    expect(savingProps.buttonProps.disabled).toBe(true);
   });
 
   it('builds utility actions for open, copy, edit, and delete without external collection', () => {

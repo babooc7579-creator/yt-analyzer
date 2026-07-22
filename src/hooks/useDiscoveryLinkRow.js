@@ -15,6 +15,7 @@ import {
 export function useDiscoveryLinkRow({
   link,
   onDelete,
+  onOpenProductionCandidates,
   onUpdate,
 }) {
   const linkDraft = getDiscoveryLinkDraft(link);
@@ -22,6 +23,7 @@ export function useDiscoveryLinkRow({
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(linkDraft.title);
   const [draftMemo, setDraftMemo] = useState(linkDraft.memo);
+  const [candidateSaveState, setCandidateSaveState] = useState('');
 
   const handleDelete = () => {
     const confirmed = window.confirm(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE);
@@ -36,6 +38,7 @@ export function useDiscoveryLinkRow({
       return;
     }
 
+    if (nextStatus !== 'candidate') setCandidateSaveState('');
     onUpdate(link.id, { status: nextStatus });
   };
 
@@ -50,14 +53,30 @@ export function useDiscoveryLinkRow({
     onUpdate(link.id, { rightsStatus: nextRightsStatus });
   };
 
-  const handleSendToCandidate = () => {
+  const handleSendToCandidate = async () => {
     if (rowMeta.currentStatus === 'candidate') return;
 
     if (needsRiskyDiscoveryCandidateConfirmation('candidate', rowMeta.currentRightsStatus) && !confirmRiskyDiscoveryCandidate()) {
       return;
     }
 
-    onUpdate(link.id, { status: 'candidate' });
+    setCandidateSaveState('saving');
+    let didSave = false;
+
+    try {
+      didSave = Boolean(await onUpdate(link.id, { status: 'candidate' }));
+    } catch {
+      didSave = false;
+    }
+
+    setCandidateSaveState(didSave ? 'saved' : 'error');
+    return didSave;
+  };
+
+  const openProductionCandidate = () => {
+    if (typeof onOpenProductionCandidates === 'function') {
+      onOpenProductionCandidates(link);
+    }
   };
 
   const openEdit = () => {
@@ -89,6 +108,7 @@ export function useDiscoveryLinkRow({
 
   return {
     cancelEdit,
+    candidateSaveState,
     currentRightsStatus: rowMeta.currentRightsStatus,
     currentStatus: rowMeta.currentStatus,
     draftMemo,
@@ -100,6 +120,7 @@ export function useDiscoveryLinkRow({
     handleStatusChange,
     isEditing,
     openEdit,
+    openProductionCandidate,
     platformLabel: rowMeta.platformLabel,
     rightsTone: rowMeta.rightsTone,
     setDraftMemo,

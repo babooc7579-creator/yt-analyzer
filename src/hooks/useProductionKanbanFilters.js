@@ -12,11 +12,13 @@ export function useProductionKanbanFilters({
   draftRecords,
   initialSearchQuery = '',
   initialSearchSource = '',
+  initialTargetDiscoveryLinkId = '',
   initialTargetVideoId = '',
   videoUserRecords,
 }) {
   const [filterMode, setFilterMode] = useState(PRODUCTION_KANBAN_FILTER.ALL);
   const [searchQuery, setSearchQuery] = useState(() => String(initialSearchQuery || '').trim());
+  const [targetDiscoveryLinkId, setTargetDiscoveryLinkId] = useState(() => String(initialTargetDiscoveryLinkId || '').trim());
   const [targetVideoId, setTargetVideoId] = useState(() => String(initialTargetVideoId || '').trim());
 
   const filteredDataModel = useMemo(() => getFilteredProductionKanbanData({
@@ -24,9 +26,10 @@ export function useProductionKanbanFilters({
     draftRecords,
     filterMode,
     searchQuery,
+    targetDiscoveryLinkId,
     targetVideoId,
     videoUserRecords,
-  }), [dataModel, draftRecords, filterMode, searchQuery, targetVideoId, videoUserRecords]);
+  }), [dataModel, draftRecords, filterMode, searchQuery, targetDiscoveryLinkId, targetVideoId, videoUserRecords]);
 
   const filterSummary = useMemo(() => getProductionKanbanFilterSummary({
     dataModel,
@@ -38,11 +41,13 @@ export function useProductionKanbanFilters({
   const searchContext = useMemo(() => getProductionKanbanSearchContext({
     searchQuery,
     source: initialSearchSource,
+    targetDiscoveryLinkId,
     targetVideoId,
-  }), [initialSearchSource, searchQuery, targetVideoId]);
+  }), [initialSearchSource, searchQuery, targetDiscoveryLinkId, targetVideoId]);
 
   const updateSearchQuery = (value) => {
     setTargetVideoId('');
+    setTargetDiscoveryLinkId('');
     setSearchQuery(value);
   };
 
@@ -50,6 +55,7 @@ export function useProductionKanbanFilters({
     setFilterMode(PRODUCTION_KANBAN_FILTER.ALL);
     setSearchQuery('');
     setTargetVideoId('');
+    setTargetDiscoveryLinkId('');
   };
 
   return {
