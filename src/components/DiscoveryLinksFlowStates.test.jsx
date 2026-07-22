@@ -6,6 +6,7 @@ import DiscoveryLinksFilteredEmptyState from './DiscoveryLinksFilteredEmptyState
 import DiscoveryLinksFilters from './DiscoveryLinksFilters';
 import DiscoveryLinksHeaderActions from './DiscoveryLinksHeaderActions';
 import DiscoveryLinksNotices from './DiscoveryLinksNotices';
+import DiscoveryLinksRouteContext from './DiscoveryLinksRouteContext';
 import DiscoveryLinkCandidateAction from './DiscoveryLinkCandidateAction';
 
 const noop = () => {};
@@ -120,5 +121,27 @@ describe('DiscoveryLinks flow states', () => {
     expect(successHtml).toContain('후보함에서 이어서');
     expect(errorHtml).toContain('Cloud 후보 표시를 완료하지 못했습니다');
     expect(errorHtml).not.toContain('후보함에서 이어서');
+  });
+
+  it('renders an exact-link return path without implying a Cloud data change', () => {
+    const html = renderToStaticMarkup(
+      <DiscoveryLinksRouteContext
+        context={{
+          description: '선택한 링크 한 건을 보여주고 있습니다.',
+          label: '제작 후보함에서 이어온 링크',
+          resetLabel: '발견함 전체 보기',
+          resetTitle: 'Cloud 데이터는 변경하지 않습니다.',
+          returnLabel: '제작 후보함으로 돌아가기',
+          returnTitle: '화면 이동만 합니다.',
+        }}
+        onReset={noop}
+        onReturnToProductionCandidates={noop}
+      />,
+    );
+
+    expect(html).toContain('제작 후보함에서 이어온 링크');
+    expect(html).toContain('제작 후보함으로 돌아가기');
+    expect(html).toContain('발견함 전체 보기');
+    expect(html).toContain('Cloud 데이터는 변경하지 않습니다.');
   });
 });

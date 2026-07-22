@@ -3,6 +3,7 @@ import DiscoveryLinksWorkspace from './DiscoveryLinksWorkspace';
 export default function CreatorDiscoveryLinksRoute({
   addDiscoveryLink,
   changeDiscoveryLink,
+  creatorViewIntent,
   discoveryLinks,
   discoveryLinksError,
   discoveryLinksLoading,
@@ -16,6 +17,9 @@ export default function CreatorDiscoveryLinksRoute({
   return (
     <DiscoveryLinksWorkspace
       error={discoveryLinksError}
+      initialSearchQuery={creatorViewIntent?.searchQuery || ''}
+      initialSearchSource={creatorViewIntent?.source || ''}
+      initialTargetDiscoveryLinkId={creatorViewIntent?.targetDiscoveryLinkId || ''}
       links={discoveryLinks}
       loading={discoveryLinksLoading}
       notice={discoveryLinksNotice}

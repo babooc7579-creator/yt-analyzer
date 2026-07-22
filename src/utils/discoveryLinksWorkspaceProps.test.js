@@ -24,9 +24,11 @@ describe('discoveryLinksWorkspaceProps utils', () => {
     onDeleteLink: () => 'delete',
     onOpenProductionCandidates: () => 'open candidates',
     onRefresh: () => 'refresh',
+    onReturnToProductionCandidates: () => 'return to candidate',
     onUpdateLink: () => 'update',
     rightsFilter: 'needs_check',
     rightsFilterOptions: [{ value: 'needs_check' }],
+    routeContext: { label: '제작 후보함에서 이어온 링크' },
     saving: false,
     savingMessage: '',
     searchQuery: 'clip',
@@ -78,6 +80,11 @@ describe('discoveryLinksWorkspaceProps utils', () => {
       loading: false,
       notice: 'Loaded',
       savingMessage: '',
+    });
+    expect(viewProps.routeContextProps).toEqual({
+      context: baseProps.routeContext,
+      onReset: baseProps.clearDiscoveryFilters,
+      onReturnToProductionCandidates: baseProps.onReturnToProductionCandidates,
     });
   });
 

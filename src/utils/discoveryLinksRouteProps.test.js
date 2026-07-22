@@ -13,6 +13,11 @@ describe('discoveryLinksRouteProps utils', () => {
       discoveryLinksNotice: 'Saved',
       discoveryLinksSaving: false,
       discoveryLinksSavingMessage: '',
+      creatorViewIntent: {
+        searchQuery: 'Reference',
+        source: 'studio-candidates',
+        targetDiscoveryLinkId: 'link-1',
+      },
       loadDiscoveryLinks: () => 'load',
       openCreatorView: () => 'open view',
       removeDiscoveryLink: () => 'remove',
@@ -29,6 +34,7 @@ describe('discoveryLinksRouteProps utils', () => {
       discoveryLinksNotice: props.discoveryLinksNotice,
       discoveryLinksSaving: props.discoveryLinksSaving,
       discoveryLinksSavingMessage: props.discoveryLinksSavingMessage,
+      creatorViewIntent: props.creatorViewIntent,
       loadDiscoveryLinks: props.loadDiscoveryLinks,
       removeDiscoveryLink: props.removeDiscoveryLink,
     });

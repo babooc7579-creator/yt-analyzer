@@ -1,6 +1,7 @@
 export function buildDiscoveryLinksRouteProps({
   addDiscoveryLink,
   changeDiscoveryLink,
+  creatorViewIntent,
   discoveryLinks,
   discoveryLinksError,
   discoveryLinksLoading,
@@ -25,6 +26,7 @@ export function buildDiscoveryLinksRouteProps({
   return {
     addDiscoveryLink,
     changeDiscoveryLink,
+    creatorViewIntent,
     discoveryLinks,
     discoveryLinksError,
     discoveryLinksLoading,

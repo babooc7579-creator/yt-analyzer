@@ -7,6 +7,7 @@ import {
 import {
   buildDiscoveryLinkFilterOptions,
   getDiscoveryLinkFilterModel,
+  getDiscoveryLinksRouteContext,
   normalizeDiscoveryLinkSearchQuery,
 } from './discoveryLinkFilters';
 
@@ -101,6 +102,34 @@ describe('discoveryLinkFilters utils', () => {
     expect(model.hasActiveDiscoveryFilters).toBe(false);
     expect(model.statusFilterOptions[0].count).toBe(3);
     expect(model.rightsFilterOptions[0].count).toBe(3);
+  });
+
+  it('keeps only the exact discovery link requested by a route intent', () => {
+    const model = getDiscoveryLinkFilterModel({
+      links,
+      searchQuery: 'workshop',
+      targetDiscoveryLinkId: 'yt-saved',
+    });
+
+    expect(model.filteredLinks.map(link => link.id)).toEqual(['yt-saved']);
+    expect(model.hasActiveDiscoveryFilters).toBe(true);
+  });
+
+  it('builds screen-only return context for a production candidate handoff', () => {
+    expect(getDiscoveryLinksRouteContext({
+      searchQuery: 'Workshop Clip',
+      source: 'studio-candidates',
+      targetDiscoveryLinkId: 'yt-saved',
+    })).toMatchObject({
+      label: '제작 후보함에서 이어온 링크',
+      resetLabel: '발견함 전체 보기',
+      returnLabel: '제작 후보함으로 돌아가기',
+    });
+    expect(getDiscoveryLinksRouteContext({
+      searchQuery: 'Workshop Clip',
+      source: 'home',
+      targetDiscoveryLinkId: 'yt-saved',
+    })).toBeNull();
   });
 
   it('uses safe empty output when links are not an array', () => {
