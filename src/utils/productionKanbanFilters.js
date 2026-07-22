@@ -41,6 +41,18 @@ export const getProductionKanbanSearchContext = ({
     };
   }
 
+  if (source === 'scrapbook') {
+    return {
+      description: `스크랩북에서 제작 후보로 표시한 "${normalizedQuery}" ${targetVideoId ? '영상 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
+      label: '스크랩북에서 이어온 후보',
+      resetLabel: '전체 작업 보기',
+      resetTitle: '스크랩북에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+      returnLabel: '스크랩북으로 돌아가기',
+      returnTarget: 'reference-vault',
+      returnTitle: '스크랩북으로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+    };
+  }
+
   if (source !== 'upload-calendar') return null;
 
   return {

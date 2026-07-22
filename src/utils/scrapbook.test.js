@@ -154,6 +154,7 @@ describe('scrapbook utils', () => {
       onMoveVideo: vi.fn(),
       onOpenDiscoveryLinks: () => 'open links',
       onOpenHome: () => 'open home',
+      onOpenProductionCandidates: () => 'open candidates',
       onOpenReferenceVault: () => 'open vault',
       onOpenUploadCalendar: () => 'open calendar',
       onRemoveScrap: () => 'remove',
@@ -202,6 +203,7 @@ describe('scrapbook utils', () => {
       video: savedVideo,
       isProductionCandidate: true,
       onFetchComments: handlers.onFetchComments,
+      onOpenProductionCandidates: handlers.onOpenProductionCandidates,
       onPromoteToProduction: expect.any(Function),
       onRemoveScrap: handlers.onRemoveScrap,
     });

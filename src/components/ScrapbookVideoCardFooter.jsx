@@ -4,6 +4,7 @@ import ScrapbookVideoFooterStats from './ScrapbookVideoFooterStats';
 export default function ScrapbookVideoCardFooter({
   onFetchComments,
   isProductionCandidate,
+  onOpenProductionCandidates,
   onPromoteToProduction,
   onRemoveScrap,
   video,
@@ -16,6 +17,7 @@ export default function ScrapbookVideoCardFooter({
       <ScrapbookVideoFooterActions
         onFetchComments={onFetchComments}
         isProductionCandidate={isProductionCandidate}
+        onOpenProductionCandidates={onOpenProductionCandidates}
         onPromoteToProduction={onPromoteToProduction}
         onRemoveScrap={onRemoveScrap}
         video={video}

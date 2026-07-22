@@ -167,6 +167,7 @@ export const getScrapbookWorkspaceViewProps = ({
   onMoveVideo,
   onOpenDiscoveryLinks,
   onOpenHome,
+  onOpenProductionCandidates,
   onOpenReferenceVault,
   onOpenUploadCalendar,
   onRemoveScrap,
@@ -190,6 +191,7 @@ export const getScrapbookWorkspaceViewProps = ({
         video,
         isProductionCandidate,
         onFetchComments,
+        onOpenProductionCandidates,
         onPromoteToProduction: isFunction(onMoveVideo) && videoId
           ? () => onMoveVideo(videoId, PRODUCTION_STATUS.CANDIDATE)
           : undefined,

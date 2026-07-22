@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  getScrapbookProductionFeedbackViewProps,
   getScrapbookRemoveButtonProps,
   getScrapbookRemoveConfirmMessage,
   getScrapbookVideoFooterActionsViewProps,
@@ -93,6 +94,35 @@ describe('scrapbookVideoFooterActions utils', () => {
     expect(viewProps.productionButtonProps['aria-label']).toContain('Cloud에 저장하는 중');
     expect(viewProps.productionButtonProps.title).toContain('완료될 때까지');
     expect(viewProps.productionButtonProps.onClick).toBeUndefined();
+  });
+
+  it('offers the saved candidate as a direct handoff and keeps failures explicit', () => {
+    const onOpenProductionCandidates = vi.fn();
+    const savedFeedback = getScrapbookProductionFeedbackViewProps({
+      onOpenProductionCandidates,
+      productionResult: 'saved',
+      video,
+      videoTitle: 'Display title',
+    });
+
+    expect(savedFeedback).toMatchObject({
+      actionLabel: '후보함에서 이어서',
+      tone: 'success',
+    });
+    expect(savedFeedback.message).toContain('Cloud 제작 후보로 저장했습니다');
+    expect(savedFeedback.actionTitle).toContain('YouTube API를 호출하지 않습니다');
+
+    savedFeedback.onAction();
+    expect(onOpenProductionCandidates).toHaveBeenCalledWith(video);
+
+    expect(getScrapbookProductionFeedbackViewProps({
+      productionResult: 'error',
+      video,
+    })).toEqual({
+      message: 'Cloud 제작 후보 저장에 실패했습니다. 제작 후보로 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      tone: 'danger',
+    });
+    expect(getScrapbookProductionFeedbackViewProps({ video })).toBeNull();
   });
 
   it('confirms before removing a Cloud scrapbook marker', () => {

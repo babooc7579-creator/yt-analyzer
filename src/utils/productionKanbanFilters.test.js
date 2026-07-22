@@ -74,6 +74,22 @@ describe('productionKanbanFilters', () => {
     });
   });
 
+  it('labels a scrapbook-originated candidate and keeps a route back to the scrapbook', () => {
+    expect(getProductionKanbanSearchContext({
+      searchQuery: '보관한 소재',
+      source: 'scrapbook',
+      targetVideoId: 'video-1',
+    })).toEqual({
+      description: '스크랩북에서 제작 후보로 표시한 "보관한 소재" 영상 한 건을 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.',
+      label: '스크랩북에서 이어온 후보',
+      resetLabel: '전체 작업 보기',
+      resetTitle: '스크랩북에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+      returnLabel: '스크랩북으로 돌아가기',
+      returnTarget: 'reference-vault',
+      returnTitle: '스크랩북으로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+    });
+  });
+
   it('searches source metadata and current production draft values', () => {
     expect(matchesProductionVideoSearch({
       searchQuery: 'build lab',
