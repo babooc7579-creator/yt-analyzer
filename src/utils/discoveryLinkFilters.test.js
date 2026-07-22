@@ -107,7 +107,9 @@ describe('discoveryLinkFilters utils', () => {
   it('keeps only the exact discovery link requested by a route intent', () => {
     const model = getDiscoveryLinkFilterModel({
       links,
-      searchQuery: 'workshop',
+      rightsFilter: 'needs_check',
+      searchQuery: 'a title that changed later',
+      statusFilter: 'candidate',
       targetDiscoveryLinkId: 'yt-saved',
     });
 
@@ -129,6 +131,11 @@ describe('discoveryLinkFilters utils', () => {
       searchQuery: 'Workshop Clip',
       source: 'home',
       targetDiscoveryLinkId: 'yt-saved',
+    })).toBeNull();
+    expect(getDiscoveryLinksRouteContext({
+      searchQuery: 'Workshop Clip',
+      source: 'studio-candidates',
+      targetDiscoveryLinkId: '',
     })).toBeNull();
   });
 
