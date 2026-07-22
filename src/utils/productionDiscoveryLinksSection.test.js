@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   getProductionDiscoveryLinkCardProps,
@@ -46,20 +46,24 @@ describe('productionDiscoveryLinksSection utils', () => {
 
   it('builds card props with move state and forwarded handlers', () => {
     const link = { id: 'link-1', title: 'Reference' };
-    const onOpenDiscoveryLinks = () => 'open';
+    const onOpenDiscoveryLinks = vi.fn(() => 'open');
     const onMoveLink = () => 'move';
 
-    expect(getProductionDiscoveryLinkCardProps({
+    const props = getProductionDiscoveryLinkCardProps({
       link,
       linkMoveStates: { 'link-1': 'saving' },
       onMoveLink,
       onOpenDiscoveryLinks,
-    })).toEqual({
+    });
+
+    expect(props).toMatchObject({
       link,
       moveState: 'saving',
-      onEditInDiscoveryLinks: onOpenDiscoveryLinks,
       onMove: onMoveLink,
     });
+    expect(props.onEditInDiscoveryLinks).toEqual(expect.any(Function));
+    props.onEditInDiscoveryLinks();
+    expect(onOpenDiscoveryLinks).toHaveBeenCalledWith(link);
   });
 
   it('keeps the existing undefined move state when no state exists', () => {

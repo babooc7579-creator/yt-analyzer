@@ -91,9 +91,11 @@ export const getDiscoveryLinksWorkspaceViewProps = ({
   onDeleteLink,
   onOpenProductionCandidates,
   onRefresh,
+  onReturnToProductionCandidates,
   onUpdateLink,
   rightsFilter,
   rightsFilterOptions,
+  routeContext,
   saving,
   savingMessage,
   searchQuery,
@@ -158,6 +160,11 @@ export const getDiscoveryLinksWorkspaceViewProps = ({
       notice,
       onRefresh,
       savingMessage,
+    },
+    routeContextProps: {
+      context: routeContext,
+      onReset: clearDiscoveryFilters,
+      onReturnToProductionCandidates,
     },
   };
 };

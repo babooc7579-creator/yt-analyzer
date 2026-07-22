@@ -9,6 +9,8 @@ const toRecordMap = (items) => (items && typeof items === 'object' ? items : {})
 
 const isLinkObject = (link) => link && typeof link === 'object';
 
+const isFunction = (value) => typeof value === 'function';
+
 const RIGHTS_PRIORITY = {
   do_not_use: 0,
   needs_check: 1,
@@ -78,7 +80,9 @@ export const getProductionDiscoveryLinkCardProps = ({
   return {
     link: sourceLink,
     moveState: moveStateMap[sourceLink.id],
-    onEditInDiscoveryLinks: onOpenDiscoveryLinks,
+    onEditInDiscoveryLinks: isFunction(onOpenDiscoveryLinks)
+      ? () => onOpenDiscoveryLinks(sourceLink)
+      : undefined,
     onMove: onMoveLink,
   };
 };

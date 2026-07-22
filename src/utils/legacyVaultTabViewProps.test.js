@@ -70,6 +70,11 @@ describe('legacyVaultTabViewProps utils', () => {
 
     props.scrapbookWorkspaceProps.onOpenHome();
     props.scrapbookWorkspaceProps.onOpenDiscoveryLinks();
+    props.scrapbookWorkspaceProps.onOpenDiscoveryLinks({
+      id: 'link-1',
+      title: '참고 링크',
+      url: 'https://example.com/link-1',
+    });
     props.scrapbookWorkspaceProps.onOpenProductionCandidates({
       title: '후보 영상',
       videoId: 'video-1',
@@ -80,6 +85,14 @@ describe('legacyVaultTabViewProps utils', () => {
     expect(openedViews).toEqual([
       { id: 'home' },
       { id: 'vault-sources' },
+      {
+        id: 'vault-sources',
+        intent: {
+          searchQuery: '참고 링크',
+          source: 'studio-candidates',
+          targetDiscoveryLinkId: 'link-1',
+        },
+      },
       {
         id: 'studio-candidates',
         intent: {

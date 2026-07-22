@@ -6,6 +6,7 @@ import DiscoveryLinksFilters from './DiscoveryLinksFilters';
 import DiscoveryLinksHeader from './DiscoveryLinksHeader';
 import DiscoveryLinksList from './DiscoveryLinksList';
 import DiscoveryLinksNotices from './DiscoveryLinksNotices';
+import DiscoveryLinksRouteContext from './DiscoveryLinksRouteContext';
 
 export default function DiscoveryLinksWorkspace({
   links,
@@ -14,6 +15,9 @@ export default function DiscoveryLinksWorkspace({
   saving,
   savingMessage,
   error,
+  initialSearchQuery = '',
+  initialSearchSource = '',
+  initialTargetDiscoveryLinkId = '',
   onCreateLink,
   onDeleteLink,
   onOpenProductionCandidates,
@@ -46,13 +50,25 @@ export default function DiscoveryLinksWorkspace({
     setStatusFilter,
     statusFilter,
     statusFilterOptions,
-  } = useDiscoveryLinkFilters(links);
+    routeContext,
+    targetDiscoveryLinkId,
+  } = useDiscoveryLinkFilters(links, {
+    initialSearchQuery,
+    initialSearchSource,
+    initialTargetDiscoveryLinkId,
+  });
+  const linkList = Array.isArray(links) ? links : [];
+  const targetDiscoveryLink = linkList.find(link => link?.id === targetDiscoveryLinkId);
+  const onReturnToProductionCandidates = routeContext && typeof onOpenProductionCandidates === 'function'
+    ? () => onOpenProductionCandidates(targetDiscoveryLink || {})
+    : undefined;
   const {
     filtersProps,
     formProps,
     headerProps,
     listProps,
     noticesProps,
+    routeContextProps,
   } = getDiscoveryLinksWorkspaceViewProps({
     clearDiscoveryFilters,
     duplicateLink,
@@ -69,9 +85,11 @@ export default function DiscoveryLinksWorkspace({
     onDeleteLink,
     onOpenProductionCandidates,
     onRefresh,
+    onReturnToProductionCandidates,
     onUpdateLink,
     rightsFilter,
     rightsFilterOptions,
+    routeContext,
     saving,
     savingMessage,
     searchQuery,
@@ -91,6 +109,8 @@ export default function DiscoveryLinksWorkspace({
 
       <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-100 p-3 shadow-xl shadow-slate-950/20 sm:p-5">
         <DiscoveryLinksHeader {...headerProps} />
+
+        <DiscoveryLinksRouteContext {...routeContextProps} />
 
         <DiscoveryLinksFilters {...filtersProps} />
 

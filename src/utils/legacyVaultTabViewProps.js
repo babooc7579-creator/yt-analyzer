@@ -30,7 +30,14 @@ export function getLegacyVaultTabViewProps({
       onCopyPrompt: () => copyPromptForVideos(savedVideoList),
       onFetchComments: fetchTopComments,
       onMoveVideo: markRadarVideoStatus,
-      onOpenDiscoveryLinks: () => openCreatorView({ id: 'vault-sources' }),
+      onOpenDiscoveryLinks: (link = {}) => openCreatorView({
+        id: 'vault-sources',
+        intent: link?.id ? {
+          searchQuery: link.title || link.url || '',
+          source: 'studio-candidates',
+          targetDiscoveryLinkId: link.id,
+        } : undefined,
+      }),
       onOpenHome: () => openCreatorView({ id: 'home' }),
       onOpenProductionCandidates: (video = {}) => openCreatorView({
         id: 'studio-candidates',
