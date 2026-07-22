@@ -94,6 +94,16 @@ export default function HomeNextActionPanel(props) {
               {nextAction.actionLabel}
             </button>
           )}
+          {!nextAction.onAction && nextAction.actionHref && nextAction.actionLabel && (
+            <a
+              href={nextAction.actionHref}
+              className={`rounded-xl px-3 py-2 text-xs font-extrabold transition ${styles.button}`}
+              title={nextAction.actionTitle}
+              aria-label={nextAction.actionTitle || nextAction.actionLabel}
+            >
+              {nextAction.actionLabel}
+            </a>
+          )}
           {nextAction.secondaryActions?.map((action) => (
             <button
               key={action.label}

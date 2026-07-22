@@ -108,6 +108,9 @@ export const getHomeNextAction = ({
       description: '좋은 후보는 제작 후보로 표시하고, 아닌 영상은 봤음/나중에 보기/제외로 정리합니다.',
       badge: '오늘 검토',
       metric: `${radarCandidates}개 남음`,
+      actionHref: '#today-radar-candidates',
+      actionLabel: '후보 판정 시작',
+      actionTitle: '같은 화면의 오늘 후보 판정 영역으로 이동합니다. 이동만으로 Cloud 저장이나 YouTube API 호출은 실행되지 않습니다.',
       impactText: '아래 후보 카드에서 누른 판단 버튼만 Cloud 판단 기록에 저장됩니다.',
     };
   }
