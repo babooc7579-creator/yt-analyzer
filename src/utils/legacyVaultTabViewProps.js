@@ -32,6 +32,14 @@ export function getLegacyVaultTabViewProps({
       onMoveVideo: markRadarVideoStatus,
       onOpenDiscoveryLinks: () => openCreatorView({ id: 'vault-sources' }),
       onOpenHome: () => openCreatorView({ id: 'home' }),
+      onOpenProductionCandidates: (video = {}) => openCreatorView({
+        id: 'studio-candidates',
+        intent: {
+          searchQuery: video.title || '',
+          source: 'scrapbook',
+          targetVideoId: video.videoId || '',
+        },
+      }),
       onOpenReferenceVault: () => openCreatorView({ id: 'vault-all' }),
       onOpenUploadCalendar: () => openCreatorView({ id: 'studio-calendar' }),
       onRemoveScrap: toggleScrapVideo,

@@ -70,12 +70,24 @@ describe('legacyVaultTabViewProps utils', () => {
 
     props.scrapbookWorkspaceProps.onOpenHome();
     props.scrapbookWorkspaceProps.onOpenDiscoveryLinks();
+    props.scrapbookWorkspaceProps.onOpenProductionCandidates({
+      title: '후보 영상',
+      videoId: 'video-1',
+    });
     props.scrapbookWorkspaceProps.onOpenReferenceVault();
     props.scrapbookWorkspaceProps.onOpenUploadCalendar();
 
     expect(openedViews).toEqual([
       { id: 'home' },
       { id: 'vault-sources' },
+      {
+        id: 'studio-candidates',
+        intent: {
+          searchQuery: '후보 영상',
+          source: 'scrapbook',
+          targetVideoId: 'video-1',
+        },
+      },
       { id: 'vault-all' },
       { id: 'studio-calendar' },
     ]);

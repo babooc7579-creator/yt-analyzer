@@ -107,3 +107,32 @@ export const getScrapbookVideoFooterActionsViewProps = ({
     }),
   };
 };
+
+export const getScrapbookProductionFeedbackViewProps = ({
+  onOpenProductionCandidates,
+  productionResult,
+  video,
+  videoTitle,
+} = {}) => {
+  if (!productionResult) return null;
+
+  const displayTitle = getSafeVideoTitle({ video, videoTitle });
+  const safeVideo = getSafeVideo(video);
+
+  if (productionResult === 'saved') {
+    return {
+      actionLabel: '후보함에서 이어서',
+      actionTitle: '방금 저장한 제작 후보만 후보함에서 바로 찾습니다. 화면 이동만 하며 YouTube API를 호출하지 않습니다.',
+      message: `'${displayTitle}' 영상을 Cloud 제작 후보로 저장했습니다.`,
+      onAction: typeof onOpenProductionCandidates === 'function'
+        ? () => onOpenProductionCandidates(safeVideo)
+        : undefined,
+      tone: 'success',
+    };
+  }
+
+  return {
+    message: 'Cloud 제작 후보 저장에 실패했습니다. 제작 후보로 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+    tone: 'danger',
+  };
+};

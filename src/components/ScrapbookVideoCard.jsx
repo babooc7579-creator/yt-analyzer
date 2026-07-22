@@ -7,6 +7,7 @@ export default function ScrapbookVideoCard({
   video,
   onFetchComments,
   isProductionCandidate,
+  onOpenProductionCandidates,
   onPromoteToProduction,
   onRemoveScrap,
 }) {
@@ -15,6 +16,7 @@ export default function ScrapbookVideoCard({
   const footerProps = {
     onFetchComments,
     isProductionCandidate,
+    onOpenProductionCandidates,
     onPromoteToProduction,
     onRemoveScrap,
     video,

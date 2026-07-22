@@ -102,11 +102,12 @@ export default function ProductionKanban({
     updateVideoFocus,
     videoUserRecords,
   });
-  const onReturnToSearchSource = searchContext?.returnTarget === 'home'
-    ? onOpenHome
-    : searchContext?.returnTarget === 'upload-calendar'
-      ? onOpenUploadCalendar
-      : undefined;
+  const returnToSearchSourceHandlers = {
+    home: onOpenHome,
+    'reference-vault': onOpenReferenceVault,
+    'upload-calendar': onOpenUploadCalendar,
+  };
+  const onReturnToSearchSource = returnToSearchSourceHandlers[searchContext?.returnTarget];
 
   return (
     <div className="space-y-4">
