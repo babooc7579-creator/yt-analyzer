@@ -66,7 +66,7 @@ export const DISCOVERY_LINKS_EMPTY_STATE = {
     },
     {
       title: '2. 상태 정리',
-      description: '받은 링크, 검토중, 저장, 제작 후보, 제외로 나눕니다.',
+      description: '받은 링크, 확인 중, 보관, 제작 후보, 제외로 나눕니다.',
     },
     {
       title: '3. 안전 기준',
