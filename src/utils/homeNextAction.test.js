@@ -107,6 +107,9 @@ describe('homeNextAction utils', () => {
     expect(action.title).toContain('오늘 후보');
     expect(action.description).toContain('제작 후보로 표시하고');
     expect(action.description).not.toContain('제작 후보로 넘기고');
+    expect(action.actionHref).toBe('#today-radar-candidates');
+    expect(action.actionLabel).toBe('후보 판정 시작');
+    expect(action.actionTitle).toContain('Cloud 저장이나 YouTube API 호출은 실행되지 않습니다');
     expect(action.impactText).toContain('후보 카드');
     expect(action.impactText).toContain('Cloud 판단 기록');
   });
