@@ -1,4 +1,4 @@
-import { ExternalLink, ListTodo, PencilLine } from 'lucide-react';
+import { CalendarPlus, ExternalLink, ListTodo, PencilLine } from 'lucide-react';
 
 import { getYouTubeVideoUrl } from '../utils/urls';
 import YouTubeThumbnailImage from './YouTubeThumbnailImage';
@@ -56,7 +56,19 @@ export default function UploadCalendarDayDetails({
           ))}
         </div>
       ) : (
-        <p className="mt-4 border border-dashed border-slate-800 px-4 py-8 text-center text-sm text-slate-500">선택한 날짜에 등록된 일정이 없습니다.</p>
+        <div className="mt-4 border border-dashed border-slate-800 px-4 py-8 text-center">
+          <p className="text-sm font-bold text-slate-400">선택한 날짜에 등록된 일정이 없습니다.</p>
+          <p className="mt-1 text-xs text-slate-500">제작 후보함에서 후보를 고르고 목표 업로드 날짜를 지정하세요.</p>
+          {typeof onOpenProductionCandidates === 'function' && (
+            <button
+              type="button"
+              onClick={onOpenProductionCandidates}
+              className="mt-4 inline-flex h-9 items-center gap-2 rounded-lg bg-amber-300 px-4 text-xs font-black text-slate-950 hover:bg-amber-200"
+            >
+              <CalendarPlus className="h-4 w-4" /> 제작 후보에서 날짜 정하기
+            </button>
+          )}
+        </div>
       )}
     </section>
   );

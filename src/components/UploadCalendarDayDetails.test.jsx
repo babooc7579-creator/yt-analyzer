@@ -40,4 +40,18 @@ describe('UploadCalendarDayDetails', () => {
     expect(html).not.toContain('후보함에서 찾기');
     expect(html).toContain('원본 열기');
   });
+
+  it('offers a direct next action when the selected date has no schedule', () => {
+    const html = renderToStaticMarkup(
+      <UploadCalendarDayDetails
+        items={[]}
+        onOpenProductionCandidates={() => {}}
+        selectedDate="2026-07-15"
+      />,
+    );
+
+    expect(html).toContain('선택한 날짜에 등록된 일정이 없습니다.');
+    expect(html).toContain('제작 후보함에서 후보를 고르고 목표 업로드 날짜를 지정하세요.');
+    expect(html).toContain('제작 후보에서 날짜 정하기');
+  });
 });
