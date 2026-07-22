@@ -36,7 +36,9 @@ export function useProductionKanbanFilters({
     filteredDataModel,
     filterMode,
     searchQuery,
-  }), [dataModel, filteredDataModel, filterMode, searchQuery]);
+    targetDiscoveryLinkId,
+    targetVideoId,
+  }), [dataModel, filteredDataModel, filterMode, searchQuery, targetDiscoveryLinkId, targetVideoId]);
 
   const searchContext = useMemo(() => getProductionKanbanSearchContext({
     searchQuery,
@@ -49,6 +51,12 @@ export function useProductionKanbanFilters({
     setTargetVideoId('');
     setTargetDiscoveryLinkId('');
     setSearchQuery(value);
+  };
+
+  const updateFilterMode = (value) => {
+    setTargetVideoId('');
+    setTargetDiscoveryLinkId('');
+    setFilterMode(value);
   };
 
   const resetFilters = () => {
@@ -65,7 +73,7 @@ export function useProductionKanbanFilters({
     resetFilters,
     searchQuery,
     searchContext,
-    setFilterMode,
+    setFilterMode: updateFilterMode,
     setSearchQuery: updateSearchQuery,
   };
 }
