@@ -1,4 +1,4 @@
-import { CalendarDays, Pin } from 'lucide-react';
+import { ArrowDown, CalendarDays, Pin } from 'lucide-react';
 
 import { PRODUCTION_FOCUS_COLUMN } from '../constants/productionKanban';
 import { getProductionVideoCardProps } from '../utils/productionKanbanColumn';
@@ -61,6 +61,13 @@ export default function ProductionFocusSection({
           <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
             {PRODUCTION_FOCUS_COLUMN.emptyDescription}
           </p>
+          <a
+            href="#production-kanban-board"
+            className="mt-3 inline-flex h-9 items-center gap-2 rounded-lg bg-amber-200 px-4 text-xs font-extrabold text-amber-950 hover:bg-amber-300"
+            title="같은 화면의 제작 후보 카드로 이동합니다. 이동만으로 Cloud 데이터는 변경되지 않습니다."
+          >
+            <ArrowDown className="h-4 w-4" /> 제작 후보에서 고르기
+          </a>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 px-3 xl:grid-cols-2">

@@ -105,6 +105,8 @@ describe('Production kanban flow states', () => {
     expect(html).toContain('캘린더에서 가져온 검색');
     expect(html).toContain('영상 한 건을 찾고 있습니다');
     expect(html).toContain('캘린더로 돌아가기');
+    expect(html).toContain('href="#production-kanban-board"');
+    expect(html).toContain('id="production-kanban-board"');
     expect((html.match(/예약 영상/g) || []).length).toBeGreaterThan(0);
     expect(html).not.toContain('video-2');
   });
