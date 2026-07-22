@@ -18,6 +18,8 @@ describe('DiscoveryLinks flow states', () => {
     expect(html).toContain('아직 저장된 발견 링크가 없습니다.');
     expect(html).toContain('Cloud 발견함');
     expect(html).toContain('URL 붙여넣기');
+    expect(html).toContain('받은 링크, 확인 중, 보관, 제작 후보, 제외');
+    expect(html).not.toContain('검토중, 저장');
     expect(html).toContain('외부 사이트 자동 수집이나 파일 다운로드는 실행하지 않습니다.');
   });
 
