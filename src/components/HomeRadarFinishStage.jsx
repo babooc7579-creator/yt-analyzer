@@ -29,12 +29,12 @@ export default function HomeRadarFinishStage({
             <button type="button" onClick={onOpenProductionCandidates} className="inline-flex items-center justify-center gap-2 bg-emerald-200 px-4 py-2.5 text-xs font-extrabold text-emerald-950 hover:bg-emerald-100">
               <Rocket className="h-4 w-4" /> 제작 후보함에서 이어가기
             </button>
-            {focusCount > 0 && typeof onOpenUploadCalendar === 'function' ? (
+            {typeof onOpenUploadCalendar === 'function' ? (
               <button
                 type="button"
                 onClick={onOpenUploadCalendar}
                 className="inline-flex items-center justify-center gap-2 border border-cyan-300/30 bg-cyan-500/10 px-4 py-2.5 text-xs font-extrabold text-cyan-100 hover:bg-cyan-500/20"
-                title="업로드 캘린더를 열어 오늘 집중 후보의 목표 업로드 날짜를 확인합니다. YouTube API를 호출하지 않습니다."
+                title="업로드 캘린더를 열어 제작 후보의 목표 업로드 날짜를 정하거나 확인합니다. YouTube API를 호출하지 않습니다."
               >
                 <CalendarDays className="h-4 w-4" /> 업로드 일정 정하기
               </button>

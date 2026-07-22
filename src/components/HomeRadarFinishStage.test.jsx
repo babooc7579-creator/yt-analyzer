@@ -28,4 +28,19 @@ describe('HomeRadarFinishStage', () => {
     expect(html).toContain('업로드 일정 정하기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
   });
+
+  it('keeps the upload calendar available before a candidate is pinned for today', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarFinishStage
+        onOpenProductionCandidates={() => {}}
+        onOpenUploadCalendar={() => {}}
+        productionCandidateCount={1}
+        productionFocusCount={0}
+      />,
+    );
+
+    expect(html).toContain('업로드 일정 정하기');
+    expect(html).toContain('제작 후보의 목표 업로드 날짜를 정하거나 확인합니다');
+    expect(html).not.toContain('현재 오늘 집중');
+  });
 });
