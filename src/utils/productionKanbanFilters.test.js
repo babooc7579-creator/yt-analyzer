@@ -104,6 +104,11 @@ describe('productionKanbanFilters', () => {
       returnTarget: 'discovery-links',
       returnTitle: '발견 링크 저장 화면으로 돌아갑니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
     });
+
+    expect(getProductionKanbanSearchContext({
+      source: 'discovery-links',
+      targetDiscoveryLinkId: 'link-1',
+    })?.description).toContain('선택한 발견 링크');
   });
 
   it('searches source metadata and current production draft values', () => {
@@ -183,7 +188,7 @@ describe('productionKanbanFilters', () => {
 
     const filtered = getFilteredProductionKanbanData({
       dataModel: duplicateTitleModel,
-      searchQuery: '같은 제목',
+      searchQuery: '나중에 바뀐 제목',
       targetVideoId: 'second',
     });
 
@@ -203,7 +208,7 @@ describe('productionKanbanFilters', () => {
 
     const filtered = getFilteredProductionKanbanData({
       dataModel,
-      searchQuery: 'Instagram hook',
+      searchQuery: '나중에 바뀐 링크 제목',
       targetDiscoveryLinkId: 'link-2',
     });
 
@@ -212,6 +217,24 @@ describe('productionKanbanFilters', () => {
     ]);
     expect(filtered.focusVideos).toEqual([]);
     expect(Object.values(filtered.groupedVideos).flat()).toEqual([]);
+  });
+
+  it('counts an exact route target as an active screen filter without a search term', () => {
+    const dataModel = createDataModel();
+    const filteredDataModel = getFilteredProductionKanbanData({
+      dataModel,
+      targetDiscoveryLinkId: 'link-1',
+    });
+
+    expect(getProductionKanbanFilterSummary({
+      dataModel,
+      filteredDataModel,
+      targetDiscoveryLinkId: 'link-1',
+    })).toMatchObject({
+      hasActiveFilters: true,
+      metricText: '전체 5개 중 1개 표시',
+      visibleCount: 1,
+    });
   });
 
   it('reports visible work counts and active filter state', () => {

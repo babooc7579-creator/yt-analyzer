@@ -60,8 +60,30 @@ describe('useProductionKanbanFilters', () => {
 
     result.setSearchQuery('새 검색');
 
+    expect(stateSetters[3]).toHaveBeenCalledWith('');
     expect(stateSetters[2]).toHaveBeenCalledWith('');
     expect(stateSetters[1]).toHaveBeenCalledWith('새 검색');
+  });
+
+  it('keeps a discovery handoff scoped to its id even when the saved title changed', () => {
+    const result = useProductionKanbanFilters({
+      dataModel,
+      initialSearchQuery: '이전 링크 제목',
+      initialSearchSource: 'discovery-links',
+      initialTargetDiscoveryLinkId: 'link-1',
+      videoUserRecords: {},
+    });
+
+    expect(result.filteredDataModel.discoveryLinkCandidates).toEqual([
+      { id: 'link-1', title: '예약 영상' },
+    ]);
+    expect(result.searchContext?.description).toContain('링크 한 건을');
+
+    result.setFilterMode(PRODUCTION_KANBAN_FILTER.LINKS);
+
+    expect(stateSetters[3]).toHaveBeenCalledWith('');
+    expect(stateSetters[2]).toHaveBeenCalledWith('');
+    expect(stateSetters[0]).toHaveBeenCalledWith(PRODUCTION_KANBAN_FILTER.LINKS);
   });
 
   it('clears stage, text, and calendar target together', () => {
@@ -78,5 +100,6 @@ describe('useProductionKanbanFilters', () => {
     expect(stateSetters[0]).toHaveBeenCalledWith(PRODUCTION_KANBAN_FILTER.ALL);
     expect(stateSetters[1]).toHaveBeenCalledWith('');
     expect(stateSetters[2]).toHaveBeenCalledWith('');
+    expect(stateSetters[3]).toHaveBeenCalledWith('');
   });
 });

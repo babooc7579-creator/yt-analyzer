@@ -27,12 +27,14 @@ export const getProductionKanbanSearchContext = ({
   targetVideoId = '',
 } = {}) => {
   const normalizedQuery = String(searchQuery || '').trim();
-
-  if (!normalizedQuery) return null;
+  const videoLabel = normalizedQuery || '선택한 영상';
+  const linkLabel = normalizedQuery || '선택한 발견 링크';
 
   if (source === 'today-radar') {
+    if (!normalizedQuery && !targetVideoId) return null;
+
     return {
-      description: `오늘의 레이더에서 제작 후보로 표시한 "${normalizedQuery}" ${targetVideoId ? '영상 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
+      description: `오늘의 레이더에서 제작 후보로 표시한 "${videoLabel}" ${targetVideoId ? '영상 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
       label: '오늘의 레이더에서 이어온 후보',
       resetLabel: '전체 작업 보기',
       resetTitle: '오늘의 레이더에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
@@ -43,8 +45,10 @@ export const getProductionKanbanSearchContext = ({
   }
 
   if (source === 'scrapbook') {
+    if (!normalizedQuery && !targetVideoId) return null;
+
     return {
-      description: `스크랩북에서 제작 후보로 표시한 "${normalizedQuery}" ${targetVideoId ? '영상 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
+      description: `스크랩북에서 제작 후보로 표시한 "${videoLabel}" ${targetVideoId ? '영상 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
       label: '스크랩북에서 이어온 후보',
       resetLabel: '전체 작업 보기',
       resetTitle: '스크랩북에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
@@ -55,8 +59,10 @@ export const getProductionKanbanSearchContext = ({
   }
 
   if (source === 'discovery-links') {
+    if (!normalizedQuery && !targetDiscoveryLinkId) return null;
+
     return {
-      description: `발견 링크 저장에서 제작 후보로 표시한 "${normalizedQuery}" ${targetDiscoveryLinkId ? '링크 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
+      description: `발견 링크 저장에서 제작 후보로 표시한 "${linkLabel}" ${targetDiscoveryLinkId ? '링크 한 건을' : '항목을'} 바로 보여주고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
       label: '발견 링크에서 이어온 후보',
       resetLabel: '전체 작업 보기',
       resetTitle: '발견 링크에서 이어온 후보 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
@@ -67,9 +73,10 @@ export const getProductionKanbanSearchContext = ({
   }
 
   if (source !== 'upload-calendar') return null;
+  if (!normalizedQuery && !targetVideoId) return null;
 
   return {
-    description: `업로드 캘린더에서 선택한 "${normalizedQuery}" ${targetVideoId ? '영상 한 건을' : '항목을'} 찾고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
+    description: `업로드 캘린더에서 선택한 "${videoLabel}" ${targetVideoId ? '영상 한 건을' : '항목을'} 찾고 있습니다. 검색을 해제하면 전체 제작 작업을 다시 볼 수 있습니다.`,
     label: '캘린더에서 가져온 검색',
     resetLabel: '전체 작업 보기',
     resetTitle: '캘린더에서 가져온 화면 검색만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
@@ -129,8 +136,9 @@ export const matchesProductionLinkSearch = ({ link, searchQuery } = {}) => {
 
 const filterVideos = (videos, options) => (
   toArray(videos).filter((video) => (
-    (!options.targetVideoId || video?.videoId === options.targetVideoId)
-    && matchesProductionVideoSearch({ ...options, video })
+    options.targetVideoId
+      ? video?.videoId === options.targetVideoId
+      : matchesProductionVideoSearch({ ...options, video })
   ))
 );
 
@@ -163,8 +171,9 @@ export const getFilteredProductionKanbanData = ({
   const discoveryLinkCandidates = targetVideoId
     ? []
     : toArray(source.discoveryLinkCandidates).filter((link) => (
-      (!targetDiscoveryLinkId || link?.id === targetDiscoveryLinkId)
-      && matchesProductionLinkSearch({ link, searchQuery })
+      targetDiscoveryLinkId
+        ? link?.id === targetDiscoveryLinkId
+        : matchesProductionLinkSearch({ link, searchQuery })
     ));
 
   if (filterMode !== PRODUCTION_KANBAN_FILTER.ALL) {
@@ -203,6 +212,8 @@ export const getProductionKanbanFilterSummary = ({
   filteredDataModel,
   filterMode = PRODUCTION_KANBAN_FILTER.ALL,
   searchQuery = '',
+  targetDiscoveryLinkId = '',
+  targetVideoId = '',
 } = {}) => {
   const sourceSummary = dataModel?.productionSummary || {};
   const filteredSummary = filteredDataModel?.productionSummary || {};
@@ -210,7 +221,12 @@ export const getProductionKanbanFilterSummary = ({
   const filteredLinkCount = toArray(filteredDataModel?.discoveryLinkCandidates).length;
   const totalCount = Number(sourceSummary.videoCount || 0) + sourceLinkCount;
   const visibleCount = Number(filteredSummary.videoCount || 0) + filteredLinkCount;
-  const hasActiveFilters = filterMode !== PRODUCTION_KANBAN_FILTER.ALL || Boolean(normalizeSearchText(searchQuery));
+  const hasActiveFilters = (
+    filterMode !== PRODUCTION_KANBAN_FILTER.ALL
+    || Boolean(normalizeSearchText(searchQuery))
+    || Boolean(String(targetDiscoveryLinkId || '').trim())
+    || Boolean(String(targetVideoId || '').trim())
+  );
 
   return {
     hasActiveFilters,
