@@ -52,6 +52,13 @@ describe('productionVideoCard utils', () => {
       video,
       videoTitle: 'Production idea',
     });
+    expect(viewProps.externalActionsProps).toMatchObject({
+      columnId: 'production_active',
+      record,
+      video,
+      videoTitle: 'Production idea',
+      videoUrl: 'https://youtube.com/watch?v=video-1',
+    });
     expect(viewProps.metaBadgesProps).toEqual({
       columnId: 'production_active',
       scheduleSignal: 'today',
@@ -69,7 +76,6 @@ describe('productionVideoCard utils', () => {
       record,
       video,
       videoTitle: 'Production idea',
-      videoUrl: 'https://youtube.com/watch?v=video-1',
     });
     expect(viewProps.thumbnailAlt).toBe('Production idea 썸네일');
     expect(viewProps.titleLinkAriaLabel).toBe('Production idea YouTube 원본 영상 열기');

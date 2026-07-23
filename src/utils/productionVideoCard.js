@@ -48,6 +48,13 @@ export const getProductionVideoCardViewProps = ({
       video,
       videoTitle,
     },
+    externalActionsProps: {
+      columnId,
+      record,
+      video,
+      videoTitle,
+      videoUrl,
+    },
     metaBadgesProps: {
       columnId,
       scheduleSignal,
@@ -66,7 +73,6 @@ export const getProductionVideoCardViewProps = ({
       record,
       video,
       videoTitle,
-      videoUrl,
     },
     thumbnailAlt: `${videoTitle} 썸네일`,
     titleLinkAriaLabel: `${videoTitle} YouTube 원본 영상 열기`,

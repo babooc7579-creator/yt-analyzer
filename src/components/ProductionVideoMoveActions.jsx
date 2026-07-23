@@ -39,7 +39,7 @@ export default function ProductionVideoMoveActions({
   const focusCopy = getProductionVideoFocusActionCopy({ isFocused, videoTitle });
 
   return (
-    <>
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
       {columnId === PRODUCTION_STATUS.CANDIDATE && (
         <ProductionVideoMoveButton
           activeClassName="bg-amber-100 text-amber-900 hover:bg-amber-200"
@@ -123,6 +123,6 @@ export default function ProductionVideoMoveActions({
           title={doneCopy.title}
         />
       )}
-    </>
+    </div>
   );
 }
