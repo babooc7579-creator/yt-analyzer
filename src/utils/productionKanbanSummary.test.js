@@ -7,6 +7,7 @@ import {
   getProductionKanbanSummaryLegendItems,
   getProductionKanbanSummaryMetricCards,
 } from './productionKanbanSummary';
+import { PRODUCTION_KANBAN_FILTER } from './productionKanbanFilters';
 
 describe('productionKanbanSummary utils', () => {
   it('builds production kanban header copy as a stored candidate view', () => {
@@ -62,6 +63,12 @@ describe('productionKanbanSummary utils', () => {
     expect(cards[3].title).toContain('Cloud 발견함');
     expect(cards[3].title).toContain('별도 제작 DB');
     expect(cards[3].warningText).toBe('권리 확인 필요 1개');
+    expect(cards.map(card => card.filterMode)).toEqual([
+      PRODUCTION_KANBAN_FILTER.CANDIDATE,
+      PRODUCTION_KANBAN_FILTER.ACTIVE,
+      PRODUCTION_KANBAN_FILTER.DONE,
+      PRODUCTION_KANBAN_FILTER.LINKS,
+    ]);
   });
 
   it('builds schedule summary copy from the production summary', () => {

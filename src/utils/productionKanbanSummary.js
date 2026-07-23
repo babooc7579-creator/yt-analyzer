@@ -1,4 +1,5 @@
 import { formatDateWithDots } from './dates';
+import { PRODUCTION_KANBAN_FILTER } from './productionKanbanFilters';
 
 const formatProductionCount = (count = 0) => `${count}개`;
 
@@ -37,6 +38,7 @@ export const getProductionKanbanSummaryMetricCards = ({
 } = {}) => [
   {
     key: 'candidate',
+    filterMode: PRODUCTION_KANBAN_FILTER.CANDIDATE,
     label: '제작 후보',
     labelClassName: 'text-indigo-500',
     value: formatProductionCount(productionSummary.candidateCount),
@@ -46,6 +48,7 @@ export const getProductionKanbanSummaryMetricCards = ({
   },
   {
     key: 'active',
+    filterMode: PRODUCTION_KANBAN_FILTER.ACTIVE,
     label: '제작 중',
     labelClassName: 'text-emerald-600',
     value: formatProductionCount(productionSummary.activeCount),
@@ -55,6 +58,7 @@ export const getProductionKanbanSummaryMetricCards = ({
   },
   {
     key: 'uploaded',
+    filterMode: PRODUCTION_KANBAN_FILTER.DONE,
     label: '업로드 완료',
     labelClassName: 'text-slate-500',
     value: formatProductionCount(productionSummary.uploadedCount),
@@ -64,6 +68,7 @@ export const getProductionKanbanSummaryMetricCards = ({
   },
   {
     key: 'discovery-links',
+    filterMode: PRODUCTION_KANBAN_FILTER.LINKS,
     label: '링크 후보',
     labelClassName: 'inline-flex items-center gap-1 text-amber-700',
     value: formatProductionCount(discoveryLinkCandidateCount),

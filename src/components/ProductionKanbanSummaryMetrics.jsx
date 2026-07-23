@@ -6,6 +6,7 @@ import ProductionKanbanSummaryCard from './ProductionKanbanSummaryCard';
 
 export default function ProductionKanbanSummaryMetrics({
   discoveryLinkCandidateCount,
+  onFilterModeChange,
   productionSummary,
 }) {
   const metricCards = getProductionKanbanSummaryMetricCards({
@@ -20,7 +21,10 @@ export default function ProductionKanbanSummaryMetrics({
           key={card.key}
           label={card.showLinkIcon ? <><LinkIcon className="h-3 w-3" /> {card.label}</> : card.label}
           labelClassName={card.labelClassName}
-          title={card.title}
+          onClick={typeof onFilterModeChange === 'function'
+            ? () => onFilterModeChange(card.filterMode)
+            : undefined}
+          title={`${card.title} 눌러 해당 단계만 표시합니다. Cloud 데이터는 변경하지 않습니다.`}
           value={card.value}
           valueClassName={card.valueClassName}
           wrapperClassName={card.wrapperClassName}
