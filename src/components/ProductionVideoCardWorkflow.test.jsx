@@ -43,6 +43,8 @@ describe('ProductionVideoCard workflow', () => {
     expect(html).toContain('원본 보기');
     expect(html).toContain('작업 묶음 복사');
     expect(html).toContain('URL 복사');
+    expect(html).toContain('업로드 26.07.30');
+    expect(html).toContain('작업 준비 완료');
   });
 
   it('opens the same YouTube source from both the thumbnail and title', () => {

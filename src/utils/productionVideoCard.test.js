@@ -61,13 +61,14 @@ describe('productionVideoCard utils', () => {
     });
     expect(viewProps.metaBadgesProps).toEqual({
       columnId: 'production_active',
+      record,
       scheduleSignal: 'today',
       video,
     });
     expect(viewProps.readinessChecklistProps).toMatchObject({
       readyCount: 2,
-      summaryText: '2/4 준비',
-      title: '작업 준비 체크',
+      summaryText: '2개 남음',
+      title: '남은 준비',
     });
     expect(viewProps.statusActionsProps).toMatchObject({
       columnId: 'production_active',
@@ -114,7 +115,7 @@ describe('productionVideoCard utils', () => {
 
     expect(emptyChecklist).toMatchObject({
       readyCount: 1,
-      summaryText: '1/4 준비',
+      summaryText: '3개 남음',
       tone: 'working',
     });
     expect(emptyChecklist.description).toContain('저장이나 API 호출은 실행하지 않습니다');
@@ -124,11 +125,18 @@ describe('productionVideoCard utils', () => {
       ['note', false],
       ['publish-date', false],
     ]);
+    expect(emptyChecklist.remainingItems.map((item) => item.key)).toEqual([
+      'title',
+      'note',
+      'publish-date',
+    ]);
     expect(readyChecklist).toMatchObject({
       readyCount: 4,
       summaryText: '4/4 준비',
+      title: '작업 준비 완료',
       tone: 'ready',
     });
+    expect(readyChecklist.remainingItems).toEqual([]);
     expect(readyChecklist.items.every((item) => item.title.includes('저장') || item.key === 'source')).toBe(true);
   });
 
@@ -180,11 +188,17 @@ describe('productionVideoCard utils', () => {
     });
 
     expect(getProductionVideoMetaBadgesViewProps({
+      record: { targetPublishDate: '2026-07-30' },
       video: { channelTitle: 'Channel', multiplier: 3.25 },
     })).toEqual({
       channelLabel: 'Channel',
       multiplierLabel: '대박 지수 3.3x',
+      targetPublishDateLabel: '업로드 26.07.30',
     });
+    expect(getProductionVideoMetaBadgesViewProps({
+      record: { targetPublishDate: 'invalid-date' },
+      video: {},
+    }).targetPublishDateLabel).toBe('');
   });
 
   it('builds a copyable production work packet from the current card values', () => {
