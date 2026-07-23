@@ -5,6 +5,7 @@ import {
 } from './radarCandidates';
 import { PRODUCTION_FOCUS_COLUMN_ID } from '../constants/productionKanban';
 import { PRODUCTION_STATUS_LABELS } from '../constants/status';
+import { formatCompactPublishedDate } from './dates';
 import { getYouTubeVideoUrl } from './urls';
 
 const noop = () => {};
@@ -57,6 +58,7 @@ export const getProductionVideoCardViewProps = ({
     },
     metaBadgesProps: {
       columnId,
+      record,
       scheduleSignal,
       video,
     },
@@ -122,14 +124,19 @@ export const getProductionVideoReadinessChecklist = ({
     },
   ];
   const readyCount = items.filter((item) => item.isReady).length;
+  const remainingItems = items.filter((item) => !item.isReady);
+  const isReady = remainingItems.length === 0;
 
   return {
-    description: '제작 시작 전 채워두면 좋은 항목입니다. 상태 확인만 하며 저장이나 API 호출은 실행하지 않습니다.',
+    description: isReady
+      ? '원본, 제목, 메모, 일정이 모두 준비됐습니다.'
+      : '아래 항목을 채우면 제작 준비가 끝납니다. 상태 확인만 하며 저장이나 API 호출은 실행하지 않습니다.',
     items,
     readyCount,
-    summaryText: `${readyCount}/${items.length} 준비`,
-    title: '작업 준비 체크',
-    tone: readyCount === items.length ? 'ready' : 'working',
+    remainingItems,
+    summaryText: isReady ? `${readyCount}/${items.length} 준비` : `${remainingItems.length}개 남음`,
+    title: isReady ? '작업 준비 완료' : '남은 준비',
+    tone: isReady ? 'ready' : 'working',
     totalCount: items.length,
   };
 };
@@ -253,9 +260,14 @@ export const getProductionWorkPacketText = ({
   ].join('\n');
 };
 
-export const getProductionVideoMetaBadgesViewProps = ({ video = {} } = {}) => ({
-  channelLabel: video.channel_title || video.channelTitle || '채널 정보 없음',
-  multiplierLabel: video.multiplier !== undefined
-    ? `대박 지수 ${Number(video.multiplier || 0).toFixed(1)}x`
-    : '',
-});
+export const getProductionVideoMetaBadgesViewProps = ({ record = {}, video = {} } = {}) => {
+  const compactTargetDate = formatCompactPublishedDate(record.targetPublishDate, '');
+
+  return {
+    channelLabel: video.channel_title || video.channelTitle || '채널 정보 없음',
+    multiplierLabel: video.multiplier !== undefined
+      ? `대박 지수 ${Number(video.multiplier || 0).toFixed(1)}x`
+      : '',
+    targetPublishDateLabel: compactTargetDate ? `업로드 ${compactTargetDate}` : '',
+  };
+};
