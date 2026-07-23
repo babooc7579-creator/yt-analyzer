@@ -5,6 +5,7 @@ import ProductionKanbanScheduleSummary from './ProductionKanbanScheduleSummary';
 import ProductionKanbanSummaryCard from './ProductionKanbanSummaryCard';
 
 export default function ProductionKanbanSummaryMetrics({
+  activeFilterMode,
   discoveryLinkCandidateCount,
   onFilterModeChange,
   productionSummary,
@@ -15,12 +16,13 @@ export default function ProductionKanbanSummaryMetrics({
   });
 
   return (
-    <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-5">
+    <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-5">
       {metricCards.map((card) => (
         <ProductionKanbanSummaryCard
           key={card.key}
           label={card.showLinkIcon ? <><LinkIcon className="h-3 w-3" /> {card.label}</> : card.label}
           labelClassName={card.labelClassName}
+          selected={activeFilterMode === card.filterMode}
           onClick={typeof onFilterModeChange === 'function'
             ? () => onFilterModeChange(card.filterMode)
             : undefined}
@@ -36,7 +38,9 @@ export default function ProductionKanbanSummaryMetrics({
           ) : null}
         </ProductionKanbanSummaryCard>
       ))}
-      <ProductionKanbanScheduleSummary productionSummary={productionSummary} />
+      <div className="col-span-2 md:col-span-1">
+        <ProductionKanbanScheduleSummary productionSummary={productionSummary} />
+      </div>
     </div>
   );
 }

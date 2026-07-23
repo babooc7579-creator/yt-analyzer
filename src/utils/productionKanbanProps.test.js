@@ -106,6 +106,7 @@ describe('productionKanbanProps utils', () => {
 
   it('builds kanban content props with summary video count and forwarded handlers', () => {
     const props = {
+      activeFilterMode: 'production_active',
       discoveryLinkCandidates: [{ id: 'link-1' }],
       draftRecords: { video1: { memo: 'draft' } },
       focusVideos: [{ videoId: 'focus-video' }],
@@ -128,6 +129,7 @@ describe('productionKanbanProps utils', () => {
     };
 
     expect(getProductionKanbanContentProps(props)).toMatchObject({
+      activeFilterMode: 'production_active',
       discoveryLinkCandidates: [{ id: 'link-1' }],
       draftRecords: props.draftRecords,
       focusVideos: props.focusVideos,
@@ -170,6 +172,7 @@ describe('productionKanbanProps utils', () => {
 
   it('builds child component props for the production kanban content view', () => {
     const props = {
+      activeFilterMode: 'production_active',
       discoveryLinkCandidates: [{ id: 'link-1' }],
       draftRecords: { video1: { memo: 'draft' } },
       focusVideos: [{ videoId: 'focus-video' }],
@@ -195,6 +198,7 @@ describe('productionKanbanProps utils', () => {
     const viewProps = getProductionKanbanContentChildProps(props);
 
     expect(viewProps.summaryProps).toEqual({
+      activeFilterMode: 'production_active',
       discoveryLinkCandidateCount: 1,
       onFilterModeChange: props.onFilterModeChange,
       onOpenUploadCalendar: props.onOpenUploadCalendar,

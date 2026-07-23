@@ -44,4 +44,23 @@ describe('ProductionKanbanSummaryCard', () => {
     expect(html).toContain('제작 중 단계만 표시합니다.');
     expect(html).toContain('2개');
   });
+
+  it('marks the selected metric as the current view', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanbanSummaryCard
+        label="제작 후보"
+        labelClassName="label-class"
+        onClick={() => {}}
+        selected
+        title="제작 후보만 표시합니다."
+        value="3개"
+        valueClassName="value-class"
+        wrapperClassName="wrapper-class"
+      />,
+    );
+
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('현재 보기');
+    expect(html).toContain('ring-indigo-500');
+  });
 });

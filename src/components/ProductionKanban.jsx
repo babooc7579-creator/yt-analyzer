@@ -85,6 +85,7 @@ export default function ProductionKanban({
   }
 
   const filteredContentProps = getProductionKanbanContentProps({
+    activeFilterMode: filterMode,
     discoveryLinkCandidates: filteredDataModel.discoveryLinkCandidates,
     draftRecords,
     focusVideos: filteredDataModel.focusVideos,

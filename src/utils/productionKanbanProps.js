@@ -89,6 +89,7 @@ export const getProductionKanbanNextActions = ({
 ].filter((action) => isFunction(action.onClick));
 
 export const getProductionKanbanContentProps = ({
+  activeFilterMode,
   discoveryLinkCandidates,
   draftRecords,
   focusVideos,
@@ -114,6 +115,7 @@ export const getProductionKanbanContentProps = ({
   const summary = toSummaryObject(productionSummary);
 
   return {
+    activeFilterMode,
     discoveryLinkCandidates: toArray(discoveryLinkCandidates),
     draftRecords,
     focusVideos: toArray(focusVideos),
@@ -142,6 +144,7 @@ export const getProductionKanbanContentProps = ({
 };
 
 export const getProductionKanbanContentChildProps = ({
+  activeFilterMode,
   discoveryLinkCandidates,
   draftRecords,
   focusVideos,
@@ -217,6 +220,7 @@ export const getProductionKanbanContentChildProps = ({
       }),
     },
     summaryProps: {
+      activeFilterMode,
       discoveryLinkCandidateCount: summaryDiscoveryLinkCandidateCount,
       onFilterModeChange,
       onOpenUploadCalendar,
