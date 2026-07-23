@@ -24,15 +24,7 @@ export default function ProductionVideoExternalActions({
   });
 
   return (
-    <>
-      <CopyUrlButton
-        {...copyUrlButtonProps}
-        className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 transition-colors hover:bg-slate-50 disabled:text-slate-300"
-      />
-      <CopyUrlButton
-        {...workPacketCopyButtonProps}
-        className="inline-flex items-center justify-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2 text-[11px] font-extrabold text-indigo-700 transition-colors hover:bg-indigo-100 disabled:text-slate-300"
-      />
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
       <a
         href={videoUrl}
         target="_blank"
@@ -42,6 +34,14 @@ export default function ProductionVideoExternalActions({
       >
         <Play className="h-3.5 w-3.5" /> {openButtonLabel} <ExternalLink className="h-3 w-3" />
       </a>
-    </>
+      <CopyUrlButton
+        {...workPacketCopyButtonProps}
+        className="inline-flex items-center justify-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2 text-[11px] font-extrabold text-indigo-700 transition-colors hover:bg-indigo-100 disabled:text-slate-300"
+      />
+      <CopyUrlButton
+        {...copyUrlButtonProps}
+        className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-[11px] font-extrabold text-slate-600 transition-colors hover:bg-slate-50 disabled:text-slate-300"
+      />
+    </div>
   );
 }

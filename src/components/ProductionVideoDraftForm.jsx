@@ -28,6 +28,7 @@ export default function ProductionVideoDraftForm({
 
   return (
     <div className="mt-3 space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3">
+      <p className="text-[10px] font-extrabold text-slate-500">2. 제작안 작성 · Cloud 저장</p>
       <ProductionVideoDraftFields
         onUpdateDraft={onUpdateDraft}
         record={record}
@@ -38,7 +39,7 @@ export default function ProductionVideoDraftForm({
         type="button"
         onClick={getProductionVideoDraftSaveHandler({ onSave, videoId })}
         disabled={saveButtonProps.disabled}
-        className={`inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors ${saveButtonProps.disabled ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
+        className={`inline-flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2 text-[11px] font-extrabold transition-colors sm:w-auto ${saveButtonProps.disabled ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
         title={saveButtonProps.title}
         aria-label={saveButtonProps.ariaLabel}
       >
