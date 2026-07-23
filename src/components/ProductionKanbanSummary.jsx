@@ -5,6 +5,7 @@ import { getProductionKanbanSummaryHeaderProps } from '../utils/productionKanban
 
 export default function ProductionKanbanSummary({
   discoveryLinkCandidateCount,
+  onFilterModeChange,
   productionSummary,
   videoCount,
 }) {
@@ -29,6 +30,7 @@ export default function ProductionKanbanSummary({
       </div>
       <ProductionKanbanSummaryMetrics
         discoveryLinkCandidateCount={discoveryLinkCandidateCount}
+        onFilterModeChange={onFilterModeChange}
         productionSummary={productionSummary}
       />
       <ProductionKanbanPriorityGuide

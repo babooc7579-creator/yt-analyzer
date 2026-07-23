@@ -101,6 +101,9 @@ export const getProductionKanbanContentProps = ({
   onOpenDiscoveryLinks,
   onOpenReferenceVault,
   onOpenUploadCalendar,
+  onFilterModeChange,
+  overallDiscoveryLinkCandidateCount,
+  overallProductionSummary,
   productionSummary,
   saveDraftRecord,
   saveStates,
@@ -123,6 +126,11 @@ export const getProductionKanbanContentProps = ({
     onOpenDiscoveryLinks,
     onOpenReferenceVault,
     onOpenUploadCalendar,
+    onFilterModeChange,
+    overallDiscoveryLinkCandidateCount: Number.isFinite(overallDiscoveryLinkCandidateCount)
+      ? overallDiscoveryLinkCandidateCount
+      : toArray(discoveryLinkCandidates).length,
+    overallProductionSummary: toSummaryObject(overallProductionSummary || summary),
     productionSummary: summary,
     saveDraftRecord,
     saveStates,
@@ -146,6 +154,9 @@ export const getProductionKanbanContentChildProps = ({
   onOpenDiscoveryLinks,
   onOpenReferenceVault,
   onOpenUploadCalendar,
+  onFilterModeChange,
+  overallDiscoveryLinkCandidateCount,
+  overallProductionSummary,
   productionSummary,
   saveDraftRecord,
   saveStates,
@@ -156,6 +167,10 @@ export const getProductionKanbanContentChildProps = ({
 }) => {
   const discoveryLinkCandidateList = toArray(discoveryLinkCandidates);
   const focusVideoList = toArray(focusVideos);
+  const summaryDiscoveryLinkCandidateCount = Number.isFinite(overallDiscoveryLinkCandidateCount)
+    ? overallDiscoveryLinkCandidateCount
+    : discoveryLinkCandidateList.length;
+  const summaryProductionModel = toSummaryObject(overallProductionSummary || productionSummary);
 
   return {
     boardProps: {
@@ -202,9 +217,10 @@ export const getProductionKanbanContentChildProps = ({
       }),
     },
     summaryProps: {
-      discoveryLinkCandidateCount: discoveryLinkCandidateList.length,
-      productionSummary,
-      videoCount,
+      discoveryLinkCandidateCount: summaryDiscoveryLinkCandidateCount,
+      onFilterModeChange,
+      productionSummary: summaryProductionModel,
+      videoCount: summaryProductionModel.videoCount || videoCount,
     },
   };
 };

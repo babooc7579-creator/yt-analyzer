@@ -118,6 +118,7 @@ describe('productionKanbanProps utils', () => {
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
       onOpenUploadCalendar: () => 'open calendar',
+      onFilterModeChange: () => 'filter',
       productionSummary: { videoCount: 1, activeCount: 1 },
       saveDraftRecord: () => 'save',
       saveStates: { video1: 'idle' },
@@ -134,6 +135,7 @@ describe('productionKanbanProps utils', () => {
       linkMoveStates: props.linkMoveStates,
       moveStates: props.moveStates,
       onOpenReferenceVault: props.onOpenReferenceVault,
+      onFilterModeChange: props.onFilterModeChange,
       productionSummary: { videoCount: 1, activeCount: 1 },
       saveStates: props.saveStates,
       videoCount: 1,
@@ -153,6 +155,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onFilterModeChange: () => 'filter',
       productionSummary: null,
       saveDraftRecord: () => 'save',
       saveStates: {},
@@ -179,6 +182,7 @@ describe('productionKanbanProps utils', () => {
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
       onOpenUploadCalendar: () => 'open calendar',
+      onFilterModeChange: () => 'filter',
       productionSummary: { videoCount: 1, activeCount: 1 },
       saveDraftRecord: () => 'save',
       saveStates: { video1: 'idle' },
@@ -192,6 +196,7 @@ describe('productionKanbanProps utils', () => {
 
     expect(viewProps.summaryProps).toEqual({
       discoveryLinkCandidateCount: 1,
+      onFilterModeChange: props.onFilterModeChange,
       productionSummary: props.productionSummary,
       videoCount: 1,
     });
@@ -251,6 +256,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onFilterModeChange: () => 'filter',
       productionSummary: {},
       saveDraftRecord: () => 'save',
       saveStates: {},
@@ -286,6 +292,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onFilterModeChange: () => 'filter',
       productionSummary: {
         candidateCount: 1,
         videoCount: 2,
@@ -307,5 +314,51 @@ describe('productionKanbanProps utils', () => {
       },
       videoCount: 2,
     });
+  });
+
+  it('keeps overall summary counts while the board shows a filtered subset', () => {
+    const viewProps = getProductionKanbanContentChildProps({
+      discoveryLinkCandidates: [],
+      draftRecords: {},
+      groupedVideos: {
+        production_candidate: [{ videoId: 'visible-candidate' }],
+      },
+      hasUnsavedChanges: () => false,
+      linkMoveStates: {},
+      moveDiscoveryLink: () => 'move link',
+      moveStates: {},
+      moveVideo: () => 'move video',
+      onFilterModeChange: () => 'filter',
+      overallDiscoveryLinkCandidateCount: 4,
+      overallProductionSummary: {
+        activeCount: 2,
+        candidateCount: 3,
+        uploadedCount: 1,
+        videoCount: 6,
+      },
+      productionSummary: {
+        candidateCount: 1,
+        videoCount: 1,
+      },
+      saveDraftRecord: () => 'save',
+      saveStates: {},
+      updateDraftRecord: () => 'update',
+      videoCount: 1,
+      videoUserRecords: {},
+    });
+
+    expect(viewProps.summaryProps).toMatchObject({
+      discoveryLinkCandidateCount: 4,
+      productionSummary: {
+        activeCount: 2,
+        candidateCount: 3,
+        uploadedCount: 1,
+        videoCount: 6,
+      },
+      videoCount: 6,
+    });
+    expect(viewProps.boardProps.groupedVideos.production_candidate).toEqual([
+      { videoId: 'visible-candidate' },
+    ]);
   });
 });

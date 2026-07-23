@@ -25,4 +25,23 @@ describe('ProductionKanbanSummaryCard', () => {
     expect(html).toContain('3개');
     expect(html).toContain('권리 확인 필요 1개');
   });
+
+  it('renders a metric as a filter button when a click handler is provided', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanbanSummaryCard
+        label="제작 중"
+        labelClassName="label-class"
+        onClick={() => {}}
+        title="제작 중 단계만 표시합니다."
+        value="2개"
+        valueClassName="value-class"
+        wrapperClassName="wrapper-class"
+      />,
+    );
+
+    expect(html).toContain('<button');
+    expect(html).toContain('type="button"');
+    expect(html).toContain('제작 중 단계만 표시합니다.');
+    expect(html).toContain('2개');
+  });
 });
