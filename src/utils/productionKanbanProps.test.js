@@ -197,6 +197,7 @@ describe('productionKanbanProps utils', () => {
     expect(viewProps.summaryProps).toEqual({
       discoveryLinkCandidateCount: 1,
       onFilterModeChange: props.onFilterModeChange,
+      onOpenUploadCalendar: props.onOpenUploadCalendar,
       productionSummary: props.productionSummary,
       videoCount: 1,
     });

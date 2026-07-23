@@ -219,6 +219,7 @@ export const getProductionKanbanContentChildProps = ({
     summaryProps: {
       discoveryLinkCandidateCount: summaryDiscoveryLinkCandidateCount,
       onFilterModeChange,
+      onOpenUploadCalendar,
       productionSummary: summaryProductionModel,
       videoCount: summaryProductionModel.videoCount || videoCount,
     },

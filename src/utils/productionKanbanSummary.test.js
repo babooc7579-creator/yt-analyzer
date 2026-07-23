@@ -96,6 +96,8 @@ describe('productionKanbanSummary utils', () => {
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { discoveryRightsWarningCount: 2 },
     })).toMatchObject({
+      actionFilterMode: PRODUCTION_KANBAN_FILTER.LINKS,
+      actionLabel: '권리 확인 링크 보기',
       badge: '권리 확인',
       nextAction: '오늘 순서: 원본 링크 열기 → 출처/권리 확인 → 사용 가능 또는 제외로 정리',
       tone: 'warning',
@@ -103,11 +105,23 @@ describe('productionKanbanSummary utils', () => {
 
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { overdueCount: 1 },
+    })).toMatchObject({
+      actionLabel: '업로드 일정 열기',
+      actionTarget: 'upload-calendar',
+    });
+    expect(getProductionKanbanPriorityGuideProps({
+      productionSummary: { overdueCount: 1 },
     }).title).toContain('지난 업로드 예정일');
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { overdueCount: 1 },
     }).nextAction).toContain('완료/일정 변경/후보 제외');
 
+    expect(getProductionKanbanPriorityGuideProps({
+      productionSummary: { activeWithoutDate: 3 },
+    })).toMatchObject({
+      actionFilterMode: PRODUCTION_KANBAN_FILTER.ACTIVE,
+      actionLabel: '일정 없는 제작 중 보기',
+    });
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { activeWithoutDate: 3 },
     }).description).toContain('일정이 없는 영상 3개');
@@ -118,6 +132,8 @@ describe('productionKanbanSummary utils', () => {
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { activeCount: 2 },
     })).toMatchObject({
+      actionFilterMode: PRODUCTION_KANBAN_FILTER.ACTIVE,
+      actionLabel: '제작 중 작업 보기',
       badge: '제작 진행',
       nextAction: '오늘 순서: 제작 중 후보 하나 선택 → 부족한 준비 항목 채우기 → 업로드 완료로 이동',
       tone: 'ready',
@@ -125,11 +141,24 @@ describe('productionKanbanSummary utils', () => {
 
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { candidateCount: 4 },
+    })).toMatchObject({
+      actionFilterMode: PRODUCTION_KANBAN_FILTER.CANDIDATE,
+      actionLabel: '제작 후보 보기',
+    });
+    expect(getProductionKanbanPriorityGuideProps({
+      productionSummary: { candidateCount: 4 },
     }).description).toContain('영상 후보 4개');
     expect(getProductionKanbanPriorityGuideProps({
       productionSummary: { candidateCount: 4 },
     }).nextAction).toContain('하나만 제작 중으로 이동');
 
+    expect(getProductionKanbanPriorityGuideProps({
+      discoveryLinkCandidateCount: 5,
+      productionSummary: {},
+    })).toMatchObject({
+      actionFilterMode: PRODUCTION_KANBAN_FILTER.LINKS,
+      actionLabel: '링크 후보 보기',
+    });
     expect(getProductionKanbanPriorityGuideProps({
       discoveryLinkCandidateCount: 5,
       productionSummary: {},

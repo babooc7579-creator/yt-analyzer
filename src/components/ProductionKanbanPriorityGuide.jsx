@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, Clock3, Lightbulb } from 'lucide-react';
+import { AlertTriangle, ArrowRight, CalendarDays, CheckCircle2, Clock3, Lightbulb } from 'lucide-react';
 
 import { getProductionKanbanPriorityGuideProps } from '../utils/productionKanbanSummary';
 
@@ -37,6 +37,8 @@ const TONE_STYLES = {
 
 export default function ProductionKanbanPriorityGuide({
   discoveryLinkCandidateCount,
+  onFilterModeChange,
+  onOpenUploadCalendar,
   productionSummary,
 }) {
   const guideProps = getProductionKanbanPriorityGuideProps({
@@ -45,6 +47,13 @@ export default function ProductionKanbanPriorityGuide({
   });
   const styles = TONE_STYLES[guideProps.tone] || TONE_STYLES.info;
   const Icon = styles.Icon;
+  const isCalendarAction = guideProps.actionTarget === 'upload-calendar';
+  const onAction = isCalendarAction
+    ? onOpenUploadCalendar
+    : (guideProps.actionFilterMode && typeof onFilterModeChange === 'function'
+      ? () => onFilterModeChange(guideProps.actionFilterMode)
+      : null);
+  const ActionIcon = isCalendarAction ? CalendarDays : ArrowRight;
 
   return (
     <div
@@ -66,6 +75,19 @@ export default function ProductionKanbanPriorityGuide({
           <p className="mt-2 rounded-lg bg-white/70 px-3 py-2 text-[11px] font-bold leading-relaxed text-slate-700">
             {guideProps.nextAction}
           </p>
+        ) : null}
+        {typeof onAction === 'function' ? (
+          <button
+            type="button"
+            onClick={onAction}
+            className="mt-3 inline-flex h-9 items-center gap-2 rounded-lg bg-slate-900 px-4 text-xs font-extrabold text-white hover:bg-slate-700"
+            title={isCalendarAction
+              ? '업로드 캘린더로 이동합니다. 화면 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다.'
+              : '안내에 해당하는 제작 단계만 표시합니다. Cloud 데이터는 변경하지 않습니다.'}
+          >
+            <ActionIcon className="h-4 w-4" />
+            {guideProps.actionLabel}
+          </button>
         ) : null}
         <p className="mt-2 text-[11px] font-bold text-slate-500">
           표시 전용 안내입니다. YouTube API 호출, 외부 자동 수집, Cloud 저장은 실행하지 않습니다.
