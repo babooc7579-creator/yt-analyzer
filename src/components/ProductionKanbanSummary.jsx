@@ -4,6 +4,7 @@ import ProductionKanbanPriorityGuide from './ProductionKanbanPriorityGuide';
 import { getProductionKanbanSummaryHeaderProps } from '../utils/productionKanbanSummary';
 
 export default function ProductionKanbanSummary({
+  activeFilterMode,
   discoveryLinkCandidateCount,
   onFilterModeChange,
   onOpenUploadCalendar,
@@ -30,6 +31,7 @@ export default function ProductionKanbanSummary({
         </p>
       </div>
       <ProductionKanbanSummaryMetrics
+        activeFilterMode={activeFilterMode}
         discoveryLinkCandidateCount={discoveryLinkCandidateCount}
         onFilterModeChange={onFilterModeChange}
         productionSummary={productionSummary}

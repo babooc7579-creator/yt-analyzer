@@ -6,6 +6,7 @@ import ProductionKanbanNextActions from './ProductionKanbanNextActions';
 import ProductionKanbanSummary from './ProductionKanbanSummary';
 
 export default function ProductionKanbanContent({
+  activeFilterMode,
   discoveryLinkCandidates,
   draftRecords,
   focusVideos,
@@ -35,6 +36,7 @@ export default function ProductionKanbanContent({
     nextActionsProps,
     summaryProps,
   } = getProductionKanbanContentChildProps({
+    activeFilterMode,
     discoveryLinkCandidates,
     draftRecords,
     focusVideos,
