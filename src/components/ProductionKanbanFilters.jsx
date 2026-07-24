@@ -47,6 +47,20 @@ export default function ProductionKanbanFilters({
         </div>
       </div>
 
+      {filterSummary.unsavedCount > 0 ? (
+        <div className="mt-3 flex items-start gap-2 border-l-4 border-amber-400 bg-amber-50 px-3 py-2 text-amber-900">
+          <Save className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+          <div className="min-w-0">
+            <p className="text-xs font-extrabold">
+              Cloud에 저장하지 않은 제작안 {filterSummary.unsavedCount}개
+            </p>
+            <p className="mt-0.5 text-xs leading-relaxed text-amber-800">
+              다른 화면 이동·새로고침·탭 닫기 전에 확인합니다. 각 카드에서 Cloud 저장을 완료하면 이 안내와 경고가 사라집니다.
+            </p>
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-[minmax(0,1fr)_180px_auto]">
         <label className="relative block">
           <span className="sr-only">제작 영상 제목, 채널, 메모 검색</span>
