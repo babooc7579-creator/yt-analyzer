@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { PRODUCTION_STATUS } from '../constants/status';
 import {
   PRODUCTION_KANBAN_FILTER,
+  countUnsavedProductionVideoDrafts,
   getFilteredProductionKanbanData,
   getProductionKanbanFilterSummary,
   getProductionKanbanSearchContext,
@@ -229,6 +230,25 @@ describe('productionKanbanFilters', () => {
     })).toBe(true);
   });
 
+  it('counts unique unsaved production drafts across focus and stage groups', () => {
+    const dataModel = createDataModel();
+    dataModel.groupedVideos[PRODUCTION_STATUS.CANDIDATE].push(videos.focus);
+
+    expect(countUnsavedProductionVideoDrafts({
+      dataModel,
+      draftRecords: {
+        active: {
+          ...videoUserRecords.active,
+          note: 'Changed opening',
+        },
+        focus: {
+          draftTitle: 'New focus title',
+        },
+      },
+      videoUserRecords,
+    })).toBe(2);
+  });
+
   it('limits a calendar-originated lookup to the selected video id', () => {
     const duplicateTitleModel = createDataModel();
     duplicateTitleModel.groupedVideos[PRODUCTION_STATUS.CANDIDATE] = [
@@ -299,6 +319,7 @@ describe('productionKanbanFilters', () => {
       hasActiveFilters: false,
       metricText: '작업 항목 5개',
       totalCount: 5,
+      unsavedCount: 0,
       visibleCount: 1,
     });
     expect(getProductionKanbanFilterSummary({
@@ -309,6 +330,7 @@ describe('productionKanbanFilters', () => {
       hasActiveFilters: true,
       metricText: '전체 5개 중 1개 표시',
       totalCount: 5,
+      unsavedCount: 0,
       visibleCount: 1,
     });
   });
