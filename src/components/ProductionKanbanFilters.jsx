@@ -1,6 +1,9 @@
-import { RotateCcw, Search } from 'lucide-react';
+import { RotateCcw, Save, Search } from 'lucide-react';
 
-import { PRODUCTION_KANBAN_FILTER_OPTIONS } from '../utils/productionKanbanFilters';
+import {
+  PRODUCTION_KANBAN_FILTER,
+  PRODUCTION_KANBAN_FILTER_OPTIONS,
+} from '../utils/productionKanbanFilters';
 
 export default function ProductionKanbanFilters({
   filterMode,
@@ -21,9 +24,27 @@ export default function ProductionKanbanFilters({
             저장된 Cloud 작업 기록 안에서만 찾습니다. YouTube API를 새로 호출하지 않습니다.
           </p>
         </div>
-        <p className="shrink-0 text-xs font-bold text-slate-500" aria-live="polite">
-          {filterSummary.metricText}
-        </p>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {filterSummary.unsavedCount > 0 ? (
+            <button
+              type="button"
+              onClick={() => onFilterModeChange(PRODUCTION_KANBAN_FILTER.UNSAVED)}
+              className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-extrabold transition-colors ${
+                filterMode === PRODUCTION_KANBAN_FILTER.UNSAVED
+                  ? 'border-amber-400 bg-amber-100 text-amber-900'
+                  : 'border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100'
+              }`}
+              title="아직 Cloud에 저장하지 않은 제작안만 표시합니다. 이 버튼은 저장을 실행하지 않습니다."
+              aria-pressed={filterMode === PRODUCTION_KANBAN_FILTER.UNSAVED}
+            >
+              <Save className="h-3.5 w-3.5" />
+              Cloud 저장 전 {filterSummary.unsavedCount}개
+            </button>
+          ) : null}
+          <p className="text-xs font-bold text-slate-500" aria-live="polite">
+            {filterSummary.metricText}
+          </p>
+        </div>
       </div>
 
       <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-[minmax(0,1fr)_180px_auto]">

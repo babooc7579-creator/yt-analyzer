@@ -35,6 +35,27 @@ describe('ProductionKanbanFilters', () => {
     expect(html).toContain('전체 작업 보기');
   });
 
+  it('renders an actionable unsaved draft shortcut only when changes exist', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanbanFilters
+        filterMode="all"
+        filterSummary={{
+          hasActiveFilters: false,
+          metricText: '작업 항목 5개',
+          unsavedCount: 2,
+        }}
+        onFilterModeChange={noop}
+        onReset={noop}
+        onSearchQueryChange={noop}
+        searchQuery=""
+      />,
+    );
+
+    expect(html).toContain('Cloud 저장 전 2개');
+    expect(html).toContain('이 버튼은 저장을 실행하지 않습니다.');
+    expect(html).toContain('aria-pressed="false"');
+  });
+
   it('explains a calendar-originated search and offers a display-only reset', () => {
     const html = renderToStaticMarkup(
       <ProductionKanbanFilters

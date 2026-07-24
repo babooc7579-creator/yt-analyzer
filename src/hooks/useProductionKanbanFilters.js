@@ -33,12 +33,23 @@ export function useProductionKanbanFilters({
 
   const filterSummary = useMemo(() => getProductionKanbanFilterSummary({
     dataModel,
+    draftRecords,
     filteredDataModel,
     filterMode,
     searchQuery,
     targetDiscoveryLinkId,
     targetVideoId,
-  }), [dataModel, filteredDataModel, filterMode, searchQuery, targetDiscoveryLinkId, targetVideoId]);
+    videoUserRecords,
+  }), [
+    dataModel,
+    draftRecords,
+    filteredDataModel,
+    filterMode,
+    searchQuery,
+    targetDiscoveryLinkId,
+    targetVideoId,
+    videoUserRecords,
+  ]);
 
   const searchContext = useMemo(() => getProductionKanbanSearchContext({
     searchQuery,

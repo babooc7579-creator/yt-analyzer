@@ -166,6 +166,32 @@ export const hasUnsavedProductionVideoDraft = ({
   );
 };
 
+export const countUnsavedProductionVideoDrafts = ({
+  dataModel,
+  draftRecords,
+  videoUserRecords,
+} = {}) => {
+  const source = dataModel && typeof dataModel === 'object' ? dataModel : {};
+  const sourceGroups = toRecordMap(source.groupedVideos);
+  const productionVideos = [
+    ...toArray(source.focusVideos),
+    ...Object.values(sourceGroups).flatMap(toArray),
+  ];
+  const countedVideoIds = new Set();
+
+  return productionVideos.reduce((count, video) => {
+    const videoId = video?.videoId;
+    if (!videoId || countedVideoIds.has(videoId)) return count;
+    countedVideoIds.add(videoId);
+
+    return count + Number(hasUnsavedProductionVideoDraft({
+      draftRecords,
+      video,
+      videoUserRecords,
+    }));
+  }, 0);
+};
+
 const filterUnsavedVideos = (videos, options) => (
   toArray(videos).filter((video) => hasUnsavedProductionVideoDraft({ ...options, video }))
 );
@@ -239,11 +265,13 @@ export const getFilteredProductionKanbanData = ({
 
 export const getProductionKanbanFilterSummary = ({
   dataModel,
+  draftRecords,
   filteredDataModel,
   filterMode = PRODUCTION_KANBAN_FILTER.ALL,
   searchQuery = '',
   targetDiscoveryLinkId = '',
   targetVideoId = '',
+  videoUserRecords,
 } = {}) => {
   const sourceSummary = dataModel?.productionSummary || {};
   const filteredSummary = filteredDataModel?.productionSummary || {};
@@ -251,6 +279,11 @@ export const getProductionKanbanFilterSummary = ({
   const filteredLinkCount = toArray(filteredDataModel?.discoveryLinkCandidates).length;
   const totalCount = Number(sourceSummary.videoCount || 0) + sourceLinkCount;
   const visibleCount = Number(filteredSummary.videoCount || 0) + filteredLinkCount;
+  const unsavedCount = countUnsavedProductionVideoDrafts({
+    dataModel,
+    draftRecords,
+    videoUserRecords,
+  });
   const hasActiveFilters = (
     filterMode !== PRODUCTION_KANBAN_FILTER.ALL
     || Boolean(normalizeSearchText(searchQuery))
@@ -264,6 +297,7 @@ export const getProductionKanbanFilterSummary = ({
       ? `전체 ${totalCount}개 중 ${visibleCount}개 표시`
       : `작업 항목 ${totalCount}개`,
     totalCount,
+    unsavedCount,
     visibleCount,
   };
 };
