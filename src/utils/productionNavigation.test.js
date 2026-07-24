@@ -4,6 +4,7 @@ import {
   getGuardedProductionNavigationHandlers,
   guardProductionNavigation,
   PRODUCTION_UNSAVED_NAVIGATION_MESSAGE,
+  registerProductionBeforeUnloadGuard,
 } from './productionNavigation';
 
 describe('production navigation guard', () => {
@@ -78,5 +79,46 @@ describe('production navigation guard', () => {
     expect(onOpenHome).toHaveBeenCalledOnce();
     expect(onOpenReferenceVault).toHaveBeenCalledOnce();
     expect(handlers.missing).toBeUndefined();
+  });
+
+  it('registers and removes browser unload protection for unsaved drafts', () => {
+    const listeners = new Map();
+    const target = {
+      addEventListener: vi.fn((name, handler) => listeners.set(name, handler)),
+      removeEventListener: vi.fn((name, handler) => {
+        if (listeners.get(name) === handler) listeners.delete(name);
+      }),
+    };
+    const cleanup = registerProductionBeforeUnloadGuard({
+      hasUnsavedDrafts: true,
+      target,
+    });
+    const event = {
+      preventDefault: vi.fn(),
+      returnValue: undefined,
+    };
+
+    listeners.get('beforeunload')(event);
+
+    expect(event.preventDefault).toHaveBeenCalledOnce();
+    expect(event.returnValue).toBe('');
+    cleanup();
+    expect(listeners.has('beforeunload')).toBe(false);
+  });
+
+  it('does not register browser unload protection when every draft is saved', () => {
+    const target = {
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    };
+    const cleanup = registerProductionBeforeUnloadGuard({
+      hasUnsavedDrafts: false,
+      target,
+    });
+
+    cleanup();
+
+    expect(target.addEventListener).not.toHaveBeenCalled();
+    expect(target.removeEventListener).not.toHaveBeenCalled();
   });
 });
