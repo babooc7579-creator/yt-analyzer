@@ -6,6 +6,7 @@ import {
   getFilteredProductionKanbanData,
   getProductionKanbanFilterSummary,
   getProductionKanbanSearchContext,
+  hasUnsavedProductionVideoDraft,
   matchesProductionLinkSearch,
   matchesProductionVideoSearch,
 } from './productionKanbanFilters';
@@ -177,6 +178,55 @@ describe('productionKanbanFilters', () => {
     expect(focus.productionSummary.videoCount).toBe(1);
     expect(links.productionSummary.videoCount).toBe(0);
     expect(links.discoveryLinkCandidates).toHaveLength(1);
+  });
+
+  it('shows only production videos with in-session changes in the unsaved view', () => {
+    const dataModel = createDataModel();
+    const draftRecords = {
+      active: {
+        ...videoUserRecords.active,
+        note: 'Changed opening',
+      },
+      candidate: {
+        draftTitle: '',
+        note: '',
+        targetPublishDate: '',
+      },
+      focus: {
+        draftTitle: 'New focus title',
+      },
+    };
+    const filtered = getFilteredProductionKanbanData({
+      dataModel,
+      draftRecords,
+      filterMode: PRODUCTION_KANBAN_FILTER.UNSAVED,
+      videoUserRecords,
+    });
+
+    expect(filtered.focusVideos).toEqual([videos.focus]);
+    expect(filtered.groupedVideos[PRODUCTION_STATUS.CANDIDATE]).toEqual([]);
+    expect(filtered.groupedVideos[PRODUCTION_STATUS.ACTIVE]).toEqual([videos.active]);
+    expect(filtered.groupedVideos[PRODUCTION_STATUS.DONE]).toEqual([]);
+    expect(filtered.discoveryLinkCandidates).toEqual([]);
+    expect(filtered.productionSummary.videoCount).toBe(2);
+  });
+
+  it('does not treat a missing draft record as an unsaved edit', () => {
+    expect(hasUnsavedProductionVideoDraft({
+      draftRecords: {},
+      video: videos.active,
+      videoUserRecords,
+    })).toBe(false);
+    expect(hasUnsavedProductionVideoDraft({
+      draftRecords: {
+        active: {
+          ...videoUserRecords.active,
+          note: 'Changed opening',
+        },
+      },
+      video: videos.active,
+      videoUserRecords,
+    })).toBe(true);
   });
 
   it('limits a calendar-originated lookup to the selected video id', () => {

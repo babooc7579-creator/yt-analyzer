@@ -24,6 +24,7 @@ describe('ProductionKanbanFilters', () => {
     expect(html).toContain('영상 제목, 채널, 내 제목, 메모 검색');
     expect(html).toContain('오늘 집중');
     expect(html).toContain('발견 링크');
+    expect(html).toContain('Cloud 저장 전');
     expect(html).toContain('작업 항목 5개');
   });
 
