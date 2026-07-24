@@ -45,6 +45,7 @@ describe('ProductionVideoCard workflow', () => {
     expect(html).toContain('URL 복사');
     expect(html).toContain('업로드 26.07.30');
     expect(html).toContain('작업 준비 완료');
+    expect(html).toContain('저장 전');
     expect(html).toContain('Cloud 저장 · API 호출 없음');
     expect(html).toContain('오늘 집중과 제작 상태 변경은 Cloud 판단 기록에 저장합니다.');
   });

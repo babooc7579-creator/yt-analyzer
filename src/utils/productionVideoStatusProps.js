@@ -90,6 +90,46 @@ export const getProductionVideoDraftSaveHandler = ({
     : noop
 );
 
+export const getProductionVideoDraftStatusBadgeProps = ({
+  isDirty = false,
+  isSaving = false,
+  saveState = '',
+} = {}) => {
+  if (isSaving) {
+    return {
+      label: '저장 중',
+      title: '변경 내용을 Cloud 판단 기록에 저장하는 중입니다.',
+      tone: 'bg-amber-100 text-amber-700',
+    };
+  }
+
+  if (saveState === 'error') {
+    return {
+      label: '저장 실패',
+      title: 'Cloud 저장에 실패했습니다. Cloud에 변경 저장 버튼을 다시 눌러 주세요.',
+      tone: 'bg-rose-100 text-rose-700',
+    };
+  }
+
+  if (isDirty) {
+    return {
+      label: '저장 전',
+      title: '입력한 변경이 아직 Cloud 판단 기록에 저장되지 않았습니다.',
+      tone: 'bg-amber-100 text-amber-700',
+    };
+  }
+
+  if (saveState === 'saved') {
+    return {
+      label: '저장 완료',
+      title: '현재 제작안이 Cloud 판단 기록에 저장됐습니다.',
+      tone: 'bg-emerald-100 text-emerald-700',
+    };
+  }
+
+  return null;
+};
+
 export const getProductionVideoMoveStatusViewProps = ({
   columnId,
   moveState,
