@@ -42,3 +42,25 @@ export const getGuardedProductionNavigationHandlers = ({
     }),
   ]),
 );
+
+export const registerProductionBeforeUnloadGuard = ({
+  hasUnsavedDrafts = false,
+  target,
+} = {}) => {
+  if (
+    !hasUnsavedDrafts
+    || !target
+    || typeof target.addEventListener !== 'function'
+    || typeof target.removeEventListener !== 'function'
+  ) {
+    return () => {};
+  }
+
+  const handleBeforeUnload = (event) => {
+    event.preventDefault();
+    event.returnValue = '';
+  };
+
+  target.addEventListener('beforeunload', handleBeforeUnload);
+  return () => target.removeEventListener('beforeunload', handleBeforeUnload);
+};

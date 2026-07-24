@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useProductionKanbanActions } from '../hooks/useProductionKanbanActions';
 import { useProductionKanbanData } from '../hooks/useProductionKanbanData';
 import { useProductionKanbanFilters } from '../hooks/useProductionKanbanFilters';
@@ -5,7 +7,10 @@ import {
   getProductionKanbanContentProps,
   shouldShowProductionKanbanEmptyState,
 } from '../utils/productionKanbanProps';
-import { getGuardedProductionNavigationHandlers } from '../utils/productionNavigation';
+import {
+  getGuardedProductionNavigationHandlers,
+  registerProductionBeforeUnloadGuard,
+} from '../utils/productionNavigation';
 import ProductionKanbanContent from './ProductionKanbanContent';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
 import ProductionKanbanFilteredEmptyState from './ProductionKanbanFilteredEmptyState';
@@ -75,6 +80,12 @@ export default function ProductionKanban({
     initialTargetVideoId,
     videoUserRecords,
   });
+  const hasUnsavedDrafts = filterSummary.unsavedCount > 0;
+
+  useEffect(() => registerProductionBeforeUnloadGuard({
+    hasUnsavedDrafts,
+    target: typeof window === 'undefined' ? undefined : window,
+  }), [hasUnsavedDrafts]);
 
   if (shouldShowProductionKanbanEmptyState({ discoveryLinkCandidates, productionSummary })) {
     return (
@@ -103,7 +114,7 @@ export default function ProductionKanban({
       'reference-vault': onOpenReferenceVault,
       'upload-calendar': onOpenUploadCalendar,
     },
-    hasUnsavedDrafts: filterSummary.unsavedCount > 0,
+    hasUnsavedDrafts,
   });
   const filteredContentProps = getProductionKanbanContentProps({
     activeFilterMode: filterMode,
