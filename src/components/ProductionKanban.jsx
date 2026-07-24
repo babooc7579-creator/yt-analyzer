@@ -5,6 +5,7 @@ import {
   getProductionKanbanContentProps,
   shouldShowProductionKanbanEmptyState,
 } from '../utils/productionKanbanProps';
+import { getGuardedProductionNavigationHandlers } from '../utils/productionNavigation';
 import ProductionKanbanContent from './ProductionKanbanContent';
 import ProductionKanbanEmptyState from './ProductionKanbanEmptyState';
 import ProductionKanbanFilteredEmptyState from './ProductionKanbanFilteredEmptyState';
@@ -22,6 +23,7 @@ export default function ProductionKanban({
   onOpenDiscoveryLinks,
   onOpenHome,
   onOpenUploadCalendar,
+  onConfirmUnsavedNavigation,
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
   onOpenReferenceVault,
@@ -84,6 +86,25 @@ export default function ProductionKanban({
     );
   }
 
+  const confirmNavigation = (message) => {
+    if (typeof onConfirmUnsavedNavigation === 'function') {
+      return onConfirmUnsavedNavigation(message);
+    }
+    if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
+      return window.confirm(message);
+    }
+    return false;
+  };
+  const guardedNavigationHandlers = getGuardedProductionNavigationHandlers({
+    confirmNavigation,
+    handlers: {
+      'discovery-links': onOpenDiscoveryLinks,
+      home: onOpenHome,
+      'reference-vault': onOpenReferenceVault,
+      'upload-calendar': onOpenUploadCalendar,
+    },
+    hasUnsavedDrafts: filterSummary.unsavedCount > 0,
+  });
   const filteredContentProps = getProductionKanbanContentProps({
     activeFilterMode: filterMode,
     discoveryLinkCandidates: filteredDataModel.discoveryLinkCandidates,
@@ -95,9 +116,9 @@ export default function ProductionKanban({
     moveDiscoveryLink,
     moveStates,
     moveVideo,
-    onOpenDiscoveryLinks,
-    onOpenReferenceVault,
-    onOpenUploadCalendar,
+    onOpenDiscoveryLinks: guardedNavigationHandlers['discovery-links'],
+    onOpenReferenceVault: guardedNavigationHandlers['reference-vault'],
+    onOpenUploadCalendar: guardedNavigationHandlers['upload-calendar'],
     onFilterModeChange: setFilterMode,
     overallDiscoveryLinkCandidateCount: discoveryLinkCandidates.length,
     overallProductionSummary: productionSummary,
@@ -108,13 +129,7 @@ export default function ProductionKanban({
     updateVideoFocus,
     videoUserRecords,
   });
-  const returnToSearchSourceHandlers = {
-    'discovery-links': onOpenDiscoveryLinks,
-    home: onOpenHome,
-    'reference-vault': onOpenReferenceVault,
-    'upload-calendar': onOpenUploadCalendar,
-  };
-  const onReturnToSearchSource = returnToSearchSourceHandlers[searchContext?.returnTarget];
+  const onReturnToSearchSource = guardedNavigationHandlers[searchContext?.returnTarget];
 
   return (
     <div className="space-y-4">
