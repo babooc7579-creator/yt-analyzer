@@ -5,6 +5,7 @@ import {
   PRODUCTION_VIDEO_STATUS_HELP_TEXT,
   getProductionVideoDraftSaveButtonProps,
   getProductionVideoDraftSaveHandler,
+  getProductionVideoDraftStatusBadgeProps,
   getProductionVideoFocusActionCopy,
   getProductionVideoFocusHandler,
   getProductionVideoMoveActionCopy,
@@ -125,6 +126,41 @@ describe('productionVideoStatusProps utils', () => {
     getProductionVideoDraftSaveHandler({ videoId: 'video-2' })();
 
     expect(onSave).toHaveBeenCalledTimes(1);
+  });
+
+  it('builds visible draft save state badges without overstating Cloud success', () => {
+    expect(getProductionVideoDraftStatusBadgeProps({
+      isDirty: true,
+    })).toMatchObject({
+      label: '저장 전',
+      tone: 'bg-amber-100 text-amber-700',
+    });
+
+    expect(getProductionVideoDraftStatusBadgeProps({
+      isDirty: true,
+      isSaving: true,
+      saveState: 'error',
+    })).toMatchObject({
+      label: '저장 중',
+      tone: 'bg-amber-100 text-amber-700',
+    });
+
+    expect(getProductionVideoDraftStatusBadgeProps({
+      isDirty: true,
+      saveState: 'error',
+    })).toMatchObject({
+      label: '저장 실패',
+      tone: 'bg-rose-100 text-rose-700',
+    });
+
+    expect(getProductionVideoDraftStatusBadgeProps({
+      saveState: 'saved',
+    })).toMatchObject({
+      label: '저장 완료',
+      tone: 'bg-emerald-100 text-emerald-700',
+    });
+
+    expect(getProductionVideoDraftStatusBadgeProps()).toBeNull();
   });
 
   it('builds moving button visible labels', () => {
