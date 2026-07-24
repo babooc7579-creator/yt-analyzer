@@ -53,7 +53,30 @@ describe('ProductionKanbanFilters', () => {
 
     expect(html).toContain('Cloud 저장 전 2개');
     expect(html).toContain('이 버튼은 저장을 실행하지 않습니다.');
+    expect(html).toContain('Cloud에 저장하지 않은 제작안 2개');
+    expect(html).toContain('다른 화면 이동·새로고침·탭 닫기 전에 확인합니다.');
+    expect(html).toContain('각 카드에서 Cloud 저장을 완료하면 이 안내와 경고가 사라집니다.');
     expect(html).toContain('aria-pressed="false"');
+  });
+
+  it('hides unsaved protection guidance after every production draft is saved', () => {
+    const html = renderToStaticMarkup(
+      <ProductionKanbanFilters
+        filterMode="all"
+        filterSummary={{
+          hasActiveFilters: false,
+          metricText: '작업 항목 5개',
+          unsavedCount: 0,
+        }}
+        onFilterModeChange={noop}
+        onReset={noop}
+        onSearchQueryChange={noop}
+        searchQuery=""
+      />,
+    );
+
+    expect(html).not.toContain('Cloud에 저장하지 않은 제작안');
+    expect(html).not.toContain('탭 닫기 전에 확인합니다.');
   });
 
   it('explains a calendar-originated search and offers a display-only reset', () => {
