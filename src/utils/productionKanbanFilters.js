@@ -1,5 +1,6 @@
 import { PRODUCTION_STATUS } from '../constants/status';
 import { getIsoTodayDate } from './dates';
+import { hasProductionDraftChanges } from './productionKanbanActions';
 import { getProductionSummary } from './productionKanbanData';
 
 export const PRODUCTION_KANBAN_FILTER = {
@@ -9,6 +10,7 @@ export const PRODUCTION_KANBAN_FILTER = {
   ACTIVE: PRODUCTION_STATUS.ACTIVE,
   DONE: PRODUCTION_STATUS.DONE,
   LINKS: 'links',
+  UNSAVED: 'unsaved',
 };
 
 export const PRODUCTION_KANBAN_FILTER_OPTIONS = [
@@ -18,6 +20,7 @@ export const PRODUCTION_KANBAN_FILTER_OPTIONS = [
   { value: PRODUCTION_KANBAN_FILTER.ACTIVE, label: '제작 중' },
   { value: PRODUCTION_KANBAN_FILTER.DONE, label: '업로드 완료' },
   { value: PRODUCTION_KANBAN_FILTER.LINKS, label: '발견 링크' },
+  { value: PRODUCTION_KANBAN_FILTER.UNSAVED, label: 'Cloud 저장 전' },
 ];
 
 export const getProductionKanbanSearchContext = ({
@@ -148,6 +151,25 @@ const createEmptyGroups = () => ({
   [PRODUCTION_STATUS.DONE]: [],
 });
 
+export const hasUnsavedProductionVideoDraft = ({
+  draftRecords,
+  video,
+  videoUserRecords,
+} = {}) => {
+  const videoId = video?.videoId;
+  const drafts = toRecordMap(draftRecords);
+  if (!videoId || !Object.prototype.hasOwnProperty.call(drafts, videoId)) return false;
+
+  return hasProductionDraftChanges(
+    toRecordMap(videoUserRecords)[videoId],
+    drafts[videoId],
+  );
+};
+
+const filterUnsavedVideos = (videos, options) => (
+  toArray(videos).filter((video) => hasUnsavedProductionVideoDraft({ ...options, video }))
+);
+
 export const getFilteredProductionKanbanData = ({
   dataModel,
   draftRecords,
@@ -161,7 +183,7 @@ export const getFilteredProductionKanbanData = ({
   const source = dataModel && typeof dataModel === 'object' ? dataModel : {};
   const sourceGroups = toRecordMap(source.groupedVideos);
   const filterOptions = { draftRecords, searchQuery, targetVideoId, videoUserRecords };
-  const focusVideos = targetDiscoveryLinkId ? [] : filterVideos(source.focusVideos, filterOptions);
+  let focusVideos = targetDiscoveryLinkId ? [] : filterVideos(source.focusVideos, filterOptions);
   const groupedVideos = createEmptyGroups();
 
   Object.keys(groupedVideos).forEach((status) => {
@@ -177,16 +199,24 @@ export const getFilteredProductionKanbanData = ({
     ));
 
   if (filterMode !== PRODUCTION_KANBAN_FILTER.ALL) {
-    if (filterMode !== PRODUCTION_KANBAN_FILTER.FOCUS) {
-      focusVideos.length = 0;
-    }
-
-    Object.keys(groupedVideos).forEach((status) => {
-      if (filterMode !== status) groupedVideos[status] = [];
-    });
-
-    if (filterMode !== PRODUCTION_KANBAN_FILTER.LINKS) {
+    if (filterMode === PRODUCTION_KANBAN_FILTER.UNSAVED) {
+      focusVideos = filterUnsavedVideos(focusVideos, filterOptions);
+      Object.keys(groupedVideos).forEach((status) => {
+        groupedVideos[status] = filterUnsavedVideos(groupedVideos[status], filterOptions);
+      });
       discoveryLinkCandidates.length = 0;
+    } else {
+      if (filterMode !== PRODUCTION_KANBAN_FILTER.FOCUS) {
+        focusVideos.length = 0;
+      }
+
+      Object.keys(groupedVideos).forEach((status) => {
+        if (filterMode !== status) groupedVideos[status] = [];
+      });
+
+      if (filterMode !== PRODUCTION_KANBAN_FILTER.LINKS) {
+        discoveryLinkCandidates.length = 0;
+      }
     }
   }
 
