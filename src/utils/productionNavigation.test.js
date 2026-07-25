@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  getGuardedProductionDataActionHandlers,
   getGuardedProductionNavigationHandlers,
+  guardProductionDataAction,
   guardProductionNavigation,
   guardProductionSidebarNavigation,
   guardProductionTabNavigation,
@@ -132,6 +134,36 @@ describe('production navigation guard', () => {
     expect(selectTab('dashboard')).toBe(true);
     expect(confirmNavigation).toHaveBeenCalledWith(PRODUCTION_UNSAVED_NAVIGATION_MESSAGE);
     expect(onSelectTab).toHaveBeenCalledWith('dashboard');
+  });
+
+  it('blocks data actions before they can clear or replace unsaved drafts', () => {
+    const confirmNavigation = vi.fn(() => false);
+    const onAction = vi.fn(() => Promise.resolve({ success: true }));
+    const runAction = guardProductionDataAction({
+      confirmNavigation,
+      hasUnsavedDrafts: true,
+      onAction,
+    });
+
+    expect(runAction('channel-1')).toBe(false);
+    expect(confirmNavigation).toHaveBeenCalledWith(PRODUCTION_UNSAVED_NAVIGATION_MESSAGE);
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
+  it('preserves data action results after confirmation', async () => {
+    const result = Promise.resolve({ success: true, videoCount: 3 });
+    const loadStoredVideos = vi.fn(() => result);
+    const handlers = getGuardedProductionDataActionHandlers({
+      confirmNavigation: () => true,
+      handlers: { loadStoredVideos },
+      hasUnsavedDrafts: true,
+    });
+
+    await expect(handlers.loadStoredVideos()).resolves.toEqual({
+      success: true,
+      videoCount: 3,
+    });
+    expect(loadStoredVideos).toHaveBeenCalledOnce();
   });
 
   it('registers and removes browser unload protection for unsaved drafts', () => {
