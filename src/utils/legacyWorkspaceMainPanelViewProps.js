@@ -1,3 +1,5 @@
+import { guardProductionTabNavigation } from './productionNavigation';
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
 const toVideoList = (videos) => (
@@ -16,6 +18,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
   fetchTopComments,
   filteredAndSortedVideos,
   handleManualScan,
+  hasUnsavedProductionDrafts,
   isProductionCandidate,
   isReferenceVaultView,
   isScanning,
@@ -23,6 +26,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
   lengthFilter,
   markRadarVideoStatus,
   openCreatorView,
+  onConfirmUnsavedNavigation,
   promoteVideoToProduction,
   promptCopyError,
   savedChannels,
@@ -60,6 +64,23 @@ export function getLegacyWorkspaceMainPanelViewProps({
   const savedVideoList = toVideoList(savedVideos);
   const selectedChannels = toArray(selectedChannelIds);
   const videoList = toVideoList(videos);
+  const confirmNavigation = (message) => {
+    if (typeof onConfirmUnsavedNavigation === 'function') {
+      return onConfirmUnsavedNavigation(message);
+    }
+    if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
+      return window.confirm(message);
+    }
+    return false;
+  };
+  const onSelectWorkspaceTab = hasUnsavedProductionDrafts
+    ? guardProductionTabNavigation({
+      activeTab,
+      confirmNavigation,
+      hasUnsavedDrafts: true,
+      onSelectTab: setActiveTab,
+    })
+    : setActiveTab;
 
   return {
     activeTab,
@@ -122,7 +143,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
     },
     workspaceTabsProps: {
       activeTab,
-      onSelectTab: setActiveTab,
+      onSelectTab: onSelectWorkspaceTab,
       savedVideoCount: savedVideoList.length,
     },
   };
