@@ -31,6 +31,7 @@ export default function ProductionKanban({
   onConfirmUnsavedNavigation,
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
+  onUnsavedDraftsChange,
   onOpenReferenceVault,
 }) {
   const {
@@ -86,6 +87,12 @@ export default function ProductionKanban({
     hasUnsavedDrafts,
     target: typeof window === 'undefined' ? undefined : window,
   }), [hasUnsavedDrafts]);
+  useEffect(() => {
+    onUnsavedDraftsChange?.(hasUnsavedDrafts);
+  }, [hasUnsavedDrafts, onUnsavedDraftsChange]);
+  useEffect(() => () => {
+    onUnsavedDraftsChange?.(false);
+  }, [onUnsavedDraftsChange]);
 
   if (shouldShowProductionKanbanEmptyState({ discoveryLinkCandidates, productionSummary })) {
     return (

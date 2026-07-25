@@ -52,11 +52,13 @@ describe('legacyVaultTabViewProps utils', () => {
     const toggleScrapVideo = () => 'remove';
     const updateDiscoveryLink = () => 'link';
     const updateVideoUserRecord = () => 'record';
+    const setHasUnsavedProductionDrafts = () => 'unsaved';
 
     const props = getLegacyVaultTabViewProps({
       fetchTopComments,
       markRadarVideoStatus,
       openCreatorView,
+      setHasUnsavedProductionDrafts,
       toggleScrapVideo,
       updateDiscoveryLink,
       updateVideoUserRecord,
@@ -67,6 +69,7 @@ describe('legacyVaultTabViewProps utils', () => {
     expect(props.scrapbookWorkspaceProps.onRemoveScrap).toBe(toggleScrapVideo);
     expect(props.scrapbookWorkspaceProps.onUpdateDiscoveryLink).toBe(updateDiscoveryLink);
     expect(props.scrapbookWorkspaceProps.onUpdateVideoRecord).toBe(updateVideoUserRecord);
+    expect(props.scrapbookWorkspaceProps.onUnsavedDraftsChange).toBe(setHasUnsavedProductionDrafts);
 
     props.scrapbookWorkspaceProps.onOpenHome();
     props.scrapbookWorkspaceProps.onOpenDiscoveryLinks();

@@ -1,3 +1,5 @@
+import { guardProductionSidebarNavigation } from './productionNavigation';
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export const getCreatorSidebarHeaderViewProps = () => ({
@@ -110,7 +112,9 @@ export function buildLayoutProps({
   creatorView,
   discoveryCandidateCount,
   error,
+  hasUnsavedProductionDrafts,
   notesModal,
+  onConfirmUnsavedNavigation,
   openCreatorView,
   savedChannels,
   savedVideos,
@@ -124,6 +128,15 @@ export function buildLayoutProps({
   const savedVideoList = toArray(savedVideos);
   const selectedChannels = toArray(selectedChannelIds);
   const videoList = toArray(videos);
+  const confirmNavigation = (message) => {
+    if (typeof onConfirmUnsavedNavigation === 'function') {
+      return onConfirmUnsavedNavigation(message);
+    }
+    if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
+      return window.confirm(message);
+    }
+    return false;
+  };
 
   return {
     activeCreatorItem,
@@ -138,7 +151,14 @@ export function buildLayoutProps({
     onCloseNotes: closeNotesModal,
     onCloseTopComments: closeTopCommentsModal,
     onClearError: () => setError?.(''),
-    onOpenCreatorView: openCreatorView,
+    onOpenCreatorView: hasUnsavedProductionDrafts
+      ? guardProductionSidebarNavigation({
+        activeView: creatorView,
+        confirmNavigation,
+        hasUnsavedDrafts: true,
+        onNavigate: openCreatorView,
+      })
+      : openCreatorView,
     progressMessage: progressMsg,
     savedVideoCount: savedVideoList.length,
     selectedChannelCount: selectedChannels.length,

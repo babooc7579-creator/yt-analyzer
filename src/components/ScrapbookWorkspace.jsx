@@ -23,6 +23,7 @@ export default function ScrapbookWorkspace({
   onRemoveScrap,
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
+  onUnsavedDraftsChange,
 }) {
   const {
     getScrapbookVideoCardProps,
@@ -50,6 +51,7 @@ export default function ScrapbookWorkspace({
     onRemoveScrap,
     onUpdateDiscoveryLink,
     onUpdateVideoRecord,
+    onUnsavedDraftsChange,
   });
   const savedVideoList = getCloudScrapbookVideos(savedVideos);
 

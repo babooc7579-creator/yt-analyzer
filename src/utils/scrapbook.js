@@ -173,6 +173,7 @@ export const getScrapbookWorkspaceViewProps = ({
   onRemoveScrap,
   onUpdateDiscoveryLink,
   onUpdateVideoRecord,
+  onUnsavedDraftsChange,
 }) => {
   const savedVideoList = getCloudScrapbookVideos(savedVideos);
   const isProductionView = creatorView === 'studio-candidates';
@@ -225,6 +226,7 @@ export const getScrapbookWorkspaceViewProps = ({
       onOpenHome,
       onUpdateDiscoveryLink,
       onUpdateVideoRecord,
+      onUnsavedDraftsChange,
       onOpenReferenceVault,
       onOpenUploadCalendar,
     },

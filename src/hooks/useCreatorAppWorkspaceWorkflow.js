@@ -13,6 +13,7 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     activeTab,
     creatorView,
     creatorViewIntent,
+    hasUnsavedProductionDrafts,
     isChannelWatchlistView,
     isComingSoonView,
     isDiscoveryLinksView,
@@ -26,6 +27,7 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     isUploadCalendarView,
     openCreatorView,
     setActiveTab,
+    setHasUnsavedProductionDrafts,
     setShowWorkPanel,
     showWorkPanel,
   } = useCreatorWorkspaceNavigation();
@@ -52,6 +54,7 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     commentModal,
     creatorView,
     creatorViewIntent,
+    hasUnsavedProductionDrafts,
     discoveryLinks,
     discoveryLinksError,
     discoveryLinksLoading,
@@ -74,6 +77,7 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     openCreatorView,
     removeDiscoveryLink,
     setActiveTab,
+    setHasUnsavedProductionDrafts,
     setShowWorkPanel,
     showWorkPanel,
   };

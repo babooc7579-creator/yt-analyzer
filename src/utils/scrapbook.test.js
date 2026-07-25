@@ -160,6 +160,7 @@ describe('scrapbook utils', () => {
       onRemoveScrap: () => 'remove',
       onUpdateDiscoveryLink: () => 'update link',
       onUpdateVideoRecord: () => 'update video',
+      onUnsavedDraftsChange: () => 'unsaved',
     };
 
     const productionProps = getScrapbookWorkspaceViewProps({
@@ -192,6 +193,7 @@ describe('scrapbook utils', () => {
       },
       onOpenHome: handlers.onOpenHome,
       onOpenUploadCalendar: handlers.onOpenUploadCalendar,
+      onUnsavedDraftsChange: handlers.onUnsavedDraftsChange,
       initialSearchQuery: '예약 영상',
       initialSearchSource: 'upload-calendar',
       initialTargetDiscoveryLinkId: '',
