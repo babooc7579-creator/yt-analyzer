@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { getLegacyWorkspaceMainPanelViewProps } from './legacyWorkspaceMainPanelViewProps';
 
@@ -64,6 +64,24 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
       onSelectTab: setActiveTab,
       savedVideoCount: 2,
     });
+  });
+
+  it('protects workspace tab changes while production drafts are unsaved', () => {
+    const onConfirmUnsavedNavigation = vi.fn(() => false);
+    const setActiveTab = vi.fn();
+    const props = getLegacyWorkspaceMainPanelViewProps({
+      activeTab: 'scrapbook',
+      hasUnsavedProductionDrafts: true,
+      onConfirmUnsavedNavigation,
+      setActiveTab,
+    });
+
+    expect(props.workspaceTabsProps.onSelectTab('dashboard')).toBe(false);
+    expect(onConfirmUnsavedNavigation).toHaveBeenCalledOnce();
+    expect(setActiveTab).not.toHaveBeenCalled();
+
+    expect(props.workspaceTabsProps.onSelectTab('scrapbook')).toBe(false);
+    expect(onConfirmUnsavedNavigation).toHaveBeenCalledOnce();
   });
 
   it('forwards dashboard handlers and setters', () => {

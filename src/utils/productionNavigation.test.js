@@ -4,6 +4,7 @@ import {
   getGuardedProductionNavigationHandlers,
   guardProductionNavigation,
   guardProductionSidebarNavigation,
+  guardProductionTabNavigation,
   PRODUCTION_UNSAVED_NAVIGATION_MESSAGE,
   registerProductionBeforeUnloadGuard,
 } from './productionNavigation';
@@ -112,6 +113,25 @@ describe('production navigation guard', () => {
 
     expect(navigate({ id: 'vault-all' })).toBe(false);
     expect(onNavigate).not.toHaveBeenCalled();
+  });
+
+  it('guards workspace tab changes without warning on the active tab', () => {
+    const confirmNavigation = vi.fn(() => true);
+    const onSelectTab = vi.fn();
+    const selectTab = guardProductionTabNavigation({
+      activeTab: 'scrapbook',
+      confirmNavigation,
+      hasUnsavedDrafts: true,
+      onSelectTab,
+    });
+
+    expect(selectTab('scrapbook')).toBe(false);
+    expect(confirmNavigation).not.toHaveBeenCalled();
+    expect(onSelectTab).not.toHaveBeenCalled();
+
+    expect(selectTab('dashboard')).toBe(true);
+    expect(confirmNavigation).toHaveBeenCalledWith(PRODUCTION_UNSAVED_NAVIGATION_MESSAGE);
+    expect(onSelectTab).toHaveBeenCalledWith('dashboard');
   });
 
   it('registers and removes browser unload protection for unsaved drafts', () => {

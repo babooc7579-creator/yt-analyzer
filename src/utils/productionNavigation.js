@@ -47,6 +47,25 @@ export const guardProductionSidebarNavigation = ({
   };
 };
 
+export const guardProductionTabNavigation = ({
+  activeTab,
+  confirmNavigation,
+  hasUnsavedDrafts = false,
+  onSelectTab,
+} = {}) => {
+  const guardedSelectTab = guardProductionNavigation({
+    confirmNavigation,
+    hasUnsavedDrafts,
+    onNavigate: onSelectTab,
+  });
+  if (typeof guardedSelectTab !== 'function') return undefined;
+
+  return (nextTab) => {
+    if (nextTab === activeTab) return false;
+    return guardedSelectTab(nextTab);
+  };
+};
+
 export const getGuardedProductionNavigationHandlers = ({
   confirmNavigation,
   hasUnsavedDrafts = false,
