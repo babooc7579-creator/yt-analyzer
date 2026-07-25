@@ -231,6 +231,38 @@ describe('Creator app workflow composition hooks', () => {
     });
   });
 
+  it('blocks collection actions when unsaved production drafts are not discarded', () => {
+    const confirm = vi.fn(() => false);
+    vi.stubGlobal('window', { confirm });
+    const workspaceWorkflow = {
+      hasUnsavedProductionDrafts: true,
+      setActiveTab: vi.fn(),
+    };
+
+    const workflow = useCreatorAppCollectionWorkflow({
+      channelWorkflow: {
+        loadChannelsFromCloud: vi.fn(),
+        savedChannels: [],
+        selectedChannelIds: [],
+      },
+      runtime: {
+        setError: vi.fn(),
+        setIsScanning: vi.fn(),
+        setLoading: vi.fn(),
+        setProgressMsg: vi.fn(),
+        setScanningTag: vi.fn(),
+        setVideos: vi.fn(),
+      },
+      videoWorkflow: { clearCheckedVideos: vi.fn() },
+      workspaceWorkflow,
+    });
+
+    expect(workflow.loadStoredVideos()).toBe(false);
+    expect(confirm).toHaveBeenCalledOnce();
+    expect(useVideoCollectionActions.mock.results.at(-1).value.loadStoredVideos).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
   it('keeps the discovery workflow as the Cloud discovery links hook result', () => {
     const workflow = useCreatorAppDiscoveryWorkflow();
 

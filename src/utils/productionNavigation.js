@@ -66,6 +66,43 @@ export const guardProductionTabNavigation = ({
   };
 };
 
+export const guardProductionDataAction = ({
+  confirmNavigation,
+  hasUnsavedDrafts = false,
+  onAction,
+} = {}) => {
+  if (typeof onAction !== 'function') return undefined;
+
+  return (...args) => {
+    if (
+      hasUnsavedDrafts
+      && (
+        typeof confirmNavigation !== 'function'
+        || !confirmNavigation(PRODUCTION_UNSAVED_NAVIGATION_MESSAGE)
+      )
+    ) {
+      return false;
+    }
+
+    return onAction(...args);
+  };
+};
+
+export const getGuardedProductionDataActionHandlers = ({
+  confirmNavigation,
+  handlers = {},
+  hasUnsavedDrafts = false,
+} = {}) => Object.fromEntries(
+  Object.entries(handlers).map(([key, onAction]) => [
+    key,
+    guardProductionDataAction({
+      confirmNavigation,
+      hasUnsavedDrafts,
+      onAction,
+    }),
+  ]),
+);
+
 export const getGuardedProductionNavigationHandlers = ({
   confirmNavigation,
   hasUnsavedDrafts = false,

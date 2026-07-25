@@ -1,4 +1,5 @@
 import { useVideoCollectionActions } from './useVideoCollectionActions';
+import { getGuardedProductionDataActionHandlers } from '../utils/productionNavigation';
 
 export function useCreatorAppCollectionWorkflow({
   channelWorkflow,
@@ -6,7 +7,7 @@ export function useCreatorAppCollectionWorkflow({
   videoWorkflow,
   workspaceWorkflow,
 }) {
-  return useVideoCollectionActions({
+  const collectionActions = useVideoCollectionActions({
     clearCheckedVideos: videoWorkflow.clearCheckedVideos,
     loadChannelsFromCloud: channelWorkflow.loadChannelsFromCloud,
     savedChannels: channelWorkflow.savedChannels,
@@ -18,5 +19,18 @@ export function useCreatorAppCollectionWorkflow({
     setProgressMsg: runtime.setProgressMsg,
     setScanningTag: runtime.setScanningTag,
     setVideos: runtime.setVideos,
+  });
+  if (!workspaceWorkflow.hasUnsavedProductionDrafts) return collectionActions;
+
+  const confirmNavigation = (message) => (
+    typeof window !== 'undefined'
+    && typeof window.confirm === 'function'
+    && window.confirm(message)
+  );
+
+  return getGuardedProductionDataActionHandlers({
+    confirmNavigation,
+    handlers: collectionActions,
+    hasUnsavedDrafts: true,
   });
 }
