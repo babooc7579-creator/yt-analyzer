@@ -3,6 +3,12 @@ export const PRODUCTION_UNSAVED_NAVIGATION_MESSAGE = [
   '저장하지 않고 다른 화면으로 이동할까요?',
 ].join('\n');
 
+export const PRODUCTION_UNSAVED_DATA_ACTION_MESSAGE = [
+  'Cloud에 저장하지 않은 제작안이 있습니다.',
+  '저장하지 않고 영상 조회 또는 수집 작업을 시작할까요?',
+  '현재 편집 내용은 사라질 수 있습니다.',
+].join('\n');
+
 export const guardProductionNavigation = ({
   confirmNavigation,
   hasUnsavedDrafts = false,
@@ -78,7 +84,7 @@ export const guardProductionDataAction = ({
       hasUnsavedDrafts
       && (
         typeof confirmNavigation !== 'function'
-        || !confirmNavigation(PRODUCTION_UNSAVED_NAVIGATION_MESSAGE)
+        || !confirmNavigation(PRODUCTION_UNSAVED_DATA_ACTION_MESSAGE)
       )
     ) {
       return false;
