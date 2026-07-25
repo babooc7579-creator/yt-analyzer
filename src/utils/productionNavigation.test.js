@@ -7,6 +7,7 @@ import {
   guardProductionNavigation,
   guardProductionSidebarNavigation,
   guardProductionTabNavigation,
+  PRODUCTION_UNSAVED_DATA_ACTION_MESSAGE,
   PRODUCTION_UNSAVED_NAVIGATION_MESSAGE,
   registerProductionBeforeUnloadGuard,
 } from './productionNavigation';
@@ -146,7 +147,7 @@ describe('production navigation guard', () => {
     });
 
     expect(runAction('channel-1')).toBe(false);
-    expect(confirmNavigation).toHaveBeenCalledWith(PRODUCTION_UNSAVED_NAVIGATION_MESSAGE);
+    expect(confirmNavigation).toHaveBeenCalledWith(PRODUCTION_UNSAVED_DATA_ACTION_MESSAGE);
     expect(onAction).not.toHaveBeenCalled();
   });
 
