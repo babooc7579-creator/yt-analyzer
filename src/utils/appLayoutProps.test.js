@@ -89,6 +89,24 @@ describe('appLayoutProps utils', () => {
     expect(props.videoCount).toBe(0);
   });
 
+  it('protects sidebar navigation while production drafts are unsaved', () => {
+    const openCreatorView = vi.fn();
+    const onConfirmUnsavedNavigation = vi.fn(() => false);
+    const props = buildLayoutProps({
+      creatorView: 'studio-candidates',
+      hasUnsavedProductionDrafts: true,
+      onConfirmUnsavedNavigation,
+      openCreatorView,
+    });
+
+    expect(props.onOpenCreatorView({ id: 'home' })).toBe(false);
+    expect(onConfirmUnsavedNavigation).toHaveBeenCalledOnce();
+    expect(openCreatorView).not.toHaveBeenCalled();
+
+    expect(props.onOpenCreatorView({ id: 'studio-candidates' })).toBe(false);
+    expect(onConfirmUnsavedNavigation).toHaveBeenCalledOnce();
+  });
+
   it('builds Creator OS sidebar header copy', () => {
     expect(getCreatorSidebarHeaderViewProps()).toEqual({
       brandLabel: '타임머신 CRM',

@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   getGuardedProductionNavigationHandlers,
   guardProductionNavigation,
+  guardProductionSidebarNavigation,
   PRODUCTION_UNSAVED_NAVIGATION_MESSAGE,
   registerProductionBeforeUnloadGuard,
 } from './productionNavigation';
@@ -79,6 +80,38 @@ describe('production navigation guard', () => {
     expect(onOpenHome).toHaveBeenCalledOnce();
     expect(onOpenReferenceVault).toHaveBeenCalledOnce();
     expect(handlers.missing).toBeUndefined();
+  });
+
+  it('guards sidebar moves while allowing the active sidebar item to be reselected quietly', () => {
+    const confirmNavigation = vi.fn(() => true);
+    const onNavigate = vi.fn();
+    const navigate = guardProductionSidebarNavigation({
+      activeView: 'studio-candidates',
+      confirmNavigation,
+      hasUnsavedDrafts: true,
+      onNavigate,
+    });
+
+    expect(navigate({ id: 'studio-candidates' })).toBe(false);
+    expect(confirmNavigation).not.toHaveBeenCalled();
+    expect(onNavigate).not.toHaveBeenCalled();
+
+    expect(navigate({ id: 'home' })).toBe(true);
+    expect(confirmNavigation).toHaveBeenCalledWith(PRODUCTION_UNSAVED_NAVIGATION_MESSAGE);
+    expect(onNavigate).toHaveBeenCalledWith({ id: 'home' });
+  });
+
+  it('keeps the current view when an unsaved sidebar move is cancelled', () => {
+    const onNavigate = vi.fn();
+    const navigate = guardProductionSidebarNavigation({
+      activeView: 'studio-candidates',
+      confirmNavigation: () => false,
+      hasUnsavedDrafts: true,
+      onNavigate,
+    });
+
+    expect(navigate({ id: 'vault-all' })).toBe(false);
+    expect(onNavigate).not.toHaveBeenCalled();
   });
 
   it('registers and removes browser unload protection for unsaved drafts', () => {

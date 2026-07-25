@@ -26,6 +26,7 @@ export function getLegacyMainPanelProps(props) {
     searchKeyword: props.searchKeyword,
     selectedChannelIds: props.selectedChannelIds,
     setActiveTab: props.setActiveTab,
+    setHasUnsavedProductionDrafts: props.setHasUnsavedProductionDrafts,
     setLengthFilter: props.setLengthFilter,
     setSearchKeyword: props.setSearchKeyword,
     setShowWorkPanel: props.setShowWorkPanel,

@@ -28,6 +28,25 @@ export const guardProductionNavigation = ({
   };
 };
 
+export const guardProductionSidebarNavigation = ({
+  activeView,
+  confirmNavigation,
+  hasUnsavedDrafts = false,
+  onNavigate,
+} = {}) => {
+  const guardedNavigate = guardProductionNavigation({
+    confirmNavigation,
+    hasUnsavedDrafts,
+    onNavigate,
+  });
+  if (typeof guardedNavigate !== 'function') return undefined;
+
+  return (item, ...args) => {
+    if (item?.id && item.id === activeView) return false;
+    return guardedNavigate(item, ...args);
+  };
+};
+
 export const getGuardedProductionNavigationHandlers = ({
   confirmNavigation,
   hasUnsavedDrafts = false,

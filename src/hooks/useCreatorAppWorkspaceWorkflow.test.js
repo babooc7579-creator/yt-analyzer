@@ -12,6 +12,7 @@ const workspaceMocks = vi.hoisted(() => {
     activeTab: 'channels',
     creatorView: 'home',
     creatorViewIntent: { searchQuery: '예약 영상' },
+    hasUnsavedProductionDrafts: true,
     isChannelWatchlistView: false,
     isComingSoonView: false,
     isDiscoveryLinksView: false,
@@ -25,6 +26,7 @@ const workspaceMocks = vi.hoisted(() => {
     isUploadCalendarView: false,
     openCreatorView: vi.fn(),
     setActiveTab: vi.fn(),
+    setHasUnsavedProductionDrafts: vi.fn(),
     setShowWorkPanel: vi.fn(),
     showWorkPanel: true,
   };
@@ -94,6 +96,7 @@ describe('useCreatorAppWorkspaceWorkflow', () => {
       commentModal: workspaceMocks.topComments.commentModal,
       creatorView: workspaceMocks.navigation.creatorView,
       creatorViewIntent: workspaceMocks.navigation.creatorViewIntent,
+      hasUnsavedProductionDrafts: workspaceMocks.navigation.hasUnsavedProductionDrafts,
       discoveryLinks: workspaceMocks.discoveryWorkflow.discoveryLinks,
       discoveryLinksError: workspaceMocks.discoveryWorkflow.discoveryLinksError,
       discoveryLinksLoading: workspaceMocks.discoveryWorkflow.discoveryLinksLoading,
@@ -116,6 +119,7 @@ describe('useCreatorAppWorkspaceWorkflow', () => {
       openCreatorView: workspaceMocks.navigation.openCreatorView,
       removeDiscoveryLink: workspaceMocks.discoveryWorkflow.removeDiscoveryLink,
       setActiveTab: workspaceMocks.navigation.setActiveTab,
+      setHasUnsavedProductionDrafts: workspaceMocks.navigation.setHasUnsavedProductionDrafts,
       setShowWorkPanel: workspaceMocks.navigation.setShowWorkPanel,
       showWorkPanel: workspaceMocks.navigation.showWorkPanel,
     });
