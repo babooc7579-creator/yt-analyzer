@@ -156,9 +156,25 @@ export default function ChannelWatchlistWorkspace({
           <p className="mt-2 text-sm text-slate-400">필터를 초기화하거나 전체 채널 목록에서 상태와 등급을 확인하세요.</p>
           <div className="mt-4 flex justify-center gap-2">
             {hasActiveFilters && (
-              <button type="button" onClick={resetFilters} className="rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950">필터 초기화</button>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950"
+                title="채널 검색과 분류 필터를 초기화합니다. 화면 표시만 바꾸며 조회나 수집은 실행되지 않습니다."
+                aria-label="채널 필터 초기화, 화면 표시만 변경"
+              >
+                필터 초기화
+              </button>
             )}
-            <button type="button" onClick={onOpenChannelList} className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-extrabold text-slate-200">전체 채널 목록</button>
+            <button
+              type="button"
+              onClick={onOpenChannelList}
+              className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-extrabold text-slate-200"
+              title="전체 채널 목록 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다."
+              aria-label="전체 채널 목록 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음"
+            >
+              전체 채널 목록
+            </button>
           </div>
         </div>
       )}
