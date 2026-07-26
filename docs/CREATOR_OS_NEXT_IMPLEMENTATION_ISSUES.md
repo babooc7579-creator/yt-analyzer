@@ -21,7 +21,7 @@
 - `/video-records`는 기존 대표 상태 `status`를 유지합니다.
 - `statusIds`는 복수 판단 보존용 보조 필드로 백엔드 저장/조회에 추가됐고, 2026-07-02 배포 smoke로 확인됐습니다.
 - `/scrapbook`은 별도 container가 아니라 `videos` container 안의 `docType: scrapbook` 구조입니다.
-- `scan_logs`, `api_quota_logs`, `production_candidates`, `discovery_links`, `local_assets`는 아직 별도 저장소가 없습니다.
+- `scan_logs`는 2026-07-27 B안으로 기존 `videos` container의 `docType: scan_log` 저장과 조회 API가 1차 구현되었습니다. `api_quota_logs`, `production_candidates`, `discovery_links`, `local_assets`는 별도 저장소가 없습니다.
 - discovery links 1차 MVP는 별도 저장소 없이 기존 `videos` container의 `docType: discovery_link` 방식으로 부분 구현되었습니다.
 - 2026-07-03 읽기 전용 확인에서 `GET /discovery-links`는 배포 환경에서 성공했고, 현재 Cloud 발견함 링크는 0개였습니다.
 - 2026-07-03 사용자 승인 후 발견 링크 저장/상태 수정/제목·메모 수정/삭제 smoke test를 완료했습니다. 임시 테스트 링크는 삭제됐고, 재조회에서 Cloud 발견함 링크 0개와 임시 smoke 링크 0개를 확인했습니다.
@@ -212,14 +212,14 @@
 ### Issue 8. scan/API 사용 기록 모델 검토
 
 - 목적: YouTube API 호출이 언제, 왜 발생했는지 추적할 기준을 만듭니다.
-- 현재 상태: 2026-07-02 기준 검토 완료. `scan_logs`, `api_quota_logs`는 없습니다. 채널별 `lastScanSummary`만 있습니다.
+- 현재 상태: 2026-07-27 B안으로 채널별 `lastScanSummary`를 유지하면서 기존 `videos` container의 `docType: scan_log`와 `GET /scan-logs`를 1차 구현했습니다. `api_quota_logs`는 없습니다.
 - 왜 필요한가: 사용자가 "조회"와 "수집"을 구분하고, API 사용량을 관리하기 위해 필요합니다.
-- 작업 범위: 모델 선택지 작성 완료. 바로 endpoint나 container를 만들지 않습니다.
+- 작업 범위: 채널별 실행 이력 저장과 최근 이력 조회 화면까지 구현합니다. 정확한 API 쿼터 기록은 제외합니다.
 - 건드릴 파일 예상: 문서 우선. 이후 백엔드 Functions, Cosmos container 설정.
-- 건드리면 안 되는 것: 새 container 추가, scan endpoint 동작 변경, 자동 스캔.
+- 건드리면 안 되는 것: 기존 scan endpoint 계약 변경, 자동 수집 확대, API 쿼터 로그 추가.
 - 위험도: 중간에서 높음.
-- 완료 기준: `CREATOR_OS_SCAN_API_USAGE_MODEL.md` 작성 완료. `scan_logs`와 `api_quota_logs`는 개념상 분리하는 방향이 권장됩니다.
-- 사용자 판단 필요 여부: 현재 없음. 실제 구현은 새 저장소 또는 새 `docType`, endpoint가 필요하므로 별도 판단 필요.
+- 완료 기준: `docType: scan_log` 저장, 읽기 endpoint, 화면 조회, 기존 수집 호환, 배포 검증.
+- 사용자 판단 필요 여부: `scan_logs` 1차 범위는 승인 완료. 보관 정책, 전체 실행 집계, `api_quota_logs`는 별도 판단 필요.
 
 ### Issue 9. discovery links/local assets MVP 범위 결정
 

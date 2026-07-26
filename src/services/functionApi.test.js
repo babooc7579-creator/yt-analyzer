@@ -12,6 +12,7 @@ import {
   fetchChannels,
   fetchDiscoveryLinks,
   fetchScrapbook,
+  fetchScanLogs,
   fetchStoredVideosByChannelIds,
   fetchVideoUserRecords,
   removeChannel,
@@ -45,6 +46,7 @@ describe('functionApi compatibility exports', () => {
   });
 
   it('keeps scan API exports available through the legacy facade', () => {
+    expect(fetchScanLogs).toBe(scanApi.fetchScanLogs);
     expect(scanChannels).toBe(scanApi.scanChannels);
     expect(scanSelectedChannels).toBe(scanApi.scanSelectedChannels);
   });

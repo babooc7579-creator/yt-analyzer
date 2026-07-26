@@ -235,15 +235,19 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - 비용성 호출임을 표시합니다.
 - API Key가 없거나 YouTube 오류/비JSON 응답이 오면 화면/상단 안내로 알려주며 Cloud DB나 localStorage를 변경하지 않습니다.
 
-### 5.6 수집 로그와 API 사용량 로그 없음
+### 5.6 수집 로그와 API 사용량 로그
 
-현재 `scan_logs`와 `api_quota_logs`는 별도 저장소나 endpoint가 없습니다.
+2026-07-27 기준 채널별 수집 이력은 기존 Cosmos `videos` container 안의 `docType: scan_log` 문서로 저장하며, `GET /scan-logs`로 최근 이력을 조회합니다. `api_quota_logs`는 별도 저장소나 endpoint가 없습니다.
 
 운영 기준:
 
-- 지금은 채널 문서의 `lastScanSummary`를 마지막 수집 상태 표시로만 사용합니다.
-- 과거 수집 이력과 API 사용량 추정은 아직 구현된 기능처럼 표시하지 않습니다.
-- 나중에 구현할 때는 `scan_logs`와 `api_quota_logs`를 개념상 분리합니다.
+- 채널 문서의 `lastScanSummary`는 마지막 상태 표시로 계속 사용합니다.
+- `scan_logs`는 채널별 성공/부분 성공/실패, 신규 영상 수, 통계 갱신 수, 오류를 보존합니다.
+- 기존 `/videos` 조회는 `docType: video`만 읽어 수집 로그가 저장 영상 목록에 섞이지 않습니다.
+- `GET /scan-logs`는 Cloud DB 조회이며 YouTube API를 호출하지 않습니다.
+- `scan_logs` 저장 실패는 기존 영상 수집 성공을 실패로 바꾸지 않습니다.
+- API 사용량 추정은 아직 구현된 기능처럼 표시하지 않습니다.
+- `scan_logs`와 `api_quota_logs`는 개념과 저장 책임을 분리합니다.
 - 자세한 목표 모델은 `CREATOR_OS_SCAN_API_USAGE_MODEL.md`를 기준으로 봅니다.
 
 ### 5.7 외부 키워드 조사 도구는 바로가기

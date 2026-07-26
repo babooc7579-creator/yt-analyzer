@@ -4,16 +4,16 @@
 
 이 문서는 Creator OS에서 YouTube API를 쓰는 작업을 어떻게 기록하고, 사용자가 "조회"와 "수집"을 혼동하지 않도록 어떤 기준을 둘지 정리합니다.
 
-중요: 이 문서는 분석 및 목표 모델 문서입니다. 코드, API, DB schema, localStorage key는 변경하지 않습니다.
+중요: 이 문서는 목표 모델과 현재 적용 상태를 함께 기록합니다. 2026-07-27 승인된 B안은 `scan_logs`만 최소 구현하며 `api_quota_logs`는 포함하지 않습니다.
 
 ## 2026-07-27 현재 적용 상태
 
 - 오퍼레이션 관제의 `최근 수집 상태` 화면에서 기존 `channels.lastScanSummary`와 `channels.lastScannedAt`을 모아봅니다.
-- 이 화면은 채널마다 가장 최근 결과 한 건만 표시하며 성공, 부분 성공, 실패, 미수집 상태를 구분합니다.
+- 같은 화면에서 기존 `videos` container의 `docType: scan_log` 최근 채널별 실행 이력 최대 100건을 Cloud DB로 조회합니다.
 - 채널 이름, 태그, 등급, 오류 검색과 상태 필터는 프론트 화면 표시만 변경합니다.
-- 화면을 열거나 필터링해도 YouTube API 호출, Cloud 저장, localStorage 변경은 실행되지 않습니다.
-- `scan_logs`와 `api_quota_logs`는 여전히 미구현입니다.
-- 따라서 과거 수집 이력과 정확한 YouTube API 쿼터 장부가 구현된 것으로 해석하면 안 됩니다.
+- 화면 열기와 이력 새로고침은 Cloud DB 조회만 실행하고, YouTube API 호출, Cloud 저장, localStorage 변경은 실행하지 않습니다.
+- `scan_logs`는 1차 구현됐고 `api_quota_logs`는 미구현입니다.
+- 따라서 채널별 과거 이력은 볼 수 있지만 정확한 YouTube API 쿼터 장부가 구현된 것으로 해석하면 안 됩니다.
 
 ---
 
@@ -27,7 +27,7 @@
 - `POST /scan/selected`, `GET /scan`, `GET /scan?tag=...`는 YouTube API 호출과 Cloud DB 갱신이 발생할 수 있습니다.
 - `GET /scan`은 HTTP 메서드상 GET이지만 단순 조회가 아니라 비용성/변경 작업으로 봐야 합니다.
 - 채널별 마지막 수집 상태는 `channels.lastScanSummary`와 `channels.lastScannedAt` 중심으로 표시됩니다.
-- `scan_logs` 별도 저장소는 없습니다.
+- `scan_logs`는 기존 `videos` container의 `docType: scan_log` 문서와 `GET /scan-logs` 읽기 endpoint가 있습니다.
 - `api_quota_logs` 별도 저장소는 없습니다.
 - 댓글 Top 10 조회는 백엔드 Functions가 아니라 프론트에서 사용자의 YouTube API Key로 직접 YouTube API를 호출합니다.
 - 채널 미리보기와 채널 저장도 YouTube API 조회가 필요할 수 있습니다.
@@ -123,8 +123,8 @@
 
 | 한계 | 설명 | 사용자 영향 |
 |---|---|---|
-| 과거 수집 이력 없음 | `lastScanSummary`는 마지막 요약만 보여줍니다. | 언제 어떤 채널을 수집했는지 되짚기 어렵습니다. |
-| 실패 원인 누적 추적 어려움 | 마지막 실패만 남거나 채널별 요약에 흩어집니다. | 반복 실패 채널을 찾기 어렵습니다. |
+| 실행 단위 집계 없음 | `scan_logs`는 현재 채널별 실행 기록입니다. | 한 번의 전체/분야 수집을 하나의 묶음으로 분석하기는 어렵습니다. |
+| 보관 정책 없음 | 최근 이력 조회는 가능하지만 자동 삭제 기간은 아직 정하지 않았습니다. | 장기 운영 전 데이터 증가량 확인이 필요합니다. |
 | API 사용량 추정 불가 | 앱 안에서 YouTube API 호출 규모를 볼 수 없습니다. | 비용/쿼터 위험을 감으로만 판단하게 됩니다. |
 | GET `/scan` 오해 위험 | URL과 메서드만 보면 조회처럼 보입니다. | 사용자가 단순 새로고침처럼 누를 수 있습니다. |
 | 댓글 API 사용량 분리 | 댓글 Top 10은 사용자 API Key로 프론트에서 직접 호출합니다. | 서버 수집 API 사용량과 합산하기 어렵습니다. |
@@ -173,42 +173,42 @@ channels.lastScanSummary = {
 - 운영 이력 데이터입니다.
 - 캐시가 아닙니다.
 - Cloud DB 기준이어야 합니다.
-- 아직 미구현입니다.
+- 2026-07-27 선택지 B 범위로 1차 구현되었습니다.
 
-초안 필드 후보:
+현재 1차 구현 필드:
 
 ```txt
 scan_log = {
   id,
   docType: "scan_log",
-  runType: "selected" | "tag" | "all",
-  trigger: "manual",
-  targetTag,
-  requestedChannelIds,
-  scannableChannelIds,
-  skippedChannelIds,
-  requestedChannelCount,
-  scannableChannelCount,
-  skippedChannelCount,
+  channelId,
+  channelTitle,
   status: "success" | "partial" | "failed",
-  startedAt,
-  finishedAt,
-  durationMs,
+  scannedAt,
   newVideosFound,
   statsRefreshed,
-  ttoTtoCandidatesFound,
+  stoppedAtLatestVideoId,
+  savedVideosTotal,
+  channelTotalVideos,
+  estimatedMissingVideos,
+  coverageRate,
   error,
-  channelSummaries,
-  createdAt
+  trigger: "manual_all" | "manual_tag" | "selected" | "timer" | "unknown",
+  scanRunId
 }
 ```
 
 운영 원칙:
 
-- `scan_logs`는 수집 실행 결과를 기록합니다.
+- 기존 Cosmos `videos` container에 `docType: scan_log`로 저장하고 partition key `/channelId`를 공유합니다.
+- 기존 `GET /videos`는 영상 문서만 필터링하므로 로그가 영상 목록에 섞이지 않습니다.
+- `scan_logs`는 채널별 수집 실행 결과를 기록합니다.
 - API quota 비용을 정확히 보장하는 장부는 아닙니다.
 - 채널별 마지막 표시는 계속 `lastScanSummary`를 사용합니다.
-- MVP에서는 최근 50개 또는 최근 30일처럼 보관 범위를 제한할 수 있습니다.
+- 이력 저장 실패는 기존 영상 수집 결과를 실패로 바꾸지 않습니다.
+- `GET /scan-logs`는 기본 100건, 최대 200건의 페이지 조회를 지원합니다.
+- 화면은 우선 최근 100건을 읽습니다.
+- 보관 기간과 자동 삭제는 운영량을 확인한 뒤 별도 결정합니다.
 
 ### 4.3 `api_quota_logs`
 
@@ -260,15 +260,16 @@ api_quota_log = {
 | 데이터 | 현재 저장 위치 | 목표 저장 위치 후보 | 현재 구현 | 기준 데이터 여부 | 비고 |
 |---|---|---|---:|---:|---|
 | `lastScanSummary` | `channels` 문서 | `channels` 문서 유지 | 예 | 예 | 마지막 상태 표시 |
-| `scan_logs` | 없음 | Cloud DB 별도 container 또는 `videos` container docType | 아니오 | 후보 | 수집 실행 이력 |
+| `scan_logs` | Cosmos `videos` container의 `docType: scan_log` | MVP는 현재 구조 유지. 규모 증가 시 별도 container 재검토 | 예 | 예 | 채널별 수집 실행 이력 |
 | `api_quota_logs` | 없음 | Cloud DB 별도 container 또는 `videos` container docType | 아니오 | 후보 | API 사용량 추정 |
 | 댓글 Top 10 사용량 | 없음 | 별도 검토 | 아니오 | 후보 | 사용자 API Key라 자동 기록 어려움 |
 
 현재 판단:
 
-- 지금은 새 container를 만들지 않습니다.
-- 지금은 endpoint를 추가하지 않습니다.
-- 구현 단계가 오면 `scan_logs`와 `api_quota_logs`를 한 container에 둘지, 별도 container로 둘지 선택지 보고가 필요합니다.
+- 승인된 B안에 따라 기존 `videos` container의 `docType: scan_log` 문서와 읽기 endpoint를 사용합니다.
+- 새 container를 만들지 않아 Cosmos 무료 처리량 한도 안에서 운영합니다.
+- `api_quota_logs`는 만들지 않습니다.
+- 두 로그의 역할과 향후 저장소 판단은 계속 분리합니다.
 
 ---
 
@@ -433,11 +434,12 @@ api_quota_log = {
 - 신규 영상 수
 - 통계 갱신 수
 - 마지막 오류 요약
+- 최근 채널별 과거 수집 이력 최대 100건
+- 수집 방식, 실행 시각, 신규 영상 수, 통계 갱신 수, 오류
 
 아직 보여줄 수 없는 항목:
 
-- 실행별 과거 이력
-- 실행 범위별 기록
+- 전체/분야 수집 1회를 하나로 묶은 실행 단위 상세
 - 정확한 API 쿼터 사용량
 
 ### 8.4 API 사용량 화면
@@ -456,12 +458,9 @@ api_quota_log = {
 
 ## 9. 지금 결정하지 말아야 할 것
 
-현재 단계에서는 아래를 결정하거나 구현하지 않습니다.
+2026-07-27 B안 승인으로 `docType: scan_log` 저장과 `GET /scan-logs`는 구현 범위에 포함되었습니다. 아래 항목은 여전히 결정하거나 구현하지 않습니다.
 
-- `scan_logs` container 추가
 - `api_quota_logs` container 추가
-- `videos` container 안에 로그 `docType`을 넣을지 여부
-- 새 endpoint 추가
 - 기존 `GET /scan` 동작 변경
 - `GET /scan`을 `POST /scan`으로 전환
 - 자동 스캔 스케줄링
@@ -476,24 +475,23 @@ api_quota_log = {
 
 사용자 결정 없이 가능한 다음 작업:
 
-1. 문서 인덱스에 이 문서를 연결합니다.
-2. 다음 이슈 계획에서 Issue 8을 "검토 완료, 구현은 별도 판단 필요"로 갱신합니다.
-3. 화면 문구는 지금 기준을 유지합니다. 추가 UI 변경은 별도 작업으로 분리합니다.
+1. 실제 운영 이력 누적 여부를 확인합니다.
+2. 반복 실패 채널의 가독성을 작은 UI 개선으로 보강합니다.
+3. 문서와 화면 문구가 채널별 이력과 전체 실행 집계를 혼동하지 않는지 유지합니다.
 
 사용자 결정이 필요한 다음 작업:
 
-1. `scan_logs`를 실제로 만들지
-2. `api_quota_logs`를 실제로 만들지
-3. 두 로그를 별도 container로 둘지, 기존 container의 `docType`으로 둘지
-4. API 사용량을 정확한 값으로 볼지, 추정치로 볼지
-5. 수집 로그 화면을 1차 MVP에 포함할지
+1. `api_quota_logs`를 실제로 만들지
+2. API 사용량을 정확한 값으로 볼지, 추정치로 볼지
+3. 전체 수집 요청 1회를 묶은 실행 단위 상세를 추가할지
+4. `scan_logs` 보관 기간이나 자동 삭제 정책을 둘지
 
 ---
 
 ## 11. 최종 판정
 
-현재 단계에서는 `scan_logs`와 `api_quota_logs`를 구현하지 않습니다.
+현재 단계에서는 `scan_logs`만 채널별 실행 이력으로 1차 구현합니다. `api_quota_logs`는 구현하지 않습니다.
 
-현재 앱은 `lastScanSummary`로 마지막 수집 상태를 보여주는 수준입니다. 이것은 채널 카드 표시에는 충분하지만, 운영 기록과 API 사용량 관리를 하기에는 부족합니다.
+현재 앱은 `lastScanSummary`로 마지막 상태를 빠르게 보여주고, `scan_logs`로 최근 채널별 과거 이력을 조회합니다. 정확한 API 사용량 관리와 전체 실행 단위 분석은 아직 제공하지 않습니다.
 
-Creator OS가 실사용 운영 도구로 커지려면 나중에 `scan_logs`와 `api_quota_logs`를 분리해서 설계하는 것이 좋습니다. 다만 이 작업은 DB/API 변경이 필요하므로 별도 선택지 보고 후 진행해야 합니다.
+Creator OS가 실사용 운영 도구로 커지면 실제 누적량을 기준으로 보관 정책과 전체 실행 집계를 검토합니다. `api_quota_logs`는 성격이 다른 데이터이므로 계속 분리해서 판단합니다.

@@ -10,13 +10,13 @@ v2.2 문서는 제품 목표 설계도입니다. 이 문서는 현재 repo와 Ba
 
 ## 1. 현재 기준 사실
 
-아래 내용은 2026-07-02 기준으로 프론트 repo와 백엔드 Functions repo에서 확인한 사실입니다.
+아래 내용은 2026-07-27 기준으로 프론트 repo와 백엔드 Functions repo에서 확인한 사실입니다.
 
 - `/video-records`는 기존 대표 상태 `status`를 유지합니다.
 - `statusIds`는 최종 상태 설계가 아니라, 현재 프론트의 복수 판단값을 Cloud에 보존하기 위한 호환성 확장입니다.
 - 기존 `status`는 대표 상태로 유지하며, `statusIds`는 복수 판단 보존용 보조 필드로 Cloud 저장/조회됩니다.
 - `/scrapbook`은 별도 Cosmos container가 아니라 `videos` container 안에 `docType: scrapbook` 형태로 저장됩니다.
-- `scan_logs` 별도 저장소는 없습니다.
+- `scan_logs`는 기존 Cosmos `videos` container 안에 `docType: scan_log`로 채널별 수집 실행 이력을 저장하고 `GET /scan-logs`로 조회합니다.
 - `api_quota_logs` 별도 저장소는 없습니다.
 - `production_candidates` 별도 저장소는 없습니다.
 - `discovery_links` 별도 Cosmos container는 없습니다.
@@ -54,7 +54,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 | `production candidates` | `videoUserRecords`에 얹힌 상태 | 미정 | 별도 저장소 없음. 프론트는 `videoUserRecords` 상태로 표현 | v1에서는 `videoUserRecords` 유지 가능. 장기적으로 별도 모델 검토 | 기준 아님 | 현재는 `/video-records`가 사실상 후보 상태를 저장 | 별도 저장소 미구현 | 높음. 영상 상태와 제작 프로젝트 상태가 섞일 수 있음 |
 | `discovery links` | Cloud DB | Cloud DB | Cosmos `videos` container 안의 `docType: discovery_link` | MVP는 기존 Cloud DB에 `docType: discovery_link` 방식 유지. 장기적으로 별도 container 재검토 | 기준 아님 | 수동 저장 링크, 메모, 발견함 상태, 권리 상태 저장 | 부분 구현 | 중간. `/videos` 조회에 discovery link 문서가 섞이지 않도록 API 경계 유지 필요 |
 | `local assets` | 없음 | 로컬 파일 메타데이터 + Cloud DB 인덱스 후보 | 없음 | 별도 `local_assets` 모델 후보 | 로컬 파일 자체는 브라우저 localStorage로 다루면 안 됨 | 파일 경로/출처/연결 메타데이터만 저장 후보 | 미구현 | 높음. 브라우저 보안, 파일 위치 변경, 출처 추적 이슈 |
-| `scan logs` | 없음 | Cloud DB | 없음. 채널 문서의 `lastScanSummary`만 있음 | 별도 `scan_logs` 모델 후보 | 기준 아님 | 수집 실행 이력, 성공/실패, 새 영상 수, 오류 기록 | 미구현 | 중간. 현재는 마지막 요약만 남아 과거 이력 추적 불가 |
+| `scan logs` | Cloud DB | Cloud DB | Cosmos `videos` container 안의 `docType: scan_log` | MVP는 현재 구조 유지. 규모 증가 시 별도 container 재검토 | 기준 아님 | 채널별 수집 실행 이력, 성공/부분 성공/실패, 새 영상 수, 오류 기록 | 1차 구현 | 중간. 전체 실행 단위 집계와 보관 기간 정책은 아직 없음 |
 | `api quota logs` | 없음 | Cloud DB | 없음 | 별도 `api_quota_logs` 모델 후보 | 기준 아님 | YouTube API 호출량과 비용 위험 기록 | 미구현 | 높음. 비용성 작업 추적 불가 |
 
 ---
@@ -234,23 +234,31 @@ Creator OS에서는 다음 원칙을 우선합니다.
 
 ### 4.8 scan logs
 
-현재 별도 저장소는 없습니다.
+2026-07-27 선택지 B 승인 이후 기존 Cloud 저장소에 수집 이력 문서가 추가되었습니다.
 
 현재 구조:
 
 - 각 채널 문서에 `lastScanSummary`가 저장됩니다.
-- 과거 스캔 이력은 누적 저장되지 않습니다.
+- 각 채널 수집 시 Cosmos `videos` container에 `docType: scan_log` 채널별 실행 이력을 추가 저장합니다.
+- `GET /scan-logs`는 최근 이력을 페이지 단위로 조회합니다.
+- 기존 container의 partition key `/channelId`를 그대로 사용합니다.
+- 이력 저장 실패가 기존 영상 수집의 성공 결과를 실패로 바꾸지 않습니다.
+- `lastScanSummary`는 계속 마지막 상태 표시 용도로 유지합니다.
 
 목표 방향:
 
-- 수집 로그 화면이 필요해지면 별도 `scan_logs` 모델을 검토합니다.
-- 지금은 `lastScanSummary`를 마지막 상태 표시 용도로만 사용합니다.
+- 채널별 과거 이력은 `scan_logs`를 기준으로 봅니다.
+- `/videos` 조회는 `docType: video`만 읽으므로 수집 로그 문서가 저장 영상에 섞이지 않습니다.
+- 이력 규모가 커질 때만 별도 `scan_logs` container 분리를 재검토합니다.
+- 전체 수집 요청 1회를 묶어 보는 실행 단위 집계는 후속 검토 대상입니다.
+- 보관 기간과 자동 삭제 정책은 운영량을 확인한 뒤 별도 결정합니다.
 - 자세한 목표 모델은 `CREATOR_OS_SCAN_API_USAGE_MODEL.md`를 기준으로 봅니다.
 
 충돌 위험:
 
 - 중간.
-- 실패 원인, 실행 시간, API 호출량, 새 영상 수의 과거 추적이 어렵습니다.
+- API 호출량은 기록하지 않으므로 `scan_logs`를 쿼터 장부로 해석하면 안 됩니다.
+- 이력 저장 실패는 수집 결과에 영향을 주지 않기 때문에 일부 실행 이력이 빠질 가능성은 남습니다.
 
 ### 4.9 api quota logs
 

@@ -21,8 +21,8 @@
 - 프론트는 영상 검토 상태와 제작 진행 상태를 구분하는 helper를 사용해 같은 record 안의 상태 역할을 분리합니다.
 - `production_candidates` 별도 저장소는 없습니다.
 - 제작 후보와 제작 칸반은 현재 `videoUserRecords` 상태값 위에서 표현됩니다.
-- `scan_logs` 별도 저장소는 없습니다.
-- 수집 상태는 현재 채널 문서의 `lastScanSummary.status` 중심입니다.
+- 2026-07-27 기준 기존 `videos` container의 `docType: scan_log` 저장과 조회 API가 1차 구현되었습니다.
+- 마지막 수집 상태는 채널 문서의 `lastScanSummary.status`, 과거 채널별 실행 상태는 `scan_logs.status`를 기준으로 봅니다.
 - `discovery_links`는 1차 MVP가 부분 구현되었습니다. `local_assets`는 아직 미구현입니다.
 - 화면/메뉴의 `live`, `soon`은 제품 UI 상태이며 영상/채널/제작 상태와 섞으면 안 됩니다.
 
@@ -38,7 +38,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 | 채널 상태 | 수집 대상 여부 | `channels.status` | `channels.status` | 구현됨 |
 | 영상 검토 상태 | 레이더/영상 목록에서 사용자의 판단 기록 | `videoUserRecords.status`, 프론트 `statusIds` 호환 | Cloud DB의 영상별 사용자 기록 | 부분 구현 |
 | 제작 후보 상태 | 후보에서 업로드까지 제작 흐름 관리 | `videoUserRecords.status` 위에 얹힘 | 미정. MVP는 `videoUserRecords`, 장기는 별도 모델 검토 | 부분 구현 |
-| 수집 상태 | 스캔 성공/실패/부분 성공 표시 | `channels.lastScanSummary.status` | `scan_logs` 후보, 현재는 채널 마지막 요약 | 부분 구현 |
+| 수집 상태 | 스캔 성공/실패/부분 성공 표시 | 마지막 상태는 `channels.lastScanSummary.status`, 과거 이력은 `scan_logs.status` | 같은 구조 유지 | 1차 구현 |
 | 스크랩북 상태 | 저장됨/삭제됨 여부 | `scrapbook` 문서 존재 여부 | Cloud DB 기준 | 부분 구현 |
 | 발견 링크 상태 | 외부 링크의 검토 상태와 권리 상태 | `/discovery-links`, `docType: discovery_link` | MVP는 `videos` container 안의 `docType: discovery_link` | 부분 구현 |
 | 로컬 파일 출처 상태 | 다운로드 파일의 원본/권리/연결 상태 | 없음 | `local_assets` 후보 | 미구현 |
@@ -176,7 +176,7 @@ Creator OS의 상태값은 다음처럼 분리합니다.
 현재 저장 위치:
 
 - `channels.lastScanSummary.status`
-- 별도 `scan_logs` 저장소 없음
+- Cosmos `videos` container 안의 `docType: scan_log` 문서 `status`
 
 | 저장값 | 화면 표시 | 현재 의미 | 목표 의미 | 현재 판단 |
 |---|---|---|---|---|
@@ -317,7 +317,7 @@ MVP 메인 상태는 작게 시작합니다. 이 값은 링크가 발견함 안�
 - `later` 기존 데이터를 어떻게 마이그레이션할지 여부
 - 발견함 MVP 이후 확장 상태값 확정
 - `local_assets` 상태값 최종 확정
-- `scan_logs` 또는 `api_quota_logs` container 추가
+- `scan_logs` 별도 container 분리 또는 `api_quota_logs` 추가
 
 이 항목은 제품 판단과 데이터 안전성이 걸려 있으므로 별도 선택지 보고 후 결정합니다.
 
