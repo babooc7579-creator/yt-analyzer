@@ -30,6 +30,7 @@ vi.mock('../hooks/useKeywordExplorerState', () => ({
   })),
 }));
 
+import { useKeywordExplorerState } from '../hooks/useKeywordExplorerState';
 import KeywordExplorerWorkspace from './KeywordExplorerWorkspace';
 
 describe('KeywordExplorerWorkspace', () => {
@@ -67,5 +68,49 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('Cloud 저장 영상을 불러오지 못했습니다');
     expect(html).toContain('Cloud 저장 영상 다시 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않았습니다');
+  });
+
+  it('offers channel selection and collection preparation after a successful empty lookup', () => {
+    useKeywordExplorerState.mockReturnValueOnce({
+      ageFilter: 'all',
+      displayedVideos: [],
+      hasActiveFilters: false,
+      hasQuery: false,
+      lengthFilter: 'all',
+      minimumViews: 0,
+      resetFilters: vi.fn(),
+      searchQuery: '',
+      setAgeFilter: vi.fn(),
+      setLengthFilter: vi.fn(),
+      setMinimumViews: vi.fn(),
+      setSearchQuery: vi.fn(),
+      setSortType: vi.fn(),
+      sortType: 'relevance',
+      suggestions: [],
+      summary: {
+        averageViews: 0,
+        channelCount: 0,
+        loadedVideoCount: 0,
+        matchedVideoCount: 0,
+        shownVideoCount: 0,
+        strongestMultiplier: 0,
+      },
+    });
+
+    const html = renderToStaticMarkup(
+      <KeywordExplorerWorkspace
+        loadResult={{ success: true, videoCount: 0 }}
+        onLoadStoredVideos={vi.fn()}
+        onOpenChannelWatchlist={vi.fn()}
+        onOpenSelectedScan={vi.fn()}
+        selectedChannelCount={2}
+        videos={[]}
+      />
+    );
+
+    expect(html).toContain('조회는 정상 완료됐지만 저장된 영상이 없습니다');
+    expect(html).toContain('다른 채널 고르기');
+    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('이동만으로 YouTube API를 호출하지 않습니다');
   });
 });

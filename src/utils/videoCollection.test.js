@@ -68,13 +68,17 @@ describe('videoCollection utils', () => {
     expect(getStoredVideosLoadedMessage(3)).toContain('3');
     expect(getStoredVideosLoadedMessage(3)).toContain('YouTube API');
     expect(getStoredVideosLoadedMessage(270, 2)).toContain('2페이지');
+    expect(getStoredVideosLoadedMessage(270, 2, 850)).toContain('1초 미만');
+    expect(getStoredVideosLoadedMessage(270, 2, 2450)).toContain('2.5초');
 
     const progressMessage = getStoredVideoLoadProgressMessage({
+      elapsedMs: 1200,
       pageCount: 2,
       videoCount: 270,
     });
     expect(progressMessage).toContain('2페이지');
     expect(progressMessage).toContain('270개');
+    expect(progressMessage).toContain('1.2초');
     expect(progressMessage).toContain('전체 조회가 끝난 뒤 한 번에 표시');
 
     expect(getStoredVideoLoadErrorMessage(new Error('Network down'))).toContain('Network down');

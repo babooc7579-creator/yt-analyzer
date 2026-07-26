@@ -47,9 +47,9 @@ export function useVideoCollectionActions({
     setProgressMsg(getStoredVideoLoadStartMessage());
   };
 
-  const finishStoredVideoLoad = (videos, pageCount) => {
+  const finishStoredVideoLoad = (videos, pageCount, elapsedMs) => {
     setVideos(videos);
-    setProgressMsg(getStoredVideosLoadedMessage(videos.length, pageCount));
+    setProgressMsg(getStoredVideosLoadedMessage(videos.length, pageCount, elapsedMs));
     clearProgressMessageAfter(3000);
   };
 
@@ -73,18 +73,22 @@ export function useVideoCollectionActions({
     }
 
     prepareStoredVideoLoad();
+    const loadStartedAt = Date.now();
 
     try {
       const data = await fetchAllStoredVideosByChannelIds(selectedChannelIds, {
         onPage: (progress) => {
-          setProgressMsg(getStoredVideoLoadProgressMessage(progress));
+          setProgressMsg(getStoredVideoLoadProgressMessage({
+            ...progress,
+            elapsedMs: Date.now() - loadStartedAt,
+          }));
         },
       });
       if (!data.success) throw new Error(data.error || STORED_VIDEO_LOAD_FAILED_MESSAGE);
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
-      finishStoredVideoLoad(mapped, data.pageCount);
+      finishStoredVideoLoad(mapped, data.pageCount, Date.now() - loadStartedAt);
       return { success: true, videoCount: mapped.length };
     } catch (err) {
       setError(getStoredVideoLoadErrorMessage(err));

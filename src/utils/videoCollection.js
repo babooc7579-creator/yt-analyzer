@@ -18,15 +18,35 @@ export const SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE =
 export const SCAN_FAILED_MESSAGE =
   '스캔에 실패했습니다.';
 
-export const getStoredVideoLoadProgressMessage = ({ pageCount = 0, videoCount = 0 } = {}) => (
-  `Cloud DB 저장 영상 조회 중: ${pageCount}페이지, ${videoCount}개를 확인했습니다. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.`
+const getStoredVideoLoadElapsedLabel = (elapsedMs) => {
+  const safeElapsedMs = Number(elapsedMs);
+  if (!Number.isFinite(safeElapsedMs) || safeElapsedMs < 0) return '';
+  if (safeElapsedMs < 1000) return '1초 미만';
+
+  const elapsedSeconds = Math.round(safeElapsedMs / 100) / 10;
+  return `${Number.isInteger(elapsedSeconds) ? elapsedSeconds.toFixed(0) : elapsedSeconds.toFixed(1)}초`;
+};
+
+const getElapsedMessagePart = (elapsedMs) => {
+  const elapsedLabel = getStoredVideoLoadElapsedLabel(elapsedMs);
+  return elapsedLabel ? ` · ${elapsedLabel} 경과` : '';
+};
+
+export const getStoredVideoLoadProgressMessage = ({
+  elapsedMs,
+  pageCount = 0,
+  videoCount = 0,
+} = {}) => (
+  `Cloud DB 저장 영상 조회 중: ${pageCount}페이지, ${videoCount}개를 확인했습니다${getElapsedMessagePart(elapsedMs)}. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.`
 );
 
-export const getStoredVideosLoadedMessage = (videoCount, pageCount = 1) => (
-  videoCount === 0
-    ? 'Cloud DB에는 아직 저장된 영상이 없습니다. 새 데이터가 필요할 때만 "선택 채널 새 영상 수집"을 실행해 주세요.'
-    : `Cloud DB 조회 완료: 저장된 영상 ${videoCount}개를 ${pageCount > 1 ? `${pageCount}페이지에서 모아 ` : ''}불러왔습니다. 새 YouTube API 호출은 없었습니다.`
-);
+export const getStoredVideosLoadedMessage = (videoCount, pageCount = 1, elapsedMs) => {
+  const elapsedPart = getElapsedMessagePart(elapsedMs);
+
+  return videoCount === 0
+    ? `Cloud DB 조회 완료${elapsedPart}: 아직 저장된 영상이 없습니다. 새 데이터가 필요할 때만 "선택 채널 새 영상 수집"을 실행해 주세요.`
+    : `Cloud DB 조회 완료${elapsedPart}: 저장된 영상 ${videoCount}개를 ${pageCount > 1 ? `${pageCount}페이지에서 모아 ` : ''}불러왔습니다. 새 YouTube API 호출은 없었습니다.`;
+};
 
 export const getStoredVideoLoadStartMessage = () => (
   'Cloud DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.'

@@ -64,4 +64,23 @@ describe('TagVaultWorkspace', () => {
     expect(html).toContain('새 영상 수집 준비');
     expect(html).toContain('이동만으로 YouTube API를 호출하지 않습니다');
   });
+
+  it('keeps a failed Cloud lookup retryable without showing partial tag results', () => {
+    const html = renderToStaticMarkup(
+      <TagVaultWorkspace
+        channels={[{ id: 'c1', tags: ['공예'] }]}
+        checkedVideos={[]}
+        loadResult={{ success: false, videoCount: 0 }}
+        onLoadStoredVideos={vi.fn()}
+        onOpenChannels={vi.fn()}
+        onSelectTagChannels={vi.fn()}
+        selectedChannelIds={['c1']}
+        videos={[]}
+      />,
+    );
+
+    expect(html).toContain('Cloud 저장 영상을 불러오지 못했습니다');
+    expect(html).toContain('Cloud 저장 영상 다시 불러오기');
+    expect(html).not.toContain('공예 저장 영상');
+  });
 });

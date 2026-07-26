@@ -72,6 +72,29 @@ describe('ttoTtoExplorer utils', () => {
     }).map(video => video.videoId)).toEqual(['old-strong-short', 'old-steady-long']);
   });
 
+  it('keeps large candidate lists searchable and sorted', () => {
+    const largeVideos = Array.from({ length: 1000 }, (_, index) => ({
+      videoId: `large-${index}`,
+      title: index % 2 === 0 ? `Cake archive ${index}` : `Workshop archive ${index}`,
+      channel_title: `Channel ${index % 20}`,
+      daysOld: 180 + index,
+      multiplier: 2 + (index / 1000),
+      view_count: index * 1000,
+      isShorts: index % 3 === 0,
+    }));
+
+    const matches = filterAndSortTtoTtoCandidates({
+      videos: largeVideos,
+      searchQuery: 'cake',
+      minimumViews: 500000,
+      sortType: 'views',
+    });
+
+    expect(matches).toHaveLength(250);
+    expect(matches[0].videoId).toBe('large-998');
+    expect(matches.at(-1).videoId).toBe('large-500');
+  });
+
   it('hides handled records while keeping strict candidate decision history', () => {
     const videoUserRecords = {
       'old-strong-short': {
