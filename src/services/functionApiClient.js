@@ -65,6 +65,13 @@ export const patchJson = (path, body) => (
   })
 );
 
+export const putJson = (path, body) => (
+  sendJson(path, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  })
+);
+
 export const deleteJson = (path) => (
   sendJson(path, {
     method: 'DELETE',

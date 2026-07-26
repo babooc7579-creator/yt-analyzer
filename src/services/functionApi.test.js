@@ -22,12 +22,15 @@ import {
   scanSelectedChannels,
   updateChannel,
   updateDiscoveryLink,
+  fetchWorkToolPreferences,
+  saveWorkToolPreferences,
 } from './functionApi';
 import * as channelApi from './channelApi';
 import * as discoveryLinksApi from './discoveryLinksApi';
 import * as scanApi from './scanApi';
 import * as scrapbookApi from './scrapbookApi';
 import * as videoRecordsApi from './videoRecordsApi';
+import * as workToolPreferencesApi from './workToolPreferencesApi';
 
 describe('functionApi compatibility exports', () => {
   it('keeps channel API exports available through the legacy facade', () => {
@@ -64,5 +67,10 @@ describe('functionApi compatibility exports', () => {
     expect(deleteDiscoveryLink).toBe(discoveryLinksApi.deleteDiscoveryLink);
     expect(fetchDiscoveryLinks).toBe(discoveryLinksApi.fetchDiscoveryLinks);
     expect(updateDiscoveryLink).toBe(discoveryLinksApi.updateDiscoveryLink);
+  });
+
+  it('keeps work tool preference API exports available through the legacy facade', () => {
+    expect(fetchWorkToolPreferences).toBe(workToolPreferencesApi.fetchWorkToolPreferences);
+    expect(saveWorkToolPreferences).toBe(workToolPreferencesApi.saveWorkToolPreferences);
   });
 });

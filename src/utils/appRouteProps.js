@@ -9,4 +9,5 @@ export { buildScriptBoardRouteProps } from './scriptBoardRouteProps';
 export { buildTagVaultRouteProps } from './tagVaultRouteProps';
 export { buildTtoTtoRouteProps } from './ttoTtoRouteProps';
 export { buildUploadCalendarRouteProps } from './uploadCalendarRouteProps';
+export { buildWorkToolsRouteProps } from './workToolsRouteProps';
 export { buildRoutesProps } from './routesProps';

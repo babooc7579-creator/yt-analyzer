@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AlertTriangle, CheckCircle2, Cloud, Database, ExternalLink, FolderCog, KeyRound, RefreshCw } from 'lucide-react';
 
 import ChannelCategorySettings from './ChannelCategorySettings';
+import WorkToolSettingsPanel from './WorkToolSettingsPanel';
 
 const settingCards = [
   {
@@ -35,6 +36,7 @@ export default function SettingsWorkspace({
   onRefreshChannels,
   refreshingChannels,
   savedChannelCount,
+  workToolSettingsProps,
 }) {
   const [refreshResult, setRefreshResult] = useState(null);
   const {
@@ -114,6 +116,8 @@ export default function SettingsWorkspace({
           </dl>
         </aside>
       </div>
+
+      <WorkToolSettingsPanel {...workToolSettingsProps} />
 
       <section className="border border-slate-700 bg-slate-900/90 p-5" aria-labelledby="settings-diagnostics-title">
         <div>

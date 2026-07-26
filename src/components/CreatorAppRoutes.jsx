@@ -36,6 +36,7 @@ export default function CreatorAppRoutes({
   ttoTtoRouteProps,
   tagVaultRouteProps,
   uploadCalendarRouteProps,
+  workToolsRouteProps,
 }) {
   if (isHomeView) {
     return <CreatorHomeRoute {...homeRouteProps} />;
@@ -62,7 +63,7 @@ export default function CreatorAppRoutes({
   }
 
   if (isWorkToolsView) {
-    return <WorkToolsWorkspace />;
+    return <WorkToolsWorkspace {...workToolsRouteProps} />;
   }
 
   if (isComingSoonView) {

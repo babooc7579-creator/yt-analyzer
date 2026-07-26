@@ -81,5 +81,13 @@ export function buildSettingsRouteProps(props = {}) {
     onChangeApiKey: props.setApiKey,
     refreshingChannels: Boolean(props.channelsLoading),
     savedChannelCount: toArray(props.savedChannels).length,
+    workToolSettingsProps: {
+      error: props.workToolPreferencesError || '',
+      loading: Boolean(props.workToolPreferencesLoading),
+      onReload: props.loadWorkToolPreferences,
+      onSave: props.saveWorkToolPreferences,
+      preferences: props.workToolPreferences,
+      saving: Boolean(props.workToolPreferencesSaving),
+    },
   };
 }

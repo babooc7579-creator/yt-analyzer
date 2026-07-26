@@ -8,6 +8,7 @@ import {
   getJson,
   patchJson,
   postJson,
+  putJson,
   sendJson,
 } from './functionApiClient';
 
@@ -65,6 +66,13 @@ describe('functionApiClient', () => {
     expect(fetchMock).toHaveBeenLastCalledWith(`${FUNCTION_API_BASE}/discovery-links/link-1`, {
       method: 'PATCH',
       body: JSON.stringify({ status: 'saved' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    await putJson('/work-tool-preferences', { toolOrder: ['google-trends'] });
+    expect(fetchMock).toHaveBeenLastCalledWith(`${FUNCTION_API_BASE}/work-tool-preferences`, {
+      method: 'PUT',
+      body: JSON.stringify({ toolOrder: ['google-trends'] }),
       headers: { 'Content-Type': 'application/json' },
     });
   });

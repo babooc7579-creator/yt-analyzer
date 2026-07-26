@@ -29,6 +29,7 @@ describe('appRouteProps barrel exports', () => {
       'buildTagVaultRouteProps',
       'buildTtoTtoRouteProps',
       'buildUploadCalendarRouteProps',
+      'buildWorkToolsRouteProps',
     ]);
   });
 

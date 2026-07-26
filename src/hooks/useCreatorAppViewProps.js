@@ -11,6 +11,7 @@ import {
   buildTagVaultRouteProps,
   buildTtoTtoRouteProps,
   buildUploadCalendarRouteProps,
+  buildWorkToolsRouteProps,
 } from '../utils/appRouteProps';
 
 export function useCreatorAppViewProps(props) {
@@ -25,6 +26,7 @@ export function useCreatorAppViewProps(props) {
   const tagVaultRouteProps = buildTagVaultRouteProps(props);
   const ttoTtoRouteProps = buildTtoTtoRouteProps(props);
   const uploadCalendarRouteProps = buildUploadCalendarRouteProps(props);
+  const workToolsRouteProps = buildWorkToolsRouteProps(props);
 
   const routesProps = buildRoutesProps({
     activeCreatorItem: props.activeCreatorItem,
@@ -51,6 +53,7 @@ export function useCreatorAppViewProps(props) {
     ttoTtoRouteProps,
     tagVaultRouteProps,
     uploadCalendarRouteProps,
+    workToolsRouteProps,
   });
 
   return {

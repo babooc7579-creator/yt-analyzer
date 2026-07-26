@@ -33,3 +33,8 @@ export {
   fetchDiscoveryLinks,
   updateDiscoveryLink,
 } from './discoveryLinksApi';
+
+export {
+  fetchWorkToolPreferences,
+  saveWorkToolPreferences,
+} from './workToolPreferencesApi';
