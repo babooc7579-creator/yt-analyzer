@@ -8,6 +8,7 @@ vi.mock('../utils/appRouteProps', () => ({
   buildLayoutProps: vi.fn(() => ({ shell: 'layout' })),
   buildLegacyWorkspaceRouteProps: vi.fn(() => ({ route: 'legacy-workspace' })),
   buildRoutesProps: vi.fn(() => ({ routes: 'creator-os' })),
+  buildScriptBoardRouteProps: vi.fn(() => ({ route: 'script-board' })),
   buildSettingsRouteProps: vi.fn(() => ({ route: 'settings' })),
   buildTagVaultRouteProps: vi.fn(() => ({ route: 'tag-vault' })),
   buildTtoTtoRouteProps: vi.fn(() => ({ route: 'ttotto' })),
@@ -22,6 +23,7 @@ import {
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
   buildRoutesProps,
+  buildScriptBoardRouteProps,
   buildSettingsRouteProps,
   buildTagVaultRouteProps,
   buildTtoTtoRouteProps,
@@ -43,6 +45,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: true,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,
@@ -58,6 +61,7 @@ describe('useCreatorAppViewProps', () => {
     expect(buildDiscoveryLinksRouteProps).toHaveBeenCalledWith(props);
     expect(buildKeywordExplorerRouteProps).toHaveBeenCalledWith(props);
     expect(buildLegacyWorkspaceRouteProps).toHaveBeenCalledWith(props);
+    expect(buildScriptBoardRouteProps).toHaveBeenCalledWith(props);
     expect(buildSettingsRouteProps).toHaveBeenCalledWith(props);
     expect(buildTagVaultRouteProps).toHaveBeenCalledWith(props);
     expect(buildTtoTtoRouteProps).toHaveBeenCalledWith(props);
@@ -73,6 +77,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: true,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,
@@ -80,6 +85,7 @@ describe('useCreatorAppViewProps', () => {
       keywordExplorerRouteProps: { route: 'keyword-explorer' },
       legacyWorkspaceRouteProps: { route: 'legacy-workspace' },
       onOpenHome: expect.any(Function),
+      scriptBoardRouteProps: { route: 'script-board' },
       settingsRouteProps: { route: 'settings' },
       ttoTtoRouteProps: { route: 'ttotto' },
       tagVaultRouteProps: { route: 'tag-vault' },
@@ -102,6 +108,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: false,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,

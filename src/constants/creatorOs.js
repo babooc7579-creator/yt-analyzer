@@ -27,7 +27,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '제작 후보로 표시한 영상과 발견함 링크를 함께 봅니다.' },
       { id: 'studio-scrapbook', label: '제작/스크랩북', status: 'live', summary: '별표로 보관한 영상과 제작 후보를 구분해 봅니다.' },
-      { id: 'studio-script', label: '대본 보드', status: 'soon', summary: '제목, 인트로, 대본 초안을 관리할 예정입니다.' },
+      { id: 'studio-script', label: '대본 보드', status: 'live', summary: '제작 후보의 제목, 구성 메모, 업로드 예정일을 Cloud에 정리합니다.' },
       { id: 'studio-calendar', label: '업로드 캘린더', status: 'live', summary: '제작 후보함에 Cloud 저장된 목표 업로드 날짜를 달력으로 확인합니다.' },
       { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '미검토, 분석중, 대본화, 제작완료 상태를 관리할 예정입니다.' },
     ],
@@ -103,6 +103,7 @@ export const CHANNEL_CREATOR_VIEWS = [
 export const SCRAPBOOK_CREATOR_VIEWS = [
   'studio-candidates',
   'studio-scrapbook',
+  'studio-script',
   'studio-calendar',
 ];
 

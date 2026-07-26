@@ -15,6 +15,7 @@ describe('creator workspace navigation utils', () => {
       'isHomeView',
       'isKeywordExplorerView',
       'isLegacyWorkspaceView',
+      'isScriptBoardView',
       'isSettingsView',
       'isTagVaultView',
       'isTtoTtoView',
@@ -22,7 +23,7 @@ describe('creator workspace navigation utils', () => {
     ];
     const liveItems = CREATOR_OS_ITEMS.filter((item) => item.status === 'live');
 
-    expect(liveItems).toHaveLength(16);
+    expect(liveItems).toHaveLength(17);
     liveItems.forEach((item) => {
       const model = getCreatorWorkspaceViewModel(item.id);
       const activeRouteCount = routeFlags.filter((flag) => model[flag]).length;
@@ -42,6 +43,7 @@ describe('creator workspace navigation utils', () => {
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
       isReferenceVaultView: false,
+      isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
       isTtoTtoView: false,
@@ -88,6 +90,12 @@ describe('creator workspace navigation utils', () => {
       isComingSoonView: false,
       isLegacyWorkspaceView: false,
       isUploadCalendarView: true,
+    });
+
+    expect(getCreatorWorkspaceViewModel('studio-script')).toMatchObject({
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
+      isScriptBoardView: true,
     });
 
     expect(getCreatorWorkspaceViewModel('ops-settings')).toMatchObject({

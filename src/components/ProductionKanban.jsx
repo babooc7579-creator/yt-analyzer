@@ -33,6 +33,7 @@ export default function ProductionKanban({
   onUpdateVideoRecord,
   onUnsavedDraftsChange,
   onOpenReferenceVault,
+  onOpenScriptBoard,
 }) {
   const {
     draftRecords,
@@ -119,6 +120,7 @@ export default function ProductionKanban({
       'discovery-links': onOpenDiscoveryLinks,
       home: onOpenHome,
       'reference-vault': onOpenReferenceVault,
+      'script-board': onOpenScriptBoard,
       'upload-calendar': onOpenUploadCalendar,
     },
     hasUnsavedDrafts,
@@ -136,6 +138,7 @@ export default function ProductionKanban({
     moveVideo,
     onOpenDiscoveryLinks: guardedNavigationHandlers['discovery-links'],
     onOpenReferenceVault: guardedNavigationHandlers['reference-vault'],
+    onOpenScriptBoard: guardedNavigationHandlers['script-board'],
     onOpenUploadCalendar: guardedNavigationHandlers['upload-calendar'],
     onFilterModeChange: setFilterMode,
     overallDiscoveryLinkCandidateCount: discoveryLinkCandidates.length,

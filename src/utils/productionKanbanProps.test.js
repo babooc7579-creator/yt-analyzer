@@ -65,43 +65,52 @@ describe('productionKanbanProps utils', () => {
     }).map((action) => action.key)).toEqual(['discovery-links']);
   });
 
-  it('builds next action shortcuts for stored videos and discovery links without data changes', () => {
+  it('builds next action shortcuts for writing, stored videos, calendar, and discovery links without data changes', () => {
     const onOpenDiscoveryLinks = () => 'open discovery';
     const onOpenReferenceVault = () => 'open vault';
+    const onOpenScriptBoard = () => 'open script';
     const onOpenUploadCalendar = () => 'open calendar';
     const actions = getProductionKanbanNextActions({
       discoveryLinkCandidateCount: 2,
       onOpenDiscoveryLinks,
       onOpenReferenceVault,
+      onOpenScriptBoard,
       onOpenUploadCalendar,
       videoCount: 3,
     });
 
     expect(actions.map((action) => action.key)).toEqual([
+      'script-board',
       'reference-vault',
       'upload-calendar',
       'discovery-links',
     ]);
     expect(actions[0]).toMatchObject({
+      label: '대본 보드 열기',
+      onClick: onOpenScriptBoard,
+      variant: 'indigo',
+    });
+    expect(actions[0].title).toContain('Cloud 저장이나 YouTube API 호출은 실행되지 않습니다');
+    expect(actions[1]).toMatchObject({
       label: '저장 영상 더 보기',
       onClick: onOpenReferenceVault,
       variant: 'indigo',
     });
-    expect(actions[0].title).toContain('Cloud DB');
-    expect(actions[0].title).toContain('YouTube API를 새로 호출하지 않습니다');
-    expect(actions[1]).toMatchObject({
+    expect(actions[1].title).toContain('Cloud DB');
+    expect(actions[1].title).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(actions[2]).toMatchObject({
       label: '업로드 일정 보기',
       onClick: onOpenUploadCalendar,
       variant: 'amber',
     });
-    expect(actions[1].title).toContain('Cloud에 저장된 목표 날짜');
-    expect(actions[1].title).toContain('YouTube API를 호출하지 않습니다');
-    expect(actions[2]).toMatchObject({
+    expect(actions[2].title).toContain('Cloud에 저장된 목표 날짜');
+    expect(actions[2].title).toContain('YouTube API를 호출하지 않습니다');
+    expect(actions[3]).toMatchObject({
       label: '발견함 링크 정리',
       onClick: onOpenDiscoveryLinks,
       variant: 'secondary',
     });
-    expect(actions[2].title).toContain('외부 자동 수집이나 다운로드는 실행하지 않습니다');
+    expect(actions[3].title).toContain('외부 자동 수집이나 다운로드는 실행하지 않습니다');
   });
 
   it('builds kanban content props with summary video count and forwarded handlers', () => {
@@ -118,6 +127,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onOpenScriptBoard: () => 'open script',
       onOpenUploadCalendar: () => 'open calendar',
       onFilterModeChange: () => 'filter',
       productionSummary: { videoCount: 1, activeCount: 1 },
@@ -137,6 +147,7 @@ describe('productionKanbanProps utils', () => {
       linkMoveStates: props.linkMoveStates,
       moveStates: props.moveStates,
       onOpenReferenceVault: props.onOpenReferenceVault,
+      onOpenScriptBoard: props.onOpenScriptBoard,
       onFilterModeChange: props.onFilterModeChange,
       productionSummary: { videoCount: 1, activeCount: 1 },
       saveStates: props.saveStates,
@@ -157,6 +168,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onOpenScriptBoard: () => 'open script',
       onFilterModeChange: () => 'filter',
       productionSummary: null,
       saveDraftRecord: () => 'save',
@@ -184,6 +196,7 @@ describe('productionKanbanProps utils', () => {
       moveVideo: () => 'move video',
       onOpenDiscoveryLinks: () => 'open links',
       onOpenReferenceVault: () => 'open vault',
+      onOpenScriptBoard: () => 'open script',
       onOpenUploadCalendar: () => 'open calendar',
       onFilterModeChange: () => 'filter',
       productionSummary: { videoCount: 1, activeCount: 1 },
@@ -225,6 +238,7 @@ describe('productionKanbanProps utils', () => {
     });
     expect(typeof viewProps.focusSectionProps.getScheduleSignal).toBe('function');
     expect(viewProps.nextActionsProps.actions.map((action) => action.key)).toEqual([
+      'script-board',
       'reference-vault',
       'upload-calendar',
       'discovery-links',
