@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   CheckCircle2,
   CircleDashed,
+  History,
   ListChecks,
   RefreshCw,
   Search,
@@ -21,6 +22,7 @@ import {
   getScanIssueGuidance,
   getScanRetryLabel,
 } from '../utils/scanIssueGuidance';
+import { getBackfillConfirmMessage } from '../utils/historicalBackfill';
 
 const STATUS_STYLES = {
   failed: 'border-rose-400/30 bg-rose-500/10 text-rose-200',
@@ -129,10 +131,13 @@ export default function RecentScanStatusWorkspace({
   channels = [],
   channelsLoading = false,
   loadScanLogs = fetchScanLogs,
+  onBackfillChannel,
   onOpenChannelOperations,
   onOpenSelectedScan,
 }) {
   const [filter, setFilter] = useState('all');
+  const [backfillChannelId, setBackfillChannelId] = useState('');
+  const [backfillMessages, setBackfillMessages] = useState({});
   const [historyError, setHistoryError] = useState('');
   const [historyLoading, setHistoryLoading] = useState(true);
   const [scanLogs, setScanLogs] = useState([]);
@@ -163,6 +168,29 @@ export default function RecentScanStatusWorkspace({
   useEffect(() => {
     loadHistory();
   }, [loadHistory]);
+
+  const handleHistoricalBackfill = async (row) => {
+    if (typeof onBackfillChannel !== 'function' || backfillChannelId) return;
+    if (
+      typeof window !== 'undefined'
+      && typeof window.confirm === 'function'
+      && !window.confirm(getBackfillConfirmMessage(row.channelTitle))
+    ) {
+      return;
+    }
+
+    setBackfillChannelId(row.channelId);
+    setBackfillMessages((current) => ({ ...current, [row.channelId]: '' }));
+    try {
+      const response = await onBackfillChannel(row.channelId, row.channelTitle);
+      setBackfillMessages((current) => ({
+        ...current,
+        [row.channelId]: response?.message || response?.error || '',
+      }));
+    } finally {
+      setBackfillChannelId('');
+    }
+  };
 
   return (
     <section className="space-y-4" aria-labelledby="recent-scan-status-title">
@@ -302,7 +330,24 @@ export default function RecentScanStatusWorkspace({
                         {getScanRetryLabel(row.status)}
                       </button>
                     ) : null}
+                    {row.status === 'partial' && !row.backfillCompleted && row.estimatedMissingVideos > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => handleHistoricalBackfill(row)}
+                        disabled={Boolean(backfillChannelId)}
+                        className="inline-flex min-h-8 items-center justify-center gap-1 border border-cyan-400/40 bg-cyan-500/10 px-3 py-1 text-[11px] font-black text-cyan-100 hover:border-cyan-300 disabled:cursor-wait disabled:opacity-60"
+                        title="이 채널 하나의 과거 업로드 목록을 YouTube API로 최대 100개 확인합니다. 자동 반복이나 다른 채널 수집은 하지 않습니다."
+                      >
+                        <History className={`h-3.5 w-3.5 ${backfillChannelId === row.channelId ? 'animate-spin' : ''}`} />
+                        {backfillChannelId === row.channelId ? '과거 영상 확인 중' : '과거 영상 100개까지 채우기'}
+                      </button>
+                    ) : null}
                   </div>
+                  {backfillMessages[row.channelId] ? (
+                    <p className="mt-2 border border-cyan-400/20 bg-cyan-500/10 p-2 text-[11px] leading-5 text-cyan-100" role="status" aria-live="polite">
+                      {backfillMessages[row.channelId]}
+                    </p>
+                  ) : null}
                 </div>
               </article>
             ))}
@@ -408,6 +453,9 @@ export default function RecentScanStatusWorkspace({
         <p className="text-xs font-black text-amber-200">현재 표시 범위</p>
         <p className="mt-1 text-xs leading-5 text-amber-100/80">
           채널 요약은 마지막 결과 한 건을 유지하고, 과거 이력은 최근 채널 기록 100건을 같은 수집 실행끼리 묶어 표시합니다. API 쿼터 추정은 아직 제공하지 않습니다.
+        </p>
+        <p className="mt-2 text-xs leading-5 text-amber-100/80">
+          “과거 영상 100개까지 채우기”는 부분 성공 채널 하나에만 표시됩니다. 사용자가 확인한 뒤 한 번만 실행되며 자동 반복·예약·전체 채널 실행은 하지 않습니다.
         </p>
       </div>
     </section>

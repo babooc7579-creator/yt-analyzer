@@ -1,10 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
+  backfillChannelHistoryMock,
   fetchAllStoredVideosByChannelIdsMock,
   scanChannelsMock,
   scanSelectedChannelsMock,
 } = vi.hoisted(() => ({
+  backfillChannelHistoryMock: vi.fn(),
   fetchAllStoredVideosByChannelIdsMock: vi.fn(),
   scanChannelsMock: vi.fn(),
   scanSelectedChannelsMock: vi.fn(),
@@ -15,12 +17,13 @@ vi.mock('../services/videoRecordsApi', () => ({
 }));
 
 vi.mock('../services/scanApi', () => ({
+  backfillChannelHistory: backfillChannelHistoryMock,
   scanChannels: scanChannelsMock,
   scanSelectedChannels: scanSelectedChannelsMock,
 }));
 
 import { CHANNEL_STATUS } from '../constants/status';
-import { scanChannels, scanSelectedChannels } from '../services/scanApi';
+import { backfillChannelHistory, scanChannels, scanSelectedChannels } from '../services/scanApi';
 import { fetchAllStoredVideosByChannelIds } from '../services/videoRecordsApi';
 import {
   SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE,
@@ -77,6 +80,16 @@ describe('useVideoCollectionActions', () => {
     scanSelectedChannelsMock.mockResolvedValue({
       success: true,
       results: [{ newVideosFound: 2, ttoTtoCandidates: [{ id: 'candidate-1' }] }],
+    });
+    backfillChannelHistoryMock.mockResolvedValue({
+      success: true,
+      result: {
+        channelId: 'active-1',
+        inspectedVideos: 100,
+        savedVideosThisRun: 30,
+        savedVideosTotal: 280,
+        estimatedMissingVideos: 120,
+      },
     });
   });
 
@@ -260,5 +273,38 @@ describe('useVideoCollectionActions', () => {
     expect(fetchAllStoredVideosByChannelIds).not.toHaveBeenCalled();
     expect(deps.setIsScanning).toHaveBeenLastCalledWith(false);
     expect(deps.setScanningTag).toHaveBeenLastCalledWith(null);
+  });
+
+  it('runs one capped historical backfill and refreshes Cloud channel progress', async () => {
+    const deps = createDeps();
+    const actions = useVideoCollectionActions(deps);
+
+    const response = await actions.runHistoricalBackfill('active-1', '테스트 채널');
+
+    expect(backfillChannelHistory).toHaveBeenCalledWith('active-1', { maxPages: 2 });
+    expect(deps.setScanningTag).toHaveBeenNthCalledWith(1, 'BACKFILL:active-1');
+    expect(deps.setProgressMsg).toHaveBeenCalledWith(
+      '테스트 채널 과거 영상 채우기 중입니다. YouTube API로 최대 100개 항목을 확인합니다.',
+    );
+    expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
+    expect(response).toMatchObject({ success: true });
+    expect(response.message).toContain('다음 묶음은 사용자가 다시 실행할 때만');
+    expect(deps.setIsScanning).toHaveBeenLastCalledWith(false);
+    expect(deps.setScanningTag).toHaveBeenLastCalledWith(null);
+  });
+
+  it('reports a historical backfill failure without claiming completion', async () => {
+    backfillChannelHistoryMock.mockResolvedValueOnce({
+      success: false,
+      error: 'quota exceeded',
+    });
+    const deps = createDeps();
+    const actions = useVideoCollectionActions(deps);
+
+    const response = await actions.runHistoricalBackfill('active-1', '테스트 채널');
+
+    expect(response.success).toBe(false);
+    expect(deps.setError).toHaveBeenCalledWith(expect.stringContaining('완료로 표시하지 않았습니다'));
+    expect(deps.loadChannelsFromCloud).not.toHaveBeenCalled();
   });
 });

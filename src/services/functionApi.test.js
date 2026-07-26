@@ -21,6 +21,7 @@ import {
   saveVideoUserRecord,
   scanChannels,
   scanSelectedChannels,
+  backfillChannelHistory,
   updateChannel,
   updateDiscoveryLink,
   fetchWorkToolPreferences,
@@ -49,6 +50,7 @@ describe('functionApi compatibility exports', () => {
     expect(fetchScanLogs).toBe(scanApi.fetchScanLogs);
     expect(scanChannels).toBe(scanApi.scanChannels);
     expect(scanSelectedChannels).toBe(scanApi.scanSelectedChannels);
+    expect(backfillChannelHistory).toBe(scanApi.backfillChannelHistory);
   });
 
   it('keeps video record API exports available through the legacy facade', () => {

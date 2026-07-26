@@ -275,6 +275,34 @@ Creator OS에서는 다음 원칙을 우선합니다.
 - 높음.
 - 현재는 API 호출량을 앱 내부에서 확인할 수 없습니다.
 
+### 4.10 historical backfill progress
+
+2026-07-27 선택지 B 승인으로 채널별 수동 과거 영상 채우기 진행 상태를 기존 `channels` 문서에 가산 방식으로 저장합니다.
+
+현재 구조:
+
+- 기준 저장 위치: Cosmos `channels` container의 채널 문서
+- 필드: `backfillState`
+- `nextPageToken`: 다음 수동 실행이 이어서 확인할 YouTube 업로드 목록 위치
+- `completed`: 업로드 목록 끝까지 확인했는지 여부
+- `pagesFetchedTotal`, `videosSavedTotal`: 수동 과거 보강 누적치
+- `lastRun`: 마지막 실행의 확인 수, 신규 저장 수, Cloud 저장 합계, 추정 미저장 수, 완료 여부
+
+운영 원칙:
+
+- Cloud DB가 기준 데이터이며 localStorage에는 진행 커서를 저장하지 않습니다.
+- 기존 `lastScanSummary`는 일반 새 영상 수집의 마지막 상태로 유지합니다.
+- 과거 보강 진행은 `backfillState`로 분리해 최신 수집과 혼동하지 않습니다.
+- 이미 존재하는 영상은 ID 기준으로 중복 저장하지 않습니다.
+- 사용자가 채널 하나를 직접 실행할 때만 진행하며 자동 반복·예약·전체 채널 일괄 실행은 하지 않습니다.
+- 기존 채널에 `backfillState`가 없어도 첫 실행 시 처음부터 시작하므로 마이그레이션은 필요하지 않습니다.
+
+충돌 위험:
+
+- YouTube 페이지 토큰이 장기간 지난 뒤 무효화될 가능성이 있습니다. 실패 시 완료로 표시하지 않고 같은 위치를 보존합니다.
+- 채널 전체 영상 수는 YouTube 채널 통계 기준이므로 삭제·비공개 영상 때문에 Cloud 저장 수와 정확히 일치하지 않을 수 있습니다.
+- `backfillState`는 진행 상태이며 정확한 API quota 장부가 아닙니다.
+
 ---
 
 ## 5. localStorage 원칙

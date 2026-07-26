@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { FUNCTION_API_BASE } from '../config';
 import {
+  backfillChannelHistory,
   buildScanLogsPath,
   fetchScanLogs,
   scanChannels,
@@ -38,6 +39,21 @@ describe('scanApi service', () => {
       body: JSON.stringify({
         channelIds: ['channel-1', 'channel-2'],
         reason: 'manual',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+
+  it('uses the capped single-channel historical backfill endpoint', async () => {
+    const fetchMock = installFetchMock();
+
+    await backfillChannelHistory('channel-1', { maxPages: 2 });
+
+    expect(fetchMock).toHaveBeenCalledWith(`${FUNCTION_API_BASE}/scan/backfill`, {
+      method: 'POST',
+      body: JSON.stringify({
+        channelId: 'channel-1',
+        maxPages: 2,
       }),
       headers: { 'Content-Type': 'application/json' },
     });
