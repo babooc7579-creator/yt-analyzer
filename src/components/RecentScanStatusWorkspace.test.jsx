@@ -46,7 +46,30 @@ describe('RecentScanStatusWorkspace', () => {
     const html = renderToStaticMarkup(<RecentScanStatusWorkspace channels={[]} />);
 
     expect(html).toContain('0개 채널 표시');
-    expect(html).toContain('조건에 맞는 채널이 없습니다');
-    expect(html).toContain('검색·필터 초기화');
+    expect(html).toContain('저장된 채널이 없습니다');
+    expect(html).toContain('채널 운영실 열기');
+  });
+
+  it('does not report an empty channel list while Cloud channels are loading', () => {
+    const html = renderToStaticMarkup(
+      <RecentScanStatusWorkspace channels={[]} channelsLoading />,
+    );
+
+    expect(html).toContain('Cloud 채널 상태 조회 중');
+    expect(html).toContain('조회가 끝나기 전에는 채널이 없다고 판단하지 않습니다');
+    expect(html).not.toContain('저장된 채널이 없습니다');
+  });
+
+  it('uses a Korean label for an unclassified channel grade', () => {
+    const html = renderToStaticMarkup(
+      <RecentScanStatusWorkspace channels={[{
+        id: 'channel-1',
+        title: '운영 채널',
+        grade: 'unclassified',
+      }]} />,
+    );
+
+    expect(html).toContain('등급 미분류');
+    expect(html).not.toContain('등급 unclassified');
   });
 });

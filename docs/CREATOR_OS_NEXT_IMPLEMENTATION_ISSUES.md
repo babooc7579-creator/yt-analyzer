@@ -90,7 +90,7 @@
 
 ### P3: 백엔드/API/DB 변경이 필요한 작업
 
-새 endpoint, 새 저장소, pagination, scan logs, api quota logs 같은 작업입니다.
+새 endpoint, 새 저장소, 아직 결정되지 않은 로그 보관 정책과 api quota logs 같은 작업입니다. `/videos` 연속 페이지 조회와 `scan_log` 1차 저장·조회는 이미 구현되었습니다.
 
 ### P4: 1차 안정화 이후 작업
 
@@ -108,7 +108,7 @@
 - 카테고리 목록을 Cloud 태그 기준으로 바꿀지
 - `production_candidates`를 별도 DB로 만들지
 - `discovery_links`를 별도 저장소로 분리할지, `local_assets` API를 만들지
-- `scan_logs`, `api_quota_logs` 저장소를 만들지
+- 기존 `videos` container의 `scan_log` 보관 정책·전체 실행 집계를 확장할지, `api_quota_logs` 저장소를 만들지
 
 ---
 
@@ -220,6 +220,7 @@
 - 위험도: 중간에서 높음.
 - 완료 기준: `docType: scan_log` 저장, 읽기 endpoint, 화면 조회, 기존 수집 호환, 배포 검증.
 - 사용자 판단 필요 여부: `scan_logs` 1차 범위는 승인 완료. 보관 정책, 전체 실행 집계, `api_quota_logs`는 별도 판단 필요.
+- 화면 표시: 최근 채널 기록 최대 100건을 `scanRunId` 기준의 수집 실행 단위로 묶어 보여주며, 저장 구조나 조회 endpoint는 변경하지 않습니다.
 
 ### Issue 9. discovery links/local assets MVP 범위 결정
 

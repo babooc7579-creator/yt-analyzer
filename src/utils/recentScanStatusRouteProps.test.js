@@ -7,11 +7,13 @@ describe('recentScanStatusRouteProps', () => {
     const openCreatorView = vi.fn();
     const channels = [{ id: 'channel-1' }];
     const props = buildRecentScanStatusRouteProps({
+      channelsLoading: true,
       openCreatorView,
       savedChannels: channels,
     });
 
     expect(props.channels).toBe(channels);
+    expect(props.channelsLoading).toBe(true);
 
     props.onOpenChannelOperations();
     props.onOpenSelectedScan();
@@ -24,5 +26,6 @@ describe('recentScanStatusRouteProps', () => {
 
   it('uses an empty channel list when app data is unavailable', () => {
     expect(buildRecentScanStatusRouteProps().channels).toEqual([]);
+    expect(buildRecentScanStatusRouteProps().channelsLoading).toBe(false);
   });
 });

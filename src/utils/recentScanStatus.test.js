@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   filterRecentScanStatusRows,
+  formatChannelGrade,
+  getScanHistoryRuns,
   getRecentScanStatusRows,
   getRecentScanStatusSummary,
 } from './recentScanStatus';
@@ -87,5 +89,58 @@ describe('recent scan status utils', () => {
     expect(filterRecentScanStatusRows({ filter: 'failed', rows })).toHaveLength(1);
     expect(filterRecentScanStatusRows({ query: '랭킹형', rows }).map((row) => row.channelId)).toEqual(['success']);
     expect(filterRecentScanStatusRows({ query: 'quota', rows }).map((row) => row.channelId)).toEqual(['failed']);
+  });
+
+  it('uses operator-friendly grade labels', () => {
+    expect(formatChannelGrade('unclassified')).toBe('미분류');
+    expect(formatChannelGrade('a')).toBe('A');
+    expect(formatChannelGrade('특별 관리')).toBe('특별 관리');
+  });
+
+  it('groups channel records by a single scan execution', () => {
+    const runs = getScanHistoryRuns([
+      {
+        id: 'log-2',
+        scanRunId: 'run-1',
+        channelTitle: '두번째 채널',
+        status: 'failed',
+        scannedAt: '2026-07-27T01:00:01.000Z',
+        error: 'quota warning',
+      },
+      {
+        id: 'log-1',
+        scanRunId: 'run-1',
+        channelTitle: '첫번째 채널',
+        status: 'success',
+        scannedAt: '2026-07-27T01:00:00.000Z',
+        newVideosFound: 2,
+        statsRefreshed: 5,
+        trigger: 'selected',
+      },
+      {
+        id: 'legacy-log',
+        channelTitle: '기존 채널',
+        status: 'success',
+        scannedAt: '2026-07-26T01:00:00.000Z',
+        newVideosFound: 1,
+      },
+    ]);
+
+    expect(runs).toHaveLength(2);
+    expect(runs[0]).toMatchObject({
+      id: 'run-1',
+      channelCount: 2,
+      failed: 1,
+      newVideosFound: 2,
+      statsRefreshed: 5,
+      status: 'partial',
+      success: 1,
+      trigger: 'selected',
+    });
+    expect(runs[0].logs.map((log) => log.channelTitle)).toEqual(['두번째 채널', '첫번째 채널']);
+    expect(runs[1]).toMatchObject({
+      channelCount: 1,
+      status: 'success',
+    });
   });
 });
