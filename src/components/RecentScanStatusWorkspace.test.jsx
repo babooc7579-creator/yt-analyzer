@@ -37,6 +37,9 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('확인 필요 채널');
     expect(html).toContain('quota warning');
     expect(html).toContain('새 영상 2개 · 통계 갱신 5개');
+    expect(html).toContain('이 채널 관리');
+    expect(html).toContain('수집 단계 열기');
+    expect((html.match(/수집 단계 열기/g) || []).length).toBe(1);
     expect(html).toContain('이 화면은 Cloud DB만 조회합니다');
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
