@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import RecentScanStatusWorkspace from './RecentScanStatusWorkspace';
+import RecentScanStatusWorkspace, {
+  RecentScanHistoryEmptyState,
+  RecentScanHistoryLogRow,
+} from './RecentScanStatusWorkspace';
 
 describe('RecentScanStatusWorkspace', () => {
   it('renders latest operational status and the Cloud history boundary', () => {
@@ -74,5 +77,34 @@ describe('RecentScanStatusWorkspace', () => {
 
     expect(html).toContain('등급 미분류');
     expect(html).not.toContain('등급 unclassified');
+  });
+
+  it('guides an empty history to the scan stage without claiming to run collection', () => {
+    const html = renderToStaticMarkup(<RecentScanHistoryEmptyState />);
+
+    expect(html).toContain('새 영상 수집 단계 열기');
+    expect(html).toContain('실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다');
+  });
+
+  it('connects a history result to the matching channel management stage', () => {
+    const html = renderToStaticMarkup(
+      <RecentScanHistoryLogRow
+        log={{
+          channelId: 'channel-1',
+          channelTitle: 'History Channel',
+          error: 'quota warning',
+          newVideosFound: 2,
+          scannedAt: '2026-07-27T01:00:00.000Z',
+          statsRefreshed: 5,
+          status: 'partial',
+        }}
+      />,
+    );
+
+    expect(html).toContain('History Channel');
+    expect(html).toContain('새 영상 2개 · 통계 갱신 5개');
+    expect(html).toContain('quota warning');
+    expect(html).toContain('채널 관리');
+    expect(html).toContain('Cloud 저장이나 YouTube API 호출은 실행되지 않습니다');
   });
 });
