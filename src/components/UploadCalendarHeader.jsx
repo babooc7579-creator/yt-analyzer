@@ -24,7 +24,13 @@ export default function UploadCalendarHeader({
             </p>
           </div>
         </div>
-        <button type="button" onClick={onOpenProductionCandidates} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-amber-300 px-4 text-xs font-black text-slate-950 hover:bg-amber-200">
+        <button
+          type="button"
+          onClick={onOpenProductionCandidates}
+          className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-amber-300 px-4 text-xs font-black text-slate-950 hover:bg-amber-200"
+          title="제작 후보함으로 이동해 목표 업로드 날짜를 수정합니다. 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="제작 후보함에서 일정 수정, 화면 이동이며 Cloud 데이터 변경 및 YouTube API 호출 없음"
+        >
           <ListTodo className="h-4 w-4" /> 제작 후보함에서 일정 수정
         </button>
       </div>
@@ -34,7 +40,15 @@ export default function UploadCalendarHeader({
           <button type="button" onClick={onPreviousMonth} aria-label="이전 달" title="이전 달" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800"><ArrowLeft className="h-4 w-4" /></button>
           <h3 className="min-w-28 text-center text-base font-black text-white">{monthLabel}</h3>
           <button type="button" onClick={onNextMonth} aria-label="다음 달" title="다음 달" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800"><ArrowRight className="h-4 w-4" /></button>
-          <button type="button" onClick={onToday} className="h-9 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800">오늘</button>
+          <button
+            type="button"
+            onClick={onToday}
+            className="h-9 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800"
+            title="오늘이 포함된 달로 이동합니다. 화면 표시만 바꾸며 Cloud 데이터는 변경하지 않습니다."
+            aria-label="오늘이 포함된 달 보기, 화면 표시만 변경"
+          >
+            오늘
+          </button>
         </div>
         <label>
           <span className="sr-only">제작 상태 필터</span>

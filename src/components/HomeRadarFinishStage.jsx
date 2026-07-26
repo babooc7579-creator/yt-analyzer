@@ -26,7 +26,13 @@ export default function HomeRadarFinishStage({
         </div>
         {hasCandidates ? (
           <div className="flex shrink-0 flex-wrap gap-2">
-            <button type="button" onClick={onOpenProductionCandidates} className="inline-flex items-center justify-center gap-2 bg-emerald-200 px-4 py-2.5 text-xs font-extrabold text-emerald-950 hover:bg-emerald-100">
+            <button
+              type="button"
+              onClick={onOpenProductionCandidates}
+              className="inline-flex items-center justify-center gap-2 bg-emerald-200 px-4 py-2.5 text-xs font-extrabold text-emerald-950 hover:bg-emerald-100"
+              title="제작 후보함으로 이동합니다. 이동만으로 후보 상태를 바꾸거나 Cloud 저장 또는 YouTube API 호출을 실행하지 않습니다."
+              aria-label="제작 후보함으로 이동, 후보 상태 변경 및 Cloud 저장 및 YouTube API 호출 없음"
+            >
               <Rocket className="h-4 w-4" /> 제작 후보함에서 이어가기
             </button>
             {typeof onOpenUploadCalendar === 'function' ? (
@@ -41,7 +47,12 @@ export default function HomeRadarFinishStage({
             ) : null}
           </div>
         ) : (
-          <a href="#today-radar-candidates" className="inline-flex shrink-0 items-center justify-center gap-2 border border-indigo-300/30 bg-indigo-500/10 px-4 py-2.5 text-xs font-extrabold text-indigo-100 hover:bg-indigo-500/20">
+          <a
+            href="#today-radar-candidates"
+            className="inline-flex shrink-0 items-center justify-center gap-2 border border-indigo-300/30 bg-indigo-500/10 px-4 py-2.5 text-xs font-extrabold text-indigo-100 hover:bg-indigo-500/20"
+            title="같은 화면의 오늘 후보 판정 영역으로 이동합니다. 이동만으로 Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+            aria-label="오늘 후보 판정 영역으로 이동, Cloud 저장 및 YouTube API 호출 없음"
+          >
             <ArrowDown className="h-4 w-4" /> 후보 판정대로 이동
           </a>
         )}

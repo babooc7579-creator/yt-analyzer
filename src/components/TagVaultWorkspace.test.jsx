@@ -21,6 +21,7 @@ describe('TagVaultWorkspace', () => {
     expect(html).toContain('태그 채널 선택');
     expect(html).toContain('상단의 저장 영상 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
+    expect(html).toContain('채널 목록 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음');
   });
 
   it('disables duplicate stored-video lookup while Cloud data is loading', () => {

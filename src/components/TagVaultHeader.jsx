@@ -17,7 +17,13 @@ export default function TagVaultHeader({ loading = false, onLoadStoredVideos, on
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={onOpenChannels} className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800">
+        <button
+          type="button"
+          onClick={onOpenChannels}
+          className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800"
+          title="채널 목록 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="채널 목록 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음"
+        >
           <FolderOpen className="h-4 w-4" /> 채널 목록
         </button>
         <button
@@ -26,6 +32,9 @@ export default function TagVaultHeader({ loading = false, onLoadStoredVideos, on
           disabled={selectedChannelCount === 0 || loading}
           className="inline-flex h-10 items-center gap-2 rounded-lg bg-cyan-400 px-3 text-xs font-black text-slate-950 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-500"
           title="선택된 채널의 영상을 Cloud DB에서 조회합니다. YouTube API를 호출하지 않습니다."
+          aria-label={loading
+            ? 'Cloud DB에서 저장 영상 불러오는 중, YouTube API 호출 없음'
+            : `선택 채널 ${selectedChannelCount}개 저장 영상 불러오기, Cloud DB 조회이며 YouTube API 호출 없음`}
         >
           {loading
             ? <Loader2 className="h-4 w-4 animate-spin" />

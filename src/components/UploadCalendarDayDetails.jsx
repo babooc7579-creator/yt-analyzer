@@ -16,7 +16,15 @@ export default function UploadCalendarDayDetails({
           <p className="text-xs font-extrabold text-amber-300">선택한 날짜</p>
           <h3 className="mt-1 text-base font-black text-white">{selectedDate} · {items.length}개</h3>
         </div>
-        <button type="button" onClick={onOpenProductionCandidates} className="inline-flex h-9 items-center gap-2 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800"><PencilLine className="h-4 w-4" /> 일정 수정</button>
+        <button
+          type="button"
+          onClick={onOpenProductionCandidates}
+          className="inline-flex h-9 items-center gap-2 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800"
+          title="제작 후보함으로 이동해 일정을 수정합니다. 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="제작 후보함에서 일정 수정, 화면 이동이며 Cloud 데이터 변경 및 YouTube API 호출 없음"
+        >
+          <PencilLine className="h-4 w-4" /> 일정 수정
+        </button>
       </div>
 
       {items.length > 0 ? (
@@ -64,6 +72,8 @@ export default function UploadCalendarDayDetails({
               type="button"
               onClick={onOpenProductionCandidates}
               className="mt-4 inline-flex h-9 items-center gap-2 rounded-lg bg-amber-300 px-4 text-xs font-black text-slate-950 hover:bg-amber-200"
+              title="제작 후보함으로 이동해 선택한 날짜를 목표 업로드 날짜로 지정합니다. 이동만으로 날짜를 저장하거나 YouTube API를 호출하지 않습니다."
+              aria-label="제작 후보함에서 날짜 정하기, 화면 이동이며 자동 날짜 저장 및 YouTube API 호출 없음"
             >
               <CalendarPlus className="h-4 w-4" /> 제작 후보에서 날짜 정하기
             </button>

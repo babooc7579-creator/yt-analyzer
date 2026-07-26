@@ -41,4 +41,26 @@ describe('ChannelWatchlistWorkspace', () => {
     expect(html).toContain('선택 상태 전체');
     expect(html).toContain('현재 결과 1개 선택 해제');
   });
+
+  it('explains empty-result recovery actions without starting lookup or collection', () => {
+    const html = renderToStaticMarkup(
+      <ChannelWatchlistWorkspace
+        channels={[{
+          id: 'channel-1',
+          title: 'Paused Channel',
+          grade: 'B',
+          status: 'paused',
+        }]}
+        channelsLoading={false}
+        onOpenChannelList={() => {}}
+        onRefreshChannels={() => {}}
+        onSetSelectedChannelIds={() => {}}
+        onToggleSelection={() => {}}
+        selectedChannelIds={[]}
+      />,
+    );
+
+    expect(html).toContain('표시할 운영중 채널이 없습니다');
+    expect(html).toContain('전체 채널 목록 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음');
+  });
 });
