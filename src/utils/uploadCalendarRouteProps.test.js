@@ -12,12 +12,17 @@ describe('buildUploadCalendarRouteProps', () => {
 
     props.onOpenProductionCandidates();
     props.onOpenProductionCandidate({ title: '예약 영상', videoId: 'v1' });
+    props.onOpenScriptBoard({ videoId: 'v1' });
 
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'studio-candidates' }],
       [{
         id: 'studio-candidates',
         intent: { searchQuery: '예약 영상', source: 'upload-calendar', targetVideoId: 'v1' },
+      }],
+      [{
+        id: 'studio-script',
+        intent: { source: 'upload-calendar', targetVideoId: 'v1' },
       }],
     ]);
     expect(props).toMatchObject({ videoUserRecords: { v1: {} }, videos: [{ videoId: 'v1' }] });
@@ -38,6 +43,16 @@ describe('buildUploadCalendarRouteProps', () => {
       id: 'studio-candidates',
       intent: {
         searchQuery: '이전 일정 기록',
+        source: 'upload-calendar',
+        targetVideoId: '',
+      },
+    });
+
+    props.onOpenScriptBoard({ title: '이전 일정 기록' });
+
+    expect(openCreatorView).toHaveBeenLastCalledWith({
+      id: 'studio-script',
+      intent: {
         source: 'upload-calendar',
         targetVideoId: '',
       },
