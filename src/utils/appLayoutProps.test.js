@@ -107,6 +107,39 @@ describe('appLayoutProps utils', () => {
     expect(onConfirmUnsavedNavigation).toHaveBeenCalledOnce();
   });
 
+  it('protects sidebar navigation while work tool settings are unsaved', () => {
+    const openCreatorView = vi.fn();
+    const onConfirmUnsavedNavigation = vi.fn(() => false);
+    const props = buildLayoutProps({
+      creatorView: 'ops-settings',
+      hasUnsavedWorkToolSettings: true,
+      onConfirmUnsavedNavigation,
+      openCreatorView,
+    });
+
+    expect(props.onOpenCreatorView({ id: 'home' })).toBe(false);
+    expect(onConfirmUnsavedNavigation).toHaveBeenCalledWith(
+      expect.stringContaining('업무 도구 설정')
+    );
+    expect(openCreatorView).not.toHaveBeenCalled();
+  });
+
+  it('mentions both unsaved areas when both safeguards are active', () => {
+    const onConfirmUnsavedNavigation = vi.fn(() => false);
+    const props = buildLayoutProps({
+      creatorView: 'ops-settings',
+      hasUnsavedProductionDrafts: true,
+      hasUnsavedWorkToolSettings: true,
+      onConfirmUnsavedNavigation,
+      openCreatorView: vi.fn(),
+    });
+
+    props.onOpenCreatorView({ id: 'home' });
+    expect(onConfirmUnsavedNavigation).toHaveBeenCalledWith(
+      expect.stringContaining('제작안과 업무 도구 설정')
+    );
+  });
+
   it('builds Creator OS sidebar header copy', () => {
     expect(getCreatorSidebarHeaderViewProps()).toEqual({
       brandLabel: '타임머신 CRM',

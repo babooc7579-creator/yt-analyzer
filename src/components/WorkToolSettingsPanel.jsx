@@ -28,6 +28,7 @@ const createCustomToolId = () => (
 export default function WorkToolSettingsPanel({
   error = '',
   loading = false,
+  onDirtyChange,
   onOpenWorkTools,
   onReload,
   onSave,
@@ -49,6 +50,14 @@ export default function WorkToolSettingsPanel({
     hasUnsavedChanges: dirty,
     target: typeof window === 'undefined' ? undefined : window,
   }), [dirty]);
+
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+
+    return () => {
+      if (dirty) onDirtyChange?.(false);
+    };
+  }, [dirty, onDirtyChange]);
 
   const allTools = useMemo(() => getAllConfiguredWorkTools(draft), [draft]);
   const hiddenIds = useMemo(() => new Set(draft.hiddenDefaultToolIds), [draft.hiddenDefaultToolIds]);
@@ -206,7 +215,7 @@ export default function WorkToolSettingsPanel({
       {notice && <p role="status" className="mt-4 border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-100">{notice}</p>}
       {dirty && !notice && (
         <p role="status" className="mt-4 text-xs font-bold text-amber-200">
-          저장하지 않은 변경사항이 있습니다. 새로고침하거나 탭을 닫기 전에 Cloud에 저장해 주세요.
+          저장하지 않은 변경사항이 있습니다. 다른 메뉴로 이동하거나 화면을 닫기 전에 Cloud에 저장해 주세요.
         </p>
       )}
 

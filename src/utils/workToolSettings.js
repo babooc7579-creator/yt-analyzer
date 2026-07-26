@@ -1,3 +1,8 @@
+export const WORK_TOOL_UNSAVED_NAVIGATION_MESSAGE = [
+  'Cloud에 저장하지 않은 업무 도구 설정이 있습니다.',
+  '저장하지 않고 다른 화면으로 이동할까요?',
+].join('\n');
+
 export const getSafeWorkToolUrl = (value) => {
   try {
     const url = new URL(String(value || '').trim());
