@@ -42,6 +42,7 @@ export function useCreatorAppViewProps(props) {
     isTagVaultView: props.isTagVaultView,
     isTtoTtoView: props.isTtoTtoView,
     isUploadCalendarView: props.isUploadCalendarView,
+    isWorkToolsView: props.isWorkToolsView,
     keywordExplorerRouteProps,
     legacyWorkspaceRouteProps,
     onOpenHome: () => props.openCreatorView({ id: 'home' }),

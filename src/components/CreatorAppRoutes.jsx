@@ -9,6 +9,7 @@ import CreatorSettingsRoute from './CreatorSettingsRoute';
 import CreatorTagVaultRoute from './CreatorTagVaultRoute';
 import CreatorTtoTtoRoute from './CreatorTtoTtoRoute';
 import CreatorUploadCalendarRoute from './CreatorUploadCalendarRoute';
+import WorkToolsWorkspace from './WorkToolsWorkspace';
 
 export default function CreatorAppRoutes({
   activeCreatorItem,
@@ -26,6 +27,7 @@ export default function CreatorAppRoutes({
   isTagVaultView,
   isTtoTtoView,
   isUploadCalendarView,
+  isWorkToolsView,
   keywordExplorerRouteProps,
   legacyWorkspaceRouteProps,
   onOpenHome,
@@ -57,6 +59,10 @@ export default function CreatorAppRoutes({
 
   if (isSettingsView) {
     return <CreatorSettingsRoute {...settingsRouteProps} />;
+  }
+
+  if (isWorkToolsView) {
+    return <WorkToolsWorkspace />;
   }
 
   if (isComingSoonView) {

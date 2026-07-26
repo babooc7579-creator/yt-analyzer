@@ -45,6 +45,9 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('외부 검색량이나 완전한 실시간 지표가 아니며');
     expect(html).toContain('반응도 87');
     expect(html).toContain('cake');
+    expect(html).toContain('외부 관심도 확인');
+    expect(html).toContain('외부 검색량을 자동 수집하지 않습니다');
+    expect(html).toContain('업무 도구함 전체 보기');
     expect(html).toContain('찾고 싶은 소재 키워드를 입력하세요');
   });
 

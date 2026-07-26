@@ -42,6 +42,7 @@ export const getCreatorWorkspaceViewModel = (creatorView) => {
     isTagVaultView: creatorView === 'vault-tags',
     isTtoTtoView: creatorView === 'discovery-ttotto',
     isUploadCalendarView: creatorView === 'studio-calendar',
+    isWorkToolsView: creatorView === 'tools-bookmarks',
   };
 };
 

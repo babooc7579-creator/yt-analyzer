@@ -26,6 +26,7 @@ export function useCreatorWorkspaceNavigation() {
     isTagVaultView,
     isTtoTtoView,
     isUploadCalendarView,
+    isWorkToolsView,
   } = getCreatorWorkspaceViewModel(creatorView);
 
   const openCreatorView = (item) => {
@@ -63,6 +64,7 @@ export function useCreatorWorkspaceNavigation() {
     isTagVaultView,
     isTtoTtoView,
     isUploadCalendarView,
+    isWorkToolsView,
     openCreatorView,
     setActiveTab,
     setHasUnsavedProductionDrafts,
