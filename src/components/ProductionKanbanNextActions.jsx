@@ -1,10 +1,11 @@
-import { CalendarDays, Link as LinkIcon, Rocket } from 'lucide-react';
+import { CalendarDays, FilePenLine, Link as LinkIcon, Rocket } from 'lucide-react';
 
 import EmptyStateActions from './EmptyStateActions';
 
 const ACTION_ICONS = {
   discoveryLinks: LinkIcon,
   referenceVault: Rocket,
+  scriptBoard: FilePenLine,
   uploadCalendar: CalendarDays,
 };
 

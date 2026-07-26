@@ -50,6 +50,7 @@ export function getLegacyVaultTabViewProps({
         },
       }),
       onOpenReferenceVault: () => openCreatorView({ id: 'vault-all' }),
+      onOpenScriptBoard: () => openCreatorView({ id: 'studio-script' }),
       onOpenUploadCalendar: () => openCreatorView({ id: 'studio-calendar' }),
       onRemoveScrap: toggleScrapVideo,
       onUpdateDiscoveryLink: updateDiscoveryLink,

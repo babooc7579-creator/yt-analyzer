@@ -6,6 +6,7 @@ import {
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
   buildRoutesProps,
+  buildScriptBoardRouteProps,
   buildSettingsRouteProps,
   buildTagVaultRouteProps,
   buildTtoTtoRouteProps,
@@ -19,6 +20,7 @@ export function useCreatorAppViewProps(props) {
   const discoveryLinksRouteProps = buildDiscoveryLinksRouteProps(props);
   const keywordExplorerRouteProps = buildKeywordExplorerRouteProps(props);
   const legacyWorkspaceRouteProps = buildLegacyWorkspaceRouteProps(props);
+  const scriptBoardRouteProps = buildScriptBoardRouteProps(props);
   const settingsRouteProps = buildSettingsRouteProps(props);
   const tagVaultRouteProps = buildTagVaultRouteProps(props);
   const ttoTtoRouteProps = buildTtoTtoRouteProps(props);
@@ -35,6 +37,7 @@ export function useCreatorAppViewProps(props) {
     isHomeView: props.isHomeView,
     isKeywordExplorerView: props.isKeywordExplorerView,
     isLegacyWorkspaceView: props.isLegacyWorkspaceView,
+    isScriptBoardView: props.isScriptBoardView,
     isSettingsView: props.isSettingsView,
     isTagVaultView: props.isTagVaultView,
     isTtoTtoView: props.isTtoTtoView,
@@ -42,6 +45,7 @@ export function useCreatorAppViewProps(props) {
     keywordExplorerRouteProps,
     legacyWorkspaceRouteProps,
     onOpenHome: () => props.openCreatorView({ id: 'home' }),
+    scriptBoardRouteProps,
     settingsRouteProps,
     ttoTtoRouteProps,
     tagVaultRouteProps,

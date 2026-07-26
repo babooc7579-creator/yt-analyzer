@@ -8,6 +8,7 @@ import { buildHomeRouteProps } from './homeRouteProps';
 import { buildKeywordExplorerRouteProps } from './keywordExplorerRouteProps';
 import { buildLegacyWorkspaceRouteProps } from './legacyWorkspaceRouteProps';
 import { buildRoutesProps } from './routesProps';
+import { buildScriptBoardRouteProps } from './scriptBoardRouteProps';
 import { buildSettingsRouteProps } from './settingsRouteProps';
 import { buildTagVaultRouteProps } from './tagVaultRouteProps';
 import { buildTtoTtoRouteProps } from './ttoTtoRouteProps';
@@ -23,6 +24,7 @@ describe('appRouteProps barrel exports', () => {
       'buildLayoutProps',
       'buildLegacyWorkspaceRouteProps',
       'buildRoutesProps',
+      'buildScriptBoardRouteProps',
       'buildSettingsRouteProps',
       'buildTagVaultRouteProps',
       'buildTtoTtoRouteProps',
@@ -38,6 +40,7 @@ describe('appRouteProps barrel exports', () => {
     expect(appRouteProps.buildLayoutProps).toBe(buildLayoutProps);
     expect(appRouteProps.buildLegacyWorkspaceRouteProps).toBe(buildLegacyWorkspaceRouteProps);
     expect(appRouteProps.buildRoutesProps).toBe(buildRoutesProps);
+    expect(appRouteProps.buildScriptBoardRouteProps).toBe(buildScriptBoardRouteProps);
     expect(appRouteProps.buildSettingsRouteProps).toBe(buildSettingsRouteProps);
     expect(appRouteProps.buildTagVaultRouteProps).toBe(buildTagVaultRouteProps);
     expect(appRouteProps.buildTtoTtoRouteProps).toBe(buildTtoTtoRouteProps);

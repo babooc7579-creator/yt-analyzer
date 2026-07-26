@@ -13,6 +13,7 @@ describe('routesProps utils', () => {
     const homeRouteProps = { selectedChannelCount: 2 };
     const legacyWorkspaceRouteProps = { totalVideoCount: 3 };
     const settingsRouteProps = { categories: [] };
+    const scriptBoardRouteProps = { videos: [] };
     const keywordExplorerRouteProps = { videos: [] };
     const tagVaultRouteProps = { channels: [] };
     const ttoTtoRouteProps = { videos: [] };
@@ -29,12 +30,14 @@ describe('routesProps utils', () => {
       isHomeView: false,
       isKeywordExplorerView: true,
       isLegacyWorkspaceView: false,
+      isScriptBoardView: true,
       isSettingsView: true,
       isTagVaultView: true,
       isTtoTtoView: true,
       isUploadCalendarView: true,
       keywordExplorerRouteProps,
       legacyWorkspaceRouteProps,
+      scriptBoardRouteProps,
       settingsRouteProps,
       tagVaultRouteProps,
       ttoTtoRouteProps,
@@ -52,12 +55,14 @@ describe('routesProps utils', () => {
       isHomeView: false,
       isKeywordExplorerView: true,
       isLegacyWorkspaceView: false,
+      isScriptBoardView: true,
       isSettingsView: true,
       isTagVaultView: true,
       isTtoTtoView: true,
       isUploadCalendarView: true,
       keywordExplorerRouteProps,
       legacyWorkspaceRouteProps,
+      scriptBoardRouteProps,
       settingsRouteProps,
       tagVaultRouteProps,
       ttoTtoRouteProps,

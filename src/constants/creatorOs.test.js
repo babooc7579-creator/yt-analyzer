@@ -62,6 +62,8 @@ describe('creatorOs constants', () => {
     expect(itemsById['vault-tags'].summary).toContain('채널 태그');
     expect(itemsById['studio-calendar']).toMatchObject({ status: 'live' });
     expect(itemsById['studio-calendar'].summary).toContain('목표 업로드 날짜');
+    expect(itemsById['studio-script']).toMatchObject({ status: 'live' });
+    expect(itemsById['studio-script'].summary).toContain('Cloud');
   });
 
   it('exposes settings as a live operations workspace', () => {
@@ -87,6 +89,7 @@ describe('creatorOs constants', () => {
     expect(SCRAPBOOK_CREATOR_VIEWS).toEqual(expect.arrayContaining([
       'studio-candidates',
       'studio-scrapbook',
+      'studio-script',
       'studio-calendar',
     ]));
   });

@@ -83,6 +83,7 @@ describe('legacyVaultTabViewProps utils', () => {
       videoId: 'video-1',
     });
     props.scrapbookWorkspaceProps.onOpenReferenceVault();
+    props.scrapbookWorkspaceProps.onOpenScriptBoard();
     props.scrapbookWorkspaceProps.onOpenUploadCalendar();
 
     expect(openedViews).toEqual([
@@ -105,6 +106,7 @@ describe('legacyVaultTabViewProps utils', () => {
         },
       },
       { id: 'vault-all' },
+      { id: 'studio-script' },
       { id: 'studio-calendar' },
     ]);
   });
