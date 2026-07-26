@@ -2,9 +2,9 @@
 
 작성일: 2026-07-02
 
-이 문서는 `GET /videos?channelIds=...` 저장 영상 조회에 페이지네이션이 지금 필요한지 평가하기 위한 감사 문서입니다.
+이 문서는 `GET /videos?channelIds=...` 저장 영상 조회의 페이지네이션 판단과 현재 적용 결과를 기록하는 감사 문서입니다.
 
-중요: 이 문서는 분석 문서입니다. 코드, API, DB schema, localStorage key는 변경하지 않습니다.
+중요: 2026-07-26 선택지 B 승인에 따라 기존 계약을 유지하는 선택형 페이지네이션이 적용됐습니다. DB schema와 localStorage key는 변경하지 않았습니다.
 
 ---
 
@@ -12,12 +12,13 @@
 
 현재 프론트 구현:
 
-- 저장 영상 불러오기는 `fetchStoredVideosByChannelIds(channelIds)`를 사용합니다.
-- 실제 호출은 `GET /videos?channelIds=${channelIds.join(',')}`입니다.
+- 저장 영상 불러오기는 `fetchAllStoredVideosByChannelIds(channelIds)`를 사용합니다.
+- 실제 호출은 `GET /videos?channelIds=...&pageSize=200&continuationToken=...`을 순차 실행합니다.
 - 이 작업은 Cloud DB 조회입니다.
 - YouTube API를 새로 호출하지 않습니다.
-- 응답은 `data.videos || []` 배열 전체를 한 번에 받습니다.
-- 프론트는 받은 전체 배열을 `mapStoredVideosToViewModels()`로 변환한 뒤 `videos` state에 저장합니다.
+- 조회 중에는 확인한 페이지 수와 누적 영상 수를 진행 문구로 표시합니다.
+- 모든 페이지가 성공한 뒤에만 전체 배열을 `mapStoredVideosToViewModels()`로 변환해 `videos` state에 저장합니다.
+- 중간 페이지가 실패하면 일부 결과를 성공 목록처럼 노출하지 않습니다.
 - 검색, 조회수 필터, 길이 필터, 정렬, 카드/리스트 보기는 현재 프론트 메모리 안의 전체 `videos` 배열 기준으로 동작합니다.
 
 현재 문서 기준:
@@ -66,8 +67,10 @@
 ```txt
 사용자가 채널 선택
 → 저장 영상 불러오기 클릭
-→ GET /videos?channelIds=...
-→ 전체 videos 배열 수신
+→ GET /videos?channelIds=...&pageSize=200
+→ continuationToken이 있으면 다음 페이지 조회
+→ 페이지 수와 누적 영상 수 진행 표시
+→ 모든 페이지의 videos 배열 수신
 → mapStoredVideosToViewModels()
 → videos state에 전체 저장
 → 프론트에서 검색/필터/정렬/터또터 모드 처리

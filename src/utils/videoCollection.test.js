@@ -12,6 +12,7 @@ import {
   getScanStartMessage,
   getSelectedScannableChannelIds,
   getStoredVideoLoadErrorMessage,
+  getStoredVideoLoadProgressMessage,
   getStoredVideoLoadStartMessage,
   getStoredVideosLoadedMessage,
   mapStoredVideosToViewModels,
@@ -66,6 +67,15 @@ describe('videoCollection utils', () => {
     expect(getStoredVideosLoadedMessage(0)).toContain('Cloud DB');
     expect(getStoredVideosLoadedMessage(3)).toContain('3');
     expect(getStoredVideosLoadedMessage(3)).toContain('YouTube API');
+    expect(getStoredVideosLoadedMessage(270, 2)).toContain('2페이지');
+
+    const progressMessage = getStoredVideoLoadProgressMessage({
+      pageCount: 2,
+      videoCount: 270,
+    });
+    expect(progressMessage).toContain('2페이지');
+    expect(progressMessage).toContain('270개');
+    expect(progressMessage).toContain('전체 조회가 끝난 뒤 한 번에 표시');
 
     expect(getStoredVideoLoadErrorMessage(new Error('Network down'))).toContain('Network down');
     expect(getStoredVideoLoadErrorMessage()).toContain('YouTube API');
