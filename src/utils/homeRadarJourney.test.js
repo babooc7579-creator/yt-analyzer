@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getHomeRadarJourneyProgress,
   getHomeRadarJourneyStages,
   getLoadedVideoCountForSelectedChannels,
   hasEmptyStoredVideoLoad,
@@ -45,6 +46,49 @@ describe('homeRadarJourney', () => {
       status: 'current',
       value: '저장 영상 0개',
       warning: true,
+    });
+  });
+
+  it('opens the production stage as soon as a candidate exists and completes it after focus selection', () => {
+    const candidateStages = getHomeRadarJourneyStages({
+      loadedVideoCount: 30,
+      openRadarCandidateCount: 5,
+      productionCandidateCount: 1,
+      selectedChannelCount: 2,
+    });
+    expect(candidateStages[2].status).toBe('current');
+    expect(candidateStages[3]).toMatchObject({
+      status: 'ready',
+      value: '1개 후보',
+    });
+
+    const focusedProgress = getHomeRadarJourneyProgress({
+      loadedVideoCount: 30,
+      openRadarCandidateCount: 5,
+      productionCandidateCount: 2,
+      productionFocusCount: 1,
+      selectedChannelCount: 2,
+    });
+    expect(focusedProgress).toMatchObject({
+      activeStageTitle: '오늘 후보 판단',
+      completedCount: 2,
+      stageCount: 4,
+    });
+    expect(focusedProgress.stages[3]).toMatchObject({
+      status: 'complete',
+      value: '1개 오늘 집중',
+    });
+
+    expect(getHomeRadarJourneyProgress({
+      loadedVideoCount: 30,
+      openRadarCandidateCount: 0,
+      productionCandidateCount: 2,
+      productionFocusCount: 1,
+      selectedChannelCount: 2,
+    })).toMatchObject({
+      activeStageTitle: '오늘 흐름 완료',
+      completedCount: 4,
+      stageCount: 4,
     });
   });
 

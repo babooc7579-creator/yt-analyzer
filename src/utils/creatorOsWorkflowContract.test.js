@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { PRODUCTION_STATUS } from '../constants/status';
+import { getCreatorOsMetricsModel } from './creatorOsMetrics';
 import { getProductionKanbanDataModel } from './productionKanbanData';
+import { getRadarCandidateDataModel } from './radarCandidates';
 import { getScrapbookWorkspaceViewProps } from './scrapbook';
 import { getUploadCalendarItems, getUploadCalendarSummary } from './uploadCalendar';
 
@@ -152,5 +154,30 @@ describe('Creator OS workflow contract', () => {
     expect(model.groupedVideos[PRODUCTION_STATUS.CANDIDATE]).toEqual([video]);
     expect(model.productionSummary.candidateCount).toBe(1);
     expect(scrapbook.getScrapbookVideoCardProps(video).isProductionCandidate).toBe(true);
+  });
+
+  it('keeps the production candidate count aligned across radar, home metrics, and kanban', () => {
+    const candidateRecord = {
+      videoId: video.videoId,
+      status: PRODUCTION_STATUS.CANDIDATE,
+      statusIds: [PRODUCTION_STATUS.CANDIDATE],
+    };
+    const videoUserRecords = { [video.videoId]: candidateRecord };
+    const videos = [video];
+    const radar = getRadarCandidateDataModel({ videoUserRecords, videos });
+    const metrics = getCreatorOsMetricsModel({
+      savedVideos: videos,
+      videoUserRecords,
+      videos,
+    });
+    const kanban = getProductionKanbanDataModel({
+      discoveryLinks: [],
+      videoUserRecords,
+      videos,
+    });
+
+    expect(radar.decisionSummary.production).toBe(1);
+    expect(metrics.productionCandidateCount).toBe(1);
+    expect(kanban.productionSummary.candidateCount).toBe(1);
   });
 });

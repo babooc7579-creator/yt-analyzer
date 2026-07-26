@@ -41,6 +41,7 @@ export default function HomeRadarWorkflowSection({
         loadedVideoCount={loadedVideoCount}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
+        productionFocusCount={productionFocusCount}
         selectedChannelCount={selectedChannelCount}
         storedVideoLoadResult={storedVideoLoadResult}
         storedVideoLoadPending={storedVideoLoadPending}

@@ -33,6 +33,10 @@ describe('HomeRadarWorkflowSection', () => {
 
     expect(html).toContain('오늘 작업 흐름');
     expect(html).toContain('오늘의 레이더 진행 단계');
+    expect(html).toContain('오늘 흐름');
+    expect(html).toContain('2/4 완료');
+    expect(html).toContain('지금 할 일');
+    expect(html).toContain('지금 할 일 · 오늘 후보 판단');
     expect(html).toContain('오늘 볼 채널 고르기');
     expect(html).toContain('제작 후보 결정');
     expect(html).toContain('STAGE 1–2');
