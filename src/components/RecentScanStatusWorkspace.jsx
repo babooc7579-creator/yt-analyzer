@@ -45,19 +45,19 @@ const getHistoryStatusLabel = (status) => (
   status === 'failed' ? '실패' : status === 'partial' ? '부분 성공' : '성공'
 );
 
-export function RecentScanHistoryEmptyState({ onOpenSelectedScan }) {
+export function RecentScanHistoryEmptyState({ onOpenChannelOperations }) {
   return (
     <div className="px-5 py-10 text-center">
       <p className="text-sm font-black text-white">아직 저장된 과거 이력이 없습니다</p>
       <p className="mt-2 text-xs text-slate-400">다음 새 영상 수집부터 성공·부분 성공·실패 기록이 Cloud에 쌓입니다.</p>
       <button
         type="button"
-        onClick={() => onOpenSelectedScan?.()}
+        onClick={() => onOpenChannelOperations?.()}
         className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-black text-amber-100 hover:border-amber-300"
-        title="새 영상 수집 단계로 이동만 합니다. 실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다."
+        title="채널 관리 단계로 이동해 수집할 채널을 먼저 고릅니다. 이동과 선택만으로 YouTube API 수집은 시작되지 않습니다."
       >
-        <RefreshCw className="h-4 w-4" />
-        새 영상 수집 단계 열기
+        <ListChecks className="h-4 w-4" />
+        수집할 채널 고르기
       </button>
     </div>
   );
@@ -325,7 +325,7 @@ export default function RecentScanStatusWorkspace({
         ) : null}
 
         {!historyLoading && !historyError && scanLogs.length === 0 ? (
-          <RecentScanHistoryEmptyState onOpenSelectedScan={onOpenSelectedScan} />
+          <RecentScanHistoryEmptyState onOpenChannelOperations={onOpenChannelOperations} />
         ) : null}
 
         {!historyLoading && !historyError && historyRuns.length > 0 ? (

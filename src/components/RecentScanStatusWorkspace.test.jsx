@@ -79,11 +79,12 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).not.toContain('등급 unclassified');
   });
 
-  it('guides an empty history to the scan stage without claiming to run collection', () => {
+  it('guides an empty history to channel selection before collection', () => {
     const html = renderToStaticMarkup(<RecentScanHistoryEmptyState />);
 
-    expect(html).toContain('새 영상 수집 단계 열기');
-    expect(html).toContain('실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다');
+    expect(html).toContain('수집할 채널 고르기');
+    expect(html).toContain('수집할 채널을 먼저 고릅니다');
+    expect(html).toContain('선택만으로 YouTube API 수집은 시작되지 않습니다');
   });
 
   it('connects a history result to the matching channel management stage', () => {
