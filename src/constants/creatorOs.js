@@ -56,6 +56,13 @@ export const CREATOR_OS_PRODUCT_MAP = [
     ],
   },
   {
+    title: '업무 도구',
+    description: '바로가기: 소재 조사와 운영에 자주 쓰는 외부 도구를 엽니다.',
+    items: [
+      { id: 'tools-bookmarks', label: '업무 도구함', status: 'live', summary: '키워드 조사와 채널 운영에 필요한 공식 외부 도구를 한곳에서 엽니다.' },
+    ],
+  },
+  {
     title: '인사이트 / 학습',
     description: '축적: 성과와 패턴을 다음 판단으로 남깁니다.',
     items: [

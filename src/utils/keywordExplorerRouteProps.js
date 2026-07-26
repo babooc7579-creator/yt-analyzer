@@ -28,6 +28,7 @@ export function buildKeywordExplorerRouteProps({
       id: 'ops-channels',
       intent: { operationStage: 'scan' },
     }),
+    onOpenWorkTools: () => openCreatorView({ id: 'tools-bookmarks' }),
     onOpenVault: () => openCreatorView({ id: 'vault-videos' }),
     onPromoteToProduction: promoteVideoToProduction,
     onToggleCheck: toggleCheckVideo,

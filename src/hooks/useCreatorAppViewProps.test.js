@@ -50,6 +50,7 @@ describe('useCreatorAppViewProps', () => {
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,
+      isWorkToolsView: false,
       openCreatorView: vi.fn(),
     };
 
@@ -82,6 +83,7 @@ describe('useCreatorAppViewProps', () => {
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,
+      isWorkToolsView: false,
       keywordExplorerRouteProps: { route: 'keyword-explorer' },
       legacyWorkspaceRouteProps: { route: 'legacy-workspace' },
       onOpenHome: expect.any(Function),
@@ -113,6 +115,7 @@ describe('useCreatorAppViewProps', () => {
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,
+      isWorkToolsView: false,
       openCreatorView,
     });
 

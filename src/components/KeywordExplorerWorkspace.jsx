@@ -3,6 +3,7 @@ import { getKeywordExplorerEmptyState } from '../utils/keywordExplorer';
 import KeywordExplorerFilters from './KeywordExplorerFilters';
 import KeywordExplorerHeader from './KeywordExplorerHeader';
 import KeywordExplorerSummary from './KeywordExplorerSummary';
+import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import KeywordSuggestionChips from './KeywordSuggestionChips';
 import StoredVideoActionGrid from './StoredVideoActionGrid';
 import StoredVideoLoadFeedback from './StoredVideoLoadFeedback';
@@ -17,6 +18,7 @@ export default function KeywordExplorerWorkspace({
   onLoadStoredVideos,
   onOpenChannelWatchlist,
   onOpenSelectedScan,
+  onOpenWorkTools,
   onOpenVault,
   onPromoteToProduction,
   onToggleCheck,
@@ -62,6 +64,7 @@ export default function KeywordExplorerWorkspace({
           sortType={state.sortType}
         />
         <KeywordSuggestionChips onSelect={state.setSearchQuery} suggestions={state.suggestions} />
+        <KeywordResearchShortcuts keyword={state.searchQuery} onOpenWorkTools={onOpenWorkTools} />
 
         {state.summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (
           <StoredVideoLoadFeedback

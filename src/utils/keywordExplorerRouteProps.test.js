@@ -25,10 +25,12 @@ describe('keywordExplorerRouteProps', () => {
     props.onOpenChannelWatchlist();
     props.onOpenSelectedScan();
     props.onOpenVault();
+    props.onOpenWorkTools();
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'discovery-watchlist' }],
       [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
       [{ id: 'vault-videos' }],
+      [{ id: 'tools-bookmarks' }],
     ]);
   });
 });

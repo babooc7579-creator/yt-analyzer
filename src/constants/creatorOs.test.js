@@ -75,6 +75,14 @@ describe('creatorOs constants', () => {
     expect(itemsById['ops-settings'].summary).toContain('데이터 연결');
   });
 
+  it('exposes the external work tool hub without implying automatic collection', () => {
+    expect(itemsById['tools-bookmarks']).toMatchObject({
+      label: '업무 도구함',
+      status: 'live',
+    });
+    expect(itemsById['tools-bookmarks'].summary).toContain('외부 도구');
+  });
+
   it('keeps live view groups aligned with channel and scrapbook workflows', () => {
     expect(READY_CREATOR_VIEWS).toEqual(expect.arrayContaining([
       'vault-videos',

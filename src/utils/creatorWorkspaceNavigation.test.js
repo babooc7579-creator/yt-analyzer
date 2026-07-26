@@ -20,10 +20,11 @@ describe('creator workspace navigation utils', () => {
       'isTagVaultView',
       'isTtoTtoView',
       'isUploadCalendarView',
+      'isWorkToolsView',
     ];
     const liveItems = CREATOR_OS_ITEMS.filter((item) => item.status === 'live');
 
-    expect(liveItems).toHaveLength(17);
+    expect(liveItems).toHaveLength(18);
     liveItems.forEach((item) => {
       const model = getCreatorWorkspaceViewModel(item.id);
       const activeRouteCount = routeFlags.filter((flag) => model[flag]).length;
@@ -48,6 +49,7 @@ describe('creator workspace navigation utils', () => {
       isTagVaultView: false,
       isTtoTtoView: false,
       isUploadCalendarView: false,
+      isWorkToolsView: false,
     });
 
     expect(getCreatorWorkspaceViewModel('vault-all')).toMatchObject({
@@ -102,6 +104,12 @@ describe('creator workspace navigation utils', () => {
       isComingSoonView: false,
       isLegacyWorkspaceView: false,
       isSettingsView: true,
+    });
+
+    expect(getCreatorWorkspaceViewModel('tools-bookmarks')).toMatchObject({
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
+      isWorkToolsView: true,
     });
   });
 

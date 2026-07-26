@@ -246,6 +246,17 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - 나중에 구현할 때는 `scan_logs`와 `api_quota_logs`를 개념상 분리합니다.
 - 자세한 목표 모델은 `CREATOR_OS_SCAN_API_USAGE_MODEL.md`를 기준으로 봅니다.
 
+### 5.7 외부 키워드 조사 도구는 바로가기
+
+키워드 탐색과 `업무 도구함`에서 Google Trends, 네이버 DataLab, 네이버 검색광고, YouTube 검색으로 이동할 수 있습니다.
+
+- Creator OS가 외부 검색량을 자동 수집하지 않습니다.
+- 별도 외부 API endpoint, API Key, DB 저장, localStorage 저장을 추가하지 않습니다.
+- Google Trends와 YouTube 검색은 현재 입력한 키워드를 URL에 담아 새 창으로 엽니다.
+- 네이버 DataLab과 네이버 검색광고는 공식 도구를 열고, 필요하면 복사한 키워드를 사용자가 직접 입력합니다.
+- 외부 사이트의 로그인, 이용약관, 조회 결과는 해당 서비스 기준을 따릅니다.
+- 외부 바로가기 사용은 Cloud 저장 영상, 판단 기록, YouTube API 수집 흐름을 변경하지 않습니다.
+
 ---
 
 ## 6. 화면별 동작 기준
@@ -259,6 +270,7 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 | 스크랩북 | 스크랩 조회/저장/삭제 | 없음 | 있음 | Cloud 우선, localStorage 보조 |
 | 수집/스캔 | 새 영상 확인 | 있음 | 있음 | 비용성 작업으로 명확히 표시 |
 | 준비중 화면 | 안내 | 없음 | 없음 | 클릭해도 변경 없어야 함 |
+| 키워드 탐색 / 업무 도구함 | 외부 공식 조사 도구 바로가기 | Creator OS API 호출 없음 | 없음 | 링크 이동과 키워드 복사만 제공 |
 
 ---
 
