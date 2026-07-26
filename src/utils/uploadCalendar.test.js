@@ -8,6 +8,7 @@ import {
   getUploadCalendarGridDays,
   getUploadCalendarItems,
   getUploadCalendarSummary,
+  getUnscheduledUploadCalendarItems,
   shiftCalendarMonth,
 } from './uploadCalendar';
 
@@ -55,6 +56,17 @@ describe('uploadCalendar utils', () => {
       todayCount: 1,
       unscheduledCount: 1,
       upcomingCount: 1,
+    });
+  });
+
+  it('returns production records without dates as actionable unscheduled items', () => {
+    const items = getUnscheduledUploadCalendarItems({ videoUserRecords: records, videos });
+
+    expect(items).toHaveLength(1);
+    expect(items[0]).toMatchObject({
+      date: '',
+      sourceLoaded: false,
+      videoId: 'v4',
     });
   });
 
