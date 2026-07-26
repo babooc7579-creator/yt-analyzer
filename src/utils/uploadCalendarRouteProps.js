@@ -6,6 +6,13 @@ export const getUploadCalendarProductionSearchQuery = (item = {}) => String(
 
 export function buildUploadCalendarRouteProps({ openCreatorView, videoUserRecords, videos } = {}) {
   return {
+    onOpenScriptBoard: (item) => openCreatorView({
+      id: 'studio-script',
+      intent: {
+        source: 'upload-calendar',
+        targetVideoId: String(item?.videoId || '').trim(),
+      },
+    }),
     onOpenProductionCandidate: (item) => openCreatorView({
       id: 'studio-candidates',
       intent: {

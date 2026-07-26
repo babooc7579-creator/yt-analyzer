@@ -18,17 +18,20 @@ describe('UploadCalendarDayDetails', () => {
         }]}
         onOpenProductionCandidate={() => {}}
         onOpenProductionCandidates={() => {}}
+        onOpenScriptBoard={() => {}}
         selectedDate="2026-07-14"
       />,
     );
 
     expect(html).toContain(longTitle);
     expect(html).toContain('line-clamp-2');
+    expect(html).toContain('대본 보드 열기');
     expect(html).toContain('후보함에서 찾기');
     expect(html).toContain('원본 열기');
+    expect(html).toContain('Cloud 데이터 변경 및 YouTube API 호출 없음');
   });
 
-  it('omits the candidate lookup button when no navigation callback is available', () => {
+  it('omits unavailable workspace navigation buttons', () => {
     const html = renderToStaticMarkup(
       <UploadCalendarDayDetails
         items={[{ date: '2026-07-14', statusLabel: '제작 후보', title: '일정 후보', videoId: 'video-1' }]}
@@ -37,6 +40,7 @@ describe('UploadCalendarDayDetails', () => {
       />,
     );
 
+    expect(html).not.toContain('대본 보드 열기');
     expect(html).not.toContain('후보함에서 찾기');
     expect(html).toContain('원본 열기');
   });

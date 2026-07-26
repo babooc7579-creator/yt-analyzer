@@ -11,6 +11,7 @@ import UploadCalendarSummary from './UploadCalendarSummary';
 export default function UploadCalendarWorkspace({
   onOpenProductionCandidate,
   onOpenProductionCandidates,
+  onOpenScriptBoard,
   videoUserRecords,
   videos,
 }) {
@@ -73,6 +74,7 @@ export default function UploadCalendarWorkspace({
               items={state.selectedDayItems}
               onOpenProductionCandidate={onOpenProductionCandidate}
               onOpenProductionCandidates={onOpenProductionCandidates}
+              onOpenScriptBoard={onOpenScriptBoard}
               selectedDate={state.selectedDate}
             />
           </>

@@ -7,6 +7,7 @@ export default function UploadCalendarDayDetails({
   items,
   onOpenProductionCandidate,
   onOpenProductionCandidates,
+  onOpenScriptBoard,
   selectedDate,
 }) {
   return (
@@ -47,6 +48,17 @@ export default function UploadCalendarDayDetails({
                 </div>
                 <p className="mt-1.5 line-clamp-2 text-sm font-extrabold text-white">{item.title}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {typeof onOpenScriptBoard === 'function' && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenScriptBoard(item)}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-violet-300 hover:text-violet-200"
+                      title="대본 보드를 열고 이 영상의 제목·메모·업로드 예정일을 이어서 작성합니다. 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다."
+                      aria-label="이 영상의 대본 보드 열기, 화면 이동이며 Cloud 데이터 변경 및 YouTube API 호출 없음"
+                    >
+                      <PencilLine className="h-3.5 w-3.5" /> 대본 보드 열기
+                    </button>
+                  )}
                   {typeof onOpenProductionCandidate === 'function' && (
                     <button
                       type="button"
