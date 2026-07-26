@@ -12,6 +12,7 @@ describe('routesProps utils', () => {
     const discoveryLinksRouteProps = { links: [] };
     const homeRouteProps = { selectedChannelCount: 2 };
     const legacyWorkspaceRouteProps = { totalVideoCount: 3 };
+    const recentScanStatusRouteProps = { channels: [] };
     const settingsRouteProps = { categories: [] };
     const scriptBoardRouteProps = { videos: [] };
     const keywordExplorerRouteProps = { videos: [] };
@@ -30,6 +31,7 @@ describe('routesProps utils', () => {
       isHomeView: false,
       isKeywordExplorerView: true,
       isLegacyWorkspaceView: false,
+      isRecentScanStatusView: true,
       isScriptBoardView: true,
       isSettingsView: true,
       isTagVaultView: true,
@@ -38,6 +40,7 @@ describe('routesProps utils', () => {
       isWorkToolsView: true,
       keywordExplorerRouteProps,
       legacyWorkspaceRouteProps,
+      recentScanStatusRouteProps,
       scriptBoardRouteProps,
       settingsRouteProps,
       tagVaultRouteProps,
@@ -56,6 +59,7 @@ describe('routesProps utils', () => {
       isHomeView: false,
       isKeywordExplorerView: true,
       isLegacyWorkspaceView: false,
+      isRecentScanStatusView: true,
       isScriptBoardView: true,
       isSettingsView: true,
       isTagVaultView: true,
@@ -64,6 +68,7 @@ describe('routesProps utils', () => {
       isWorkToolsView: true,
       keywordExplorerRouteProps,
       legacyWorkspaceRouteProps,
+      recentScanStatusRouteProps,
       scriptBoardRouteProps,
       settingsRouteProps,
       tagVaultRouteProps,

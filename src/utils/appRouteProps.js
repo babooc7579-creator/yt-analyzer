@@ -4,6 +4,7 @@ export { buildHomeRouteProps } from './homeRouteProps';
 export { buildKeywordExplorerRouteProps } from './keywordExplorerRouteProps';
 export { buildLayoutProps } from './appLayoutProps';
 export { buildLegacyWorkspaceRouteProps } from './legacyWorkspaceRouteProps';
+export { buildRecentScanStatusRouteProps } from './recentScanStatusRouteProps';
 export { buildSettingsRouteProps } from './settingsRouteProps';
 export { buildScriptBoardRouteProps } from './scriptBoardRouteProps';
 export { buildTagVaultRouteProps } from './tagVaultRouteProps';

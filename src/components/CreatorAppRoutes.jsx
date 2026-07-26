@@ -4,6 +4,7 @@ import CreatorDiscoveryLinksRoute from './CreatorDiscoveryLinksRoute';
 import CreatorHomeRoute from './CreatorHomeRoute';
 import CreatorKeywordExplorerRoute from './CreatorKeywordExplorerRoute';
 import CreatorLegacyWorkspaceRoute from './CreatorLegacyWorkspaceRoute';
+import RecentScanStatusWorkspace from './RecentScanStatusWorkspace';
 import CreatorScriptBoardRoute from './CreatorScriptBoardRoute';
 import CreatorSettingsRoute from './CreatorSettingsRoute';
 import CreatorTagVaultRoute from './CreatorTagVaultRoute';
@@ -22,6 +23,7 @@ export default function CreatorAppRoutes({
   isHomeView,
   isKeywordExplorerView,
   isLegacyWorkspaceView,
+  isRecentScanStatusView,
   isScriptBoardView,
   isSettingsView,
   isTagVaultView,
@@ -30,6 +32,7 @@ export default function CreatorAppRoutes({
   isWorkToolsView,
   keywordExplorerRouteProps,
   legacyWorkspaceRouteProps,
+  recentScanStatusRouteProps,
   onOpenHome,
   scriptBoardRouteProps,
   settingsRouteProps,
@@ -64,6 +67,10 @@ export default function CreatorAppRoutes({
 
   if (isWorkToolsView) {
     return <WorkToolsWorkspace {...workToolsRouteProps} />;
+  }
+
+  if (isRecentScanStatusView) {
+    return <RecentScanStatusWorkspace {...recentScanStatusRouteProps} />;
   }
 
   if (isComingSoonView) {

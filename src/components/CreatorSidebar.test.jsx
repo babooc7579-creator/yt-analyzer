@@ -19,11 +19,12 @@ describe('CreatorSidebar', () => {
     expect(html).toContain('발견 링크 저장');
     expect(html).toContain('제작 후보함');
     expect(html).toContain('채널 운영실');
+    expect(html).toContain('최근 수집 상태');
     expect(html).toContain('업무 도구함');
     expect(html).not.toContain('data-testid="creator-sidebar-item-ops-add-channel"');
     expect(html).not.toContain('data-testid="creator-sidebar-item-ops-selected-scan"');
     expect(html).toContain('향후 기능');
-    expect(html).toContain('15개');
+    expect(html).toContain('14개');
     expect(html).toContain('aria-expanded="false"');
     expect(html).not.toContain('트렌드 스캐너');
     expect(html).not.toContain('후킹 분석');
@@ -50,6 +51,6 @@ describe('CreatorSidebar', () => {
     expect(html).toContain('트렌드 스캐너');
     expect(html).toContain('후킹 분석');
     expect(html).toContain('성과 리포트');
-    expect(html.match(/data-testid="creator-sidebar-item-/g)).toHaveLength(15);
+    expect(html.match(/data-testid="creator-sidebar-item-/g)).toHaveLength(14);
   });
 });

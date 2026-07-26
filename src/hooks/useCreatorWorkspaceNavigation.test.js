@@ -98,4 +98,15 @@ describe('useCreatorWorkspaceNavigation', () => {
     expect(stateSetters[0]).toHaveBeenCalledWith('scrapbook');
     expect(stateSetters[1]).toHaveBeenCalledWith(true);
   });
+
+  it('exposes the recent scan status route flag for the operations menu', () => {
+    setStateValues('dashboard', false, 'ops-scan-log');
+
+    const navigation = useCreatorWorkspaceNavigation();
+
+    expect(navigation).toMatchObject({
+      creatorView: 'ops-scan-log',
+      isRecentScanStatusView: true,
+    });
+  });
 });

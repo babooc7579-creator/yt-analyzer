@@ -7,6 +7,7 @@ vi.mock('../utils/appRouteProps', () => ({
   buildKeywordExplorerRouteProps: vi.fn(() => ({ route: 'keyword-explorer' })),
   buildLayoutProps: vi.fn(() => ({ shell: 'layout' })),
   buildLegacyWorkspaceRouteProps: vi.fn(() => ({ route: 'legacy-workspace' })),
+  buildRecentScanStatusRouteProps: vi.fn(() => ({ route: 'recent-scan-status' })),
   buildRoutesProps: vi.fn(() => ({ routes: 'creator-os' })),
   buildScriptBoardRouteProps: vi.fn(() => ({ route: 'script-board' })),
   buildSettingsRouteProps: vi.fn(() => ({ route: 'settings' })),
@@ -23,6 +24,7 @@ import {
   buildKeywordExplorerRouteProps,
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
+  buildRecentScanStatusRouteProps,
   buildRoutesProps,
   buildScriptBoardRouteProps,
   buildSettingsRouteProps,
@@ -47,6 +49,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: true,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isRecentScanStatusView: false,
       isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
@@ -64,6 +67,7 @@ describe('useCreatorAppViewProps', () => {
     expect(buildDiscoveryLinksRouteProps).toHaveBeenCalledWith(props);
     expect(buildKeywordExplorerRouteProps).toHaveBeenCalledWith(props);
     expect(buildLegacyWorkspaceRouteProps).toHaveBeenCalledWith(props);
+    expect(buildRecentScanStatusRouteProps).toHaveBeenCalledWith(props);
     expect(buildScriptBoardRouteProps).toHaveBeenCalledWith(props);
     expect(buildSettingsRouteProps).toHaveBeenCalledWith(props);
     expect(buildTagVaultRouteProps).toHaveBeenCalledWith(props);
@@ -81,6 +85,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: true,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isRecentScanStatusView: false,
       isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
@@ -89,6 +94,7 @@ describe('useCreatorAppViewProps', () => {
       isWorkToolsView: false,
       keywordExplorerRouteProps: { route: 'keyword-explorer' },
       legacyWorkspaceRouteProps: { route: 'legacy-workspace' },
+      recentScanStatusRouteProps: { route: 'recent-scan-status' },
       onOpenHome: expect.any(Function),
       scriptBoardRouteProps: { route: 'script-board' },
       settingsRouteProps: { route: 'settings' },
@@ -114,6 +120,7 @@ describe('useCreatorAppViewProps', () => {
       isHomeView: false,
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
+      isRecentScanStatusView: false,
       isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
