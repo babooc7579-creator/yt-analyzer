@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import RecentScanStatusWorkspace, {
   RecentScanHistoryEmptyState,
   RecentScanHistoryLogRow,
+  ScanIssueGuidance,
 } from './RecentScanStatusWorkspace';
 
 describe('RecentScanStatusWorkspace', () => {
@@ -38,11 +39,13 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('채널별 최근 수집 상태');
     expect(html).toContain('Cloud에 저장된 과거 수집 이력');
     expect(html).toContain('확인 필요 채널');
+    expect(html).toContain('YouTube API 사용 한도');
+    expect(html).toContain('기술 오류 원문 보기');
     expect(html).toContain('quota warning');
     expect(html).toContain('새 영상 2개 · 통계 갱신 5개');
     expect(html).toContain('이 채널 관리');
-    expect(html).toContain('수집 단계 열기');
-    expect((html.match(/수집 단계 열기/g) || []).length).toBe(1);
+    expect(html).toContain('다시 수집 준비');
+    expect((html.match(/다시 수집 준비/g) || []).length).toBe(1);
     expect(html).toContain('이 화면은 Cloud DB만 조회합니다');
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
@@ -107,5 +110,24 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('quota warning');
     expect(html).toContain('채널 관리');
     expect(html).toContain('Cloud 저장이나 YouTube API 호출은 실행되지 않습니다');
+  });
+
+  it('explains partial coverage without promising that retry will backfill history', () => {
+    const html = renderToStaticMarkup(
+      <ScanIssueGuidance
+        record={{
+          status: 'partial',
+          savedVideosTotal: 250,
+          channelTotalVideos: 400,
+          estimatedMissingVideos: 150,
+          coverageRate: 62.5,
+        }}
+      />,
+    );
+
+    expect(html).toContain('과거 영상 저장 범위가 아직 부족합니다');
+    expect(html).toContain('Cloud 저장 250개 / 채널 전체 400개');
+    expect(html).toContain('과거 누락분 전체가 자동으로 채워지는 것은 아닙니다');
+    expect(html).not.toContain('기술 오류 원문 보기');
   });
 });

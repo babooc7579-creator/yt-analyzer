@@ -51,17 +51,29 @@ export const getRecentScanStatusRows = (channels = []) => (
       const scannedAt = summary.scannedAt || channel.lastScannedAt || '';
       const status = getScanStatus(channel);
       const timestamp = scannedAt ? new Date(scannedAt).getTime() : 0;
+      const coverageRateValue = summary.coverageRate;
+      const coverageRate = coverageRateValue !== null
+        && coverageRateValue !== undefined
+        && coverageRateValue !== ''
+        && Number.isFinite(Number(coverageRateValue))
+        ? Number(coverageRateValue)
+        : null;
 
       return {
         channelId: channel.id || channel.channelId || '',
         channelTitle: channel.title || channel.channelTitle || '이름 없는 채널',
+        channelTotalVideos: Number(summary.channelTotalVideos) || 0,
+        coverageRate,
         error: summary.error || '',
+        estimatedMissingVideos: Number(summary.estimatedMissingVideos) || 0,
         exactScannedAt: formatKoreanDateTime(scannedAt, '기록 없음'),
         grade: formatChannelGrade(channel.grade),
         newVideosFound: Number(summary.newVideosFound) || 0,
+        savedVideosTotal: Number(summary.savedVideosTotal) || 0,
         scannedAt,
         scannedText: scannedAt ? formatRelativeTime(scannedAt) : '아직 수집하지 않음',
         statsRefreshed: Number(summary.statsRefreshed) || 0,
+        stoppedAtLatestVideoId: Boolean(summary.stoppedAtLatestVideoId),
         status,
         statusLabel: STATUS_LABELS[status],
         tags: toArray(channel.tags).filter(Boolean),
