@@ -45,6 +45,51 @@ const getHistoryStatusLabel = (status) => (
   status === 'failed' ? '실패' : status === 'partial' ? '부분 성공' : '성공'
 );
 
+export function RecentScanHistoryEmptyState({ onOpenSelectedScan }) {
+  return (
+    <div className="px-5 py-10 text-center">
+      <p className="text-sm font-black text-white">아직 저장된 과거 이력이 없습니다</p>
+      <p className="mt-2 text-xs text-slate-400">다음 새 영상 수집부터 성공·부분 성공·실패 기록이 Cloud에 쌓입니다.</p>
+      <button
+        type="button"
+        onClick={() => onOpenSelectedScan?.()}
+        className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 border border-amber-400/40 bg-amber-500/10 px-4 py-2 text-xs font-black text-amber-100 hover:border-amber-300"
+        title="새 영상 수집 단계로 이동만 합니다. 실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다."
+      >
+        <RefreshCw className="h-4 w-4" />
+        새 영상 수집 단계 열기
+      </button>
+    </div>
+  );
+}
+
+export function RecentScanHistoryLogRow({ log = {}, onOpenChannelOperations }) {
+  return (
+    <article className="grid gap-2 p-3 sm:grid-cols-[minmax(180px,1fr)_110px_minmax(220px,1.4fr)_auto] sm:items-center">
+      <div>
+        <p className="text-xs font-black text-slate-100">{log.channelTitle || log.channelId}</p>
+        <p className="mt-1 text-[11px] text-slate-500">{formatKoreanDateTime(log.scannedAt, '시간 기록 없음')}</p>
+      </div>
+      <span className={`inline-flex w-fit items-center border px-2 py-1 text-[11px] font-black ${STATUS_STYLES[log.status] || STATUS_STYLES.never}`}>
+        {getHistoryStatusLabel(log.status)}
+      </span>
+      <div className="text-xs leading-5 text-slate-300">
+        <p>새 영상 {Number(log.newVideosFound) || 0}개 · 통계 갱신 {Number(log.statsRefreshed) || 0}개</p>
+        {log.error ? <p className="font-bold text-rose-300">{log.error}</p> : null}
+      </div>
+      <button
+        type="button"
+        onClick={() => onOpenChannelOperations?.(log.channelId)}
+        className="inline-flex min-h-9 items-center justify-center gap-1 border border-slate-600 bg-slate-900 px-3 py-1.5 text-[11px] font-black text-slate-200 hover:border-cyan-400"
+        title="이 기록의 채널 하나를 선택한 상태로 채널 관리 단계에 이동합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+      >
+        <ListChecks className="h-3.5 w-3.5" />
+        채널 관리
+      </button>
+    </article>
+  );
+}
+
 export default function RecentScanStatusWorkspace({
   channels = [],
   channelsLoading = false,
@@ -280,10 +325,7 @@ export default function RecentScanStatusWorkspace({
         ) : null}
 
         {!historyLoading && !historyError && scanLogs.length === 0 ? (
-          <div className="px-5 py-10 text-center">
-            <p className="text-sm font-black text-white">아직 저장된 과거 이력이 없습니다</p>
-            <p className="mt-2 text-xs text-slate-400">다음 새 영상 수집부터 성공·부분 성공·실패 기록이 Cloud에 쌓입니다.</p>
-          </div>
+          <RecentScanHistoryEmptyState onOpenSelectedScan={onOpenSelectedScan} />
         ) : null}
 
         {!historyLoading && !historyError && historyRuns.length > 0 ? (
@@ -310,22 +352,11 @@ export default function RecentScanStatusWorkspace({
                 </summary>
                 <div className="mt-4 divide-y divide-slate-800 border border-slate-800 bg-slate-950/50">
                   {run.logs.map((log) => (
-                    <article
+                    <RecentScanHistoryLogRow
                       key={log.id || `${log.channelId}-${log.scannedAt}`}
-                      className="grid gap-2 p-3 sm:grid-cols-[minmax(180px,1fr)_110px_minmax(220px,1.4fr)] sm:items-center"
-                    >
-                      <div>
-                        <p className="text-xs font-black text-slate-100">{log.channelTitle || log.channelId}</p>
-                        <p className="mt-1 text-[11px] text-slate-500">{formatKoreanDateTime(log.scannedAt, '시간 기록 없음')}</p>
-                      </div>
-                      <span className={`inline-flex w-fit items-center border px-2 py-1 text-[11px] font-black ${STATUS_STYLES[log.status] || STATUS_STYLES.never}`}>
-                        {getHistoryStatusLabel(log.status)}
-                      </span>
-                      <div className="text-xs leading-5 text-slate-300">
-                        <p>새 영상 {Number(log.newVideosFound) || 0}개 · 통계 갱신 {Number(log.statsRefreshed) || 0}개</p>
-                        {log.error ? <p className="font-bold text-rose-300">{log.error}</p> : null}
-                      </div>
-                    </article>
+                      log={log}
+                      onOpenChannelOperations={onOpenChannelOperations}
+                    />
                   ))}
                 </div>
               </details>
