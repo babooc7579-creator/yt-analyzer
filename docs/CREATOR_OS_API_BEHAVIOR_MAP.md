@@ -61,7 +61,7 @@
 | 채널 삭제 | `removeChannel` | `DELETE /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 삭제 전 확인 필요 |
 | 채널 등급/상태/태그 수정 | `updateChannel` | `PATCH /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`는 스캔 대상 여부에 영향 |
 | 채널 기록 추가 | `createChannelNote` | `POST /channels/{id}/notes?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 낮음 |
-| 저장된 영상 불러오기 | `fetchAllStoredVideosByChannelIds` | `GET /videos?channelIds=...&pageSize=...&continuationToken=...` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 프론트가 모든 페이지를 순차 조회한 뒤 전체 목록 제공. 기존 무페이지 호출도 호환 유지 |
+| 저장된 영상 불러오기 | `fetchAllStoredVideosByChannelIds` | `GET /videos?channelIds=...&pageSize=...&continuationToken=...` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 프론트가 페이지 수와 누적 영상 수를 안내하며 모든 페이지를 순차 조회한 뒤 전체 목록 제공. 중간 실패 시 일부 목록은 노출하지 않음. 기존 무페이지 호출도 호환 유지 |
 | 선택 채널 새 영상 수집 | `scanSelectedChannels` | `POST /scan/selected` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | quota 사용 및 영상/채널 갱신 |
 | 전체/태그 새 영상 수집 | `scanChannels` | `GET /scan`, `GET /scan?tag=...` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | GET이지만 비용성/변경 작업 |
 | 태그 이름 변경 | `renameTag` | `GET /tags/rename?from=...&to=...` | DB 변경 | 아니오 | 예 | 예 | 아니오 | 가능 | GET이지만 DB 변경. 오해 위험 높음 |

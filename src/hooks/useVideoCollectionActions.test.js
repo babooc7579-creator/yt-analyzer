@@ -68,6 +68,7 @@ describe('useVideoCollectionActions', () => {
     fetchAllStoredVideosByChannelIdsMock.mockResolvedValue({
       success: true,
       videos: [storedVideo],
+      pageCount: 1,
     });
     scanChannelsMock.mockResolvedValue({
       success: true,
@@ -113,7 +114,10 @@ describe('useVideoCollectionActions', () => {
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
       'Cloud DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.',
     );
-    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1', 'active-2']);
+    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(
+      ['active-1', 'active-2'],
+      { onPage: expect.any(Function) },
+    );
     expect(scanChannels).not.toHaveBeenCalled();
     expect(scanSelectedChannels).not.toHaveBeenCalled();
     expect(deps.setVideos).toHaveBeenNthCalledWith(2, [
@@ -169,7 +173,10 @@ describe('useVideoCollectionActions', () => {
       '선택 채널 1개 새 영상 수집 중입니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.',
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
-    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1', 'paused-1']);
+    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(
+      ['active-1', 'paused-1'],
+      { onPage: expect.any(Function) },
+    );
     expect(deps.setIsScanning).toHaveBeenLastCalledWith(false);
     expect(deps.setScanningTag).toHaveBeenLastCalledWith(null);
   });
@@ -203,7 +210,37 @@ describe('useVideoCollectionActions', () => {
       "'history' 태그 채널 새 영상 수집 중입니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.",
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
-    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1']);
+    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(
+      ['active-1'],
+      { onPage: expect.any(Function) },
+    );
+  });
+
+  it('reports paged DB lookup progress without exposing partial video results', async () => {
+    fetchAllStoredVideosByChannelIdsMock.mockImplementationOnce(async (_channelIds, { onPage }) => {
+      onPage({ pageCount: 1, videoCount: 200 });
+      onPage({ pageCount: 2, videoCount: 270 });
+      return {
+        success: true,
+        videos: [storedVideo],
+        pageCount: 2,
+      };
+    });
+    const deps = createDeps();
+    const actions = useVideoCollectionActions(deps);
+
+    await actions.loadStoredVideosForSelectedChannels();
+
+    expect(deps.setProgressMsg).toHaveBeenCalledWith(
+      'Cloud DB 저장 영상 조회 중: 1페이지, 200개를 확인했습니다. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
+    );
+    expect(deps.setProgressMsg).toHaveBeenCalledWith(
+      'Cloud DB 저장 영상 조회 중: 2페이지, 270개를 확인했습니다. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
+    );
+    expect(deps.setVideos).toHaveBeenCalledTimes(2);
+    expect(deps.setProgressMsg).toHaveBeenCalledWith(
+      'Cloud DB 조회 완료: 저장된 영상 1개를 2페이지에서 모아 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
+    );
   });
 
   it('keeps scan failures separate from stored-video DB lookup failures', async () => {
