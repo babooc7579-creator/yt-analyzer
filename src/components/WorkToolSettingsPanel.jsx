@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowDown, ArrowUp, Cloud, Eye, EyeOff, Plus, RotateCcw, Save, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Cloud, Eye, EyeOff, LibraryBig, Plus, RotateCcw, Save, Trash2 } from 'lucide-react';
 
 import {
   EMPTY_WORK_TOOL_PREFERENCES,
@@ -32,6 +32,7 @@ const getSafeUrl = (value) => {
 export default function WorkToolSettingsPanel({
   error = '',
   loading = false,
+  onOpenWorkTools,
   onReload,
   onSave,
   preferences = EMPTY_WORK_TOOL_PREFERENCES,
@@ -149,6 +150,16 @@ export default function WorkToolSettingsPanel({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={onOpenWorkTools}
+            disabled={dirty || saving || typeof onOpenWorkTools !== 'function'}
+            title={dirty ? '변경사항을 Cloud에 저장한 뒤 실제 업무 도구함에서 확인할 수 있습니다.' : '저장된 설정이 적용된 업무 도구함으로 이동합니다. 외부 사이트는 자동으로 열지 않습니다.'}
+            className="inline-flex items-center gap-2 border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <LibraryBig className="h-3.5 w-3.5" />
+            업무 도구함에서 확인
+          </button>
           <button
             type="button"
             onClick={restoreDefaults}

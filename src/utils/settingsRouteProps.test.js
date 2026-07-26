@@ -13,6 +13,7 @@ describe('settingsRouteProps', () => {
       startRenameCategory: vi.fn(),
     };
     const loadChannelsFromCloud = vi.fn();
+    const openCreatorView = vi.fn();
     const setError = vi.fn();
     const props = buildSettingsRouteProps({
       ...handlers,
@@ -21,6 +22,7 @@ describe('settingsRouteProps', () => {
       cloudOnlyTags: ['예능'],
       error: 'Cloud 요청 실패',
       loadChannelsFromCloud,
+      openCreatorView,
       savedChannels: [{ id: 'channel-1' }, { id: 'channel-2' }],
       setApiKey: vi.fn(),
       setError,
@@ -44,6 +46,8 @@ describe('settingsRouteProps', () => {
     expect(props.refreshingChannels).toBe(false);
     expect(props.functionApiBase).toBe('/api');
     expect(props.savedChannelCount).toBe(2);
+    props.workToolSettingsProps.onOpenWorkTools();
+    expect(openCreatorView).toHaveBeenCalledWith({ id: 'tools-bookmarks' });
     expect(props.categorySettingsProps).toMatchObject({
       ...handlers,
       categories: ['랭킹형', '영화'],

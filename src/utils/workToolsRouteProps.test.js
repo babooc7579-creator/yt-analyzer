@@ -5,8 +5,10 @@ import { buildWorkToolsRouteProps } from './workToolsRouteProps';
 describe('workToolsRouteProps', () => {
   it('applies hidden defaults, Cloud custom tools, and saved order', () => {
     const onReload = vi.fn();
+    const openCreatorView = vi.fn();
     const props = buildWorkToolsRouteProps({
       loadWorkToolPreferences: onReload,
+      openCreatorView,
       workToolPreferences: {
         customTools: [{
           id: 'custom-1',
@@ -27,5 +29,7 @@ describe('workToolsRouteProps', () => {
     expect(tools[0].id).toBe('custom-1');
     expect(tools.some((tool) => tool.id === 'naver-search-ad')).toBe(false);
     expect(props.onReload).toBe(onReload);
+    props.onOpenSettings();
+    expect(openCreatorView).toHaveBeenCalledWith({ id: 'ops-settings' });
   });
 });

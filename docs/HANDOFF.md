@@ -395,3 +395,5 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 같은 날 외부 키워드 조사는 API 직접 연동 대신 `업무 도구함`과 공식 도구 바로가기로 결정했습니다. 키워드 탐색에서 현재 키워드를 복사하고 Google Trends, 네이버 DataLab, 네이버 검색광고를 새 창으로 열 수 있습니다. Google Trends에는 현재 키워드를 URL로 전달하며, 네이버 도구는 공식 화면을 열어 복사한 키워드를 직접 사용합니다. 사이드바의 `업무 도구함`에는 키워드 조사와 YouTube 레퍼런스 확인 도구를 모았습니다. 외부 자동 수집, API Key, 새 endpoint, DB schema, localStorage key, 저장·동기화는 추가하지 않았습니다. 전체 검증은 테스트 파일 230개, 테스트 1,031개와 production build를 통과했습니다.
 
 같은 날 업무 도구함 개인 설정은 승인된 B안에 따라 Cloud 기준으로 확장했습니다. 설정의 `업무 도구 관리`에서 개인 링크 추가·수정·삭제, 기본 도구 숨김·복원, 위·아래 순서 변경 후 명시적으로 Cloud 저장합니다. 백엔드는 기존 `videos` container에 `docType: work_tool_preferences` 사용자 문서 1개를 저장하며, 새 container와 localStorage key는 추가하지 않았습니다. 외부 검색 데이터와 로그인 정보는 수집하지 않습니다.
+
+같은 날 업무 도구함에 이름·설명·분류·주소 검색과 결과 없음 복구를 추가하고, `설정에서 관리`와 `업무 도구함에서 확인`으로 두 화면을 왕복 연결했습니다. 저장하지 않은 설정이 있으면 확인 버튼을 비활성화합니다. 검색과 이동은 화면 동작이며 Cloud 저장, 외부 사이트 열기, YouTube API 호출, localStorage 변경을 자동 실행하지 않습니다. 전체 검증은 테스트 파일 234개, 테스트 1,039개와 production build를 통과했습니다.
