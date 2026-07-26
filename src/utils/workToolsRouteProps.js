@@ -6,6 +6,7 @@ export function buildWorkToolsRouteProps(props = {}) {
   return {
     error: props.workToolPreferencesError || '',
     loading: Boolean(props.workToolPreferencesLoading),
+    onOpenSettings: () => props.openCreatorView?.({ id: 'ops-settings' }),
     onReload: props.loadWorkToolPreferences,
     toolGroups: getConfiguredWorkToolGroups(preferences),
   };

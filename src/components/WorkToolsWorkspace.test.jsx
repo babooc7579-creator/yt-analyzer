@@ -15,6 +15,9 @@ describe('WorkToolsWorkspace', () => {
     expect(html).toContain('YouTube Studio');
     expect(html).toContain('개인 링크 추가·수정·숨김·순서 변경');
     expect(html).toContain('변경사항은 Cloud에 저장됩니다');
+    expect(html).toContain('설정에서 관리');
+    expect(html).toContain('업무 도구 검색');
+    expect(html).toContain('5개 도구');
   });
 
   it('renders Cloud custom tools and a visible retry state', () => {

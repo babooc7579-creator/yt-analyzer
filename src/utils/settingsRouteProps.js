@@ -84,6 +84,7 @@ export function buildSettingsRouteProps(props = {}) {
     workToolSettingsProps: {
       error: props.workToolPreferencesError || '',
       loading: Boolean(props.workToolPreferencesLoading),
+      onOpenWorkTools: () => props.openCreatorView?.({ id: 'tools-bookmarks' }),
       onReload: props.loadWorkToolPreferences,
       onSave: props.saveWorkToolPreferences,
       preferences: props.workToolPreferences,

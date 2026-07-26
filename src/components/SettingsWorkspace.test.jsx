@@ -48,6 +48,7 @@ describe('SettingsWorkspace', () => {
     expect(html).toContain('이 브라우저의 화면 목록에만 복원합니다');
     expect(html).toContain('즐겨찾기 추가·숨김·순서 변경');
     expect(html).toContain('변경사항 Cloud 저장');
+    expect(html).toContain('업무 도구함에서 확인');
   });
 
   it('shows Cloud sync warnings and the current runtime error without making requests', () => {
