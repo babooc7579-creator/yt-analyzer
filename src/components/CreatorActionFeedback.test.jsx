@@ -40,6 +40,7 @@ describe('CreatorActionFeedback', () => {
     );
 
     expect(html).toContain('role="status"');
+    expect(html).toContain('aria-live="polite"');
     expect(html).toContain('저장 영상을 불러오는 중입니다');
     expect(html).not.toContain('작업을 완료하지 못했습니다');
   });

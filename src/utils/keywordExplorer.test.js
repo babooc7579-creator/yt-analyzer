@@ -41,6 +41,30 @@ describe('keywordExplorer utils', () => {
     expect(filterKeywordExplorerVideos({ videos, searchQuery: 'lab', sortType: 'newest' }).map(video => video.videoId)).toEqual(['v2', 'v1', 'v3']);
   });
 
+  it('keeps large stored-video searches deterministic', () => {
+    const largeVideos = Array.from({ length: 1000 }, (_, index) => ({
+      videoId: `large-${index}`,
+      title: index % 2 === 0 ? `Cake idea ${index}` : `Workshop idea ${index}`,
+      channel_title: `Channel ${index % 25}`,
+      daysOld: index,
+      view_count: index * 1000,
+      multiplier: index / 10,
+      isShorts: index % 3 === 0,
+    }));
+
+    const matches = filterKeywordExplorerVideos({
+      videos: largeVideos,
+      searchQuery: 'cake',
+      minimumViews: 500000,
+      sortType: 'views',
+    });
+
+    expect(matches).toHaveLength(250);
+    expect(matches[0].videoId).toBe('large-998');
+    expect(matches.at(-1).videoId).toBe('large-500');
+    expect(matches.slice(0, KEYWORD_EXPLORER_RESULT_LIMIT)).toHaveLength(60);
+  });
+
   it('summarizes matched videos without changing the result limit', () => {
     const summary = getKeywordExplorerSummary({
       matchedVideos: videos,

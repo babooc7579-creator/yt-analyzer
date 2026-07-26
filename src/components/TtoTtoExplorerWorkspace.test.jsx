@@ -87,4 +87,22 @@ describe('TtoTtoExplorerWorkspace', () => {
     expect(html).toContain('다른 채널 고르기');
     expect(html).toContain('새 영상 수집 준비');
   });
+
+  it('keeps a failed Cloud lookup retryable without presenting candidates', () => {
+    const html = renderToStaticMarkup(
+      <TtoTtoExplorerWorkspace
+        isVideoSaved={() => false}
+        loadResult={{ success: false, videoCount: 0 }}
+        onLoadStoredVideos={() => {}}
+        selectedChannelCount={2}
+        savedVideos={[]}
+        videoUserRecords={{}}
+        videos={[]}
+      />,
+    );
+
+    expect(html).toContain('Cloud 저장 영상을 불러오지 못했습니다');
+    expect(html).toContain('Cloud 저장 영상 다시 불러오기');
+    expect(html).not.toContain('후보 판단 점수');
+  });
 });

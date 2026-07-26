@@ -61,7 +61,7 @@
 | 채널 삭제 | `removeChannel` | `DELETE /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 삭제 전 확인 필요 |
 | 채널 등급/상태/태그 수정 | `updateChannel` | `PATCH /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`는 스캔 대상 여부에 영향 |
 | 채널 기록 추가 | `createChannelNote` | `POST /channels/{id}/notes?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 낮음 |
-| 저장된 영상 불러오기 | `fetchAllStoredVideosByChannelIds` | `GET /videos?channelIds=...&pageSize=...&continuationToken=...` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 프론트가 페이지 수와 누적 영상 수를 안내하며 모든 페이지를 순차 조회한 뒤 전체 목록 제공. 중간 실패 시 일부 목록은 노출하지 않음. 기존 무페이지 호출도 호환 유지 |
+| 저장된 영상 불러오기 | `fetchAllStoredVideosByChannelIds` | `GET /videos?channelIds=...&pageSize=...&continuationToken=...` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 프론트가 페이지 수, 누적 영상 수, 경과 시간을 안내하며 모든 페이지를 순차 조회한 뒤 전체 목록 제공. 중간 실패 시 일부 목록은 노출하지 않고 재시도 안내. 기존 무페이지 호출도 호환 유지 |
 | 선택 채널 새 영상 수집 | `scanSelectedChannels` | `POST /scan/selected` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | quota 사용 및 영상/채널 갱신 |
 | 전체/태그 새 영상 수집 | `scanChannels` | `GET /scan`, `GET /scan?tag=...` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | GET이지만 비용성/변경 작업 |
 | 태그 이름 변경 | `renameTag` | `GET /tags/rename?from=...&to=...` | DB 변경 | 아니오 | 예 | 예 | 아니오 | 가능 | GET이지만 DB 변경. 오해 위험 높음 |
@@ -218,6 +218,8 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - `pageSize`가 없는 기존 요청과 기존 `{ success, videos }` 응답은 그대로 유지합니다.
 - 프론트는 기본 200개씩 조회하지만 중간 페이지만 화면에 노출하지 않고, 모든 페이지를 받은 뒤 레이더/검색/정렬에 전달합니다.
 - 중간 페이지가 실패하면 일부 데이터로 성공한 것처럼 표시하지 않습니다.
+- 조회 진행은 공통 상태 영역에 페이지 수, 누적 영상 수, 경과 시간으로 표시합니다.
+- Cloud 성공 후 0개인 경우는 장애 fallback과 구분하고, 채널 선택 또는 새 영상 수집 준비로 이어지는 다음 행동을 안내합니다.
 - 이 작업은 Cloud DB 조회이며 YouTube API를 호출하지 않습니다.
 - 서버 검색/정렬은 아직 도입하지 않았습니다. 전체 기준 점수와 필터 의미는 기존과 같습니다.
 - 자세한 판단 근거는 `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md`를 기준으로 봅니다.

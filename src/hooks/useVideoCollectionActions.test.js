@@ -128,7 +128,7 @@ describe('useVideoCollectionActions', () => {
       }),
     ]);
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 조회 완료: 저장된 영상 1개를 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
+      'Cloud DB 조회 완료 · 1초 미만 경과: 저장된 영상 1개를 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
     );
     expect(deps.setLoading).toHaveBeenLastCalledWith(false);
 
@@ -232,14 +232,14 @@ describe('useVideoCollectionActions', () => {
     await actions.loadStoredVideosForSelectedChannels();
 
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 저장 영상 조회 중: 1페이지, 200개를 확인했습니다. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
+      'Cloud DB 저장 영상 조회 중: 1페이지, 200개를 확인했습니다 · 1초 미만 경과. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
     );
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 저장 영상 조회 중: 2페이지, 270개를 확인했습니다. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
+      'Cloud DB 저장 영상 조회 중: 2페이지, 270개를 확인했습니다 · 1초 미만 경과. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
     );
     expect(deps.setVideos).toHaveBeenCalledTimes(2);
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 조회 완료: 저장된 영상 1개를 2페이지에서 모아 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
+      'Cloud DB 조회 완료 · 1초 미만 경과: 저장된 영상 1개를 2페이지에서 모아 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
     );
   });
 

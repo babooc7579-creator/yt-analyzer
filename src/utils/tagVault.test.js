@@ -32,6 +32,34 @@ describe('tagVault utils', () => {
     expect(filterTagVaultVideos({ channels, lengthFilter: 'shorts', searchQuery: 'cake', selectedTag: '공예', videos }).map((video) => video.videoId)).toEqual(['v1']);
   });
 
+  it('keeps large tag searches scoped and sorted', () => {
+    const largeChannels = Array.from({ length: 100 }, (_, index) => ({
+      id: `channel-${index}`,
+      tags: index % 2 === 0 ? ['공예'] : ['요리'],
+    }));
+    const largeVideos = Array.from({ length: 1000 }, (_, index) => ({
+      videoId: `large-${index}`,
+      channel_id: `channel-${index % 100}`,
+      title: `Stored idea ${index}`,
+      view_count: index,
+      multiplier: index,
+      daysOld: index,
+      isShorts: index % 3 === 0,
+    }));
+
+    const matches = filterTagVaultVideos({
+      channels: largeChannels,
+      selectedTag: '공예',
+      sortType: 'views',
+      videos: largeVideos,
+    });
+
+    expect(matches).toHaveLength(500);
+    expect(matches[0].videoId).toBe('large-998');
+    expect(matches.at(-1).videoId).toBe('large-0');
+    expect(matches.slice(0, TAG_VAULT_RESULT_LIMIT)).toHaveLength(60);
+  });
+
   it('summarizes current tag data without changing the display limit', () => {
     expect(TAG_VAULT_RESULT_LIMIT).toBe(60);
     expect(getTagVaultSummary({ channels, matchedVideos: videos.slice(0, 2), selectedChannelIds: ['c1'], selectedTag: '해외', shownVideoCount: 2, videos })).toEqual({
