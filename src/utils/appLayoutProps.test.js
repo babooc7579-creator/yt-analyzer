@@ -169,8 +169,8 @@ describe('appLayoutProps utils', () => {
   it('separates live navigation from the future roadmap without duplicate operations menus', () => {
     const groups = getCreatorSidebarNavigationGroups(CREATOR_OS_PRODUCT_MAP);
 
-    expect(groups.liveItemCount).toBe(16);
-    expect(groups.roadmapItemCount).toBe(15);
+    expect(groups.liveItemCount).toBe(17);
+    expect(groups.roadmapItemCount).toBe(14);
     expect(groups.liveItemCount + groups.roadmapItemCount).toBe(31);
     expect(groups.liveSections.flatMap((section) => section.items).filter((item) => item.id === 'ops-channels')).toHaveLength(1);
     expect(groups.liveSections.flatMap((section) => section.items).every((item) => item.status !== 'soon')).toBe(true);

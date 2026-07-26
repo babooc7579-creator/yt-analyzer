@@ -15,6 +15,7 @@ describe('creator workspace navigation utils', () => {
       'isHomeView',
       'isKeywordExplorerView',
       'isLegacyWorkspaceView',
+      'isRecentScanStatusView',
       'isScriptBoardView',
       'isSettingsView',
       'isTagVaultView',
@@ -24,7 +25,7 @@ describe('creator workspace navigation utils', () => {
     ];
     const liveItems = CREATOR_OS_ITEMS.filter((item) => item.status === 'live');
 
-    expect(liveItems).toHaveLength(18);
+    expect(liveItems).toHaveLength(19);
     liveItems.forEach((item) => {
       const model = getCreatorWorkspaceViewModel(item.id);
       const activeRouteCount = routeFlags.filter((flag) => model[flag]).length;
@@ -44,6 +45,7 @@ describe('creator workspace navigation utils', () => {
       isKeywordExplorerView: false,
       isLegacyWorkspaceView: false,
       isReferenceVaultView: false,
+      isRecentScanStatusView: false,
       isScriptBoardView: false,
       isSettingsView: false,
       isTagVaultView: false,
@@ -110,6 +112,12 @@ describe('creator workspace navigation utils', () => {
       isComingSoonView: false,
       isLegacyWorkspaceView: false,
       isWorkToolsView: true,
+    });
+
+    expect(getCreatorWorkspaceViewModel('ops-scan-log')).toMatchObject({
+      isComingSoonView: false,
+      isLegacyWorkspaceView: false,
+      isRecentScanStatusView: true,
     });
   });
 

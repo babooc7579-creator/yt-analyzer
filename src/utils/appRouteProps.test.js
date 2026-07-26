@@ -7,6 +7,7 @@ import { buildDiscoveryLinksRouteProps } from './discoveryLinksRouteProps';
 import { buildHomeRouteProps } from './homeRouteProps';
 import { buildKeywordExplorerRouteProps } from './keywordExplorerRouteProps';
 import { buildLegacyWorkspaceRouteProps } from './legacyWorkspaceRouteProps';
+import { buildRecentScanStatusRouteProps } from './recentScanStatusRouteProps';
 import { buildRoutesProps } from './routesProps';
 import { buildScriptBoardRouteProps } from './scriptBoardRouteProps';
 import { buildSettingsRouteProps } from './settingsRouteProps';
@@ -23,6 +24,7 @@ describe('appRouteProps barrel exports', () => {
       'buildKeywordExplorerRouteProps',
       'buildLayoutProps',
       'buildLegacyWorkspaceRouteProps',
+      'buildRecentScanStatusRouteProps',
       'buildRoutesProps',
       'buildScriptBoardRouteProps',
       'buildSettingsRouteProps',
@@ -40,6 +42,7 @@ describe('appRouteProps barrel exports', () => {
     expect(appRouteProps.buildKeywordExplorerRouteProps).toBe(buildKeywordExplorerRouteProps);
     expect(appRouteProps.buildLayoutProps).toBe(buildLayoutProps);
     expect(appRouteProps.buildLegacyWorkspaceRouteProps).toBe(buildLegacyWorkspaceRouteProps);
+    expect(appRouteProps.buildRecentScanStatusRouteProps).toBe(buildRecentScanStatusRouteProps);
     expect(appRouteProps.buildRoutesProps).toBe(buildRoutesProps);
     expect(appRouteProps.buildScriptBoardRouteProps).toBe(buildScriptBoardRouteProps);
     expect(appRouteProps.buildSettingsRouteProps).toBe(buildSettingsRouteProps);

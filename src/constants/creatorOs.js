@@ -50,7 +50,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     description: '수집: 채널, 선택 수집, 운영 상태를 통제합니다.',
     items: [
       { id: 'ops-channels', label: '채널 운영실', status: 'live', summary: '채널 관리, 새 채널 등록, 선택 채널 새 영상 수집을 한 흐름으로 진행합니다.' },
-      { id: 'ops-scan-log', label: '수집 로그', status: 'soon', summary: '수집 이력과 실패 원인을 모아볼 예정입니다.' },
+      { id: 'ops-scan-log', label: '최근 수집 상태', status: 'live', summary: '채널별 마지막 수집 결과와 실패·미수집 상태를 한곳에서 확인합니다.' },
       { id: 'ops-api', label: 'API 사용량', status: 'soon', summary: 'YouTube API 호출량과 비용 위험을 볼 수 있게 할 예정입니다.' },
       { id: 'ops-settings', label: '설정', status: 'live', summary: '채널 분야와 데이터 연결 기준을 한곳에서 확인하고 관리합니다.' },
     ],

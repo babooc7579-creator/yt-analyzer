@@ -5,6 +5,7 @@ import {
   buildKeywordExplorerRouteProps,
   buildLayoutProps,
   buildLegacyWorkspaceRouteProps,
+  buildRecentScanStatusRouteProps,
   buildRoutesProps,
   buildScriptBoardRouteProps,
   buildSettingsRouteProps,
@@ -21,6 +22,7 @@ export function useCreatorAppViewProps(props) {
   const discoveryLinksRouteProps = buildDiscoveryLinksRouteProps(props);
   const keywordExplorerRouteProps = buildKeywordExplorerRouteProps(props);
   const legacyWorkspaceRouteProps = buildLegacyWorkspaceRouteProps(props);
+  const recentScanStatusRouteProps = buildRecentScanStatusRouteProps(props);
   const scriptBoardRouteProps = buildScriptBoardRouteProps(props);
   const settingsRouteProps = buildSettingsRouteProps(props);
   const tagVaultRouteProps = buildTagVaultRouteProps(props);
@@ -39,6 +41,7 @@ export function useCreatorAppViewProps(props) {
     isHomeView: props.isHomeView,
     isKeywordExplorerView: props.isKeywordExplorerView,
     isLegacyWorkspaceView: props.isLegacyWorkspaceView,
+    isRecentScanStatusView: props.isRecentScanStatusView,
     isScriptBoardView: props.isScriptBoardView,
     isSettingsView: props.isSettingsView,
     isTagVaultView: props.isTagVaultView,
@@ -47,6 +50,7 @@ export function useCreatorAppViewProps(props) {
     isWorkToolsView: props.isWorkToolsView,
     keywordExplorerRouteProps,
     legacyWorkspaceRouteProps,
+    recentScanStatusRouteProps,
     onOpenHome: () => props.openCreatorView({ id: 'home' }),
     scriptBoardRouteProps,
     settingsRouteProps,
