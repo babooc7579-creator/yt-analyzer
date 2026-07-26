@@ -30,5 +30,6 @@ describe('WorkToolSettingsPanel', () => {
     expect(html).toContain('기본값으로 되돌리기');
     expect(html).toContain('변경사항 Cloud 저장');
     expect(html).toContain('개인 도구 추가');
+    expect(html).toContain('<form');
   });
 });
