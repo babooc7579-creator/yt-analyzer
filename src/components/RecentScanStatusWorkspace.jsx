@@ -17,6 +17,10 @@ import {
   getRecentScanStatusSummary,
   RECENT_SCAN_STATUS_FILTERS,
 } from '../utils/recentScanStatus';
+import {
+  getScanIssueGuidance,
+  getScanRetryLabel,
+} from '../utils/scanIssueGuidance';
 
 const STATUS_STYLES = {
   failed: 'border-rose-400/30 bg-rose-500/10 text-rose-200',
@@ -44,6 +48,37 @@ const HISTORY_TRIGGER_LABELS = {
 const getHistoryStatusLabel = (status) => (
   status === 'failed' ? '실패' : status === 'partial' ? '부분 성공' : '성공'
 );
+
+export function ScanIssueGuidance({ record = {} }) {
+  const guidance = getScanIssueGuidance(record);
+  if (!guidance) return null;
+
+  const isFailed = guidance.tone === 'failed';
+
+  return (
+    <div className={`mt-2 border p-3 ${
+      isFailed
+        ? 'border-rose-400/25 bg-rose-500/10'
+        : 'border-amber-400/25 bg-amber-500/10'
+    }`}>
+      <p className={`text-xs font-black ${isFailed ? 'text-rose-100' : 'text-amber-100'}`}>
+        {guidance.title}
+      </p>
+      <p className="mt-1 text-[11px] leading-5 text-slate-300">
+        <strong className="text-slate-100">현재 영향:</strong> {guidance.cause}
+      </p>
+      <p className="text-[11px] leading-5 text-slate-300">
+        <strong className="text-slate-100">다음 행동:</strong> {guidance.nextAction}
+      </p>
+      {record.error ? (
+        <details className="mt-2">
+          <summary className="cursor-pointer text-[11px] font-bold text-slate-400">기술 오류 원문 보기</summary>
+          <p className="mt-1 break-words text-[11px] leading-5 text-slate-400">{record.error}</p>
+        </details>
+      ) : null}
+    </div>
+  );
+}
 
 export function RecentScanHistoryEmptyState({ onOpenChannelOperations }) {
   return (
@@ -75,7 +110,7 @@ export function RecentScanHistoryLogRow({ log = {}, onOpenChannelOperations }) {
       </span>
       <div className="text-xs leading-5 text-slate-300">
         <p>새 영상 {Number(log.newVideosFound) || 0}개 · 통계 갱신 {Number(log.statsRefreshed) || 0}개</p>
-        {log.error ? <p className="font-bold text-rose-300">{log.error}</p> : null}
+        <ScanIssueGuidance record={log} />
       </div>
       <button
         type="button"
@@ -241,7 +276,7 @@ export default function RecentScanStatusWorkspace({
                   ) : (
                     <p>새 영상 {row.newVideosFound}개 · 통계 갱신 {row.statsRefreshed}개</p>
                   )}
-                  {row.error ? <p className="mt-1 font-bold text-rose-300">{row.error}</p> : null}
+                  <ScanIssueGuidance record={row} />
                   <div className="mt-2 flex flex-wrap gap-2">
                     <button
                       type="button"
@@ -257,10 +292,14 @@ export default function RecentScanStatusWorkspace({
                         type="button"
                         onClick={() => onOpenSelectedScan?.(row.channelId)}
                         className="inline-flex min-h-8 items-center justify-center gap-1 border border-amber-400/40 bg-amber-500/10 px-3 py-1 text-[11px] font-black text-amber-100 hover:border-amber-300"
-                        title="이 채널 하나를 선택한 상태로 새 영상 수집 단계에 이동합니다. 실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다."
+                        title={`이 채널 하나를 선택한 상태로 새 영상 수집 단계에 이동합니다. ${
+                          row.status === 'partial'
+                            ? '최신 영상 수집이며 과거 누락 영상 전체를 채우는 보강 수집은 아닙니다.'
+                            : '실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다.'
+                        }`}
                       >
                         <RefreshCw className="h-3.5 w-3.5" />
-                        수집 단계 열기
+                        {getScanRetryLabel(row.status)}
                       </button>
                     ) : null}
                   </div>

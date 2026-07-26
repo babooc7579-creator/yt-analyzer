@@ -62,6 +62,26 @@ describe('recent scan status utils', () => {
     });
   });
 
+  it('preserves Cloud coverage fields used to explain a partial result', () => {
+    const [row] = getRecentScanStatusRows([{
+      id: 'partial',
+      lastScanSummary: {
+        status: 'partial',
+        savedVideosTotal: 250,
+        channelTotalVideos: 400,
+        estimatedMissingVideos: 150,
+        coverageRate: 62.5,
+      },
+    }]);
+
+    expect(row).toMatchObject({
+      savedVideosTotal: 250,
+      channelTotalVideos: 400,
+      estimatedMissingVideos: 150,
+      coverageRate: 62.5,
+    });
+  });
+
   it('treats a legacy lastScannedAt value as a successful latest result', () => {
     const [row] = getRecentScanStatusRows([{
       id: 'legacy',
