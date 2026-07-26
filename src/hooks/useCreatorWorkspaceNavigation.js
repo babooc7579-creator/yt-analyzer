@@ -11,6 +11,7 @@ export function useCreatorWorkspaceNavigation() {
   const [creatorView, setCreatorView] = useState('home');
   const [creatorViewIntent, setCreatorViewIntent] = useState(null);
   const [hasUnsavedProductionDrafts, setHasUnsavedProductionDrafts] = useState(false);
+  const [hasUnsavedWorkToolSettings, setHasUnsavedWorkToolSettings] = useState(false);
 
   const {
     activeCreatorItem,
@@ -52,6 +53,7 @@ export function useCreatorWorkspaceNavigation() {
     creatorView,
     creatorViewIntent,
     hasUnsavedProductionDrafts,
+    hasUnsavedWorkToolSettings,
     isChannelWatchlistView,
     isComingSoonView,
     isDiscoveryLinksView,
@@ -68,6 +70,7 @@ export function useCreatorWorkspaceNavigation() {
     openCreatorView,
     setActiveTab,
     setHasUnsavedProductionDrafts,
+    setHasUnsavedWorkToolSettings,
     setShowWorkPanel,
     showWorkPanel,
   };

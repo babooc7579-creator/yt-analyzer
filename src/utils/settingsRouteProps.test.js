@@ -15,6 +15,7 @@ describe('settingsRouteProps', () => {
     const loadChannelsFromCloud = vi.fn();
     const openCreatorView = vi.fn();
     const setError = vi.fn();
+    const setHasUnsavedWorkToolSettings = vi.fn();
     const props = buildSettingsRouteProps({
       ...handlers,
       apiKey: 'youtube-key',
@@ -26,6 +27,7 @@ describe('settingsRouteProps', () => {
       savedChannels: [{ id: 'channel-1' }, { id: 'channel-2' }],
       setApiKey: vi.fn(),
       setError,
+      setHasUnsavedWorkToolSettings,
       syncWarnings: ['판단 기록 임시 표시 중'],
     });
 
@@ -46,6 +48,7 @@ describe('settingsRouteProps', () => {
     expect(props.refreshingChannels).toBe(false);
     expect(props.functionApiBase).toBe('/api');
     expect(props.savedChannelCount).toBe(2);
+    expect(props.workToolSettingsProps.onDirtyChange).toBe(setHasUnsavedWorkToolSettings);
     props.workToolSettingsProps.onOpenWorkTools();
     expect(openCreatorView).toHaveBeenCalledWith({ id: 'tools-bookmarks' });
     expect(props.categorySettingsProps).toMatchObject({

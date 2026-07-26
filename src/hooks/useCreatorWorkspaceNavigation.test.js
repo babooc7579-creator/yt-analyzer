@@ -40,17 +40,20 @@ describe('useCreatorWorkspaceNavigation', () => {
     expect(useState).toHaveBeenNthCalledWith(3, 'home');
     expect(useState).toHaveBeenNthCalledWith(4, null);
     expect(useState).toHaveBeenNthCalledWith(5, false);
+    expect(useState).toHaveBeenNthCalledWith(6, false);
     expect(navigation).toMatchObject({
       activeTab: 'dashboard',
       creatorView: 'home',
       creatorViewIntent: null,
       hasUnsavedProductionDrafts: false,
+      hasUnsavedWorkToolSettings: false,
       isHomeView: true,
       isLegacyWorkspaceView: false,
       showWorkPanel: false,
     });
     expect(navigation.activeCreatorItem.id).toBe('home');
     expect(navigation.setHasUnsavedProductionDrafts).toBe(stateSetters[4]);
+    expect(navigation.setHasUnsavedWorkToolSettings).toBe(stateSetters[5]);
   });
 
   it('opens channel workspaces on the dashboard and shows the work panel', () => {

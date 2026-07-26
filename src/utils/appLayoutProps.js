@@ -1,4 +1,6 @@
-import { guardProductionSidebarNavigation } from './productionNavigation';
+import { PRODUCTION_UNSAVED_NAVIGATION_MESSAGE } from './productionNavigation';
+import { guardUnsavedSidebarNavigation } from './unsavedNavigation';
+import { WORK_TOOL_UNSAVED_NAVIGATION_MESSAGE } from './workToolSettings';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
@@ -113,6 +115,7 @@ export function buildLayoutProps({
   discoveryCandidateCount,
   error,
   hasUnsavedProductionDrafts,
+  hasUnsavedWorkToolSettings,
   notesModal,
   onConfirmUnsavedNavigation,
   openCreatorView,
@@ -137,6 +140,17 @@ export function buildLayoutProps({
     }
     return false;
   };
+  const hasUnsavedSidebarChanges = Boolean(
+    hasUnsavedProductionDrafts || hasUnsavedWorkToolSettings
+  );
+  const unsavedNavigationMessage = hasUnsavedProductionDrafts && hasUnsavedWorkToolSettings
+    ? [
+      'Cloud에 저장하지 않은 제작안과 업무 도구 설정이 있습니다.',
+      '저장하지 않고 다른 화면으로 이동할까요?',
+    ].join('\n')
+    : hasUnsavedProductionDrafts
+      ? PRODUCTION_UNSAVED_NAVIGATION_MESSAGE
+      : WORK_TOOL_UNSAVED_NAVIGATION_MESSAGE;
 
   return {
     activeCreatorItem,
@@ -151,11 +165,12 @@ export function buildLayoutProps({
     onCloseNotes: closeNotesModal,
     onCloseTopComments: closeTopCommentsModal,
     onClearError: () => setError?.(''),
-    onOpenCreatorView: hasUnsavedProductionDrafts
-      ? guardProductionSidebarNavigation({
+    onOpenCreatorView: hasUnsavedSidebarChanges
+      ? guardUnsavedSidebarNavigation({
         activeView: creatorView,
         confirmNavigation,
-        hasUnsavedDrafts: true,
+        hasUnsavedChanges: true,
+        message: unsavedNavigationMessage,
         onNavigate: openCreatorView,
       })
       : openCreatorView,
