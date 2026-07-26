@@ -7,6 +7,11 @@ import {
   getAllConfiguredWorkTools,
   normalizeWorkToolPreferences,
 } from '../constants/workTools';
+import {
+  getSafeWorkToolUrl,
+  registerWorkToolBeforeUnloadGuard,
+  validateWorkToolPreferences,
+} from '../utils/workToolSettings';
 
 const createEmptyTool = () => ({
   label: '',
@@ -19,15 +24,6 @@ const createEmptyTool = () => ({
 const createCustomToolId = () => (
   `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 );
-
-const getSafeUrl = (value) => {
-  try {
-    const url = new URL(String(value || '').trim());
-    return ['http:', 'https:'].includes(url.protocol) ? url.toString() : '';
-  } catch {
-    return '';
-  }
-};
 
 export default function WorkToolSettingsPanel({
   error = '',
@@ -48,6 +44,11 @@ export default function WorkToolSettingsPanel({
     setDraft(normalizeWorkToolPreferences(preferences));
     setDirty(false);
   }, [preferences]);
+
+  useEffect(() => registerWorkToolBeforeUnloadGuard({
+    hasUnsavedChanges: dirty,
+    target: typeof window === 'undefined' ? undefined : window,
+  }), [dirty]);
 
   const allTools = useMemo(() => getAllConfiguredWorkTools(draft), [draft]);
   const hiddenIds = useMemo(() => new Set(draft.hiddenDefaultToolIds), [draft.hiddenDefaultToolIds]);
@@ -98,7 +99,7 @@ export default function WorkToolSettingsPanel({
 
   const addCustomTool = () => {
     const label = newTool.label.trim();
-    const href = getSafeUrl(newTool.href);
+    const href = getSafeWorkToolUrl(newTool.href);
     if (!label) {
       setValidationError('도구 이름을 입력해 주세요.');
       return;
@@ -125,11 +126,19 @@ export default function WorkToolSettingsPanel({
   };
 
   const save = async () => {
+    const validation = validateWorkToolPreferences(draft);
+    if (!validation.success) {
+      setValidationError(validation.message);
+      setNotice('');
+      return { success: false };
+    }
+
     const result = await onSave?.(draft);
     if (result?.success) {
       setDirty(false);
       setNotice('업무 도구 설정을 Cloud에 저장했습니다.');
     }
+    return result;
   };
 
   const restoreDefaults = () => {
@@ -149,13 +158,13 @@ export default function WorkToolSettingsPanel({
             저장한 설정은 Cloud 기준으로 모든 브라우저에 적용됩니다. 외부 사이트의 검색 데이터는 수집하지 않습니다.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
           <button
             type="button"
             onClick={onOpenWorkTools}
             disabled={dirty || saving || typeof onOpenWorkTools !== 'function'}
             title={dirty ? '변경사항을 Cloud에 저장한 뒤 실제 업무 도구함에서 확인할 수 있습니다.' : '저장된 설정이 적용된 업무 도구함으로 이동합니다. 외부 사이트는 자동으로 열지 않습니다.'}
-            className="inline-flex items-center gap-2 border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-10 items-center justify-center gap-2 border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <LibraryBig className="h-3.5 w-3.5" />
             업무 도구함에서 확인
@@ -164,7 +173,7 @@ export default function WorkToolSettingsPanel({
             type="button"
             onClick={restoreDefaults}
             disabled={saving}
-            className="inline-flex items-center gap-2 border border-slate-600 bg-slate-950 px-3 py-2 text-xs font-bold text-slate-200 hover:border-amber-400 disabled:opacity-50"
+            className="inline-flex min-h-10 items-center justify-center gap-2 border border-slate-600 bg-slate-950 px-3 py-2 text-xs font-bold text-slate-200 hover:border-amber-400 disabled:opacity-50"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             기본값으로 되돌리기
@@ -173,7 +182,7 @@ export default function WorkToolSettingsPanel({
             type="button"
             onClick={save}
             disabled={!dirty || saving}
-            className="inline-flex items-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-10 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Save className="h-3.5 w-3.5" />
             {saving ? 'Cloud 저장 중' : '변경사항 Cloud 저장'}
@@ -195,7 +204,11 @@ export default function WorkToolSettingsPanel({
         </div>
       )}
       {notice && <p role="status" className="mt-4 border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-100">{notice}</p>}
-      {dirty && !notice && <p role="status" className="mt-4 text-xs font-bold text-amber-200">저장하지 않은 변경사항이 있습니다.</p>}
+      {dirty && !notice && (
+        <p role="status" className="mt-4 text-xs font-bold text-amber-200">
+          저장하지 않은 변경사항이 있습니다. 새로고침하거나 탭을 닫기 전에 Cloud에 저장해 주세요.
+        </p>
+      )}
 
       <div className="mt-5 space-y-2">
         {allTools.map((tool, index) => {
@@ -298,7 +311,14 @@ export default function WorkToolSettingsPanel({
         })}
       </div>
 
-      <section className="mt-5 border border-dashed border-cyan-400/30 bg-cyan-500/5 p-4" aria-labelledby="add-work-tool-title">
+      <form
+        className="mt-5 border border-dashed border-cyan-400/30 bg-cyan-500/5 p-4"
+        aria-labelledby="add-work-tool-title"
+        onSubmit={(event) => {
+          event.preventDefault();
+          addCustomTool();
+        }}
+      >
         <div className="flex items-center gap-2">
           <Plus className="h-4 w-4 text-cyan-300" />
           <h4 id="add-work-tool-title" className="text-sm font-extrabold text-white">개인 도구 추가</h4>
@@ -337,16 +357,32 @@ export default function WorkToolSettingsPanel({
         </div>
         {validationError && <p role="alert" className="mt-2 text-xs font-bold text-rose-200">{validationError}</p>}
         <button
-          type="button"
-          onClick={addCustomTool}
+          type="submit"
           disabled={saving}
-          className="mt-3 inline-flex items-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25"
+          className="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25 sm:w-auto"
         >
           <Plus className="h-3.5 w-3.5" />
           목록에 추가
         </button>
         <p className="mt-2 text-[11px] leading-4 text-slate-500">목록에 추가한 뒤 상단의 ‘변경사항 Cloud 저장’을 눌러야 다른 기기에도 반영됩니다.</p>
-      </section>
+      </form>
+
+      {dirty && (
+        <div className="sticky bottom-2 z-10 mt-4 flex flex-col gap-3 border border-amber-400/30 bg-slate-950/95 p-3 shadow-2xl sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs font-bold leading-5 text-amber-100">
+            변경사항은 아직 이 화면에만 있습니다. Cloud 저장을 완료해야 다른 기기에도 반영됩니다.
+          </p>
+          <button
+            type="button"
+            onClick={save}
+            disabled={saving}
+            className="inline-flex min-h-10 w-full shrink-0 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/20 px-4 py-2 text-xs font-black text-cyan-50 hover:bg-cyan-500/30 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          >
+            <Save className="h-3.5 w-3.5" />
+            {saving ? 'Cloud 저장 중' : '변경사항 Cloud에 저장'}
+          </button>
+        </div>
+      )}
 
       <footer className="mt-4 flex items-center gap-2 text-[11px] text-slate-500">
         <Cloud className="h-3.5 w-3.5" />
