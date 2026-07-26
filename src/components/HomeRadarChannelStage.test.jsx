@@ -34,6 +34,7 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('오늘 선택');
     expect(html).toContain('저장 영상 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
+    expect(html).toContain('전체 채널 선택 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음');
   });
 
   it('shows a direct candidate action after stored videos load', () => {
@@ -50,6 +51,7 @@ describe('HomeRadarChannelStage', () => {
     expect(html).not.toContain('아래 STAGE 2에서 오늘의 후보를 바로 판단할 수 있습니다.');
     expect(html).toContain('후보 판정 시작');
     expect(html).toContain('#today-radar-candidates');
+    expect(html).toContain('오늘 후보 판정 영역으로 이동, Cloud 저장 및 YouTube API 호출 없음');
   });
 
   it('shows recovery without pretending an empty Cloud result is a failure', () => {
@@ -63,7 +65,21 @@ describe('HomeRadarChannelStage', () => {
     );
 
     expect(html).toContain('저장된 영상이 없는 채널 조합입니다');
-    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('새 영상 수집 단계로');
+    expect(html).toContain('새 영상 수집 화면으로 이동, 이동만으로 YouTube API 호출 없음');
+  });
+
+  it('explains that opening channel registration does not save or collect data', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarChannelStage
+        onOpenAddChannel={() => {}}
+        savedChannels={[]}
+        selectedChannelIds={[]}
+      />,
+    );
+
+    expect(html).toContain('첫 채널 등록하기');
+    expect(html).toContain('새 채널 등록 화면으로 이동, 채널 저장 및 YouTube API 호출 없음');
   });
 
   it('continues to candidate review after returning to radar with matching loaded videos', () => {

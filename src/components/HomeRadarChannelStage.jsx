@@ -79,7 +79,13 @@ export default function HomeRadarChannelStage({
           <div className="mt-4 border border-dashed border-slate-700 bg-slate-950/50 px-5 py-8 text-center">
             <p className="font-extrabold text-white">먼저 소재를 찾을 채널이 필요합니다</p>
             <p className="mt-2 text-xs text-slate-400">채널을 등록해도 새 영상 수집은 자동으로 시작되지 않습니다.</p>
-            <button type="button" onClick={onOpenAddChannel} className="mt-4 bg-indigo-200 px-4 py-2 text-xs font-extrabold text-indigo-950">
+            <button
+              type="button"
+              onClick={onOpenAddChannel}
+              className="mt-4 bg-indigo-200 px-4 py-2 text-xs font-extrabold text-indigo-950"
+              title="새 채널 등록 화면으로 이동합니다. 이동만으로 채널 저장이나 YouTube API 호출은 실행되지 않습니다."
+              aria-label="새 채널 등록 화면으로 이동, 채널 저장 및 YouTube API 호출 없음"
+            >
               첫 채널 등록하기
             </button>
           </div>
@@ -121,7 +127,13 @@ export default function HomeRadarChannelStage({
 
           <div className="mt-4 flex items-center justify-between gap-3">
             <p className="text-xs font-bold text-slate-400">조건에 맞는 채널 <span className="text-white">{filteredChannels.length}개</span></p>
-            <button type="button" onClick={onOpenChannelWatchlist} className="text-xs font-extrabold text-cyan-300 hover:text-cyan-100">
+            <button
+              type="button"
+              onClick={onOpenChannelWatchlist}
+              className="text-xs font-extrabold text-cyan-300 hover:text-cyan-100"
+              title="전체 채널 선택 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다."
+              aria-label="전체 채널 선택 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음"
+            >
               전체 채널 선택 화면
             </button>
           </div>
@@ -189,7 +201,14 @@ export default function HomeRadarChannelStage({
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
               {loadSucceeded && !emptyLoad ? (
-                <a href="#today-radar-candidates" className="inline-flex items-center gap-2 bg-emerald-200 px-4 py-2.5 text-xs font-extrabold text-emerald-950">후보 판정 시작 <span aria-hidden="true">↓</span></a>
+                <a
+                  href="#today-radar-candidates"
+                  className="inline-flex items-center gap-2 bg-emerald-200 px-4 py-2.5 text-xs font-extrabold text-emerald-950"
+                  title="같은 화면의 오늘 후보 판정 영역으로 이동합니다. 이동만으로 Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+                  aria-label="오늘 후보 판정 영역으로 이동, Cloud 저장 및 YouTube API 호출 없음"
+                >
+                  후보 판정 시작 <span aria-hidden="true">↓</span>
+                </a>
               ) : (
                 <button
                   type="button"
@@ -209,7 +228,15 @@ export default function HomeRadarChannelStage({
                 </button>
               )}
               {emptyLoad && (
-                <button type="button" onClick={onOpenSelectedScan} className="border border-emerald-400/30 bg-emerald-500/10 px-4 py-2.5 text-xs font-extrabold text-emerald-100">새 영상 수집 준비</button>
+                <button
+                  type="button"
+                  onClick={onOpenSelectedScan}
+                  className="border border-emerald-400/30 bg-emerald-500/10 px-4 py-2.5 text-xs font-extrabold text-emerald-100"
+                  title="선택 채널 새 영상 수집 화면으로 이동합니다. 이동만으로 수집은 실행되지 않으며, 실제 수집 버튼에서 YouTube API를 사용할 수 있습니다."
+                  aria-label="새 영상 수집 화면으로 이동, 이동만으로 YouTube API 호출 없음"
+                >
+                  새 영상 수집 단계로
+                </button>
               )}
             </div>
           </div>
