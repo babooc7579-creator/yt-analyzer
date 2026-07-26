@@ -7,6 +7,7 @@ import UploadCalendarDayDetails from './UploadCalendarDayDetails';
 import UploadCalendarGrid from './UploadCalendarGrid';
 import UploadCalendarHeader from './UploadCalendarHeader';
 import UploadCalendarSummary from './UploadCalendarSummary';
+import UploadCalendarUnscheduledList from './UploadCalendarUnscheduledList';
 
 export default function UploadCalendarWorkspace({
   onOpenProductionCandidate,
@@ -39,6 +40,12 @@ export default function UploadCalendarWorkspace({
 
       <div className="mt-5 space-y-4">
         <UploadCalendarSummary summary={state.summary} />
+        <UploadCalendarUnscheduledList
+          items={state.visibleUnscheduledItems}
+          onOpenProductionCandidate={onOpenProductionCandidate}
+          onOpenProductionCandidates={onOpenProductionCandidates}
+          onOpenScriptBoard={onOpenScriptBoard}
+        />
         {emptyState ? (
           <div className="border border-dashed border-slate-700 bg-slate-950/40 px-5 py-12 text-center">
             <h3 className="text-base font-extrabold text-white">{emptyState.title}</h3>

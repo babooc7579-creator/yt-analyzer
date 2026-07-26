@@ -59,18 +59,18 @@ const getCalendarStatusGroup = (status) => {
   return 'candidate';
 };
 
-export const getUploadCalendarItems = ({ videoUserRecords, videos } = {}) => {
+const getProductionItems = ({ videoUserRecords, videos, scheduled } = {}) => {
   const videoMap = getVideoMap(videos);
 
   return Object.entries(toRecordMap(videoUserRecords))
     .filter(([, record]) => hasAnyProductionStatus(record, PRODUCTION_STATUSES))
-    .filter(([, record]) => DATE_PATTERN.test(String(record?.targetPublishDate || '')))
+    .filter(([, record]) => DATE_PATTERN.test(String(record?.targetPublishDate || '')) === scheduled)
     .map(([recordKey, record]) => {
       const videoId = record.videoId || recordKey;
       const video = videoMap.get(videoId) || null;
       const status = getProductionStatusFromRecord(record);
       return {
-        date: record.targetPublishDate,
+        date: scheduled ? record.targetPublishDate : '',
         draftTitle: record.draftTitle || '',
         record,
         sourceLoaded: Boolean(video),
@@ -84,8 +84,16 @@ export const getUploadCalendarItems = ({ videoUserRecords, videos } = {}) => {
         videoId,
       };
     })
-    .sort((left, right) => left.date.localeCompare(right.date) || left.title.localeCompare(right.title, 'ko-KR'));
+    .sort((left, right) => (
+      scheduled
+        ? left.date.localeCompare(right.date) || left.title.localeCompare(right.title, 'ko-KR')
+        : left.title.localeCompare(right.title, 'ko-KR')
+    ));
 };
+
+export const getUploadCalendarItems = (options = {}) => getProductionItems({ ...options, scheduled: true });
+
+export const getUnscheduledUploadCalendarItems = (options = {}) => getProductionItems({ ...options, scheduled: false });
 
 export const filterUploadCalendarItems = (items, statusFilter = 'all') => (
   statusFilter === 'all'
