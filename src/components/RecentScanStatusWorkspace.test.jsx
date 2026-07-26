@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import RecentScanStatusWorkspace from './RecentScanStatusWorkspace';
 
 describe('RecentScanStatusWorkspace', () => {
-  it('renders latest-only operational status without implying history or quota accuracy', () => {
+  it('renders latest operational status and the Cloud history boundary', () => {
     const html = renderToStaticMarkup(
       <RecentScanStatusWorkspace
         channels={[
@@ -33,11 +33,13 @@ describe('RecentScanStatusWorkspace', () => {
     );
 
     expect(html).toContain('채널별 최근 수집 상태');
-    expect(html).toContain('과거 이력이나 정확한 YouTube API 쿼터 장부는 아직 포함하지 않습니다');
+    expect(html).toContain('Cloud에 저장된 과거 수집 이력');
     expect(html).toContain('확인 필요 채널');
     expect(html).toContain('quota warning');
     expect(html).toContain('새 영상 2개 · 통계 갱신 5개');
-    expect(html).toContain('이 화면을 열거나 필터링해도 YouTube API 호출과 Cloud 저장은 실행되지 않습니다');
+    expect(html).toContain('이 화면은 Cloud DB만 조회합니다');
+    expect(html).toContain('과거 수집 이력');
+    expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
   });
 
   it('renders an honest empty state when no channels exist', () => {

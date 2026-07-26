@@ -10,6 +10,7 @@ export {
 } from './channelApi';
 
 export {
+  fetchScanLogs,
   scanChannels,
   scanSelectedChannels,
 } from './scanApi';
