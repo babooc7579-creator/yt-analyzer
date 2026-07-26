@@ -18,7 +18,7 @@ vi.mock('../hooks/useKeywordExplorerState', () => ({
     setSearchQuery: vi.fn(),
     setSortType: vi.fn(),
     sortType: 'relevance',
-    suggestions: [{ label: 'cake', count: 3 }],
+    suggestions: [{ label: 'cake', count: 3, channelCount: 2, reactionScore: 87 }],
     summary: {
       averageViews: 0,
       channelCount: 0,
@@ -41,7 +41,9 @@ describe('KeywordExplorerWorkspace', () => {
 
     expect(html).toContain('키워드 탐색');
     expect(html).toContain('YouTube API를 새로 호출하지 않습니다');
-    expect(html).toContain('제목 추천어');
+    expect(html).toContain('수집 채널 반응도');
+    expect(html).toContain('외부 검색량이나 완전한 실시간 지표가 아니며');
+    expect(html).toContain('반응도 87');
     expect(html).toContain('cake');
     expect(html).toContain('찾고 싶은 소재 키워드를 입력하세요');
   });

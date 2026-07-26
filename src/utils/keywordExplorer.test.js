@@ -26,8 +26,31 @@ describe('keywordExplorer utils', () => {
       { title: 'Cake cake design' },
     ]);
 
-    expect(suggestions[0]).toEqual({ label: 'cake', count: 3 });
+    expect(suggestions[0]).toMatchObject({
+      label: 'cake',
+      count: 3,
+      channelCount: 2,
+      reactionScore: expect.any(Number),
+    });
+    expect(suggestions[0].reactionScore).toBeGreaterThanOrEqual(0);
+    expect(suggestions[0].reactionScore).toBeLessThanOrEqual(100);
     expect(suggestions.some(item => item.label === 'video')).toBe(false);
+  });
+
+  it('scores repeated, cross-channel, recent, and high-response title keywords without external APIs', () => {
+    const suggestions = getKeywordSuggestions([
+      { title: 'Cake surprise', channel_id: 'c1', daysOld: 5, view_count: 100000, multiplier: 8 },
+      { title: 'Cake challenge', channel_id: 'c2', daysOld: 12, view_count: 80000, multiplier: 6 },
+      { title: 'Quiet workshop', channel_id: 'c1', daysOld: 200, view_count: 1000, multiplier: 0.2 },
+    ]);
+
+    expect(suggestions[0]).toMatchObject({
+      label: 'cake',
+      channelCount: 2,
+      count: 2,
+      recentVideoCount: 2,
+    });
+    expect(suggestions[0].reactionScore).toBeGreaterThan(suggestions.find(item => item.label === 'quiet').reactionScore);
   });
 
   it('searches title and channel text and applies view, length, and age filters', () => {

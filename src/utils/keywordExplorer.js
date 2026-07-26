@@ -61,17 +61,89 @@ export const tokenizeKeywordText = (value) => (
 );
 
 export const getKeywordSuggestions = (videos, limit = 12) => {
-  const counts = new Map();
+  const signals = new Map();
 
   toArray(videos).forEach((video) => {
     const titleTokens = new Set(tokenizeKeywordText(video?.title));
-    titleTokens.forEach((token) => counts.set(token, (counts.get(token) || 0) + 1));
+    const channelKey = String(
+      video?.channel_id
+      || video?.channelId
+      || video?.channel_title
+      || video?.channelTitle
+      || '',
+    ).trim();
+    const rawDaysOld = video?.daysOld;
+    const daysOld = rawDaysOld === null || rawDaysOld === undefined || rawDaysOld === ''
+      ? null
+      : Number(rawDaysOld);
+    const viewsPerDay = toNumber(video?.views_per_day || video?.viewsPerDay)
+      || toNumber(video?.view_count) / Math.max(1, Number.isFinite(daysOld) ? daysOld : 1);
+
+    titleTokens.forEach((token) => {
+      const current = signals.get(token) || {
+        channelKeys: new Set(),
+        multiplierTotal: 0,
+        recentVideoCount: 0,
+        videoCount: 0,
+        viewsPerDayTotal: 0,
+      };
+      current.videoCount += 1;
+      current.multiplierTotal += Math.max(0, toNumber(video?.multiplier));
+      current.viewsPerDayTotal += Math.max(0, viewsPerDay);
+      if (channelKey) current.channelKeys.add(channelKey);
+      if (Number.isFinite(daysOld) && daysOld >= 0 && daysOld <= 30) current.recentVideoCount += 1;
+      signals.set(token, current);
+    });
   });
 
-  return [...counts.entries()]
-    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0], 'ko-KR'))
+  const rows = [...signals.entries()].map(([label, signal]) => ({
+    averageMultiplier: signal.videoCount > 0 ? signal.multiplierTotal / signal.videoCount : 0,
+    averageViewsPerDay: signal.videoCount > 0 ? signal.viewsPerDayTotal / signal.videoCount : 0,
+    channelCount: signal.channelKeys.size,
+    count: signal.videoCount,
+    label,
+    recentVideoCount: signal.recentVideoCount,
+  }));
+  const maximums = rows.reduce((result, row) => ({
+    averageMultiplier: Math.max(result.averageMultiplier, row.averageMultiplier),
+    averageViewsPerDay: Math.max(result.averageViewsPerDay, row.averageViewsPerDay),
+    channelCount: Math.max(result.channelCount, row.channelCount),
+    count: Math.max(result.count, row.count),
+    recentVideoCount: Math.max(result.recentVideoCount, row.recentVideoCount),
+  }), {
+    averageMultiplier: 0,
+    averageViewsPerDay: 0,
+    channelCount: 0,
+    count: 0,
+    recentVideoCount: 0,
+  });
+  const normalize = (value, maximum) => maximum > 0 ? Math.min(1, value / maximum) : 0;
+  const normalizeLog = (value, maximum) => maximum > 0
+    ? Math.min(1, Math.log1p(value) / Math.log1p(maximum))
+    : 0;
+
+  return rows
+    .map((row) => {
+      const performanceScore = (
+        normalize(row.averageMultiplier, maximums.averageMultiplier) * 0.6
+        + normalizeLog(row.averageViewsPerDay, maximums.averageViewsPerDay) * 0.4
+      );
+      return {
+        ...row,
+        reactionScore: Math.round(
+          normalize(row.count, maximums.count) * 30
+          + normalize(row.channelCount, maximums.channelCount) * 20
+          + normalize(row.recentVideoCount, maximums.recentVideoCount) * 25
+          + performanceScore * 25,
+        ),
+      };
+    })
+    .sort((left, right) => (
+      right.reactionScore - left.reactionScore
+      || right.count - left.count
+      || left.label.localeCompare(right.label, 'ko-KR')
+    ))
     .slice(0, Math.max(0, Number(limit) || 0))
-    .map(([label, count]) => ({ label, count }));
 };
 
 const getSearchScore = (video, query, tokens) => {
