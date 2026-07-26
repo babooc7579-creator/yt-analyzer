@@ -23,6 +23,7 @@ export function buildRoutesProps({
   ttoTtoRouteProps,
   tagVaultRouteProps,
   uploadCalendarRouteProps,
+  workToolsRouteProps,
 }) {
   return {
     activeCreatorItem,
@@ -49,6 +50,7 @@ export function buildRoutesProps({
     ttoTtoRouteProps,
     tagVaultRouteProps,
     uploadCalendarRouteProps,
+    workToolsRouteProps,
   };
 }
 

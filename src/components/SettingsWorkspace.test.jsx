@@ -46,6 +46,8 @@ describe('SettingsWorkspace', () => {
     expect(html).toContain('Cloud 채널 다시 불러오기');
     expect(html).toContain('숨긴 분야 다시 표시');
     expect(html).toContain('이 브라우저의 화면 목록에만 복원합니다');
+    expect(html).toContain('즐겨찾기 추가·숨김·순서 변경');
+    expect(html).toContain('변경사항 Cloud 저장');
   });
 
   it('shows Cloud sync warnings and the current runtime error without making requests', () => {

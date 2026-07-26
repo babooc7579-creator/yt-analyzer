@@ -1,6 +1,7 @@
 import { useCreatorWorkspaceNavigation } from './useCreatorWorkspaceNavigation';
 import { useCreatorAppDiscoveryWorkflow } from './useCreatorAppDiscoveryWorkflow';
 import { useTopComments } from './useTopComments';
+import { useWorkToolPreferences } from './useWorkToolPreferences';
 
 export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
   const {
@@ -33,6 +34,9 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     setShowWorkPanel,
     showWorkPanel,
   } = useCreatorWorkspaceNavigation();
+  const workToolWorkflow = useWorkToolPreferences({
+    enabled: isSettingsView || isWorkToolsView,
+  });
   const discoveryWorkflow = useCreatorAppDiscoveryWorkflow();
   const {
     discoveryLinks,
@@ -84,5 +88,6 @@ export function useCreatorAppWorkspaceWorkflow({ apiKey, setError }) {
     setHasUnsavedProductionDrafts,
     setShowWorkPanel,
     showWorkPanel,
+    ...workToolWorkflow,
   };
 }

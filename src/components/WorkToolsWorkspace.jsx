@@ -2,7 +2,12 @@ import { ExternalLink, LibraryBig } from 'lucide-react';
 
 import { WORK_TOOL_GROUPS } from '../constants/workTools';
 
-export default function WorkToolsWorkspace() {
+export default function WorkToolsWorkspace({
+  error = '',
+  loading = false,
+  onReload,
+  toolGroups = WORK_TOOL_GROUPS,
+}) {
   return (
     <section data-testid="creator-route-work-tools" className="min-w-0 space-y-4">
       <header className="border border-slate-800 bg-slate-900/90 p-5">
@@ -19,7 +24,19 @@ export default function WorkToolsWorkspace() {
         </p>
       </header>
 
-      {WORK_TOOL_GROUPS.map((group) => (
+      {loading && (
+        <p role="status" className="border border-blue-400/20 bg-blue-500/10 px-4 py-3 text-xs text-blue-100">
+          Cloud에서 나의 업무 도구 설정을 불러오는 중입니다.
+        </p>
+      )}
+      {error && (
+        <div role="alert" className="flex flex-col gap-2 border border-rose-400/25 bg-rose-500/10 px-4 py-3 text-xs text-rose-100 sm:flex-row sm:items-center sm:justify-between">
+          <span>{error} 현재는 기본 도구를 표시합니다.</span>
+          <button type="button" onClick={onReload} className="shrink-0 border border-rose-300/30 px-3 py-1.5 font-bold hover:bg-rose-500/10">다시 불러오기</button>
+        </div>
+      )}
+
+      {toolGroups.map((group) => (
         <section key={group.id} aria-labelledby={`work-tool-group-${group.id}`} className="border border-slate-800 bg-slate-900/80 p-5">
           <h3 id={`work-tool-group-${group.id}`} className="text-base font-black text-white">{group.title}</h3>
           <p className="mt-1 text-xs leading-5 text-slate-400">{group.description}</p>
@@ -48,7 +65,7 @@ export default function WorkToolsWorkspace() {
       ))}
 
       <aside className="border border-amber-500/20 bg-amber-500/5 p-4 text-xs leading-5 text-amber-100">
-        현재는 검증된 기본 도구만 제공합니다. 개인 링크 추가·삭제와 순서 저장은 저장 기준을 정한 뒤 별도 기능으로 확장합니다.
+        개인 링크 추가·수정·숨김·순서 변경은 설정의 ‘업무 도구 관리’에서 할 수 있습니다. 변경사항은 Cloud에 저장됩니다.
       </aside>
     </section>
   );

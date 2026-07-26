@@ -13,6 +13,7 @@ vi.mock('../utils/appRouteProps', () => ({
   buildTagVaultRouteProps: vi.fn(() => ({ route: 'tag-vault' })),
   buildTtoTtoRouteProps: vi.fn(() => ({ route: 'ttotto' })),
   buildUploadCalendarRouteProps: vi.fn(() => ({ route: 'upload-calendar' })),
+  buildWorkToolsRouteProps: vi.fn(() => ({ route: 'work-tools' })),
 }));
 
 import {
@@ -28,6 +29,7 @@ import {
   buildTagVaultRouteProps,
   buildTtoTtoRouteProps,
   buildUploadCalendarRouteProps,
+  buildWorkToolsRouteProps,
 } from '../utils/appRouteProps';
 import { useCreatorAppViewProps } from './useCreatorAppViewProps';
 
@@ -67,6 +69,7 @@ describe('useCreatorAppViewProps', () => {
     expect(buildTagVaultRouteProps).toHaveBeenCalledWith(props);
     expect(buildTtoTtoRouteProps).toHaveBeenCalledWith(props);
     expect(buildUploadCalendarRouteProps).toHaveBeenCalledWith(props);
+    expect(buildWorkToolsRouteProps).toHaveBeenCalledWith(props);
     expect(buildRoutesProps).toHaveBeenCalledWith({
       activeCreatorItem: props.activeCreatorItem,
       channelWatchlistRouteProps: { route: 'channel-watchlist' },
@@ -92,6 +95,7 @@ describe('useCreatorAppViewProps', () => {
       ttoTtoRouteProps: { route: 'ttotto' },
       tagVaultRouteProps: { route: 'tag-vault' },
       uploadCalendarRouteProps: { route: 'upload-calendar' },
+      workToolsRouteProps: { route: 'work-tools' },
     });
     expect(viewProps).toEqual({
       layoutProps: { shell: 'layout' },

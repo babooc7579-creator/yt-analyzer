@@ -59,3 +59,80 @@ export const getWorkToolUrl = (tool, keyword = '') => {
   }
   return tool?.href || '#';
 };
+
+export const EMPTY_WORK_TOOL_PREFERENCES = {
+  customTools: [],
+  hiddenDefaultToolIds: [],
+  toolOrder: [],
+  updatedAt: '',
+};
+
+export const getDefaultWorkTools = () => (
+  WORK_TOOL_GROUPS.flatMap((group) => (
+    group.tools.map((tool) => ({
+      ...tool,
+      groupId: group.id,
+      isDefault: true,
+    }))
+  ))
+);
+
+export const normalizeWorkToolPreferences = (preferences = {}) => ({
+  customTools: Array.isArray(preferences.customTools) ? preferences.customTools : [],
+  hiddenDefaultToolIds: Array.isArray(preferences.hiddenDefaultToolIds)
+    ? preferences.hiddenDefaultToolIds
+    : [],
+  toolOrder: Array.isArray(preferences.toolOrder) ? preferences.toolOrder : [],
+  updatedAt: typeof preferences.updatedAt === 'string' ? preferences.updatedAt : '',
+});
+
+export const getAllConfiguredWorkTools = (preferences = {}) => {
+  const normalized = normalizeWorkToolPreferences(preferences);
+  const tools = [
+    ...getDefaultWorkTools(),
+    ...normalized.customTools.map((tool) => ({ ...tool, isDefault: false })),
+  ];
+  const orderIndex = new Map(normalized.toolOrder.map((id, index) => [id, index]));
+
+  return tools.sort((left, right) => {
+    const leftIndex = orderIndex.has(left.id) ? orderIndex.get(left.id) : Number.MAX_SAFE_INTEGER;
+    const rightIndex = orderIndex.has(right.id) ? orderIndex.get(right.id) : Number.MAX_SAFE_INTEGER;
+    return leftIndex - rightIndex;
+  });
+};
+
+export const getOrderedWorkTools = (preferences = {}) => {
+  const hiddenIds = new Set(normalizeWorkToolPreferences(preferences).hiddenDefaultToolIds);
+  return getAllConfiguredWorkTools(preferences).filter((tool) => (
+    !tool.isDefault || !hiddenIds.has(tool.id)
+  ));
+};
+
+export const getConfiguredWorkToolGroups = (preferences = {}) => {
+  const groupsById = new Map(
+    WORK_TOOL_GROUPS.map((group) => [
+      group.id,
+      { ...group, tools: [] },
+    ])
+  );
+  groupsById.set('personal', {
+    id: 'personal',
+    title: '나의 업무 도구',
+    description: '설정에서 직접 추가한 개인 바로가기입니다.',
+    tools: [],
+  });
+
+  const orderedTools = getOrderedWorkTools(preferences);
+  const orderIndex = new Map(orderedTools.map((tool, index) => [tool.id, index]));
+
+  orderedTools.forEach((tool) => {
+    const group = groupsById.get(tool.groupId) || groupsById.get('personal');
+    group.tools.push(tool);
+  });
+
+  return [...groupsById.values()]
+    .filter((group) => group.tools.length > 0)
+    .sort((left, right) => (
+      orderIndex.get(left.tools[0].id) - orderIndex.get(right.tools[0].id)
+    ));
+};

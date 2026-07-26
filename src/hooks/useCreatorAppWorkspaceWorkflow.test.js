@@ -46,10 +46,21 @@ const workspaceMocks = vi.hoisted(() => {
     removeDiscoveryLink: vi.fn(),
   };
 
+  const workToolWorkflow = {
+    loadWorkToolPreferences: vi.fn(),
+    saveWorkToolPreferences: vi.fn(),
+    workToolPreferences: { customTools: [], hiddenDefaultToolIds: [], toolOrder: [] },
+    workToolPreferencesError: '',
+    workToolPreferencesLoaded: true,
+    workToolPreferencesLoading: false,
+    workToolPreferencesSaving: false,
+  };
+
   return {
     discoveryWorkflow,
     navigation,
     topComments,
+    workToolWorkflow,
   };
 });
 
@@ -65,10 +76,15 @@ vi.mock('./useTopComments', () => ({
   useTopComments: vi.fn(() => workspaceMocks.topComments),
 }));
 
+vi.mock('./useWorkToolPreferences', () => ({
+  useWorkToolPreferences: vi.fn(() => workspaceMocks.workToolWorkflow),
+}));
+
 import { useCreatorAppDiscoveryWorkflow } from './useCreatorAppDiscoveryWorkflow';
 import { useCreatorAppWorkspaceWorkflow } from './useCreatorAppWorkspaceWorkflow';
 import { useCreatorWorkspaceNavigation } from './useCreatorWorkspaceNavigation';
 import { useTopComments } from './useTopComments';
+import { useWorkToolPreferences } from './useWorkToolPreferences';
 
 describe('useCreatorAppWorkspaceWorkflow', () => {
   beforeEach(() => {
@@ -89,6 +105,7 @@ describe('useCreatorAppWorkspaceWorkflow', () => {
     });
     expect(useCreatorWorkspaceNavigation).toHaveBeenCalledTimes(1);
     expect(useCreatorAppDiscoveryWorkflow).toHaveBeenCalledTimes(1);
+    expect(useWorkToolPreferences).toHaveBeenCalledWith({ enabled: false });
     expect(workflow).toEqual({
       activeCreatorItem: workspaceMocks.navigation.activeCreatorItem,
       activeTab: workspaceMocks.navigation.activeTab,
@@ -126,6 +143,7 @@ describe('useCreatorAppWorkspaceWorkflow', () => {
       setHasUnsavedProductionDrafts: workspaceMocks.navigation.setHasUnsavedProductionDrafts,
       setShowWorkPanel: workspaceMocks.navigation.setShowWorkPanel,
       showWorkPanel: workspaceMocks.navigation.showWorkPanel,
+      ...workspaceMocks.workToolWorkflow,
     });
   });
 });

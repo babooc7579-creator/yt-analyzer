@@ -13,6 +13,35 @@ describe('WorkToolsWorkspace', () => {
     expect(html).toContain('Google Trends');
     expect(html).toContain('네이버 DataLab');
     expect(html).toContain('YouTube Studio');
-    expect(html).toContain('개인 링크 추가·삭제');
+    expect(html).toContain('개인 링크 추가·수정·숨김·순서 변경');
+    expect(html).toContain('변경사항은 Cloud에 저장됩니다');
+  });
+
+  it('renders Cloud custom tools and a visible retry state', () => {
+    const html = renderToStaticMarkup(
+      <WorkToolsWorkspace
+        error="Cloud 연결 실패"
+        onReload={() => {}}
+        toolGroups={[
+          {
+            id: 'personal',
+            title: '나의 업무 도구',
+            description: '직접 추가한 도구',
+            tools: [{
+              id: 'custom-1',
+              label: '내 키워드 도구',
+              description: '매일 확인',
+              href: 'https://example.com/',
+              badge: '개인 도구',
+            }],
+          },
+        ]}
+      />
+    );
+
+    expect(html).toContain('Cloud 연결 실패');
+    expect(html).toContain('다시 불러오기');
+    expect(html).toContain('나의 업무 도구');
+    expect(html).toContain('내 키워드 도구');
   });
 });
