@@ -32,6 +32,17 @@ describe('RecentScanStatusWorkspace', () => {
               statsRefreshed: 5,
             },
           },
+          {
+            id: 'partial',
+            title: '과거 보강 채널',
+            lastScanSummary: {
+              status: 'partial',
+              scannedAt: '2026-07-26T11:00:00.000Z',
+              savedVideosTotal: 200,
+              channelTotalVideos: 400,
+              estimatedMissingVideos: 200,
+            },
+          },
         ]}
       />,
     );
@@ -46,6 +57,8 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('이 채널 관리');
     expect(html).toContain('다시 수집 준비');
     expect((html.match(/다시 수집 준비/g) || []).length).toBe(1);
+    expect(html).toContain('과거 영상 100개까지 채우기');
+    expect(html).toContain('자동 반복·예약·전체 채널 실행은 하지 않습니다');
     expect(html).toContain('이 화면은 Cloud DB만 조회합니다');
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
@@ -127,7 +140,7 @@ describe('RecentScanStatusWorkspace', () => {
 
     expect(html).toContain('과거 영상 저장 범위가 아직 부족합니다');
     expect(html).toContain('Cloud 저장 250개 / 채널 전체 400개');
-    expect(html).toContain('과거 누락분 전체가 자동으로 채워지는 것은 아닙니다');
+    expect(html).toContain('과거 영상 100개까지 채우기');
     expect(html).not.toContain('기술 오류 원문 보기');
   });
 });

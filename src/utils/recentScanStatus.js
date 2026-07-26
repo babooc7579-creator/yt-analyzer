@@ -40,6 +40,7 @@ const getScanStatus = (channel = {}) => {
   const rawStatus = String(summary.status || '').toLowerCase();
 
   if (rawStatus === 'failed' || summary.error) return 'failed';
+  if (channel.backfillState?.completed) return 'success';
   if (rawStatus === 'partial') return 'partial';
   return scannedAt ? 'success' : 'never';
 };
@@ -48,10 +49,12 @@ export const getRecentScanStatusRows = (channels = []) => (
   toArray(channels)
     .map((channel) => {
       const summary = channel.lastScanSummary || {};
+      const backfillState = channel.backfillState || {};
+      const coverage = backfillState.lastRun || summary;
       const scannedAt = summary.scannedAt || channel.lastScannedAt || '';
       const status = getScanStatus(channel);
       const timestamp = scannedAt ? new Date(scannedAt).getTime() : 0;
-      const coverageRateValue = summary.coverageRate;
+      const coverageRateValue = coverage.coverageRate;
       const coverageRate = coverageRateValue !== null
         && coverageRateValue !== undefined
         && coverageRateValue !== ''
@@ -62,14 +65,16 @@ export const getRecentScanStatusRows = (channels = []) => (
       return {
         channelId: channel.id || channel.channelId || '',
         channelTitle: channel.title || channel.channelTitle || '이름 없는 채널',
-        channelTotalVideos: Number(summary.channelTotalVideos) || 0,
+        backfillCompleted: Boolean(backfillState.completed),
+        backfillUpdatedAt: backfillState.updatedAt || '',
+        channelTotalVideos: Number(coverage.channelTotalVideos) || 0,
         coverageRate,
         error: summary.error || '',
-        estimatedMissingVideos: Number(summary.estimatedMissingVideos) || 0,
+        estimatedMissingVideos: Number(coverage.estimatedMissingVideos) || 0,
         exactScannedAt: formatKoreanDateTime(scannedAt, '기록 없음'),
         grade: formatChannelGrade(channel.grade),
         newVideosFound: Number(summary.newVideosFound) || 0,
-        savedVideosTotal: Number(summary.savedVideosTotal) || 0,
+        savedVideosTotal: Number(coverage.savedVideosTotal) || 0,
         scannedAt,
         scannedText: scannedAt ? formatRelativeTime(scannedAt) : '아직 수집하지 않음',
         statsRefreshed: Number(summary.statsRefreshed) || 0,

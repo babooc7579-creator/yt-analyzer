@@ -7,15 +7,18 @@ describe('recentScanStatusRouteProps', () => {
     const openCreatorView = vi.fn();
     const setSelectedChannelIds = vi.fn();
     const channels = [{ id: 'channel-1' }];
+    const runHistoricalBackfill = vi.fn();
     const props = buildRecentScanStatusRouteProps({
       channelsLoading: true,
       openCreatorView,
       savedChannels: channels,
+      runHistoricalBackfill,
       setSelectedChannelIds,
     });
 
     expect(props.channels).toBe(channels);
     expect(props.channelsLoading).toBe(true);
+    expect(props.onBackfillChannel).toBe(runHistoricalBackfill);
 
     props.onOpenChannelOperations('channel-1');
     props.onOpenSelectedScan('channel-2');

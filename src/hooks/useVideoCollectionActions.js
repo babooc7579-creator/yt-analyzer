@@ -2,6 +2,7 @@ import {
   fetchAllStoredVideosByChannelIds,
 } from '../services/videoRecordsApi';
 import {
+  backfillChannelHistory,
   scanChannels,
   scanSelectedChannels as scanSelectedChannelsRequest,
 } from '../services/scanApi';
@@ -20,6 +21,12 @@ import {
   getStoredVideosLoadedMessage,
   mapStoredVideosToViewModels,
 } from '../utils/videoCollection';
+import {
+  BACKFILL_MAX_PAGES,
+  getBackfillErrorMessage,
+  getBackfillResultMessage,
+  getBackfillStartMessage,
+} from '../utils/historicalBackfill';
 
 export function useVideoCollectionActions({
   clearCheckedVideos,
@@ -126,9 +133,36 @@ export function useVideoCollectionActions({
     }
   };
 
+  const runHistoricalBackfill = async (channelId, channelTitle) => {
+    if (!channelId) return { success: false, error: '채널을 찾을 수 없습니다.' };
+
+    setError('');
+    setIsScanning(true);
+    setScanningTag(`BACKFILL:${channelId}`);
+    setProgressMsg(getBackfillStartMessage(channelTitle));
+
+    try {
+      const data = await backfillChannelHistory(channelId, { maxPages: BACKFILL_MAX_PAGES });
+      if (!data.success) throw new Error(data.error || '과거 영상 채우기에 실패했습니다.');
+      const message = getBackfillResultMessage(data.result);
+      setProgressMsg(message);
+      await loadChannelsFromCloud();
+      return { success: true, result: data.result, message };
+    } catch (error) {
+      const message = getBackfillErrorMessage(error);
+      setError(message);
+      setProgressMsg('');
+      return { success: false, error: message };
+    } finally {
+      setIsScanning(false);
+      setScanningTag(null);
+    }
+  };
+
   return {
     handleManualScan: () => runScanRequest(null),
     handleTagScan: (tag) => runScanRequest(tag),
     loadStoredVideosForSelectedChannels,
+    runHistoricalBackfill,
   };
 }

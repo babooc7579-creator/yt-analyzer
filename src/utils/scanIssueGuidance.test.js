@@ -16,7 +16,7 @@ describe('scan issue guidance', () => {
     })).toMatchObject({
       title: '최신 수집은 완료됐지만 과거 영상 저장 범위가 아직 부족합니다',
       cause: expect.stringContaining('Cloud 저장 250개 / 채널 전체 400개 · 약 62.5%'),
-      nextAction: expect.stringContaining('과거 누락분 전체가 자동으로 채워지는 것은 아닙니다'),
+      nextAction: expect.stringContaining('과거 영상 100개까지 채우기'),
       tone: 'partial',
     });
   });

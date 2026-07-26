@@ -63,6 +63,7 @@
 | 채널 기록 추가 | `createChannelNote` | `POST /channels/{id}/notes?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 낮음 |
 | 저장된 영상 불러오기 | `fetchAllStoredVideosByChannelIds` | `GET /videos?channelIds=...&pageSize=...&continuationToken=...` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 프론트가 페이지 수, 누적 영상 수, 경과 시간을 안내하며 모든 페이지를 순차 조회한 뒤 전체 목록 제공. 중간 실패 시 일부 목록은 노출하지 않고 재시도 안내. 기존 무페이지 호출도 호환 유지 |
 | 선택 채널 새 영상 수집 | `scanSelectedChannels` | `POST /scan/selected` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | quota 사용 및 영상/채널 갱신 |
+| 채널별 과거 영상 채우기 | `backfillChannelHistory` | `POST /scan/backfill` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | 사용자가 채널 하나를 직접 실행. 1회 기본 2페이지·서버 최대 3페이지로 제한. 진행 커서는 채널의 `backfillState`에 저장하며 자동 반복 없음 |
 | 전체/태그 새 영상 수집 | `scanChannels` | `GET /scan`, `GET /scan?tag=...` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | GET이지만 비용성/변경 작업 |
 | 태그 이름 변경 | `renameTag` | `GET /tags/rename?from=...&to=...` | DB 변경 | 아니오 | 예 | 예 | 아니오 | 가능 | GET이지만 DB 변경. 오해 위험 높음 |
 | 스크랩북 불러오기 | `fetchScrapbook` | `GET /scrapbook` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | `videos` container 안의 `docType` 조회 |
@@ -249,6 +250,20 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - API 사용량 추정은 아직 구현된 기능처럼 표시하지 않습니다.
 - `scan_logs`와 `api_quota_logs`는 개념과 저장 책임을 분리합니다.
 - 자세한 목표 모델은 `CREATOR_OS_SCAN_API_USAGE_MODEL.md`를 기준으로 봅니다.
+
+### 5.6.1 채널별 과거 영상 채우기
+
+2026-07-27 선택지 B 승인에 따라 일반 새 영상 수집과 별도로 수동 과거 보강 기능을 둡니다.
+
+- `POST /scan/backfill`은 저장된 운영중 채널 하나만 처리합니다.
+- 프론트 기본값은 2페이지이며, 한 번에 최대 100개 업로드 항목을 확인합니다.
+- 서버는 요청값과 관계없이 최대 3페이지로 제한합니다.
+- 이미 저장된 영상 ID는 다시 저장하지 않습니다.
+- 다음 페이지 위치는 채널 문서의 `backfillState.nextPageToken`에 저장합니다.
+- 업로드 목록 끝까지 확인하면 `backfillState.completed`를 `true`로 저장하고 다음 실행에서 YouTube API를 호출하지 않습니다.
+- 일반 새 영상 수집의 `lastScanSummary`와 `scan_log`는 덮어쓰지 않습니다.
+- 자동 반복, 예약 실행, 전체 채널 일괄 과거 보강은 하지 않습니다.
+- 정확한 quota 사용량 장부는 아직 없으므로 화면은 최대 확인 범위와 비용성 작업이라는 사실만 안내합니다.
 
 ### 5.7 외부 키워드 조사 도구는 바로가기
 

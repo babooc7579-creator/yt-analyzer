@@ -15,6 +15,10 @@ export const buildScanLogsPath = ({
 
 export const fetchScanLogs = (options) => getJson(buildScanLogsPath(options));
 
+export const backfillChannelHistory = (channelId, { maxPages = 2 } = {}) => (
+  postJson('/scan/backfill', { channelId, maxPages })
+);
+
 export const scanSelectedChannels = (channelIds) => (
   postJson('/scan/selected', { channelIds, reason: 'manual' })
 );

@@ -10,6 +10,7 @@ export {
 } from './channelApi';
 
 export {
+  backfillChannelHistory,
   fetchScanLogs,
   scanChannels,
   scanSelectedChannels,
