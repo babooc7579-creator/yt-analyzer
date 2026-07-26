@@ -1,17 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
-  fetchStoredVideosByChannelIdsMock,
+  fetchAllStoredVideosByChannelIdsMock,
   scanChannelsMock,
   scanSelectedChannelsMock,
 } = vi.hoisted(() => ({
-  fetchStoredVideosByChannelIdsMock: vi.fn(),
+  fetchAllStoredVideosByChannelIdsMock: vi.fn(),
   scanChannelsMock: vi.fn(),
   scanSelectedChannelsMock: vi.fn(),
 }));
 
 vi.mock('../services/videoRecordsApi', () => ({
-  fetchStoredVideosByChannelIds: fetchStoredVideosByChannelIdsMock,
+  fetchAllStoredVideosByChannelIds: fetchAllStoredVideosByChannelIdsMock,
 }));
 
 vi.mock('../services/scanApi', () => ({
@@ -21,7 +21,7 @@ vi.mock('../services/scanApi', () => ({
 
 import { CHANNEL_STATUS } from '../constants/status';
 import { scanChannels, scanSelectedChannels } from '../services/scanApi';
-import { fetchStoredVideosByChannelIds } from '../services/videoRecordsApi';
+import { fetchAllStoredVideosByChannelIds } from '../services/videoRecordsApi';
 import {
   SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE,
   STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE,
@@ -65,7 +65,7 @@ describe('useVideoCollectionActions', () => {
     vi.useFakeTimers();
     vi.clearAllMocks();
 
-    fetchStoredVideosByChannelIdsMock.mockResolvedValue({
+    fetchAllStoredVideosByChannelIdsMock.mockResolvedValue({
       success: true,
       videos: [storedVideo],
     });
@@ -92,7 +92,7 @@ describe('useVideoCollectionActions', () => {
 
     expect(result).toEqual({ success: false, videoCount: 0 });
     expect(deps.setError).toHaveBeenCalledWith(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE);
-    expect(fetchStoredVideosByChannelIds).not.toHaveBeenCalled();
+    expect(fetchAllStoredVideosByChannelIds).not.toHaveBeenCalled();
     expect(deps.setLoading).not.toHaveBeenCalled();
     expect(scanChannels).not.toHaveBeenCalled();
     expect(scanSelectedChannels).not.toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe('useVideoCollectionActions', () => {
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
       'Cloud DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.',
     );
-    expect(fetchStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1', 'active-2']);
+    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1', 'active-2']);
     expect(scanChannels).not.toHaveBeenCalled();
     expect(scanSelectedChannels).not.toHaveBeenCalled();
     expect(deps.setVideos).toHaveBeenNthCalledWith(2, [
@@ -134,7 +134,7 @@ describe('useVideoCollectionActions', () => {
   });
 
   it('keeps stored video load failures explicit about DB lookup failure', async () => {
-    fetchStoredVideosByChannelIdsMock.mockResolvedValueOnce({
+    fetchAllStoredVideosByChannelIdsMock.mockResolvedValueOnce({
       success: false,
       error: 'Cloud unavailable',
     });
@@ -169,7 +169,7 @@ describe('useVideoCollectionActions', () => {
       '선택 채널 1개 새 영상 수집 중입니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.',
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
-    expect(fetchStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1', 'paused-1']);
+    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1', 'paused-1']);
     expect(deps.setIsScanning).toHaveBeenLastCalledWith(false);
     expect(deps.setScanningTag).toHaveBeenLastCalledWith(null);
   });
@@ -185,7 +185,7 @@ describe('useVideoCollectionActions', () => {
     expect(deps.setError).toHaveBeenCalledWith(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE);
     expect(scanSelectedChannels).not.toHaveBeenCalled();
     expect(scanChannels).not.toHaveBeenCalled();
-    expect(fetchStoredVideosByChannelIds).not.toHaveBeenCalled();
+    expect(fetchAllStoredVideosByChannelIds).not.toHaveBeenCalled();
   });
 
   it('uses tag scans for tag requests even when channels are selected', async () => {
@@ -203,7 +203,7 @@ describe('useVideoCollectionActions', () => {
       "'history' 태그 채널 새 영상 수집 중입니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.",
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
-    expect(fetchStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1']);
+    expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(['active-1']);
   });
 
   it('keeps scan failures separate from stored-video DB lookup failures', async () => {
@@ -220,7 +220,7 @@ describe('useVideoCollectionActions', () => {
       '새 영상 수집 실패: Quota exceeded YouTube API 호출 결과가 정상 저장되었는지 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(deps.loadChannelsFromCloud).not.toHaveBeenCalled();
-    expect(fetchStoredVideosByChannelIds).not.toHaveBeenCalled();
+    expect(fetchAllStoredVideosByChannelIds).not.toHaveBeenCalled();
     expect(deps.setIsScanning).toHaveBeenLastCalledWith(false);
     expect(deps.setScanningTag).toHaveBeenLastCalledWith(null);
   });

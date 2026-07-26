@@ -1,5 +1,5 @@
 import {
-  fetchStoredVideosByChannelIds,
+  fetchAllStoredVideosByChannelIds,
 } from '../services/videoRecordsApi';
 import {
   scanChannels,
@@ -74,7 +74,7 @@ export function useVideoCollectionActions({
     prepareStoredVideoLoad();
 
     try {
-      const data = await fetchStoredVideosByChannelIds(selectedChannelIds);
+      const data = await fetchAllStoredVideosByChannelIds(selectedChannelIds);
       if (!data.success) throw new Error(data.error || STORED_VIDEO_LOAD_FAILED_MESSAGE);
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);

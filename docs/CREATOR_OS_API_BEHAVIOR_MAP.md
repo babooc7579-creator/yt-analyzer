@@ -61,7 +61,7 @@
 | 채널 삭제 | `removeChannel` | `DELETE /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 삭제 전 확인 필요 |
 | 채널 등급/상태/태그 수정 | `updateChannel` | `PATCH /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`는 스캔 대상 여부에 영향 |
 | 채널 기록 추가 | `createChannelNote` | `POST /channels/{id}/notes?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 낮음 |
-| 저장된 영상 불러오기 | `fetchStoredVideosByChannelIds` | `GET /videos?channelIds=...` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 페이지네이션 없음 |
+| 저장된 영상 불러오기 | `fetchAllStoredVideosByChannelIds` | `GET /videos?channelIds=...&pageSize=...&continuationToken=...` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 프론트가 모든 페이지를 순차 조회한 뒤 전체 목록 제공. 기존 무페이지 호출도 호환 유지 |
 | 선택 채널 새 영상 수집 | `scanSelectedChannels` | `POST /scan/selected` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | quota 사용 및 영상/채널 갱신 |
 | 전체/태그 새 영상 수집 | `scanChannels` | `GET /scan`, `GET /scan?tag=...` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | GET이지만 비용성/변경 작업 |
 | 태그 이름 변경 | `renameTag` | `GET /tags/rename?from=...&to=...` | DB 변경 | 아니오 | 예 | 예 | 아니오 | 가능 | GET이지만 DB 변경. 오해 위험 높음 |
@@ -208,16 +208,18 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - `focusPinnedAt`은 사용자가 직접 고른 제작 후보의 고정 시각이며, 기존 제작 상태를 변경하지 않습니다.
 - 필드가 없는 기존 record는 고정되지 않은 상태로 읽고, 필드를 보내지 않은 저장에서는 기존 Cloud 고정값을 보존합니다.
 
-### 5.4 `/videos` 페이지네이션 없음
+### 5.4 `/videos` 선택형 페이지네이션
 
-`GET /videos?channelIds=...`는 현재 저장된 영상을 한 번에 가져옵니다.
+`GET /videos?channelIds=...`는 기존처럼 저장된 영상을 한 번에 가져옵니다. 프론트 앱은 `pageSize`와 `continuationToken`을 사용해 여러 페이지를 순차 조회한 뒤 전체 목록을 완성합니다.
 
 운영 기준:
 
-- 지금은 MVP로 유지할 수 있습니다.
-- 2026-07-02 기준 운영 데이터는 저장 영상 1,821개, 응답 약 1.16MB로 측정됐습니다.
-- 지금 당장 페이지네이션을 넣으면 대박지수/터또터/검색/정렬의 전체 기준이 흔들릴 수 있으므로 구현하지 않습니다.
-- 저장 영상 5,000개 이상, 응답 5MB 이상, 로딩 3초 이상, 카드/리스트 스크롤 지연이 확인되면 `limit`, `continuationToken`, 서버 정렬/검색 기준을 다시 검토합니다.
+- 2026-07-26 승인된 B안으로 선택형 cursor pagination을 추가했습니다.
+- `pageSize`가 없는 기존 요청과 기존 `{ success, videos }` 응답은 그대로 유지합니다.
+- 프론트는 기본 200개씩 조회하지만 중간 페이지만 화면에 노출하지 않고, 모든 페이지를 받은 뒤 레이더/검색/정렬에 전달합니다.
+- 중간 페이지가 실패하면 일부 데이터로 성공한 것처럼 표시하지 않습니다.
+- 이 작업은 Cloud DB 조회이며 YouTube API를 호출하지 않습니다.
+- 서버 검색/정렬은 아직 도입하지 않았습니다. 전체 기준 점수와 필터 의미는 기존과 같습니다.
 - 자세한 판단 근거는 `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md`를 기준으로 봅니다.
 
 ### 5.5 댓글 Top 10은 직접 YouTube API 호출
@@ -278,7 +280,7 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - `GET /scan`을 `POST /scan` 중심으로 바꿀지 여부
 - `GET /tags/rename`을 `PATCH` 또는 `POST`로 바꿀지 여부
 - `/video-records`의 장기 상태 모델을 명시 필드로 분리할지 여부
-- `/videos` 페이지네이션을 어떤 방식으로 구현할지 여부
+- `/videos` 서버 검색/정렬 또는 화면 가상화를 추가할지 여부
 - `scan_logs` 또는 `api_quota_logs` endpoint 추가 여부
 - `local_assets` API 추가 여부 또는 `discovery_links` 별도 container 분리 여부
 - 댓글 조회를 백엔드로 옮길지 여부
