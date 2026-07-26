@@ -197,6 +197,28 @@ export default function RecentScanStatusWorkspace({
                     <p>새 영상 {row.newVideosFound}개 · 통계 갱신 {row.statsRefreshed}개</p>
                   )}
                   {row.error ? <p className="mt-1 font-bold text-rose-300">{row.error}</p> : null}
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => onOpenChannelOperations?.(row.channelId)}
+                      className="inline-flex min-h-8 items-center justify-center gap-1 border border-slate-600 bg-slate-950 px-3 py-1 text-[11px] font-black text-slate-200 hover:border-cyan-400"
+                      title="이 채널 하나를 선택한 상태로 채널 관리 단계에 이동합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+                    >
+                      <ListChecks className="h-3.5 w-3.5" />
+                      이 채널 관리
+                    </button>
+                    {row.status !== 'success' ? (
+                      <button
+                        type="button"
+                        onClick={() => onOpenSelectedScan?.(row.channelId)}
+                        className="inline-flex min-h-8 items-center justify-center gap-1 border border-amber-400/40 bg-amber-500/10 px-3 py-1 text-[11px] font-black text-amber-100 hover:border-amber-300"
+                        title="이 채널 하나를 선택한 상태로 새 영상 수집 단계에 이동합니다. 실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다."
+                      >
+                        <RefreshCw className="h-3.5 w-3.5" />
+                        수집 단계 열기
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
               </article>
             ))}
