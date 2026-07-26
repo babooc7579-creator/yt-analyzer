@@ -12,6 +12,7 @@ import { fetchScanLogs } from '../services/scanApi';
 import { formatKoreanDateTime } from '../utils/dates';
 import {
   filterRecentScanStatusRows,
+  getScanHistoryRuns,
   getRecentScanStatusRows,
   getRecentScanStatusSummary,
   RECENT_SCAN_STATUS_FILTERS,
@@ -40,8 +41,13 @@ const HISTORY_TRIGGER_LABELS = {
   unknown: '수집 방식 미상',
 };
 
+const getHistoryStatusLabel = (status) => (
+  status === 'failed' ? '실패' : status === 'partial' ? '부분 성공' : '성공'
+);
+
 export default function RecentScanStatusWorkspace({
   channels = [],
+  channelsLoading = false,
   loadScanLogs = fetchScanLogs,
   onOpenChannelOperations,
   onOpenSelectedScan,
@@ -52,6 +58,7 @@ export default function RecentScanStatusWorkspace({
   const [scanLogs, setScanLogs] = useState([]);
   const [query, setQuery] = useState('');
   const rows = useMemo(() => getRecentScanStatusRows(channels), [channels]);
+  const historyRuns = useMemo(() => getScanHistoryRuns(scanLogs), [scanLogs]);
   const summary = useMemo(() => getRecentScanStatusSummary(rows), [rows]);
   const visibleRows = useMemo(() => filterRecentScanStatusRows({
     filter,
@@ -128,7 +135,9 @@ export default function RecentScanStatusWorkspace({
               title={`${item.label} 채널만 화면에 표시합니다. 데이터는 변경하지 않습니다.`}
             >
               <span className="block text-[11px] font-bold text-slate-400">{item.label}</span>
-              <strong className="mt-1 block text-2xl font-black text-white">{summary[item.key]}</strong>
+              <strong className="mt-1 block text-2xl font-black text-white">
+                {channelsLoading && rows.length === 0 ? '…' : summary[item.key]}
+              </strong>
             </button>
           ))}
         </div>
@@ -148,11 +157,19 @@ export default function RecentScanStatusWorkspace({
             />
           </label>
           <p className="text-xs font-bold text-slate-400" role="status" aria-live="polite">
-            {visibleRows.length}개 채널 표시
+            {channelsLoading && rows.length === 0
+              ? 'Cloud 채널 상태 조회 중'
+              : `${visibleRows.length}개 채널 표시`}
           </p>
         </div>
 
-        {visibleRows.length > 0 ? (
+        {channelsLoading && rows.length === 0 ? (
+          <div className="px-5 py-12 text-center" role="status" aria-live="polite">
+            <RefreshCw className="mx-auto h-5 w-5 animate-spin text-cyan-300" />
+            <p className="mt-3 text-sm font-black text-white">Cloud 채널 상태를 불러오는 중입니다</p>
+            <p className="mt-2 text-xs text-slate-400">조회가 끝나기 전에는 채널이 없다고 판단하지 않습니다.</p>
+          </div>
+        ) : visibleRows.length > 0 ? (
           <div className="divide-y divide-slate-800">
             {visibleRows.map((row) => (
               <article key={row.channelId || row.channelTitle} className="grid gap-3 p-4 lg:grid-cols-[minmax(220px,1.2fr)_150px_170px_minmax(220px,1fr)] lg:items-center">
@@ -186,17 +203,23 @@ export default function RecentScanStatusWorkspace({
           </div>
         ) : (
           <div className="px-5 py-12 text-center">
-            <p className="text-sm font-black text-white">조건에 맞는 채널이 없습니다</p>
-            <p className="mt-2 text-xs text-slate-400">검색어를 지우거나 전체 상태를 선택해 주세요.</p>
+            <p className="text-sm font-black text-white">
+              {rows.length === 0 ? '저장된 채널이 없습니다' : '조건에 맞는 채널이 없습니다'}
+            </p>
+            <p className="mt-2 text-xs text-slate-400">
+              {rows.length === 0
+                ? '채널 운영실에서 먼저 채널을 등록해 주세요.'
+                : '검색어를 지우거나 전체 상태를 선택해 주세요.'}
+            </p>
             <button
               type="button"
-              onClick={() => {
+              onClick={rows.length === 0 ? onOpenChannelOperations : () => {
                 setFilter('all');
                 setQuery('');
               }}
               className="mt-4 border border-slate-600 bg-slate-950 px-4 py-2 text-xs font-black text-slate-200 hover:border-cyan-400"
             >
-              검색·필터 초기화
+              {rows.length === 0 ? '채널 운영실 열기' : '검색·필터 초기화'}
             </button>
           </div>
         )}
@@ -206,7 +229,7 @@ export default function RecentScanStatusWorkspace({
         <div className="flex flex-col gap-3 border-b border-slate-800 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 id="scan-history-title" className="text-sm font-black text-white">과거 수집 이력</h3>
-            <p className="mt-1 text-xs text-slate-400">최근 Cloud 기록 최대 100건입니다. 이 조회는 YouTube API를 사용하지 않습니다.</p>
+            <p className="mt-1 text-xs text-slate-400">최근 Cloud 채널 기록 최대 100건을 수집 실행 단위로 묶습니다. 이 조회는 YouTube API를 사용하지 않습니다.</p>
           </div>
           <button
             type="button"
@@ -241,28 +264,49 @@ export default function RecentScanStatusWorkspace({
           </div>
         ) : null}
 
-        {!historyLoading && !historyError && scanLogs.length > 0 ? (
+        {!historyLoading && !historyError && historyRuns.length > 0 ? (
           <div className="divide-y divide-slate-800">
-            {scanLogs.map((log) => (
-              <article
-                key={log.id}
-                className="grid gap-3 p-4 lg:grid-cols-[minmax(220px,1.2fr)_150px_190px_minmax(240px,1fr)] lg:items-center"
-              >
-                <div>
-                  <h4 className="text-sm font-black text-white">{log.channelTitle || log.channelId}</h4>
-                  <p className="mt-1 text-[11px] text-slate-500">
-                    {HISTORY_TRIGGER_LABELS[log.trigger] || HISTORY_TRIGGER_LABELS.unknown}
-                  </p>
+            {historyRuns.map((run) => (
+              <details key={run.id} className="group p-4" open={historyRuns.length === 1}>
+                <summary className="grid cursor-pointer list-none gap-3 lg:grid-cols-[minmax(220px,1.2fr)_150px_190px_minmax(240px,1fr)] lg:items-center">
+                  <div>
+                    <h4 className="text-sm font-black text-white">
+                      {HISTORY_TRIGGER_LABELS[run.trigger] || HISTORY_TRIGGER_LABELS.unknown}
+                    </h4>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      {run.channelCount}개 채널 · 눌러서 채널별 결과 보기
+                    </p>
+                  </div>
+                  <span className={`inline-flex w-fit items-center border px-3 py-1.5 text-xs font-black ${STATUS_STYLES[run.status] || STATUS_STYLES.never}`}>
+                    {getHistoryStatusLabel(run.status)}
+                  </span>
+                  <p className="text-xs font-bold text-slate-300">{formatKoreanDateTime(run.scannedAt, '시간 기록 없음')}</p>
+                  <div className="text-xs leading-5 text-slate-300">
+                    <p>성공 {run.success} · 부분 {run.partial} · 실패 {run.failed}</p>
+                    <p className="text-slate-500">새 영상 {run.newVideosFound}개 · 통계 갱신 {run.statsRefreshed}개</p>
+                  </div>
+                </summary>
+                <div className="mt-4 divide-y divide-slate-800 border border-slate-800 bg-slate-950/50">
+                  {run.logs.map((log) => (
+                    <article
+                      key={log.id || `${log.channelId}-${log.scannedAt}`}
+                      className="grid gap-2 p-3 sm:grid-cols-[minmax(180px,1fr)_110px_minmax(220px,1.4fr)] sm:items-center"
+                    >
+                      <div>
+                        <p className="text-xs font-black text-slate-100">{log.channelTitle || log.channelId}</p>
+                        <p className="mt-1 text-[11px] text-slate-500">{formatKoreanDateTime(log.scannedAt, '시간 기록 없음')}</p>
+                      </div>
+                      <span className={`inline-flex w-fit items-center border px-2 py-1 text-[11px] font-black ${STATUS_STYLES[log.status] || STATUS_STYLES.never}`}>
+                        {getHistoryStatusLabel(log.status)}
+                      </span>
+                      <div className="text-xs leading-5 text-slate-300">
+                        <p>새 영상 {Number(log.newVideosFound) || 0}개 · 통계 갱신 {Number(log.statsRefreshed) || 0}개</p>
+                        {log.error ? <p className="font-bold text-rose-300">{log.error}</p> : null}
+                      </div>
+                    </article>
+                  ))}
                 </div>
-                <span className={`inline-flex w-fit items-center border px-3 py-1.5 text-xs font-black ${STATUS_STYLES[log.status] || STATUS_STYLES.never}`}>
-                  {log.status === 'failed' ? '실패' : log.status === 'partial' ? '부분 성공' : '성공'}
-                </span>
-                <p className="text-xs font-bold text-slate-300">{formatKoreanDateTime(log.scannedAt, '시간 기록 없음')}</p>
-                <div className="text-xs leading-5 text-slate-300">
-                  <p>새 영상 {Number(log.newVideosFound) || 0}개 · 통계 갱신 {Number(log.statsRefreshed) || 0}개</p>
-                  {log.error ? <p className="mt-1 font-bold text-rose-300">{log.error}</p> : null}
-                </div>
-              </article>
+              </details>
             ))}
           </div>
         ) : null}
@@ -271,7 +315,7 @@ export default function RecentScanStatusWorkspace({
       <div className="border border-amber-400/20 bg-amber-500/10 p-4">
         <p className="text-xs font-black text-amber-200">현재 표시 범위</p>
         <p className="mt-1 text-xs leading-5 text-amber-100/80">
-          채널 요약은 마지막 결과 한 건을 유지하고, 과거 이력은 최근 100건까지 별도 표시합니다. API 쿼터 추정은 아직 제공하지 않습니다.
+          채널 요약은 마지막 결과 한 건을 유지하고, 과거 이력은 최근 채널 기록 100건을 같은 수집 실행끼리 묶어 표시합니다. API 쿼터 추정은 아직 제공하지 않습니다.
         </p>
       </div>
     </section>

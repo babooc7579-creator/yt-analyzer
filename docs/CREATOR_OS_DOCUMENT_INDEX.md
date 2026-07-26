@@ -234,8 +234,8 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 - `production_candidates` 별도 저장소를 만들지
 - `discovery_links`를 별도 container로 분리할지 또는 API를 확장할지
 - `local_assets` API를 만들지
-- `scan_logs`, `api_quota_logs` container를 만들지
-- `/videos` pagination을 어떤 방식으로 구현할지
+- 현재 `videos` container의 `docType: scan_log` 보관 정책과 전체 실행 집계를 확장할지, `api_quota_logs`를 도입할지
+- 구현된 `/videos` continuation token 연속 조회의 성능 기준과 화면 표시 범위를 언제 확장할지
 - Azure Static Web Apps 배포 workflow 경고를 token 방식 단순화로 정리할지
 - Static Web Apps 접근 역할, 로그인 공급자, API 연결 방식을 바꿀지
 - 테스트 도구를 추가하고 `package.json` / CI test step을 바꿀지
@@ -262,7 +262,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 ## 7. 다음 추천 순서
 
 1. 발견함 1차 MVP를 기준으로 문서와 화면 문구가 현재 구현 상태를 정확히 말하는지 점검합니다.
-2. `scan_logs`와 `api_quota_logs` 실제 구현 여부는 별도 선택지 보고 후 결정합니다.
+2. `scan_log` 1차 저장·조회는 구현된 현재 기준으로 유지하고, 보관 정책·전체 실행 집계와 `api_quota_logs`는 별도 선택지 보고 후 결정합니다.
 3. local assets, 별도 제작 프로젝트 모델, 제작 칸반 확장은 1차 MVP 안정화 이후 별도 판단합니다.
 
 페이지네이션 감사는 2026-07-02에 완료됐고, 2026-07-26 승인된 B안에 따라 기존 전체 조회 호환을 유지한 선택형 페이지 조회가 구현되었습니다.
