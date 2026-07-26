@@ -103,7 +103,11 @@ describe('ttoTtoExplorer utils', () => {
     expect(getTtoTtoExplorerEmptyState({
       loadedVideoCount: 0,
       selectedChannelCount: 2,
-    })).toMatchObject({ kind: 'not-loaded', actionLabel: '저장 영상 불러오기' });
+    })).toMatchObject({
+      kind: 'not-loaded',
+      actionLabel: '저장 영상 불러오기',
+      actionAriaLabel: expect.stringContaining('Cloud DB 조회이며 YouTube API 호출 없음'),
+    });
 
     expect(getTtoTtoExplorerEmptyState({
       loadedVideoCount: 3,
@@ -114,6 +118,10 @@ describe('ttoTtoExplorer utils', () => {
       hasActiveFilters: true,
       loadedVideoCount: 3,
       openCandidateCount: 2,
-    })).toMatchObject({ kind: 'filtered', actionLabel: '필터 초기화' });
+    })).toMatchObject({
+      kind: 'filtered',
+      actionLabel: '필터 초기화',
+      actionTitle: expect.stringContaining('Cloud 데이터나 처리 기록은 바꾸지 않으며'),
+    });
   });
 });

@@ -19,6 +19,8 @@ export default function TtoTtoExplorerEmptyState({
           type="button"
           onClick={onAction}
           disabled={loading}
+          title={emptyState.actionTitle}
+          aria-label={emptyState.actionAriaLabel || emptyState.actionLabel}
           className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950 hover:bg-slate-200 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
         >
           {loading ? '저장 영상 불러오는 중...' : emptyState.actionLabel}
