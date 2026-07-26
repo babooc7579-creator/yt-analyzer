@@ -40,6 +40,7 @@ describe('TagVaultWorkspace', () => {
 
     expect(html).toContain('저장 영상 불러오는 중...');
     expect(html).toContain('disabled');
+    expect(html).toContain('Cloud DB 조회이며 YouTube API 호출 없음');
   });
 
   it('offers safe next actions when a successful Cloud lookup returns zero videos', () => {
