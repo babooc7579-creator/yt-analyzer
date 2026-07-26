@@ -1,6 +1,6 @@
 import { Check, ChevronRight } from 'lucide-react';
 
-import { getHomeRadarJourneyStages } from '../utils/homeRadarJourney';
+import { getHomeRadarJourneyProgress } from '../utils/homeRadarJourney';
 
 const STATUS_STYLES = {
   complete: 'border-emerald-400/30 bg-emerald-500/10 text-emerald-100',
@@ -17,10 +17,23 @@ const STATUS_LABELS = {
 };
 
 export default function HomeRadarJourney(props) {
-  const stages = getHomeRadarJourneyStages(props);
+  const {
+    activeStageTitle,
+    completedCount,
+    stageCount,
+    stages,
+  } = getHomeRadarJourneyProgress(props);
 
   return (
     <div className="mt-4" aria-label="오늘의 레이더 진행 단계">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
+        <p className="text-[11px] font-extrabold text-slate-400">
+          오늘 흐름 <span className="text-white">{completedCount}/{stageCount} 완료</span>
+        </p>
+        <p className="text-[11px] font-bold text-amber-200">
+          지금 할 일 · {activeStageTitle}
+        </p>
+      </div>
       <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
         {stages.map((stage, index) => (
           <div key={stage.key} className="relative flex min-w-0 items-stretch">

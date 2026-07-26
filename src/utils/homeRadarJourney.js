@@ -29,6 +29,7 @@ export const getHomeRadarJourneyStages = ({
   loadedVideoCount = 0,
   openRadarCandidateCount = 0,
   productionCandidateCount = 0,
+  productionFocusCount = 0,
   selectedChannelCount = 0,
   storedVideoLoadResult,
 } = {}) => {
@@ -36,6 +37,7 @@ export const getHomeRadarJourneyStages = ({
   const loadedVideos = toCount(loadedVideoCount);
   const radarCandidates = toCount(openRadarCandidateCount);
   const productionCandidates = toCount(productionCandidateCount);
+  const productionFocus = toCount(productionFocusCount);
   const emptyLoad = hasEmptyStoredVideoLoad(storedVideoLoadResult);
 
   const channelStatus = selectedChannels > 0 ? 'complete' : 'current';
@@ -49,11 +51,13 @@ export const getHomeRadarJourneyStages = ({
     : radarCandidates > 0
       ? 'current'
       : 'complete';
-  const productionStatus = radarCandidates > 0 || loadedVideos === 0
-    ? 'upcoming'
+  const productionStatus = productionFocus > 0
+    ? 'complete'
     : productionCandidates > 0
-      ? 'current'
-      : 'ready';
+      ? radarCandidates > 0 ? 'ready' : 'current'
+      : radarCandidates > 0 || loadedVideos === 0
+        ? 'upcoming'
+        : 'ready';
 
   return [
     {
@@ -89,9 +93,35 @@ export const getHomeRadarJourneyStages = ({
       number: 4,
       href: '#today-radar-finish',
       title: '제작 후보 결정',
-      value: productionCandidates > 0 ? `${productionCandidates}개 후보` : '다음 소재 결정',
-      hint: '오늘 집중과 업로드 일정으로 이어갑니다.',
+      value: productionFocus > 0
+        ? `${productionFocus}개 오늘 집중`
+        : productionCandidates > 0
+          ? `${productionCandidates}개 후보`
+          : '다음 소재 결정',
+      hint: productionFocus > 0
+        ? '오늘 집중 후보를 제작과 업로드 일정으로 이어갑니다.'
+        : '후보함에서 오늘 집중과 업로드 일정을 정합니다.',
       status: productionStatus,
     },
   ];
+};
+
+export const getHomeRadarJourneyProgress = (props = {}) => {
+  const stages = getHomeRadarJourneyStages(props);
+  const firstIncompleteStageIndex = stages.findIndex(stage => stage.status !== 'complete');
+  const completedCount = firstIncompleteStageIndex === -1
+    ? stages.length
+    : firstIncompleteStageIndex;
+  const allStagesComplete = completedCount === stages.length;
+  const activeStage = stages.find(stage => stage.status === 'current')
+    || stages.find(stage => stage.status === 'ready')
+    || stages.find(stage => stage.status === 'upcoming')
+    || stages[stages.length - 1];
+
+  return {
+    activeStageTitle: allStagesComplete ? '오늘 흐름 완료' : activeStage?.title || '',
+    completedCount,
+    stageCount: stages.length,
+    stages,
+  };
 };

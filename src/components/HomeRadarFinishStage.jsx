@@ -33,7 +33,7 @@ export default function HomeRadarFinishStage({
               title="제작 후보함으로 이동합니다. 이동만으로 후보 상태를 바꾸거나 Cloud 저장 또는 YouTube API 호출을 실행하지 않습니다."
               aria-label="제작 후보함으로 이동, 후보 상태 변경 및 Cloud 저장 및 YouTube API 호출 없음"
             >
-              <Rocket className="h-4 w-4" /> 제작 후보함에서 이어가기
+              <Rocket className="h-4 w-4" /> {focusCount > 0 ? '오늘 집중 계속하기' : '오늘 집중 정하기'}
             </button>
             {typeof onOpenUploadCalendar === 'function' ? (
               <button

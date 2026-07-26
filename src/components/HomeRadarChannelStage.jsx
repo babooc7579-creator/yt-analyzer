@@ -66,6 +66,9 @@ export default function HomeRadarChannelStage({
           <p className="mt-1 text-xs leading-5 text-slate-400">
             분야와 채널을 고른 뒤 같은 화면에서 저장 영상을 펼칩니다. 채널 선택만으로 조회나 YouTube API 호출은 실행되지 않습니다.
           </p>
+          <p className="mt-1 text-[11px] font-bold text-slate-500">
+            오늘 선택은 화면을 이동해도 유지되지만 브라우저를 새로고침하면 초기화됩니다. 영상 판단과 제작 후보 기록은 Cloud에 보존됩니다.
+          </p>
         </div>
         <div className="flex shrink-0 items-center gap-2 border border-cyan-300/20 bg-slate-950/60 px-3 py-2">
           <Users className="h-4 w-4 text-cyan-300" />

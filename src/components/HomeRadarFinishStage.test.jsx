@@ -25,7 +25,7 @@ describe('HomeRadarFinishStage', () => {
 
     expect(html).toContain('제작 후보 2개가 준비됐습니다');
     expect(html).toContain('현재 오늘 집중 1개');
-    expect(html).toContain('제작 후보함에서 이어가기');
+    expect(html).toContain('오늘 집중 계속하기');
     expect(html).toContain('업로드 일정 정하기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
     expect(html).toContain('제작 후보함으로 이동, 후보 상태 변경 및 Cloud 저장 및 YouTube API 호출 없음');
@@ -42,6 +42,7 @@ describe('HomeRadarFinishStage', () => {
     );
 
     expect(html).toContain('업로드 일정 정하기');
+    expect(html).toContain('오늘 집중 정하기');
     expect(html).toContain('제작 후보의 목표 업로드 날짜를 정하거나 확인합니다');
     expect(html).not.toContain('현재 오늘 집중');
   });

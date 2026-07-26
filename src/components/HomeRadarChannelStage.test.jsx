@@ -32,6 +32,8 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('수집일 전체');
     expect(html).toContain('랭킹 연구소');
     expect(html).toContain('오늘 선택');
+    expect(html).toContain('브라우저를 새로고침하면 초기화됩니다');
+    expect(html).toContain('영상 판단과 제작 후보 기록은 Cloud에 보존됩니다');
     expect(html).toContain('저장 영상 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
     expect(html).toContain('전체 채널 선택 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음');
