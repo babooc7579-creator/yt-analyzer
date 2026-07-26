@@ -48,7 +48,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 | 데이터 | 현재 기준 데이터 | 목표 기준 데이터 | 현재 저장 위치 | 목표 저장 위치 | localStorage 역할 | Cloud DB 역할 | 미구현 여부 | 충돌 위험 |
 |---|---|---|---|---|---|---|---|---|
 | `channels` | Cloud DB | Cloud DB | Cosmos `channels` container | Cosmos `channels` container | 원칙상 기준 아님 | 채널 목록, 태그, 언어, 등급, 상태, 마지막 수집 요약 저장 | 구현됨 | 낮음. 기존 데이터에 필드가 없어도 기본값 보정 필요 |
-| `videos` | Cloud DB | Cloud DB | Cosmos `videos` container | Cosmos `videos` container | 원칙상 기준 아님 | YouTube에서 수집한 영상 목록과 통계 저장 | 구현됨 | 중간. 페이지네이션 없이 전체 조회 구조 |
+| `videos` | Cloud DB | Cloud DB | Cosmos `videos` container | Cosmos `videos` container | 원칙상 기준 아님 | YouTube에서 수집한 영상 목록과 통계 저장. 선택형 페이지 조회 지원 | 구현됨 | 낮음. 프론트가 모든 페이지를 완료한 뒤 전체 목록으로 사용 |
 | `videoUserRecords` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: video_user_record` | 장기적으로 Cloud DB 기준. 현재 단계는 대표 `status` 유지 + 호환용 `statusIds`, 수동 집중 표시 `focusPinnedAt` 보존 | Cloud 성공 캐시/장애 시 임시 fallback | 영상별 사용자 판단 상태, 노트, 제작 관련 필드, 오늘 집중 고정 시각 저장 | 부분 구현 | 중간. Cloud 저장 실패 시 화면 임시 기록과 Cloud 기준이 달라질 수 있음 |
 | `scrapbook` | Cloud DB + localStorage fallback | Cloud DB | Cosmos `videos` container 안의 `docType: scrapbook` | Cloud DB. 별도 container 여부는 나중에 판단 | Cloud 성공 캐시/장애 시 임시 fallback | 별표/스크랩 저장 영상 목록 저장 | 부분 구현 | 중간. 별도 컨테이너가 아니라 `videos`와 섞여 있음 |
 | `production candidates` | `videoUserRecords`에 얹힌 상태 | 미정 | 별도 저장소 없음. 프론트는 `videoUserRecords` 상태로 표현 | v1에서는 `videoUserRecords` 유지 가능. 장기적으로 별도 모델 검토 | 기준 아님 | 현재는 `/video-records`가 사실상 후보 상태를 저장 | 별도 저장소 미구현 | 높음. 영상 상태와 제작 프로젝트 상태가 섞일 수 있음 |
@@ -118,10 +118,11 @@ Creator OS에서는 다음 원칙을 우선합니다.
 충돌 위험:
 
 - 중간.
-- 현재 `GET /videos?channelIds=...`는 페이지네이션 없이 전체 조회합니다.
+- 현재 `GET /videos?channelIds=...`의 기존 전체 조회 계약은 호환을 위해 유지합니다.
 - 2026-07-02 기준 운영 데이터는 저장 영상 1,821개, 응답 약 1.16MB로 측정됐습니다.
-- 현재는 페이지네이션을 바로 도입하지 않고 전체 조회를 유지합니다.
-- 영상 수가 커지면 성능과 비용 문제가 생길 수 있으므로 `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md`의 재검토 기준을 따릅니다.
+- 2026-07-26부터 프론트는 선택형 페이지 조회를 사용해 기본 200개씩 모든 페이지를 순차 조회합니다.
+- 중간 페이지 결과는 기준 데이터로 노출하지 않으며, 전체 조회가 끝난 결과만 레이더/검색/정렬에 사용합니다.
+- 페이지 조회도 Cloud DB 읽기이며 YouTube API 수집과 분리됩니다.
 
 ### 4.3 videoUserRecords
 
