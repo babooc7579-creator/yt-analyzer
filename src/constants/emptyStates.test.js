@@ -12,6 +12,7 @@ describe('emptyStates constants', () => {
   it('keeps reference vault empty guidance clear about scan versus DB lookup', () => {
     expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('온라인 저장소(Azure DB)');
     expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('필요할 때만');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].description).toContain('온라인 저장소(Azure DB)');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].description).toContain('영상 수집은 실행되지 않습니다');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].title).toContain('수집 영상 목록 불러오기');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');

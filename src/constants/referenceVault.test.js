@@ -37,7 +37,7 @@ describe('referenceVault constants', () => {
     expect(cardsByKey['load-saved-videos'].description).toContain('새 YouTube API 호출은 없습니다');
     expect(cardsByKey['save-reference'].description).toContain('스크랩북');
     expect(cardsByKey['promote-production'].title).toBe('3. 제작 후보로 표시');
-    expect(cardsByKey['promote-production'].description).toContain('Cloud 판단 기록');
+    expect(cardsByKey['promote-production'].description).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(cardsByKey['promote-production'].description).toContain('제작 칸반');
     expect(cardsByKey['promote-production'].description).toContain('새 YouTube API 호출은 없습니다');
     expect(cardsByKey['promote-production'].description).not.toContain('제작 후보로 보내');
