@@ -18,6 +18,9 @@ export default function WorkspaceTabs({ activeTab, savedVideoCount, onSelectTab 
         type="button"
       >
         <Search className="w-4 h-4" /> {dashboardTab.label}
+        {activeTab === 'dashboard' ? (
+          <span className="bg-indigo-100 px-2 py-0.5 text-[10px] font-black text-indigo-700">현재 화면</span>
+        ) : null}
       </button>
       <button
         onClick={() => onSelectTab('scrapbook')}
@@ -27,7 +30,11 @@ export default function WorkspaceTabs({ activeTab, savedVideoCount, onSelectTab 
         aria-pressed={activeTab === 'scrapbook'}
         type="button"
       >
-        <Bookmark className="w-4 h-4" /> {scrapbookTab.label} <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">{savedVideoCount}</span>
+        <Bookmark className="w-4 h-4" /> {scrapbookTab.label}
+        <span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">{savedVideoCount}</span>
+        {activeTab === 'scrapbook' ? (
+          <span className="bg-yellow-100 px-2 py-0.5 text-[10px] font-black text-yellow-800">현재 화면</span>
+        ) : null}
       </button>
     </div>
   );
