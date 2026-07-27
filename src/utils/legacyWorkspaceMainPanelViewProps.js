@@ -26,6 +26,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
   lengthFilter,
   markRadarVideoStatus,
   openCreatorView,
+  operationStage,
   onConfirmUnsavedNavigation,
   promoteVideoToProduction,
   promptCopyError,
@@ -84,6 +85,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
 
   return {
     activeTab,
+    operationStage,
     dashboardTabProps: {
       activeSelectedChannelCount,
       checkedVideos: checkedVideoIds,

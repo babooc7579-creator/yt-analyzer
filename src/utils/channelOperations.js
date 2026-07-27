@@ -22,8 +22,8 @@ export const CHANNEL_OPERATION_STAGES = [
   {
     id: 'scan',
     step: '3',
-    label: '새 영상 수집',
-    description: '선택한 운영중 채널만 YouTube API로 확인합니다.',
+    label: '영상 확인·수집',
+    description: '저장 영상을 먼저 보고, 필요할 때만 YouTube API로 새 영상을 확인합니다.',
     targetId: 'channel-operations-scan',
   },
 ];

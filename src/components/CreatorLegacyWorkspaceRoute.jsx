@@ -44,6 +44,7 @@ export default function CreatorLegacyWorkspaceRoute(props) {
   }, [isChannelOperationsView, props.creatorViewIntent?.operationStage, requestedOperationStage]);
 
   const legacyWorkspaceViewProps = {
+    activeOperationStage: isChannelOperationsView ? activeOperationStage : null,
     asideProps: getLegacyAsideProps(props),
     channelPanelProps: getLegacyChannelPanelProps(props),
     mainPanelProps: getLegacyMainPanelProps(props),

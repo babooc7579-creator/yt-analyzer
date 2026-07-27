@@ -10,6 +10,7 @@ export default function ChannelTagTabRow({
   onScanTag,
   onSelectCategory,
   scannableCount,
+  showScanAction = true,
 }) {
   const {
     canScanTag,
@@ -40,16 +41,18 @@ export default function ChannelTagTabRow({
           {scannableCount}/{count}
         </span>
       </button>
-      <button
-        type="button"
-        onClick={() => onScanTag(category)}
-        disabled={isScanning || !canScanTag}
-        title={scanButtonTitle}
-        aria-label={scanButtonAriaLabel}
-        className="p-2 text-slate-400 hover:text-emerald-600 disabled:text-slate-200 disabled:cursor-not-allowed transition-colors shrink-0"
-      >
-        {isScanningTag ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <RefreshCw className="w-4 h-4" />}
-      </button>
+      {showScanAction ? (
+        <button
+          type="button"
+          onClick={() => onScanTag(category)}
+          disabled={isScanning || !canScanTag}
+          title={scanButtonTitle}
+          aria-label={scanButtonAriaLabel}
+          className="p-2 text-slate-400 hover:text-emerald-600 disabled:text-slate-200 disabled:cursor-not-allowed transition-colors shrink-0"
+        >
+          {isScanningTag ? <Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> : <RefreshCw className="w-4 h-4" />}
+        </button>
+      ) : null}
     </div>
   );
 }
