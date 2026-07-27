@@ -79,12 +79,46 @@ describe('recent scan status utils', () => {
     }]);
 
     expect(row).toMatchObject({
+      backfillActionLabel: '이어서 과거 영상 수집',
+      backfillPhase: 'in_progress',
+      backfillStatusLabel: '과거 목록 확인 25%',
       savedVideosTotal: 250,
       channelTotalVideos: 400,
       estimatedMissingVideos: 150,
       coverageRate: 62.5,
       inspectionProgressRate: 25,
       videosInspectedTotal: 100,
+    });
+  });
+
+  it('marks a completed public upload inspection separately from Cloud coverage', () => {
+    const [row] = getRecentScanStatusRows([{
+      id: 'completed',
+      backfillState: {
+        completed: true,
+        inspectionProgressRate: 100,
+        videosInspectedTotal: 1017,
+        lastRun: {
+          coverageRate: 82,
+          estimatedMissingVideos: 183,
+          savedVideosTotal: 834,
+          channelTotalVideos: 1017,
+        },
+      },
+      lastScanSummary: {
+        status: 'partial',
+        scannedAt: '2026-07-27T10:00:00.000Z',
+      },
+    }]);
+
+    expect(row).toMatchObject({
+      backfillActionLabel: '',
+      backfillCompleted: true,
+      backfillPhase: 'completed',
+      backfillStatusLabel: '공개 업로드 목록 끝까지 확인 완료',
+      coverageRate: 82,
+      inspectionProgressRate: 100,
+      status: 'success',
     });
   });
 

@@ -1,6 +1,47 @@
 export const BACKFILL_MAX_PAGES = 10;
 export const BACKFILL_MAX_ITEMS = BACKFILL_MAX_PAGES * 50;
 
+export const getBackfillViewState = ({
+  backfillCompleted = false,
+  inspectionProgressRate = null,
+  videosInspectedTotal = 0,
+} = {}) => {
+  const inspected = Math.max(0, Number(videosInspectedTotal) || 0);
+  const numericProgress = Number(inspectionProgressRate);
+  const hasProgress = inspectionProgressRate !== null
+    && inspectionProgressRate !== ''
+    && Number.isFinite(numericProgress);
+  const progress = hasProgress ? Math.min(Math.max(numericProgress, 0), 100) : null;
+
+  if (backfillCompleted) {
+    return {
+      actionLabel: '',
+      label: '공개 업로드 목록 끝까지 확인 완료',
+      nextAction: '앞으로는 새 영상 수집 단계에서 최근에 올라온 영상만 추가로 확인하면 됩니다.',
+      phase: 'completed',
+      progress: 100,
+    };
+  }
+
+  if (inspected > 0 || (progress !== null && progress > 0)) {
+    return {
+      actionLabel: '이어서 과거 영상 수집',
+      label: `과거 목록 확인 ${progress ?? '계산 중'}%`,
+      nextAction: '다시 실행하면 저장된 위치부터 이어서 확인합니다. 이미 확인한 처음부터 반복하지 않습니다.',
+      phase: 'in_progress',
+      progress,
+    };
+  }
+
+  return {
+    actionLabel: '전체 과거 영상 수집 시작',
+    label: '과거 업로드 목록 확인 전',
+    nextAction: `필요할 때 수동으로 실행하면 한 번에 최대 ${BACKFILL_MAX_ITEMS}개를 확인합니다.`,
+    phase: 'not_started',
+    progress: null,
+  };
+};
+
 export const getBackfillConfirmMessage = (channelTitle) => [
   `'${channelTitle || '선택 채널'}'의 공개 업로드 목록을 끝까지 이어서 수집할까요?`,
   '',

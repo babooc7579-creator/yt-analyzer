@@ -1,5 +1,6 @@
 import { formatRelativeTime } from './channelScanDisplay';
 import { formatKoreanDateTime } from './dates';
+import { getBackfillViewState } from './historicalBackfill';
 
 export const RECENT_SCAN_STATUS_FILTERS = [
   { id: 'all', label: '전체' },
@@ -69,11 +70,23 @@ export const getRecentScanStatusRows = (channels = []) => (
         && Number.isFinite(Number(inspectionProgressValue))
         ? Number(inspectionProgressValue)
         : null;
+      const videosInspectedTotal = Number(
+        backfillState.videosInspectedTotal ?? coverage.videosInspectedTotal,
+      ) || 0;
+      const backfillViewState = getBackfillViewState({
+        backfillCompleted: Boolean(backfillState.completed),
+        inspectionProgressRate,
+        videosInspectedTotal,
+      });
 
       return {
         channelId: channel.id || channel.channelId || '',
         channelTitle: channel.title || channel.channelTitle || '이름 없는 채널',
         backfillCompleted: Boolean(backfillState.completed),
+        backfillActionLabel: backfillViewState.actionLabel,
+        backfillNextAction: backfillViewState.nextAction,
+        backfillPhase: backfillViewState.phase,
+        backfillStatusLabel: backfillViewState.label,
         backfillUpdatedAt: backfillState.updatedAt || '',
         channelTotalVideos: Number(coverage.channelTotalVideos) || 0,
         coverageRate,
@@ -92,9 +105,7 @@ export const getRecentScanStatusRows = (channels = []) => (
         statusLabel: STATUS_LABELS[status],
         tags: toArray(channel.tags).filter(Boolean),
         timestamp: Number.isFinite(timestamp) ? timestamp : 0,
-        videosInspectedTotal: Number(
-          backfillState.videosInspectedTotal ?? coverage.videosInspectedTotal,
-        ) || 0,
+        videosInspectedTotal,
       };
     })
     .sort((left, right) => (

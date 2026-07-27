@@ -5,9 +5,34 @@ import {
   getBackfillConfirmMessage,
   getBackfillErrorMessage,
   getBackfillResultMessage,
+  getBackfillViewState,
 } from './historicalBackfill';
 
 describe('historicalBackfill', () => {
+  it('separates not started, resumable, and completed operator states', () => {
+    expect(getBackfillViewState()).toMatchObject({
+      actionLabel: '전체 과거 영상 수집 시작',
+      phase: 'not_started',
+    });
+    expect(getBackfillViewState({
+      inspectionProgressRate: 58.4,
+      videosInspectedTotal: 500,
+    })).toMatchObject({
+      actionLabel: '이어서 과거 영상 수집',
+      label: '과거 목록 확인 58.4%',
+      phase: 'in_progress',
+    });
+    expect(getBackfillViewState({
+      backfillCompleted: true,
+      inspectionProgressRate: 72,
+    })).toMatchObject({
+      actionLabel: '',
+      label: '공개 업로드 목록 끝까지 확인 완료',
+      phase: 'completed',
+      progress: 100,
+    });
+  });
+
   it('explains the capped manual API action before execution', () => {
     const message = getBackfillConfirmMessage('테스트 채널');
 

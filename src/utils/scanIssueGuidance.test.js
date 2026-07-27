@@ -16,7 +16,7 @@ describe('scan issue guidance', () => {
     })).toMatchObject({
       title: '최신 수집은 완료됐지만 과거 영상 저장 범위가 아직 부족합니다',
       cause: expect.stringContaining('Cloud 저장 250개 / 채널 전체 400개 · 약 62.5%'),
-      nextAction: expect.stringContaining('선택 채널 전체 과거 영상 수집'),
+      nextAction: expect.stringContaining('과거 영상 수집을 직접 시작'),
       tone: 'partial',
     });
   });
@@ -50,8 +50,10 @@ describe('scan issue guidance', () => {
     expect(guidance.cause).not.toContain('0%');
   });
 
-  it('uses distinct retry labels for partial and failed results', () => {
+  it('uses distinct operator labels for each new-video collection state', () => {
     expect(getScanRetryLabel('partial')).toBe('최신 영상 수집 준비');
-    expect(getScanRetryLabel('failed')).toBe('다시 수집 준비');
+    expect(getScanRetryLabel('failed')).toBe('다시 새 영상 수집 준비');
+    expect(getScanRetryLabel('never')).toBe('첫 새 영상 수집 준비');
+    expect(getScanRetryLabel('success')).toBe('새 영상 수집 준비');
   });
 });

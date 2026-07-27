@@ -76,7 +76,7 @@ export const getScanIssueGuidance = (record = {}) => {
 
     return {
       cause: `${getCoverageSummary(record)}${missingText}`,
-      nextAction: '현재 저장된 영상은 바로 탐색할 수 있습니다. 전체 과거 범위가 필요하면 이 채널의 “선택 채널 전체 과거 영상 수집”을 직접 실행하세요. 한 번에 최대 500개를 확인하고, 끝나지 않으면 다음 실행에서 이어갑니다.',
+      nextAction: '현재 저장된 영상은 바로 탐색할 수 있습니다. 전체 과거 범위가 필요하면 이 채널의 과거 영상 수집을 직접 시작하세요. 이미 진행 중이면 저장된 위치에서 이어집니다.',
       title: '최신 수집은 완료됐지만 과거 영상 저장 범위가 아직 부족합니다',
       tone: 'partial',
     };
@@ -93,6 +93,9 @@ export const getScanIssueGuidance = (record = {}) => {
   return null;
 };
 
-export const getScanRetryLabel = (status) => (
-  status === 'partial' ? '최신 영상 수집 준비' : '다시 수집 준비'
-);
+export const getScanRetryLabel = (status) => {
+  if (status === 'never') return '첫 새 영상 수집 준비';
+  if (status === 'failed') return '다시 새 영상 수집 준비';
+  if (status === 'partial') return '최신 영상 수집 준비';
+  return '새 영상 수집 준비';
+};
