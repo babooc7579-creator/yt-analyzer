@@ -16,6 +16,7 @@ export default function ChannelTagTabs({
   isScanning,
   onSelectCategory,
   onScanTag,
+  showScanActions = true,
 }) {
   const categoryList = toArray(categories);
   const channelList = toArray(channels);
@@ -40,14 +41,17 @@ export default function ChannelTagTabs({
               onScanTag={onScanTag}
               onSelectCategory={onSelectCategory}
               scannableCount={scannableCount}
+              showScanAction={showScanActions}
             />
           );
         })}
       </div>
-      <div className="mt-2 bg-emerald-50 border border-emerald-100 rounded-lg p-2.5">
-        <p className="text-[11px] font-bold text-emerald-700">{scanNoticeProps.title}</p>
-        <p className="text-[10px] text-slate-600 mt-0.5">{scanNoticeProps.description}</p>
-      </div>
+      {showScanActions ? (
+        <div className="mt-2 bg-emerald-50 border border-emerald-100 rounded-lg p-2.5">
+          <p className="text-[11px] font-bold text-emerald-700">{scanNoticeProps.title}</p>
+          <p className="text-[10px] text-slate-600 mt-0.5">{scanNoticeProps.description}</p>
+        </div>
+      ) : null}
     </>
   );
 }

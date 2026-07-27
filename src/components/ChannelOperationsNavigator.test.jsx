@@ -11,7 +11,8 @@ describe('ChannelOperationsNavigator', () => {
     expect(html).toContain('오늘의 채널 운영 순서');
     expect(html).toContain('1. 채널 관리');
     expect(html).toContain('2. 새 채널 등록');
-    expect(html).toContain('3. 새 영상 수집');
+    expect(html).toContain('3. 영상 확인·수집');
+    expect(html).toContain('해당 작업 화면만 열립니다');
     expect(html).toContain('aria-current="step"');
     expect(html).toContain('채널 선택만으로 YouTube API는 호출되지 않습니다');
     expect(html).toContain('다음 추천 행동');

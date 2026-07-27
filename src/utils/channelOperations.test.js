@@ -17,7 +17,7 @@ describe('channel operations utils', () => {
   });
 
   it('falls back to channel management for unknown stages', () => {
-    expect(getChannelOperationStage('scan').label).toBe('새 영상 수집');
+    expect(getChannelOperationStage('scan').label).toBe('영상 확인·수집');
     expect(getChannelOperationStage('unknown').id).toBe('manage');
   });
 
