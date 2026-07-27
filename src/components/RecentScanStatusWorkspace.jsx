@@ -339,7 +339,7 @@ export default function RecentScanStatusWorkspace({
                         title="이 채널 하나의 과거 업로드 목록을 YouTube API로 최대 100개 확인합니다. 자동 반복이나 다른 채널 수집은 하지 않습니다."
                       >
                         <History className={`h-3.5 w-3.5 ${backfillChannelId === row.channelId ? 'animate-spin' : ''}`} />
-                        {backfillChannelId === row.channelId ? '과거 영상 확인 중' : '과거 영상 100개까지 채우기'}
+                        {backfillChannelId === row.channelId ? '과거 영상 확인 중' : '다음 과거 영상 100개 확인'}
                       </button>
                     ) : null}
                   </div>
@@ -455,7 +455,7 @@ export default function RecentScanStatusWorkspace({
           채널 요약은 마지막 결과 한 건을 유지하고, 과거 이력은 최근 채널 기록 100건을 같은 수집 실행끼리 묶어 표시합니다. API 쿼터 추정은 아직 제공하지 않습니다.
         </p>
         <p className="mt-2 text-xs leading-5 text-amber-100/80">
-          “과거 영상 100개까지 채우기”는 부분 성공 채널 하나에만 표시됩니다. 사용자가 확인한 뒤 한 번만 실행되며 자동 반복·예약·전체 채널 실행은 하지 않습니다.
+          “다음 과거 영상 100개 확인”은 업로드 목록 최대 100개를 살펴본 뒤 Cloud에 없는 영상만 저장합니다. 신규 저장 수는 100개보다 적을 수 있으며, 자동 반복·예약·전체 채널 실행은 하지 않습니다.
         </p>
       </div>
     </section>

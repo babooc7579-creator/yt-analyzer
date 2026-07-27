@@ -284,7 +284,7 @@ describe('useVideoCollectionActions', () => {
     expect(backfillChannelHistory).toHaveBeenCalledWith('active-1', { maxPages: 2 });
     expect(deps.setScanningTag).toHaveBeenNthCalledWith(1, 'BACKFILL:active-1');
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      '테스트 채널 과거 영상 채우기 중입니다. YouTube API로 최대 100개 항목을 확인합니다.',
+      '테스트 채널의 다음 과거 영상 묶음을 확인하고 있습니다. YouTube API로 최대 100개를 확인한 뒤 Cloud에 없는 영상만 저장합니다.',
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
     expect(response).toMatchObject({ success: true });

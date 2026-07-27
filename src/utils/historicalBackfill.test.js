@@ -12,10 +12,10 @@ describe('historicalBackfill', () => {
     const message = getBackfillConfirmMessage('테스트 채널');
 
     expect(BACKFILL_MAX_ITEMS).toBe(100);
-    expect(message).toContain("'테스트 채널'의 과거 영상을 더 채울까요?");
+    expect(message).toContain("'테스트 채널'의 다음 과거 영상 묶음을 확인할까요?");
     expect(message).toContain('YouTube API');
     expect(message).toContain('최대 100개');
-    expect(message).toContain('중복 저장하지 않습니다');
+    expect(message).toContain('저장 개수는 100개보다 적을 수 있습니다');
     expect(message).toContain('자동 반복');
   });
 
@@ -25,7 +25,7 @@ describe('historicalBackfill', () => {
       savedVideosThisRun: 30,
       savedVideosTotal: 280,
       estimatedMissingVideos: 120,
-    })).toContain('다음 묶음은 사용자가 다시 실행할 때만');
+    })).toContain('확인 100개 · 신규 저장 30개 · 이미 저장됨 70개');
 
     expect(getBackfillResultMessage({
       completed: true,
