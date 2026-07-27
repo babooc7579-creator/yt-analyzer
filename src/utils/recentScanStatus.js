@@ -61,6 +61,14 @@ export const getRecentScanStatusRows = (channels = []) => (
         && Number.isFinite(Number(coverageRateValue))
         ? Number(coverageRateValue)
         : null;
+      const inspectionProgressValue = backfillState.inspectionProgressRate
+        ?? coverage.inspectionProgressRate;
+      const inspectionProgressRate = inspectionProgressValue !== null
+        && inspectionProgressValue !== undefined
+        && inspectionProgressValue !== ''
+        && Number.isFinite(Number(inspectionProgressValue))
+        ? Number(inspectionProgressValue)
+        : null;
 
       return {
         channelId: channel.id || channel.channelId || '',
@@ -73,6 +81,7 @@ export const getRecentScanStatusRows = (channels = []) => (
         estimatedMissingVideos: Number(coverage.estimatedMissingVideos) || 0,
         exactScannedAt: formatKoreanDateTime(scannedAt, '기록 없음'),
         grade: formatChannelGrade(channel.grade),
+        inspectionProgressRate,
         newVideosFound: Number(summary.newVideosFound) || 0,
         savedVideosTotal: Number(coverage.savedVideosTotal) || 0,
         scannedAt,
@@ -83,6 +92,9 @@ export const getRecentScanStatusRows = (channels = []) => (
         statusLabel: STATUS_LABELS[status],
         tags: toArray(channel.tags).filter(Boolean),
         timestamp: Number.isFinite(timestamp) ? timestamp : 0,
+        videosInspectedTotal: Number(
+          backfillState.videosInspectedTotal ?? coverage.videosInspectedTotal,
+        ) || 0,
       };
     })
     .sort((left, right) => (

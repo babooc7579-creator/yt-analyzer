@@ -281,14 +281,14 @@ describe('useVideoCollectionActions', () => {
 
     const response = await actions.runHistoricalBackfill('active-1', '테스트 채널');
 
-    expect(backfillChannelHistory).toHaveBeenCalledWith('active-1', { maxPages: 2 });
+    expect(backfillChannelHistory).toHaveBeenCalledWith('active-1', { maxPages: 10 });
     expect(deps.setScanningTag).toHaveBeenNthCalledWith(1, 'BACKFILL:active-1');
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      '테스트 채널의 다음 과거 영상 묶음을 확인하고 있습니다. YouTube API로 최대 100개를 확인한 뒤 Cloud에 없는 영상만 저장합니다.',
+      '테스트 채널의 공개 업로드 목록을 끝까지 확인하고 있습니다. 이번 실행은 최대 500개까지 진행하며 Cloud에 없는 영상만 저장합니다.',
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
     expect(response).toMatchObject({ success: true });
-    expect(response.message).toContain('다음 묶음은 사용자가 다시 실행할 때만');
+    expect(response.message).toContain('다시 실행하면 현재 위치부터 이어갑니다');
     expect(deps.setIsScanning).toHaveBeenLastCalledWith(false);
     expect(deps.setScanningTag).toHaveBeenLastCalledWith(null);
   });

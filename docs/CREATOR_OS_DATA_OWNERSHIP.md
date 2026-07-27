@@ -277,7 +277,7 @@ Creator OS에서는 다음 원칙을 우선합니다.
 
 ### 4.10 historical backfill progress
 
-2026-07-27 선택지 B 승인으로 채널별 수동 과거 영상 채우기 진행 상태를 기존 `channels` 문서에 가산 방식으로 저장합니다.
+2026-07-27 선택 채널 전체 수집 C안 승인으로 채널별 수동 과거 영상 수집 진행 상태를 기존 `channels` 문서에 가산 방식으로 저장합니다.
 
 현재 구조:
 
@@ -285,8 +285,9 @@ Creator OS에서는 다음 원칙을 우선합니다.
 - 필드: `backfillState`
 - `nextPageToken`: 다음 수동 실행이 이어서 확인할 YouTube 업로드 목록 위치
 - `completed`: 업로드 목록 끝까지 확인했는지 여부
-- `pagesFetchedTotal`, `videosSavedTotal`: 수동 과거 보강 누적치
-- `lastRun`: 마지막 실행의 확인 수, 신규 저장 수, Cloud 저장 합계, 추정 미저장 수, 완료 여부
+- `pagesFetchedTotal`, `videosInspectedTotal`, `videosSavedTotal`: 수동 과거 보강 누적치
+- `inspectionProgressRate`: 채널 업로드 목록 중 확인을 마친 범위의 진행률
+- `lastRun`: 마지막 실행의 확인 수, 신규 저장 수, 목록 확인 진행률, Cloud 저장 합계, 추정 미저장 수, 완료 여부
 
 운영 원칙:
 
@@ -294,6 +295,8 @@ Creator OS에서는 다음 원칙을 우선합니다.
 - 기존 `lastScanSummary`는 일반 새 영상 수집의 마지막 상태로 유지합니다.
 - 과거 보강 진행은 `backfillState`로 분리해 최신 수집과 혼동하지 않습니다.
 - 이미 존재하는 영상은 ID 기준으로 중복 저장하지 않습니다.
+- 선택한 채널 하나에서 한 번에 최대 500개를 확인하며, 목록 끝에 도달하면 즉시 완료합니다.
+- 500개 안에 끝나지 않으면 `nextPageToken`을 저장하고 사용자의 다음 실행에서 이어갑니다.
 - 사용자가 채널 하나를 직접 실행할 때만 진행하며 자동 반복·예약·전체 채널 일괄 실행은 하지 않습니다.
 - 기존 채널에 `backfillState`가 없어도 첫 실행 시 처음부터 시작하므로 마이그레이션은 필요하지 않습니다.
 
