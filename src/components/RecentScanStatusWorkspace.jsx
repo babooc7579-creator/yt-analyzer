@@ -12,6 +12,7 @@ import {
 import { fetchScanLogs } from '../services/scanApi';
 import { formatKoreanDateTime } from '../utils/dates';
 import {
+  BACKFILL_SORT_OPTIONS,
   BACKFILL_STATUS_FILTERS,
   filterRecentScanStatusRows,
   getBackfillStatusSummary,
@@ -146,6 +147,7 @@ export default function RecentScanStatusWorkspace({
 }) {
   const [filter, setFilter] = useState('all');
   const [backfillFilter, setBackfillFilter] = useState('all');
+  const [backfillSort, setBackfillSort] = useState('recommended');
   const [backfillChannelId, setBackfillChannelId] = useState('');
   const [backfillMessages, setBackfillMessages] = useState({});
   const [historyError, setHistoryError] = useState('');
@@ -161,7 +163,8 @@ export default function RecentScanStatusWorkspace({
     filter,
     query,
     rows,
-  }), [backfillFilter, filter, query, rows]);
+    sort: backfillSort,
+  }), [backfillFilter, backfillSort, filter, query, rows]);
   const loadHistory = useCallback(async () => {
     setHistoryLoading(true);
     setHistoryError('');
@@ -310,12 +313,35 @@ export default function RecentScanStatusWorkspace({
               className="min-h-11 w-full border border-slate-700 bg-slate-950 py-2 pl-10 pr-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-400"
             />
           </label>
-          <p className="text-xs font-bold text-slate-400" role="status" aria-live="polite">
-            {channelsLoading && rows.length === 0
-              ? 'Cloud 채널 상태 조회 중'
-              : `${visibleRows.length}개 채널 표시 · 최근 결과와 과거 수집 필터 동시 적용`}
-          </p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label className="flex min-h-11 items-center gap-2 border border-slate-700 bg-slate-950 px-3 text-xs font-black text-slate-300">
+              <span>정렬</span>
+              <select
+                value={backfillSort}
+                onChange={(event) => setBackfillSort(event.target.value)}
+                className="min-h-9 bg-transparent text-xs font-black text-white outline-none"
+                title="이미 조회된 채널을 화면에서만 정렬합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+              >
+                {BACKFILL_SORT_OPTIONS.map((option) => (
+                  <option key={option.id} value={option.id} className="bg-slate-950">
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="text-xs font-bold text-slate-400" role="status" aria-live="polite">
+              {channelsLoading && rows.length === 0
+                ? 'Cloud 채널 상태 조회 중'
+                : `${visibleRows.length}개 채널 표시 · 필터와 정렬 동시 적용`}
+            </p>
+          </div>
         </div>
+        {backfillSort === 'recommended' && visibleRows.some((row) => row.backfillPhase !== 'completed') ? (
+          <div className="border-b border-violet-400/20 bg-violet-500/10 px-4 py-3 text-xs leading-5 text-violet-100">
+            <strong>추천 순서:</strong> 진행 중인 채널을 먼저 마무리하고, 확인 전 채널은 미확인 영상이 많은 순서로 보여줍니다.
+            이 정렬은 화면 표시만 바꿉니다.
+          </div>
+        ) : null}
 
         {channelsLoading && rows.length === 0 ? (
           <div className="px-5 py-12 text-center" role="status" aria-live="polite">
@@ -325,9 +351,14 @@ export default function RecentScanStatusWorkspace({
           </div>
         ) : visibleRows.length > 0 ? (
           <div className="divide-y divide-slate-800">
-            {visibleRows.map((row) => (
+            {visibleRows.map((row, index) => (
               <article key={row.channelId || row.channelTitle} className="grid gap-3 p-4 lg:grid-cols-[minmax(220px,1.2fr)_150px_170px_minmax(220px,1fr)] lg:items-center">
                 <div>
+                  {backfillSort === 'recommended' && index === 0 && row.backfillPhase !== 'completed' ? (
+                    <span className="mb-2 inline-flex border border-violet-300/40 bg-violet-400/10 px-2 py-1 text-[10px] font-black text-violet-100">
+                      다음 과거 수집 추천
+                    </span>
+                  ) : null}
                   <h3 className="text-sm font-black text-white">{row.channelTitle}</h3>
                   <p className="mt-1 text-xs text-slate-400">
                     등급 {row.grade}{row.tags.length > 0 ? ` · ${row.tags.join(', ')}` : ' · 태그 없음'}

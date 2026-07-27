@@ -83,7 +83,12 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('진행 중');
     expect(html).toContain('확인 완료');
     expect(html).toContain('필터 변경은 화면 표시만 바꿉니다');
-    expect(html).toContain('최근 결과와 과거 수집 필터 동시 적용');
+    expect(html).toContain('추천 순서:');
+    expect(html).toContain('다음 과거 수집 추천');
+    expect(html).toContain('필터와 정렬 동시 적용');
+    expect(html).toContain('남은 영상 많은 순');
+    expect(html).toContain('최근 확인 순');
+    expect(html).toContain('채널 이름 순');
   });
 
   it('renders an honest empty state when no channels exist', () => {
