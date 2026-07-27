@@ -13,7 +13,7 @@ export const REFERENCE_VAULT_HEADER = {
 
 export const REFERENCE_VAULT_SUMMARY_CARDS = [
   { key: 'videoCount', label: '불러온 영상' },
-  { key: 'channelCount', label: '저장 채널' },
+  { key: 'channelCount', label: '등록 채널' },
   { key: 'scrapCount', label: '스크랩 소재', tone: 'yellow' },
   { key: 'visibleScrapCount', label: '현재 보드 스크랩', tone: 'indigo' },
   { key: 'ttoTtoCount', label: '또터또 후보', tone: 'rose' },
@@ -41,7 +41,7 @@ export const REFERENCE_VAULT_GUIDE_CARDS = [
   {
     key: 'promote-production',
     title: '3. 제작 후보로 표시',
-    description: '만들 만한 소재는 Cloud 판단 기록에 제작 후보로 표시하면 제작 칸반에서 이어서 관리합니다. 새 YouTube API 호출은 없습니다.',
+    description: '만들 만한 소재는 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시하면 제작 칸반에서 이어서 관리합니다. 새 YouTube API 호출은 없습니다.',
     iconName: 'sparkles',
     className: 'border-indigo-100 bg-indigo-50/80',
     iconClassName: 'text-indigo-700',

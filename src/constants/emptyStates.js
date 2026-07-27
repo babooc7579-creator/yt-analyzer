@@ -4,7 +4,7 @@ export const REFERENCE_VAULT_EMPTY_STATE = {
   steps: [
     {
       title: '1. 채널 등록·선택',
-      description: '채널을 Cloud 목록에 등록하고 오늘 확인할 채널을 선택합니다. 선택만으로 영상 수집은 실행되지 않습니다.',
+      description: '채널을 온라인 저장소(Azure DB)에 등록하고 오늘 확인할 채널을 선택합니다. 선택만으로 영상 수집은 실행되지 않습니다.',
     },
     {
       title: '2. 수집 영상 목록 불러오기',
