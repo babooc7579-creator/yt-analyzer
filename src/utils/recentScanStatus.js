@@ -10,6 +10,13 @@ export const RECENT_SCAN_STATUS_FILTERS = [
   { id: 'success', label: '성공' },
 ];
 
+export const BACKFILL_STATUS_FILTERS = [
+  { id: 'all', label: '과거 수집 전체' },
+  { id: 'not_started', label: '확인 전' },
+  { id: 'in_progress', label: '진행 중' },
+  { id: 'completed', label: '확인 완료' },
+];
+
 const STATUS_PRIORITY = {
   failed: 0,
   partial: 1,
@@ -177,6 +184,17 @@ export const getRecentScanStatusSummary = (rows = []) => {
   };
 };
 
+export const getBackfillStatusSummary = (rows = []) => {
+  const safeRows = toArray(rows);
+
+  return {
+    total: safeRows.length,
+    not_started: safeRows.filter((row) => row.backfillPhase === 'not_started').length,
+    in_progress: safeRows.filter((row) => row.backfillPhase === 'in_progress').length,
+    completed: safeRows.filter((row) => row.backfillPhase === 'completed').length,
+  };
+};
+
 export const getScanHistoryRuns = (scanLogs = []) => {
   const runMap = new Map();
 
@@ -232,6 +250,7 @@ export const getScanHistoryRuns = (scanLogs = []) => {
 };
 
 export const filterRecentScanStatusRows = ({
+  backfillFilter = 'all',
   filter = 'all',
   query = '',
   rows = [],
@@ -240,6 +259,7 @@ export const filterRecentScanStatusRows = ({
 
   return toArray(rows).filter((row) => {
     if (filter !== 'all' && row.status !== filter) return false;
+    if (backfillFilter !== 'all' && row.backfillPhase !== backfillFilter) return false;
     if (!normalizedQuery) return true;
 
     return [
