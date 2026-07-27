@@ -17,11 +17,24 @@ export const BACKFILL_STATUS_FILTERS = [
   { id: 'completed', label: '확인 완료' },
 ];
 
+export const BACKFILL_SORT_OPTIONS = [
+  { id: 'recommended', label: '추천 순서' },
+  { id: 'remaining', label: '남은 영상 많은 순' },
+  { id: 'recent', label: '최근 확인 순' },
+  { id: 'name', label: '채널 이름 순' },
+];
+
 const STATUS_PRIORITY = {
   failed: 0,
   partial: 1,
   never: 2,
   success: 3,
+};
+
+const BACKFILL_PHASE_PRIORITY = {
+  in_progress: 0,
+  not_started: 1,
+  completed: 2,
 };
 
 const STATUS_LABELS = {
@@ -123,6 +136,10 @@ export const getRecentScanStatusRows = (channels = []) => (
         inspectionProgressRate,
         videosInspectedTotal,
       });
+      const backfillUpdatedAt = backfillState.updatedAt || '';
+      const backfillTimestampValue = backfillUpdatedAt
+        ? new Date(backfillUpdatedAt).getTime()
+        : 0;
       const channelTotalVideos = toNonNegativeNumber(coverage.channelTotalVideos);
       const savedVideosTotal = toNonNegativeNumber(coverage.savedVideosTotal);
       const coverageDisplay = getBackfillCoverageDisplay({
@@ -140,7 +157,8 @@ export const getRecentScanStatusRows = (channels = []) => (
         backfillNextAction: backfillViewState.nextAction,
         backfillPhase: backfillViewState.phase,
         backfillStatusLabel: backfillViewState.label,
-        backfillUpdatedAt: backfillState.updatedAt || '',
+        backfillTimestamp: Number.isFinite(backfillTimestampValue) ? backfillTimestampValue : 0,
+        backfillUpdatedAt,
         channelTotalVideos,
         coverageRate,
         displayCoverageRate: coverageDisplay.displayCoverageRate,
@@ -254,10 +272,11 @@ export const filterRecentScanStatusRows = ({
   filter = 'all',
   query = '',
   rows = [],
+  sort = 'current',
 } = {}) => {
   const normalizedQuery = String(query).trim().toLocaleLowerCase('ko');
 
-  return toArray(rows).filter((row) => {
+  const filteredRows = toArray(rows).filter((row) => {
     if (filter !== 'all' && row.status !== filter) return false;
     if (backfillFilter !== 'all' && row.backfillPhase !== backfillFilter) return false;
     if (!normalizedQuery) return true;
@@ -268,5 +287,35 @@ export const filterRecentScanStatusRows = ({
       ...toArray(row.tags),
       row.error,
     ].some((value) => String(value).toLocaleLowerCase('ko').includes(normalizedQuery));
+  });
+
+  if (sort === 'current') return filteredRows;
+
+  return filteredRows.slice().sort((left, right) => {
+    if (sort === 'name') {
+      return left.channelTitle.localeCompare(right.channelTitle, 'ko');
+    }
+
+    if (sort === 'recent') {
+      return right.backfillTimestamp - left.backfillTimestamp
+        || left.channelTitle.localeCompare(right.channelTitle, 'ko');
+    }
+
+    if (sort === 'remaining') {
+      return right.estimatedMissingVideos - left.estimatedMissingVideos
+        || right.channelTotalVideos - left.channelTotalVideos
+        || left.channelTitle.localeCompare(right.channelTitle, 'ko');
+    }
+
+    return BACKFILL_PHASE_PRIORITY[left.backfillPhase] - BACKFILL_PHASE_PRIORITY[right.backfillPhase]
+      || (left.backfillPhase === 'in_progress'
+        ? (right.inspectionProgressRate ?? -1) - (left.inspectionProgressRate ?? -1)
+        : 0)
+      || (left.backfillPhase === 'not_started'
+        ? right.estimatedMissingVideos - left.estimatedMissingVideos
+          || right.channelTotalVideos - left.channelTotalVideos
+        : 0)
+      || right.backfillTimestamp - left.backfillTimestamp
+      || left.channelTitle.localeCompare(right.channelTitle, 'ko');
   });
 };

@@ -241,6 +241,78 @@ describe('recent scan status utils', () => {
     }).map((row) => row.channelId)).toEqual(['in-progress']);
   });
 
+  it('sorts historical collection work in an operator-friendly priority order', () => {
+    const rows = getRecentScanStatusRows([
+      {
+        id: 'not-started-small',
+        title: '확인 전 작은 채널',
+        lastScanSummary: {
+          channelTotalVideos: 100,
+          estimatedMissingVideos: 80,
+        },
+      },
+      {
+        id: 'completed',
+        title: '확인 완료 채널',
+        backfillState: {
+          completed: true,
+          updatedAt: '2026-07-27T03:00:00.000Z',
+        },
+      },
+      {
+        id: 'in-progress-low',
+        title: '진행률 낮은 채널',
+        backfillState: {
+          inspectionProgressRate: 25,
+          videosInspectedTotal: 25,
+          updatedAt: '2026-07-27T01:00:00.000Z',
+        },
+      },
+      {
+        id: 'not-started-large',
+        title: '확인 전 큰 채널',
+        lastScanSummary: {
+          channelTotalVideos: 500,
+          estimatedMissingVideos: 450,
+        },
+      },
+      {
+        id: 'in-progress-high',
+        title: '완료에 가까운 채널',
+        backfillState: {
+          inspectionProgressRate: 80,
+          videosInspectedTotal: 400,
+          updatedAt: '2026-07-27T02:00:00.000Z',
+        },
+      },
+    ]);
+
+    expect(filterRecentScanStatusRows({
+      rows,
+      sort: 'recommended',
+    }).map((row) => row.channelId)).toEqual([
+      'in-progress-high',
+      'in-progress-low',
+      'not-started-large',
+      'not-started-small',
+      'completed',
+    ]);
+    expect(filterRecentScanStatusRows({
+      rows,
+      sort: 'remaining',
+    }).map((row) => row.channelId).slice(0, 2)).toEqual([
+      'not-started-large',
+      'not-started-small',
+    ]);
+    expect(filterRecentScanStatusRows({
+      rows,
+      sort: 'recent',
+    }).map((row) => row.channelId).slice(0, 2)).toEqual([
+      'completed',
+      'in-progress-high',
+    ]);
+  });
+
   it('filters by status and searches channel metadata or errors', () => {
     const rows = getRecentScanStatusRows(channels);
 
