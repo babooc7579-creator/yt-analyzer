@@ -77,6 +77,13 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
     expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('과거 목록 확인 상태');
+    expect(html).toContain('과거 수집 전체');
+    expect(html).toContain('확인 전');
+    expect(html).toContain('진행 중');
+    expect(html).toContain('확인 완료');
+    expect(html).toContain('필터 변경은 화면 표시만 바꿉니다');
+    expect(html).toContain('최근 결과와 과거 수집 필터 동시 적용');
   });
 
   it('renders an honest empty state when no channels exist', () => {

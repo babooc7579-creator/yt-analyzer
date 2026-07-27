@@ -4,6 +4,7 @@ import {
   filterRecentScanStatusRows,
   formatChannelGrade,
   getBackfillCoverageDisplay,
+  getBackfillStatusSummary,
   getScanHistoryRuns,
   getRecentScanStatusRows,
   getRecentScanStatusSummary,
@@ -185,6 +186,59 @@ describe('recent scan status utils', () => {
       success: 1,
       total: 4,
     });
+  });
+
+  it('summarizes and filters historical collection phases separately from latest scan status', () => {
+    const rows = getRecentScanStatusRows([
+      {
+        id: 'not-started',
+        title: '확인 전 채널',
+        lastScanSummary: {
+          status: 'success',
+          scannedAt: '2026-07-27T01:00:00.000Z',
+        },
+      },
+      {
+        id: 'in-progress',
+        title: '진행 중 채널',
+        backfillState: {
+          inspectionProgressRate: 40,
+          videosInspectedTotal: 200,
+        },
+        lastScanSummary: {
+          status: 'partial',
+          scannedAt: '2026-07-27T02:00:00.000Z',
+        },
+      },
+      {
+        id: 'completed',
+        title: '확인 완료 채널',
+        backfillState: {
+          completed: true,
+          videosInspectedTotal: 300,
+        },
+        lastScanSummary: {
+          status: 'success',
+          scannedAt: '2026-07-27T03:00:00.000Z',
+        },
+      },
+    ]);
+
+    expect(getBackfillStatusSummary(rows)).toEqual({
+      completed: 1,
+      in_progress: 1,
+      not_started: 1,
+      total: 3,
+    });
+    expect(filterRecentScanStatusRows({
+      backfillFilter: 'not_started',
+      filter: 'success',
+      rows,
+    }).map((row) => row.channelId)).toEqual(['not-started']);
+    expect(filterRecentScanStatusRows({
+      backfillFilter: 'in_progress',
+      rows,
+    }).map((row) => row.channelId)).toEqual(['in-progress']);
   });
 
   it('filters by status and searches channel metadata or errors', () => {

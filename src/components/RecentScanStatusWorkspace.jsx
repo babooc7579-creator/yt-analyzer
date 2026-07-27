@@ -12,7 +12,9 @@ import {
 import { fetchScanLogs } from '../services/scanApi';
 import { formatKoreanDateTime } from '../utils/dates';
 import {
+  BACKFILL_STATUS_FILTERS,
   filterRecentScanStatusRows,
+  getBackfillStatusSummary,
   getScanHistoryRuns,
   getRecentScanStatusRows,
   getRecentScanStatusSummary,
@@ -38,6 +40,13 @@ const SUMMARY_ITEMS = [
   { id: 'never', key: 'never', label: '미수집' },
   { id: 'success', key: 'success', label: '성공' },
 ];
+
+const BACKFILL_SUMMARY_KEYS = {
+  all: 'total',
+  not_started: 'not_started',
+  in_progress: 'in_progress',
+  completed: 'completed',
+};
 
 const HISTORY_TRIGGER_LABELS = {
   manual_all: '전체 수동 수집',
@@ -136,6 +145,7 @@ export default function RecentScanStatusWorkspace({
   onOpenSelectedScan,
 }) {
   const [filter, setFilter] = useState('all');
+  const [backfillFilter, setBackfillFilter] = useState('all');
   const [backfillChannelId, setBackfillChannelId] = useState('');
   const [backfillMessages, setBackfillMessages] = useState({});
   const [historyError, setHistoryError] = useState('');
@@ -145,11 +155,13 @@ export default function RecentScanStatusWorkspace({
   const rows = useMemo(() => getRecentScanStatusRows(channels), [channels]);
   const historyRuns = useMemo(() => getScanHistoryRuns(scanLogs), [scanLogs]);
   const summary = useMemo(() => getRecentScanStatusSummary(rows), [rows]);
+  const backfillSummary = useMemo(() => getBackfillStatusSummary(rows), [rows]);
   const visibleRows = useMemo(() => filterRecentScanStatusRows({
+    backfillFilter,
     filter,
     query,
     rows,
-  }), [filter, query, rows]);
+  }), [backfillFilter, filter, query, rows]);
   const loadHistory = useCallback(async () => {
     setHistoryLoading(true);
     setHistoryError('');
@@ -249,6 +261,40 @@ export default function RecentScanStatusWorkspace({
             </button>
           ))}
         </div>
+        <div className="mt-4 border-t border-slate-700/70 pt-4">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-black text-violet-200">과거 목록 확인 상태</p>
+              <p className="mt-1 text-[11px] text-slate-400">
+                최근 수집 성공 여부와 별개로, 공개 업로드 목록을 어디까지 확인했는지 골라봅니다.
+              </p>
+            </div>
+            <p className="text-[11px] font-bold text-slate-500">필터 변경은 화면 표시만 바꿉니다.</p>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-4" aria-label="과거 수집 상태 필터">
+            {BACKFILL_STATUS_FILTERS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={backfillFilter === item.id}
+                onClick={() => setBackfillFilter(item.id)}
+                className={`min-h-12 border px-3 py-2 text-left transition-colors ${
+                  backfillFilter === item.id
+                    ? 'border-violet-300 bg-violet-400/15 text-violet-100'
+                    : 'border-slate-700 bg-slate-950/70 text-slate-300 hover:border-slate-500'
+                }`}
+                title={`${item.label} 채널만 화면에 표시합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다.`}
+              >
+                <span className="block text-[11px] font-black">{item.label}</span>
+                <strong className="mt-0.5 block text-lg font-black text-white">
+                  {channelsLoading && rows.length === 0
+                    ? '…'
+                    : backfillSummary[BACKFILL_SUMMARY_KEYS[item.id]]}
+                </strong>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="border border-slate-800 bg-slate-900/70">
@@ -267,7 +313,7 @@ export default function RecentScanStatusWorkspace({
           <p className="text-xs font-bold text-slate-400" role="status" aria-live="polite">
             {channelsLoading && rows.length === 0
               ? 'Cloud 채널 상태 조회 중'
-              : `${visibleRows.length}개 채널 표시`}
+              : `${visibleRows.length}개 채널 표시 · 최근 결과와 과거 수집 필터 동시 적용`}
           </p>
         </div>
 
