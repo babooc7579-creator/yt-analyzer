@@ -304,8 +304,16 @@ export default function RecentScanStatusWorkspace({
                   ) : (
                     <p>새 영상 {row.newVideosFound}개 · 통계 갱신 {row.statsRefreshed}개</p>
                   )}
-                  {row.videosInspectedTotal > 0 || row.backfillCompleted ? (
-                    <div className="mt-2 border border-slate-700 bg-slate-950/60 p-2 text-[11px] leading-5 text-slate-300">
+                  {row.status === 'partial' || row.videosInspectedTotal > 0 || row.backfillCompleted ? (
+                    <div className={`mt-2 border p-2 text-[11px] leading-5 ${
+                      row.backfillCompleted
+                        ? 'border-emerald-400/30 bg-emerald-500/10 text-emerald-100'
+                        : 'border-slate-700 bg-slate-950/60 text-slate-300'
+                    }`}>
+                      <p className="font-black">
+                        {row.backfillCompleted ? <CheckCircle2 className="mr-1 inline h-3.5 w-3.5" /> : null}
+                        {row.backfillStatusLabel}
+                      </p>
                       <p>
                         업로드 목록 확인 {row.inspectionProgressRate ?? (row.backfillCompleted ? 100 : 0)}%
                         {row.channelTotalVideos > 0
@@ -314,8 +322,23 @@ export default function RecentScanStatusWorkspace({
                       </p>
                       <p>
                         Cloud 저장 {row.coverageRate ?? 0}% · {row.savedVideosTotal}개 저장
-                        {row.estimatedMissingVideos > 0 ? ` · 추정 잔여 ${row.estimatedMissingVideos}개` : ''}
+                        {row.estimatedMissingVideos > 0
+                          ? ` · ${row.backfillCompleted ? '통계상 차이' : '추정 미저장'} ${row.estimatedMissingVideos}개`
+                          : ''}
                       </p>
+                      {row.backfillUpdatedAt ? (
+                        <p className="text-slate-500">
+                          과거 목록 마지막 확인 {formatKoreanDateTime(row.backfillUpdatedAt, '시간 기록 없음')}
+                        </p>
+                      ) : null}
+                      <p className={row.backfillCompleted ? 'text-emerald-200' : 'text-slate-400'}>
+                        다음: {row.backfillNextAction}
+                      </p>
+                      {row.backfillCompleted && row.coverageRate !== null && row.coverageRate < 100 ? (
+                        <p className="text-amber-200">
+                          채널 통계에는 비공개·삭제 영상이 포함될 수 있어 Cloud 저장률이 100%가 아니어도 목록 확인은 완료될 수 있습니다.
+                        </p>
+                      ) : null}
                     </div>
                   ) : null}
                   <ScanIssueGuidance record={row} />
@@ -329,21 +352,19 @@ export default function RecentScanStatusWorkspace({
                       <ListChecks className="h-3.5 w-3.5" />
                       이 채널 관리
                     </button>
-                    {row.status !== 'success' ? (
-                      <button
-                        type="button"
-                        onClick={() => onOpenSelectedScan?.(row.channelId)}
-                        className="inline-flex min-h-8 items-center justify-center gap-1 border border-amber-400/40 bg-amber-500/10 px-3 py-1 text-[11px] font-black text-amber-100 hover:border-amber-300"
-                        title={`이 채널 하나를 선택한 상태로 새 영상 수집 단계에 이동합니다. ${
-                          row.status === 'partial'
-                            ? '최신 영상 수집이며 과거 누락 영상 전체를 채우는 보강 수집은 아닙니다.'
-                            : '실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다.'
-                        }`}
-                      >
-                        <RefreshCw className="h-3.5 w-3.5" />
-                        {getScanRetryLabel(row.status)}
-                      </button>
-                    ) : null}
+                    <button
+                      type="button"
+                      onClick={() => onOpenSelectedScan?.(row.channelId)}
+                      className="inline-flex min-h-8 items-center justify-center gap-1 border border-amber-400/40 bg-amber-500/10 px-3 py-1 text-[11px] font-black text-amber-100 hover:border-amber-300"
+                      title={`이 채널 하나를 선택한 상태로 새 영상 수집 단계에 이동합니다. ${
+                        row.status === 'partial'
+                          ? '최신 영상 수집이며 과거 업로드 목록을 이어서 확인하는 기능은 아닙니다.'
+                          : '실제 수집은 다음 화면에서 별도 버튼을 눌러야 시작됩니다.'
+                      }`}
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      {getScanRetryLabel(row.status)}
+                    </button>
                     {row.status === 'partial' && !row.backfillCompleted && row.estimatedMissingVideos > 0 ? (
                       <button
                         type="button"
@@ -353,7 +374,7 @@ export default function RecentScanStatusWorkspace({
                         title="선택한 채널 하나의 공개 업로드 목록을 끝까지 확인합니다. 한 번에 최대 500개이며, 끝나지 않으면 다음 실행에서 이어갑니다."
                       >
                         <History className={`h-3.5 w-3.5 ${backfillChannelId === row.channelId ? 'animate-spin' : ''}`} />
-                        {backfillChannelId === row.channelId ? '전체 과거 영상 수집 중' : '선택 채널 전체 과거 영상 수집'}
+                        {backfillChannelId === row.channelId ? '전체 과거 영상 수집 중' : row.backfillActionLabel}
                       </button>
                     ) : null}
                   </div>

@@ -65,10 +65,10 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('quota warning');
     expect(html).toContain('새 영상 2개 · 통계 갱신 5개');
     expect(html).toContain('이 채널 관리');
-    expect(html).toContain('다시 수집 준비');
-    expect((html.match(/다시 수집 준비/g) || []).length).toBe(1);
-    expect(html).toContain('선택 채널 전체 과거 영상 수집');
+    expect((html.match(/다시 새 영상 수집 준비/g) || []).length).toBe(1);
     expect(html).toContain('한 번에 최대 500개이며');
+    expect(html).toContain('과거 목록 확인 25%');
+    expect(html).toContain('이어서 과거 영상 수집');
     expect(html).toContain('업로드 목록 확인 25%');
     expect(html).toContain('100/400개 확인');
     expect(html).toContain('Cloud 저장 50%');
@@ -76,6 +76,7 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('이 화면은 Cloud DB만 조회합니다');
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
+    expect(html).toContain('새 영상 수집 준비');
   });
 
   it('renders an honest empty state when no channels exist', () => {
@@ -154,7 +155,8 @@ describe('RecentScanStatusWorkspace', () => {
 
     expect(html).toContain('과거 영상 저장 범위가 아직 부족합니다');
     expect(html).toContain('Cloud 저장 250개 / 채널 전체 400개');
-    expect(html).toContain('선택 채널 전체 과거 영상 수집');
+    expect(html).toContain('과거 영상 수집을 직접 시작하세요');
+    expect(html).toContain('저장된 위치에서 이어집니다');
     expect(html).not.toContain('기술 오류 원문 보기');
   });
 });
