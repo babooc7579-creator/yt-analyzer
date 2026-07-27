@@ -60,15 +60,15 @@ export default function HomeRadarChannelStage({
     <section id="today-radar-channels" className="mt-4 scroll-mt-5 border border-cyan-400/25 bg-cyan-500/5 p-4" aria-labelledby="home-radar-channel-stage-title">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <p className="text-[11px] font-extrabold text-cyan-300">STAGE 1–2 · 오늘의 탐색 범위와 저장 영상</p>
+          <p className="text-[11px] font-extrabold text-cyan-300">STAGE 1–2 · 오늘의 탐색 범위와 수집 영상</p>
           <h3 id="home-radar-channel-stage-title" className="mt-1 text-lg font-black text-white">
             어떤 분야의 채널에서 소재를 찾을까요?
           </h3>
           <p className="mt-1 text-xs leading-5 text-slate-400">
-            분야와 채널을 고른 뒤 같은 화면에서 저장 영상을 펼칩니다. 채널 선택만으로 조회나 YouTube API 호출은 실행되지 않습니다.
+            분야와 채널을 고른 뒤 같은 화면에서 수집 영상을 펼칩니다. 채널 선택만으로 조회나 YouTube API 호출은 실행되지 않습니다.
           </p>
           <p className="mt-1 text-[11px] font-bold text-slate-500">
-            오늘 선택은 화면을 이동해도 유지되지만 브라우저를 새로고침하면 초기화됩니다. 영상 판단과 제작 후보 기록은 Cloud에 보존됩니다.
+            오늘 선택은 화면을 이동해도 유지되지만 브라우저를 새로고침하면 초기화됩니다. 영상 판단과 제작 후보 기록은 온라인 저장소(Azure DB)에 보존됩니다.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2 border border-cyan-300/20 bg-slate-950/60 px-3 py-2">
@@ -83,8 +83,8 @@ export default function HomeRadarChannelStage({
           <div className="mt-4 flex items-center justify-center gap-3 border border-blue-400/25 bg-blue-500/10 px-5 py-8 text-center" role="status">
             <RefreshCw className="h-5 w-5 animate-spin text-blue-200" />
             <div className="text-left">
-              <p className="font-extrabold text-white">Cloud 채널 목록을 불러오는 중입니다</p>
-              <p className="mt-1 text-xs text-blue-100/70">저장된 채널 조회이며 YouTube API는 호출하지 않습니다.</p>
+              <p className="font-extrabold text-white">온라인 저장소(Azure DB)의 채널 목록을 불러오는 중입니다</p>
+              <p className="mt-1 text-xs text-blue-100/70">등록된 채널 조회이며 YouTube API는 호출하지 않습니다.</p>
             </div>
           </div>
         ) : channelList.length === 0 ? (
@@ -143,8 +143,8 @@ export default function HomeRadarChannelStage({
               type="button"
               onClick={onOpenChannelWatchlist}
               className="text-xs font-extrabold text-cyan-300 hover:text-cyan-100"
-              title="전체 채널 선택 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다."
-              aria-label="전체 채널 선택 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음"
+              title="전체 채널 선택 화면으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다."
+              aria-label="전체 채널 선택 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음"
             >
               전체 채널 선택 화면
             </button>
@@ -192,15 +192,15 @@ export default function HomeRadarChannelStage({
             <div>
               <p className="text-sm font-extrabold text-white">
                 {storedVideoLoadPending
-                  ? 'Cloud DB에서 저장 영상을 불러오는 중입니다'
+                  ? '온라인 저장소(Azure DB)에서 수집 영상을 불러오는 중입니다'
                   : loadFailed
-                    ? '저장 영상을 불러오지 못했습니다'
+                    ? '수집 영상을 불러오지 못했습니다'
                     : loadSucceeded
                   ? emptyLoad
-                    ? '저장된 영상이 없는 채널 조합입니다'
-                    : `저장 영상 ${loadedVideoCount}개가 판정대에 준비됐습니다`
+                    ? '수집된 영상 정보가 없는 채널 조합입니다'
+                    : `수집 영상 ${loadedVideoCount}개가 판정대에 준비됐습니다`
                   : selectedIds.length > 0
-                    ? `선택한 ${selectedIds.length}개 채널의 저장 영상을 펼쳐보세요`
+                    ? `선택한 ${selectedIds.length}개 채널의 수집 영상을 펼쳐보세요`
                     : '먼저 오늘 볼 채널을 1개 이상 담아주세요'}
               </p>
               <p className="mt-1 text-[11px] font-bold text-slate-400">
@@ -208,7 +208,7 @@ export default function HomeRadarChannelStage({
                   ? '연결 상태를 확인한 뒤 같은 버튼으로 다시 시도하세요. 실패해도 YouTube API는 호출되지 않습니다.'
                   : loadSucceeded && !emptyLoad
                     ? '아래 STAGE 3에서 오늘의 후보를 바로 판단할 수 있습니다.'
-                    : '저장 영상 불러오기는 Cloud DB 조회이며 YouTube API를 호출하지 않습니다.'}
+                    : '수집 영상 목록 불러오기는 온라인 저장소(Azure DB) 조회이며 YouTube API를 호출하지 않습니다.'}
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
@@ -216,8 +216,8 @@ export default function HomeRadarChannelStage({
                 <a
                   href="#today-radar-candidates"
                   className="inline-flex items-center gap-2 bg-emerald-200 px-4 py-2.5 text-xs font-extrabold text-emerald-950"
-                  title="같은 화면의 오늘 후보 판정 영역으로 이동합니다. 이동만으로 Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
-                  aria-label="오늘 후보 판정 영역으로 이동, Cloud 저장 및 YouTube API 호출 없음"
+                  title="같은 화면의 오늘 후보 판정 영역으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
+                  aria-label="오늘 후보 판정 영역으로 이동, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
                 >
                   후보 판정 시작 <span aria-hidden="true">↓</span>
                 </a>
@@ -227,16 +227,16 @@ export default function HomeRadarChannelStage({
                   onClick={onLoadStoredVideos}
                   disabled={!canLoad}
                   className="inline-flex items-center gap-2 bg-blue-100 px-4 py-2.5 text-xs font-extrabold text-blue-950 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
-                  title="선택 채널의 저장 영상을 Cloud DB에서 조회합니다. YouTube API는 호출하지 않습니다."
+                  title="선택 채널의 수집 영상을 온라인 저장소(Azure DB)에서 조회합니다. YouTube API는 호출하지 않습니다."
                 >
                   {storedVideoLoadPending
                     ? <RefreshCw className="h-4 w-4 animate-spin" />
                     : <Database className="h-4 w-4" />}
                   {storedVideoLoadPending
-                    ? '저장 영상 불러오는 중...'
+                    ? '수집 영상 불러오는 중...'
                     : loadFailed
-                      ? '저장 영상 다시 불러오기'
-                      : '저장 영상 불러오기'}
+                      ? '수집 영상 다시 불러오기'
+                      : '수집 영상 목록 불러오기'}
                 </button>
               )}
               {emptyLoad && (

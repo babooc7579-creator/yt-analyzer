@@ -46,7 +46,7 @@ export default function KeywordExplorerFilters({
           onClick={onReset}
           disabled={!hasActiveFilters}
           className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-300 hover:bg-slate-800 disabled:cursor-not-allowed disabled:text-slate-700"
-          title="검색어와 화면 필터만 초기화합니다. Cloud 데이터는 변경하지 않습니다."
+          title="검색어와 화면 필터만 초기화합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다."
         >
           <RotateCcw className="h-4 w-4" /> 초기화
         </button>

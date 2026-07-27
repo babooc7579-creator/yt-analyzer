@@ -17,7 +17,7 @@ describe('ChannelOperationsNavigator', () => {
     expect(html).toContain('채널 선택만으로 YouTube API는 호출되지 않습니다');
     expect(html).toContain('다음 추천 행동');
     expect(html).toContain('새 채널 등록하기');
-    expect(html).toContain('이동만으로 YouTube API 호출이나 Cloud 저장은 실행되지 않습니다');
+    expect(html).toContain('이동만으로 YouTube API 호출이나 온라인 저장소(Azure DB) 저장은 실행되지 않습니다');
   });
 
   it('shows stored-video and radar actions when videos are ready', () => {
@@ -33,7 +33,7 @@ describe('ChannelOperationsNavigator', () => {
     );
 
     expect(html).toContain('영상이 준비됐습니다');
-    expect(html).toContain('저장 영상 2개 보기');
+    expect(html).toContain('수집 영상 2개 보기');
     expect(html).toContain('오늘의 레이더로');
     expect(html).toContain('1개 선택');
   });
@@ -47,9 +47,9 @@ describe('ChannelOperationsNavigator', () => {
       />,
     );
 
-    expect(html).toContain('선택 채널에 저장된 영상이 없습니다');
+    expect(html).toContain('선택 채널에 수집된 영상 정보가 없습니다');
     expect(html).toContain('채널 다시 선택');
     expect(html).toContain('새 영상 수집 단계');
-    expect(html).toContain('Cloud DB 조회 결과');
+    expect(html).toContain('온라인 저장소(Azure DB) 조회 결과');
   });
 });

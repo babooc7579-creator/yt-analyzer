@@ -128,7 +128,7 @@ export function RecentScanHistoryLogRow({ log = {}, onOpenChannelOperations }) {
         type="button"
         onClick={() => onOpenChannelOperations?.(log.channelId)}
         className="inline-flex min-h-9 items-center justify-center gap-1 border border-slate-600 bg-slate-900 px-3 py-1.5 text-[11px] font-black text-slate-200 hover:border-cyan-400"
-        title="이 기록의 채널 하나를 선택한 상태로 채널 관리 단계에 이동합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+        title="이 기록의 채널 하나를 선택한 상태로 채널 관리 단계에 이동합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
       >
         <ListChecks className="h-3.5 w-3.5" />
         채널 관리
@@ -218,7 +218,7 @@ export default function RecentScanStatusWorkspace({
               채널별 마지막 결과와 Cloud에 저장된 과거 수집 이력을 함께 봅니다. 정확한 YouTube API 쿼터 장부는 아직 포함하지 않습니다.
             </p>
             <p className="mt-1 text-xs font-bold text-emerald-200">
-              이 화면은 Cloud DB만 조회합니다. YouTube API 호출과 Cloud 저장은 실행되지 않습니다.
+              이 화면은 온라인 저장소(Azure DB)만 조회합니다. YouTube API 호출과 온라인 저장소(Azure DB) 저장은 실행되지 않습니다.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -286,7 +286,7 @@ export default function RecentScanStatusWorkspace({
                     ? 'border-violet-300 bg-violet-400/15 text-violet-100'
                     : 'border-slate-700 bg-slate-950/70 text-slate-300 hover:border-slate-500'
                 }`}
-                title={`${item.label} 채널만 화면에 표시합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다.`}
+                title={`${item.label} 채널만 화면에 표시합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다.`}
               >
                 <span className="block text-[11px] font-black">{item.label}</span>
                 <strong className="mt-0.5 block text-lg font-black text-white">
@@ -320,7 +320,7 @@ export default function RecentScanStatusWorkspace({
                 value={backfillSort}
                 onChange={(event) => setBackfillSort(event.target.value)}
                 className="min-h-9 bg-transparent text-xs font-black text-white outline-none"
-                title="이미 조회된 채널을 화면에서만 정렬합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+                title="이미 조회된 채널을 화면에서만 정렬합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
               >
                 {BACKFILL_SORT_OPTIONS.map((option) => (
                   <option key={option.id} value={option.id} className="bg-slate-950">
@@ -396,7 +396,7 @@ export default function RecentScanStatusWorkspace({
                         {row.inspectionCountLabel ? ` · ${row.inspectionCountLabel}` : ''}
                       </p>
                       <p>
-                        Cloud 저장 {row.displayCoverageRate ?? 0}% · {row.savedVideosTotal.toLocaleString('ko-KR')}개 저장
+                        온라인 저장소(Azure DB) 저장 {row.displayCoverageRate ?? 0}% · {row.savedVideosTotal.toLocaleString('ko-KR')}개 저장
                         {row.savedAboveChannelTotal > 0
                           ? ` · 채널 통계보다 ${row.savedAboveChannelTotal.toLocaleString('ko-KR')}개 많음`
                           : ''}
@@ -414,7 +414,7 @@ export default function RecentScanStatusWorkspace({
                       </p>
                       {row.backfillCompleted && row.statisticsMismatch ? (
                         <p className="text-amber-200">
-                          삭제·비공개 영상과 집계 시점 차이로 채널 통계와 Cloud 저장 수는 정확히 일치하지 않을 수 있습니다.
+                          삭제·비공개 영상과 집계 시점 차이로 채널 통계와 온라인 저장소(Azure DB) 저장 수는 정확히 일치하지 않을 수 있습니다.
                         </p>
                       ) : null}
                     </div>
@@ -425,7 +425,7 @@ export default function RecentScanStatusWorkspace({
                       type="button"
                       onClick={() => onOpenChannelOperations?.(row.channelId)}
                       className="inline-flex min-h-8 items-center justify-center gap-1 border border-slate-600 bg-slate-950 px-3 py-1 text-[11px] font-black text-slate-200 hover:border-cyan-400"
-                      title="이 채널 하나를 선택한 상태로 채널 관리 단계에 이동합니다. Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
+                      title="이 채널 하나를 선택한 상태로 채널 관리 단계에 이동합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
                     >
                       <ListChecks className="h-3.5 w-3.5" />
                       이 채널 관리
@@ -500,7 +500,7 @@ export default function RecentScanStatusWorkspace({
             onClick={loadHistory}
             disabled={historyLoading}
             className="inline-flex min-h-10 items-center justify-center gap-2 border border-slate-600 bg-slate-950 px-4 py-2 text-xs font-black text-slate-200 hover:border-cyan-400 disabled:cursor-wait disabled:opacity-60"
-            title="Cloud DB의 수집 이력만 다시 조회합니다. YouTube API 호출이나 새 저장은 실행되지 않습니다."
+            title="온라인 저장소(Azure DB)의 수집 이력만 다시 조회합니다. YouTube API 호출이나 새 저장은 실행되지 않습니다."
           >
             <RefreshCw className={`h-4 w-4 ${historyLoading ? 'animate-spin' : ''}`} />
             {historyLoading ? '이력 조회 중' : '이력 다시 불러오기'}

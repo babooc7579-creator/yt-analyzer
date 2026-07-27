@@ -1,14 +1,14 @@
 export const REFERENCE_VAULT_EMPTY_STATE = {
   title: '레퍼런스 금고가 비어 있습니다',
-  description: '채널을 저장한 뒤, Cloud DB에 저장된 영상을 불러오면 금고에 제작 소재가 쌓입니다. 새 영상 수집은 필요할 때만 따로 실행합니다.',
+  description: '채널을 저장한 뒤, 온라인 저장소(Azure DB)에 보관된 수집 영상 정보를 불러오면 금고에 제작 소재가 쌓입니다. 새 영상 수집은 필요할 때만 따로 실행합니다.',
   steps: [
     {
       title: '1. 채널 등록·선택',
       description: '채널을 Cloud 목록에 등록하고 오늘 확인할 채널을 선택합니다. 선택만으로 영상 수집은 실행되지 않습니다.',
     },
     {
-      title: '2. 저장된 영상 불러오기',
-      description: 'Cloud DB에 이미 저장된 영상을 먼저 조회합니다. 새 YouTube API 호출은 없습니다.',
+      title: '2. 수집 영상 목록 불러오기',
+      description: '온라인 저장소(Azure DB)에 이미 보관된 수집 영상 정보를 먼저 조회합니다. 새 YouTube API 호출은 없습니다.',
     },
     {
       title: '3. 필요할 때 새 영상 수집',
@@ -29,15 +29,15 @@ export const REFERENCE_VAULT_EMPTY_STATE = {
 
 export const SCRAPBOOK_EMPTY_STATE = {
   title: '스크랩된 영상이 없습니다',
-  description: '스크랩북은 나중에 다시 볼 레퍼런스 영상을 모아두는 보관함입니다. 별표로 저장한 영상만 이곳에 표시되며, 제작 후보와는 별도로 관리합니다.',
+  description: '스크랩북은 나중에 다시 볼 레퍼런스 영상을 모아두는 보관함입니다. 별표로 수집 영상 목록만 이곳에 표시되며, 제작 후보와는 별도로 관리합니다.',
   steps: [
     {
       title: '1. 채널 저장',
       description: '소재를 모을 채널을 Cloud 채널 목록에 저장합니다. 영상 수집은 별도 버튼에서 실행합니다.',
     },
     {
-      title: '2. 저장 영상 불러오기',
-      description: 'Cloud DB에 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.',
+      title: '2. 수집 영상 목록 불러오기',
+      description: '온라인 저장소(Azure DB)에 보관된 수집 영상 정보만 조회합니다. 새 YouTube API 호출은 없습니다.',
     },
     {
       title: '3. 별표 저장',
@@ -50,9 +50,9 @@ export const SCRAPBOOK_EMPTY_STATE = {
     ariaLabel: '오늘 레이더 화면 열기, 이동만으로 YouTube API 호출 없음',
   },
   referenceVaultButton: {
-    label: '저장 영상 탐색',
-    title: '저장 영상 탐색 화면을 엽니다. Cloud DB에 저장된 영상 조회 흐름이며 YouTube API를 새로 호출하지 않습니다.',
-    ariaLabel: '저장 영상 탐색 화면 열기, Cloud DB 조회 흐름이며 YouTube API 호출 없음',
+    label: '수집 영상 목록',
+    title: '수집 영상 목록 화면을 엽니다. 온라인 저장소(Azure DB)에 보관된 수집 영상 정보 조회 흐름이며 YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '수집 영상 목록 화면 열기, 온라인 저장소(Azure DB) 조회 흐름이며 YouTube API 호출 없음',
   },
 };
 
@@ -81,11 +81,11 @@ export const PRODUCTION_KANBAN_EMPTY_STATE = {
   steps: [
     {
       title: '1. 오늘 레이더에서 고르기',
-      description: '저장 영상을 불러온 뒤 오늘 볼 후보에서 제작 후보로 표시할 영상을 고릅니다.',
+      description: '수집 영상을 불러온 뒤 오늘 볼 후보에서 제작 후보로 표시할 영상을 고릅니다.',
     },
     {
-      title: '2. 저장 영상에서 고르기',
-      description: 'Cloud DB에 저장된 영상만 훑고 제작 후보로 표시합니다. 새 YouTube API 호출은 없습니다.',
+      title: '2. 수집 영상에서 고르기',
+      description: '온라인 저장소(Azure DB)에 보관된 수집 영상 정보만 훑고 제작 후보로 표시합니다. 새 YouTube API 호출은 없습니다.',
     },
     {
       title: '3. 발견 링크에서 표시하기',
@@ -93,9 +93,9 @@ export const PRODUCTION_KANBAN_EMPTY_STATE = {
     },
   ],
   referenceVaultButton: {
-    label: '저장 영상 탐색',
-    title: '저장 영상 탐색 화면을 엽니다. Cloud DB 조회이며 YouTube API를 새로 호출하지 않습니다.',
-    ariaLabel: '저장 영상 탐색 화면 열기, Cloud DB 조회이며 YouTube API 호출 없음',
+    label: '수집 영상 목록',
+    title: '수집 영상 목록 화면을 엽니다. 온라인 저장소(Azure DB) 조회이며 YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '수집 영상 목록 화면 열기, 온라인 저장소(Azure DB) 조회이며 YouTube API 호출 없음',
   },
   discoveryLinksButton: {
     label: '발견 링크 저장',

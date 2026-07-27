@@ -122,7 +122,7 @@ export default function ScriptBoardWorkspace({
               type="button"
               onClick={navigation.production}
               className="inline-flex items-center gap-2 border border-indigo-300/30 bg-indigo-400/10 px-3 py-2 text-xs font-extrabold text-indigo-100 hover:bg-indigo-400/20"
-              title="제작 후보함으로 이동합니다. 화면 이동만으로 Cloud 데이터는 변경되지 않습니다."
+              title="제작 후보함으로 이동합니다. 화면 이동만으로 온라인 저장소(Azure DB) 데이터는 변경되지 않습니다."
             >
               <Sparkles className="h-4 w-4" /> 제작 후보함
             </button>
@@ -130,7 +130,7 @@ export default function ScriptBoardWorkspace({
               type="button"
               onClick={navigation.schedule}
               className="inline-flex items-center gap-2 border border-amber-300/30 bg-amber-400/10 px-3 py-2 text-xs font-extrabold text-amber-100 hover:bg-amber-400/20"
-              title="업로드 캘린더로 이동합니다. 화면 이동만으로 Cloud 저장이나 YouTube API 호출은 없습니다."
+              title="업로드 캘린더로 이동합니다. 화면 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다."
             >
               <CalendarDays className="h-4 w-4" /> 업로드 캘린더
             </button>
@@ -171,7 +171,7 @@ export default function ScriptBoardWorkspace({
                     ? 'border-indigo-300 bg-indigo-400 text-slate-950'
                     : 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500'
                 }`}
-                title={`${filter.label} 작업만 표시합니다. 화면 필터만 바꾸며 Cloud 데이터는 변경하지 않습니다.`}
+                title={`${filter.label} 작업만 표시합니다. 화면 필터만 바꾸며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.`}
               >
                 {filter.label}
               </button>
@@ -194,8 +194,8 @@ export default function ScriptBoardWorkspace({
             onClick={emptyState.type === 'filter' ? resetFilters : navigation.production}
             className="mt-4 bg-white px-4 py-2 text-xs font-extrabold text-slate-950"
             title={emptyState.type === 'filter'
-              ? '검색어와 진행 단계 필터를 초기화합니다. Cloud 데이터는 변경하지 않습니다.'
-              : '제작 후보함으로 이동합니다. 화면 이동만으로 Cloud 저장이나 YouTube API 호출은 없습니다.'}
+              ? '검색어와 진행 단계 필터를 초기화합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.'
+              : '제작 후보함으로 이동합니다. 화면 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다.'}
           >
             {emptyState.actionLabel}
           </button>

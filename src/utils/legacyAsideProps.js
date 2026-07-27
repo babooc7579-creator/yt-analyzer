@@ -7,7 +7,7 @@ export const LEGACY_ASIDE_COPY = {
       text: '은 YouTube API를 호출해 새 영상 여부를 확인합니다.',
     },
     {
-      accentText: '저장된 영상 불러오기',
+      accentText: '수집 영상 목록 불러오기',
       text: '는 이미 저장된 데이터만 조회합니다.',
     },
   ],
@@ -25,7 +25,7 @@ export const LEGACY_ASIDE_COPY = {
     },
     {
       description: '저장된 데이터만 보고 싶을 때 사용합니다.',
-      title: '3. 저장 영상 조회',
+      title: '3. 수집 영상 조회',
     },
   ],
   statusLabels: {

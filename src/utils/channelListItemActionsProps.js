@@ -34,10 +34,10 @@ export const getChannelListItemActionsViewProps = ({
         ? () => onDelete(safeChannel.id, safeChannel.category, safeChannel.title)
         : noop,
       title: canDelete
-        ? 'Cloud 채널 목록에서 삭제합니다. 조회/수집 대상에서 빠지지만 YouTube 원본이나 이미 저장된 영상 데이터는 삭제하지 않습니다.'
+        ? 'Cloud 채널 목록에서 삭제합니다. 조회/수집 대상에서 빠지지만 YouTube 원본이나 이미 수집된 영상 정보는 삭제하지 않습니다.'
         : '삭제할 채널 ID가 없어 Cloud 삭제를 실행하지 않습니다.',
       'aria-label': canDelete
-        ? `${channelTitle} Cloud 채널 목록에서 삭제하고 조회/수집 대상에서 제외, 저장 영상 데이터는 삭제하지 않음`
+        ? `${channelTitle} Cloud 채널 목록에서 삭제하고 조회/수집 대상에서 제외, 수집 영상 정보는 삭제하지 않음`
         : `${channelTitle} 삭제 비활성화 - 채널 ID 없음`,
       type: 'button',
     },

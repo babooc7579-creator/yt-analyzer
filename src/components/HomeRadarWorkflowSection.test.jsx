@@ -42,8 +42,8 @@ describe('HomeRadarWorkflowSection', () => {
     expect(html).toContain('STAGE 1–2');
     expect(html).toContain('채널 이름 또는 태그 검색');
     expect(html).toContain('오늘 선택');
-    expect(html).toContain('저장 영상 불러오기');
-    expect(html).toContain('Cloud DB');
+    expect(html).toContain('수집 영상 목록 불러오기');
+    expect(html).toContain('온라인 저장소(Azure DB)');
     expect(html).toContain('YouTube API');
   });
 
@@ -70,7 +70,7 @@ describe('HomeRadarWorkflowSection', () => {
       />,
     );
 
-    expect(html).toContain('저장 영상 12개가 판정대에 준비됐습니다');
+    expect(html).toContain('수집 영상 12개가 판정대에 준비됐습니다');
     expect(html).toContain('후보 판정 시작');
   });
 
@@ -85,7 +85,7 @@ describe('HomeRadarWorkflowSection', () => {
       />,
     );
 
-    expect(html).toContain('Cloud DB에서 저장 영상을 불러오는 중입니다');
-    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('온라인 저장소(Azure DB)에서 수집 영상을 불러오는 중입니다');
+    expect(html).toContain('수집 영상 불러오는 중...');
   });
 });

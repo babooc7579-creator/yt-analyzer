@@ -8,15 +8,15 @@ import ScrapbookVideoFooterActions from './ScrapbookVideoFooterActions';
 const noop = () => {};
 
 describe('Scrapbook and reference vault flow', () => {
-  it('renders scrapbook empty actions as safe navigation and Cloud DB lookup guidance', () => {
+  it('renders scrapbook empty actions as safe navigation and 온라인 저장소(Azure DB) lookup guidance', () => {
     const html = renderToStaticMarkup(
       <ScrapbookEmptyState onOpenHome={noop} onOpenReferenceVault={noop} />,
     );
 
     expect(html).toContain('스크랩된 영상이 없습니다');
     expect(html).toContain('오늘 레이더로');
-    expect(html).toContain('저장 영상 탐색');
-    expect(html).toContain('Cloud DB에 저장된 영상만 조회합니다. 새 YouTube API 호출은 없습니다.');
+    expect(html).toContain('수집 영상 목록');
+    expect(html).toContain('온라인 저장소(Azure DB)에 보관된 수집 영상 정보만 조회합니다. 새 YouTube API 호출은 없습니다.');
     expect(html).toContain('Cloud 스크랩북에 보관합니다.');
   });
 
@@ -38,8 +38,8 @@ describe('Scrapbook and reference vault flow', () => {
 
     expect(html).toContain('레퍼런스 금고가 비어 있습니다');
     expect(html).toContain('1. 채널 등록·선택');
-    expect(html).toContain('2. 저장된 영상 불러오기');
-    expect(html).toContain('Cloud DB에 이미 저장된 영상을 먼저 조회합니다. 새 YouTube API 호출은 없습니다.');
+    expect(html).toContain('2. 수집 영상 목록 불러오기');
+    expect(html).toContain('온라인 저장소(Azure DB)에 이미 보관된 수집 영상 정보를 먼저 조회합니다. 새 YouTube API 호출은 없습니다.');
     expect(html).toContain('3. 필요할 때 새 영상 수집');
     expect(html).toContain('새 데이터가 필요할 때만 선택 채널을 수집합니다. 이 단계는 YouTube API를 호출할 수 있습니다.');
     expect(html).toContain('오늘 레이더로');
@@ -62,7 +62,7 @@ describe('Scrapbook and reference vault flow', () => {
     expect(html).toContain('조회 결과를 Cloud에 저장하지 않습니다.');
     expect(html).toContain('제작 후보로');
     expect(html).toContain('Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.');
-    expect(html).toContain('Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 저장 영상 데이터는 삭제하지 않습니다.');
+    expect(html).toContain('Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.');
     expect(html).toContain('flex-wrap');
   });
 });

@@ -5,8 +5,8 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
       { id: 'discovery-trends', label: '트렌드 스캐너', status: 'soon', summary: '외부 트렌드와 급상승 신호를 연결할 예정입니다.' },
-      { id: 'discovery-ttotto', label: '또터또 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 저장 영상을 전용 화면에서 검토합니다.' },
-      { id: 'discovery-keywords', label: '키워드 탐색', status: 'live', summary: 'Cloud에 저장된 영상 제목과 채널명을 키워드로 검색하고 판단 작업으로 연결합니다.' },
+      { id: 'discovery-ttotto', label: '또터또 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 수집 영상을 전용 화면에서 검토합니다.' },
+      { id: 'discovery-keywords', label: '키워드 탐색', status: 'live', summary: '온라인 저장소(Azure DB)에 보관된 수집 영상의 제목과 채널명을 검색하고 판단 작업으로 연결합니다.' },
       { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'live', summary: '운영중 채널을 등급과 마지막 수집일 기준으로 정렬하고 오늘 확인할 범위를 고릅니다.' },
     ],
   },
@@ -14,8 +14,8 @@ export const CREATOR_OS_PRODUCT_MAP = [
     title: '레퍼런스 금고',
     description: '보관: 영상과 발견 링크를 자산처럼 쌓습니다.',
     items: [
-      { id: 'vault-videos', label: '저장한 영상', status: 'live', summary: '저장된 영상 데이터와 영상 보드를 확인합니다.' },
-      { id: 'vault-tags', label: '태그별 금고', status: 'live', summary: '기존 채널 태그별로 채널을 선택하고 Cloud 저장 영상을 묶어 봅니다.' },
+      { id: 'vault-videos', label: '수집 영상 목록', status: 'live', summary: '수집된 영상 정보와 영상 보드를 확인합니다.' },
+      { id: 'vault-tags', label: '태그별 금고', status: 'live', summary: '기존 채널 태그별로 채널을 선택하고 온라인 저장소(Azure DB)의 수집 영상을 묶어 봅니다.' },
       { id: 'vault-sources', label: '발견 링크 저장', status: 'live', summary: '외부에서 발견한 링크를 Cloud 발견함에 수동 저장하고 검토 상태를 관리합니다.' },
     ],
   },
@@ -26,7 +26,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
       { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '제작 후보로 표시한 영상과 발견함 링크를 함께 봅니다.' },
       { id: 'studio-scrapbook', label: '제작/스크랩북', status: 'live', summary: '별표로 보관한 영상과 제작 후보를 구분해 봅니다.' },
       { id: 'studio-script', label: '대본 보드', status: 'live', summary: '제작 후보의 제목, 구성 메모, 업로드 예정일을 Cloud에 정리합니다.' },
-      { id: 'studio-calendar', label: '업로드 캘린더', status: 'live', summary: '제작 후보함에 Cloud 저장된 목표 업로드 날짜를 달력으로 확인합니다.' },
+      { id: 'studio-calendar', label: '업로드 캘린더', status: 'live', summary: '제작 후보함에 온라인 저장소(Azure DB)에 저장된 목표 업로드 날짜를 달력으로 확인합니다.' },
       { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '미검토, 분석중, 대본화, 제작완료 상태를 관리할 예정입니다.' },
     ],
   },
@@ -47,7 +47,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     title: '오퍼레이션 관제',
     description: '수집: 채널, 선택 수집, 운영 상태를 통제합니다.',
     items: [
-      { id: 'ops-channels', label: '채널 운영실', status: 'live', summary: '채널 관리, 새 채널 등록, 저장 영상 확인과 새 영상 수집을 단계별로 진행합니다.' },
+      { id: 'ops-channels', label: '채널 운영실', status: 'live', summary: '채널 관리, 새 채널 등록, 수집 영상 확인과 새 영상 수집을 단계별로 진행합니다.' },
       { id: 'ops-scan-log', label: '최근 수집 상태', status: 'live', summary: '채널별 마지막 수집 결과와 실패·미수집 상태를 한곳에서 확인합니다.' },
       { id: 'ops-api', label: 'API 사용량', status: 'soon', summary: 'YouTube API 호출량과 비용 위험을 볼 수 있게 할 예정입니다.' },
       { id: 'ops-settings', label: '설정', status: 'live', summary: '채널 분야와 데이터 연결 기준을 한곳에서 확인하고 관리합니다.' },
@@ -78,7 +78,7 @@ const CREATOR_OS_VISIBLE_ITEMS = CREATOR_OS_PRODUCT_MAP.flatMap((section) => (
 
 // Duplicate legacy views remain addressable, but are hidden from the sidebar.
 export const LEGACY_REFERENCE_ITEMS = [
-  { id: 'vault-all', label: '올인원 보관함', status: 'live', summary: '저장한 영상 화면과 같은 기존 영상 보드입니다.', sectionTitle: '레퍼런스 금고' },
+  { id: 'vault-all', label: '올인원 보관함', status: 'live', summary: '수집 영상 목록 화면과 같은 기존 영상 보드입니다.', sectionTitle: '레퍼런스 금고' },
   { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '채널 운영실로 통합하기 전의 기존 채널 목록입니다.', sectionTitle: '레퍼런스 금고' },
 ];
 

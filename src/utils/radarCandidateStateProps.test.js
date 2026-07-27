@@ -21,7 +21,7 @@ describe('radarCandidateStateProps utils', () => {
     expect(props.descriptionText).toContain('제작 후보함');
     expect(props.openVaultButtonProps).toMatchObject({
       label: '레퍼런스 금고 열기',
-      title: '저장된 영상 조회 화면으로 이동',
+      title: '수집된 영상 정보 조회 화면으로 이동',
     });
     expect(props.openProductionButtonProps).toMatchObject({
       label: '제작 후보함 열기',
@@ -35,7 +35,7 @@ describe('radarCandidateStateProps utils', () => {
     const props = getRadarCandidateEmptyStateViewProps({ selectedChannelCount: 2 });
 
     expect(props.titleText).toBe('오늘 볼 후보');
-    expect(props.descriptionText).toContain('저장 영상');
+    expect(props.descriptionText).toContain('수집 영상');
     expect(props.descriptionText).toContain('선택한 채널 2개');
     expect(props.descriptionText).toContain('YouTube API는 호출하지 않습니다');
     expect(props.channelWatchlistButtonProps.show).toBe(false);
@@ -127,7 +127,7 @@ describe('radarCandidateStateProps utils', () => {
     expect(getRadarCandidateActionErrorMessage('production')).toContain('제작 후보 표시');
     expect(getRadarCandidateActionErrorMessage('scrapbook')).toContain('소재 보관 상태');
     expect(getRadarCandidateActionErrorMessage('status')).toContain('영상 판단');
-    expect(getRadarCandidateActionErrorMessage('unknown')).toContain('Cloud 저장');
+    expect(getRadarCandidateActionErrorMessage('unknown')).toContain('온라인 저장소(Azure DB) 저장');
   });
 
   it('guards radar production promotion action when video id or handler is missing', () => {

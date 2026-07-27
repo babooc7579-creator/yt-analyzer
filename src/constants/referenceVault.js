@@ -8,7 +8,7 @@ export const REFERENCE_VAULT_SUMMARY_TONES = {
 export const REFERENCE_VAULT_HEADER = {
   eyebrow: 'Reference Vault',
   title: '레퍼런스 금고',
-  description: '저장된 영상과 스크랩 소재를 한 곳에서 훑고, 제작 후보로 표시할 소재를 고르는 작업 캔버스입니다.',
+  description: '수집된 영상 정보와 스크랩 소재를 한 곳에서 훑고, 제작 후보로 표시할 소재를 고르는 작업 캔버스입니다.',
 };
 
 export const REFERENCE_VAULT_SUMMARY_CARDS = [
@@ -22,8 +22,8 @@ export const REFERENCE_VAULT_SUMMARY_CARDS = [
 export const REFERENCE_VAULT_GUIDE_CARDS = [
   {
     key: 'load-saved-videos',
-    title: '1. 저장된 영상 보기',
-    description: '이미 DB에 저장된 영상만 불러와서 봅니다. 새 YouTube API 호출은 없습니다.',
+    title: '1. 수집된 영상 정보 보기',
+    description: '이미 DB에 수집된 영상 정보만 불러와서 봅니다. 새 YouTube API 호출은 없습니다.',
     iconName: 'play',
     className: 'border-blue-100 bg-blue-50/80',
     iconClassName: 'text-blue-700',

@@ -84,7 +84,7 @@ describe('useTagRenameActions', () => {
 
     await useTagRenameActions(deps).confirmRenameCategory();
 
-    expect(window.confirm).toHaveBeenCalledWith(expect.stringContaining('Cloud DB'));
+    expect(window.confirm).toHaveBeenCalledWith(expect.stringContaining('온라인 저장소(Azure DB)'));
     expect(renameTag).not.toHaveBeenCalled();
     expect(deps.setRenameLoading).not.toHaveBeenCalled();
     expect(deps.setCategories).not.toHaveBeenCalled();

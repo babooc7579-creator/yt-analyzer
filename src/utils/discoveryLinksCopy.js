@@ -11,7 +11,7 @@ export const getDiscoveryLinksFilteredEmptyStateViewProps = ({ allLinkCount = 0 
   description: `Cloud에는 링크 ${allLinkCount}개가 저장되어 있지만, 현재 검색어나 필터 조건 때문에 보이지 않습니다. 필터 초기화는 화면 조건만 바꾸며 저장 데이터나 외부 사이트에는 영향을 주지 않습니다.`,
   clearButtonProps: {
     label: '필터 초기화',
-    title: '검색어와 필터를 모두 초기화합니다. Cloud 저장 데이터는 바꾸지 않습니다.',
+    title: '검색어와 필터를 모두 초기화합니다. 온라인 저장소(Azure DB) 저장 데이터는 바꾸지 않습니다.',
     'aria-label': '발견함 화면 필터 초기화, 저장 데이터 변경 없음',
   },
 });
@@ -44,7 +44,7 @@ export const getDiscoveryLinkRiskyCandidateHintViewProps = () => ({
 
 export const getDiscoveryLinkSafetyNoticeViewProps = () => ({
   title: '안전 기준',
-  description: '저장 영상 조회와 같은 Cloud DB 작업입니다. 선택 채널 새 영상 수집이나 외부 사이트 크롤링을 실행하지 않습니다. 권리 상태는 사용자가 남기는 검토 표시이며, 사용 허가나 자동 권리 확인을 의미하지 않습니다.',
+  description: '수집 영상 조회와 같은 온라인 저장소(Azure DB) 작업입니다. 선택 채널 새 영상 수집이나 외부 사이트 크롤링을 실행하지 않습니다. 권리 상태는 사용자가 남기는 검토 표시이며, 사용 허가나 자동 권리 확인을 의미하지 않습니다.',
 });
 
 export const getDiscoveryLinkSearchBoxViewProps = () => ({
@@ -98,9 +98,9 @@ export const getDiscoveryLinksLoadingStateViewProps = () => ({
 
 export const getDiscoveryLinksActiveFilterSummaryViewProps = ({ filteredLinkCount = 0 } = {}) => ({
   clearButtonProps: {
-    'aria-label': '발견함 검색어와 상태 필터 모두 초기화, Cloud 저장 데이터 변경 없음',
+    'aria-label': '발견함 검색어와 상태 필터 모두 초기화, 온라인 저장소(Azure DB) 저장 데이터 변경 없음',
     label: '필터 초기화',
-    title: '검색어와 상태 필터를 모두 초기화합니다. Cloud 저장 데이터는 바꾸지 않습니다.',
+    title: '검색어와 상태 필터를 모두 초기화합니다. 온라인 저장소(Azure DB) 저장 데이터는 바꾸지 않습니다.',
   },
   message: `현재 조건에 맞는 링크 ${filteredLinkCount}개를 보고 있습니다.`,
 });
@@ -149,7 +149,7 @@ export const getDiscoveryLinkSubmitButtonViewProps = ({
     'aria-label': 'Cloud 발견함에 링크 저장',
     type: 'submit',
   },
-  label: saving ? 'Cloud 저장 중' : duplicateLink ? '이미 저장된 링크' : '링크 저장',
+  label: saving ? '온라인 저장소(Azure DB) 저장 중' : duplicateLink ? '이미 저장된 링크' : '링크 저장',
 });
 
 export const getDiscoveryLinkUrlFieldViewProps = ({ duplicateLink, urlPreview } = {}) => ({

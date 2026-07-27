@@ -22,8 +22,8 @@ export default function UploadCalendarDayDetails({
           type="button"
           onClick={onOpenProductionCandidates}
           className="inline-flex h-9 items-center gap-2 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800"
-          title="제작 후보함으로 이동해 일정을 수정합니다. 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다."
-          aria-label="제작 후보함에서 일정 수정, 화면 이동이며 Cloud 데이터 변경 및 YouTube API 호출 없음"
+          title="제작 후보함으로 이동해 일정을 수정합니다. 이동만으로 온라인 저장소(Azure DB) 데이터나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="제작 후보함에서 일정 수정, 화면 이동이며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
         >
           <PencilLine className="h-4 w-4" /> 일정 수정
         </button>
@@ -60,8 +60,8 @@ export default function UploadCalendarDayDetails({
                       type="button"
                       onClick={() => onOpenScriptBoard(item)}
                       className="inline-flex items-center gap-1 text-[11px] font-bold text-violet-300 hover:text-violet-200"
-                      title="대본 보드를 열고 이 영상의 제목·메모·업로드 예정일을 이어서 작성합니다. 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다."
-                      aria-label="이 영상의 대본 보드 열기, 화면 이동이며 Cloud 데이터 변경 및 YouTube API 호출 없음"
+                      title="대본 보드를 열고 이 영상의 제목·메모·업로드 예정일을 이어서 작성합니다. 이동만으로 온라인 저장소(Azure DB) 데이터나 YouTube API 호출은 실행되지 않습니다."
+                      aria-label="이 영상의 대본 보드 열기, 화면 이동이며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
                     >
                       <PencilLine className="h-3.5 w-3.5" /> 대본 보드 열기
                     </button>
@@ -71,7 +71,7 @@ export default function UploadCalendarDayDetails({
                       type="button"
                       onClick={() => onOpenProductionCandidate(item)}
                       className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 hover:text-amber-200"
-                      title="제작 후보함을 열고 이 항목의 제목으로 화면 검색합니다. Cloud 데이터는 바꾸지 않습니다."
+                      title="제작 후보함을 열고 이 항목의 제목으로 화면 검색합니다. 온라인 저장소(Azure DB) 데이터는 바꾸지 않습니다."
                     >
                       <ListTodo className="h-3.5 w-3.5" /> 후보함에서 찾기
                     </button>

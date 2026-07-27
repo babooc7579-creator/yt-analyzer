@@ -64,9 +64,9 @@ describe('channelListItemActionsProps utils', () => {
     expect(onOpenNotes).toHaveBeenCalledWith(baseChannel);
 
     expect(props.deleteButtonProps.title).toContain('Cloud 채널 목록에서 삭제합니다');
-    expect(props.deleteButtonProps.title).toContain('이미 저장된 영상 데이터는 삭제하지 않습니다');
+    expect(props.deleteButtonProps.title).toContain('이미 수집된 영상 정보는 삭제하지 않습니다');
     expect(props.deleteButtonProps.disabled).toBe(false);
-    expect(props.deleteButtonProps['aria-label']).toContain('저장 영상 데이터는 삭제하지 않음');
+    expect(props.deleteButtonProps['aria-label']).toContain('수집 영상 정보는 삭제하지 않음');
     expect(props.deleteButtonProps.type).toBe('button');
 
     props.deleteButtonProps.onClick();

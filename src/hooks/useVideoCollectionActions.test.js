@@ -125,7 +125,7 @@ describe('useVideoCollectionActions', () => {
     expect(deps.clearCheckedVideos).toHaveBeenCalledTimes(1);
     expect(deps.setActiveTab).toHaveBeenCalledWith('dashboard');
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB에 저장된 영상만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.',
+      '온라인 저장소(Azure DB)에 보관된 수집 영상 정보만 불러오는 중입니다. YouTube API를 새로 호출하지 않습니다.',
     );
     expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(
       ['active-1', 'active-2'],
@@ -141,7 +141,7 @@ describe('useVideoCollectionActions', () => {
       }),
     ]);
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 조회 완료 · 1초 미만 경과: 저장된 영상 1개를 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
+      '온라인 저장소(Azure DB) 조회 완료 · 1초 미만 경과: 수집된 영상 정보 1개를 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
     );
     expect(deps.setLoading).toHaveBeenLastCalledWith(false);
 
@@ -162,7 +162,7 @@ describe('useVideoCollectionActions', () => {
 
     expect(result).toEqual({ success: false, videoCount: 0 });
     expect(deps.setError).toHaveBeenCalledWith(
-      'Cloud unavailable Cloud DB 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      'Cloud unavailable 온라인 저장소(Azure DB) 조회를 완료하지 못했습니다. 새 YouTube API 호출이나 새 영상 수집은 실행하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(deps.setProgressMsg).toHaveBeenLastCalledWith('');
     expect(deps.setLoading).toHaveBeenLastCalledWith(false);
@@ -183,7 +183,7 @@ describe('useVideoCollectionActions', () => {
     expect(deps.setIsScanning).toHaveBeenNthCalledWith(1, true);
     expect(deps.setScanningTag).toHaveBeenNthCalledWith(1, 'SELECTED');
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      '선택 채널 1개 새 영상 수집 중입니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.',
+      '선택 채널 1개 새 영상 수집 중입니다. YouTube API 호출이 발생하며 수집 영상 목록 불러오기와 다른 작업입니다.',
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
     expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(
@@ -220,7 +220,7 @@ describe('useVideoCollectionActions', () => {
     expect(scanSelectedChannels).not.toHaveBeenCalled();
     expect(deps.setScanningTag).toHaveBeenNthCalledWith(1, 'history');
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      "'history' 태그 채널 새 영상 수집 중입니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.",
+      "'history' 태그 채널 새 영상 수집 중입니다. YouTube API 호출이 발생하며 수집 영상 목록 불러오기와 다른 작업입니다.",
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
     expect(fetchAllStoredVideosByChannelIds).toHaveBeenCalledWith(
@@ -245,14 +245,14 @@ describe('useVideoCollectionActions', () => {
     await actions.loadStoredVideosForSelectedChannels();
 
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 저장 영상 조회 중: 1페이지, 200개를 확인했습니다 · 1초 미만 경과. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
+      '온라인 저장소(Azure DB) 수집 영상 조회 중: 1페이지, 200개를 확인했습니다 · 1초 미만 경과. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
     );
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 저장 영상 조회 중: 2페이지, 270개를 확인했습니다 · 1초 미만 경과. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
+      '온라인 저장소(Azure DB) 수집 영상 조회 중: 2페이지, 270개를 확인했습니다 · 1초 미만 경과. 전체 조회가 끝난 뒤 한 번에 표시하며 YouTube API는 호출하지 않습니다.',
     );
     expect(deps.setVideos).toHaveBeenCalledTimes(2);
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      'Cloud DB 조회 완료 · 1초 미만 경과: 저장된 영상 1개를 2페이지에서 모아 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
+      '온라인 저장소(Azure DB) 조회 완료 · 1초 미만 경과: 수집된 영상 정보 1개를 2페이지에서 모아 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
     );
   });
 

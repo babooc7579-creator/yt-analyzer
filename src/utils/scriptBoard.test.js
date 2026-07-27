@@ -12,7 +12,7 @@ const videos = [
   { videoId: 'candidate', title: '원본 후보', channel_title: '랭킹 채널', multiplier: 8 },
   { videoId: 'active', title: '제작 중 원본', channel_title: '예능 채널', multiplier: 2 },
   { videoId: 'done', title: '완료 원본', channel_title: '영화 채널', multiplier: 3 },
-  { videoId: 'plain', title: '일반 저장 영상' },
+  { videoId: 'plain', title: '일반 수집 영상' },
 ];
 
 describe('scriptBoard utils', () => {

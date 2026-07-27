@@ -15,7 +15,7 @@ describe('scan issue guidance', () => {
       coverageRate: 62.5,
     })).toMatchObject({
       title: '최신 수집은 완료됐지만 과거 영상 저장 범위가 아직 부족합니다',
-      cause: expect.stringContaining('Cloud 저장 250개 / 채널 전체 400개 · 약 62.5%'),
+      cause: expect.stringContaining('온라인 저장소(Azure DB) 저장 250개 / 채널 전체 400개 · 약 62.5%'),
       nextAction: expect.stringContaining('과거 영상 수집을 직접 시작'),
       tone: 'partial',
     });
@@ -46,7 +46,7 @@ describe('scan issue guidance', () => {
       coverageRate: null,
     });
 
-    expect(guidance.cause).toContain('Cloud 저장 250개 / 채널 전체 400개');
+    expect(guidance.cause).toContain('온라인 저장소(Azure DB) 저장 250개 / 채널 전체 400개');
     expect(guidance.cause).not.toContain('0%');
   });
 

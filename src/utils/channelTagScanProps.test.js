@@ -17,7 +17,7 @@ describe('channelTagScanProps utils', () => {
     expect(props.listButtonTitle).toBe("'해외' 태그 채널 목록 보기 - 운영중 7개 / 전체 10개");
     expect(props.scanButtonTitle).toContain('운영중 채널 7개만 새 영상 수집');
     expect(props.scanButtonTitle).toContain('YouTube API 호출이 발생');
-    expect(props.scanButtonTitle).toContain('저장 영상 불러오기와 다른 작업');
+    expect(props.scanButtonTitle).toContain('수집 영상 목록 불러오기와 다른 작업');
     expect(props.scanButtonAriaLabel).toBe("'해외' 태그 새 영상 수집, YouTube API 호출");
   });
 

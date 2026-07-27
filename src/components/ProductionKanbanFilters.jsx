@@ -38,7 +38,7 @@ export default function ProductionKanbanFilters({
               aria-pressed={filterMode === PRODUCTION_KANBAN_FILTER.UNSAVED}
             >
               <Save className="h-3.5 w-3.5" />
-              Cloud 저장 전 {filterSummary.unsavedCount}개
+              온라인 저장소(Azure DB) 저장 전 {filterSummary.unsavedCount}개
             </button>
           ) : null}
           <p className="text-xs font-bold text-slate-500" aria-live="polite">
@@ -55,7 +55,7 @@ export default function ProductionKanbanFilters({
               Cloud에 저장하지 않은 제작안 {filterSummary.unsavedCount}개
             </p>
             <p className="mt-0.5 text-xs leading-relaxed text-amber-800">
-              다른 화면 이동·새로고침·탭 닫기 전에 확인합니다. 각 카드에서 Cloud 저장을 완료하면 이 안내와 경고가 사라집니다.
+              다른 화면 이동·새로고침·탭 닫기 전에 확인합니다. 각 카드에서 온라인 저장소(Azure DB) 저장을 완료하면 이 안내와 경고가 사라집니다.
             </p>
           </div>
         </div>
@@ -93,7 +93,7 @@ export default function ProductionKanbanFilters({
           onClick={onReset}
           disabled={!filterSummary.hasActiveFilters}
           className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 text-xs font-extrabold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:text-slate-300"
-          title="검색어와 보기 조건만 초기화합니다. Cloud 데이터는 변경하지 않습니다."
+          title="검색어와 보기 조건만 초기화합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다."
         >
           <RotateCcw className="h-4 w-4" />
           초기화

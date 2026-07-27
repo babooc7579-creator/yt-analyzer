@@ -27,13 +27,13 @@ export default function ChannelWatchlistNextStep({
 
   return (
     <section
-      aria-label="저장 영상 불러오기 다음 단계"
+      aria-label="수집 영상 목록 불러오기 다음 단계"
       className="mt-4 flex flex-col gap-3 border border-emerald-400/40 bg-emerald-500/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
     >
       <div className="flex items-start gap-3">
         <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
         <div>
-          <p className="text-sm font-extrabold text-white">저장 영상 {videoCount}개 불러오기 완료</p>
+          <p className="text-sm font-extrabold text-white">수집 영상 {videoCount}개 불러오기 완료</p>
           <p className="mt-1 text-xs leading-relaxed text-slate-300">
             다음 단계에서 오늘 우선 검토할 영상을 판단하세요.
           </p>

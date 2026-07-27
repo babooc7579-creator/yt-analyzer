@@ -16,7 +16,7 @@ describe('channelTagSelectorProps utils', () => {
 
     expect(props.className).toContain('bg-indigo-600');
     expect(props.title).toContain('해외 태그 선택 해제');
-    expect(props.title).toContain('YouTube API 호출이나 Cloud 저장은 실행되지 않습니다');
+    expect(props.title).toContain('YouTube API 호출이나 온라인 저장소(Azure DB) 저장은 실행되지 않습니다');
     expect(props['aria-label']).toBe(props.title);
     expect(props.type).toBe('button');
 
@@ -35,7 +35,7 @@ describe('channelTagSelectorProps utils', () => {
     expect(props.className).toContain('bg-white');
     expect(props.className).toContain('hover:border-indigo-300');
     expect(props.title).toContain('정치 태그 선택');
-    expect(props.title).toContain('YouTube API 호출이나 Cloud 저장은 실행되지 않습니다');
+    expect(props.title).toContain('YouTube API 호출이나 온라인 저장소(Azure DB) 저장은 실행되지 않습니다');
   });
 
   it('maps categories to tag button props and ignores non-array input', () => {

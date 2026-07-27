@@ -5,7 +5,7 @@ import ProductionKanbanSummaryCard from './ProductionKanbanSummaryCard';
 
 describe('ProductionKanbanSummaryCard', () => {
   it('renders the metric title as a hover explanation', () => {
-    const title = 'Cloud 판단 기록에서 제작 후보 상태로 표시된 저장 영상 수입니다. YouTube API를 새로 호출하지 않습니다.';
+    const title = 'Cloud 판단 기록에서 제작 후보 상태로 표시된 수집 영상 수입니다. YouTube API를 새로 호출하지 않습니다.';
 
     const html = renderToStaticMarkup(
       <ProductionKanbanSummaryCard

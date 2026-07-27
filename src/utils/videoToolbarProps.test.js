@@ -138,7 +138,7 @@ describe('videoToolbarProps utils', () => {
     });
 
     expect(props).toMatchObject({
-      copyButtonAriaLabel: '현재 표시된 저장 영상 3개 URL 목록 복사',
+      copyButtonAriaLabel: '현재 표시된 수집 영상 3개 URL 목록 복사',
       copyButtonCopiedLabel: '목록 복사 완료',
       copyButtonDisabled: true,
       copyButtonLabel: '영상 URL 목록 복사',
@@ -182,9 +182,9 @@ describe('videoToolbarProps utils', () => {
     });
 
     expect(inactiveProps).toMatchObject({
-      ariaLabel: '또터또 발굴 모드 켜기, 현재 불러온 저장 영상 필터링, YouTube API 호출 없음',
+      ariaLabel: '또터또 발굴 모드 켜기, 현재 불러온 수집 영상 정보 필터링, YouTube API 호출 없음',
     });
-    expect(inactiveProps.title).toContain('현재 불러온 저장 영상');
+    expect(inactiveProps.title).toContain('현재 불러온 수집 영상 정보');
     expect(inactiveProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
   });
 });

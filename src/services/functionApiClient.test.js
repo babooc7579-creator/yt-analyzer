@@ -36,10 +36,10 @@ describe('functionApiClient', () => {
     vi.restoreAllMocks();
   });
 
-  it('keeps Cloud API fallback copy centralized', () => {
-    expect(FUNCTION_API_REQUEST_FAILED_MESSAGE).toBe('Cloud API 요청에 실패했습니다.');
+  it('keeps online storage API fallback copy centralized', () => {
+    expect(FUNCTION_API_REQUEST_FAILED_MESSAGE).toBe('온라인 저장 API(Azure) 요청에 실패했습니다.');
     expect(FUNCTION_API_RESPONSE_READ_FAILED_MESSAGE).toBe(
-      'Cloud API 응답을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.'
+      '온라인 저장 API(Azure) 응답을 읽지 못했습니다. 잠시 뒤 다시 시도해 주세요.'
     );
   });
 

@@ -107,8 +107,8 @@ export default function ScriptBoardEditor({
               type="button"
               onClick={onOpenUploadCalendar}
               className="inline-flex items-center justify-center gap-2 border border-amber-400/30 bg-amber-500/10 px-3 py-3 text-xs font-extrabold text-amber-200 hover:bg-amber-500/20"
-              title="업로드 캘린더로 이동합니다. 이동만으로 Cloud 저장이나 YouTube API 호출은 실행되지 않습니다."
-              aria-label="업로드 캘린더 열기, 화면 이동이며 Cloud 저장 및 YouTube API 호출 없음"
+              title="업로드 캘린더로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
+              aria-label="업로드 캘린더 열기, 화면 이동이며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
             >
               <CalendarDays className="h-4 w-4" /> 업로드 캘린더 보기
             </button>

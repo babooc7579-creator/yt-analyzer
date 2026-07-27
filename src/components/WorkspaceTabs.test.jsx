@@ -11,7 +11,7 @@ describe('WorkspaceTabs', () => {
     );
 
     expect(markup).toContain('영구 스크랩북');
-    expect(markup).toContain('저장 영상 탐색');
+    expect(markup).toContain('수집 영상 목록');
     expect(markup).toContain('현재 화면');
     expect(markup).toContain('aria-pressed="false"');
     expect(markup).toContain('bg-slate-800');

@@ -34,7 +34,7 @@ describe('ProductionVideoCard workflow', () => {
   it('renders the production work in source, draft, and next-stage order', () => {
     const html = renderCard();
     const sourceStepIndex = html.indexOf('1. 원본 확인');
-    const draftStepIndex = html.indexOf('2. 제작안 작성 · Cloud 저장');
+    const draftStepIndex = html.indexOf('2. 제작안 작성 · 온라인 저장소(Azure DB) 저장');
     const moveStepIndex = html.indexOf('3. 다음 제작 단계 선택');
 
     expect(sourceStepIndex).toBeGreaterThan(-1);
@@ -46,7 +46,7 @@ describe('ProductionVideoCard workflow', () => {
     expect(html).toContain('업로드 26.07.30');
     expect(html).toContain('작업 준비 완료');
     expect(html).toContain('저장 전');
-    expect(html).toContain('Cloud 저장 · API 호출 없음');
+    expect(html).toContain('온라인 저장소(Azure DB) 저장 · API 호출 없음');
     expect(html).toContain('오늘 집중과 제작 상태 변경은 Cloud 판단 기록에 저장합니다.');
   });
 

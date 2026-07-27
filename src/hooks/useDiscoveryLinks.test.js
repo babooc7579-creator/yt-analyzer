@@ -193,7 +193,7 @@ describe('useDiscoveryLinks', () => {
 
     const upsert = stateSetters[0].mock.calls[0][0];
     expect(upsert([oldLink]).map(link => link.id)).toEqual(['new', 'old']);
-    expect(stateSetters[4]).toHaveBeenCalledWith('New Clip 링크를 Cloud 발견함에 저장했습니다.');
+    expect(stateSetters[4]).toHaveBeenCalledWith('New Clip 링크를 온라인 발견함(Azure DB)에 저장했습니다.');
     expect(stateSetters[2]).toHaveBeenLastCalledWith(false);
     expect(stateSetters[5]).toHaveBeenLastCalledWith('');
   });
@@ -231,7 +231,7 @@ describe('useDiscoveryLinks', () => {
     expect(created).toBe(false);
     expect(stateSetters[0]).not.toHaveBeenCalled();
     expect(stateSetters[3]).toHaveBeenCalledWith(
-      `${DISCOVERY_LINK_SAVE_FAILED_MESSAGE} Cloud 저장 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
+      `${DISCOVERY_LINK_SAVE_FAILED_MESSAGE} 온라인 저장소(Azure DB) 저장 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
     );
     expect(stateSetters[2]).toHaveBeenLastCalledWith(false);
     expect(stateSetters[5]).toHaveBeenLastCalledWith('');
@@ -291,7 +291,7 @@ describe('useDiscoveryLinks', () => {
     expect(changed).toBe(false);
     expect(stateSetters[0]).not.toHaveBeenCalled();
     expect(stateSetters[3]).toHaveBeenCalledWith(
-      `${DISCOVERY_LINK_STATUS_SAVE_FAILED_MESSAGE} Cloud 변경 저장 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
+      `${DISCOVERY_LINK_STATUS_SAVE_FAILED_MESSAGE} 온라인 저장소(Azure DB) 변경 저장 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
     );
   });
 
@@ -309,7 +309,7 @@ describe('useDiscoveryLinks', () => {
 
     const remove = stateSetters[0].mock.calls[0][0];
     expect(remove([oldLink, newLink])).toEqual([newLink]);
-    expect(stateSetters[4]).toHaveBeenCalledWith('Old Clip 링크 기록을 Cloud 발견함에서 삭제했습니다.');
+    expect(stateSetters[4]).toHaveBeenCalledWith('Old Clip 링크 기록을 온라인 발견함(Azure DB)에서 삭제했습니다.');
   });
 
   it('does not remove a discovery link from the list when Cloud delete fails', async () => {
@@ -326,7 +326,7 @@ describe('useDiscoveryLinks', () => {
     expect(removed).toBe(false);
     expect(stateSetters[0]).not.toHaveBeenCalled();
     expect(stateSetters[3]).toHaveBeenCalledWith(
-      `${DISCOVERY_LINK_DELETE_FAILED_MESSAGE} Cloud 삭제 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
+      `${DISCOVERY_LINK_DELETE_FAILED_MESSAGE} 온라인 저장소(Azure DB) 삭제 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
     );
   });
 });

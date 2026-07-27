@@ -116,7 +116,7 @@ describe('useCloudChannels', () => {
     await flushPromises();
 
     expect(onError).toHaveBeenCalledWith(
-      'Cloud channels unavailable Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      'Cloud channels unavailable 온라인 저장소(Azure DB)의 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(stateSetters[0]).not.toHaveBeenCalled();
     expect(stateSetters[1]).toHaveBeenLastCalledWith(false);
@@ -133,7 +133,7 @@ describe('useCloudChannels', () => {
     await flushPromises();
 
     expect(onError).toHaveBeenCalledWith(
-      `${CHANNEL_LOAD_FAILED_MESSAGE} Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
+      `${CHANNEL_LOAD_FAILED_MESSAGE} 온라인 저장소(Azure DB)의 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.`,
     );
   });
 

@@ -11,8 +11,8 @@ export const CHANNEL_BULK_INPUT_PLACEHOLDER = [
 export const getChannelPreviewInputCopy = () => ({
   inputPlaceholder: CHANNEL_INPUT_PLACEHOLDER,
   inputAriaLabel: '확인할 채널 핸들, 채널 링크 또는 영상 링크',
-  inputTitle: '붙여넣기만으로는 Cloud 저장이나 영상 수집이 실행되지 않습니다. YouTube에서 확인 버튼으로 채널 정보만 먼저 확인합니다.',
-  previewButtonTitle: 'YouTube에서 채널 정보만 확인합니다. Cloud 저장과 영상 수집은 하지 않습니다.',
+  inputTitle: '붙여넣기만으로는 온라인 저장소(Azure DB) 저장이나 영상 수집이 실행되지 않습니다. YouTube에서 확인 버튼으로 채널 정보만 먼저 확인합니다.',
+  previewButtonTitle: 'YouTube에서 채널 정보만 확인합니다. 온라인 저장소(Azure DB) 저장과 영상 수집은 하지 않습니다.',
   previewButtonAriaLabel: 'YouTube에서 채널 정보 확인',
   previewButtonLabel: 'YouTube에서 확인',
   helperText: '아직 Cloud에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다. 영상 수집은 하지 않습니다.',
@@ -27,7 +27,7 @@ export const getChannelBulkInputCopy = (recognizedLineCount = 0) => ({
 export const getChannelBulkSubmitButtonCopy = ({ bulkLoading = false } = {}) => ({
   title: 'YouTube에서 채널 정보를 확인한 뒤 Cloud 채널 목록에 저장합니다. 영상 수집은 하지 않습니다.',
   ariaLabel: 'YouTube 확인 후 채널 일괄 저장',
-  label: bulkLoading ? 'YouTube 확인 후 Cloud 저장 중' : 'YouTube 확인 후 일괄 저장',
+  label: bulkLoading ? 'YouTube 확인 후 온라인 저장소(Azure DB) 저장 중' : 'YouTube 확인 후 일괄 저장',
 });
 
 export const getChannelPreviewActionsCopy = () => ({

@@ -11,7 +11,7 @@ describe('HomeRadarFinishStage', () => {
     expect(html).toContain('id="today-radar-finish"');
     expect(html).toContain('오늘 만들 한 가지');
     expect(html).toContain('후보 판정대로 이동');
-    expect(html).toContain('오늘 후보 판정 영역으로 이동, Cloud 저장 및 YouTube API 호출 없음');
+    expect(html).toContain('오늘 후보 판정 영역으로 이동, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음');
   });
 
   it('opens the production workflow after a candidate is chosen', () => {
@@ -28,7 +28,7 @@ describe('HomeRadarFinishStage', () => {
     expect(html).toContain('오늘 집중 계속하기');
     expect(html).toContain('업로드 일정 정하기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
-    expect(html).toContain('제작 후보함으로 이동, 후보 상태 변경 및 Cloud 저장 및 YouTube API 호출 없음');
+    expect(html).toContain('제작 후보함으로 이동, 후보 상태 변경 및 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음');
   });
 
   it('keeps the upload calendar available before a candidate is pinned for today', () => {

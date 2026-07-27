@@ -22,9 +22,9 @@ describe('Production kanban flow states', () => {
 
     expect(html).toContain('아직 제작 후보가 없습니다');
     expect(html).toContain('오늘 레이더로');
-    expect(html).toContain('저장 영상 탐색');
+    expect(html).toContain('수집 영상 목록');
     expect(html).toContain('발견 링크 저장');
-    expect(html).toContain('Cloud DB 조회이며 YouTube API를 새로 호출하지 않습니다.');
+    expect(html).toContain('온라인 저장소(Azure DB) 조회이며 YouTube API를 새로 호출하지 않습니다.');
     expect(html).toContain('외부 사이트 자동 수집이나 다운로드는 실행하지 않습니다.');
   });
 
@@ -44,7 +44,7 @@ describe('Production kanban flow states', () => {
     const errorHtml = renderToStaticMarkup(<ProductionVideoSaveStatus saveState="error" />);
 
     expect(successHtml).toContain('Cloud에 저장됐습니다.');
-    expect(errorHtml).toContain('Cloud 저장 실패. 저장 완료 처리하지 않았습니다. 다시 저장해 주세요.');
+    expect(errorHtml).toContain('온라인 저장소(Azure DB) 저장 실패. 저장 완료 처리하지 않았습니다. 다시 저장해 주세요.');
   });
 
   it('renders discovery link candidate count separately from video candidates', () => {

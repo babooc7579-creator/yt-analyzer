@@ -59,12 +59,12 @@ describe('videoCollection utils', () => {
   it('keeps stored video load messages separate from YouTube API scans', () => {
     expect(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE).toContain('DB 조회');
     expect(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE).toContain('새 영상 수집');
-    expect(STORED_VIDEO_LOAD_FAILED_MESSAGE).toContain('Cloud DB');
+    expect(STORED_VIDEO_LOAD_FAILED_MESSAGE).toContain('온라인 저장소(Azure DB)');
 
     expect(getStoredVideoLoadStartMessage()).toContain('YouTube API');
-    expect(getStoredVideoLoadStartMessage()).toContain('Cloud DB');
+    expect(getStoredVideoLoadStartMessage()).toContain('온라인 저장소(Azure DB)');
 
-    expect(getStoredVideosLoadedMessage(0)).toContain('Cloud DB');
+    expect(getStoredVideosLoadedMessage(0)).toContain('온라인 저장소(Azure DB)');
     expect(getStoredVideosLoadedMessage(3)).toContain('3');
     expect(getStoredVideosLoadedMessage(3)).toContain('YouTube API');
     expect(getStoredVideosLoadedMessage(270, 2)).toContain('2페이지');
@@ -164,7 +164,7 @@ describe('videoCollection utils', () => {
     const completeMessage = getScanCompleteMessage(results);
     expect(completeMessage).toContain('5');
     expect(completeMessage).toContain('3');
-    expect(completeMessage).toContain('Cloud DB');
+    expect(completeMessage).toContain('온라인 저장소(Azure DB)');
   });
 
   it('keeps scan error messages explicit about failed collection work', () => {

@@ -47,7 +47,7 @@ export default function ProductionFocusSection({
               onClick={onOpenUploadCalendar}
               className="inline-flex items-center gap-2 rounded-xl border border-amber-300 bg-white px-3 py-2 text-xs font-extrabold text-amber-800 transition hover:bg-amber-100"
               title="업로드 캘린더를 열어 오늘 집중 후보의 목표 날짜를 확인합니다. YouTube API를 호출하지 않습니다."
-              aria-label="오늘 집중 후보 업로드 일정 정하기, 화면 이동과 Cloud 저장 일정 조회이며 YouTube API 호출 없음"
+              aria-label="오늘 집중 후보 업로드 일정 정하기, 화면 이동과 온라인 저장소(Azure DB) 저장 일정 조회이며 YouTube API 호출 없음"
             >
               <CalendarDays className="h-4 w-4" /> 일정 정하기
             </button>
@@ -64,7 +64,7 @@ export default function ProductionFocusSection({
           <a
             href="#production-kanban-board"
             className="mt-3 inline-flex h-9 items-center gap-2 rounded-lg bg-amber-200 px-4 text-xs font-extrabold text-amber-950 hover:bg-amber-300"
-            title="같은 화면의 제작 후보 카드로 이동합니다. 이동만으로 Cloud 데이터는 변경되지 않습니다."
+            title="같은 화면의 제작 후보 카드로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 데이터는 변경되지 않습니다."
           >
             <ArrowDown className="h-4 w-4" /> 제작 후보에서 고르기
           </a>

@@ -38,9 +38,9 @@ export const getHomeNextAction = ({
     return {
       tone: 'blue',
       iconKey: 'refresh',
-      title: 'Cloud 채널 목록을 확인하고 있습니다',
-      description: '저장된 채널 목록 조회가 끝나면 오늘 할 일을 이어서 안내합니다.',
-      badge: 'Cloud DB 조회',
+      title: '온라인 저장소(Azure DB)의 채널 목록을 확인하고 있습니다',
+      description: '등록된 채널 목록 조회가 끝나면 오늘 할 일을 이어서 안내합니다.',
+      badge: '온라인 저장소(Azure DB) 조회',
       metric: '조회 중',
       actionLabel: '',
       impactText: '채널 목록 조회이며 새 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
@@ -52,7 +52,7 @@ export const getHomeNextAction = ({
       tone: 'indigo',
       iconKey: 'plus',
       title: '먼저 소재 채널을 등록하세요',
-      description: '채널 목록이 있어야 저장 영상을 모으고 오늘 볼 후보를 만들 수 있습니다.',
+      description: '채널 목록이 있어야 수집 영상을 모으고 오늘 볼 후보를 만들 수 있습니다.',
       badge: '준비 작업',
       metric: '채널 0개',
       actionLabel: '채널 등록 열기',
@@ -71,7 +71,7 @@ export const getHomeNextAction = ({
       badge: '선택 필요',
       metric: `${savedChannels}개 채널 보유`,
       actionLabel: '오늘 볼 채널 열기',
-      actionTitle: '오늘 볼 채널 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다.',
+      actionTitle: '오늘 볼 채널 화면으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다.',
       impactText: '화면 이동만 합니다. 채널 체크는 수집 실행이 아니라 볼 범위를 고르는 단계입니다.',
       onAction: onOpenChannelWatchlist || onOpenVault,
     };
@@ -81,7 +81,7 @@ export const getHomeNextAction = ({
     return {
       tone: 'amber',
       iconKey: 'listChecks',
-      title: '선택한 채널에는 저장된 영상이 없습니다',
+      title: '선택한 채널에는 수집된 영상 정보가 없습니다',
       description: '조회는 정상적으로 끝났습니다. 다른 채널을 골라 다시 조회하거나, 선택 채널의 새 영상 수집 화면으로 이동하세요.',
       badge: '다음 경로 선택',
       metric: `선택 ${selectedChannels}개 · 영상 0개`,
@@ -103,13 +103,13 @@ export const getHomeNextAction = ({
     return {
       tone: 'blue',
       iconKey: 'bookmark',
-      title: '저장 영상을 먼저 불러오세요',
-      description: '선택한 채널의 저장 영상만 Cloud DB에서 조회합니다. 새 YouTube API 호출은 없습니다.',
+      title: '수집 영상을 먼저 불러오세요',
+      description: '선택한 채널의 수집 영상만 온라인 저장소(Azure DB)에서 조회합니다. 새 YouTube API 호출은 없습니다.',
       badge: 'DB 조회',
       metric: `선택 ${selectedChannels}개`,
-      actionLabel: '저장 영상 불러오기',
-      actionTitle: `DB 조회: 선택 채널 ${selectedChannels}개의 저장된 영상을 불러옵니다. 새 YouTube API 호출은 없습니다.`,
-      impactText: 'Cloud DB 조회입니다. 새 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
+      actionLabel: '수집 영상 목록 불러오기',
+      actionTitle: `DB 조회: 선택 채널 ${selectedChannels}개의 수집된 영상 정보를 불러옵니다. 새 YouTube API 호출은 없습니다.`,
+      impactText: '온라인 저장소(Azure DB) 조회입니다. 새 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
       onAction: onLoadStoredVideos,
     };
   }
@@ -124,8 +124,8 @@ export const getHomeNextAction = ({
       metric: `${radarCandidates}개 남음`,
       actionHref: '#today-radar-candidates',
       actionLabel: '후보 판정 시작',
-      actionTitle: '같은 화면의 오늘 후보 판정 영역으로 이동합니다. 이동만으로 Cloud 저장이나 YouTube API 호출은 실행되지 않습니다.',
-      impactText: '아래 후보 카드에서 누른 판단 버튼만 Cloud 판단 기록에 저장됩니다.',
+      actionTitle: '같은 화면의 오늘 후보 판정 영역으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다.',
+      impactText: '아래 후보 카드에서 누른 판단 버튼만 온라인 저장소(Azure DB)의 판단 기록에 저장됩니다.',
     };
   }
 
@@ -140,7 +140,7 @@ export const getHomeNextAction = ({
         metric: `권리 확인 ${rightsWarnings}개`,
         actionLabel: '후보함에서 확인',
         actionTitle: '제작 후보함에서 권리 확인이 필요한 발견 링크 후보를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
-        impactText: '화면 이동만 합니다. 권리 상태 변경은 후보함이나 발견함에서 직접 선택할 때 Cloud에 저장됩니다.',
+        impactText: '화면 이동만 합니다. 권리 상태 변경은 후보함이나 발견함에서 직접 선택할 때 온라인 저장소(Azure DB)에 저장됩니다.',
         onAction: onOpenProductionCandidates,
       };
     }
@@ -155,7 +155,7 @@ export const getHomeNextAction = ({
         metric: `${productionFocusCandidates}개`,
         actionLabel: '오늘 집중 보기',
         actionTitle: '제작 후보함의 오늘 집중 영역을 엽니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
-        impactText: '화면 이동만 합니다. 집중 해제나 제작 상태 변경은 후보함 안에서 직접 선택할 때 Cloud에 저장됩니다.',
+        impactText: '화면 이동만 합니다. 집중 해제나 제작 상태 변경은 후보함 안에서 직접 선택할 때 온라인 저장소(Azure DB)에 저장됩니다.',
         onAction: onOpenProductionCandidates,
       };
     }

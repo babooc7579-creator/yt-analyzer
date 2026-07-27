@@ -21,7 +21,7 @@ export const getChannelListItemViewProps = ({
   const status = getChannelStatus(safeChannel);
   const channelTitle = safeChannel.title || '이 채널';
   const canToggleSelection = Boolean(safeChannel.id) && typeof onToggleSelection === 'function';
-  const selectionLabel = `${channelTitle} ${isSelected ? '선택 해제' : '선택'} - 저장 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.`;
+  const selectionLabel = `${channelTitle} ${isSelected ? '선택 해제' : '선택'} - 수집 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.`;
 
   return {
     actionsProps: {

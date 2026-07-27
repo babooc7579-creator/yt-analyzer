@@ -98,7 +98,7 @@ describe('productionDiscoveryLinksSection utils', () => {
     expect(openDiscoveryLinksButtonProps.title).toContain('Cloud 발견함에 저장된 링크 후보');
     expect(openDiscoveryLinksButtonProps.title).toContain('외부 사이트 자동 수집');
     expect(openDiscoveryLinksButtonProps.title).toContain('다운로드는 실행하지 않습니다');
-    expect(openDiscoveryLinksButtonProps['aria-label']).toContain('Cloud 저장 링크 조회와 수정');
+    expect(openDiscoveryLinksButtonProps['aria-label']).toContain('온라인 저장소(Azure DB) 저장 링크 조회와 수정');
     expect(openDiscoveryLinksButtonProps['aria-label']).toContain('외부 자동 수집 없음');
   });
 

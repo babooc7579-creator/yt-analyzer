@@ -44,7 +44,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     value: formatProductionCount(productionSummary.candidateCount),
     valueClassName: 'text-lg text-indigo-900',
     wrapperClassName: 'border-indigo-100 bg-indigo-50',
-    title: 'Cloud 판단 기록에서 제작 후보 상태로 표시된 저장 영상 수입니다. 오늘 집중으로 고정한 영상도 포함하며 YouTube API를 새로 호출하지 않습니다.',
+    title: 'Cloud 판단 기록에서 제작 후보 상태로 표시된 수집 영상 수입니다. 오늘 집중으로 고정한 영상도 포함하며 YouTube API를 새로 호출하지 않습니다.',
   },
   {
     key: 'active',
@@ -54,7 +54,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     value: formatProductionCount(productionSummary.activeCount),
     valueClassName: 'text-lg text-emerald-900',
     wrapperClassName: 'border-emerald-100 bg-emerald-50',
-    title: 'Cloud 판단 기록에서 제작 중 상태로 관리 중인 저장 영상 수입니다.',
+    title: 'Cloud 판단 기록에서 제작 중 상태로 관리 중인 수집 영상 수입니다.',
   },
   {
     key: 'uploaded',
@@ -64,7 +64,7 @@ export const getProductionKanbanSummaryMetricCards = ({
     value: formatProductionCount(productionSummary.uploadedCount),
     valueClassName: 'text-lg text-slate-900',
     wrapperClassName: 'border-slate-200 bg-slate-50',
-    title: 'Cloud 판단 기록에서 업로드 완료 상태로 표시한 저장 영상 수입니다.',
+    title: 'Cloud 판단 기록에서 업로드 완료 상태로 표시한 수집 영상 수입니다.',
   },
   {
     key: 'discovery-links',
@@ -189,8 +189,8 @@ export const getProductionKanbanPriorityGuideProps = ({
   return {
     badge: '후보 없음',
     title: '오늘 레이더나 발견함에서 후보를 먼저 채우세요',
-    description: '이 안내는 저장된 Cloud 후보 기록을 읽어 표시만 합니다. 새 YouTube API 호출, 외부 자동 수집, Cloud 저장은 실행하지 않습니다.',
-    nextAction: '오늘 순서: 오늘 레이더에서 저장 영상 후보 확인 또는 발견함에 수동 링크 저장',
+    description: '이 안내는 저장된 Cloud 후보 기록을 읽어 표시만 합니다. 새 YouTube API 호출, 외부 자동 수집, 온라인 저장소(Azure DB) 저장은 실행하지 않습니다.',
+    nextAction: '오늘 순서: 오늘 레이더에서 수집 영상 후보 확인 또는 발견함에 수동 링크 저장',
     tone: 'idle',
   };
 };

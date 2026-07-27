@@ -66,7 +66,7 @@ describe('channelListItemProps utils', () => {
 
     expect(props.containerClassName).toContain('border-slate-100');
     expect(props.containerClassName).toContain('hover:border-slate-300');
-    expect(props.selectionButtonProps.title).toContain('선택 - 저장 영상 조회와 새 영상 수집 범위를 정합니다');
+    expect(props.selectionButtonProps.title).toContain('선택 - 수집 영상 조회와 새 영상 수집 범위를 정합니다');
     expect(props.selectionButtonProps.title).toContain('선택만으로 YouTube API를 호출하지 않습니다');
     expect(props.thumbnailProps).toMatchObject({
       alt: '',
@@ -122,7 +122,7 @@ describe('channelListItemProps utils', () => {
     expect(props.selectionButtonProps).toMatchObject({
       disabled: true,
       title: 'No ID Channel 선택 비활성화 - 채널 ID가 없어 선택 상태를 바꾸지 않습니다.',
-      'aria-label': 'No ID Channel 선택 - 저장 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.',
+      'aria-label': 'No ID Channel 선택 - 수집 영상 조회와 새 영상 수집 범위를 정합니다. 선택만으로 YouTube API를 호출하지 않습니다.',
       type: 'button',
     });
 

@@ -12,7 +12,13 @@
 
 ### 1단계. 제품 방향 이해
 
-1. `CREATOR_OS_DEFINITION_BLUEPRINT.md`
+1. `CREATOR_OS_TERMINOLOGY.md`
+
+사용자 화면과 작업 보고에서 사용하는 `수집 영상 목록`, `온라인 저장소(Azure DB)`, `브라우저 임시 상태`, `YouTube 수집` 용어를 정의합니다.
+
+메뉴, 버튼, 안내 문구를 수정하기 전에 가장 먼저 확인합니다.
+
+2. `CREATOR_OS_DEFINITION_BLUEPRINT.md`
 
 Creator OS가 어떤 제품이어야 하는지 정의한 상위 기준 문서입니다.
 
@@ -20,13 +26,13 @@ Creator OS가 어떤 제품이어야 하는지 정의한 상위 기준 문서입
 
 ### 2단계. 현재 데이터 기준 확인
 
-2. `CREATOR_OS_DATA_OWNERSHIP.md`
+3. `CREATOR_OS_DATA_OWNERSHIP.md`
 
-Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
+온라인 저장소(Azure DB), 현재 브라우저의 임시 저장소(localStorage), 미구현 데이터의 역할을 구분합니다.
 
 코드 작업 전 가장 먼저 확인해야 하는 데이터 기준 문서입니다.
 
-3. `CREATOR_OS_STATUS_DICTIONARY.md`
+4. `CREATOR_OS_STATUS_DICTIONARY.md`
 
 채널, 영상, 제작 후보, 스크랩북, 발견 링크, 로컬 파일의 상태값을 정리합니다.
 
@@ -34,9 +40,9 @@ Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
 
 ### 3단계. API와 저장 흐름 확인
 
-4. `CREATOR_OS_API_BEHAVIOR_MAP.md`
+5. `CREATOR_OS_API_BEHAVIOR_MAP.md`
 
-각 버튼과 API가 DB 조회인지, Cloud DB 변경인지, YouTube API 호출인지 구분합니다.
+각 버튼과 API가 온라인 저장소(Azure DB) 조회인지, 온라인 기록 변경인지, YouTube API 호출인지 구분합니다.
 
 버튼 문구, 비용성 작업, scan 관련 UI를 수정하기 전에 확인해야 합니다.
 
@@ -48,19 +54,19 @@ Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
 
 버튼 이름, tooltip, `aria-label`, 발견함 피드백 메시지를 수정하기 전에 확인합니다.
 
-5. `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md`
+6. `CREATOR_OS_VIDEOS_PAGINATION_AUDIT.md`
 
 저장 영상 조회가 현재 전체 조회 구조로 유지 가능한지, 언제 페이지네이션을 다시 검토해야 하는지 정리합니다.
 
 `GET /videos?channelIds=...` 응답 구조, 저장 영상 수, 검색/정렬/터또터 영향도를 수정하기 전에 확인해야 합니다.
 
-6. `CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md`
+7. `CREATOR_OS_VIDEO_USER_RECORDS_AUDIT.md`
 
 영상별 사용자 판단 기록이 프론트, localStorage, Cloud DB 사이에서 어떻게 움직이는지 정리합니다.
 
 `reviewed`, `production_candidate`, `watch_later` 같은 상태 저장을 수정하기 전에 확인해야 합니다.
 
-7. `CREATOR_OS_CATEGORY_TAGS_AUDIT.md`
+8. `CREATOR_OS_CATEGORY_TAGS_AUDIT.md`
 
 화면 카테고리 목록과 Cloud 채널 태그의 불일치 가능성을 정리합니다.
 
@@ -68,31 +74,31 @@ Cloud DB, localStorage, 미구현 데이터의 역할을 구분합니다.
 
 ### 4단계. 미래 기능 모델 확인
 
-8. `CREATOR_OS_SCAN_API_USAGE_MODEL.md`
+9. `CREATOR_OS_SCAN_API_USAGE_MODEL.md`
 
 YouTube API 호출이 발생하는 새 영상 수집, 채널 확인, 댓글 조회를 어떻게 기록할지 정리합니다.
 
 `scan_logs`, `api_quota_logs`, 자동 스캔, API 사용량 화면을 검토하기 전에 확인해야 합니다.
 
-9. `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md`
+10. `CREATOR_OS_DISCOVERY_LINKS_LOCAL_ASSETS_MODEL.md`
 
 인스타/외부 링크, 로컬 파일, 출처 확인, 제작 후보 연결의 목표 모델을 정리합니다.
 
 discovery links는 1차 MVP가 부분 구현되었습니다. 수동 링크 저장과 `status: candidate` 기반 제작 후보함 연결은 구현됐고, local assets와 별도 제작 프로젝트 모델은 아직 목표 모델 단계입니다. 구현된 것과 목표 설계를 구분해서 봅니다.
 
-10. `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`
+11. `CREATOR_OS_DISCOVERY_LINKS_MVP_SCOPE.md`
 
 discovery links / local assets의 1차 MVP 범위와 현재 반영된 수동 링크 저장, URL 복사, 제작 후보함 연결 기준을 정리합니다.
 
 수동 링크 저장 이후 파일 메모 카드, 별도 제작 프로젝트 모델, 스크랩북 확장, 로컬 파일 참조 중 어디까지 할지 구현 전 확인해야 합니다.
 
-11. `CREATOR_OS_DISCOVERY_LINKS_API_BOUNDARY_OPTIONS.md`
+12. `CREATOR_OS_DISCOVERY_LINKS_API_BOUNDARY_OPTIONS.md`
 
 발견함 MVP의 API endpoint 이름, `/videos` 조회 분리 방식, 첫 화면 흐름 선택지를 정리합니다.
 
 discovery links 확장 또는 local assets 구현 전에 확인해야 합니다.
 
-12. `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md`
+13. `CREATOR_OS_PRODUCTION_CANDIDATES_MVP_SCOPE.md`
 
 제작 후보와 제작 칸반을 1차 MVP에서 `videoUserRecords` 기반으로 유지할지, 별도 `production_candidates`로 분리할지 정리합니다.
 
@@ -100,49 +106,49 @@ discovery links 확장 또는 local assets 구현 전에 확인해야 합니다.
 
 ### 5단계. 결정이 필요한 선택지 확인
 
-13. `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md`
+14. `CREATOR_OS_VIDEO_RECORDS_SCHEMA_OPTIONS.md`
 
 `/video-records`의 단일 `status`와 프론트 `statusIds` 불일치를 어떻게 정리할지 선택지를 정리합니다.
 
 2026-07-02 기준 선택지 B가 채택되어 `statusIds` Cloud 저장/조회가 구현됐습니다. 기존 결정의 배경을 확인할 때 봅니다.
 
-14. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
+15. `CREATOR_OS_VIDEO_RECORDS_LONG_TERM_MODEL.md`
 
 `status/statusIds` 이후의 장기 상태 모델을 어떻게 가져갈지 정리합니다.
 
 제작 상태 분리, `production_candidates` 별도 DB, `lifecycleStatus/usagePurposeTags/productionStatus` 명시 필드 검토 전 확인합니다.
 
-15. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
+16. `CREATOR_OS_LOCAL_STORAGE_CLOUD_SYNC_OPTIONS.md`
 
 Cloud DB와 localStorage 충돌을 어떻게 처리할지 선택지를 정리합니다.
 
 localStorage 제거, migration, Cloud-first sync 구현 전 반드시 확인해야 합니다.
 
-16. `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md`
+17. `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md`
 
 GitHub Actions와 Azure Static Web Apps 배포 경고를 어떻게 정리할지 선택지를 정리합니다.
 
 배포 workflow, GitHub Actions 버전, Azure Static Web Apps 인증 흐름을 수정하기 전에 확인해야 합니다.
 
-17. `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md`
+18. `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md`
 
 Azure 리소스를 MCPP Subscription에서 Microsoft Azure 스폰서십으로 이동한 결과와 남은 검증 항목을 정리합니다.
 
 Azure 구독, 비용, Static Web Apps 배포 연결, 이동 제외 리소스, 스폰서십 크레딧 반영 여부를 확인할 때 봅니다.
 
-18. `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md`
+19. `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md`
 
 Microsoft 계정 로그인, 개인 owner 역할, 연결된 Function API를 이용한 접근 보호 기준을 정리합니다.
 
 Static Web Apps Standard, API 연결, 역할 부여, 인증 배포 또는 롤백 전에 확인합니다.
 
-19. `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`
+20. `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`
 
 프론트 테스트 도구를 도입할지, 도입한다면 어디서부터 시작할지 정리합니다.
 
 `package.json`, `package-lock.json`, GitHub Actions test step을 바꾸기 전에 확인해야 합니다.
 
-20. `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md`
+21. `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md`
 
 main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 전용 절차입니다.
 
@@ -150,7 +156,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 
 ### 6단계. 실행 순서 확인
 
-21. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
+22. `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md`
 
 위 문서들을 바탕으로 다음 작업을 작은 Issue 단위로 쪼갠 실행 계획입니다.
 

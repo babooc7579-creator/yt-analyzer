@@ -73,11 +73,11 @@ export const getBackfillResultMessage = (result = {}) => {
 
   if (result.completed) {
     return `전체 과거 영상 확인 완료: 이번 확인 ${inspected}개 · 신규 저장 ${saved}개 · 이미 저장됨 ${existing}개. `
-      + `업로드 목록 확인 100% · Cloud 저장 영상 ${total}개입니다.`;
+      + `업로드 목록 확인 100% · 온라인 저장소(Azure DB)에 보관된 수집 영상 ${total}개입니다.`;
   }
 
   return `이번 실행 안전 범위 도달: 확인 ${inspected}개 · 신규 저장 ${saved}개 · 이미 저장됨 ${existing}개. `
-    + `목록 확인 ${progress} · Cloud 저장 ${total}개 · 추정 미저장 ${remaining}개입니다. 다시 실행하면 현재 위치부터 이어갑니다.`;
+    + `목록 확인 ${progress} · 온라인 저장소(Azure DB) 저장 ${total}개 · 추정 미저장 ${remaining}개입니다. 다시 실행하면 현재 위치부터 이어갑니다.`;
 };
 
 export const getBackfillErrorMessage = (error) => (

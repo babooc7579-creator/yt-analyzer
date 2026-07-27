@@ -35,7 +35,7 @@ describe('scrapbookVideoFooterActions utils', () => {
     expect(viewProps.productionButtonProps.title).toContain('Cloud 판단 기록');
     expect(viewProps.productionButtonProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(viewProps.removeButtonProps.title).toContain('보관 표시만 해제');
-    expect(viewProps.removeButtonProps['aria-label']).toContain('저장 영상 데이터는 삭제하지 않음');
+    expect(viewProps.removeButtonProps['aria-label']).toContain('수집 영상 정보는 삭제하지 않음');
   });
 
   it('promotes a scrapbook video to production candidate only when the Cloud handler is available', () => {
@@ -89,7 +89,7 @@ describe('scrapbookVideoFooterActions utils', () => {
       videoTitle: 'Display title',
     });
 
-    expect(viewProps.productionButtonText).toBe('Cloud 저장 중');
+    expect(viewProps.productionButtonText).toBe('온라인 저장소(Azure DB) 저장 중');
     expect(viewProps.productionButtonProps.disabled).toBe(true);
     expect(viewProps.productionButtonProps['aria-label']).toContain('Cloud에 저장하는 중');
     expect(viewProps.productionButtonProps.title).toContain('완료될 때까지');
@@ -138,7 +138,7 @@ describe('scrapbookVideoFooterActions utils', () => {
     buttonProps.onClick();
 
     expect(confirmFn).toHaveBeenCalledWith(expect.stringContaining('Display title'));
-    expect(confirmFn.mock.calls[0][0]).toContain('영상 원본이나 저장된 영상 데이터는 삭제되지 않고');
+    expect(confirmFn.mock.calls[0][0]).toContain('영상 원본이나 수집된 영상 정보는 삭제되지 않고');
     expect(onRemoveScrap).toHaveBeenCalledWith(video);
   });
 

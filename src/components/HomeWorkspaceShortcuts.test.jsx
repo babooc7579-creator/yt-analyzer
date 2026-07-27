@@ -17,7 +17,7 @@ describe('HomeWorkspaceShortcuts', () => {
     expect(html).toContain('키워드 탐색');
     expect(html).toContain('태그별 금고');
     expect(html).toContain('업로드 캘린더');
-    expect(html).toContain('자동 수집, Cloud 저장, 상태 변경은 실행하지 않습니다');
+    expect(html).toContain('자동 수집, 온라인 저장소(Azure DB) 저장, 상태 변경은 실행하지 않습니다');
     expect(Object.values(handlers).every((handler) => handler.mock.calls.length === 0)).toBe(true);
   });
 });

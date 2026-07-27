@@ -24,7 +24,7 @@ export default function CreatorActionFeedback({
               </p>
               <a
                 href={CREATOR_OS_LOGIN_PATH}
-                title="Microsoft 로그인 화면을 다시 엽니다. 이 동작은 Cloud 데이터를 변경하거나 YouTube API를 호출하지 않습니다."
+                title="Microsoft 로그인 화면을 다시 엽니다. 이 동작은 온라인 저장소(Azure DB) 데이터를 변경하거나 YouTube API를 호출하지 않습니다."
                 className="mt-3 inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-red-200/40 bg-red-100 px-3 py-2 text-xs font-black text-red-950 transition-colors hover:bg-white"
               >
                 <LogIn aria-hidden="true" className="h-4 w-4" />

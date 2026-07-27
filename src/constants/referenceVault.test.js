@@ -33,7 +33,7 @@ describe('referenceVault constants', () => {
       REFERENCE_VAULT_GUIDE_CARDS.map((card) => [card.key, card])
     );
 
-    expect(cardsByKey['load-saved-videos'].description).toContain('DB에 저장된 영상만');
+    expect(cardsByKey['load-saved-videos'].description).toContain('DB에 수집된 영상 정보만');
     expect(cardsByKey['load-saved-videos'].description).toContain('새 YouTube API 호출은 없습니다');
     expect(cardsByKey['save-reference'].description).toContain('스크랩북');
     expect(cardsByKey['promote-production'].title).toBe('3. 제작 후보로 표시');

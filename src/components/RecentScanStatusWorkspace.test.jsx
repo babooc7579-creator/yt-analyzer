@@ -71,9 +71,9 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('이어서 과거 영상 수집');
     expect(html).toContain('업로드 목록 확인 25%');
     expect(html).toContain('100/400개 확인');
-    expect(html).toContain('Cloud 저장 50%');
+    expect(html).toContain('온라인 저장소(Azure DB) 저장 50%');
     expect(html).toContain('자동 반복·예약·전체 채널 일괄 실행은 하지 않습니다');
-    expect(html).toContain('이 화면은 Cloud DB만 조회합니다');
+    expect(html).toContain('이 화면은 온라인 저장소(Azure DB)만 조회합니다');
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
     expect(html).toContain('새 영상 수집 준비');
@@ -149,7 +149,7 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('새 영상 2개 · 통계 갱신 5개');
     expect(html).toContain('quota warning');
     expect(html).toContain('채널 관리');
-    expect(html).toContain('Cloud 저장이나 YouTube API 호출은 실행되지 않습니다');
+    expect(html).toContain('온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다');
   });
 
   it('explains partial coverage without promising that retry will backfill history', () => {
@@ -166,7 +166,7 @@ describe('RecentScanStatusWorkspace', () => {
     );
 
     expect(html).toContain('과거 영상 저장 범위가 아직 부족합니다');
-    expect(html).toContain('Cloud 저장 250개 / 채널 전체 400개');
+    expect(html).toContain('온라인 저장소(Azure DB) 저장 250개 / 채널 전체 400개');
     expect(html).toContain('과거 영상 수집을 직접 시작하세요');
     expect(html).toContain('저장된 위치에서 이어집니다');
     expect(html).not.toContain('기술 오류 원문 보기');
@@ -196,10 +196,10 @@ describe('RecentScanStatusWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('Cloud 저장 100% · 1,018개 저장');
+    expect(html).toContain('온라인 저장소(Azure DB) 저장 100% · 1,018개 저장');
     expect(html).toContain('채널 통계보다 1개 많음');
     expect(html).toContain('1,019개 확인 · 채널 통계 1,017개');
     expect(html).toContain('삭제·비공개 영상과 집계 시점 차이');
-    expect(html).not.toContain('Cloud 저장 100.1%');
+    expect(html).not.toContain('온라인 저장소(Azure DB) 저장 100.1%');
   });
 });

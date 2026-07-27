@@ -164,7 +164,7 @@ describe('videoRecordsApi service', () => {
 
     expect(result).toEqual({
       success: false,
-      error: 'Cloud DB 페이지 정보가 반복되어 저장 영상 조회를 안전하게 중단했습니다.',
+      error: '온라인 저장소(Azure DB) 페이지 정보가 반복되어 수집 영상 조회를 안전하게 중단했습니다.',
       pageCount: 2,
       videos: [],
     });

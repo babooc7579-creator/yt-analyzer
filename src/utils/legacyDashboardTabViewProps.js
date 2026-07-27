@@ -5,7 +5,7 @@ const toVideoList = (videos) => (
 );
 const isFunction = (value) => typeof value === 'function';
 
-export const LEGACY_DASHBOARD_COMMENT_NOTICE = '댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 저장된 영상 불러오기와는 별도 기능입니다.';
+export const LEGACY_DASHBOARD_COMMENT_NOTICE = '댓글 Top 10 보기는 YouTube API로 댓글을 조회합니다. 수집 영상 목록 불러오기와는 별도 기능입니다.';
 
 export function getLegacyDashboardTabViewProps({
   activeSelectedChannelCount,

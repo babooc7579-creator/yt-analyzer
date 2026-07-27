@@ -267,11 +267,11 @@ describe('scrapbook utils', () => {
     expect(actions[0].ariaLabel).toContain('YouTube API 호출 없음');
     expect(actions[1]).toMatchObject({
       iconKey: 'referenceVault',
-      label: '저장 영상 탐색',
+      label: '수집 영상 목록',
       onClick: onOpenReferenceVault,
       variant: 'indigo',
     });
-    expect(actions[1].title).toContain('Cloud DB');
+    expect(actions[1].title).toContain('온라인 저장소(Azure DB)');
     expect(actions[1].title).toContain('YouTube API를 새로 호출하지 않습니다');
   });
 

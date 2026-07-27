@@ -48,7 +48,8 @@ describe('creatorOs constants', () => {
 
   it('keeps scan and stored-vault menu copy distinct', () => {
     expect(itemsById['ops-selected-scan'].summary).toContain('YouTube API');
-    expect(itemsById['vault-videos'].summary).toContain('저장된 영상 데이터');
+    expect(itemsById['vault-videos'].label).toBe('수집 영상 목록');
+    expect(itemsById['vault-videos'].summary).toContain('수집된 영상 정보');
     expect(itemsById['vault-videos'].summary).not.toContain('YouTube API');
   });
 
@@ -56,7 +57,7 @@ describe('creatorOs constants', () => {
     expect(itemsById['discovery-ttotto']).toMatchObject({
       status: 'live',
     });
-    expect(itemsById['discovery-ttotto'].summary).toContain('저장 영상');
+    expect(itemsById['discovery-ttotto'].summary).toContain('수집 영상');
     expect(itemsById['discovery-ttotto'].summary).toContain('6개월');
   });
 
@@ -66,9 +67,9 @@ describe('creatorOs constants', () => {
     expect(itemsById['discovery-watchlist'].summary).toContain('오늘 확인할 범위');
   });
 
-  it('exposes keyword, tag vault, and upload calendar as live Cloud-data workflows', () => {
+  it('exposes keyword, tag vault, and upload calendar as live online-storage workflows', () => {
     expect(itemsById['discovery-keywords']).toMatchObject({ status: 'live' });
-    expect(itemsById['discovery-keywords'].summary).toContain('Cloud');
+    expect(itemsById['discovery-keywords'].summary).toContain('온라인 저장소(Azure DB)');
     expect(itemsById['vault-tags']).toMatchObject({ status: 'live' });
     expect(itemsById['vault-tags'].summary).toContain('채널 태그');
     expect(itemsById['studio-calendar']).toMatchObject({ status: 'live' });

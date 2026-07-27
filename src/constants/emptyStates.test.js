@@ -10,10 +10,10 @@ import {
 
 describe('emptyStates constants', () => {
   it('keeps reference vault empty guidance clear about scan versus DB lookup', () => {
-    expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('Cloud DB');
+    expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('온라인 저장소(Azure DB)');
     expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('필요할 때만');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].description).toContain('영상 수집은 실행되지 않습니다');
-    expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].title).toContain('저장된 영상 불러오기');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].title).toContain('수집 영상 목록 불러오기');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[2].title).toContain('필요할 때 새 영상 수집');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[2].description).toContain('YouTube API');
@@ -24,7 +24,7 @@ describe('emptyStates constants', () => {
   it('keeps scrapbook empty guidance tied to Cloud scrapbook storage', () => {
     expect(SCRAPBOOK_EMPTY_STATE.description).toContain('별표');
     expect(SCRAPBOOK_EMPTY_STATE.description).toContain('제작 후보와는 별도로 관리');
-    expect(SCRAPBOOK_EMPTY_STATE.steps[1].description).toContain('Cloud DB');
+    expect(SCRAPBOOK_EMPTY_STATE.steps[1].description).toContain('온라인 저장소(Azure DB)');
     expect(SCRAPBOOK_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
     expect(SCRAPBOOK_EMPTY_STATE.steps[2].description).toContain('Cloud 스크랩북');
   });
@@ -43,12 +43,12 @@ describe('emptyStates constants', () => {
     expect(PRODUCTION_KANBAN_EMPTY_STATE.description).toContain('제작 후보로 표시하면');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.description).not.toContain('제작 후보로 보내');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[0].description).toContain('제작 후보로 표시할 영상');
-    expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[1].description).toContain('Cloud DB');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[1].description).toContain('온라인 저장소(Azure DB)');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].title).toContain('표시하기');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].description).toContain('Cloud 발견함');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].description).toContain('제작 후보로 표시합니다');
-    expect(PRODUCTION_KANBAN_EMPTY_STATE.referenceVaultButton.title).toContain('Cloud DB 조회');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.referenceVaultButton.title).toContain('온라인 저장소(Azure DB) 조회');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.discoveryLinksButton.title).toContain('자동 수집이나 다운로드는 실행하지 않습니다');
   });
 

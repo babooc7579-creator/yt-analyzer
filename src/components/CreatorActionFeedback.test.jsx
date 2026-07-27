@@ -19,7 +19,7 @@ describe('CreatorActionFeedback', () => {
     expect(html).toContain('Microsoft 로그인 세션이 만료될 수 있습니다');
     expect(html).toContain('Microsoft 로그인 다시 열기');
     expect(html).toContain(`href="${CREATOR_OS_LOGIN_PATH.replaceAll('&', '&amp;')}"`);
-    expect(html).toContain('Cloud 데이터를 변경하거나 YouTube API를 호출하지 않습니다');
+    expect(html).toContain('온라인 저장소(Azure DB) 데이터를 변경하거나 YouTube API를 호출하지 않습니다');
     expect(html).toContain('오류 안내 닫기');
     expect(html).not.toContain('불러오는 중');
   });
@@ -36,12 +36,12 @@ describe('CreatorActionFeedback', () => {
 
   it('shows progress when there is no error', () => {
     const html = renderToStaticMarkup(
-      <CreatorActionFeedback progressMessage="저장 영상을 불러오는 중입니다" />,
+      <CreatorActionFeedback progressMessage="수집 영상을 불러오는 중입니다" />,
     );
 
     expect(html).toContain('role="status"');
     expect(html).toContain('aria-live="polite"');
-    expect(html).toContain('저장 영상을 불러오는 중입니다');
+    expect(html).toContain('수집 영상을 불러오는 중입니다');
     expect(html).not.toContain('작업을 완료하지 못했습니다');
   });
 

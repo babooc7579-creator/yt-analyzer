@@ -76,7 +76,7 @@ export default function UploadCalendarWorkspace({
               type="button"
               onClick={() => state.setStatusFilter('all')}
               className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950"
-              title="제작 상태 필터를 전체로 바꿉니다. 화면 표시만 변경하며 Cloud 데이터는 변경하지 않습니다."
+              title="제작 상태 필터를 전체로 바꿉니다. 화면 표시만 변경하며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다."
               aria-label="제작 상태 필터 전체 보기, 화면 표시만 변경"
             >
               {filterEmptyState.actionLabel}

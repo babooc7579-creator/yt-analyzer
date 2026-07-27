@@ -82,7 +82,7 @@ describe('productionVideoStatusProps utils', () => {
       isSaving: true,
     })).toMatchObject({
       disabled: true,
-      label: 'Cloud 저장 중',
+      label: '온라인 저장소(Azure DB) 저장 중',
     });
     expect(getProductionVideoDraftSaveButtonProps({
       isDirty: true,
@@ -94,7 +94,7 @@ describe('productionVideoStatusProps utils', () => {
       isSaving: false,
     })).toMatchObject({
       disabled: true,
-      label: 'Cloud 저장됨',
+      label: '온라인 저장소(Azure DB) 저장됨',
     });
     expect(getProductionVideoDraftSaveButtonProps({
       isDirty: false,
@@ -108,7 +108,7 @@ describe('productionVideoStatusProps utils', () => {
     })).toMatchObject({
       disabled: true,
       label: '저장 대상 없음',
-      title: '저장할 영상 ID가 없어 Cloud 저장을 실행하지 않습니다.',
+      title: '저장할 영상 ID가 없어 온라인 저장소(Azure DB) 저장을 실행하지 않습니다.',
     });
   });
 
