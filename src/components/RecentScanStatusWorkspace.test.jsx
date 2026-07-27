@@ -159,4 +159,35 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('저장된 위치에서 이어집니다');
     expect(html).not.toContain('기술 오류 원문 보기');
   });
+
+  it('shows completed Cloud coverage above channel statistics without exceeding 100 percent', () => {
+    const html = renderToStaticMarkup(
+      <RecentScanStatusWorkspace
+        channels={[{
+          id: 'completed',
+          title: '완료 채널',
+          backfillState: {
+            completed: true,
+            inspectionProgressRate: 100,
+            videosInspectedTotal: 1019,
+            lastRun: {
+              coverageRate: 100.1,
+              savedVideosTotal: 1018,
+              channelTotalVideos: 1017,
+            },
+          },
+          lastScanSummary: {
+            status: 'success',
+            scannedAt: '2026-07-27T10:00:00.000Z',
+          },
+        }]}
+      />,
+    );
+
+    expect(html).toContain('Cloud 저장 100% · 1,018개 저장');
+    expect(html).toContain('채널 통계보다 1개 많음');
+    expect(html).toContain('1,019개 확인 · 채널 통계 1,017개');
+    expect(html).toContain('삭제·비공개 영상과 집계 시점 차이');
+    expect(html).not.toContain('Cloud 저장 100.1%');
+  });
 });

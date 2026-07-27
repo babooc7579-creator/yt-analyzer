@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   filterRecentScanStatusRows,
   formatChannelGrade,
+  getBackfillCoverageDisplay,
   getScanHistoryRuns,
   getRecentScanStatusRows,
   getRecentScanStatusSummary,
@@ -45,6 +46,20 @@ const channels = [
 ];
 
 describe('recent scan status utils', () => {
+  it('caps display percentages without changing raw Cloud counts', () => {
+    expect(getBackfillCoverageDisplay({
+      channelTotalVideos: 1017,
+      coverageRate: 100.1,
+      savedVideosTotal: 1018,
+      videosInspectedTotal: 1019,
+    })).toEqual({
+      displayCoverageRate: 100,
+      inspectionCountLabel: '1,019개 확인 · 채널 통계 1,017개',
+      savedAboveChannelTotal: 1,
+      statisticsMismatch: true,
+    });
+  });
+
   it('normalizes and orders failed, partial, never, and success rows', () => {
     const rows = getRecentScanStatusRows(channels);
 
@@ -119,6 +134,35 @@ describe('recent scan status utils', () => {
       coverageRate: 82,
       inspectionProgressRate: 100,
       status: 'success',
+    });
+  });
+
+  it('keeps raw values while preparing safe display values above 100 percent', () => {
+    const [row] = getRecentScanStatusRows([{
+      id: 'completed-above-statistics',
+      backfillState: {
+        completed: true,
+        inspectionProgressRate: 100,
+        videosInspectedTotal: 1019,
+        lastRun: {
+          coverageRate: 100.1,
+          savedVideosTotal: 1018,
+          channelTotalVideos: 1017,
+        },
+      },
+      lastScanSummary: {
+        status: 'success',
+        scannedAt: '2026-07-27T10:00:00.000Z',
+      },
+    }]);
+
+    expect(row).toMatchObject({
+      coverageRate: 100.1,
+      displayCoverageRate: 100,
+      inspectionCountLabel: '1,019개 확인 · 채널 통계 1,017개',
+      savedAboveChannelTotal: 1,
+      savedVideosTotal: 1018,
+      statisticsMismatch: true,
     });
   });
 

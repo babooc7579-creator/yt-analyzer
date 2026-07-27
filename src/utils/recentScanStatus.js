@@ -25,6 +25,44 @@ const STATUS_LABELS = {
 };
 
 const toArray = (value) => (Array.isArray(value) ? value : []);
+const toNonNegativeNumber = (value) => Math.max(0, Number(value) || 0);
+
+export const getBackfillCoverageDisplay = ({
+  channelTotalVideos = 0,
+  coverageRate = null,
+  savedVideosTotal = 0,
+  videosInspectedTotal = 0,
+} = {}) => {
+  const channelTotal = toNonNegativeNumber(channelTotalVideos);
+  const savedTotal = toNonNegativeNumber(savedVideosTotal);
+  const inspectedTotal = toNonNegativeNumber(videosInspectedTotal);
+  const numericCoverageRate = Number(coverageRate);
+  const hasCoverageRate = coverageRate !== null
+    && coverageRate !== undefined
+    && coverageRate !== ''
+    && Number.isFinite(numericCoverageRate);
+  const displayCoverageRate = hasCoverageRate
+    ? Math.min(Math.max(numericCoverageRate, 0), 100)
+    : null;
+  const savedAboveChannelTotal = channelTotal > 0
+    ? Math.max(0, savedTotal - channelTotal)
+    : 0;
+  const inspectionCountLabel = channelTotal <= 0
+    ? ''
+    : inspectedTotal > channelTotal
+      ? `${inspectedTotal.toLocaleString('ko-KR')}개 확인 · 채널 통계 ${channelTotal.toLocaleString('ko-KR')}개`
+      : `${inspectedTotal.toLocaleString('ko-KR')}/${channelTotal.toLocaleString('ko-KR')}개 확인`;
+
+  return {
+    displayCoverageRate,
+    inspectionCountLabel,
+    savedAboveChannelTotal,
+    statisticsMismatch: channelTotal > 0 && (
+      savedTotal !== channelTotal
+      || inspectedTotal !== channelTotal
+    ),
+  };
+};
 
 export const formatChannelGrade = (value) => {
   const grade = String(value || '').trim();
@@ -78,6 +116,14 @@ export const getRecentScanStatusRows = (channels = []) => (
         inspectionProgressRate,
         videosInspectedTotal,
       });
+      const channelTotalVideos = toNonNegativeNumber(coverage.channelTotalVideos);
+      const savedVideosTotal = toNonNegativeNumber(coverage.savedVideosTotal);
+      const coverageDisplay = getBackfillCoverageDisplay({
+        channelTotalVideos,
+        coverageRate,
+        savedVideosTotal,
+        videosInspectedTotal,
+      });
 
       return {
         channelId: channel.id || channel.channelId || '',
@@ -88,15 +134,17 @@ export const getRecentScanStatusRows = (channels = []) => (
         backfillPhase: backfillViewState.phase,
         backfillStatusLabel: backfillViewState.label,
         backfillUpdatedAt: backfillState.updatedAt || '',
-        channelTotalVideos: Number(coverage.channelTotalVideos) || 0,
+        channelTotalVideos,
         coverageRate,
+        displayCoverageRate: coverageDisplay.displayCoverageRate,
         error: summary.error || '',
         estimatedMissingVideos: Number(coverage.estimatedMissingVideos) || 0,
         exactScannedAt: formatKoreanDateTime(scannedAt, '기록 없음'),
         grade: formatChannelGrade(channel.grade),
         inspectionProgressRate,
         newVideosFound: Number(summary.newVideosFound) || 0,
-        savedVideosTotal: Number(coverage.savedVideosTotal) || 0,
+        savedAboveChannelTotal: coverageDisplay.savedAboveChannelTotal,
+        savedVideosTotal,
         scannedAt,
         scannedText: scannedAt ? formatRelativeTime(scannedAt) : '아직 수집하지 않음',
         statsRefreshed: Number(summary.statsRefreshed) || 0,
@@ -105,6 +153,8 @@ export const getRecentScanStatusRows = (channels = []) => (
         statusLabel: STATUS_LABELS[status],
         tags: toArray(channel.tags).filter(Boolean),
         timestamp: Number.isFinite(timestamp) ? timestamp : 0,
+        inspectionCountLabel: coverageDisplay.inspectionCountLabel,
+        statisticsMismatch: coverageDisplay.statisticsMismatch,
         videosInspectedTotal,
       };
     })

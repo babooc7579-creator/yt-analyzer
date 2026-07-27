@@ -316,12 +316,13 @@ export default function RecentScanStatusWorkspace({
                       </p>
                       <p>
                         업로드 목록 확인 {row.inspectionProgressRate ?? (row.backfillCompleted ? 100 : 0)}%
-                        {row.channelTotalVideos > 0
-                          ? ` · ${row.videosInspectedTotal}/${row.channelTotalVideos}개 확인`
-                          : ''}
+                        {row.inspectionCountLabel ? ` · ${row.inspectionCountLabel}` : ''}
                       </p>
                       <p>
-                        Cloud 저장 {row.coverageRate ?? 0}% · {row.savedVideosTotal}개 저장
+                        Cloud 저장 {row.displayCoverageRate ?? 0}% · {row.savedVideosTotal.toLocaleString('ko-KR')}개 저장
+                        {row.savedAboveChannelTotal > 0
+                          ? ` · 채널 통계보다 ${row.savedAboveChannelTotal.toLocaleString('ko-KR')}개 많음`
+                          : ''}
                         {row.estimatedMissingVideos > 0
                           ? ` · ${row.backfillCompleted ? '통계상 차이' : '추정 미저장'} ${row.estimatedMissingVideos}개`
                           : ''}
@@ -334,9 +335,9 @@ export default function RecentScanStatusWorkspace({
                       <p className={row.backfillCompleted ? 'text-emerald-200' : 'text-slate-400'}>
                         다음: {row.backfillNextAction}
                       </p>
-                      {row.backfillCompleted && row.coverageRate !== null && row.coverageRate < 100 ? (
+                      {row.backfillCompleted && row.statisticsMismatch ? (
                         <p className="text-amber-200">
-                          채널 통계에는 비공개·삭제 영상이 포함될 수 있어 Cloud 저장률이 100%가 아니어도 목록 확인은 완료될 수 있습니다.
+                          삭제·비공개 영상과 집계 시점 차이로 채널 통계와 Cloud 저장 수는 정확히 일치하지 않을 수 있습니다.
                         </p>
                       ) : null}
                     </div>
