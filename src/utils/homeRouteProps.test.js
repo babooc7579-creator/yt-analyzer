@@ -10,7 +10,9 @@ describe('homeRouteProps utils', () => {
     const videos = [{ videoId: 'video1' }, { videoId: 'video2' }];
 
     const props = buildHomeRouteProps({
+      channelsLoading: true,
       discoveryCandidateCount: 4,
+      channelsLoading: true,
       discoveryRightsWarningCount: 2,
       latestScanText: 'just now',
       openRadarCandidateCount: 5,

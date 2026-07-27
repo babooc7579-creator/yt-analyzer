@@ -34,7 +34,7 @@ describe('videoListRowBadgesProps utils', () => {
     expect(badges.find(item => item.icon === 'candidate').title).toContain('제작 후보함');
   });
 
-  it('shows tteotteotto badge for either candidate signal and strong badge only for strong reaction', () => {
+  it('keeps the tteotteotto and strong-reaction signals separate', () => {
     expect(getVideoListRowBadgeItems({
       isChecked: false,
       isProductionCandidate: false,
@@ -49,10 +49,10 @@ describe('videoListRowBadgesProps utils', () => {
       isSaved: false,
       isStrongReaction: true,
       isTtoTto: false,
-    }).filter(item => item.isVisible).map(item => item.icon)).toEqual(['tteotteotto', 'strong']);
+    }).filter(item => item.isVisible).map(item => item.icon)).toEqual(['strong']);
     expect(getVideoListRowBadgeItems({
-      isStrongReaction: true,
-      isTtoTto: false,
+      isStrongReaction: false,
+      isTtoTto: true,
     }).find(item => item.icon === 'tteotteotto').title).toContain('성공 예측이 아닙니다');
   });
 });

@@ -12,10 +12,20 @@ import {
   shiftCalendarMonth,
 } from '../utils/uploadCalendar';
 
-export function useUploadCalendarState({ videoUserRecords, videos }) {
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+export function useUploadCalendarState({
+  initialTargetPublishDate = '',
+  initialTargetVideoId = '',
+  videoUserRecords,
+  videos,
+}) {
   const todayKey = useMemo(() => formatLocalDateKey(new Date()), []);
-  const [monthKey, setMonthKey] = useState(() => getCurrentMonthKey());
-  const [selectedDate, setSelectedDate] = useState(todayKey);
+  const initialDate = DATE_PATTERN.test(String(initialTargetPublishDate))
+    ? initialTargetPublishDate
+    : todayKey;
+  const [monthKey, setMonthKey] = useState(() => initialDate.slice(0, 7) || getCurrentMonthKey());
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [statusFilter, setStatusFilter] = useState('all');
 
   const allItems = useMemo(() => getUploadCalendarItems({ videoUserRecords, videos }), [videoUserRecords, videos]);
@@ -55,6 +65,7 @@ export function useUploadCalendarState({ videoUserRecords, videos }) {
     goPreviousMonth: () => moveMonth(-1),
     goToday,
     gridDays,
+    initialTargetVideoId: String(initialTargetVideoId || '').trim(),
     monthKey,
     monthLabel: getCalendarMonthLabel(monthKey),
     productionRecordCount: allItems.length + summary.unscheduledCount,

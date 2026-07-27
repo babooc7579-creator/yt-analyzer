@@ -105,7 +105,7 @@ describe('legacyVaultTabViewProps utils', () => {
           targetVideoId: 'video-1',
         },
       },
-      { id: 'vault-all' },
+      { id: 'vault-videos' },
       { id: 'studio-script' },
       { id: 'studio-calendar' },
     ]);

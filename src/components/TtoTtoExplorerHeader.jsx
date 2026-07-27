@@ -12,7 +12,7 @@ export default function TtoTtoExplorerHeader({
           <Sparkles className="h-5 w-5" />
           <p className="text-xs font-extrabold">저장 영상 기반 소재 발굴</p>
         </div>
-        <h2 className="mt-2 text-2xl font-black text-white">터또터 탐색</h2>
+        <h2 className="mt-2 text-2xl font-black text-white">또터또 탐색</h2>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
           6개월 이상 지났고 채널 평균보다 1.5배 이상 반응한 저장 영상을 찾습니다. 성공 예측이 아니라 다시 검토할 소재를 좁히는 판단 보조 신호입니다.
         </p>

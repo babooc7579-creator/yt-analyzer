@@ -19,8 +19,8 @@ const settingCards = [
   },
   {
     icon: KeyRound,
-    title: '새 영상 수집만 YouTube API를 사용합니다',
-    description: '채널 선택과 저장 영상 불러오기는 YouTube API 호출 작업이 아닙니다.',
+    title: 'YouTube API 작업은 실행 전에 구분합니다',
+    description: '새 영상 수집, 채널 정보 확인·등록, 댓글 Top 10은 YouTube API를 사용할 수 있습니다. 채널 선택과 저장 영상 불러오기는 사용하지 않습니다.',
     tone: 'border-emerald-400/25 bg-emerald-500/10 text-emerald-200',
   },
 ];

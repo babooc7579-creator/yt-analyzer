@@ -9,6 +9,7 @@ describe('UploadCalendarDayDetails', () => {
   it('renders long schedule titles with a stable clamped layout and safe actions', () => {
     const html = renderToStaticMarkup(
       <UploadCalendarDayDetails
+        focusedVideoId="video-1"
         items={[{
           date: '2026-07-14',
           sourceLoaded: true,
@@ -29,6 +30,8 @@ describe('UploadCalendarDayDetails', () => {
     expect(html).toContain('후보함에서 찾기');
     expect(html).toContain('원본 열기');
     expect(html).toContain('Cloud 데이터 변경 및 YouTube API 호출 없음');
+    expect(html).toContain('이어서 작업');
+    expect(html).toContain('border-amber-300');
   });
 
   it('omits unavailable workspace navigation buttons', () => {

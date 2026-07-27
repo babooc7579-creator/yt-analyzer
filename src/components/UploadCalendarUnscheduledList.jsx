@@ -3,6 +3,7 @@ import { CalendarPlus, PencilLine } from 'lucide-react';
 import YouTubeThumbnailImage from './YouTubeThumbnailImage';
 
 export default function UploadCalendarUnscheduledList({
+  focusedVideoId = '',
   items = [],
   onOpenProductionCandidate,
   onOpenProductionCandidates,
@@ -35,7 +36,12 @@ export default function UploadCalendarUnscheduledList({
 
       <div className="mt-4 grid grid-cols-1 gap-2 lg:grid-cols-2">
         {items.map((item) => (
-          <article key={item.videoId} className="flex min-w-0 gap-3 border border-slate-800 bg-slate-950/70 p-3">
+          <article
+            key={item.videoId}
+            className={`flex min-w-0 gap-3 border bg-slate-950/70 p-3 ${
+              item.videoId === focusedVideoId ? 'border-amber-300 ring-1 ring-amber-300/30' : 'border-slate-800'
+            }`}
+          >
             {item.thumbnail ? (
               <YouTubeThumbnailImage
                 src={item.thumbnail}
@@ -54,6 +60,9 @@ export default function UploadCalendarUnscheduledList({
                 <span className="border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-[10px] font-bold text-slate-300">
                   {item.statusLabel}
                 </span>
+                {item.videoId === focusedVideoId && (
+                  <span className="bg-amber-300 px-1.5 py-0.5 text-[10px] font-black text-slate-950">이어서 작업</span>
+                )}
                 {!item.sourceLoaded && (
                   <span className="border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-200">
                     영상 정보 미불러옴

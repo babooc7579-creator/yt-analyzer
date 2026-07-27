@@ -8,6 +8,7 @@ import TopCommentsModal from './TopCommentsModal';
 export default function CreatorAppLayout({
   activeCreatorItem,
   channelCount,
+  channelsLoading,
   children,
   commentModal,
   creatorView,
@@ -50,6 +51,7 @@ export default function CreatorAppLayout({
           <CreatorWorkspaceHeader
             item={activeCreatorItem}
             channelCount={channelCount}
+            channelsLoading={channelsLoading}
             discoveryCandidateCount={discoveryCandidateCount}
             videoCount={videoCount}
             selectedChannelCount={selectedChannelCount}

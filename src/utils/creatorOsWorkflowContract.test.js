@@ -5,6 +5,7 @@ import { getCreatorOsMetricsModel } from './creatorOsMetrics';
 import { getProductionKanbanDataModel } from './productionKanbanData';
 import { getRadarCandidateDataModel } from './radarCandidates';
 import { getScrapbookWorkspaceViewProps } from './scrapbook';
+import { getScriptBoardItems } from './scriptBoard';
 import { getUploadCalendarItems, getUploadCalendarSummary } from './uploadCalendar';
 
 const video = {
@@ -78,11 +79,24 @@ describe('Creator OS workflow contract', () => {
       ...focusedRecord,
       targetPublishDate: '2026-07-24',
     };
+    const scriptItems = getScriptBoardItems({
+      videoUserRecords: { [video.videoId]: scheduledRecord },
+      videos: [video],
+    });
     const calendarItems = getUploadCalendarItems({
       videoUserRecords: { [video.videoId]: scheduledRecord },
       videos: [video],
     });
 
+    expect(scriptItems).toEqual([
+      expect.objectContaining({
+        id: video.videoId,
+        record: expect.objectContaining({
+          targetPublishDate: '2026-07-24',
+        }),
+        video,
+      }),
+    ]);
     expect(calendarItems).toEqual([
       expect.objectContaining({
         date: '2026-07-24',

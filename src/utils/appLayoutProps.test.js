@@ -21,6 +21,7 @@ describe('appLayoutProps utils', () => {
       closeTopCommentsModal: () => 'close comments',
       commentModal: { isOpen: true },
       creatorView: 'today',
+      channelsLoading: true,
       discoveryCandidateCount: 3,
       error: 'Cloud error',
       notesModal: { isOpen: false },
@@ -36,6 +37,7 @@ describe('appLayoutProps utils', () => {
     expect(props).toMatchObject({
       activeCreatorItem: { id: 'today' },
       channelCount: 2,
+      channelsLoading: true,
       commentModal: { isOpen: true },
       creatorView: 'today',
       discoveryCandidateCount: 3,
@@ -169,9 +171,12 @@ describe('appLayoutProps utils', () => {
   it('separates live navigation from the future roadmap without duplicate operations menus', () => {
     const groups = getCreatorSidebarNavigationGroups(CREATOR_OS_PRODUCT_MAP);
 
-    expect(groups.liveItemCount).toBe(17);
+    expect(groups.liveItemCount).toBe(15);
     expect(groups.roadmapItemCount).toBe(14);
-    expect(groups.liveItemCount + groups.roadmapItemCount).toBe(31);
+    expect(groups.liveItemCount + groups.roadmapItemCount).toBe(29);
+    expect(groups.liveSections.flatMap((section) => section.items).map((item) => item.id)).not.toEqual(
+      expect.arrayContaining(['vault-all', 'vault-channels']),
+    );
     expect(groups.liveSections.flatMap((section) => section.items).filter((item) => item.id === 'ops-channels')).toHaveLength(1);
     expect(groups.liveSections.flatMap((section) => section.items).every((item) => item.status !== 'soon')).toBe(true);
     expect(groups.roadmapSections.flatMap((section) => section.items).every((item) => item.status === 'soon')).toBe(true);
@@ -214,6 +219,20 @@ describe('appLayoutProps utils', () => {
     ]);
     expect(cards.map((card) => card.value)).toEqual([10, 99, 4, 3, 2]);
     expect(cards[1].description).toContain('새 YouTube API 호출 수가 아닙니다');
+  });
+
+  it('shows Cloud channel lookup instead of a false zero during initial loading', () => {
+    const cards = getCreatorWorkspaceHeaderStatCards({
+      channelCount: 0,
+      channelsLoading: true,
+    });
+
+    expect(cards[0]).toMatchObject({
+      label: '채널',
+      value: '조회 중',
+    });
+    expect(cards[0].description).toContain('Cloud DB');
+    expect(cards[0].description).toContain('YouTube API 호출은 없습니다');
   });
 
   it('builds workspace tab copy with saved video count', () => {

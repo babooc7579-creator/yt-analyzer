@@ -59,15 +59,18 @@ export const getCreatorSidebarRoadmapViewProps = ({
 
 export const getCreatorWorkspaceHeaderStatCards = ({
   channelCount,
+  channelsLoading = false,
   discoveryCandidateCount,
   savedVideoCount,
   selectedChannelCount,
   videoCount,
 }) => [
   {
-    value: channelCount,
+    value: channelsLoading ? '조회 중' : channelCount,
     label: '채널',
-    description: 'Cloud 채널 목록에 저장된 채널 수입니다.',
+    description: channelsLoading
+      ? 'Cloud DB에서 채널 목록을 조회하고 있습니다. YouTube API 호출은 없습니다.'
+      : 'Cloud 채널 목록에 저장된 채널 수입니다.',
   },
   {
     value: videoCount,
@@ -112,6 +115,7 @@ export function buildLayoutProps({
   closeTopCommentsModal,
   commentModal,
   creatorView,
+  channelsLoading,
   discoveryCandidateCount,
   error,
   hasUnsavedProductionDrafts,
@@ -155,6 +159,7 @@ export function buildLayoutProps({
   return {
     activeCreatorItem,
     channelCount: channelList.length,
+    channelsLoading: Boolean(channelsLoading),
     commentModal,
     creatorView,
     discoveryCandidateCount,

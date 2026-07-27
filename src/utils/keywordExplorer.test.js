@@ -18,6 +18,12 @@ const videos = [
 describe('keywordExplorer utils', () => {
   it('tokenizes useful words and drops simple stop words', () => {
     expect(tokenizeKeywordText('This AMAZING cake-video 2026')).toEqual(['amazing', 'cake']);
+    expect(tokenizeKeywordText('The story of how he found his dog and you can help')).toEqual([
+      'story',
+      'found',
+      'dog',
+      'help',
+    ]);
   });
 
   it('builds frequent title suggestions without counting duplicates in one title twice', () => {

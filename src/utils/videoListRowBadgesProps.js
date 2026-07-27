@@ -29,15 +29,15 @@ export const getVideoListRowBadgeItems = ({
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-extrabold text-white shadow-sm',
     icon: 'tteotteotto',
-    isVisible: isStrongReaction || isTtoTto,
+    isVisible: isTtoTto,
     label: '또터또 후보',
-    title: '오래된 반응 또는 강한 반응 기준에 맞는 판단 보조 신호입니다. 성공 예측이 아닙니다.',
+    title: '게시 후 180일 이상이고 채널 평균보다 1.5배 이상 반응한 저장 영상입니다. 성공 예측이 아닙니다.',
   },
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-[10px] font-bold text-orange-700',
     icon: 'strong',
     isVisible: isStrongReaction,
     label: '강한 반응',
-    title: '조회수 대비 좋아요 반응이 강한 저장 영상입니다.',
+    title: '대박 지수가 3배 이상인 반응 신호입니다. 또터또 후보와는 별도 기준입니다.',
   },
 ];

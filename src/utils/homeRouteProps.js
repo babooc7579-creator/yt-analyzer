@@ -1,6 +1,7 @@
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export function buildHomeRouteProps({
+  channelsLoading,
   clearRadarDecisions,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
@@ -26,6 +27,7 @@ export function buildHomeRouteProps({
   const selectedChannels = toArray(selectedChannelIds);
 
   return {
+    channelsLoading: Boolean(channelsLoading),
     clearRadarDecisions,
     discoveryCandidateCount,
     discoveryRightsWarningCount,

@@ -5,18 +5,16 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
       { id: 'discovery-trends', label: '트렌드 스캐너', status: 'soon', summary: '외부 트렌드와 급상승 신호를 연결할 예정입니다.' },
-      { id: 'discovery-ttotto', label: '터또터 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 저장 영상을 전용 화면에서 검토합니다.' },
+      { id: 'discovery-ttotto', label: '또터또 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 저장 영상을 전용 화면에서 검토합니다.' },
       { id: 'discovery-keywords', label: '키워드 탐색', status: 'live', summary: 'Cloud에 저장된 영상 제목과 채널명을 키워드로 검색하고 판단 작업으로 연결합니다.' },
       { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'live', summary: '운영중 채널을 등급과 마지막 수집일 기준으로 정렬하고 오늘 확인할 범위를 고릅니다.' },
     ],
   },
   {
     title: '레퍼런스 금고',
-    description: '보관: 영상과 채널을 자산처럼 쌓습니다.',
+    description: '보관: 영상과 발견 링크를 자산처럼 쌓습니다.',
     items: [
-      { id: 'vault-all', label: '올인원 보관함', status: 'live', summary: '기존 영상 보드와 카드/리스트 보기를 사용합니다.' },
       { id: 'vault-videos', label: '저장한 영상', status: 'live', summary: '저장된 영상 데이터와 영상 보드를 확인합니다.' },
-      { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '기존 채널 목록과 수집 상태를 확인합니다.' },
       { id: 'vault-tags', label: '태그별 금고', status: 'live', summary: '기존 채널 태그별로 채널을 선택하고 Cloud 저장 영상을 묶어 봅니다.' },
       { id: 'vault-sources', label: '발견 링크 저장', status: 'live', summary: '외부에서 발견한 링크를 Cloud 발견함에 수동 저장하고 검토 상태를 관리합니다.' },
     ],
@@ -78,6 +76,12 @@ const CREATOR_OS_VISIBLE_ITEMS = CREATOR_OS_PRODUCT_MAP.flatMap((section) => (
   section.items.map((item) => ({ ...item, sectionTitle: section.title }))
 ));
 
+// Duplicate legacy views remain addressable, but are hidden from the sidebar.
+export const LEGACY_REFERENCE_ITEMS = [
+  { id: 'vault-all', label: '올인원 보관함', status: 'live', summary: '저장한 영상 화면과 같은 기존 영상 보드입니다.', sectionTitle: '레퍼런스 금고' },
+  { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '채널 운영실로 통합하기 전의 기존 채널 목록입니다.', sectionTitle: '레퍼런스 금고' },
+];
+
 // Older shortcuts keep resolving while the sidebar exposes one unified channel workspace.
 export const LEGACY_CHANNEL_OPERATION_ITEMS = [
   { id: 'ops-add-channel', label: '새 채널 등록', status: 'live', summary: '채널 운영실의 새 채널 등록 단계로 이동합니다.', sectionTitle: '오퍼레이션 관제' },
@@ -86,6 +90,7 @@ export const LEGACY_CHANNEL_OPERATION_ITEMS = [
 
 export const CREATOR_OS_ITEMS = [
   ...CREATOR_OS_VISIBLE_ITEMS,
+  ...LEGACY_REFERENCE_ITEMS,
   ...LEGACY_CHANNEL_OPERATION_ITEMS,
 ];
 

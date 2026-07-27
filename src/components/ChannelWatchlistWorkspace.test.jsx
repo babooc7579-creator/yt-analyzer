@@ -36,7 +36,7 @@ describe('ChannelWatchlistWorkspace', () => {
     expect(html).toContain('새 영상 수집 화면');
     expect(html).toContain('실제 실행 시 YouTube API');
     expect(html).toContain('저장 영상 전체 보기');
-    expect(html).toContain('터또터 탐색');
+    expect(html).toContain('또터또 탐색');
     expect(html).toContain('분류 전체');
     expect(html).toContain('선택 상태 전체');
     expect(html).toContain('현재 결과 1개 선택 해제');

@@ -4,9 +4,9 @@ import VideoCardThumbnailBadges from './VideoCardThumbnailBadges';
 import YouTubeThumbnailImage from './YouTubeThumbnailImage';
 
 export default function VideoCardThumbnail({
-  isCandidate,
   isChecked,
   isStrongReaction,
+  isTtoTto,
   onToggleCheck,
   rank,
   thumbnailHeightClass,
@@ -26,8 +26,8 @@ export default function VideoCardThumbnail({
       <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/35 to-transparent" />
       <VideoCardThumbnailBadges
-        isCandidate={isCandidate}
         isStrongReaction={isStrongReaction}
+        isTtoTto={isTtoTto}
         rank={rank}
       />
       <VideoCardThumbnailActions

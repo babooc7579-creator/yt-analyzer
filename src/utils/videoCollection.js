@@ -95,7 +95,7 @@ export const summarizeScanResults = (results = []) => (
 
 export const getScanCompleteMessage = (results = []) => {
   const { totalNew, ttoTtoCount } = summarizeScanResults(results);
-  return `새 영상 수집 완료: 신규 영상 ${totalNew}개 확인${ttoTtoCount > 0 ? `, 터또터 후보 ${ttoTtoCount}개 확인` : ''}. 이후 저장 영상 불러오기는 Cloud DB 조회입니다.`;
+  return `새 영상 수집 완료: 신규 영상 ${totalNew}개 확인${ttoTtoCount > 0 ? `, 또터또 후보 ${ttoTtoCount}개 확인` : ''}. 이후 저장 영상 불러오기는 Cloud DB 조회입니다.`;
 };
 
 export const getScanErrorMessage = (error) => {

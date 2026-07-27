@@ -32,7 +32,7 @@ describe('creatorHomeViewProps utils', () => {
     expect(guidelinesProps.guidelines.map(guideline => guideline.title)).toEqual([
       '수집은 API 호출',
       '불러오기는 저장 데이터 조회',
-      '터또터 기준',
+      '또터또 기준',
     ]);
     expect(guidelinesProps.guidelines[0].description).toContain('YouTube API');
     expect(statsProps.cards.map(card => [card.label, card.value])).toEqual([
@@ -67,6 +67,7 @@ describe('creatorHomeViewProps utils', () => {
 
   it('builds home summary counts and dashboard metrics from provided lists', () => {
     const props = getCreatorHomeViewProps({
+      channelsLoading: true,
       discoveryCandidateCount: 4,
       discoveryRightsWarningCount: 2,
       latestScanText: 'just now',
@@ -83,6 +84,7 @@ describe('creatorHomeViewProps utils', () => {
     });
 
     expect(props.radarSummaryProps).toMatchObject({
+      channelsLoading: true,
       discoveryCandidateCount: 4,
       discoveryRightsWarningCount: 2,
       latestScanText: 'just now',
@@ -97,6 +99,20 @@ describe('creatorHomeViewProps utils', () => {
       selectedLoadedVideoCount: 1,
       ttoTtoAssetCount: 7,
     });
+    expect(props.nextActionProps.channelsLoading).toBe(true);
+  });
+
+  it('uses a loading label for the saved channel metric before Cloud responds', () => {
+    const statsProps = getHomeRadarStatsGridViewProps({
+      channelsLoading: true,
+      savedChannelCount: 0,
+    });
+
+    expect(statsProps.cards[0]).toMatchObject({
+      label: '저장된 채널',
+      value: '조회 중',
+    });
+    expect(statsProps.cards[0].description).toContain('Cloud DB');
   });
 
   it('builds radar candidate strip props with videos, records, and handlers', () => {
@@ -172,18 +188,18 @@ describe('creatorHomeViewProps utils', () => {
       { id: 'ops-channels', intent: { operationStage: 'add' } },
       { id: 'vault-sources' },
       { id: 'ops-channels', intent: { operationStage: 'scan' } },
-      { id: 'vault-all' },
+      { id: 'vault-videos' },
       { id: 'studio-candidates' },
       { id: 'studio-scrapbook' },
       { id: 'discovery-watchlist' },
-      { id: 'vault-all' },
+      { id: 'vault-videos' },
       { id: 'ops-channels', intent: { operationStage: 'add' } },
       { id: 'discovery-watchlist' },
       { id: 'vault-sources' },
       { id: 'studio-candidates' },
       { id: 'ops-channels', intent: { operationStage: 'scan' } },
       { id: 'discovery-ttotto' },
-      { id: 'vault-all' },
+      { id: 'vault-videos' },
       { id: 'discovery-keywords' },
       { id: 'vault-tags' },
       { id: 'studio-calendar' },

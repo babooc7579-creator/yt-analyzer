@@ -58,9 +58,9 @@ describe('videoCard utils', () => {
     expect(props.videoTitle).toBe('Old viral idea');
     expect(props.videoUrl).toBe('https://youtube.com/watch?v=video%201');
     expect(props.thumbnailProps).toMatchObject({
-      isCandidate: true,
       isChecked: true,
       isStrongReaction: true,
+      isTtoTto: true,
       rank: 2,
       thumbnailHeightClass: 'h-[260px]',
       video,
@@ -107,9 +107,9 @@ describe('videoCard utils', () => {
     expect(props.cardClassName).toContain('border-rose-100');
     expect(props.contentClassName).toBe('p-4');
     expect(props.thumbnailProps).toMatchObject({
-      isCandidate: true,
       isChecked: false,
       isStrongReaction: false,
+      isTtoTto: true,
       thumbnailHeightClass: 'h-[300px]',
     });
     expect(props.statsGridProps).toMatchObject({
@@ -146,7 +146,7 @@ describe('videoCard utils', () => {
       isCandidate: true,
       reasonList: ['평균 대비 3.2배', '200일 지난 소재'],
       shouldShow: true,
-      title: '후보 이유',
+      title: '판단 신호',
     });
 
     expect(getVideoCardCandidateReasonsViewProps({
@@ -249,14 +249,23 @@ describe('videoCard utils', () => {
 
   it('builds thumbnail badge items and generic media copy', () => {
     const badges = getVideoCardThumbnailBadgeItems({
-      isCandidate: true,
       isStrongReaction: true,
+      isTtoTto: true,
       rank: 4,
     });
 
     expect(badges.filter((badge) => badge.isVisible).map((badge) => badge.label)).toEqual([
       '#4',
       '또터또 후보',
+      '강한 반응',
+    ]);
+    expect(badges.find((badge) => badge.label === '또터또 후보').title).toContain('180일 이상');
+    expect(getVideoCardThumbnailBadgeItems({
+      isStrongReaction: true,
+      isTtoTto: false,
+      rank: 5,
+    }).filter((badge) => badge.isVisible).map((badge) => badge.label)).toEqual([
+      '#5',
       '강한 반응',
     ]);
     expect(getVideoThumbnailAltText({ videoTitle: 'First idea' })).toBe('First idea 썸네일');

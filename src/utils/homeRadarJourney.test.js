@@ -36,6 +36,19 @@ describe('homeRadarJourney', () => {
     expect(reviewStages[3].href).toBe('#today-radar-finish');
   });
 
+  it('shows the channel step as a Cloud lookup before the empty result is known', () => {
+    const stages = getHomeRadarJourneyStages({
+      channelsLoading: true,
+      selectedChannelCount: 0,
+    });
+
+    expect(stages[0]).toMatchObject({
+      status: 'current',
+      value: 'Cloud 조회 중',
+    });
+    expect(stages[1].status).toBe('upcoming');
+  });
+
   it('marks a successful zero-video lookup as an actionable warning', () => {
     const stages = getHomeRadarJourneyStages({
       selectedChannelCount: 2,

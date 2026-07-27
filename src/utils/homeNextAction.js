@@ -7,6 +7,7 @@ export const getHomeNextActionPanelViewProps = () => ({
 });
 
 export const getHomeNextAction = ({
+  channelsLoading = false,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
   loadedVideoCount,
@@ -32,6 +33,19 @@ export const getHomeNextAction = ({
   const discoveryCandidates = toCount(discoveryCandidateCount);
   const rightsWarnings = toCount(discoveryRightsWarningCount);
   const candidateTotal = productionCandidates + discoveryCandidates;
+
+  if (channelsLoading) {
+    return {
+      tone: 'blue',
+      iconKey: 'refresh',
+      title: 'Cloud 채널 목록을 확인하고 있습니다',
+      description: '저장된 채널 목록 조회가 끝나면 오늘 할 일을 이어서 안내합니다.',
+      badge: 'Cloud DB 조회',
+      metric: '조회 중',
+      actionLabel: '',
+      impactText: '채널 목록 조회이며 새 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
+    };
+  }
 
   if (savedChannels === 0) {
     return {

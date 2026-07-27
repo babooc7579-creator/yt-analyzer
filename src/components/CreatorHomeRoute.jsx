@@ -1,6 +1,7 @@
 import CreatorHomeView from './CreatorHomeView';
 
 export default function CreatorHomeRoute({
+  channelsLoading,
   clearRadarDecisions,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
@@ -27,6 +28,7 @@ export default function CreatorHomeRoute({
 }) {
   return (
     <CreatorHomeView
+      channelsLoading={channelsLoading}
       clearRadarDecisions={clearRadarDecisions}
       isVideoSaved={isVideoSaved}
       latestScanText={latestScanText}

@@ -37,6 +37,8 @@ describe('SettingsWorkspace', () => {
     expect(html).toContain('화면 분야 목록은 브라우저 설정입니다');
     expect(html).toContain('저장 영상 불러오기');
     expect(html).toContain('YouTube API 호출 없음');
+    expect(html).toContain('새 영상 수집, 채널 정보 확인·등록, 댓글 Top 10은 YouTube API를 사용할 수 있습니다');
+    expect(html).not.toContain('새 영상 수집만 YouTube API를 사용합니다');
     expect(html).toContain('/api');
     expect(html).toContain('댓글 Top 10용 YouTube API Key');
     expect(html).toContain('새로고침하면 사라지며 Cloud DB, localStorage, 저장소에 저장하지 않습니다');

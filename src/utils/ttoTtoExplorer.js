@@ -167,7 +167,7 @@ export const getTtoTtoExplorerEmptyState = ({
       actionAriaLabel: '저장 영상 화면으로 이동, Cloud 저장 및 YouTube API 호출 없음',
       actionLabel: '저장 영상 화면 열기',
       actionTitle: '저장 영상 화면으로 이동합니다. 처리 기록이나 Cloud 데이터를 바꾸지 않으며 YouTube API를 호출하지 않습니다.',
-      description: '현재 불러온 영상에서는 미처리 터또터 후보가 없습니다. 처리 기록은 아래에서 되돌릴 수 있습니다.',
+      description: '현재 불러온 영상에서는 미처리 또터또 후보가 없습니다. 처리 기록은 아래에서 되돌릴 수 있습니다.',
       kind: 'completed',
       title: '확인할 후보를 모두 처리했습니다',
     };
@@ -175,7 +175,7 @@ export const getTtoTtoExplorerEmptyState = ({
 
   if (hasActiveFilters) {
     return {
-      actionAriaLabel: '터또터 탐색 필터 초기화, Cloud 저장 및 YouTube API 호출 없음',
+      actionAriaLabel: '또터또 탐색 필터 초기화, Cloud 저장 및 YouTube API 호출 없음',
       actionLabel: '필터 초기화',
       actionTitle: '현재 검색어와 화면 필터를 초기화합니다. Cloud 데이터나 처리 기록은 바꾸지 않으며 YouTube API를 호출하지 않습니다.',
       description: '후보는 있지만 현재 검색어나 필터 조건과 일치하지 않습니다.',

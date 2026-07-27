@@ -50,12 +50,12 @@ export const getVideoToolbarReferenceHeaderViewProps = ({
 
 export const getVideoToolbarTtoTtoButtonViewProps = ({ ttoTtoMode }) => ({
   ariaLabel: ttoTtoMode
-    ? '터또터 발굴 모드 끄기, 화면 필터만 변경하며 YouTube API 호출 없음'
-    : '터또터 발굴 모드 켜기, 현재 불러온 저장 영상 필터링, YouTube API 호출 없음',
-  label: '터또터 발굴 (6개월+ · 1.5배+)',
+    ? '또터또 발굴 모드 끄기, 화면 필터만 변경하며 YouTube API 호출 없음'
+    : '또터또 발굴 모드 켜기, 현재 불러온 저장 영상 필터링, YouTube API 호출 없음',
+  label: '또터또 발굴 (6개월+ · 1.5배+)',
   title: ttoTtoMode
-    ? '터또터 필터를 끕니다. 화면 표시 조건만 바꾸며 YouTube API를 새로 호출하지 않습니다.'
-    : '현재 불러온 저장 영상에서 6개월 이상 지났고 채널 평균보다 1.5배 이상 반응한 터또터 후보만 봅니다. 화면 필터만 바꾸며 YouTube API를 새로 호출하지 않습니다.',
+    ? '또터또 필터를 끕니다. 화면 표시 조건만 바꾸며 YouTube API를 새로 호출하지 않습니다.'
+    : '현재 불러온 저장 영상에서 6개월 이상 지났고 채널 평균보다 1.5배 이상 반응한 또터또 후보만 봅니다. 화면 필터만 바꾸며 YouTube API를 새로 호출하지 않습니다.',
 });
 
 export const getVideoToolbarViewProps = ({

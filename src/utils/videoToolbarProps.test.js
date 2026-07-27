@@ -170,8 +170,8 @@ describe('videoToolbarProps utils', () => {
     expect(getVideoToolbarTtoTtoButtonViewProps({
       ttoTtoMode: true,
     })).toMatchObject({
-      ariaLabel: '터또터 발굴 모드 끄기, 화면 필터만 변경하며 YouTube API 호출 없음',
-      label: '터또터 발굴 (6개월+ · 1.5배+)',
+      ariaLabel: '또터또 발굴 모드 끄기, 화면 필터만 변경하며 YouTube API 호출 없음',
+      label: '또터또 발굴 (6개월+ · 1.5배+)',
     });
     expect(getVideoToolbarTtoTtoButtonViewProps({
       ttoTtoMode: true,
@@ -182,7 +182,7 @@ describe('videoToolbarProps utils', () => {
     });
 
     expect(inactiveProps).toMatchObject({
-      ariaLabel: '터또터 발굴 모드 켜기, 현재 불러온 저장 영상 필터링, YouTube API 호출 없음',
+      ariaLabel: '또터또 발굴 모드 켜기, 현재 불러온 저장 영상 필터링, YouTube API 호출 없음',
     });
     expect(inactiveProps.title).toContain('현재 불러온 저장 영상');
     expect(inactiveProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
