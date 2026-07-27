@@ -31,11 +31,11 @@ describe('ChannelWatchlistWorkspace', () => {
     expect(html).toContain('data-testid="creator-route-channel-watchlist"');
     expect(html).toContain('Priority Channel');
     expect(html).toContain('S 등급 핵심 채널');
-    expect(html).toContain('선택 채널 저장 영상 불러오기');
-    expect(html).toContain('Cloud DB에서 조회');
+    expect(html).toContain('선택 채널 수집 영상 목록 불러오기');
+    expect(html).toContain('온라인 저장소(Azure DB)에서 조회');
     expect(html).toContain('새 영상 수집 화면');
     expect(html).toContain('실제 실행 시 YouTube API');
-    expect(html).toContain('저장 영상 전체 보기');
+    expect(html).toContain('수집 영상 전체 보기');
     expect(html).toContain('또터또 탐색');
     expect(html).toContain('분류 전체');
     expect(html).toContain('선택 상태 전체');
@@ -61,6 +61,6 @@ describe('ChannelWatchlistWorkspace', () => {
     );
 
     expect(html).toContain('표시할 운영중 채널이 없습니다');
-    expect(html).toContain('전체 채널 목록 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음');
+    expect(html).toContain('전체 채널 목록 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음');
   });
 });

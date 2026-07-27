@@ -20,7 +20,7 @@ describe('productionDiscoveryLinkActionProps utils', () => {
     expect(getProductionDiscoveryLinkMoveButtonViewProps({
       isMoving: true,
       label: '후보 제외',
-    }).visibleLabel).toBe('Cloud 저장 중');
+    }).visibleLabel).toBe('온라인 저장소(Azure DB) 저장 중');
     expect(getProductionDiscoveryLinkMoveButtonViewProps({
       isMoving: false,
       label: '후보 제외',
@@ -51,7 +51,7 @@ describe('productionDiscoveryLinkActionProps utils', () => {
       disabled: false,
       href: 'https://example.com/post',
       label: '원본 열기',
-      title: '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, Cloud 저장 작업은 없습니다.',
+      title: '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, 온라인 저장소(Azure DB) 저장 작업은 없습니다.',
     });
 
     expect(getProductionDiscoveryLinkEditButtonProps()).toEqual({

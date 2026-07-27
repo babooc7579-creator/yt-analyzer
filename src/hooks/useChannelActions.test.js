@@ -129,7 +129,7 @@ describe('useChannelActions', () => {
       language: 'en',
       note: '',
     })).rejects.toThrow(
-      'Cloud add failed Cloud 채널 저장 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      'Cloud add failed 온라인 저장소(Azure DB)의 채널 저장 작업을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
 
     expect(deps.setSavedChannels).not.toHaveBeenCalled();
@@ -196,7 +196,7 @@ describe('useChannelActions', () => {
     await deleteChannel(existingChannel.id, existingChannel.category, existingChannel.title);
 
     expect(deps.setError).toHaveBeenCalledWith(
-      'Cloud delete failed Cloud 채널 삭제 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      'Cloud delete failed 온라인 저장소(Azure DB)의 채널 삭제 작업을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(deps.setSavedChannels).not.toHaveBeenCalled();
     expect(deps.setSelectedChannelIds).not.toHaveBeenCalled();
@@ -242,7 +242,7 @@ describe('useChannelActions', () => {
     await updateChannelMetadata(existingChannel, { grade: 'S' });
 
     expect(deps.setError).toHaveBeenLastCalledWith(
-      'Cloud update failed Cloud 채널 정보 저장 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      'Cloud update failed 온라인 저장소(Azure DB)의 채널 정보 저장 작업을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(deps.setSavedChannels).not.toHaveBeenCalled();
     expect(deps.setSelectedChannelIds).not.toHaveBeenCalled();

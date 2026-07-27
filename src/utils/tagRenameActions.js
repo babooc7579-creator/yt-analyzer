@@ -8,7 +8,7 @@ export const getTagRenameErrorMessage = (error) => {
 };
 
 export const getTagRenameConfirmMessage = (from, to) => (
-  `'${from}' 태그 이름을 '${to}'로 변경할까요?\n\n이 작업은 화면 목록만 바꾸는 것이 아니라, Cloud DB에서 이 태그가 붙은 채널들에도 일괄 반영됩니다.`
+  `'${from}' 태그 이름을 '${to}'로 변경할까요?\n\n이 작업은 화면 목록만 바꾸는 것이 아니라, 온라인 저장소(Azure DB)에서 이 태그가 붙은 채널들에도 일괄 반영됩니다.`
 );
 
 export const getTagRenameStartMessage = (from, to) => (

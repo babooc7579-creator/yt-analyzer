@@ -88,25 +88,25 @@ describe('channelActions utils', () => {
     })).toBeUndefined();
   });
 
-  it('builds Cloud action error messages without duplicating completion text', () => {
+  it('builds online-storage action errors without duplicating completion text', () => {
     expect(getChannelCloudActionError('network down', 'fallback', '삭제')).toBe(
-      'network down Cloud 채널 삭제 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      'network down 온라인 저장소(Azure DB)의 채널 삭제 작업을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(getChannelCloudActionError('', '채널 삭제에 실패했습니다.', '삭제')).toBe(
-      '채널 삭제에 실패했습니다. Cloud 채널 삭제 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      '채널 삭제에 실패했습니다. 온라인 저장소(Azure DB)의 채널 삭제 작업을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(getChannelCloudActionError('이미 완료 처리하지 않았습니다', 'fallback', '삭제')).toBe(
       '이미 완료 처리하지 않았습니다',
     );
   });
 
-  it('builds Cloud channel load errors that avoid treating failed lookup as source data', () => {
+  it('builds online-storage channel load errors that avoid treating failed lookup as source data', () => {
     expect(CHANNEL_LOAD_FAILED_MESSAGE).toBe('채널 목록을 불러오지 못했습니다.');
     expect(getChannelLoadErrorMessage(new Error('network down'))).toBe(
-      'network down Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      'network down 온라인 저장소(Azure DB)의 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
     expect(getChannelLoadErrorMessage(null)).toBe(
-      '채널 목록을 불러오지 못했습니다. Cloud 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      '채널 목록을 불러오지 못했습니다. 온라인 저장소(Azure DB)의 채널 목록 조회를 완료하지 못했습니다. 조회가 성공할 때까지 화면의 채널 목록을 기준 데이터로 보지 않습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     );
   });
 
@@ -119,9 +119,9 @@ describe('channelActions utils', () => {
   it('builds delete confirmation wording that protects YouTube source and stored videos', () => {
     const message = getChannelDeleteConfirmMessage('Peak Viral Shorts');
 
-    expect(message).toContain("'Peak Viral Shorts' 채널을 Cloud 채널 목록에서 삭제할까요?");
-    expect(message).toContain('저장 영상 조회와 새 영상 수집 대상에서 빠집니다');
-    expect(message).toContain('YouTube 원본이나 이미 Cloud에 저장된 영상 데이터는 삭제하지 않습니다');
+    expect(message).toContain("'Peak Viral Shorts' 채널을 온라인 저장소(Azure DB)의 채널 목록에서 삭제할까요?");
+    expect(message).toContain('수집 영상 조회와 새 영상 수집 대상에서 빠집니다');
+    expect(message).toContain('YouTube 원본이나 이미 온라인 저장소에 수집된 영상 정보는 삭제하지 않습니다');
     expect(message).toContain('나중에 다시 보려면 채널을 다시 추가해야 합니다');
   });
 });

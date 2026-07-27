@@ -52,7 +52,7 @@ describe('productionKanbanProps utils', () => {
     expect(actions[0].title).toContain('호출하지 않습니다');
     expect(actions[0].ariaLabel).toContain('YouTube API 호출 없음');
     expect(actions[1].onClick).toBe(onOpenReferenceVault);
-    expect(actions[1].title).toContain('Cloud DB 조회');
+    expect(actions[1].title).toContain('온라인 저장소(Azure DB) 조회');
     expect(actions[1].ariaLabel).toContain('YouTube API 호출 없음');
     expect(actions[2].onClick).toBe(onOpenDiscoveryLinks);
     expect(actions[2].title).toContain('자동 수집이나 다운로드는 실행하지 않습니다');
@@ -90,13 +90,13 @@ describe('productionKanbanProps utils', () => {
       onClick: onOpenScriptBoard,
       variant: 'indigo',
     });
-    expect(actions[0].title).toContain('Cloud 저장이나 YouTube API 호출은 실행되지 않습니다');
+    expect(actions[0].title).toContain('온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다');
     expect(actions[1]).toMatchObject({
-      label: '저장 영상 더 보기',
+      label: '수집 영상 더 보기',
       onClick: onOpenReferenceVault,
       variant: 'indigo',
     });
-    expect(actions[1].title).toContain('Cloud DB');
+    expect(actions[1].title).toContain('온라인 저장소(Azure DB)');
     expect(actions[1].title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(actions[2]).toMatchObject({
       label: '업로드 일정 보기',

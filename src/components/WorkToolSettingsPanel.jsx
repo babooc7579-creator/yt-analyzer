@@ -194,7 +194,7 @@ export default function WorkToolSettingsPanel({
             className="inline-flex min-h-10 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Save className="h-3.5 w-3.5" />
-            {saving ? 'Cloud 저장 중' : '변경사항 Cloud 저장'}
+            {saving ? '온라인 저장소(Azure DB) 저장 중' : '변경사항 온라인 저장소(Azure DB) 저장'}
           </button>
         </div>
       </div>
@@ -373,13 +373,13 @@ export default function WorkToolSettingsPanel({
           <Plus className="h-3.5 w-3.5" />
           목록에 추가
         </button>
-        <p className="mt-2 text-[11px] leading-4 text-slate-500">목록에 추가한 뒤 상단의 ‘변경사항 Cloud 저장’을 눌러야 다른 기기에도 반영됩니다.</p>
+        <p className="mt-2 text-[11px] leading-4 text-slate-500">목록에 추가한 뒤 상단의 ‘변경사항 온라인 저장소(Azure DB) 저장’을 눌러야 다른 기기에도 반영됩니다.</p>
       </form>
 
       {dirty && (
         <div className="sticky bottom-2 z-10 mt-4 flex flex-col gap-3 border border-amber-400/30 bg-slate-950/95 p-3 shadow-2xl sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs font-bold leading-5 text-amber-100">
-            변경사항은 아직 이 화면에만 있습니다. Cloud 저장을 완료해야 다른 기기에도 반영됩니다.
+            변경사항은 아직 이 화면에만 있습니다. 온라인 저장소(Azure DB) 저장을 완료해야 다른 기기에도 반영됩니다.
           </p>
           <button
             type="button"
@@ -388,14 +388,14 @@ export default function WorkToolSettingsPanel({
             className="inline-flex min-h-10 w-full shrink-0 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/20 px-4 py-2 text-xs font-black text-cyan-50 hover:bg-cyan-500/30 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             <Save className="h-3.5 w-3.5" />
-            {saving ? 'Cloud 저장 중' : '변경사항 Cloud에 저장'}
+            {saving ? '온라인 저장소(Azure DB) 저장 중' : '변경사항 Cloud에 저장'}
           </button>
         </div>
       )}
 
       <footer className="mt-4 flex items-center gap-2 text-[11px] text-slate-500">
         <Cloud className="h-3.5 w-3.5" />
-        기본 도구는 삭제하지 않고 숨김 처리하며, 기본값 복원 후 Cloud 저장으로 되돌릴 수 있습니다.
+        기본 도구는 삭제하지 않고 숨김 처리하며, 기본값 복원 후 온라인 저장소(Azure DB) 저장으로 되돌릴 수 있습니다.
       </footer>
     </section>
   );

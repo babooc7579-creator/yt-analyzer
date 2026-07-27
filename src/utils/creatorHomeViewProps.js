@@ -13,7 +13,7 @@ export const getHomeOperatingGuidelinesViewProps = () => ({
     },
     {
       title: '불러오기는 저장 데이터 조회',
-      description: '저장된 영상 불러오기는 이미 DB에 있는 영상만 보여줍니다.',
+      description: '수집 영상 목록 불러오기는 이미 DB에 있는 영상만 보여줍니다.',
       className: 'border-blue-400/20 bg-blue-500/10',
       titleClassName: 'text-blue-200',
     },
@@ -49,18 +49,18 @@ export const getHomeRadarStatsGridViewProps = ({
       label: '저장된 채널',
       value: channelsLoading ? '조회 중' : savedChannelCount,
       description: channelsLoading
-        ? 'Cloud DB에서 채널 목록을 조회하고 있습니다. YouTube API 호출은 없습니다.'
+        ? '온라인 저장소(Azure DB)에서 채널 목록을 조회하고 있습니다. YouTube API 호출은 없습니다.'
         : 'Cloud에 저장된 채널 자산입니다. 숫자 확인만으로 YouTube API를 호출하지 않습니다.',
     },
     {
       label: '현재 화면 영상',
       value: loadedVideoCount,
-      description: '현재 화면에 불러온 저장 영상 수입니다. 새 YouTube API 호출 수가 아닙니다.',
+      description: '현재 화면에 불러온 수집 영상 정보 수입니다. 새 YouTube API 호출 수가 아닙니다.',
     },
     {
       label: '스크랩북 보관',
       value: savedVideoCount,
-      description: 'Cloud 스크랩북에 보관한 영상입니다. 원본 영상이나 저장 영상 데이터 삭제와 다릅니다.',
+      description: 'Cloud 스크랩북에 보관한 영상입니다. 원본 영상이나 수집 영상 정보 삭제와 다릅니다.',
     },
     {
       label: '마지막 수집 기록',
@@ -74,7 +74,7 @@ export const getHomeRadarStatsGridViewProps = ({
     {
       label: '또터또 후보',
       value: ttoTtoAssetCount,
-      description: '현재 불러온 저장 영상 기준의 오래된 반응 후보입니다. 예측 점수가 아니라 판단 보조 신호입니다.',
+      description: '현재 불러온 수집 영상 정보 기준의 오래된 반응 후보입니다. 예측 점수가 아니라 판단 보조 신호입니다.',
       className: 'border-rose-500/20 bg-rose-950/30',
       labelClassName: 'text-rose-300',
       descriptionClassName: 'text-rose-100/70',
@@ -82,7 +82,7 @@ export const getHomeRadarStatsGridViewProps = ({
     {
       label: '제작 후보',
       value: productionCandidateCount,
-      description: 'Cloud 판단 기록에서 아직 제작 중·완료 전인 후보 단계 저장 영상입니다. 오늘 집중 영상도 이 숫자에 포함되며, 숫자 확인만으로 저장이나 API 호출은 실행하지 않습니다.',
+      description: 'Cloud 판단 기록에서 아직 제작 중·완료 전인 후보 단계 수집 영상입니다. 오늘 집중 영상도 이 숫자에 포함되며, 숫자 확인만으로 저장이나 API 호출은 실행하지 않습니다.',
       className: 'border-indigo-500/20 bg-indigo-950/30',
       labelClassName: 'text-indigo-300',
       descriptionClassName: 'text-indigo-100/70',

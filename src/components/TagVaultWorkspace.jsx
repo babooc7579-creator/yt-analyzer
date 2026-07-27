@@ -78,7 +78,7 @@ export default function TagVaultWorkspace({
         {state.displayedVideos.length > 0 ? (
           <>
             <p className="text-xs text-slate-400">
-              <strong className="text-emerald-300">#{state.effectiveTag}</strong> 저장 영상 {state.summary.matchedVideoCount.toLocaleString()}개 중 {state.summary.shownVideoCount.toLocaleString()}개를 표시합니다.
+              <strong className="text-emerald-300">#{state.effectiveTag}</strong> 수집 영상 {state.summary.matchedVideoCount.toLocaleString()}개 중 {state.summary.shownVideoCount.toLocaleString()}개를 표시합니다.
             </p>
             <StoredVideoActionGrid
               checkedVideos={checkedVideos}
@@ -111,7 +111,7 @@ export default function TagVaultWorkspace({
               aria-label={emptyState.actionAriaLabel || emptyState.actionLabel}
               className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
             >
-              {emptyState.action === 'load' && loading ? '저장 영상 불러오는 중...' : emptyState.actionLabel}
+              {emptyState.action === 'load' && loading ? '수집 영상 불러오는 중...' : emptyState.actionLabel}
             </button>
           </div>
         )}

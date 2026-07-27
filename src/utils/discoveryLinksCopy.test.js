@@ -45,7 +45,7 @@ describe('discoveryLinksCopy utils', () => {
     expect(props.description).toContain('저장 데이터나 외부 사이트에는 영향을 주지 않습니다');
     expect(props.clearButtonProps).toMatchObject({
       label: '필터 초기화',
-      title: '검색어와 필터를 모두 초기화합니다. Cloud 저장 데이터는 바꾸지 않습니다.',
+      title: '검색어와 필터를 모두 초기화합니다. 온라인 저장소(Azure DB) 저장 데이터는 바꾸지 않습니다.',
     });
   });
 
@@ -136,7 +136,7 @@ describe('discoveryLinksCopy utils', () => {
       label: '검토 상태',
     });
     expect(getDiscoveryLinkStatusFieldsViewProps().rightsField.selectProps.title).toContain('사용 허가나 권리 확인 완료');
-    expect(getDiscoveryLinkSubmitButtonViewProps({ saving: true }).label).toBe('Cloud 저장 중');
+    expect(getDiscoveryLinkSubmitButtonViewProps({ saving: true }).label).toBe('온라인 저장소(Azure DB) 저장 중');
     expect(getDiscoveryLinkSubmitButtonViewProps({ duplicateLink: { id: 'link-1' } }).label).toBe('이미 저장된 링크');
     expect(getDiscoveryLinkSubmitButtonViewProps().label).toBe('링크 저장');
     expect(getDiscoveryLinkUrlFieldViewProps({

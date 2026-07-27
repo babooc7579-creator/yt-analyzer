@@ -24,7 +24,7 @@ describe('radarDecisionViewProps utils', () => {
     expect(props.description).toContain('새 YouTube 스캔이 아니라');
     expect(props.queueHint).toContain('다음 미판단 후보가 자동으로 들어옵니다');
     expect(props.queueHint).toContain('별도의 다음 버튼 없이');
-    expect(props.description).toContain('저장 영상 12개');
+    expect(props.description).toContain('수집 영상 12개');
     expect(props.description).toContain('상위 6개');
     expect(props.progressText).toEqual({
       label: '3개 완료 · 9개 남음',

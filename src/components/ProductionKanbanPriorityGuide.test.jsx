@@ -40,7 +40,7 @@ describe('ProductionKanbanPriorityGuide', () => {
     expect(html).toContain('업로드 예정일 입력');
     expect(html).toContain('표시 전용 안내입니다');
     expect(html).toContain('YouTube API 호출');
-    expect(html).toContain('Cloud 저장은 실행하지 않습니다');
+    expect(html).toContain('온라인 저장소(Azure DB) 저장은 실행하지 않습니다');
     expect(html).toContain('일정 없는 제작 중 보기');
     expect(html).toContain('해당하는 제작 단계만 표시합니다');
   });
@@ -77,7 +77,7 @@ describe('ProductionKanbanPriorityGuide', () => {
 
     expect(html).toContain('업로드 일정 열기');
     expect(html).toContain('업로드 캘린더로 이동합니다');
-    expect(html).toContain('Cloud 데이터나 YouTube API 호출은 실행되지 않습니다');
+    expect(html).toContain('온라인 저장소(Azure DB) 데이터나 YouTube API 호출은 실행되지 않습니다');
   });
 
   it('applies the recommended stage filter when its action is clicked', () => {

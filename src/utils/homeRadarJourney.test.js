@@ -57,7 +57,7 @@ describe('homeRadarJourney', () => {
 
     expect(stages[1]).toMatchObject({
       status: 'current',
-      value: '저장 영상 0개',
+      value: '수집 영상 0개',
       warning: true,
     });
   });

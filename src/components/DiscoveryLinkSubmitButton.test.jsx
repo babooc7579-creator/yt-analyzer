@@ -41,7 +41,7 @@ describe('DiscoveryLinkSubmitButton', () => {
       />,
     );
 
-    expect(html).toContain('Cloud 저장 중');
+    expect(html).toContain('온라인 저장소(Azure DB) 저장 중');
     expect(html).toContain('disabled=""');
   });
 });

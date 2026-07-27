@@ -20,7 +20,7 @@ export default function UploadCalendarHeader({
             <p className="text-xs font-extrabold text-amber-300">제작 스튜디오</p>
             <h2 className="mt-1 text-xl font-black text-white">업로드 캘린더</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
-              제작 후보함에 Cloud 저장된 목표 업로드 날짜를 모아 봅니다. 달력 조회만으로 YouTube API를 호출하지 않습니다.
+              제작 후보함에 온라인 저장소(Azure DB)에 저장된 목표 업로드 날짜를 모아 봅니다. 달력 조회만으로 YouTube API를 호출하지 않습니다.
             </p>
           </div>
         </div>
@@ -28,8 +28,8 @@ export default function UploadCalendarHeader({
           type="button"
           onClick={onOpenProductionCandidates}
           className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-amber-300 px-4 text-xs font-black text-slate-950 hover:bg-amber-200"
-          title="제작 후보함으로 이동해 목표 업로드 날짜를 수정합니다. 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다."
-          aria-label="제작 후보함에서 일정 수정, 화면 이동이며 Cloud 데이터 변경 및 YouTube API 호출 없음"
+          title="제작 후보함으로 이동해 목표 업로드 날짜를 수정합니다. 이동만으로 온라인 저장소(Azure DB) 데이터나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="제작 후보함에서 일정 수정, 화면 이동이며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
         >
           <ListTodo className="h-4 w-4" /> 제작 후보함에서 일정 수정
         </button>
@@ -44,7 +44,7 @@ export default function UploadCalendarHeader({
             type="button"
             onClick={onToday}
             className="h-9 rounded-lg border border-slate-700 px-3 text-xs font-extrabold text-slate-200 hover:bg-slate-800"
-            title="오늘이 포함된 달로 이동합니다. 화면 표시만 바꾸며 Cloud 데이터는 변경하지 않습니다."
+            title="오늘이 포함된 달로 이동합니다. 화면 표시만 바꾸며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다."
             aria-label="오늘이 포함된 달 보기, 화면 표시만 변경"
           >
             오늘

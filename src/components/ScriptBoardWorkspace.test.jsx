@@ -50,6 +50,6 @@ describe('ScriptBoardWorkspace', () => {
 
     expect(html).toContain('아직 작성할 제작 후보가 없습니다');
     expect(html).toContain('제작 후보 고르기');
-    expect(html).toContain('화면 이동만으로 Cloud 저장이나 YouTube API 호출은 없습니다');
+    expect(html).toContain('화면 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다');
   });
 });

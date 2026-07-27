@@ -309,16 +309,16 @@ export const getKeywordExplorerEmptyState = ({
     return {
       action: selectedChannelCount > 0 ? 'load' : 'channels',
       actionAriaLabel: selectedChannelCount > 0
-        ? `선택 채널 ${selectedChannelCount}개 저장 영상 불러오기, Cloud DB 조회이며 YouTube API 호출 없음`
-        : '오늘 볼 채널 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음',
-      actionLabel: selectedChannelCount > 0 ? '선택 채널 저장 영상 불러오기' : '오늘 볼 채널 열기',
+        ? `선택 채널 ${selectedChannelCount}개 수집 영상 목록 불러오기, 온라인 저장소(Azure DB) 조회이며 YouTube API 호출 없음`
+        : '오늘 볼 채널 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음',
+      actionLabel: selectedChannelCount > 0 ? '선택 채널 수집 영상 목록 불러오기' : '오늘 볼 채널 열기',
       actionTitle: selectedChannelCount > 0
-        ? `Cloud DB에서 선택 채널 ${selectedChannelCount}개의 저장 영상을 조회합니다. 새 YouTube API 호출은 없습니다.`
-        : '오늘 볼 채널 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다.',
+        ? `온라인 저장소(Azure DB)에서 선택 채널 ${selectedChannelCount}개의 수집 영상을 조회합니다. 새 YouTube API 호출은 없습니다.`
+        : '오늘 볼 채널 화면으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다.',
       description: selectedChannelCount > 0
-        ? `선택한 채널 ${selectedChannelCount}개의 Cloud 저장 영상을 불러오면 키워드 검색을 시작할 수 있습니다.`
-        : '1. 오늘 볼 채널에서 채널을 선택한 뒤, 2. 이 화면으로 돌아와 Cloud 저장 영상을 불러오세요. 채널을 여는 것만으로 YouTube API를 호출하지 않습니다.',
-      title: '검색할 저장 영상이 없습니다',
+        ? `온라인 저장소(Azure DB)에서 선택한 채널 ${selectedChannelCount}개의 수집 영상 정보를 불러오면 키워드 검색을 시작할 수 있습니다.`
+        : '1. 오늘 볼 채널에서 채널을 선택한 뒤, 2. 이 화면으로 돌아와 온라인 저장소(Azure DB)의 수집 영상 정보를 불러오세요. 채널을 여는 것만으로 YouTube API를 호출하지 않습니다.',
+      title: '검색할 수집 영상이 없습니다',
     };
   }
 
@@ -333,10 +333,10 @@ export const getKeywordExplorerEmptyState = ({
 
   return {
     action: 'reset',
-    actionAriaLabel: '키워드 검색 조건 초기화, 화면 표시만 변경하며 Cloud 저장 및 YouTube API 호출 없음',
+    actionAriaLabel: '키워드 검색 조건 초기화, 화면 표시만 변경하며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음',
     actionLabel: '검색 조건 초기화',
-    actionTitle: '현재 키워드와 화면 필터를 초기화합니다. Cloud 데이터나 저장 상태는 바꾸지 않으며 YouTube API를 호출하지 않습니다.',
-    description: '현재 키워드와 필터 조건에 맞는 저장 영상이 없습니다.',
+    actionTitle: '현재 키워드와 화면 필터를 초기화합니다. 온라인 저장소(Azure DB) 데이터나 저장 상태는 바꾸지 않으며 YouTube API를 호출하지 않습니다.',
+    description: '현재 키워드와 필터 조건에 맞는 수집 영상이 없습니다.',
     title: '일치하는 영상이 없습니다',
   };
 };

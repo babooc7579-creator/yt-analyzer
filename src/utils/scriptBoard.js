@@ -110,7 +110,7 @@ export const getScriptBoardEmptyState = ({ totalCount = 0, visibleCount = 0 } = 
   if (totalCount === 0) {
     return {
       actionLabel: '제작 후보 고르기',
-      description: '오늘의 레이더나 저장 영상에서 제작 후보로 표시한 영상이 이곳에 나타납니다.',
+      description: '오늘의 레이더나 수집 영상에서 제작 후보로 표시한 영상이 이곳에 나타납니다.',
       title: '아직 작성할 제작 후보가 없습니다',
       type: 'source',
     };

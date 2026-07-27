@@ -18,7 +18,7 @@ export const getChannelTagTabRowProps = ({
     listButtonTitle: `'${category}' 태그 채널 목록 보기 - 운영중 ${safeScannableCount}개 / 전체 ${safeCount}개`,
     listButtonAriaLabel: `'${category}' 태그 채널 목록 보기`,
     scanButtonTitle: canScanTag
-      ? `'${category}' 태그의 운영중 채널 ${safeScannableCount}개만 새 영상 수집합니다. YouTube API 호출이 발생하며 저장 영상 불러오기와 다른 작업입니다.`
+      ? `'${category}' 태그의 운영중 채널 ${safeScannableCount}개만 새 영상 수집합니다. YouTube API 호출이 발생하며 수집 영상 목록 불러오기와 다른 작업입니다.`
       : `'${category}' 태그에는 새 영상 수집을 실행할 운영중 채널이 없습니다. 보류/제외 채널은 수집하지 않습니다.`,
     scanButtonAriaLabel: canScanTag
       ? `'${category}' 태그 새 영상 수집, YouTube API 호출`

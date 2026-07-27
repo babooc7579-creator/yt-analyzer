@@ -116,13 +116,13 @@ describe('keywordExplorer utils', () => {
     expect(getKeywordExplorerEmptyState({ loadedVideoCount: 0, selectedChannelCount: 0 })).toMatchObject({ action: 'channels' });
     expect(getKeywordExplorerEmptyState({ loadedVideoCount: 0, selectedChannelCount: 2 })).toMatchObject({
       action: 'load',
-      actionAriaLabel: expect.stringContaining('Cloud DB 조회이며 YouTube API 호출 없음'),
+      actionAriaLabel: expect.stringContaining('온라인 저장소(Azure DB) 조회이며 YouTube API 호출 없음'),
       actionTitle: expect.stringContaining('새 YouTube API 호출은 없습니다'),
     });
     expect(getKeywordExplorerEmptyState({ loadedVideoCount: 10, hasQuery: false })).toMatchObject({ action: 'none' });
     expect(getKeywordExplorerEmptyState({ loadedVideoCount: 10, hasQuery: true })).toMatchObject({
       action: 'reset',
-      actionTitle: expect.stringContaining('Cloud 데이터나 저장 상태는 바꾸지 않으며'),
+      actionTitle: expect.stringContaining('온라인 저장소(Azure DB) 데이터나 저장 상태는 바꾸지 않으며'),
     });
   });
 });

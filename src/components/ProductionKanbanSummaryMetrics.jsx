@@ -26,7 +26,7 @@ export default function ProductionKanbanSummaryMetrics({
           onClick={typeof onFilterModeChange === 'function'
             ? () => onFilterModeChange(card.filterMode)
             : undefined}
-          title={`${card.title} 눌러 해당 단계만 표시합니다. Cloud 데이터는 변경하지 않습니다.`}
+          title={`${card.title} 눌러 해당 단계만 표시합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.`}
           value={card.value}
           valueClassName={card.valueClassName}
           wrapperClassName={card.wrapperClassName}

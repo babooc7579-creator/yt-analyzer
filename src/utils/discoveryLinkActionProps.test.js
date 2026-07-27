@@ -69,7 +69,7 @@ describe('discoveryLinkActionProps utils', () => {
       candidateSaveState: 'saving',
       currentStatus: 'saved',
     });
-    expect(savingProps.label).toBe('Cloud 저장 중');
+    expect(savingProps.label).toBe('온라인 저장소(Azure DB) 저장 중');
     expect(savingProps.buttonProps.disabled).toBe(true);
   });
 
@@ -86,7 +86,7 @@ describe('discoveryLinkActionProps utils', () => {
     });
 
     expect(props.openLinkProps.href).toBe('https://example.com/post');
-    expect(props.openLinkProps.title).toContain('외부 사이트 수집, 다운로드, Cloud 저장 작업은 없습니다');
+    expect(props.openLinkProps.title).toContain('외부 사이트 수집, 다운로드, 온라인 저장소(Azure DB) 저장 작업은 없습니다');
     expect(props.openLinkProps['aria-label']).toContain('외부 수집이나 저장 작업 없음');
     expect(props.openLinkLabel).toBe('열기');
     expect(props.copyUrlButtonProps.title).toContain('외부 사이트 수집이나 저장 작업은 없습니다');

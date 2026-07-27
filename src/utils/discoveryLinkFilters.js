@@ -101,8 +101,8 @@ export const getDiscoveryLinksRouteContext = ({
     description: `제작 후보함에서 수정하려고 선택한 "${normalizedQuery || '발견 링크'}" 한 건을 바로 보여주고 있습니다. 전체 보기는 화면 조건만 초기화합니다.`,
     label: '제작 후보함에서 이어온 링크',
     resetLabel: '발견함 전체 보기',
-    resetTitle: '이 링크 찾기 조건만 해제합니다. Cloud 데이터는 변경하지 않습니다.',
+    resetTitle: '이 링크 찾기 조건만 해제합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
     returnLabel: '제작 후보함으로 돌아가기',
-    returnTitle: '제작 후보함으로 돌아가 방금 선택한 링크를 다시 확인합니다. 화면 이동만 하며 Cloud 데이터는 변경하지 않습니다.',
+    returnTitle: '제작 후보함으로 돌아가 방금 선택한 링크를 다시 확인합니다. 화면 이동만 하며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
   };
 };

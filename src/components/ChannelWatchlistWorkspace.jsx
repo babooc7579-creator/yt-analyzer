@@ -170,8 +170,8 @@ export default function ChannelWatchlistWorkspace({
               type="button"
               onClick={onOpenChannelList}
               className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-extrabold text-slate-200"
-              title="전체 채널 목록 화면으로 이동합니다. 이동만으로 Cloud DB 조회나 YouTube API 호출은 실행되지 않습니다."
-              aria-label="전체 채널 목록 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음"
+              title="전체 채널 목록 화면으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다."
+              aria-label="전체 채널 목록 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음"
             >
               전체 채널 목록
             </button>

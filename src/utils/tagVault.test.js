@@ -76,11 +76,11 @@ describe('tagVault utils', () => {
     expect(getTagVaultEmptyState({ channelCount: 0 })).toMatchObject({ action: 'channels' });
     expect(getTagVaultEmptyState({ channelCount: 2, tagCount: 2, loadedVideoCount: 0, selectedChannelCount: 1 })).toMatchObject({
       action: 'load',
-      actionAriaLabel: expect.stringContaining('Cloud DB 조회이며 YouTube API 호출 없음'),
+      actionAriaLabel: expect.stringContaining('온라인 저장소(Azure DB) 조회이며 YouTube API 호출 없음'),
     });
     expect(getTagVaultEmptyState({ channelCount: 2, tagCount: 2, loadedVideoCount: 10, hasActiveFilters: true })).toMatchObject({
       action: 'reset',
-      actionTitle: expect.stringContaining('Cloud 데이터나 저장 상태는 바꾸지 않으며'),
+      actionTitle: expect.stringContaining('온라인 저장소(Azure DB) 데이터나 저장 상태는 바꾸지 않으며'),
     });
   });
 });

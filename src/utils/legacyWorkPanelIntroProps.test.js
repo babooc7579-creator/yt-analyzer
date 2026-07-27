@@ -8,9 +8,9 @@ describe('legacyWorkPanelIntroProps utils', () => {
 
     expect(props.brandTitle).toBe('타임머신 CRM');
     expect(props.workflowTitle).toBe('오늘의 작업 흐름');
-    expect(props.workflowDescription).toBe('채널 등록·선택 → 저장된 영상 확인 → 필요할 때만 새 영상 수집');
+    expect(props.workflowDescription).toBe('채널 등록·선택 → 수집된 영상 정보 확인 → 필요할 때만 새 영상 수집');
     expect(props.workflowSteps).toHaveLength(3);
-    expect(props.workflowSteps[1].description).toContain('Cloud DB');
+    expect(props.workflowSteps[1].description).toContain('온라인 저장소(Azure DB)');
     expect(props.workflowSteps[1].description).toContain('새 YouTube API 호출은 없습니다');
     expect(props.workflowSteps[2].description).toContain('YouTube API');
     expect(props.apiKeyInputProps).toMatchObject({

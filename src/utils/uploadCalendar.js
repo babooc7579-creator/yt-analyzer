@@ -152,7 +152,7 @@ export const getUploadCalendarSummary = ({
 export const getUploadCalendarEmptyState = ({ productionRecordCount = 0, scheduledCount = 0 } = {}) => {
   if (productionRecordCount === 0) {
     return {
-      description: '저장 영상이나 오늘 레이더에서 만들 소재를 제작 후보로 표시하면 일정 관리 흐름을 시작할 수 있습니다.',
+      description: '수집 영상이나 오늘 레이더에서 만들 소재를 제작 후보로 표시하면 일정 관리 흐름을 시작할 수 있습니다.',
       title: '아직 제작 후보가 없습니다',
     };
   }
@@ -178,7 +178,7 @@ export const getUploadCalendarFilterEmptyState = ({
 
   return {
     actionLabel: '전체 제작 상태 보기',
-    description: `${statusLabel}에 해당하는 일정이 없습니다. 전체 상태로 돌아가면 저장된 다른 일정을 다시 볼 수 있습니다. 화면 필터만 초기화하며 Cloud 데이터는 바꾸지 않습니다.`,
+    description: `${statusLabel}에 해당하는 일정이 없습니다. 전체 상태로 돌아가면 저장된 다른 일정을 다시 볼 수 있습니다. 화면 필터만 초기화하며 온라인 저장소(Azure DB) 데이터는 바꾸지 않습니다.`,
     title: '선택한 상태의 일정이 없습니다',
   };
 };

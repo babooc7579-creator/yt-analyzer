@@ -20,7 +20,7 @@ export default function ProductionVideoStatusActions({
           className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500"
           title={PRODUCTION_VIDEO_STATUS_HELP_TEXT}
         >
-          Cloud 저장 · API 호출 없음
+          온라인 저장소(Azure DB) 저장 · API 호출 없음
         </span>
       </div>
       <ProductionVideoMoveActions

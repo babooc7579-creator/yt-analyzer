@@ -41,7 +41,7 @@ export const getProductionDiscoveryLinkReviewHintProps = ({
 export const getProductionDiscoveryLinkMoveButtonViewProps = ({
   isMoving = false,
   label,
-  movingLabel = 'Cloud 저장 중',
+  movingLabel = '온라인 저장소(Azure DB) 저장 중',
 } = {}) => ({
   visibleLabel: isMoving ? movingLabel : label,
 });
@@ -81,7 +81,7 @@ export const getProductionDiscoveryLinkOpenButtonProps = ({ link, linkTitle } = 
     label: '원본 열기',
     title: disabled
       ? '원본 링크 URL이 없어 열 수 없습니다.'
-      : '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, Cloud 저장 작업은 없습니다.',
+      : '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, 온라인 저장소(Azure DB) 저장 작업은 없습니다.',
   };
 };
 

@@ -79,11 +79,11 @@ describe('homeActionShortcuts utils', () => {
     expect(shortcutsByKey['selected-scan'].hint).toContain('YouTube API 호출 작업');
     expect(shortcutsByKey['selected-scan'].dataFlowLabels).toEqual(['YouTube API 가능', 'Cloud 영상 갱신 가능']);
 
-    expect(shortcutsByKey.vault.description).toContain('Cloud DB');
-    expect(shortcutsByKey.vault.description).toContain('이미 저장된 영상');
+    expect(shortcutsByKey.vault.description).toContain('온라인 저장소(Azure DB)');
+    expect(shortcutsByKey.vault.description).toContain('수집 영상 정보');
     expect(shortcutsByKey.vault.description).toContain('새 YouTube API 호출은 없습니다');
-    expect(shortcutsByKey.vault.hint).toContain('Cloud DB 조회');
-    expect(shortcutsByKey.vault.dataFlowLabels).toEqual(['Cloud DB 조회', '새 API 호출 없음']);
+    expect(shortcutsByKey.vault.hint).toContain('온라인 저장소(Azure DB) 조회');
+    expect(shortcutsByKey.vault.dataFlowLabels).toEqual(['온라인 저장소(Azure DB) 조회', '새 API 호출 없음']);
 
     expect(shortcutsByKey['discovery-links'].description).toContain('Cloud 발견함');
     expect(shortcutsByKey['discovery-links'].description).toContain('제작 후보로 표시');
@@ -113,7 +113,7 @@ describe('homeActionShortcuts utils', () => {
       getHomeWorkspaceShortcutItems({}).map((item) => [item.key, item]),
     );
 
-    expect(itemsByKey['keyword-explorer'].description).toContain('Cloud 저장 영상');
+    expect(itemsByKey['keyword-explorer'].description).toContain('수집 영상의 제목');
     expect(itemsByKey['keyword-explorer'].dataFlowLabels).toContain('YouTube API 호출 없음');
     expect(itemsByKey['tag-vault'].description).toContain('기존 채널 태그');
     expect(itemsByKey['tag-vault'].dataFlowLabels).toContain('자동 수집 없음');

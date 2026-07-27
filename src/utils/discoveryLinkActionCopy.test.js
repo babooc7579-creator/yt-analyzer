@@ -22,13 +22,13 @@ import {
 describe('discoveryLinkActionCopy utils', () => {
   it('keeps discovery link action fallback copy centralized', () => {
     expect(DISCOVERY_LINK_LOAD_FAILED_MESSAGE).toBe('발견함 링크를 불러오지 못했습니다.');
-    expect(DISCOVERY_LINK_LOAD_UNAVAILABLE_MESSAGE).toContain('Cloud 발견함 연결에 실패했습니다');
+    expect(DISCOVERY_LINK_LOAD_UNAVAILABLE_MESSAGE).toContain('온라인 발견함(Azure DB) 연결에 실패했습니다');
     expect(DISCOVERY_LINK_SAVE_FAILED_MESSAGE).toBe('링크를 저장하지 못했습니다.');
-    expect(DISCOVERY_LINK_SAVE_CLOUD_FAILED_MESSAGE).toBe('Cloud에 링크를 저장하지 못했습니다.');
+    expect(DISCOVERY_LINK_SAVE_CLOUD_FAILED_MESSAGE).toBe('온라인 발견함(Azure DB)에 링크를 저장하지 못했습니다.');
     expect(DISCOVERY_LINK_STATUS_SAVE_FAILED_MESSAGE).toBe('링크 상태를 저장하지 못했습니다.');
-    expect(DISCOVERY_LINK_UPDATE_CLOUD_FAILED_MESSAGE).toBe('Cloud에 링크 변경 사항을 저장하지 못했습니다.');
+    expect(DISCOVERY_LINK_UPDATE_CLOUD_FAILED_MESSAGE).toBe('온라인 발견함(Azure DB)에 링크 변경 사항을 저장하지 못했습니다.');
     expect(DISCOVERY_LINK_DELETE_FAILED_MESSAGE).toBe('링크를 삭제하지 못했습니다.');
-    expect(DISCOVERY_LINK_DELETE_CLOUD_FAILED_MESSAGE).toBe('Cloud에서 링크 기록을 삭제하지 못했습니다.');
+    expect(DISCOVERY_LINK_DELETE_CLOUD_FAILED_MESSAGE).toBe('온라인 발견함(Azure DB)에서 링크 기록을 삭제하지 못했습니다.');
     expect(DISCOVERY_LINK_SAVE_ACTION_LABEL).toBe('저장');
     expect(DISCOVERY_LINK_UPDATE_ACTION_LABEL).toBe('변경 저장');
     expect(DISCOVERY_LINK_DELETE_ACTION_LABEL).toBe('삭제');
@@ -61,7 +61,7 @@ describe('discoveryLinkActionCopy utils', () => {
     );
 
     expect(message).toContain('Network failed');
-    expect(message).toContain('Cloud');
+    expect(message).toContain('온라인 저장소(Azure DB)');
     expect(message).toContain('save');
   });
 
@@ -69,16 +69,16 @@ describe('discoveryLinkActionCopy utils', () => {
     const message = getDiscoveryActionError({}, 'Fallback failed', 'delete');
 
     expect(message).toContain('Fallback failed');
-    expect(message).toContain('Cloud');
+    expect(message).toContain('온라인 저장소(Azure DB)');
     expect(message).toContain('delete');
   });
 
   it('builds Cloud discovery link notices from link names', () => {
     expect(getDiscoveryLinkCreatedNotice({ title: 'Clip' })).toBe(
-      'Clip 링크를 Cloud 발견함에 저장했습니다.'
+      'Clip 링크를 온라인 발견함(Azure DB)에 저장했습니다.'
     );
     expect(getDiscoveryLinkDeletedNotice({ title: 'Clip' })).toBe(
-      'Clip 링크 기록을 Cloud 발견함에서 삭제했습니다.'
+      'Clip 링크 기록을 온라인 발견함(Azure DB)에서 삭제했습니다.'
     );
   });
 });

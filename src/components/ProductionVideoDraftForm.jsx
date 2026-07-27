@@ -35,7 +35,7 @@ export default function ProductionVideoDraftForm({
   return (
     <div className="mt-3 space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-[10px] font-extrabold text-slate-500">2. 제작안 작성 · Cloud 저장</p>
+        <p className="text-[10px] font-extrabold text-slate-500">2. 제작안 작성 · 온라인 저장소(Azure DB) 저장</p>
         {statusBadgeProps && (
           <span
             className={`inline-flex items-center rounded-full px-2 py-1 text-[10px] font-extrabold ${statusBadgeProps.tone}`}

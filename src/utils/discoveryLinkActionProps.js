@@ -36,7 +36,7 @@ export const getDiscoveryLinkCandidateActionProps = ({
       type: 'button',
     },
     isCandidate,
-    label: isSavingCandidate ? 'Cloud 저장 중' : isCandidate ? '후보함 표시됨' : '제작 후보로',
+    label: isSavingCandidate ? '온라인 저장소(Azure DB) 저장 중' : isCandidate ? '후보함 표시됨' : '제작 후보로',
   };
 };
 
@@ -122,7 +122,7 @@ export const getDiscoveryLinkUtilityActionProps = ({
       href: sourceLink.url,
       rel: 'noreferrer',
       target: '_blank',
-      title: '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, Cloud 저장 작업은 없습니다.',
+      title: '브라우저 새 탭에서 원본 URL만 엽니다. 외부 사이트 수집, 다운로드, 온라인 저장소(Azure DB) 저장 작업은 없습니다.',
     },
   };
 };

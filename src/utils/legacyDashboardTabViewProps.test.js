@@ -57,7 +57,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       visibleScrapCount: 5,
     });
     expect(props.commentApiNotice).toContain('YouTube API');
-    expect(props.commentApiNotice).toContain('저장된 영상 불러오기');
+    expect(props.commentApiNotice).toContain('수집 영상 목록 불러오기');
   });
 
   it('copies only checked videos from the full video list', () => {

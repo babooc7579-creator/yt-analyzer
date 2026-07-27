@@ -11,7 +11,7 @@ const getSafeVideoTitle = ({ video, videoTitle }) => (
 export const getScrapbookRemoveConfirmMessage = ({ video, videoTitle } = {}) => {
   const displayTitle = getSafeVideoTitle({ video, videoTitle });
 
-  return `'${displayTitle}' 영상을 Cloud 스크랩북에서 해제할까요?\n\n영상 원본이나 저장된 영상 데이터는 삭제되지 않고, 스크랩북 보관 표시만 해제됩니다.`;
+  return `'${displayTitle}' 영상을 Cloud 스크랩북에서 해제할까요?\n\n영상 원본이나 수집된 영상 정보는 삭제되지 않고, 스크랩북 보관 표시만 해제됩니다.`;
 };
 
 export const getScrapbookRemoveButtonProps = ({
@@ -24,7 +24,7 @@ export const getScrapbookRemoveButtonProps = ({
   const safeVideo = getSafeVideo(video);
 
   return {
-    'aria-label': `${displayTitle} Cloud 스크랩북에서 해제, 원본 영상과 저장 영상 데이터는 삭제하지 않음`,
+    'aria-label': `${displayTitle} Cloud 스크랩북에서 해제, 원본 영상과 수집 영상 정보는 삭제하지 않음`,
     className: 'p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors',
     onClick: () => {
       const message = getScrapbookRemoveConfirmMessage({
@@ -34,7 +34,7 @@ export const getScrapbookRemoveButtonProps = ({
 
       if (confirmFn?.(message)) onRemoveScrap?.(safeVideo);
     },
-    title: 'Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 저장 영상 데이터는 삭제하지 않습니다.',
+    title: 'Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.',
     type: 'button',
   };
 };
@@ -95,7 +95,7 @@ export const getScrapbookVideoFooterActionsViewProps = ({
       type: 'button',
     },
     productionButtonText: productionSaving
-      ? 'Cloud 저장 중'
+      ? '온라인 저장소(Azure DB) 저장 중'
       : isProductionCandidate
         ? '후보 표시됨'
         : '제작 후보로',

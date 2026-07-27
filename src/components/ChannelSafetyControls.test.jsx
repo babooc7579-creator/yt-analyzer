@@ -24,7 +24,7 @@ describe('Channel safety controls', () => {
 
     expect(html).toContain('좋은 채널 분석/기록 남기기');
     expect(html).toContain('YouTube 채널 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.');
-    expect(html).toContain('Cloud 채널 목록에서 삭제합니다. 조회/수집 대상에서 빠지지만 YouTube 원본이나 이미 저장된 영상 데이터는 삭제하지 않습니다.');
+    expect(html).toContain('Cloud 채널 목록에서 삭제합니다. 조회/수집 대상에서 빠지지만 YouTube 원본이나 이미 수집된 영상 정보는 삭제하지 않습니다.');
   });
 
   it('renders tag selection as a local selection with no Cloud save or YouTube API call', () => {
@@ -38,7 +38,7 @@ describe('Channel safety controls', () => {
     );
 
     expect(html).toContain('카테고리');
-    expect(html).toContain('해외 태그 선택 해제 - 이 태그 선택만으로 YouTube API 호출이나 Cloud 저장은 실행되지 않습니다.');
-    expect(html).toContain('예능 태그 선택 - 이 태그 선택만으로 YouTube API 호출이나 Cloud 저장은 실행되지 않습니다.');
+    expect(html).toContain('해외 태그 선택 해제 - 이 태그 선택만으로 YouTube API 호출이나 온라인 저장소(Azure DB) 저장은 실행되지 않습니다.');
+    expect(html).toContain('예능 태그 선택 - 이 태그 선택만으로 YouTube API 호출이나 온라인 저장소(Azure DB) 저장은 실행되지 않습니다.');
   });
 });

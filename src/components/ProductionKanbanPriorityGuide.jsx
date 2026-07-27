@@ -82,15 +82,15 @@ export default function ProductionKanbanPriorityGuide({
             onClick={onAction}
             className="mt-3 inline-flex h-9 items-center gap-2 rounded-lg bg-slate-900 px-4 text-xs font-extrabold text-white hover:bg-slate-700"
             title={isCalendarAction
-              ? '업로드 캘린더로 이동합니다. 화면 이동만으로 Cloud 데이터나 YouTube API 호출은 실행되지 않습니다.'
-              : '안내에 해당하는 제작 단계만 표시합니다. Cloud 데이터는 변경하지 않습니다.'}
+              ? '업로드 캘린더로 이동합니다. 화면 이동만으로 온라인 저장소(Azure DB) 데이터나 YouTube API 호출은 실행되지 않습니다.'
+              : '안내에 해당하는 제작 단계만 표시합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.'}
           >
             <ActionIcon className="h-4 w-4" />
             {guideProps.actionLabel}
           </button>
         ) : null}
         <p className="mt-2 text-[11px] font-bold text-slate-500">
-          표시 전용 안내입니다. YouTube API 호출, 외부 자동 수집, Cloud 저장은 실행하지 않습니다.
+          표시 전용 안내입니다. YouTube API 호출, 외부 자동 수집, 온라인 저장소(Azure DB) 저장은 실행하지 않습니다.
         </p>
       </div>
     </div>

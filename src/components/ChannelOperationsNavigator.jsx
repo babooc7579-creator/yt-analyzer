@@ -108,7 +108,7 @@ export default function ChannelOperationsNavigator({
                   ? 'border-cyan-300 bg-cyan-400/15 text-white'
                   : 'border-slate-700 bg-slate-900 text-slate-300 hover:border-cyan-500/60 hover:bg-slate-800'
               }`}
-              title={`${stage.label} 영역으로 이동합니다. 이동만으로 API 호출이나 Cloud 저장은 실행되지 않습니다.`}
+              title={`${stage.label} 영역으로 이동합니다. 이동만으로 API 호출이나 온라인 저장소(Azure DB) 저장은 실행되지 않습니다.`}
             >
               <span className="flex items-center gap-2 text-sm font-black">
                 <span className={`flex h-7 w-7 items-center justify-center ${isActive ? 'bg-cyan-200 text-cyan-950' : 'bg-slate-800 text-slate-300'}`}>

@@ -32,7 +32,7 @@ export const getRadarCandidateStripHeaderViewProps = ({
       show: allDecisionCount > 0,
       title: 'Cloud에 저장된 오늘 판단 기록을 초기화합니다',
     },
-    description: `저장 영상 ${currentTotalCount}개를 한꺼번에 펼치지 않고 점수순 상위 ${candidateLimit}개만 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.`,
+    description: `수집 영상 ${currentTotalCount}개를 한꺼번에 펼치지 않고 점수순 상위 ${candidateLimit}개만 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.`,
     progressText: {
       label: currentTotalCount > 0
         ? `${currentProcessedCount}개 완료 · ${visibleQueueCount}개 남음`

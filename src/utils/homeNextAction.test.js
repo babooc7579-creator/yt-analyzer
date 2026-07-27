@@ -26,16 +26,16 @@ describe('homeNextAction utils', () => {
     expect(action.onAction).toBe(onOpenAddChannel);
   });
 
-  it('waits for the initial Cloud lookup before treating the channel list as empty', () => {
+  it('waits for the initial online-storage lookup before treating the channel list as empty', () => {
     const action = getHomeNextAction({
       channelsLoading: true,
       savedChannelCount: 0,
     });
 
     expect(action).toMatchObject({
-      badge: 'Cloud DB 조회',
+      badge: '온라인 저장소(Azure DB) 조회',
       metric: '조회 중',
-      title: 'Cloud 채널 목록을 확인하고 있습니다',
+      title: '온라인 저장소(Azure DB)의 채널 목록을 확인하고 있습니다',
     });
     expect(action.impactText).toContain('YouTube API 호출은 실행하지 않습니다');
     expect(action.onAction).toBeUndefined();
@@ -54,14 +54,14 @@ describe('homeNextAction utils', () => {
     expect(action.iconKey).toBe('listChecks');
     expect(action.description).toContain('YouTube API를 호출하지 않습니다');
     expect(action.actionLabel).toBe('오늘 볼 채널 열기');
-    expect(action.actionTitle).toContain('Cloud DB 조회');
+    expect(action.actionTitle).toContain('온라인 저장소(Azure DB) 조회');
     expect(action.actionTitle).toContain('YouTube API 호출은 실행되지 않습니다');
     expect(action.impactText).toContain('화면 이동만');
     expect(action.impactText).toContain('볼 범위');
     expect(action.onAction).toBe(onOpenChannelWatchlist);
   });
 
-  it('keeps stored video loading clear that it is a Cloud DB lookup without YouTube API calls', () => {
+  it('keeps stored video loading clear that it is a 온라인 저장소(Azure DB) lookup without YouTube API calls', () => {
     const onLoadStoredVideos = () => 'load stored videos';
 
     const action = getHomeNextAction({
@@ -74,11 +74,11 @@ describe('homeNextAction utils', () => {
     expect(action.tone).toBe('blue');
     expect(action.iconKey).toBe('bookmark');
     expect(action.badge).toBe('DB 조회');
-    expect(action.description).toContain('Cloud DB');
+    expect(action.description).toContain('온라인 저장소(Azure DB)');
     expect(action.description).toContain('새 YouTube API 호출은 없습니다');
     expect(action.actionTitle).toContain('DB 조회');
     expect(action.actionTitle).toContain('새 YouTube API 호출은 없습니다');
-    expect(action.impactText).toContain('Cloud DB 조회');
+    expect(action.impactText).toContain('온라인 저장소(Azure DB) 조회');
     expect(action.impactText).toContain('YouTube API 호출은 실행하지 않습니다');
     expect(action.onAction).toBe(onLoadStoredVideos);
   });
@@ -96,7 +96,7 @@ describe('homeNextAction utils', () => {
       onOpenSelectedScan,
     });
 
-    expect(action.title).toBe('선택한 채널에는 저장된 영상이 없습니다');
+    expect(action.title).toBe('선택한 채널에는 수집된 영상 정보가 없습니다');
     expect(action.actionLabel).toBe('다른 채널 고르기');
     expect(action.onAction).toBe(onOpenChannelWatchlist);
     expect(action.secondaryActions).toEqual([expect.objectContaining({
@@ -124,9 +124,9 @@ describe('homeNextAction utils', () => {
     expect(action.description).not.toContain('제작 후보로 넘기고');
     expect(action.actionHref).toBe('#today-radar-candidates');
     expect(action.actionLabel).toBe('후보 판정 시작');
-    expect(action.actionTitle).toContain('Cloud 저장이나 YouTube API 호출은 실행되지 않습니다');
+    expect(action.actionTitle).toContain('온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다');
     expect(action.impactText).toContain('후보 카드');
-    expect(action.impactText).toContain('Cloud 판단 기록');
+    expect(action.impactText).toContain('온라인 저장소(Azure DB)의 판단 기록');
   });
 
   it('opens production candidates as a stored candidate lookup after radar candidates are done', () => {
@@ -177,7 +177,7 @@ describe('homeNextAction utils', () => {
     expect(action.actionTitle).toContain('저장된 후보 조회');
     expect(action.actionTitle).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(action.impactText).toContain('화면 이동만');
-    expect(action.impactText).toContain('Cloud에 저장');
+    expect(action.impactText).toContain('온라인 저장소(Azure DB)에 저장');
     expect(action.onAction).toBe(onOpenProductionCandidates);
   });
 

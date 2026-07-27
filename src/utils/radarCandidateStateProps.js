@@ -10,11 +10,11 @@ const toVideoObject = (video) => (
 
 export const getRadarCandidateCompletedStateViewProps = () => ({
   titleText: '오늘 볼 후보를 모두 처리했습니다',
-  descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 Cloud 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있고, 다음 작업은 저장 영상 탐색이나 제작 후보함에서 이어갈 수 있습니다.',
+  descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 Cloud 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있고, 다음 작업은 수집 영상 목록이나 제작 후보함에서 이어갈 수 있습니다.',
   openVaultButtonProps: {
     label: '레퍼런스 금고 열기',
-    title: '저장된 영상 조회 화면으로 이동',
-    'aria-label': '저장된 영상 조회 화면으로 이동',
+    title: '수집된 영상 정보 조회 화면으로 이동',
+    'aria-label': '수집된 영상 정보 조회 화면으로 이동',
   },
   openProductionButtonProps: {
     label: '제작 후보함 열기',
@@ -37,10 +37,10 @@ export const getRadarCandidateEmptyStateViewProps = ({
   return ({
     titleText: '오늘 볼 후보',
     descriptionText: emptyStoredVideoLoad
-      ? `선택한 채널 ${selectedChannelCount}개의 Cloud DB 조회는 정상적으로 끝났지만 저장된 영상이 없습니다. 다른 채널을 고르거나 새 영상 수집 화면으로 이동하세요.`
+      ? `선택한 채널 ${selectedChannelCount}개의 온라인 저장소(Azure DB) 조회는 정상적으로 끝났지만 수집된 영상 정보가 없습니다. 다른 채널을 고르거나 새 영상 수집 화면으로 이동하세요.`
       : selectedChannelCount > 0
-        ? `선택한 채널 ${selectedChannelCount}개의 영상이 아직 화면에 없습니다. 저장 영상 불러오기를 누르면 Cloud DB에서 조회해 오늘 먼저 볼 후보를 보여줍니다. YouTube API는 호출하지 않습니다.`
-        : '아직 선택한 채널이 없습니다. 오늘 볼 채널에서 채널을 먼저 고른 뒤 저장 영상을 불러오면 오늘 후보를 보여줍니다. 채널 선택만으로 YouTube API를 호출하지 않습니다.',
+        ? `선택한 채널 ${selectedChannelCount}개의 영상이 아직 화면에 없습니다. 수집 영상 목록 불러오기를 누르면 온라인 저장소(Azure DB)에서 조회해 오늘 먼저 볼 후보를 보여줍니다. YouTube API는 호출하지 않습니다.`
+        : '아직 선택한 채널이 없습니다. 오늘 볼 채널에서 채널을 먼저 고른 뒤 수집 영상을 불러오면 오늘 후보를 보여줍니다. 채널 선택만으로 YouTube API를 호출하지 않습니다.',
     channelWatchlistButtonProps: {
       label: emptyStoredVideoLoad ? '다른 채널 고르기' : '오늘 볼 채널 고르기',
       title: '오늘 볼 채널 화면으로 이동합니다. 이동과 채널 선택만으로 YouTube API를 호출하지 않습니다.',
@@ -55,8 +55,8 @@ export const getRadarCandidateEmptyStateViewProps = ({
     },
     openVaultButtonProps: {
       label: '레퍼런스 금고 열기',
-      title: '저장된 영상 조회 화면으로 이동',
-      'aria-label': '저장된 영상 조회 화면으로 이동',
+      title: '수집된 영상 정보 조회 화면으로 이동',
+      'aria-label': '수집된 영상 정보 조회 화면으로 이동',
     },
     hideLoadButton: emptyStoredVideoLoad,
   });
@@ -109,7 +109,7 @@ export const getRadarCandidateActionErrorMessage = (actionKey) => ({
   production: '제작 후보 표시를 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
   scrapbook: '소재 보관 상태를 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
   status: '영상 판단을 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
-}[actionKey] || 'Cloud 저장을 완료하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 시도해 주세요.');
+}[actionKey] || '온라인 저장소(Azure DB) 저장을 완료하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 시도해 주세요.');
 
 export const getRadarCandidateScrapButtonProps = ({
   isSaved = false,

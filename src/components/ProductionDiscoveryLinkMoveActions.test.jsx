@@ -32,7 +32,7 @@ describe('ProductionDiscoveryLinkMoveActions', () => {
       />,
     );
 
-    expect(html.match(/Cloud 저장 중/g)).toHaveLength(2);
+    expect(html.match(/온라인 저장소\(Azure DB\) 저장 중/g)).toHaveLength(2);
     expect(html.match(/disabled=""/g)).toHaveLength(2);
   });
 

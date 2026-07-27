@@ -16,14 +16,14 @@ const getCoverageSummary = (record = {}) => {
 
   if (channelTotalVideos > 0) {
     const rateText = hasCoverageRate ? ` · 약 ${coverageRate}%` : '';
-    return `Cloud 저장 ${savedVideosTotal.toLocaleString('ko-KR')}개 / 채널 전체 ${channelTotalVideos.toLocaleString('ko-KR')}개${rateText}`;
+    return `온라인 저장소(Azure DB) 저장 ${savedVideosTotal.toLocaleString('ko-KR')}개 / 채널 전체 ${channelTotalVideos.toLocaleString('ko-KR')}개${rateText}`;
   }
 
   if (estimatedMissingVideos > 0) {
     return `과거 영상 약 ${estimatedMissingVideos.toLocaleString('ko-KR')}개가 아직 저장 범위 밖에 있습니다.`;
   }
 
-  return '수집은 끝났지만 채널 전체 영상과 Cloud 저장 범위가 아직 일치하지 않습니다.';
+  return '수집은 끝났지만 채널 전체 영상과 온라인 저장소(Azure DB) 저장 범위가 아직 일치하지 않습니다.';
 };
 
 const getFailedGuidance = (error = '') => {
@@ -76,7 +76,7 @@ export const getScanIssueGuidance = (record = {}) => {
 
     return {
       cause: `${getCoverageSummary(record)}${missingText}`,
-      nextAction: '현재 저장된 영상은 바로 탐색할 수 있습니다. 전체 과거 범위가 필요하면 이 채널의 과거 영상 수집을 직접 시작하세요. 이미 진행 중이면 저장된 위치에서 이어집니다.',
+      nextAction: '현재 수집된 영상 정보는 바로 탐색할 수 있습니다. 전체 과거 범위가 필요하면 이 채널의 과거 영상 수집을 직접 시작하세요. 이미 진행 중이면 저장된 위치에서 이어집니다.',
       title: '최신 수집은 완료됐지만 과거 영상 저장 범위가 아직 부족합니다',
       tone: 'partial',
     };

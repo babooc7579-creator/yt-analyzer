@@ -27,12 +27,11 @@ describe('syncWarningBannerProps utils', () => {
     }).messages).toEqual(['video warning', 'scrapbook warning']);
   });
 
-  it('keeps the Cloud-first help copy attached to every visible banner', () => {
+  it('keeps the online-storage-first help copy attached to every visible banner', () => {
     const props = getSyncWarningBannerViewProps({ messages: ['fallback warning'] });
 
     expect(props.title).toBe(SYNC_WARNING_BANNER_COPY.title);
-    expect(props.helpText).toContain('Cloud 응답만 기준');
-    expect(props.helpText).toContain('자동 병합하지 않습니다');
-    expect(props.helpText).toContain('자동 업로드하지 않습니다');
+    expect(props.helpText).toContain('해당 응답만 기준');
+    expect(props.helpText).toContain('자동 병합하거나 자동 업로드하지 않습니다');
   });
 });

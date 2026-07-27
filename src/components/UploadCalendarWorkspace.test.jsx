@@ -32,7 +32,7 @@ describe('UploadCalendarWorkspace', () => {
     expect(html).toContain('YouTube API를 호출하지 않습니다');
     expect(html).toContain('대본 보드 열기');
     expect(html).toContain('후보함에서 찾기');
-    expect(html).toContain('제작 후보함에서 일정 수정, 화면 이동이며 Cloud 데이터 변경 및 YouTube API 호출 없음');
+    expect(html).toContain('제작 후보함에서 일정 수정, 화면 이동이며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음');
     expect(html).toContain('오늘이 포함된 달 보기, 화면 표시만 변경');
   });
 

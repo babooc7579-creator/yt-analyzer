@@ -59,15 +59,15 @@ export const getProductionVideoDraftSaveButtonProps = ({
 } = {}) => {
   const displayTitle = getDisplayVideoTitle(videoTitle);
   const canSave = Boolean(hasSaveTarget) && Boolean(isDirty) && !isSaving;
-  let label = 'Cloud 저장됨';
+  let label = '온라인 저장소(Azure DB) 저장됨';
   let title = '제작 제목, 메모, 업로드 예정일이 Cloud 판단 기록에 저장된 상태입니다. YouTube API를 새로 호출하지 않습니다.';
 
   if (isSaving) {
-    label = 'Cloud 저장 중';
+    label = '온라인 저장소(Azure DB) 저장 중';
     title = '제작 제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장하는 중입니다. YouTube API를 새로 호출하지 않습니다.';
   } else if (!hasSaveTarget) {
     label = '저장 대상 없음';
-    title = '저장할 영상 ID가 없어 Cloud 저장을 실행하지 않습니다.';
+    title = '저장할 영상 ID가 없어 온라인 저장소(Azure DB) 저장을 실행하지 않습니다.';
   } else if (isDirty) {
     label = 'Cloud에 변경 저장';
     title = '제작 제목, 메모, 업로드 예정일을 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.';
@@ -106,7 +106,7 @@ export const getProductionVideoDraftStatusBadgeProps = ({
   if (saveState === 'error') {
     return {
       label: '저장 실패',
-      title: 'Cloud 저장에 실패했습니다. Cloud에 변경 저장 버튼을 다시 눌러 주세요.',
+      title: '온라인 저장소(Azure DB) 저장에 실패했습니다. Cloud에 변경 저장 버튼을 다시 눌러 주세요.',
       tone: 'bg-rose-100 text-rose-700',
     };
   }
@@ -155,7 +155,7 @@ export const getProductionVideoSaveStatusViewProps = (saveState) => {
   if (saveState === 'error') {
     return {
       iconName: 'error',
-      message: 'Cloud 저장 실패. 저장 완료 처리하지 않았습니다. 다시 저장해 주세요.',
+      message: '온라인 저장소(Azure DB) 저장 실패. 저장 완료 처리하지 않았습니다. 다시 저장해 주세요.',
       tone: 'danger',
     };
   }

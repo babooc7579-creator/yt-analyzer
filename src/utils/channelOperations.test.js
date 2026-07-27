@@ -77,7 +77,7 @@ describe('channel operations utils', () => {
     expect(scanningJourney.primaryAction).toBeNull();
     expect(scanningJourney.stageStatusById.scan).toEqual({ label: '수집 중', tone: 'active' });
     expect(readyJourney.title).toBe('영상이 준비됐습니다');
-    expect(readyJourney.primaryAction).toMatchObject({ id: 'open-videos', label: '저장 영상 2개 보기' });
+    expect(readyJourney.primaryAction).toMatchObject({ id: 'open-videos', label: '수집 영상 2개 보기' });
     expect(readyJourney.secondaryAction.id).toBe('open-radar');
     expect(readyJourney.stageStatusById.scan.label).toBe('1개 수집 기록');
   });
@@ -128,8 +128,8 @@ describe('channel operations utils', () => {
       storedVideoLoadResult: { success: true, videoCount: 0 },
     });
 
-    expect(journey.title).toBe('선택 채널에 저장된 영상이 없습니다');
-    expect(journey.description).toContain('Cloud DB 조회 결과');
+    expect(journey.title).toBe('선택 채널에 수집된 영상 정보가 없습니다');
+    expect(journey.description).toContain('온라인 저장소(Azure DB) 조회 결과');
     expect(journey.primaryAction).toMatchObject({ id: 'open-scan', label: '새 영상 수집 단계' });
     expect(journey.secondaryAction).toMatchObject({ id: 'open-manage', label: '채널 다시 선택' });
   });
@@ -143,7 +143,7 @@ describe('channel operations utils', () => {
     });
 
     expect(journey.title).toBe('영상이 준비됐습니다');
-    expect(journey.primaryAction).toMatchObject({ id: 'open-videos', label: '저장 영상 1개 보기' });
+    expect(journey.primaryAction).toMatchObject({ id: 'open-videos', label: '수집 영상 1개 보기' });
     expect(journey.secondaryAction.id).toBe('open-radar');
   });
 });

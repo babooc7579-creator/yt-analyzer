@@ -23,7 +23,7 @@ export const CHANNEL_OPERATION_STAGES = [
     id: 'scan',
     step: '3',
     label: '영상 확인·수집',
-    description: '저장 영상을 먼저 보고, 필요할 때만 YouTube API로 새 영상을 확인합니다.',
+    description: '수집 영상을 먼저 보고, 필요할 때만 YouTube API로 새 영상을 확인합니다.',
     targetId: 'channel-operations-scan',
   },
 ];
@@ -93,7 +93,7 @@ export const getChannelOperationsJourney = ({
       primaryAction: {
         id: 'open-add',
         label: '새 채널 등록하기',
-        title: '새 채널 등록 영역으로 이동합니다. 이동만으로 YouTube API 호출이나 Cloud 저장은 실행되지 않습니다.',
+        title: '새 채널 등록 영역으로 이동합니다. 이동만으로 YouTube API 호출이나 온라인 저장소(Azure DB) 저장은 실행되지 않습니다.',
       },
       stageStatusById,
       title: '먼저 소재를 모을 채널을 등록하세요',
@@ -115,7 +115,7 @@ export const getChannelOperationsJourney = ({
 
   if (isScanning) {
     return {
-      description: 'YouTube API로 새 영상 여부를 확인 중입니다. 완료되면 저장 영상도 자동으로 다시 불러옵니다.',
+      description: 'YouTube API로 새 영상 여부를 확인 중입니다. 완료되면 수집 영상도 자동으로 다시 불러옵니다.',
       primaryAction: null,
       stageStatusById,
       title: `선택 채널 ${selectedChannelCount}개를 수집 중입니다`,
@@ -125,7 +125,7 @@ export const getChannelOperationsJourney = ({
   if (videoCount === 0 && hasEmptyStoredVideoLoad(storedVideoLoadResult)) {
     if (selectedScannableChannelCount === 0) {
       return {
-        description: 'Cloud DB 조회 결과 저장된 영상이 없고, 현재 선택은 보류·제외 채널이라 새 영상 수집 대상도 아닙니다.',
+        description: '온라인 저장소(Azure DB) 조회 결과 수집된 영상 정보가 없고, 현재 선택은 보류·제외 채널이라 새 영상 수집 대상도 아닙니다.',
         primaryAction: {
           id: 'open-manage',
           label: '운영중 채널 다시 선택',
@@ -137,7 +137,7 @@ export const getChannelOperationsJourney = ({
     }
 
     return {
-      description: 'Cloud DB 조회 결과 선택 채널에 저장된 영상이 없습니다. 다른 채널을 고르거나 새 영상 수집 단계로 이동하세요.',
+      description: '온라인 저장소(Azure DB) 조회 결과 선택 채널에 수집된 영상 정보가 없습니다. 다른 채널을 고르거나 새 영상 수집 단계로 이동하세요.',
       primaryAction: {
         id: 'open-scan',
         label: '새 영상 수집 단계',
@@ -149,17 +149,17 @@ export const getChannelOperationsJourney = ({
         title: '채널 목록으로 이동합니다. 채널 선택만으로 YouTube API 호출이나 데이터 저장은 실행되지 않습니다.',
       },
       stageStatusById,
-      title: '선택 채널에 저장된 영상이 없습니다',
+      title: '선택 채널에 수집된 영상 정보가 없습니다',
     };
   }
 
   if (videoCount > 0) {
     return {
-      description: '현재 불러온 저장 영상을 보거나 오늘의 레이더에서 후보를 판단할 수 있습니다.',
+      description: '현재 불러온 수집 영상 정보를 보거나 오늘의 레이더에서 후보를 판단할 수 있습니다.',
       primaryAction: {
         id: 'open-videos',
-        label: `저장 영상 ${videoCount}개 보기`,
-        title: '현재 불러온 저장 영상 화면으로 이동합니다. YouTube API를 새로 호출하지 않습니다.',
+        label: `수집 영상 ${videoCount}개 보기`,
+        title: '현재 불러온 수집 영상 목록 화면으로 이동합니다. YouTube API를 새로 호출하지 않습니다.',
       },
       secondaryAction: {
         id: 'open-radar',
@@ -178,8 +178,8 @@ export const getChannelOperationsJourney = ({
     primaryAction: {
       disabled: isLoading,
       id: 'load-stored',
-      label: isLoading ? '저장 영상 불러오는 중...' : '저장 영상 불러오기',
-      title: '선택 채널의 기존 영상을 Cloud DB에서 조회합니다. YouTube API를 새로 호출하지 않습니다.',
+      label: isLoading ? '수집 영상 불러오는 중...' : '수집 영상 목록 불러오기',
+      title: '선택 채널의 기존 영상을 온라인 저장소(Azure DB)에서 조회합니다. YouTube API를 새로 호출하지 않습니다.',
     },
     secondaryAction: selectedScannableChannelCount > 0
       ? {

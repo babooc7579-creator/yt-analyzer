@@ -29,7 +29,7 @@ describe('UploadCalendarDayDetails', () => {
     expect(html).toContain('대본 보드 열기');
     expect(html).toContain('후보함에서 찾기');
     expect(html).toContain('원본 열기');
-    expect(html).toContain('Cloud 데이터 변경 및 YouTube API 호출 없음');
+    expect(html).toContain('온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음');
     expect(html).toContain('이어서 작업');
     expect(html).toContain('border-amber-300');
   });

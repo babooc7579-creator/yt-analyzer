@@ -19,9 +19,9 @@ describe('TagVaultWorkspace', () => {
 
     expect(html).toContain('태그별 금고');
     expect(html).toContain('태그 채널 선택');
-    expect(html).toContain('상단의 저장 영상 불러오기');
+    expect(html).toContain('상단의 수집 영상 목록 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
-    expect(html).toContain('채널 목록 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음');
+    expect(html).toContain('채널 목록 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음');
   });
 
   it('disables duplicate stored-video lookup while Cloud data is loading', () => {
@@ -38,9 +38,9 @@ describe('TagVaultWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('수집 영상 불러오는 중...');
     expect(html).toContain('disabled');
-    expect(html).toContain('Cloud DB 조회이며 YouTube API 호출 없음');
+    expect(html).toContain('온라인 저장소(Azure DB) 조회이며 YouTube API 호출 없음');
   });
 
   it('offers safe next actions when a successful Cloud lookup returns zero videos', () => {
@@ -59,7 +59,7 @@ describe('TagVaultWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('조회는 정상 완료됐지만 저장된 영상이 없습니다');
+    expect(html).toContain('조회는 정상 완료됐지만 수집된 영상 정보가 없습니다');
     expect(html).toContain('다른 채널 고르기');
     expect(html).toContain('새 영상 수집 준비');
     expect(html).toContain('이동만으로 YouTube API를 호출하지 않습니다');
@@ -79,8 +79,8 @@ describe('TagVaultWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('Cloud 저장 영상을 불러오지 못했습니다');
-    expect(html).toContain('Cloud 저장 영상 다시 불러오기');
-    expect(html).not.toContain('공예 저장 영상');
+    expect(html).toContain('온라인 저장소(Azure DB)의 수집 영상 정보를 불러오지 못했습니다');
+    expect(html).toContain('온라인 저장소(Azure DB)의 수집 영상 정보 다시 불러오기');
+    expect(html).not.toContain('공예 수집 영상');
   });
 });

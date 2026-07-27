@@ -231,7 +231,7 @@ describe('appLayoutProps utils', () => {
       label: '채널',
       value: '조회 중',
     });
-    expect(cards[0].description).toContain('Cloud DB');
+    expect(cards[0].description).toContain('온라인 저장소(Azure DB)');
     expect(cards[0].description).toContain('YouTube API 호출은 없습니다');
   });
 
@@ -240,14 +240,14 @@ describe('appLayoutProps utils', () => {
       savedVideoCount: 7,
     })).toEqual({
       dashboardTab: {
-        ariaLabel: '저장 영상 탐색 탭 열기, 탭 이동만으로 YouTube API 호출 없음',
-        label: '저장 영상 탐색',
-        title: '현재 불러온 저장 영상을 검색·필터·정렬하는 화면입니다. 탭 이동만으로 영상 조회나 YouTube API 호출을 실행하지 않습니다.',
+        ariaLabel: '수집 영상 목록 탭 열기, 탭 이동만으로 YouTube API 호출 없음',
+        label: '수집 영상 목록',
+        title: '현재 불러온 수집 영상 정보를 검색·필터·정렬하는 화면입니다. 탭 이동만으로 영상 조회나 YouTube API 호출을 실행하지 않습니다.',
       },
       scrapbookTab: {
         ariaLabel: '영구 스크랩북 탭 열기, 보관 영상 7개, 탭 이동만으로 YouTube API 호출 없음',
         label: '영구 스크랩북',
-        title: 'Cloud 스크랩북 보기 - 보관 영상 7개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
+        title: '온라인 스크랩북(Azure DB) 보기 - 보관 영상 7개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
       },
     });
   });

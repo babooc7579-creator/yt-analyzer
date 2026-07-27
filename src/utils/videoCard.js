@@ -124,7 +124,7 @@ export const getVideoCardThumbnailBadgeItems = ({
     icon: 'candidate',
     isVisible: isTtoTto,
     label: '또터또 후보',
-    title: '게시 후 180일 이상이고 채널 평균보다 1.5배 이상 반응한 저장 영상입니다.',
+    title: '게시 후 180일 이상이고 채널 평균보다 1.5배 이상 반응한 수집 영상입니다.',
   },
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-bold text-orange-700',

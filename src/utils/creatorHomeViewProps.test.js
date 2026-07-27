@@ -112,7 +112,7 @@ describe('creatorHomeViewProps utils', () => {
       label: '저장된 채널',
       value: '조회 중',
     });
-    expect(statsProps.cards[0].description).toContain('Cloud DB');
+    expect(statsProps.cards[0].description).toContain('온라인 저장소(Azure DB)');
   });
 
   it('builds radar candidate strip props with videos, records, and handlers', () => {

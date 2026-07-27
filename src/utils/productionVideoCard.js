@@ -104,7 +104,7 @@ export const getProductionVideoReadinessChecklist = ({
       label: '제목 초안',
       missingText: '제목 필요',
       readyText: '작성됨',
-      title: '내 채널에 맞게 바꿀 제목 초안입니다. 아래 Cloud 저장 버튼을 눌러야 저장됩니다.',
+      title: '내 채널에 맞게 바꿀 제목 초안입니다. 아래 온라인 저장소(Azure DB) 저장 버튼을 눌러야 저장됩니다.',
     },
     {
       key: 'note',
@@ -112,7 +112,7 @@ export const getProductionVideoReadinessChecklist = ({
       label: '제작 메모',
       missingText: '메모 필요',
       readyText: '작성됨',
-      title: '훅 포인트, 참고 장면, 만들 방향 메모입니다. 아래 Cloud 저장 버튼을 눌러야 저장됩니다.',
+      title: '훅 포인트, 참고 장면, 만들 방향 메모입니다. 아래 온라인 저장소(Azure DB) 저장 버튼을 눌러야 저장됩니다.',
     },
     {
       key: 'publish-date',
@@ -120,7 +120,7 @@ export const getProductionVideoReadinessChecklist = ({
       label: '업로드 예정일',
       missingText: '일정 미정',
       readyText: '지정됨',
-      title: '업로드 예정일입니다. 아래 Cloud 저장 버튼을 눌러야 저장됩니다.',
+      title: '업로드 예정일입니다. 아래 온라인 저장소(Azure DB) 저장 버튼을 눌러야 저장됩니다.',
     },
   ];
   const readyCount = items.filter((item) => item.isReady).length;
@@ -216,7 +216,7 @@ export const getProductionVideoExternalActionsViewProps = ({
     label: '작업 묶음 복사',
     copiedLabel: '묶음 복사 완료',
     ariaLabel: `${videoTitle} 제작 작업 묶음 복사`,
-    title: '현재 카드의 원본, 제목 초안, 메모, 일정 정보를 클립보드에 복사합니다. Cloud 저장이나 YouTube API 호출은 없습니다.',
+    title: '현재 카드의 원본, 제목 초안, 메모, 일정 정보를 클립보드에 복사합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다.',
   },
 });
 

@@ -23,7 +23,7 @@ describe('ProductionVideoReadinessChecklist', () => {
             label: '제작 메모',
             missingText: '메모 필요',
             readyText: '작성됨',
-            title: '훅 포인트 메모입니다. 아래 Cloud 저장 버튼을 눌러야 저장됩니다.',
+            title: '훅 포인트 메모입니다. 아래 온라인 저장소(Azure DB) 저장 버튼을 눌러야 저장됩니다.',
           },
         ]}
         summaryText="1개 남음"
@@ -39,7 +39,7 @@ describe('ProductionVideoReadinessChecklist', () => {
     expect(html).not.toContain('확인 가능');
     expect(html).toContain('제작 메모');
     expect(html).toContain('메모 필요');
-    expect(html).toContain('아래 Cloud 저장 버튼을 눌러야 저장됩니다.');
+    expect(html).toContain('아래 온라인 저장소(Azure DB) 저장 버튼을 눌러야 저장됩니다.');
   });
 
   it('collapses to one completion message when every preparation item is ready', () => {

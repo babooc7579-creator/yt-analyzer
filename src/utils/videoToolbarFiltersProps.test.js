@@ -75,9 +75,9 @@ describe('videoToolbarFiltersProps utils', () => {
 
   it('builds search field copy', () => {
     expect(getVideoToolbarSearchFieldViewProps()).toEqual({
-      ariaLabel: '저장 영상 제목 검색',
+      ariaLabel: '수집 영상 제목 검색',
       placeholder: '제목 검색...',
-      title: '불러온 저장 영상 제목만 검색합니다. YouTube API를 새로 호출하지 않습니다.',
+      title: '불러온 수집 영상의 제목만 검색합니다. YouTube API를 새로 호출하지 않습니다.',
     });
   });
 
@@ -95,7 +95,7 @@ describe('videoToolbarFiltersProps utils', () => {
       { label: '쇼츠만', value: 'shorts' },
       { label: '롱폼만', value: 'long' },
     ]);
-    expect(props.viewFilterTitle).toContain('저장 영상');
+    expect(props.viewFilterTitle).toContain('수집 영상');
     expect(props.viewFilterTitle).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props.lengthFilterTitle).toContain('YouTube API를 새로 호출하지 않습니다');
   });

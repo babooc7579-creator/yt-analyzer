@@ -34,7 +34,7 @@ export default function WorkToolsWorkspace({
             type="button"
             onClick={onOpenSettings}
             disabled={typeof onOpenSettings !== 'function'}
-            title="설정의 업무 도구 관리 화면으로 이동합니다. 이동만으로 Cloud 저장이나 외부 API 호출은 실행되지 않습니다."
+            title="설정의 업무 도구 관리 화면으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 저장이나 외부 API 호출은 실행되지 않습니다."
             className="inline-flex min-h-10 w-full items-center justify-center gap-2 border border-cyan-400/30 bg-cyan-500/10 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             <Settings2 aria-hidden="true" className="h-4 w-4" />

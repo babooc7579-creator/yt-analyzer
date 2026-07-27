@@ -33,10 +33,10 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('랭킹 연구소');
     expect(html).toContain('오늘 선택');
     expect(html).toContain('브라우저를 새로고침하면 초기화됩니다');
-    expect(html).toContain('영상 판단과 제작 후보 기록은 Cloud에 보존됩니다');
-    expect(html).toContain('저장 영상 불러오기');
+    expect(html).toContain('영상 판단과 제작 후보 기록은 온라인 저장소(Azure DB)에 보존됩니다');
+    expect(html).toContain('수집 영상 목록 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
-    expect(html).toContain('전체 채널 선택 화면으로 이동, Cloud DB 조회 및 YouTube API 호출 없음');
+    expect(html).toContain('전체 채널 선택 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음');
   });
 
   it('shows a direct candidate action after stored videos load', () => {
@@ -48,12 +48,12 @@ describe('HomeRadarChannelStage', () => {
       />,
     );
 
-    expect(html).toContain('저장 영상 12개가 판정대에 준비됐습니다');
+    expect(html).toContain('수집 영상 12개가 판정대에 준비됐습니다');
     expect(html).toContain('아래 STAGE 3에서 오늘의 후보를 바로 판단할 수 있습니다.');
     expect(html).not.toContain('아래 STAGE 2에서 오늘의 후보를 바로 판단할 수 있습니다.');
     expect(html).toContain('후보 판정 시작');
     expect(html).toContain('#today-radar-candidates');
-    expect(html).toContain('오늘 후보 판정 영역으로 이동, Cloud 저장 및 YouTube API 호출 없음');
+    expect(html).toContain('오늘 후보 판정 영역으로 이동, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음');
   });
 
   it('shows recovery without pretending an empty Cloud result is a failure', () => {
@@ -66,7 +66,7 @@ describe('HomeRadarChannelStage', () => {
       />,
     );
 
-    expect(html).toContain('저장된 영상이 없는 채널 조합입니다');
+    expect(html).toContain('수집된 영상 정보가 없는 채널 조합입니다');
     expect(html).toContain('새 영상 수집 단계로');
     expect(html).toContain('새 영상 수집 화면으로 이동, 이동만으로 YouTube API 호출 없음');
   });
@@ -84,7 +84,7 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('새 채널 등록 화면으로 이동, 채널 저장 및 YouTube API 호출 없음');
   });
 
-  it('does not present an empty channel list while the initial Cloud lookup is pending', () => {
+  it('does not present an empty channel list while the initial online-storage lookup is pending', () => {
     const html = renderToStaticMarkup(
       <HomeRadarChannelStage
         channelsLoading
@@ -93,8 +93,8 @@ describe('HomeRadarChannelStage', () => {
       />,
     );
 
-    expect(html).toContain('Cloud 채널 목록을 불러오는 중입니다');
-    expect(html).toContain('저장된 채널 조회이며 YouTube API는 호출하지 않습니다');
+    expect(html).toContain('온라인 저장소(Azure DB)의 채널 목록을 불러오는 중입니다');
+    expect(html).toContain('등록된 채널 조회이며 YouTube API는 호출하지 않습니다');
     expect(html).not.toContain('먼저 소재를 찾을 채널이 필요합니다');
     expect(html).not.toContain('첫 채널 등록하기');
   });
@@ -108,7 +108,7 @@ describe('HomeRadarChannelStage', () => {
       />,
     );
 
-    expect(html).toContain('저장 영상 8개가 판정대에 준비됐습니다');
+    expect(html).toContain('수집 영상 8개가 판정대에 준비됐습니다');
     expect(html).toContain('후보 판정 시작');
   });
 
@@ -122,8 +122,8 @@ describe('HomeRadarChannelStage', () => {
       />,
     );
 
-    expect(html).toContain('Cloud DB에서 저장 영상을 불러오는 중입니다');
-    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('온라인 저장소(Azure DB)에서 수집 영상을 불러오는 중입니다');
+    expect(html).toContain('수집 영상 불러오는 중...');
     expect(html).toContain('disabled');
   });
 
@@ -137,7 +137,7 @@ describe('HomeRadarChannelStage', () => {
       />,
     );
 
-    expect(html).toContain('저장 영상을 불러오지 못했습니다');
-    expect(html).toContain('저장 영상 다시 불러오기');
+    expect(html).toContain('수집 영상을 불러오지 못했습니다');
+    expect(html).toContain('수집 영상 다시 불러오기');
   });
 });

@@ -7,8 +7,8 @@ import WorkToolSettingsPanel from './WorkToolSettingsPanel';
 const settingCards = [
   {
     icon: Database,
-    title: 'Cloud DB가 기준 데이터입니다',
-    description: '채널, 저장 영상, 판단 기록과 스크랩북은 Cloud 데이터를 기준으로 사용합니다.',
+    title: '온라인 저장소(Azure DB)가 기준 데이터입니다',
+    description: '채널, 수집 영상, 판단 기록과 스크랩북은 온라인 저장소(Azure DB) 데이터를 기준으로 사용합니다.',
     tone: 'border-blue-400/25 bg-blue-500/10 text-blue-200',
   },
   {
@@ -20,7 +20,7 @@ const settingCards = [
   {
     icon: KeyRound,
     title: 'YouTube API 작업은 실행 전에 구분합니다',
-    description: '새 영상 수집, 채널 정보 확인·등록, 댓글 Top 10은 YouTube API를 사용할 수 있습니다. 채널 선택과 저장 영상 불러오기는 사용하지 않습니다.',
+    description: '새 영상 수집, 채널 정보 확인·등록, 댓글 Top 10은 YouTube API를 사용할 수 있습니다. 채널 선택과 수집 영상 목록 불러오기는 사용하지 않습니다.',
     tone: 'border-emerald-400/25 bg-emerald-500/10 text-emerald-200',
   },
 ];
@@ -64,7 +64,7 @@ export default function SettingsWorkspace({
             <p className="text-xs font-extrabold text-indigo-300">운영 설정</p>
             <h3 className="mt-1 text-lg font-black text-white">앱의 기준과 채널 분야를 관리합니다</h3>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-              화면 표시 설정과 Cloud 데이터 변경을 구분합니다. 이름 변경은 Cloud 채널 태그를 바꾸지만, 추가와 숨김은 현재 브라우저의 화면 목록만 바꿉니다.
+              화면 표시 설정과 온라인 저장소(Azure DB) 데이터 변경을 구분합니다. 이름 변경은 Cloud 채널 태그를 바꾸지만, 추가와 숨김은 현재 브라우저의 화면 목록만 바꿉니다.
             </p>
           </div>
         </div>
@@ -106,8 +106,8 @@ export default function SettingsWorkspace({
               <dd className="mt-1 break-all font-mono text-slate-200">{functionApiBase}</dd>
             </div>
             <div className="border-b border-slate-800 pb-4">
-              <dt className="font-bold text-slate-500">저장 영상 불러오기</dt>
-              <dd className="mt-1 font-bold text-blue-200">Cloud DB 조회 · YouTube API 호출 없음</dd>
+              <dt className="font-bold text-slate-500">수집 영상 목록 불러오기</dt>
+              <dd className="mt-1 font-bold text-blue-200">온라인 저장소(Azure DB) 조회 · YouTube API 호출 없음</dd>
             </div>
             <div>
               <dt className="font-bold text-slate-500">선택 채널 새 영상 수집</dt>
@@ -148,7 +148,7 @@ export default function SettingsWorkspace({
               type="password"
               value={apiKey || ''}
             />
-            <p className="mt-2 text-[11px] leading-4 text-slate-500">새로고침하면 사라지며 Cloud DB, localStorage, 저장소에 저장하지 않습니다.</p>
+            <p className="mt-2 text-[11px] leading-4 text-slate-500">새로고침하면 사라지며 온라인 저장소(Azure DB), localStorage, 저장소에 저장하지 않습니다.</p>
           </article>
 
           <article className="border border-slate-700 bg-slate-950/70 p-4">
@@ -186,7 +186,7 @@ export default function SettingsWorkspace({
                 onClick={refreshChannels}
                 disabled={refreshingChannels || typeof onRefreshChannels !== 'function'}
                 className="inline-flex w-full items-center justify-center gap-2 border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
-                title="Cloud DB에서 채널 목록만 다시 조회합니다. YouTube API는 호출하지 않습니다."
+                title="온라인 저장소(Azure DB)에서 채널 목록만 다시 조회합니다. YouTube API는 호출하지 않습니다."
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${refreshingChannels ? 'animate-spin' : ''}`} />
                 {refreshingChannels ? 'Cloud 채널 조회 중' : 'Cloud 채널 다시 불러오기'}

@@ -1,5 +1,5 @@
 const SUMMARY_ITEMS = [
-  { key: 'loadedVideoCount', label: '불러온 저장 영상', tone: 'text-blue-200' },
+  { key: 'loadedVideoCount', label: '불러온 수집 영상 정보', tone: 'text-blue-200' },
   { key: 'totalCandidateCount', label: '기준 충족', tone: 'text-rose-200' },
   { key: 'openCandidateCount', label: '검토 대기', tone: 'text-amber-200' },
   { key: 'handledCandidateCount', label: '처리 완료', tone: 'text-emerald-200' },

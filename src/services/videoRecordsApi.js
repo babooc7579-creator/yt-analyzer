@@ -70,7 +70,7 @@ export const fetchAllStoredVideosByChannelIds = async (
     if (seenContinuationTokens.has(nextContinuationToken)) {
       return {
         success: false,
-        error: 'Cloud DB 페이지 정보가 반복되어 저장 영상 조회를 안전하게 중단했습니다.',
+        error: '온라인 저장소(Azure DB) 페이지 정보가 반복되어 수집 영상 조회를 안전하게 중단했습니다.',
         pageCount,
         videos: [],
       };
@@ -82,7 +82,7 @@ export const fetchAllStoredVideosByChannelIds = async (
 
   return {
     success: false,
-    error: '저장 영상 조회 페이지 수가 안전 한도를 초과했습니다.',
+    error: '수집 영상 조회 페이지 수가 안전 한도를 초과했습니다.',
     pageCount: maxPages,
     videos: [],
   };

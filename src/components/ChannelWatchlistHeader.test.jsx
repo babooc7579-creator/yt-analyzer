@@ -13,7 +13,7 @@ describe('ChannelWatchlistHeader', () => {
       />,
     );
 
-    expect(html).toContain('저장 영상 불러오는 중...');
+    expect(html).toContain('수집 영상 불러오는 중...');
     expect(html).toContain('disabled');
     expect(html).toContain('새 영상 수집 화면');
   });
