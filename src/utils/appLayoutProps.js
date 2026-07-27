@@ -93,9 +93,9 @@ export const getCreatorWorkspaceHeaderStatCards = ({
 
 export const getWorkspaceTabsViewProps = ({ savedVideoCount }) => ({
   dashboardTab: {
-    ariaLabel: '분석 대시보드 탭 열기, 탭 이동만으로 YouTube API 호출 없음',
-    label: '분석 대시보드',
-    title: '현재 불러온 저장 영상 분석 대시보드 보기. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '저장 영상 탐색 탭 열기, 탭 이동만으로 YouTube API 호출 없음',
+    label: '저장 영상 탐색',
+    title: '현재 불러온 저장 영상을 검색·필터·정렬하는 화면입니다. 탭 이동만으로 영상 조회나 YouTube API 호출을 실행하지 않습니다.',
   },
   scrapbookTab: {
     ariaLabel: `영구 스크랩북 탭 열기, 보관 영상 ${savedVideoCount}개, 탭 이동만으로 YouTube API 호출 없음`,
