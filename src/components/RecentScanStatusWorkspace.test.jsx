@@ -57,7 +57,8 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('이 채널 관리');
     expect(html).toContain('다시 수집 준비');
     expect((html.match(/다시 수집 준비/g) || []).length).toBe(1);
-    expect(html).toContain('과거 영상 100개까지 채우기');
+    expect(html).toContain('다음 과거 영상 100개 확인');
+    expect(html).toContain('신규 저장 수는 100개보다 적을 수 있으며');
     expect(html).toContain('자동 반복·예약·전체 채널 실행은 하지 않습니다');
     expect(html).toContain('이 화면은 Cloud DB만 조회합니다');
     expect(html).toContain('과거 수집 이력');
@@ -140,7 +141,7 @@ describe('RecentScanStatusWorkspace', () => {
 
     expect(html).toContain('과거 영상 저장 범위가 아직 부족합니다');
     expect(html).toContain('Cloud 저장 250개 / 채널 전체 400개');
-    expect(html).toContain('과거 영상 100개까지 채우기');
+    expect(html).toContain('다음 과거 영상 100개 확인');
     expect(html).not.toContain('기술 오류 원문 보기');
   });
 });

@@ -76,7 +76,7 @@ export const getScanIssueGuidance = (record = {}) => {
 
     return {
       cause: `${getCoverageSummary(record)}${missingText}`,
-      nextAction: '현재 저장된 영상은 바로 탐색할 수 있습니다. 더 필요하면 이 채널의 “과거 영상 100개까지 채우기”를 직접 실행하세요. 자동 반복되지는 않습니다.',
+      nextAction: '현재 저장된 영상은 바로 탐색할 수 있습니다. 더 필요하면 이 채널의 “다음 과거 영상 100개 확인”을 직접 실행하세요. 최대 100개를 확인하고 Cloud에 없는 영상만 저장하며 자동 반복되지는 않습니다.',
       title: '최신 수집은 완료됐지만 과거 영상 저장 범위가 아직 부족합니다',
       tone: 'partial',
     };
