@@ -304,6 +304,20 @@ export default function RecentScanStatusWorkspace({
                   ) : (
                     <p>새 영상 {row.newVideosFound}개 · 통계 갱신 {row.statsRefreshed}개</p>
                   )}
+                  {row.videosInspectedTotal > 0 || row.backfillCompleted ? (
+                    <div className="mt-2 border border-slate-700 bg-slate-950/60 p-2 text-[11px] leading-5 text-slate-300">
+                      <p>
+                        업로드 목록 확인 {row.inspectionProgressRate ?? (row.backfillCompleted ? 100 : 0)}%
+                        {row.channelTotalVideos > 0
+                          ? ` · ${row.videosInspectedTotal}/${row.channelTotalVideos}개 확인`
+                          : ''}
+                      </p>
+                      <p>
+                        Cloud 저장 {row.coverageRate ?? 0}% · {row.savedVideosTotal}개 저장
+                        {row.estimatedMissingVideos > 0 ? ` · 추정 잔여 ${row.estimatedMissingVideos}개` : ''}
+                      </p>
+                    </div>
+                  ) : null}
                   <ScanIssueGuidance record={row} />
                   <div className="mt-2 flex flex-wrap gap-2">
                     <button
@@ -336,10 +350,10 @@ export default function RecentScanStatusWorkspace({
                         onClick={() => handleHistoricalBackfill(row)}
                         disabled={Boolean(backfillChannelId)}
                         className="inline-flex min-h-8 items-center justify-center gap-1 border border-cyan-400/40 bg-cyan-500/10 px-3 py-1 text-[11px] font-black text-cyan-100 hover:border-cyan-300 disabled:cursor-wait disabled:opacity-60"
-                        title="이 채널 하나의 과거 업로드 목록을 YouTube API로 최대 100개 확인합니다. 자동 반복이나 다른 채널 수집은 하지 않습니다."
+                        title="선택한 채널 하나의 공개 업로드 목록을 끝까지 확인합니다. 한 번에 최대 500개이며, 끝나지 않으면 다음 실행에서 이어갑니다."
                       >
                         <History className={`h-3.5 w-3.5 ${backfillChannelId === row.channelId ? 'animate-spin' : ''}`} />
-                        {backfillChannelId === row.channelId ? '과거 영상 확인 중' : '다음 과거 영상 100개 확인'}
+                        {backfillChannelId === row.channelId ? '전체 과거 영상 수집 중' : '선택 채널 전체 과거 영상 수집'}
                       </button>
                     ) : null}
                   </div>
@@ -455,7 +469,7 @@ export default function RecentScanStatusWorkspace({
           채널 요약은 마지막 결과 한 건을 유지하고, 과거 이력은 최근 채널 기록 100건을 같은 수집 실행끼리 묶어 표시합니다. API 쿼터 추정은 아직 제공하지 않습니다.
         </p>
         <p className="mt-2 text-xs leading-5 text-amber-100/80">
-          “다음 과거 영상 100개 확인”은 업로드 목록 최대 100개를 살펴본 뒤 Cloud에 없는 영상만 저장합니다. 신규 저장 수는 100개보다 적을 수 있으며, 자동 반복·예약·전체 채널 실행은 하지 않습니다.
+          “선택 채널 전체 과거 영상 수집”은 선택한 채널 하나만 목록 끝까지 진행합니다. 한 번에 최대 500개이며, 더 많으면 현재 위치를 저장해 다음 실행에서 이어갑니다. 자동 반복·예약·전체 채널 일괄 실행은 하지 않습니다.
         </p>
       </div>
     </section>

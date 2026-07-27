@@ -65,6 +65,10 @@ describe('recent scan status utils', () => {
   it('preserves Cloud coverage fields used to explain a partial result', () => {
     const [row] = getRecentScanStatusRows([{
       id: 'partial',
+      backfillState: {
+        inspectionProgressRate: 25,
+        videosInspectedTotal: 100,
+      },
       lastScanSummary: {
         status: 'partial',
         savedVideosTotal: 250,
@@ -79,6 +83,8 @@ describe('recent scan status utils', () => {
       channelTotalVideos: 400,
       estimatedMissingVideos: 150,
       coverageRate: 62.5,
+      inspectionProgressRate: 25,
+      videosInspectedTotal: 100,
     });
   });
 

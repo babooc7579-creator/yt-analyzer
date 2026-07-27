@@ -47,13 +47,13 @@ describe('scanApi service', () => {
   it('uses the capped single-channel historical backfill endpoint', async () => {
     const fetchMock = installFetchMock();
 
-    await backfillChannelHistory('channel-1', { maxPages: 2 });
+    await backfillChannelHistory('channel-1', { maxPages: 10 });
 
     expect(fetchMock).toHaveBeenCalledWith(`${FUNCTION_API_BASE}/scan/backfill`, {
       method: 'POST',
       body: JSON.stringify({
         channelId: 'channel-1',
-        maxPages: 2,
+        maxPages: 10,
       }),
       headers: { 'Content-Type': 'application/json' },
     });
