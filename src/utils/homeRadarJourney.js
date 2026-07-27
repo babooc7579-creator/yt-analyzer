@@ -26,6 +26,7 @@ export const getLoadedVideoCountForSelectedChannels = ({
 };
 
 export const getHomeRadarJourneyStages = ({
+  channelsLoading = false,
   loadedVideoCount = 0,
   openRadarCandidateCount = 0,
   productionCandidateCount = 0,
@@ -41,7 +42,7 @@ export const getHomeRadarJourneyStages = ({
   const emptyLoad = hasEmptyStoredVideoLoad(storedVideoLoadResult);
 
   const channelStatus = selectedChannels > 0 ? 'complete' : 'current';
-  const loadStatus = selectedChannels === 0
+  const loadStatus = channelsLoading || selectedChannels === 0
     ? 'upcoming'
     : loadedVideos > 0
       ? 'complete'
@@ -65,7 +66,7 @@ export const getHomeRadarJourneyStages = ({
       number: 1,
       href: '#today-radar-channels',
       title: '오늘 볼 채널 고르기',
-      value: selectedChannels > 0 ? `${selectedChannels}개 선택` : '선택 필요',
+      value: channelsLoading ? 'Cloud 조회 중' : selectedChannels > 0 ? `${selectedChannels}개 선택` : '선택 필요',
       hint: '분야·등급·수집일로 범위를 좁힙니다.',
       status: channelStatus,
     },

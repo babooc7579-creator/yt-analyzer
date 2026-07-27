@@ -8,6 +8,7 @@ import HomeWorkspaceShortcuts from './HomeWorkspaceShortcuts';
 import RadarCandidateStrip from './RadarCandidateStrip';
 
 export default function CreatorHomeView({
+  channelsLoading,
   clearRadarDecisions,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
@@ -48,6 +49,7 @@ export default function CreatorHomeView({
     radarSummaryProps,
     workspaceShortcutsProps,
   } = getCreatorHomeViewProps({
+    channelsLoading,
     clearRadarDecisions,
     discoveryCandidateCount,
     discoveryRightsWarningCount,

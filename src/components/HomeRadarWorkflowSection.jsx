@@ -3,6 +3,7 @@ import HomeRadarChannelStage from './HomeRadarChannelStage';
 import HomeRadarJourney from './HomeRadarJourney';
 
 export default function HomeRadarWorkflowSection({
+  channelsLoading,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
   loadedVideoCount,
@@ -38,6 +39,7 @@ export default function HomeRadarWorkflowSection({
         <p className="text-[11px] font-bold text-emerald-200">{headerProps.safetyNote}</p>
       </div>
       <HomeRadarJourney
+        channelsLoading={channelsLoading}
         loadedVideoCount={loadedVideoCount}
         openRadarCandidateCount={openRadarCandidateCount}
         productionCandidateCount={productionCandidateCount}
@@ -47,6 +49,7 @@ export default function HomeRadarWorkflowSection({
         storedVideoLoadPending={storedVideoLoadPending}
       />
       <HomeRadarChannelStage
+        channelsLoading={channelsLoading}
         onLoadStoredVideos={onLoadStoredVideos}
         onOpenAddChannel={onOpenAddChannel}
         onOpenChannelWatchlist={onOpenChannelWatchlist}

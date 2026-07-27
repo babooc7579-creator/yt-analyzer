@@ -4,6 +4,7 @@ import CreatorWorkspaceStatCard from './CreatorWorkspaceStatCard';
 export default function CreatorWorkspaceHeader({
   item,
   channelCount,
+  channelsLoading,
   discoveryCandidateCount,
   videoCount,
   selectedChannelCount,
@@ -11,6 +12,7 @@ export default function CreatorWorkspaceHeader({
 }) {
   const statCards = getCreatorWorkspaceHeaderStatCards({
     channelCount,
+    channelsLoading,
     discoveryCandidateCount,
     savedVideoCount,
     selectedChannelCount,

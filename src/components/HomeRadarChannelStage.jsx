@@ -15,6 +15,7 @@ const VISIBLE_CHANNEL_LIMIT = 6;
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
 export default function HomeRadarChannelStage({
+  channelsLoading = false,
   onLoadStoredVideos,
   onOpenAddChannel,
   onOpenChannelWatchlist,
@@ -78,7 +79,15 @@ export default function HomeRadarChannelStage({
       </div>
 
       <div id="today-radar-load" className="scroll-mt-5">
-        {channelList.length === 0 ? (
+        {channelsLoading ? (
+          <div className="mt-4 flex items-center justify-center gap-3 border border-blue-400/25 bg-blue-500/10 px-5 py-8 text-center" role="status">
+            <RefreshCw className="h-5 w-5 animate-spin text-blue-200" />
+            <div className="text-left">
+              <p className="font-extrabold text-white">Cloud 채널 목록을 불러오는 중입니다</p>
+              <p className="mt-1 text-xs text-blue-100/70">저장된 채널 조회이며 YouTube API는 호출하지 않습니다.</p>
+            </div>
+          </div>
+        ) : channelList.length === 0 ? (
           <div className="mt-4 border border-dashed border-slate-700 bg-slate-950/50 px-5 py-8 text-center">
             <p className="font-extrabold text-white">먼저 소재를 찾을 채널이 필요합니다</p>
             <p className="mt-2 text-xs text-slate-400">채널을 등록해도 새 영상 수집은 자동으로 시작되지 않습니다.</p>

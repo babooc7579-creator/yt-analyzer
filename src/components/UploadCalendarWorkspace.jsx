@@ -10,13 +10,20 @@ import UploadCalendarSummary from './UploadCalendarSummary';
 import UploadCalendarUnscheduledList from './UploadCalendarUnscheduledList';
 
 export default function UploadCalendarWorkspace({
+  initialTargetPublishDate,
+  initialTargetVideoId,
   onOpenProductionCandidate,
   onOpenProductionCandidates,
   onOpenScriptBoard,
   videoUserRecords,
   videos,
 }) {
-  const state = useUploadCalendarState({ videoUserRecords, videos });
+  const state = useUploadCalendarState({
+    initialTargetPublishDate,
+    initialTargetVideoId,
+    videoUserRecords,
+    videos,
+  });
   const emptyState = getUploadCalendarEmptyState({
     productionRecordCount: state.productionRecordCount,
     scheduledCount: state.allItems.length,
@@ -41,6 +48,7 @@ export default function UploadCalendarWorkspace({
       <div className="mt-5 space-y-4">
         <UploadCalendarSummary summary={state.summary} />
         <UploadCalendarUnscheduledList
+          focusedVideoId={state.initialTargetVideoId}
           items={state.visibleUnscheduledItems}
           onOpenProductionCandidate={onOpenProductionCandidate}
           onOpenProductionCandidates={onOpenProductionCandidates}
@@ -78,6 +86,7 @@ export default function UploadCalendarWorkspace({
           <>
             <UploadCalendarGrid days={state.gridDays} onSelectDate={state.setSelectedDate} selectedDate={state.selectedDate} />
             <UploadCalendarDayDetails
+              focusedVideoId={state.initialTargetVideoId}
               items={state.selectedDayItems}
               onOpenProductionCandidate={onOpenProductionCandidate}
               onOpenProductionCandidates={onOpenProductionCandidates}

@@ -93,7 +93,7 @@ export default function ScriptBoardWorkspace({
     handlers: {
       home: onOpenHome,
       production: () => onOpenProductionCandidates(selectedItem?.video),
-      schedule: onOpenUploadCalendar,
+      schedule: () => onOpenUploadCalendar(selectedItem),
     },
     hasUnsavedDrafts,
   });

@@ -49,7 +49,7 @@ export function getLegacyVaultTabViewProps({
           targetVideoId: video.videoId || '',
         },
       }),
-      onOpenReferenceVault: () => openCreatorView({ id: 'vault-all' }),
+      onOpenReferenceVault: () => openCreatorView({ id: 'vault-videos' }),
       onOpenScriptBoard: () => openCreatorView({ id: 'studio-script' }),
       onOpenUploadCalendar: () => openCreatorView({ id: 'studio-calendar' }),
       onRemoveScrap: toggleScrapVideo,

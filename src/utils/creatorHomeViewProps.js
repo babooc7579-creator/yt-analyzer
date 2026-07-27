@@ -18,7 +18,7 @@ export const getHomeOperatingGuidelinesViewProps = () => ({
       titleClassName: 'text-blue-200',
     },
     {
-      title: '터또터 기준',
+      title: '또터또 기준',
       description: '한 번 반응이 검증된 영상을 재편집해 다시 살릴 후보를 우선 확인합니다.',
       className: 'border-orange-400/20 bg-orange-500/10',
       titleClassName: 'text-orange-200',
@@ -33,6 +33,7 @@ export const getHomeRadarHeroViewProps = () => ({
 });
 
 export const getHomeRadarStatsGridViewProps = ({
+  channelsLoading = false,
   discoveryCandidateCount = 0,
   discoveryRightsWarningCount = 0,
   latestScanText,
@@ -46,8 +47,10 @@ export const getHomeRadarStatsGridViewProps = ({
   cards: [
     {
       label: '저장된 채널',
-      value: savedChannelCount,
-      description: 'Cloud에 저장된 채널 자산입니다. 숫자 확인만으로 YouTube API를 호출하지 않습니다.',
+      value: channelsLoading ? '조회 중' : savedChannelCount,
+      description: channelsLoading
+        ? 'Cloud DB에서 채널 목록을 조회하고 있습니다. YouTube API 호출은 없습니다.'
+        : 'Cloud에 저장된 채널 자산입니다. 숫자 확인만으로 YouTube API를 호출하지 않습니다.',
     },
     {
       label: '현재 화면 영상',
@@ -106,6 +109,7 @@ export const getHomeRadarStatsGridViewProps = ({
 });
 
 export const getCreatorHomeViewProps = ({
+  channelsLoading,
   clearRadarDecisions,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
@@ -145,9 +149,10 @@ export const getCreatorHomeViewProps = ({
       onOpenAddChannel: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'add' } }),
       onOpenDiscoveryLinks: () => onOpenView({ id: 'vault-sources' }),
       onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
-      onOpenVault: () => onOpenView({ id: 'vault-all' }),
+      onOpenVault: () => onOpenView({ id: 'vault-videos' }),
     },
     nextActionProps: {
+      channelsLoading: Boolean(channelsLoading),
       discoveryCandidateCount,
       discoveryRightsWarningCount,
       loadedVideoCount: selectedLoadedVideoCount,
@@ -156,7 +161,7 @@ export const getCreatorHomeViewProps = ({
       onOpenChannelWatchlist: () => onOpenView({ id: 'discovery-watchlist' }),
       onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
       onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
-      onOpenVault: () => onOpenView({ id: 'vault-all' }),
+      onOpenVault: () => onOpenView({ id: 'vault-videos' }),
       openRadarCandidateCount,
       productionCandidateCount,
       productionFocusCount,
@@ -180,7 +185,7 @@ export const getCreatorHomeViewProps = ({
       storedVideoLoadPending,
       onOpenChannelWatchlist: () => onOpenView({ id: 'discovery-watchlist' }),
       onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
-      onOpenVault: () => onOpenView({ id: 'vault-all' }),
+      onOpenVault: () => onOpenView({ id: 'vault-videos' }),
       onOpenScrapbook: () => onOpenView({ id: 'studio-scrapbook' }),
       onOpenProductionCandidates: (intent) => onOpenView({
         id: 'studio-candidates',
@@ -188,6 +193,7 @@ export const getCreatorHomeViewProps = ({
       }),
     },
     radarSummaryProps: {
+      channelsLoading: Boolean(channelsLoading),
       savedChannelCount: channelList.length,
       loadedVideoCount: videoList.length,
       savedVideoCount: savedVideoList.length,
@@ -205,7 +211,7 @@ export const getCreatorHomeViewProps = ({
       onOpenProductionCandidates: () => onOpenView({ id: 'studio-candidates' }),
       onOpenSelectedScan: () => onOpenView({ id: 'ops-channels', intent: { operationStage: 'scan' } }),
       onOpenTtoTto: () => onOpenView({ id: 'discovery-ttotto' }),
-      onOpenVault: () => onOpenView({ id: 'vault-all' }),
+      onOpenVault: () => onOpenView({ id: 'vault-videos' }),
       savedChannels: channelList,
       selectedChannelIds: toArray(selectedChannelIds),
       selectedLoadedVideoCount,

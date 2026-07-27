@@ -40,7 +40,7 @@ export const LEGACY_ASIDE_COPY = {
     '채널 평균보다 반응이 컸던 영상',
     '지금 다시 써도 소재로 확장 가능한 영상',
   ],
-  ttoTtoTitle: '터또터 발굴 기준',
+  ttoTtoTitle: '또터또 발굴 기준',
 };
 
 export function getLegacyAsideProps(props = {}) {

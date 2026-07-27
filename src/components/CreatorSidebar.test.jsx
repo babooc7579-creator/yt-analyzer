@@ -14,13 +14,15 @@ describe('CreatorSidebar', () => {
     );
 
     expect(html).toContain('오늘의 레이더');
-    expect(html).toContain('터또터 탐색');
+    expect(html).toContain('또터또 탐색');
     expect(html).toContain('오늘 볼 채널');
     expect(html).toContain('발견 링크 저장');
     expect(html).toContain('제작 후보함');
     expect(html).toContain('채널 운영실');
     expect(html).toContain('최근 수집 상태');
     expect(html).toContain('업무 도구함');
+    expect(html).not.toContain('올인원 보관함');
+    expect(html).not.toContain('저장한 채널');
     expect(html).not.toContain('data-testid="creator-sidebar-item-ops-add-channel"');
     expect(html).not.toContain('data-testid="creator-sidebar-item-ops-selected-scan"');
     expect(html).toContain('향후 기능');

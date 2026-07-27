@@ -26,6 +26,21 @@ describe('homeNextAction utils', () => {
     expect(action.onAction).toBe(onOpenAddChannel);
   });
 
+  it('waits for the initial Cloud lookup before treating the channel list as empty', () => {
+    const action = getHomeNextAction({
+      channelsLoading: true,
+      savedChannelCount: 0,
+    });
+
+    expect(action).toMatchObject({
+      badge: 'Cloud DB 조회',
+      metric: '조회 중',
+      title: 'Cloud 채널 목록을 확인하고 있습니다',
+    });
+    expect(action.impactText).toContain('YouTube API 호출은 실행하지 않습니다');
+    expect(action.onAction).toBeUndefined();
+  });
+
   it('keeps channel selection clear that it does not call the YouTube API', () => {
     const onOpenChannelWatchlist = () => 'open channel watchlist';
 

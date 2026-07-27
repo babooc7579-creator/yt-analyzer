@@ -2,6 +2,7 @@ import HomeSummaryCard from './HomeSummaryCard';
 import { getHomeRadarStatsGridViewProps } from '../utils/creatorHomeViewProps';
 
 export default function HomeRadarStatsGrid({
+  channelsLoading,
   discoveryCandidateCount,
   discoveryRightsWarningCount,
   latestScanText,
@@ -13,6 +14,7 @@ export default function HomeRadarStatsGrid({
   ttoTtoAssetCount,
 }) {
   const viewProps = getHomeRadarStatsGridViewProps({
+    channelsLoading,
     discoveryCandidateCount,
     discoveryRightsWarningCount,
     latestScanText,

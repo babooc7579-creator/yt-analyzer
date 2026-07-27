@@ -65,9 +65,9 @@ export default function ChannelWatchlistHeader({
           type="button"
           onClick={onOpenTtoTto}
           className="inline-flex items-center gap-2 rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-xs font-extrabold text-amber-100 hover:bg-amber-500/20"
-          title="현재 앱에 불러온 영상에서 터또터 후보를 탐색하는 화면으로 이동합니다. 이동만으로 API 호출은 실행되지 않습니다."
+          title="현재 앱에 불러온 영상에서 또터또 후보를 탐색하는 화면으로 이동합니다. 이동만으로 API 호출은 실행되지 않습니다."
         >
-          <Rocket className="h-4 w-4" /> 터또터 탐색
+          <Rocket className="h-4 w-4" /> 또터또 탐색
         </button>
       </div>
     </header>

@@ -84,6 +84,21 @@ describe('HomeRadarChannelStage', () => {
     expect(html).toContain('새 채널 등록 화면으로 이동, 채널 저장 및 YouTube API 호출 없음');
   });
 
+  it('does not present an empty channel list while the initial Cloud lookup is pending', () => {
+    const html = renderToStaticMarkup(
+      <HomeRadarChannelStage
+        channelsLoading
+        savedChannels={[]}
+        selectedChannelIds={[]}
+      />,
+    );
+
+    expect(html).toContain('Cloud 채널 목록을 불러오는 중입니다');
+    expect(html).toContain('저장된 채널 조회이며 YouTube API는 호출하지 않습니다');
+    expect(html).not.toContain('먼저 소재를 찾을 채널이 필요합니다');
+    expect(html).not.toContain('첫 채널 등록하기');
+  });
+
   it('continues to candidate review after returning to radar with matching loaded videos', () => {
     const html = renderToStaticMarkup(
       <HomeRadarChannelStage

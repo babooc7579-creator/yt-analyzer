@@ -4,6 +4,7 @@ import {
   CHANNEL_CREATOR_VIEWS,
   CREATOR_OS_ITEMS,
   CREATOR_OS_PRODUCT_MAP,
+  LEGACY_REFERENCE_ITEMS,
   READY_CREATOR_VIEWS,
   SCRAPBOOK_CREATOR_VIEWS,
   getCreatorOsItem,
@@ -19,6 +20,16 @@ describe('creatorOs constants', () => {
     expect(CREATOR_OS_ITEMS.length).toBeGreaterThan(CREATOR_OS_PRODUCT_MAP.length);
     expect(itemsById.home.sectionTitle).toBe('디스커버리 탐색');
     expect(itemsById['ops-selected-scan'].sectionTitle).toBe('오퍼레이션 관제');
+  });
+
+  it('hides duplicate legacy vault menus while keeping old view ids compatible', () => {
+    const visibleIds = CREATOR_OS_PRODUCT_MAP.flatMap((section) => section.items.map((item) => item.id));
+
+    expect(visibleIds).not.toContain('vault-all');
+    expect(visibleIds).not.toContain('vault-channels');
+    expect(LEGACY_REFERENCE_ITEMS.map((item) => item.id)).toEqual(['vault-all', 'vault-channels']);
+    expect(itemsById['vault-all']).toBeDefined();
+    expect(itemsById['vault-channels']).toBeDefined();
   });
 
   it('keeps scrapbook storage separate from production candidate meaning', () => {

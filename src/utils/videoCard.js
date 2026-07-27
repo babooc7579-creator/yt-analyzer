@@ -27,7 +27,7 @@ export const getVideoCardCandidateReasonsViewProps = ({ candidateReasons }) => {
     isCandidate,
     reasonList,
     shouldShow: true,
-    title: isCandidate ? '후보 이유' : '비교 참고',
+    title: isCandidate ? '판단 신호' : '비교 참고',
   };
 };
 
@@ -109,8 +109,8 @@ export const getVideoCardStatsGridViewProps = ({
 };
 
 export const getVideoCardThumbnailBadgeItems = ({
-  isCandidate,
   isStrongReaction,
+  isTtoTto,
   rank,
 }) => [
   {
@@ -122,14 +122,16 @@ export const getVideoCardThumbnailBadgeItems = ({
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-rose-600 px-2.5 py-1 text-xs font-extrabold text-white shadow-sm',
     icon: 'candidate',
-    isVisible: isCandidate,
+    isVisible: isTtoTto,
     label: '또터또 후보',
+    title: '게시 후 180일 이상이고 채널 평균보다 1.5배 이상 반응한 저장 영상입니다.',
   },
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-bold text-orange-700',
     icon: 'strong',
     isVisible: isStrongReaction,
     label: '강한 반응',
+    title: '대박 지수가 3배 이상인 반응 신호입니다. 또터또 후보와는 별도 기준입니다.',
   },
 ];
 
@@ -151,7 +153,8 @@ export const getVideoCardViewProps = ({
 }) => {
   const videoTitle = video.title || '제목 없는 영상';
   const isStrongReactionVideo = hasStrongReaction(video);
-  const isCandidate = isStrongReactionVideo || isTtoTtoCandidate(video);
+  const isTtoTto = isTtoTtoCandidate(video);
+  const isCandidate = isStrongReactionVideo || isTtoTto;
   const thumbnailHeightClass = showWorkPanel ? 'h-[260px]' : 'h-[300px]';
   const videoUrl = getYouTubeVideoUrl(video.videoId);
   const candidateReasons = getVideoCardCandidateReasons({
@@ -164,9 +167,9 @@ export const getVideoCardViewProps = ({
     contentClassName: 'p-4',
     candidateReasons,
     thumbnailProps: {
-      isCandidate,
       isChecked,
       isStrongReaction: isStrongReactionVideo,
+      isTtoTto,
       onToggleCheck,
       rank,
       thumbnailHeightClass,

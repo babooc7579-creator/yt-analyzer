@@ -4,6 +4,7 @@ import { getYouTubeVideoUrl } from '../utils/urls';
 import YouTubeThumbnailImage from './YouTubeThumbnailImage';
 
 export default function UploadCalendarDayDetails({
+  focusedVideoId = '',
   items,
   onOpenProductionCandidate,
   onOpenProductionCandidates,
@@ -31,7 +32,12 @@ export default function UploadCalendarDayDetails({
       {items.length > 0 ? (
         <div className="mt-4 grid grid-cols-1 gap-2 lg:grid-cols-2">
           {items.map((item) => (
-            <article key={`${item.date}-${item.videoId}`} className="flex min-w-0 gap-3 border border-slate-800 bg-slate-900 p-3">
+            <article
+              key={`${item.date}-${item.videoId}`}
+              className={`flex min-w-0 gap-3 border bg-slate-900 p-3 ${
+                item.videoId === focusedVideoId ? 'border-amber-300 ring-1 ring-amber-300/30' : 'border-slate-800'
+              }`}
+            >
               {item.thumbnail ? (
                 <YouTubeThumbnailImage
                   src={item.thumbnail}
@@ -44,6 +50,7 @@ export default function UploadCalendarDayDetails({
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-[10px] font-bold text-slate-300">{item.statusLabel}</span>
+                  {item.videoId === focusedVideoId && <span className="bg-amber-300 px-1.5 py-0.5 text-[10px] font-black text-slate-950">이어서 작업</span>}
                   {!item.sourceLoaded && <span className="border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-200">영상 정보 미불러옴</span>}
                 </div>
                 <p className="mt-1.5 line-clamp-2 text-sm font-extrabold text-white">{item.title}</p>

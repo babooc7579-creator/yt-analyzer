@@ -4,6 +4,7 @@ import HomeRadarStatsGrid from './HomeRadarStatsGrid';
 import HomeRadarWorkflowSection from './HomeRadarWorkflowSection';
 
 export default function HomeRadarSummary({
+  channelsLoading,
   savedChannelCount,
   loadedVideoCount,
   savedVideoCount,
@@ -41,6 +42,7 @@ export default function HomeRadarSummary({
       <HomeNextActionPanel {...nextActionProps} />
 
       <HomeRadarWorkflowSection
+        channelsLoading={channelsLoading}
         discoveryCandidateCount={discoveryCandidateCount}
         discoveryRightsWarningCount={discoveryRightsWarningCount}
         loadedVideoCount={loadedVideoCount}
@@ -70,6 +72,7 @@ export default function HomeRadarSummary({
           오늘 현황 숫자 보기
         </summary>
         <HomeRadarStatsGrid
+          channelsLoading={channelsLoading}
           discoveryCandidateCount={discoveryCandidateCount}
           discoveryRightsWarningCount={discoveryRightsWarningCount}
           latestScanText={latestScanText}

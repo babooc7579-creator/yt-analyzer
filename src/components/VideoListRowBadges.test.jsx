@@ -11,7 +11,7 @@ describe('VideoListRowBadges', () => {
         isProductionCandidate
         isSaved
         isStrongReaction
-        isTtoTto={false}
+        isTtoTto
       />,
     );
 
