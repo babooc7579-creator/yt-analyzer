@@ -49,9 +49,12 @@ export const getVideoToolbarFiltersViewProps = ({
   },
 });
 
-export const getVideoToolbarSearchFieldViewProps = () => ({
+export const getVideoToolbarSearchFieldViewProps = ({ searchKeyword } = {}) => ({
   ariaLabel: '수집 영상 제목 검색',
+  clearAriaLabel: '수집 영상 검색어 지우기, 영상 선택 유지, API 호출 없음',
+  clearTitle: '검색어만 지웁니다. 영상 선택은 유지하며 Azure DB나 YouTube API를 호출하지 않습니다.',
   placeholder: '제목 검색...',
+  showClearButton: Boolean(searchKeyword),
   title: '불러온 수집 영상의 제목만 검색합니다. YouTube API를 새로 호출하지 않습니다.',
 });
 

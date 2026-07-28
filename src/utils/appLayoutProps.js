@@ -14,12 +14,18 @@ export const getSyncWarningRetryActions = ({
   videoRecordsSyncWarning && isFunction(retryVideoUserRecordsSync) ? {
     key: 'video-records',
     label: '영상 판단 기록 다시 확인',
+    pendingLabel: '영상 판단 기록 확인 중...',
+    successMessage: '영상 판단 기록을 온라인 저장소(Azure DB)에서 다시 확인했습니다.',
+    failureMessage: '영상 판단 기록을 아직 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     title: '온라인 저장소(Azure DB)의 영상 판단 기록을 다시 조회합니다. 기존 기록을 저장·삭제하거나 YouTube API를 호출하지 않습니다.',
     onClick: retryVideoUserRecordsSync,
   } : null,
   scrapbookSyncWarning && isFunction(retryScrapbookSync) ? {
     key: 'scrapbook',
     label: '소재 보관함 다시 확인',
+    pendingLabel: '소재 보관함 확인 중...',
+    successMessage: '소재 보관함을 온라인 저장소(Azure DB)에서 다시 확인했습니다.',
+    failureMessage: '소재 보관함을 아직 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     title: '온라인 저장소(Azure DB)의 소재 보관함을 다시 조회합니다. 보관 상태를 변경하거나 YouTube API를 호출하지 않습니다.',
     onClick: retryScrapbookSync,
   } : null,
