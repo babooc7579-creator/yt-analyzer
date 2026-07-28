@@ -27,7 +27,7 @@ describe('UploadCalendarWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('업로드 캘린더');
+    expect(html).toContain('업로드 일정 보기');
     expect(html).toContain('제작 후보함에서 일정 수정');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
     expect(html).toContain('대본 보드 열기');

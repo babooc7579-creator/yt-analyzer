@@ -9,7 +9,7 @@ describe('scrapbookHeaderProps utils', () => {
     expect(props).toMatchObject({
       iconName: 'bookmark',
       isProductionMode: false,
-      title: '소재 보관함',
+      title: '다시 볼 소재 모음',
     });
     expect(props.description).toContain('온라인 저장소(Azure DB) 기준');
     expect(props.description).toContain('브라우저 임시 기록');
@@ -21,7 +21,7 @@ describe('scrapbookHeaderProps utils', () => {
     expect(props).toMatchObject({
       iconName: 'rocket',
       isProductionMode: true,
-      title: '제작 후보함',
+      title: '오늘 만들 후보 정리',
     });
     expect(props.description).toContain('발견함 링크');
     expect(props.description).toContain('제작 후보로 표시한 영상');

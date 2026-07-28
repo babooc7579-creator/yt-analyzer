@@ -28,7 +28,7 @@ describe('ScriptBoardWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('대본 보드');
+    expect(html).toContain('제작 내용 작성');
     expect(html).toContain('기존 온라인 저장소(Azure DB)의 제작 기록');
     expect(html).toContain('새 YouTube API 호출은 없습니다');
     expect(html).toContain('내가 만들 제목');
@@ -36,6 +36,8 @@ describe('ScriptBoardWorkspace', () => {
     expect(html).toContain('첫 3초 훅');
     expect(html).toContain('업로드 캘린더 보기');
     expect(html).toContain('변경사항 저장');
+    expect(html).toContain('href="https://youtube.com/watch?v=v1"');
+    expect(html).toContain('원본 영상 제목 YouTube 원본 URL 복사');
   });
 
   it('renders a clear source action when no production candidate exists', () => {

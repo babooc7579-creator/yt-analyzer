@@ -29,7 +29,7 @@ describe('ChannelWatchlistNextStep', () => {
     );
 
     expect(html).toContain('조회는 정상 완료됐지만 수집된 영상 정보가 없습니다');
-    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('새 영상 수집 화면 열기');
     expect(html).toContain('화면 이동만으로 YouTube API를 호출하지 않습니다.');
   });
 

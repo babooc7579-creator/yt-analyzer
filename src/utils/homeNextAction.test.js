@@ -100,7 +100,7 @@ describe('homeNextAction utils', () => {
     expect(action.actionLabel).toBe('다른 채널 고르기');
     expect(action.onAction).toBe(onOpenChannelWatchlist);
     expect(action.secondaryActions).toEqual([expect.objectContaining({
-      label: '새 영상 수집 준비',
+      label: '새 영상 수집 화면 열기',
       onAction: onOpenSelectedScan,
     })]);
     expect(action.impactText).toContain('실제 수집 버튼을 누르기 전');

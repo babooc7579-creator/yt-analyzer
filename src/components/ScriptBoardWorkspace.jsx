@@ -111,7 +111,7 @@ export default function ScriptBoardWorkspace({
               <FilePenLine className="h-5 w-5" />
               <p className="text-xs font-extrabold">제작 스튜디오</p>
             </div>
-            <h2 className="mt-2 text-2xl font-black text-white">대본 보드</h2>
+            <h2 className="mt-2 text-2xl font-black text-white">제작 내용 작성</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
               제작 후보를 고르고 제목, 인트로·구성 메모, 업로드 예정일을 한 자리에서 정리합니다.
               기존 온라인 저장소(Azure DB)의 제작 기록을 사용하며 새 YouTube API 호출은 없습니다.

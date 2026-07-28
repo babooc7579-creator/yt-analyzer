@@ -4,6 +4,7 @@ import {
   getProductionVideoReadinessChecklist,
 } from '../utils/productionVideoCard';
 import { getProductionVideoDraftSaveButtonProps } from '../utils/productionVideoStatusProps';
+import { getYouTubeVideoUrl } from '../utils/urls';
 import ProductionVideoExternalActions from './ProductionVideoExternalActions';
 import ProductionVideoReadinessChecklist from './ProductionVideoReadinessChecklist';
 import ProductionVideoSaveStatus from './ProductionVideoSaveStatus';
@@ -21,6 +22,7 @@ export default function ScriptBoardEditor({
 
   const { groupStatus, record = {}, video = {} } = item;
   const videoId = video.videoId;
+  const videoUrl = getYouTubeVideoUrl(videoId);
   const videoTitle = video.title || '제목 없는 영상';
   const isSaving = saveState === 'saving';
   const saveButtonProps = getProductionVideoDraftSaveButtonProps({
@@ -58,6 +60,7 @@ export default function ScriptBoardEditor({
               record={record}
               video={video}
               videoTitle={videoTitle}
+              videoUrl={videoUrl}
             />
           </div>
         </div>

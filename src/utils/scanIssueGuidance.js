@@ -94,8 +94,8 @@ export const getScanIssueGuidance = (record = {}) => {
 };
 
 export const getScanRetryLabel = (status) => {
-  if (status === 'never') return '첫 새 영상 수집 준비';
-  if (status === 'failed') return '다시 새 영상 수집 준비';
-  if (status === 'partial') return '최신 영상 수집 준비';
-  return '새 영상 수집 준비';
+  if (status === 'never') return '첫 수집 화면 열기';
+  if (status === 'failed') return '다시 수집 화면 열기';
+  if (status === 'partial') return '최신 영상 수집 화면 열기';
+  return '이 채널 수집 화면 열기';
 };

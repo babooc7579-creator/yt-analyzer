@@ -37,7 +37,7 @@ export default function StoredVideoLoadFeedback({
           <p className="mt-1 text-xs leading-5 text-slate-300">
             {failed
               ? '연결 상태를 확인한 뒤 같은 자리에서 다시 시도하세요. 실패한 작업은 YouTube API를 호출하지 않았습니다.'
-              : '다른 채널을 고르거나 새 영상 수집 준비 화면으로 이동하세요. 화면 이동만으로 YouTube API를 호출하지 않습니다.'}
+              : '다른 채널을 고르거나 새 영상 수집 화면으로 이동하세요. 화면 이동만으로 YouTube API를 호출하지 않습니다.'}
           </p>
         </div>
       </div>
@@ -73,12 +73,12 @@ export default function StoredVideoLoadFeedback({
             {typeof onOpenSelectedScan === 'function' && (
               <button
                 type="button"
-                aria-label="선택 채널 새 영상 수집 준비 화면 열기"
+                aria-label="선택 채널 새 영상 수집 화면 열기"
                 onClick={onOpenSelectedScan}
                 className="inline-flex items-center gap-2 border border-amber-300/30 bg-amber-500/10 px-4 py-2.5 text-xs font-extrabold text-amber-100 hover:bg-amber-500/20"
-                title="새 영상 수집 준비 화면으로 이동합니다. 이동만으로 수집은 시작되지 않습니다."
+                title="새 영상 수집 화면으로 이동합니다. 이동만으로 수집은 시작되지 않습니다."
               >
-                <ScanSearch className="h-4 w-4" /> 새 영상 수집 준비
+                <ScanSearch className="h-4 w-4" /> 새 영상 수집 화면 열기
               </button>
             )}
           </>

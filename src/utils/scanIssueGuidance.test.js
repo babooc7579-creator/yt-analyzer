@@ -51,9 +51,9 @@ describe('scan issue guidance', () => {
   });
 
   it('uses distinct operator labels for each new-video collection state', () => {
-    expect(getScanRetryLabel('partial')).toBe('최신 영상 수집 준비');
-    expect(getScanRetryLabel('failed')).toBe('다시 새 영상 수집 준비');
-    expect(getScanRetryLabel('never')).toBe('첫 새 영상 수집 준비');
-    expect(getScanRetryLabel('success')).toBe('새 영상 수집 준비');
+    expect(getScanRetryLabel('failed')).toBe('다시 수집 화면 열기');
+    expect(getScanRetryLabel('never')).toBe('첫 수집 화면 열기');
+    expect(getScanRetryLabel('partial')).toBe('최신 영상 수집 화면 열기');
+    expect(getScanRetryLabel('success')).toBe('이 채널 수집 화면 열기');
   });
 });

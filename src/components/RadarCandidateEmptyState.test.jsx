@@ -65,7 +65,7 @@ describe('RadarCandidateEmptyState', () => {
 
     expect(html).toContain('조회는 정상적으로 끝났지만 수집된 영상 정보가 없습니다');
     expect(html).toContain('다른 채널 고르기');
-    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('새 영상 수집 화면 열기');
     expect(html).not.toContain('>수집 영상 목록 불러오기</button>');
   });
 

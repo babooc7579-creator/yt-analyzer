@@ -17,7 +17,7 @@ describe('TagVaultWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('태그별 금고');
+    expect(html).toContain('태그로 수집 영상 찾기');
     expect(html).toContain('태그 채널 선택');
     expect(html).toContain('상단의 수집 영상 목록 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
@@ -61,7 +61,7 @@ describe('TagVaultWorkspace', () => {
 
     expect(html).toContain('조회는 정상 완료됐지만 수집된 영상 정보가 없습니다');
     expect(html).toContain('다른 채널 고르기');
-    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('새 영상 수집 화면 열기');
     expect(html).toContain('이동만으로 YouTube API를 호출하지 않습니다');
   });
 

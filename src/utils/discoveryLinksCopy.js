@@ -88,7 +88,7 @@ export const getDiscoveryLinksHeaderActionsViewProps = ({
     'aria-label': '온라인 발견함(Azure DB) 목록 다시 조회, 외부 수집 없음',
     type: 'button',
   },
-  refreshButtonLabel: '새로고침',
+  refreshButtonLabel: '목록 다시 조회',
   isRefreshing: loading,
 });
 

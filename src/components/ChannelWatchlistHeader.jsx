@@ -14,7 +14,7 @@ export default function ChannelWatchlistHeader({
     <header className="flex flex-col gap-4 border-b border-slate-800 pb-5 xl:flex-row xl:items-end xl:justify-between">
       <div>
         <p className="text-xs font-extrabold text-cyan-200">오늘의 채널 점검</p>
-        <h2 className="mt-2 text-2xl font-black text-white">오늘 볼 채널</h2>
+        <h2 className="mt-2 text-2xl font-black text-white">오늘 확인할 채널 고르기</h2>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
           운영중 채널을 등급과 마지막 확인일로 정렬합니다. 채널을 고르는 것만으로 수집은 실행되지 않습니다.
         </p>
@@ -29,7 +29,7 @@ export default function ChannelWatchlistHeader({
           title="온라인 저장소(Azure DB)에서 채널 목록만 다시 조회합니다. YouTube API 호출은 없습니다."
         >
           <RefreshCw className={`h-4 w-4 ${channelsLoading ? 'animate-spin' : ''}`} />
-          {channelsLoading ? '채널 조회 중' : '채널 새로고침'}
+          {channelsLoading ? '채널 조회 중' : '채널 목록 다시 조회'}
         </button>
         <button
           type="button"
