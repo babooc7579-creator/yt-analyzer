@@ -246,9 +246,22 @@ describe('appLayoutProps utils', () => {
       },
       scrapbookTab: {
         ariaLabel: '영구 스크랩북 탭 열기, 보관 영상 7개, 탭 이동만으로 YouTube API 호출 없음',
+        countLabel: 7,
         label: '영구 스크랩북',
         title: '온라인 스크랩북(Azure DB) 보기 - 보관 영상 7개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
       },
+    });
+  });
+
+  it('labels the active production workspace as the production candidate box', () => {
+    expect(getWorkspaceTabsViewProps({
+      creatorView: 'studio-candidates',
+      savedVideoCount: 7,
+    }).scrapbookTab).toEqual({
+      ariaLabel: '제작 후보함 탭, 저장된 제작 후보 조회이며 YouTube API 호출 없음',
+      countLabel: null,
+      label: '제작 후보함',
+      title: '제작 후보로 표시한 영상과 발견 링크를 확인하는 화면입니다. 새 YouTube API 호출이나 외부 수집은 실행하지 않습니다.',
     });
   });
 });

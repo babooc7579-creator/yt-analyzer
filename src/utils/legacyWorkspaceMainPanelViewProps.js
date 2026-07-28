@@ -145,6 +145,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
     },
     workspaceTabsProps: {
       activeTab,
+      creatorView,
       onSelectTab: onSelectWorkspaceTab,
       savedVideoCount: savedVideoList.length,
     },

@@ -94,18 +94,30 @@ export const getCreatorWorkspaceHeaderStatCards = ({
   },
 ];
 
-export const getWorkspaceTabsViewProps = ({ savedVideoCount }) => ({
-  dashboardTab: {
-    ariaLabel: '수집 영상 목록 탭 열기, 탭 이동만으로 YouTube API 호출 없음',
-    label: '수집 영상 목록',
-    title: '현재 불러온 수집 영상 정보를 검색·필터·정렬하는 화면입니다. 탭 이동만으로 영상 조회나 YouTube API 호출을 실행하지 않습니다.',
-  },
-  scrapbookTab: {
-    ariaLabel: `영구 스크랩북 탭 열기, 보관 영상 ${savedVideoCount}개, 탭 이동만으로 YouTube API 호출 없음`,
-    label: '영구 스크랩북',
-    title: `온라인 스크랩북(Azure DB) 보기 - 보관 영상 ${savedVideoCount}개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.`,
-  },
-});
+export const getWorkspaceTabsViewProps = ({ creatorView, savedVideoCount }) => {
+  const isProductionView = creatorView === 'studio-candidates';
+
+  return {
+    dashboardTab: {
+      ariaLabel: '수집 영상 목록 탭 열기, 탭 이동만으로 YouTube API 호출 없음',
+      label: '수집 영상 목록',
+      title: '현재 불러온 수집 영상 정보를 검색·필터·정렬하는 화면입니다. 탭 이동만으로 영상 조회나 YouTube API 호출을 실행하지 않습니다.',
+    },
+    scrapbookTab: isProductionView
+      ? {
+        ariaLabel: '제작 후보함 탭, 저장된 제작 후보 조회이며 YouTube API 호출 없음',
+        countLabel: null,
+        label: '제작 후보함',
+        title: '제작 후보로 표시한 영상과 발견 링크를 확인하는 화면입니다. 새 YouTube API 호출이나 외부 수집은 실행하지 않습니다.',
+      }
+      : {
+        ariaLabel: `영구 스크랩북 탭 열기, 보관 영상 ${savedVideoCount}개, 탭 이동만으로 YouTube API 호출 없음`,
+        countLabel: savedVideoCount,
+        label: '영구 스크랩북',
+        title: `온라인 스크랩북(Azure DB) 보기 - 보관 영상 ${savedVideoCount}개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.`,
+      },
+  };
+};
 
 export function buildLayoutProps({
   activeCreatorItem,

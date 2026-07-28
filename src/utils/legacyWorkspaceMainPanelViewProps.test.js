@@ -55,12 +55,14 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
 
     const props = getLegacyWorkspaceMainPanelViewProps({
       activeTab: 'vault',
+      creatorView: 'studio-candidates',
       savedVideos: [{ videoId: 'saved1' }, { videoId: 'saved2' }],
       setActiveTab,
     });
 
     expect(props.workspaceTabsProps).toEqual({
       activeTab: 'vault',
+      creatorView: 'studio-candidates',
       onSelectTab: setActiveTab,
       savedVideoCount: 2,
     });
