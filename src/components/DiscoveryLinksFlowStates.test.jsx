@@ -16,7 +16,7 @@ describe('DiscoveryLinks flow states', () => {
     const html = renderToStaticMarkup(<DiscoveryLinksEmptyState />);
 
     expect(html).toContain('아직 저장된 발견 링크가 없습니다.');
-    expect(html).toContain('Cloud 발견함');
+    expect(html).toContain('온라인 발견함(Azure DB)');
     expect(html).toContain('URL 붙여넣기');
     expect(html).toContain('받은 링크, 확인 중, 보관, 제작 후보, 제외');
     expect(html).not.toContain('검토중, 저장');
@@ -29,7 +29,7 @@ describe('DiscoveryLinks flow states', () => {
     );
 
     expect(html).toContain('조건에 맞는 링크가 없습니다.');
-    expect(html).toContain('Cloud에는 링크 7개가 저장되어 있지만');
+    expect(html).toContain('온라인 저장소(Azure DB)에는 링크 7개가 저장되어 있지만');
     expect(html).toContain('저장 데이터나 외부 사이트에는 영향을 주지 않습니다');
     expect(html).toContain('aria-label="발견함 화면 필터 초기화, 저장 데이터 변경 없음"');
   });
@@ -51,20 +51,20 @@ describe('DiscoveryLinks flow states', () => {
     expect(html).toContain('새로고침');
     expect(html).toContain('외부 사이트 수집이나 저장 작업은 없습니다.');
     expect(html).toContain('새 YouTube API 호출이나 외부 수집은 없습니다.');
-    expect(html).toContain('Cloud 발견함 목록을 다시 조회합니다. 외부 사이트를 새로 수집하지 않습니다.');
+    expect(html).toContain('온라인 발견함(Azure DB) 목록을 다시 조회합니다. 외부 사이트를 새로 수집하지 않습니다.');
   });
 
   it('renders discovery link Cloud errors without implying localStorage merge', () => {
     const html = renderToStaticMarkup(
       <DiscoveryLinksNotices
-        error="Cloud 연결 실패"
+        error="온라인 저장소(Azure DB) 연결 실패"
         loading={false}
         onRefresh={noop}
       />,
     );
 
-    expect(html).toContain('Cloud 연결 실패');
-    expect(html).toContain('Cloud 발견함 재조회만 실행합니다');
+    expect(html).toContain('온라인 저장소(Azure DB) 연결 실패');
+    expect(html).toContain('온라인 발견함(Azure DB) 재조회만 실행합니다');
     expect(html).toContain('localStorage와 자동 병합');
     expect(html).toContain('링크를 자동 업로드하지 않습니다');
   });
@@ -118,10 +118,10 @@ describe('DiscoveryLinks flow states', () => {
       />,
     );
 
-    expect(successHtml).toContain('Cloud 발견함에 제작 후보로 표시했습니다');
+    expect(successHtml).toContain('온라인 발견함(Azure DB)에 제작 후보로 표시했습니다');
     expect(successHtml).toContain('권리 상태는 별도로 확인해야 합니다');
     expect(successHtml).toContain('후보함에서 이어서');
-    expect(errorHtml).toContain('Cloud 후보 표시를 완료하지 못했습니다');
+    expect(errorHtml).toContain('온라인 저장소(Azure DB) 후보 표시를 완료하지 못했습니다');
     expect(errorHtml).not.toContain('후보함에서 이어서');
   });
 

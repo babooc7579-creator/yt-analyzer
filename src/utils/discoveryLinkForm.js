@@ -71,7 +71,7 @@ export const getDiscoveryLinkEditFormViewProps = ({
     className: 'inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 text-xs font-extrabold text-white transition hover:bg-indigo-500 disabled:bg-slate-300',
     disabled: saving,
     onClick: onSave,
-    title: '제목과 메모를 Cloud 발견함에 저장',
+    title: '제목과 메모를 온라인 발견함(Azure DB)에 저장',
     'aria-label': `${title} 제목과 메모 저장`,
     type: 'button',
   },
@@ -185,7 +185,7 @@ export const needsRiskyDiscoveryCandidateConfirmation = (status, rightsStatus) =
 );
 
 export const confirmRiskyDiscoveryCandidate = () => window.confirm(
-  '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 표시하시겠어요?\n이 작업은 Cloud 발견함 상태만 바꾸며, 사용 허가나 권리 확인 완료를 의미하지 않습니다. 나중에 제작 후보함에서 강한 경고로 표시됩니다.'
+  '이 링크는 "사용 금지"로 표시되어 있습니다.\n\n그래도 제작 후보로 표시하시겠어요?\n이 작업은 온라인 발견함(Azure DB) 상태만 바꾸며, 사용 허가나 권리 확인 완료를 의미하지 않습니다. 나중에 제작 후보함에서 강한 경고로 표시됩니다.'
 );
 
 export const getInitialDiscoveryLinkForm = () => ({

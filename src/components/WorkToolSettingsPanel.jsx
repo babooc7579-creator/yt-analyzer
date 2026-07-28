@@ -145,7 +145,7 @@ export default function WorkToolSettingsPanel({
     const result = await onSave?.(draft);
     if (result?.success) {
       setDirty(false);
-      setNotice('업무 도구 설정을 Cloud에 저장했습니다.');
+      setNotice('업무 도구 설정을 온라인 저장소(Azure DB)에 저장했습니다.');
     }
     return result;
   };
@@ -164,7 +164,7 @@ export default function WorkToolSettingsPanel({
           <p className="text-xs font-extrabold text-cyan-300">업무 도구 관리</p>
           <h3 id="work-tool-settings-title" className="mt-1 text-lg font-black text-white">즐겨찾기 추가·숨김·순서 변경</h3>
           <p className="mt-2 max-w-3xl text-xs leading-5 text-slate-400">
-            저장한 설정은 Cloud 기준으로 모든 브라우저에 적용됩니다. 외부 사이트의 검색 데이터는 수집하지 않습니다.
+            저장한 설정은 온라인 저장소 기준으로 모든 브라우저에 적용됩니다. 외부 사이트의 검색 데이터는 수집하지 않습니다.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
@@ -172,7 +172,7 @@ export default function WorkToolSettingsPanel({
             type="button"
             onClick={onOpenWorkTools}
             disabled={dirty || saving || typeof onOpenWorkTools !== 'function'}
-            title={dirty ? '변경사항을 Cloud에 저장한 뒤 실제 업무 도구함에서 확인할 수 있습니다.' : '저장된 설정이 적용된 업무 도구함으로 이동합니다. 외부 사이트는 자동으로 열지 않습니다.'}
+            title={dirty ? '변경사항을 온라인 저장소(Azure DB)에 저장한 뒤 실제 업무 도구함에서 확인할 수 있습니다.' : '저장된 설정이 적용된 업무 도구함으로 이동합니다. 외부 사이트는 자동으로 열지 않습니다.'}
             className="inline-flex min-h-10 items-center justify-center gap-2 border border-blue-400/30 bg-blue-500/10 px-3 py-2 text-xs font-bold text-blue-100 hover:bg-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <LibraryBig className="h-3.5 w-3.5" />
@@ -194,14 +194,14 @@ export default function WorkToolSettingsPanel({
             className="inline-flex min-h-10 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Save className="h-3.5 w-3.5" />
-            {saving ? '온라인 저장소(Azure DB) 저장 중' : '변경사항 온라인 저장소(Azure DB) 저장'}
+            {saving ? '저장 중...' : '변경사항 저장'}
           </button>
         </div>
       </div>
 
       {loading && (
         <p role="status" className="mt-4 border border-blue-400/20 bg-blue-500/10 px-3 py-2 text-xs text-blue-100">
-          Cloud에서 업무 도구 설정을 불러오는 중입니다.
+          온라인 저장소(Azure DB)에서 업무 도구 설정을 불러오는 중입니다.
         </p>
       )}
       {error && (
@@ -215,7 +215,7 @@ export default function WorkToolSettingsPanel({
       {notice && <p role="status" className="mt-4 border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-100">{notice}</p>}
       {dirty && !notice && (
         <p role="status" className="mt-4 text-xs font-bold text-amber-200">
-          저장하지 않은 변경사항이 있습니다. 다른 메뉴로 이동하거나 화면을 닫기 전에 Cloud에 저장해 주세요.
+          저장하지 않은 변경사항이 있습니다. 다른 메뉴로 이동하거나 화면을 닫기 전에 온라인 저장소(Azure DB)에 저장해 주세요.
         </p>
       )}
 
@@ -373,7 +373,7 @@ export default function WorkToolSettingsPanel({
           <Plus className="h-3.5 w-3.5" />
           목록에 추가
         </button>
-        <p className="mt-2 text-[11px] leading-4 text-slate-500">목록에 추가한 뒤 상단의 ‘변경사항 온라인 저장소(Azure DB) 저장’을 눌러야 다른 기기에도 반영됩니다.</p>
+        <p className="mt-2 text-[11px] leading-4 text-slate-500">목록에 추가한 뒤 상단의 ‘변경사항 저장’을 눌러야 온라인 저장소(Azure DB)에 반영됩니다.</p>
       </form>
 
       {dirty && (
@@ -388,7 +388,7 @@ export default function WorkToolSettingsPanel({
             className="inline-flex min-h-10 w-full shrink-0 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/20 px-4 py-2 text-xs font-black text-cyan-50 hover:bg-cyan-500/30 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             <Save className="h-3.5 w-3.5" />
-            {saving ? '온라인 저장소(Azure DB) 저장 중' : '변경사항 Cloud에 저장'}
+            {saving ? '저장 중...' : '변경사항 저장'}
           </button>
         </div>
       )}

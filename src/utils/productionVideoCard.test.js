@@ -152,16 +152,16 @@ describe('productionVideoCard utils', () => {
     expect(getProductionVideoDraftFieldsViewProps({ videoTitle: 'Clip' })).toMatchObject({
       titleField: {
         label: '내가 만들 제목',
-        title: '입력만으로는 Cloud에 저장되지 않습니다. 아래 Cloud에 변경 저장 버튼을 눌러야 반영됩니다.',
+        title: '입력만으로는 온라인 저장소(Azure DB)에 저장되지 않습니다. 아래 ‘변경사항 저장’ 버튼을 눌러야 반영됩니다.',
         'aria-label': 'Clip 내가 만들 제목 입력',
       },
       noteField: {
         label: '메모',
-        title: '입력만으로는 Cloud에 저장되지 않습니다. 아래 Cloud에 변경 저장 버튼을 눌러야 반영됩니다.',
+        title: '입력만으로는 온라인 저장소(Azure DB)에 저장되지 않습니다. 아래 ‘변경사항 저장’ 버튼을 눌러야 반영됩니다.',
       },
       publishDateField: {
         label: '업로드 예정일',
-        title: '입력만으로는 Cloud에 저장되지 않습니다. 아래 Cloud에 변경 저장 버튼을 눌러야 반영됩니다.',
+        title: '입력만으로는 온라인 저장소(Azure DB)에 저장되지 않습니다. 아래 ‘변경사항 저장’ 버튼을 눌러야 반영됩니다.',
       },
     });
 

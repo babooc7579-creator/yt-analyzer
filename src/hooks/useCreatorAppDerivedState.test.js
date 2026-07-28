@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('./useAppSyncWarnings', () => ({
-  useAppSyncWarnings: vi.fn(() => ['Cloud 연결 실패로 임시 기록 표시 중']),
+  useAppSyncWarnings: vi.fn(() => ['온라인 저장소(Azure DB) 연결 실패로 임시 기록 표시 중']),
 }));
 
 vi.mock('./useCreatorOsMetrics', () => ({
@@ -26,9 +26,9 @@ describe('useCreatorAppDerivedState', () => {
       discoveryLinks: [{ id: 'link-1' }],
       savedChannels: [{ id: 'channel-1' }],
       savedVideos: [{ videoId: 'video-1' }],
-      scrapbookSyncWarning: '스크랩북 Cloud 연결 실패',
+      scrapbookSyncWarning: '스크랩북 온라인 저장소(Azure DB) 연결 실패',
       selectedChannelIds: ['channel-1'],
-      videoRecordsSyncWarning: '판단 기록 Cloud 연결 실패',
+      videoRecordsSyncWarning: '판단 기록 온라인 저장소(Azure DB) 연결 실패',
       videoUserRecords: { 'video-1': { statusIds: ['production_candidate'] } },
       videos: [{ videoId: 'video-1' }],
     };
@@ -51,7 +51,7 @@ describe('useCreatorAppDerivedState', () => {
     expect(derivedState).toEqual({
       candidateCount: 3,
       savedVideoCount: 2,
-      syncWarnings: ['Cloud 연결 실패로 임시 기록 표시 중'],
+      syncWarnings: ['온라인 저장소(Azure DB) 연결 실패로 임시 기록 표시 중'],
     });
   });
 });

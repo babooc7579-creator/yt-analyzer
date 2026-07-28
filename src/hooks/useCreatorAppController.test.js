@@ -18,8 +18,8 @@ const controllerMocks = vi.hoisted(() => {
 
   const videoWorkflow = {
     savedVideos: [{ videoId: 'video-1' }],
-    scrapbookSyncWarning: '스크랩북 Cloud 연결 실패',
-    videoRecordsSyncWarning: '판단 기록 Cloud 연결 실패',
+    scrapbookSyncWarning: '스크랩북 온라인 저장소(Azure DB) 연결 실패',
+    videoRecordsSyncWarning: '판단 기록 온라인 저장소(Azure DB) 연결 실패',
     videoUserRecords: {
       'video-1': { statusIds: ['production_candidate'] },
     },
@@ -36,7 +36,7 @@ const controllerMocks = vi.hoisted(() => {
   };
 
   const derivedState = {
-    syncWarnings: ['Cloud 연결 실패로 임시 기록 표시 중'],
+    syncWarnings: ['온라인 저장소(Azure DB) 연결 실패로 임시 기록 표시 중'],
     todayCandidateCount: 1,
   };
 

@@ -39,7 +39,7 @@ describe('discoveryLinks utils', () => {
   };
 
   it('keeps destructive discovery link confirmation copy explicit', () => {
-    expect(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE).toContain('Cloud 발견함에서 삭제');
+    expect(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE).toContain('온라인 발견함(Azure DB)에서 삭제');
     expect(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE).toContain('외부 링크 자체는 삭제되지 않습니다');
     expect(DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE).toContain('Creator OS 안의 발견함 기록만 삭제');
   });

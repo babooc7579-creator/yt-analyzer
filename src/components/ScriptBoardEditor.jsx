@@ -73,7 +73,7 @@ export default function ScriptBoardEditor({
               onChange={(event) => onUpdateDraft(videoId, { draftTitle: event.target.value })}
               placeholder="내 채널에 맞게 바꿀 제목 초안"
               className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-3 text-sm font-bold text-white outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-              title="입력만으로는 저장되지 않습니다. 아래 Cloud에 변경 저장 버튼을 눌러야 반영됩니다."
+              title="입력만으로는 온라인 저장소(Azure DB)에 저장되지 않습니다. 아래 ‘변경사항 저장’ 버튼을 눌러야 반영됩니다."
               aria-label={`${videoTitle} 내가 만들 제목 입력`}
             />
           </label>
@@ -86,7 +86,7 @@ export default function ScriptBoardEditor({
               placeholder={'첫 3초 훅\n장면 순서와 핵심 내용\n내 영상에서 바꿀 포인트'}
               rows={12}
               className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-3 text-sm leading-6 text-slate-100 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-              title="현재 단계에서는 기존 Cloud 제작 메모 필드에 저장합니다. 구조화된 전체 대본 모델을 새로 만들지는 않습니다."
+              title="현재 단계에서는 온라인 저장소(Azure DB)의 기존 제작 메모 항목에 저장합니다. 구조화된 전체 대본 모델을 새로 만들지는 않습니다."
               aria-label={`${videoTitle} 인트로 구성 대본 초안 입력`}
             />
           </label>
@@ -99,7 +99,7 @@ export default function ScriptBoardEditor({
                 value={record.targetPublishDate || ''}
                 onChange={(event) => onUpdateDraft(videoId, { targetPublishDate: event.target.value })}
                 className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-3 text-sm font-bold text-white outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-                title="저장 후 업로드 캘린더에도 같은 Cloud 날짜가 표시됩니다."
+                title="저장 후 업로드 캘린더에도 온라인 저장소(Azure DB)의 같은 날짜가 표시됩니다."
                 aria-label={`${videoTitle} 업로드 예정일 선택`}
               />
             </label>
@@ -139,7 +139,7 @@ export default function ScriptBoardEditor({
         <aside className="min-w-0">
           <ProductionVideoReadinessChecklist {...readiness} />
           <div className="mt-3 border border-slate-700 bg-slate-900/70 p-3 text-xs leading-5 text-slate-400">
-            이 화면은 제작 후보함과 같은 Cloud 기록을 편집합니다. 저장 버튼을 누르기 전 입력은 브라우저에만 머물며,
+            이 화면은 제작 후보함과 같은 온라인 저장소(Azure DB)의 기록을 편집합니다. 저장 버튼을 누르기 전 입력은 브라우저에만 머물며,
             YouTube API는 호출하지 않습니다.
           </div>
         </aside>

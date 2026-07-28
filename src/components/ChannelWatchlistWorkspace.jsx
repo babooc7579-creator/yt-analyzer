@@ -138,7 +138,7 @@ export default function ChannelWatchlistWorkspace({
       </div>
 
       {channelsLoading && (!Array.isArray(channels) || channels.length === 0) ? (
-        <p role="status" className="py-12 text-center text-sm font-bold text-slate-400">Cloud 채널 목록을 불러오는 중입니다.</p>
+        <p role="status" className="py-12 text-center text-sm font-bold text-slate-400">온라인 저장소(Azure DB)의 채널 목록을 불러오는 중입니다.</p>
       ) : filteredChannels.length > 0 ? (
         <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2 2xl:grid-cols-3">
           {visibleChannels.map((channel) => (

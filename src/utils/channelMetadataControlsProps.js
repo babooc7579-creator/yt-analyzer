@@ -40,7 +40,7 @@ export const getChannelMetadataControlsViewProps = ({
     className: SELECT_CLASS_NAME,
     disabled: isUpdating,
     onChange: (event) => onUpdateMetadata(channel, { status: event.target.value }),
-    title: '채널 상태 변경 - 활성 채널만 새 영상 수집 대상이며 변경 내용은 Cloud에 저장됩니다',
+    title: '채널 상태 변경 - 활성 채널만 새 영상 수집 대상이며 변경 내용은 온라인 저장소(Azure DB)에 저장됩니다',
     value: status,
   },
   statusOptions: CHANNEL_STATUS_OPTIONS,

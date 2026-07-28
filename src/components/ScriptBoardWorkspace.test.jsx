@@ -29,13 +29,13 @@ describe('ScriptBoardWorkspace', () => {
     );
 
     expect(html).toContain('대본 보드');
-    expect(html).toContain('기존 Cloud 제작 기록');
+    expect(html).toContain('기존 온라인 저장소(Azure DB)의 제작 기록');
     expect(html).toContain('새 YouTube API 호출은 없습니다');
     expect(html).toContain('내가 만들 제목');
     expect(html).toContain('인트로 · 구성 · 대본 초안');
     expect(html).toContain('첫 3초 훅');
     expect(html).toContain('업로드 캘린더 보기');
-    expect(html).toContain('Cloud에 변경 저장');
+    expect(html).toContain('변경사항 저장');
   });
 
   it('renders a clear source action when no production candidate exists', () => {

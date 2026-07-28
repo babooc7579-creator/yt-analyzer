@@ -114,7 +114,7 @@ describe('channelListProps utils', () => {
       selectedCategory: '해외',
       totalChannelCount: 0,
     })).toEqual({
-      description: '먼저 위에서 채널을 미리보기한 뒤 Cloud 채널 목록에 저장해 주세요. 채널 저장만으로 새 영상 수집은 실행되지 않습니다.',
+      description: '먼저 위에서 채널을 미리보기한 뒤 온라인 저장소(Azure DB)의 채널 목록에 저장해 주세요. 채널 저장만으로 새 영상 수집은 실행되지 않습니다.',
       hasChannelsInOtherTags: false,
       title: '저장된 채널이 없습니다.',
     });
@@ -162,7 +162,7 @@ describe('channelListProps utils', () => {
 
   it('builds loading state copy for Cloud channel lookup', () => {
     expect(getChannelListLoadingStateViewProps()).toEqual({
-      label: 'Cloud 채널 목록을 불러오는 중입니다. 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
+      label: '온라인 저장소(Azure DB)의 채널 목록을 불러오는 중입니다. 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
     });
   });
 });

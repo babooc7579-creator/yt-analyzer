@@ -16,9 +16,9 @@ describe('ProductionDiscoveryLinkMoveActions', () => {
 
     expect(html).toContain('발견함으로 되돌리기');
     expect(html).toContain('후보 제외');
-    expect(html).toContain('제작 후보 표시만 해제하고 Cloud 발견함 상태를 받은 링크로 저장합니다. 링크 기록은 삭제되지 않습니다.');
-    expect(html).toContain('링크 기록을 삭제하지 않고 Cloud 발견함의 후보 제외 상태로 저장합니다.');
-    expect(html).toContain('aria-label="좋은 참고 링크 링크 삭제 없이 Cloud 발견함 후보 제외 상태로 저장"');
+    expect(html).toContain('제작 후보 표시만 해제하고 온라인 발견함(Azure DB) 상태를 받은 링크로 저장합니다. 링크 기록은 삭제되지 않습니다.');
+    expect(html).toContain('링크 기록을 삭제하지 않고 온라인 발견함(Azure DB)의 후보 제외 상태로 저장합니다.');
+    expect(html).toContain('aria-label="좋은 참고 링크 링크 삭제 없이 온라인 발견함(Azure DB) 후보 제외 상태로 저장"');
     expect(html).not.toContain('disabled=""');
   });
 
@@ -45,7 +45,7 @@ describe('ProductionDiscoveryLinkMoveActions', () => {
       />,
     );
 
-    expect(html).toContain('임시 링크 제작 후보 표시를 해제하고 Cloud 발견함 받은 링크 상태로 저장');
+    expect(html).toContain('임시 링크 제작 후보 표시를 해제하고 온라인 발견함(Azure DB) 받은 링크 상태로 저장');
     expect(html.match(/disabled=""/g)).toHaveLength(2);
   });
 });

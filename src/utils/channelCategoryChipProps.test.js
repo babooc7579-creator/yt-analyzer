@@ -20,7 +20,7 @@ describe('channelCategoryChipProps utils', () => {
     const props = createProps({ hideCategoryFromLocalList });
 
     expect(props.hideButtonProps).toMatchObject({
-      title: '화면 목록에서만 숨깁니다. 이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다.',
+      title: '화면 목록에서만 숨깁니다. 이미 채널에 붙은 온라인 저장소(Azure DB)의 채널 태그는 삭제되지 않습니다.',
       'aria-label': '해외 카테고리를 화면 목록에서만 숨기기',
       type: 'button',
     });
@@ -41,12 +41,12 @@ describe('channelCategoryChipProps utils', () => {
       startRenameCategory,
     });
 
-    expect(props.startRenameButtonProps.title).toBe('Cloud 태그 이름 변경 - 이 태그가 붙은 모든 채널에 일괄 반영됩니다');
-    expect(props.startRenameButtonProps['aria-label']).toBe('해외 Cloud 태그 이름 변경');
+    expect(props.startRenameButtonProps.title).toBe('온라인 저장소(Azure DB)의 채널 태그 이름 변경 - 이 태그가 붙은 모든 채널에 일괄 반영됩니다');
+    expect(props.startRenameButtonProps['aria-label']).toBe('해외 온라인 저장소(Azure DB)의 채널 태그 이름 변경');
     expect(props.confirmButtonProps).toMatchObject({
       disabled: true,
-      title: 'Cloud 태그 이름 변경 저장',
-      'aria-label': '해외 Cloud 태그 이름 변경 저장',
+      title: '온라인 저장소(Azure DB)의 채널 태그 이름 변경 저장',
+      'aria-label': '해외 온라인 저장소(Azure DB)의 채널 태그 이름 변경 저장',
       type: 'button',
     });
     expect(props.cancelButtonProps).toMatchObject({
@@ -77,8 +77,8 @@ describe('channelCategoryChipProps utils', () => {
 
     expect(props.renameInputProps).toMatchObject({
       autoFocus: true,
-      title: '변경할 Cloud 태그 이름 입력',
-      'aria-label': '해외 Cloud 태그 새 이름',
+      title: '변경할 온라인 저장소(Azure DB)의 채널 태그 이름 입력',
+      'aria-label': '해외 온라인 저장소(Azure DB)의 채널 태그 새 이름',
       type: 'text',
       value: '새 해외',
     });

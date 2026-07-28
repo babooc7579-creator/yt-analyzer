@@ -54,7 +54,7 @@ describe('channel operations utils', () => {
     expect(journey.title).toBe('채널 1개 선택 완료');
     expect(journey.primaryAction.id).toBe('load-stored');
     expect(journey.secondaryAction.id).toBe('open-scan');
-    expect(journey.description).toContain('Cloud 영상을 먼저 조회');
+    expect(journey.description).toContain('온라인 저장소(Azure DB)에 있는 기존 수집 영상 정보를 먼저 조회');
     expect(journey.description).toContain('YouTube API 수집');
   });
 

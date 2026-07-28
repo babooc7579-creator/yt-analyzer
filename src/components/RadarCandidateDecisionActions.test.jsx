@@ -41,7 +41,7 @@ describe('RadarCandidateDecisionActions', () => {
       />,
     );
 
-    expect(html).toContain('스크랩북 보관과 제작 후보 표시를 Cloud에 저장하는 중입니다');
+    expect(html).toContain('스크랩북 보관과 제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중입니다');
     expect(html.match(/disabled=""/g)).toHaveLength(5);
   });
 });

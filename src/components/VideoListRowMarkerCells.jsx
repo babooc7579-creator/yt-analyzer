@@ -51,7 +51,7 @@ export default function VideoListRowMarkerCells({
           type="button"
           onClick={onToggleScrap}
           disabled={scrapDisabled}
-          title={scrapDisabled ? '보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.' : scrapTitle}
+          title={scrapDisabled ? '보관할 영상 ID가 없어 온라인 스크랩북(Azure DB) 저장을 실행하지 않습니다.' : scrapTitle}
           aria-label={scrapAriaLabel}
           className="p-2 rounded-full hover:bg-yellow-100 transition-colors disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
         >

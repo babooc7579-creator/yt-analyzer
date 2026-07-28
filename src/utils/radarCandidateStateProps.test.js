@@ -16,7 +16,7 @@ describe('radarCandidateStateProps utils', () => {
     const props = getRadarCandidateCompletedStateViewProps();
 
     expect(props.titleText).toBe('오늘 볼 후보를 모두 처리했습니다');
-    expect(props.descriptionText).toContain('Cloud 판단 기록');
+    expect(props.descriptionText).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(props.descriptionText).toContain('오늘의 레이더에서 숨겨집니다');
     expect(props.descriptionText).toContain('제작 후보함');
     expect(props.openVaultButtonProps).toMatchObject({
@@ -28,7 +28,7 @@ describe('radarCandidateStateProps utils', () => {
       title: '제작 후보로 표시한 영상과 발견함 링크를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
     });
     expect(props.openProductionButtonProps['aria-label']).toContain('YouTube API 호출 없음');
-    expect(props.clearDecisionsButtonProps['aria-label']).toContain('Cloud에 저장된');
+    expect(props.clearDecisionsButtonProps['aria-label']).toContain('온라인 저장소(Azure DB)에 저장된');
   });
 
   it('describes the empty radar state as stored-video lookup guidance', () => {
@@ -59,7 +59,7 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(props.label).toBe('제작 후보로');
-    expect(props.title).toContain('Cloud 판단 기록');
+    expect(props.title).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(props.title).toContain('제작 후보로 표시');
     expect(props.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props['aria-label']).toContain('Radar clip');
@@ -80,18 +80,18 @@ describe('radarCandidateStateProps utils', () => {
       videoTitle: 'Radar clip',
     });
 
-    expect(decisionProps.descriptionText).toContain('Cloud 판단 기록');
+    expect(decisionProps.descriptionText).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(decisionProps.descriptionText).toContain('만들 만하면 제작 후보로');
     expect(decisionProps.descriptionText).toContain('다음 후보가 자동으로 이어집니다');
     expect(decisionProps.descriptionText).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(saveProps).toMatchObject({
       buttonText: '소재 보관',
-      title: 'Cloud 스크랩북에 소재로 보관합니다',
+      title: '온라인 스크랩북(Azure DB)에 소재로 보관합니다',
     });
     expect(saveProps['aria-label']).toContain('Radar clip');
     expect(unsaveProps).toMatchObject({
       buttonText: '보관 해제',
-      title: 'Cloud 스크랩북에서 보관을 해제합니다',
+      title: '온라인 스크랩북(Azure DB)에서 보관을 해제합니다',
     });
     expect(getRadarCandidateScrapButtonProps()['aria-label']).toContain('이 영상');
   });
@@ -114,8 +114,8 @@ describe('radarCandidateStateProps utils', () => {
       video: { videoId: 'video-1' },
     });
 
-    expect(productionPending.pendingText).toContain('제작 후보 표시를 Cloud에 저장하는 중');
-    expect(statusPending.pendingText).toContain('영상 판단 기록을 Cloud에 저장하는 중');
+    expect(productionPending.pendingText).toContain('제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중');
+    expect(statusPending.pendingText).toContain('영상 판단 기록을 온라인 저장소(Azure DB)에 저장하는 중');
     expect(getRadarCandidateDecisionActionsViewProps().pendingText).toBe('');
     expect(promotionProps.disabled).toBe(true);
     expect(scrapbookProps.disabled).toBe(true);
@@ -151,7 +151,7 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(missingIdProps.disabled).toBe(true);
-    expect(missingIdProps.title).toBe('제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+    expect(missingIdProps.title).toBe('제작 후보로 표시할 영상 ID가 없어 온라인 저장소(Azure DB)의 판단 기록 저장을 실행하지 않습니다.');
     expect(missingHandlerProps.disabled).toBe(true);
 
     missingIdProps.onClick();
@@ -182,7 +182,7 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(missingIdProps.disabled).toBe(true);
-    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.');
+    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 온라인 스크랩북(Azure DB) 저장을 실행하지 않습니다.');
     expect(missingHandlerProps.disabled).toBe(true);
 
     missingIdProps.onClick();

@@ -1,6 +1,6 @@
 export const COMMENT_API_BUTTON_LABEL = '댓글 Top 10(API)';
 
-export const COMMENT_API_BUTTON_TITLE = '댓글 Top 10 보기 - 버튼을 누를 때만 YouTube API로 댓글을 조회합니다. 수집 영상 목록 불러오기와 다른 작업이며, 조회 결과를 Cloud에 저장하지 않습니다.';
+export const COMMENT_API_BUTTON_TITLE = '댓글 Top 10 보기 - 버튼을 누를 때만 YouTube API로 댓글을 조회합니다. 수집 영상 목록 불러오기와 다른 작업이며, 조회 결과를 온라인 저장소(Azure DB)에 저장하지 않습니다.';
 
 const toVideoObject = (video) => (
   video && typeof video === 'object' ? video : {}

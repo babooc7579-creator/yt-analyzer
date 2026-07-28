@@ -32,8 +32,8 @@ describe('SettingsWorkspace', () => {
 
     expect(html).toContain('data-testid="creator-route-settings"');
     expect(html).toContain('분야 목록 추가·숨김·이름 변경');
-    expect(html).toContain('Cloud 채널 10개');
-    expect(html).toContain('레이더의 분야 필터는 실제 Cloud 채널에 붙은 태그를 자동 집계합니다');
+    expect(html).toContain('온라인 저장소(Azure DB)의 채널 10개');
+    expect(html).toContain('레이더의 분야 필터는 실제 온라인 저장소(Azure DB)의 채널에 붙은 태그를 자동 집계합니다');
     expect(html).toContain('화면 분야 목록은 브라우저 설정입니다');
     expect(html).toContain('수집 영상 목록 불러오기');
     expect(html).toContain('YouTube API 호출 없음');
@@ -45,11 +45,11 @@ describe('SettingsWorkspace', () => {
     expect(html).toContain('현재 영상 판단 기록과 스크랩북 동기화 경고가 없습니다');
     expect(html).toContain('현재 화면에서 보고된 오류가 없습니다');
     expect(html).toContain('GitHub Actions에서 배포 상태 확인');
-    expect(html).toContain('Cloud 채널 다시 불러오기');
+    expect(html).toContain('온라인 저장소(Azure DB)의 채널 다시 불러오기');
     expect(html).toContain('숨긴 분야 다시 표시');
     expect(html).toContain('이 브라우저의 화면 목록에만 복원합니다');
     expect(html).toContain('즐겨찾기 추가·숨김·순서 변경');
-    expect(html).toContain('변경사항 온라인 저장소(Azure DB) 저장');
+    expect(html).toContain('변경사항 저장');
     expect(html).toContain('업무 도구함에서 확인');
   });
 
@@ -62,11 +62,11 @@ describe('SettingsWorkspace', () => {
         diagnostics={{
           apiKeyConfigured: true,
           errorGuidance: {
-            title: 'Cloud API가 요청을 처리하지 못했습니다',
+            title: '온라인 저장 API(Azure)가 요청을 처리하지 못했습니다',
             description: '잠시 뒤 다시 시도하세요.',
           },
           runtimeError: '수집 영상 요청 실패',
-          syncWarnings: ['Cloud 연결 실패로 임시 기록 표시 중'],
+          syncWarnings: ['온라인 저장소(Azure DB) 연결 실패로 임시 기록 표시 중'],
         }}
         functionApiBase="/api"
         onChangeApiKey={vi.fn()}
@@ -77,12 +77,12 @@ describe('SettingsWorkspace', () => {
     );
 
     expect(html).toContain('입력됨');
-    expect(html).toContain('Cloud 연결 실패로 임시 기록 표시 중');
+    expect(html).toContain('온라인 저장소(Azure DB) 연결 실패로 임시 기록 표시 중');
     expect(html).toContain('수집 영상 요청 실패');
     expect(html).toContain('type="password"');
     expect(html).toContain('새로고침하면 사라지며 온라인 저장소(Azure DB), localStorage, 저장소에 저장하지 않습니다');
-    expect(html).toContain('Cloud API가 요청을 처리하지 못했습니다');
-    expect(html).toContain('Cloud 채널 조회 중');
+    expect(html).toContain('온라인 저장 API(Azure)가 요청을 처리하지 못했습니다');
+    expect(html).toContain('온라인 저장소(Azure DB)의 채널 조회 중');
     expect(html).toContain('w-full');
   });
 });

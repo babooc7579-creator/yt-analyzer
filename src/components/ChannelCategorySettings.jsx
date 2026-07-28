@@ -71,7 +71,7 @@ export default function ChannelCategorySettings({
       {restorableCategories.length > 0 && (
         <div className="mt-3 border-t border-slate-200 pt-3">
           <p className="text-[10px] font-bold text-slate-600">숨긴 분야 다시 표시</p>
-          <p className="mt-1 text-[10px] leading-4 text-slate-500">이 브라우저의 화면 목록에만 복원합니다. Cloud 채널 태그나 수집 영상은 변경하지 않습니다.</p>
+          <p className="mt-1 text-[10px] leading-4 text-slate-500">이 브라우저의 화면 목록에만 복원합니다. 온라인 저장소(Azure DB)의 채널 태그나 수집 영상은 변경하지 않습니다.</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {restorableCategories.map((category) => (
               <button

@@ -103,7 +103,7 @@ describe('productionKanbanProps utils', () => {
       onClick: onOpenUploadCalendar,
       variant: 'amber',
     });
-    expect(actions[2].title).toContain('Cloud에 저장된 목표 날짜');
+    expect(actions[2].title).toContain('온라인 저장소(Azure DB)에 저장된 목표 날짜');
     expect(actions[2].title).toContain('YouTube API를 호출하지 않습니다');
     expect(actions[3]).toMatchObject({
       label: '발견함 링크 정리',

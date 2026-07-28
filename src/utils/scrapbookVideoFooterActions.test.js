@@ -32,7 +32,7 @@ describe('scrapbookVideoFooterActions utils', () => {
     expect(viewProps.commentsButtonProps.title).toContain('YouTube API');
     expect(viewProps.productionButtonText).toBe('제작 후보로');
     expect(viewProps.productionButtonProps.disabled).toBe(false);
-    expect(viewProps.productionButtonProps.title).toContain('Cloud 판단 기록');
+    expect(viewProps.productionButtonProps.title).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(viewProps.productionButtonProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(viewProps.removeButtonProps.title).toContain('보관 표시만 해제');
     expect(viewProps.removeButtonProps['aria-label']).toContain('수집 영상 정보는 삭제하지 않음');
@@ -76,7 +76,7 @@ describe('scrapbookVideoFooterActions utils', () => {
 
     expect(viewProps.productionButtonText).toBe('후보 표시됨');
     expect(viewProps.productionButtonProps.disabled).toBe(true);
-    expect(viewProps.productionButtonProps.title).toContain('이미 Cloud 판단 기록');
+    expect(viewProps.productionButtonProps.title).toContain('이미 온라인 저장소(Azure DB)의 판단 기록');
     expect(viewProps.productionButtonProps.onClick).toBeUndefined();
   });
 
@@ -91,7 +91,7 @@ describe('scrapbookVideoFooterActions utils', () => {
 
     expect(viewProps.productionButtonText).toBe('온라인 저장소(Azure DB) 저장 중');
     expect(viewProps.productionButtonProps.disabled).toBe(true);
-    expect(viewProps.productionButtonProps['aria-label']).toContain('Cloud에 저장하는 중');
+    expect(viewProps.productionButtonProps['aria-label']).toContain('온라인 저장소(Azure DB)에 저장하는 중');
     expect(viewProps.productionButtonProps.title).toContain('완료될 때까지');
     expect(viewProps.productionButtonProps.onClick).toBeUndefined();
   });
@@ -109,7 +109,7 @@ describe('scrapbookVideoFooterActions utils', () => {
       actionLabel: '후보함에서 이어서',
       tone: 'success',
     });
-    expect(savedFeedback.message).toContain('Cloud 제작 후보로 저장했습니다');
+    expect(savedFeedback.message).toContain('온라인 저장소(Azure DB)의 제작 후보로 표시했습니다');
     expect(savedFeedback.actionTitle).toContain('YouTube API를 호출하지 않습니다');
 
     savedFeedback.onAction();
@@ -119,7 +119,7 @@ describe('scrapbookVideoFooterActions utils', () => {
       productionResult: 'error',
       video,
     })).toEqual({
-      message: 'Cloud 제작 후보 저장에 실패했습니다. 제작 후보로 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+      message: '온라인 저장소(Azure DB)의 제작 후보 표시를 저장하지 못했습니다. 제작 후보로 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
       tone: 'danger',
     });
     expect(getScrapbookProductionFeedbackViewProps({ video })).toBeNull();

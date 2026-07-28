@@ -47,7 +47,7 @@ describe('ProductionVideoCard workflow', () => {
     expect(html).toContain('작업 준비 완료');
     expect(html).toContain('저장 전');
     expect(html).toContain('온라인 저장소(Azure DB) 저장 · API 호출 없음');
-    expect(html).toContain('오늘 집중과 제작 상태 변경은 Cloud 판단 기록에 저장합니다.');
+    expect(html).toContain('오늘 집중과 제작 상태 변경은 온라인 저장소(Azure DB)의 판단 기록에 저장합니다.');
   });
 
   it('opens the same YouTube source from both the thumbnail and title', () => {

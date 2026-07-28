@@ -96,7 +96,7 @@ export function RecentScanHistoryEmptyState({ onOpenChannelOperations }) {
   return (
     <div className="px-5 py-10 text-center">
       <p className="text-sm font-black text-white">아직 저장된 과거 이력이 없습니다</p>
-      <p className="mt-2 text-xs text-slate-400">다음 새 영상 수집부터 성공·부분 성공·실패 기록이 Cloud에 쌓입니다.</p>
+      <p className="mt-2 text-xs text-slate-400">다음 새 영상 수집부터 성공·부분 성공·실패 기록이 온라인 저장소(Azure DB)에 쌓입니다.</p>
       <button
         type="button"
         onClick={() => onOpenChannelOperations?.()}
@@ -215,7 +215,7 @@ export default function RecentScanStatusWorkspace({
             <p className="text-xs font-black text-cyan-300">오퍼레이션 관제</p>
             <h2 id="recent-scan-status-title" className="mt-1 text-xl font-black text-white">채널별 최근 수집 상태</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-              채널별 마지막 결과와 Cloud에 저장된 과거 수집 이력을 함께 봅니다. 정확한 YouTube API 쿼터 장부는 아직 포함하지 않습니다.
+              채널별 마지막 결과와 온라인 저장소(Azure DB)에 저장된 과거 수집 이력을 함께 봅니다. 정확한 YouTube API 쿼터 장부는 아직 포함하지 않습니다.
             </p>
             <p className="mt-1 text-xs font-bold text-emerald-200">
               이 화면은 온라인 저장소(Azure DB)만 조회합니다. YouTube API 호출과 온라인 저장소(Azure DB) 저장은 실행되지 않습니다.
@@ -331,7 +331,7 @@ export default function RecentScanStatusWorkspace({
             </label>
             <p className="text-xs font-bold text-slate-400" role="status" aria-live="polite">
               {channelsLoading && rows.length === 0
-                ? 'Cloud 채널 상태 조회 중'
+                ? '온라인 저장소(Azure DB)의 채널 상태 조회 중'
                 : `${visibleRows.length}개 채널 표시 · 필터와 정렬 동시 적용`}
             </p>
           </div>
@@ -346,7 +346,7 @@ export default function RecentScanStatusWorkspace({
         {channelsLoading && rows.length === 0 ? (
           <div className="px-5 py-12 text-center" role="status" aria-live="polite">
             <RefreshCw className="mx-auto h-5 w-5 animate-spin text-cyan-300" />
-            <p className="mt-3 text-sm font-black text-white">Cloud 채널 상태를 불러오는 중입니다</p>
+            <p className="mt-3 text-sm font-black text-white">온라인 저장소(Azure DB)의 채널 상태를 불러오는 중입니다</p>
             <p className="mt-2 text-xs text-slate-400">조회가 끝나기 전에는 채널이 없다고 판단하지 않습니다.</p>
           </div>
         ) : visibleRows.length > 0 ? (
@@ -493,7 +493,7 @@ export default function RecentScanStatusWorkspace({
         <div className="flex flex-col gap-3 border-b border-slate-800 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 id="scan-history-title" className="text-sm font-black text-white">과거 수집 이력</h3>
-            <p className="mt-1 text-xs text-slate-400">최근 Cloud 채널 기록 최대 100건을 수집 실행 단위로 묶습니다. 이 조회는 YouTube API를 사용하지 않습니다.</p>
+            <p className="mt-1 text-xs text-slate-400">최근 온라인 저장소(Azure DB)의 채널 기록 최대 100건을 수집 실행 단위로 묶습니다. 이 조회는 YouTube API를 사용하지 않습니다.</p>
           </div>
           <button
             type="button"
@@ -509,7 +509,7 @@ export default function RecentScanStatusWorkspace({
 
         {historyLoading ? (
           <p className="px-5 py-10 text-center text-sm font-bold text-slate-300" role="status" aria-live="polite">
-            Cloud 수집 이력을 불러오는 중입니다.
+            온라인 저장소(Azure DB)의 수집 이력을 불러오는 중입니다.
           </p>
         ) : null}
 

@@ -92,15 +92,15 @@ export const getDiscoveryLinkUpdateNotice = (updates, link) => {
 
   if (updateKeys.length > 0 && updateKeys.every((key) => ['title', 'memo'].includes(key))) {
     if (updates.title !== undefined && updates.memo !== undefined) {
-      return `${linkName}의 제목과 메모를 Cloud에 저장했습니다.`;
+      return `${linkName}의 제목과 메모를 온라인 저장소(Azure DB)에 저장했습니다.`;
     }
     if (updates.title !== undefined) {
-      return `${linkName}의 제목을 Cloud에 저장했습니다.`;
+      return `${linkName}의 제목을 온라인 저장소(Azure DB)에 저장했습니다.`;
     }
     if (updates.memo !== undefined) {
-      return `${linkName}의 메모를 Cloud에 저장했습니다.`;
+      return `${linkName}의 메모를 온라인 저장소(Azure DB)에 저장했습니다.`;
     }
   }
 
-  return `${linkName}의 변경 사항을 Cloud에 저장했습니다.`;
+  return `${linkName}의 변경 사항을 온라인 저장소(Azure DB)에 저장했습니다.`;
 };

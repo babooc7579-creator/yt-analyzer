@@ -14,7 +14,7 @@ describe('WorkToolsWorkspace', () => {
     expect(html).toContain('네이버 DataLab');
     expect(html).toContain('YouTube Studio');
     expect(html).toContain('개인 링크 추가·수정·숨김·순서 변경');
-    expect(html).toContain('변경사항은 Cloud에 저장됩니다');
+    expect(html).toContain('변경사항은 온라인 저장소(Azure DB)에 저장됩니다');
     expect(html).toContain('설정에서 관리');
     expect(html).toContain('업무 도구 검색');
     expect(html).toContain('5개 도구');
@@ -23,7 +23,7 @@ describe('WorkToolsWorkspace', () => {
   it('renders Cloud custom tools and a visible retry state', () => {
     const html = renderToStaticMarkup(
       <WorkToolsWorkspace
-        error="Cloud 연결 실패"
+        error="온라인 저장소(Azure DB) 연결 실패"
         onReload={() => {}}
         toolGroups={[
           {
@@ -42,7 +42,7 @@ describe('WorkToolsWorkspace', () => {
       />
     );
 
-    expect(html).toContain('Cloud 연결 실패');
+    expect(html).toContain('온라인 저장소(Azure DB) 연결 실패');
     expect(html).toContain('다시 불러오기');
     expect(html).toContain('나의 업무 도구');
     expect(html).toContain('내 키워드 도구');

@@ -17,7 +17,7 @@ import {
 
 describe('productionVideoStatusProps utils', () => {
   it('keeps production status help text explicit about Cloud and YouTube API boundaries', () => {
-    expect(PRODUCTION_VIDEO_STATUS_HELP_TEXT).toContain('Cloud 판단 기록');
+    expect(PRODUCTION_VIDEO_STATUS_HELP_TEXT).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(PRODUCTION_VIDEO_STATUS_HELP_TEXT).toContain('YouTube API를 새로 호출하지 않습니다');
   });
 
@@ -26,9 +26,9 @@ describe('productionVideoStatusProps utils', () => {
       targetStatus: PRODUCTION_STATUS.CANDIDATE,
       videoTitle: 'Clip',
     })).toEqual({
-      ariaLabel: 'Clip 제작 후보 상태로 변경, Cloud 판단 기록 저장, YouTube API 호출 없음',
+      ariaLabel: 'Clip 제작 후보 상태로 변경, 온라인 저장소(Azure DB)의 판단 기록 저장, YouTube API 호출 없음',
       label: '제작 후보로',
-      title: '제작 진행 상태를 제작 후보로 변경해 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
+      title: '제작 진행 상태를 제작 후보로 변경해 온라인 저장소(Azure DB)의 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.',
     });
 
     expect(getProductionVideoMoveActionCopy({
@@ -38,12 +38,12 @@ describe('productionVideoStatusProps utils', () => {
     expect(getProductionVideoMoveActionCopy({
       targetStatus: PRODUCTION_STATUS.ACTIVE,
       videoTitle: 'Clip',
-    }).title).toContain('Cloud 판단 기록');
+    }).title).toContain('온라인 저장소(Azure DB)의 판단 기록');
 
     expect(getProductionVideoMoveActionCopy({
       targetStatus: PRODUCTION_STATUS.DONE,
       videoTitle: '',
-    }).ariaLabel).toBe('이 영상 업로드 완료 상태로 변경, Cloud 판단 기록 저장, YouTube API 호출 없음');
+    }).ariaLabel).toBe('이 영상 업로드 완료 상태로 변경, 온라인 저장소(Azure DB)의 판단 기록 저장, YouTube API 호출 없음');
   });
 
   it('builds focus and unfocus copy without changing production status semantics', () => {
@@ -67,9 +67,9 @@ describe('productionVideoStatusProps utils', () => {
       isSaving: false,
       videoTitle: 'Clip',
     })).toMatchObject({
-      ariaLabel: 'Clip 제작 메모 Cloud 판단 기록에 저장, YouTube API 호출 없음',
+      ariaLabel: 'Clip 제작 메모 온라인 저장소(Azure DB)의 판단 기록에 저장, YouTube API 호출 없음',
       disabled: false,
-      label: 'Cloud에 변경 저장',
+      label: '변경사항 저장',
     });
     expect(getProductionVideoDraftSaveButtonProps({
       isDirty: true,
@@ -82,7 +82,7 @@ describe('productionVideoStatusProps utils', () => {
       isSaving: true,
     })).toMatchObject({
       disabled: true,
-      label: '온라인 저장소(Azure DB) 저장 중',
+      label: '저장 중...',
     });
     expect(getProductionVideoDraftSaveButtonProps({
       isDirty: true,
@@ -94,12 +94,12 @@ describe('productionVideoStatusProps utils', () => {
       isSaving: false,
     })).toMatchObject({
       disabled: true,
-      label: '온라인 저장소(Azure DB) 저장됨',
+      label: '저장됨',
     });
     expect(getProductionVideoDraftSaveButtonProps({
       isDirty: false,
       isSaving: false,
-    }).title).toContain('Cloud 판단 기록에 저장된 상태입니다');
+    }).title).toContain('온라인 저장소(Azure DB)의 판단 기록에 저장된 상태입니다');
 
     expect(getProductionVideoDraftSaveButtonProps({
       hasSaveTarget: false,
@@ -241,7 +241,7 @@ describe('productionVideoStatusProps utils', () => {
       moveState: 'error',
       uploadedAt: '',
     })).toEqual({
-      errorMessage: 'Cloud 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.',
+      errorMessage: '온라인 저장소(Azure DB) 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.',
       uploadedAtText: '업로드 완료일 기록 없음',
     });
 
@@ -256,7 +256,7 @@ describe('productionVideoStatusProps utils', () => {
 
     expect(getProductionVideoSaveStatusViewProps('saved')).toMatchObject({
       iconName: 'saved',
-      message: 'Cloud에 저장됐습니다.',
+      message: '온라인 저장소(Azure DB)에 저장됐습니다.',
       tone: 'success',
     });
     expect(getProductionVideoSaveStatusViewProps('error')).toMatchObject({

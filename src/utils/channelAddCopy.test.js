@@ -25,7 +25,7 @@ describe('channelAddCopy utils', () => {
     expect(copy.inputTitle).toContain('붙여넣기만으로는 온라인 저장소(Azure DB) 저장이나 영상 수집이 실행되지 않습니다');
     expect(copy.previewButtonTitle).toContain('YouTube에서 채널 정보만 확인');
     expect(copy.previewButtonTitle).toContain('온라인 저장소(Azure DB) 저장과 영상 수집은 하지 않습니다');
-    expect(copy.helperText).toContain('아직 Cloud에 저장하지 않고');
+    expect(copy.helperText).toContain('아직 온라인 저장소(Azure DB)에 저장하지 않고');
     expect(copy.helperText).toContain('영상 수집은 하지 않습니다');
   });
 
@@ -36,9 +36,9 @@ describe('channelAddCopy utils', () => {
 
     expect(inputCopy.placeholder).toBe(CHANNEL_BULK_INPUT_PLACEHOLDER);
     expect(inputCopy.helperText).toBe(
-      '3개 줄 인식됨. YouTube에서 채널 정보만 확인한 뒤 Cloud 목록에 저장합니다. 영상 수집은 하지 않습니다.'
+      '3개 줄 인식됨. YouTube에서 채널 정보만 확인한 뒤 온라인 저장소(Azure DB)에 저장합니다. 영상 수집은 하지 않습니다.'
     );
-    expect(idleButtonCopy.title).toContain('Cloud 채널 목록에 저장');
+    expect(idleButtonCopy.title).toContain('온라인 저장소(Azure DB)의 채널 목록에 저장');
     expect(idleButtonCopy.title).toContain('영상 수집은 하지 않습니다');
     expect(idleButtonCopy.label).toBe('YouTube 확인 후 일괄 저장');
     expect(loadingButtonCopy.label).toBe('YouTube 확인 후 온라인 저장소(Azure DB) 저장 중');
@@ -49,9 +49,9 @@ describe('channelAddCopy utils', () => {
     const noticeText = getChannelPreviewSaveNoticeText();
 
     expect(copy.cancelButtonLabel).toBe('취소');
-    expect(copy.saveButtonTitle).toContain('Cloud 목록에 저장');
+    expect(copy.saveButtonTitle).toContain('온라인 저장소(Azure DB)에 저장');
     expect(copy.saveButtonTitle).toContain('새 영상 수집은 하지 않습니다');
-    expect(noticeText).toContain('Cloud 목록에 저장');
+    expect(noticeText).toContain('온라인 저장소(Azure DB)에 저장');
     expect(noticeText).toContain('선택 채널 새 영상 수집 버튼');
   });
 
@@ -70,7 +70,7 @@ describe('channelAddCopy utils', () => {
       ariaLabel: '카테고리 설정 열기',
       label: '카테고리 설정',
     });
-    expect(copy.categoryButtonProps.title).toContain('Cloud 태그');
+    expect(copy.categoryButtonProps.title).toContain('온라인 저장소(Azure DB)의 채널 태그');
   });
 
   it('builds bulk result panel copy with safe result fallback', () => {

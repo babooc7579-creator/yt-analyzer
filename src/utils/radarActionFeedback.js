@@ -8,9 +8,9 @@ const getVideoTitle = (video = {}) => {
 
 export const getRadarProductionSuccessFeedback = (video) => ({
   actionLabel: '제작 후보함 열기',
-  actionTitle: 'Cloud 제작 후보함을 엽니다. YouTube API를 호출하지 않습니다.',
+  actionTitle: '온라인 저장소(Azure DB)의 제작 후보함을 엽니다. YouTube API를 호출하지 않습니다.',
   destination: 'production',
-  message: `'${getVideoTitle(video)}' 영상을 Cloud 제작 후보로 표시했습니다. 다음 후보가 자동으로 표시됩니다. 후보함에서 오늘 집중과 일정을 이어서 정할 수 있습니다.`,
+  message: `'${getVideoTitle(video)}' 영상을 온라인 저장소(Azure DB)의 제작 후보로 표시했습니다. 다음 후보가 자동으로 표시됩니다. 후보함에서 오늘 집중과 일정을 이어서 정할 수 있습니다.`,
   navigationIntent: {
     searchQuery: getVideoTitle(video),
     source: 'today-radar',
@@ -32,7 +32,7 @@ export const getRadarStatusSuccessFeedback = ({ status, video } = {}) => {
     actionLabel: '처리 기록 보기',
     actionTitle: '방금 처리한 영상을 확인하거나 레이더로 되돌릴 수 있는 처리 기록으로 이동합니다.',
     destination: 'decisions',
-    message: `'${getVideoTitle(video)}' 영상의 판단을 Cloud에 저장했습니다. 다음 후보가 자동으로 표시됩니다. 실수했다면 처리 기록에서 레이더로 되돌릴 수 있습니다.`,
+    message: `'${getVideoTitle(video)}' 영상의 판단을 온라인 저장소(Azure DB)에 저장했습니다. 다음 후보가 자동으로 표시됩니다. 실수했다면 처리 기록에서 레이더로 되돌릴 수 있습니다.`,
     title,
   };
 };
@@ -41,10 +41,10 @@ export const getRadarScrapbookSuccessFeedback = ({ removed = false, video } = {}
   actionLabel: removed ? '' : '스크랩북 열기',
   actionTitle: removed
     ? ''
-    : 'Cloud 스크랩북을 엽니다. YouTube API를 호출하지 않습니다.',
+    : '온라인 스크랩북(Azure DB)을 엽니다. YouTube API를 호출하지 않습니다.',
   destination: removed ? '' : 'scrapbook',
   message: removed
-    ? `'${getVideoTitle(video)}' 영상을 Cloud 스크랩북에서 해제했습니다. 레이더 후보는 유지됩니다.`
-    : `'${getVideoTitle(video)}' 영상을 Cloud 스크랩북에 보관했습니다. 레이더 후보는 유지되므로 봤음, 나중에 보기, 제작 후보, 제외 중 하나로 판단을 마저 선택하세요.`,
+    ? `'${getVideoTitle(video)}' 영상을 온라인 스크랩북(Azure DB)에서 해제했습니다. 레이더 후보는 유지됩니다.`
+    : `'${getVideoTitle(video)}' 영상을 온라인 스크랩북(Azure DB)에 보관했습니다. 레이더 후보는 유지되므로 봤음, 나중에 보기, 제작 후보, 제외 중 하나로 판단을 마저 선택하세요.`,
   title: removed ? '소재 보관을 해제했습니다' : '소재로 보관했습니다',
 });

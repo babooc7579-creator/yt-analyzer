@@ -11,7 +11,7 @@ const getSafeVideoTitle = ({ video, videoTitle }) => (
 export const getScrapbookRemoveConfirmMessage = ({ video, videoTitle } = {}) => {
   const displayTitle = getSafeVideoTitle({ video, videoTitle });
 
-  return `'${displayTitle}' 영상을 Cloud 스크랩북에서 해제할까요?\n\n영상 원본이나 수집된 영상 정보는 삭제되지 않고, 스크랩북 보관 표시만 해제됩니다.`;
+  return `'${displayTitle}' 영상을 온라인 스크랩북(Azure DB)에서 해제할까요?\n\n영상 원본이나 수집된 영상 정보는 삭제되지 않고, 스크랩북 보관 표시만 해제됩니다.`;
 };
 
 export const getScrapbookRemoveButtonProps = ({
@@ -24,7 +24,7 @@ export const getScrapbookRemoveButtonProps = ({
   const safeVideo = getSafeVideo(video);
 
   return {
-    'aria-label': `${displayTitle} Cloud 스크랩북에서 해제, 원본 영상과 수집 영상 정보는 삭제하지 않음`,
+    'aria-label': `${displayTitle} 온라인 스크랩북(Azure DB)에서 해제, 원본 영상과 수집 영상 정보는 삭제하지 않음`,
     className: 'p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors',
     onClick: () => {
       const message = getScrapbookRemoveConfirmMessage({
@@ -34,7 +34,7 @@ export const getScrapbookRemoveButtonProps = ({
 
       if (confirmFn?.(message)) onRemoveScrap?.(safeVideo);
     },
-    title: 'Cloud 스크랩북 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.',
+    title: '온라인 스크랩북(Azure DB) 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.',
     type: 'button',
   };
 };
@@ -74,10 +74,10 @@ export const getScrapbookVideoFooterActionsViewProps = ({
     },
     productionButtonProps: {
       'aria-label': isProductionCandidate
-        ? `${displayTitle} 이미 Cloud 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됨`
+        ? `${displayTitle} 이미 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됨`
         : productionSaving
-          ? `${displayTitle} 제작 후보 표시를 Cloud에 저장하는 중`
-          : `${displayTitle} Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 관리, YouTube API 호출 없음`,
+          ? `${displayTitle} 제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중`
+          : `${displayTitle} 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시하고 제작 후보함에서 관리, YouTube API 호출 없음`,
       className: `inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors ${
         canPromoteToProduction
           ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'
@@ -86,12 +86,12 @@ export const getScrapbookVideoFooterActionsViewProps = ({
       disabled: !canPromoteToProduction,
       onClick: canPromoteToProduction ? () => onPromoteToProduction(safeVideo) : undefined,
       title: productionSaving
-        ? '제작 후보 표시를 Cloud에 저장하는 중입니다. 완료될 때까지 기다려 주세요.'
+        ? '제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중입니다. 완료될 때까지 기다려 주세요.'
         : isProductionCandidate
-        ? '이미 Cloud 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됩니다. YouTube API를 새로 호출하지 않습니다.'
+        ? '이미 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시되어 제작 후보함에 표시됩니다. YouTube API를 새로 호출하지 않습니다.'
         : canPromoteToProduction
-          ? 'Cloud 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.'
-          : '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
+          ? '온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.'
+          : '제작 후보로 표시할 영상 ID가 없어 온라인 저장소(Azure DB)의 판단 기록 저장을 실행하지 않습니다.',
       type: 'button',
     },
     productionButtonText: productionSaving
@@ -123,7 +123,7 @@ export const getScrapbookProductionFeedbackViewProps = ({
     return {
       actionLabel: '후보함에서 이어서',
       actionTitle: '방금 저장한 제작 후보만 후보함에서 바로 찾습니다. 화면 이동만 하며 YouTube API를 호출하지 않습니다.',
-      message: `'${displayTitle}' 영상을 Cloud 제작 후보로 저장했습니다.`,
+      message: `'${displayTitle}' 영상을 온라인 저장소(Azure DB)의 제작 후보로 표시했습니다.`,
       onAction: typeof onOpenProductionCandidates === 'function'
         ? () => onOpenProductionCandidates(safeVideo)
         : undefined,
@@ -132,7 +132,7 @@ export const getScrapbookProductionFeedbackViewProps = ({
   }
 
   return {
-    message: 'Cloud 제작 후보 저장에 실패했습니다. 제작 후보로 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+    message: '온라인 저장소(Azure DB)의 제작 후보 표시를 저장하지 못했습니다. 제작 후보로 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
     tone: 'danger',
   };
 };

@@ -68,7 +68,7 @@ export default function RadarCandidateStripHeader({
             onClick={onClearDecisions}
             disabled={clearDecisionsPending}
             className="inline-flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-950/50 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
-            title={clearDecisionsPending ? 'Cloud 판단 기록 초기화가 끝날 때까지 기다려 주세요.' : clearButtonProps.title}
+            title={clearDecisionsPending ? '온라인 저장소(Azure DB)의 판단 기록 초기화가 끝날 때까지 기다려 주세요.' : clearButtonProps.title}
             aria-label={clearButtonProps['aria-label']}
           >
             {clearDecisionsPending ? '초기화 중' : clearButtonProps.label}

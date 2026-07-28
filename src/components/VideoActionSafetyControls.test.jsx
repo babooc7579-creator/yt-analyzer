@@ -30,7 +30,7 @@ describe('Video action safety controls', () => {
 
     expect(html).toContain('스크랩');
     expect(html).toContain('제작 후보');
-    expect(html).toContain('Cloud');
+    expect(html).toContain('온라인 저장소(Azure DB)');
     expect(html).toContain('YouTube API');
   });
 
@@ -45,7 +45,7 @@ describe('Video action safety controls', () => {
     );
 
     expect(html).toContain('댓글 Top 10 보기 - 버튼을 누를 때만 YouTube API로 댓글을 조회합니다.');
-    expect(html).toContain('조회 결과를 Cloud에 저장하지 않습니다.');
+    expect(html).toContain('조회 결과를 온라인 저장소(Azure DB)에 저장하지 않습니다.');
     expect(html).toContain('좋은 영상 YouTube 원본 URL 복사');
     expect(html).toContain('YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.');
   });
@@ -62,6 +62,6 @@ describe('Video action safety controls', () => {
 
     expect(html).toContain('disabled=""');
     expect(html).toContain('좋은 영상');
-    expect(html).toContain('Cloud');
+    expect(html).toContain('온라인 저장소(Azure DB)');
   });
 });

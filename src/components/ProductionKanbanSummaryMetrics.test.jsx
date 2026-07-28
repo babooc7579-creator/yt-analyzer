@@ -5,7 +5,7 @@ import { PRODUCTION_KANBAN_FILTER } from '../utils/productionKanbanFilters';
 import ProductionKanbanSummaryMetrics from './ProductionKanbanSummaryMetrics';
 
 describe('ProductionKanbanSummaryMetrics', () => {
-  it('passes Cloud 기준 hover explanations to the metric cards', () => {
+  it('passes 온라인 저장소 기준 hover explanations to the metric cards', () => {
     const html = renderToStaticMarkup(
       <ProductionKanbanSummaryMetrics
         activeFilterMode={PRODUCTION_KANBAN_FILTER.CANDIDATE}
@@ -20,9 +20,9 @@ describe('ProductionKanbanSummaryMetrics', () => {
       />,
     );
 
-    expect(html).toContain('Cloud 판단 기록에서 제작 후보 상태로 표시된 수집 영상 수입니다');
+    expect(html).toContain('온라인 저장소(Azure DB)의 판단 기록에서 제작 후보 상태로 표시된 수집 영상 수입니다');
     expect(html).toContain('YouTube API를 새로 호출하지 않습니다');
-    expect(html).toContain('Cloud 발견함에서 제작 후보로 표시한 링크 수입니다');
+    expect(html).toContain('온라인 발견함(Azure DB)에서 제작 후보로 표시한 링크 수입니다');
     expect(html).toContain('별도 제작 DB로 옮긴 값이 아닙니다');
     expect(html).toContain('권리 확인 필요 1개');
     expect((html.match(/<button/g) || []).length).toBe(4);

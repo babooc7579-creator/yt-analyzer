@@ -284,7 +284,7 @@ describe('useVideoCollectionActions', () => {
     expect(backfillChannelHistory).toHaveBeenCalledWith('active-1', { maxPages: 10 });
     expect(deps.setScanningTag).toHaveBeenNthCalledWith(1, 'BACKFILL:active-1');
     expect(deps.setProgressMsg).toHaveBeenCalledWith(
-      '테스트 채널의 공개 업로드 목록을 끝까지 확인하고 있습니다. 이번 실행은 최대 500개까지 진행하며 Cloud에 없는 영상만 저장합니다.',
+      '테스트 채널의 공개 업로드 목록을 끝까지 확인하고 있습니다. 이번 실행은 최대 500개까지 진행하며 온라인 저장소(Azure DB)에 없는 영상만 저장합니다.',
     );
     expect(deps.loadChannelsFromCloud).toHaveBeenCalledTimes(1);
     expect(response).toMatchObject({ success: true });

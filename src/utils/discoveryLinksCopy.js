@@ -1,14 +1,14 @@
 import { hasCopyableUrlValue } from './copyUrlButtonProps';
 
 export const getDiscoveryLinksHeaderTitleViewProps = ({ totalLinkCount = 0 } = {}) => ({
-  eyebrow: 'Cloud 발견함',
+  eyebrow: '온라인 발견함(Azure DB)',
   title: `저장한 링크 ${totalLinkCount}개`,
-  description: 'Cloud에 저장된 수동 링크입니다. 목록이 비어 있으면 Cloud 기준으로 아직 저장된 링크가 없는 상태입니다.',
+  description: '온라인 저장소(Azure DB)에 저장된 수동 링크입니다. 목록이 비어 있으면 온라인 저장소 기준으로 아직 저장된 링크가 없는 상태입니다.',
 });
 
 export const getDiscoveryLinksFilteredEmptyStateViewProps = ({ allLinkCount = 0 } = {}) => ({
   title: '조건에 맞는 링크가 없습니다.',
-  description: `Cloud에는 링크 ${allLinkCount}개가 저장되어 있지만, 현재 검색어나 필터 조건 때문에 보이지 않습니다. 필터 초기화는 화면 조건만 바꾸며 저장 데이터나 외부 사이트에는 영향을 주지 않습니다.`,
+  description: `온라인 저장소(Azure DB)에는 링크 ${allLinkCount}개가 저장되어 있지만, 현재 검색어나 필터 조건 때문에 보이지 않습니다. 필터 초기화는 화면 조건만 바꾸며 저장 데이터나 외부 사이트에는 영향을 주지 않습니다.`,
   clearButtonProps: {
     label: '필터 초기화',
     title: '검색어와 필터를 모두 초기화합니다. 온라인 저장소(Azure DB) 저장 데이터는 바꾸지 않습니다.',
@@ -18,17 +18,17 @@ export const getDiscoveryLinksFilteredEmptyStateViewProps = ({ allLinkCount = 0 
 
 export const getDiscoveryLinksRefreshButtonProps = () => ({
   label: '다시 조회',
-  title: 'Cloud 발견함 목록을 다시 조회합니다. 외부 사이트 수집이나 저장 변경은 없습니다.',
-  'aria-label': 'Cloud 발견함 다시 조회, 외부 수집이나 저장 변경 없음',
+  title: '온라인 발견함(Azure DB) 목록을 다시 조회합니다. 외부 사이트 수집이나 저장 변경은 없습니다.',
+  'aria-label': '온라인 발견함(Azure DB) 다시 조회, 외부 수집이나 저장 변경 없음',
 });
 
 export const getDiscoveryLinksErrorNoticeViewProps = () => ({
-  recoveryText: 'Cloud 발견함 재조회만 실행합니다. localStorage와 자동 병합하거나 링크를 자동 업로드하지 않습니다.',
+  recoveryText: '온라인 발견함(Azure DB) 재조회만 실행합니다. localStorage와 자동 병합하거나 링크를 자동 업로드하지 않습니다.',
 });
 
 export const getDiscoveryLinkFormHeaderViewProps = () => ({
   title: '수동 링크 저장',
-  description: '링크와 메모만 Cloud에 저장합니다. 외부 사이트 자동 수집, 다운로드, AI 분석은 실행하지 않습니다.',
+  description: '링크와 메모만 온라인 저장소(Azure DB)에 저장합니다. 외부 사이트 자동 수집, 다운로드, AI 분석은 실행하지 않습니다.',
 });
 
 export const getDiscoveryLinkMemoFieldViewProps = () => ({
@@ -39,7 +39,7 @@ export const getDiscoveryLinkMemoFieldViewProps = () => ({
 
 export const getDiscoveryLinkRiskyCandidateHintViewProps = () => ({
   title: '사용 금지 링크를 제작 후보로 표시하려고 합니다',
-  description: '저장 버튼을 누르면 한 번 더 확인합니다. 이 작업은 Cloud 발견함 상태만 바꾸며, 사용 허가나 권리 확인 완료를 의미하지 않습니다.',
+  description: '저장 버튼을 누르면 한 번 더 확인합니다. 이 작업은 온라인 발견함(Azure DB) 상태만 바꾸며, 사용 허가나 권리 확인 완료를 의미하지 않습니다.',
 });
 
 export const getDiscoveryLinkSafetyNoticeViewProps = () => ({
@@ -84,8 +84,8 @@ export const getDiscoveryLinksHeaderActionsViewProps = ({
   refreshButtonProps: {
     disabled: loading || saving,
     onClick: onRefresh,
-    title: 'Cloud 발견함 목록을 다시 조회합니다. 외부 사이트를 새로 수집하지 않습니다.',
-    'aria-label': 'Cloud 발견함 목록 다시 조회, 외부 수집 없음',
+    title: '온라인 발견함(Azure DB) 목록을 다시 조회합니다. 외부 사이트를 새로 수집하지 않습니다.',
+    'aria-label': '온라인 발견함(Azure DB) 목록 다시 조회, 외부 수집 없음',
     type: 'button',
   },
   refreshButtonLabel: '새로고침',
@@ -93,7 +93,7 @@ export const getDiscoveryLinksHeaderActionsViewProps = ({
 });
 
 export const getDiscoveryLinksLoadingStateViewProps = () => ({
-  message: 'Cloud 발견함을 불러오는 중입니다. 외부 사이트 수집이나 자동 업로드는 실행하지 않습니다.',
+  message: '온라인 발견함(Azure DB)을 불러오는 중입니다. 외부 사이트 수집이나 자동 업로드는 실행하지 않습니다.',
 });
 
 export const getDiscoveryLinksActiveFilterSummaryViewProps = ({ filteredLinkCount = 0 } = {}) => ({
@@ -145,8 +145,8 @@ export const getDiscoveryLinkSubmitButtonViewProps = ({
   saving = false,
 } = {}) => ({
   buttonProps: {
-    title: '링크와 메모를 Cloud 발견함에 저장합니다. 외부 사이트 크롤링은 하지 않습니다.',
-    'aria-label': 'Cloud 발견함에 링크 저장',
+    title: '링크와 메모를 온라인 발견함(Azure DB)에 저장합니다. 외부 사이트 크롤링은 하지 않습니다.',
+    'aria-label': '온라인 발견함(Azure DB)에 링크 저장',
     type: 'submit',
   },
   label: saving ? '온라인 저장소(Azure DB) 저장 중' : duplicateLink ? '이미 저장된 링크' : '링크 저장',
@@ -157,24 +157,24 @@ export const getDiscoveryLinkUrlFieldViewProps = ({ duplicateLink, urlPreview } 
   inputAriaLabel: '저장할 원본 링크 URL',
   previewHostText: urlPreview?.host ? `출처 도메인: ${urlPreview.host}` : '',
   duplicateWarning: duplicateLink ? {
-    title: '이미 Cloud 발견함에 저장된 링크입니다.',
+    title: '이미 온라인 발견함(Azure DB)에 저장된 링크입니다.',
     description: '새로 저장하지 말고 오른쪽 목록에서 기존 항목을 수정하세요.',
   } : null,
 });
 
 export const getDiscoveryLinkStatusControlsViewProps = ({ title = '발견 링크' } = {}) => ({
   statusSelectProps: {
-    title: '검토 상태 변경 - Cloud 발견함 기록에 저장됩니다. 원본 사이트를 새로 수집하지 않습니다.',
-    'aria-label': `${title} 검토 상태 변경, Cloud 발견함 기록 저장`,
+    title: '검토 상태 변경 - 온라인 발견함(Azure DB) 기록에 저장됩니다. 원본 사이트를 새로 수집하지 않습니다.',
+    'aria-label': `${title} 검토 상태 변경, 온라인 발견함(Azure DB) 기록 저장`,
   },
   rightsSelectProps: {
-    title: '권리 상태 표시 변경 - Cloud 발견함 기록에 저장됩니다. 사용 허가나 권리 확인 완료를 의미하지 않습니다.',
-    'aria-label': `${title} 권리 상태 표시 변경, Cloud 발견함 기록 저장, 사용 허가 의미 아님`,
+    title: '권리 상태 표시 변경 - 온라인 발견함(Azure DB) 기록에 저장됩니다. 사용 허가나 권리 확인 완료를 의미하지 않습니다.',
+    'aria-label': `${title} 권리 상태 표시 변경, 온라인 발견함(Azure DB) 기록 저장, 사용 허가 의미 아님`,
   },
 });
 
 export const getDiscoveryLinkActionsNoticeViewProps = () => ({
-  message: '검토 상태와 권리 상태 표시는 바꾸는 즉시 Cloud 발견함에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다.',
+  message: '검토 상태와 권리 상태 표시는 바꾸는 즉시 온라인 발견함(Azure DB)에 저장됩니다. 외부 사이트를 새로 수집하지 않습니다.',
 });
 
 export const getDiscoveryLinkSourceBadgeLabel = (sourceHost) => `출처 ${sourceHost}`;

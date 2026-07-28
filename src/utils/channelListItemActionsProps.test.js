@@ -63,7 +63,7 @@ describe('channelListItemActionsProps utils', () => {
 
     expect(onOpenNotes).toHaveBeenCalledWith(baseChannel);
 
-    expect(props.deleteButtonProps.title).toContain('Cloud 채널 목록에서 삭제합니다');
+    expect(props.deleteButtonProps.title).toContain('온라인 저장소(Azure DB)의 채널 목록에서 삭제합니다');
     expect(props.deleteButtonProps.title).toContain('이미 수집된 영상 정보는 삭제하지 않습니다');
     expect(props.deleteButtonProps.disabled).toBe(false);
     expect(props.deleteButtonProps['aria-label']).toContain('수집 영상 정보는 삭제하지 않음');
@@ -95,7 +95,7 @@ describe('channelListItemActionsProps utils', () => {
     });
     expect(props.deleteButtonProps).toMatchObject({
       disabled: true,
-      title: '삭제할 채널 ID가 없어 Cloud 삭제를 실행하지 않습니다.',
+      title: '삭제할 채널 ID가 없어 온라인 저장소(Azure DB)의 채널 삭제를 실행하지 않습니다.',
       'aria-label': 'No ID Channel 삭제 비활성화 - 채널 ID 없음',
     });
 

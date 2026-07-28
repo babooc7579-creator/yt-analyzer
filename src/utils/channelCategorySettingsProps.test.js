@@ -20,7 +20,7 @@ describe('channelCategorySettingsProps utils', () => {
 
     const message = getCategoryHideConfirmMessage('해외');
     expect(message).toContain("'해외' 카테고리를 화면 목록에서 숨길까요?");
-    expect(message).toContain('Cloud 태그는 삭제되지 않습니다');
+    expect(message).toContain('온라인 저장소(Azure DB)의 채널 태그는 삭제되지 않습니다');
   });
 
   it('calculates local category hide and add results without Cloud changes', () => {
@@ -108,16 +108,16 @@ describe('channelCategorySettingsProps utils', () => {
       '미분류',
     ]);
 
-    expect(props.title).toContain('Cloud에는 있지만');
+    expect(props.title).toContain('온라인 저장소(Azure DB)에는 있지만');
     expect(props.tagSummary).toBe('해외, 예능, 정치, 역사 외 1개');
-    expect(props.description).toContain('Cloud 채널 태그는 삭제되지 않습니다');
+    expect(props.description).toContain('온라인 저장소(Azure DB)의 채널 태그는 삭제되지 않습니다');
   });
 
   it('builds category help text that separates Cloud tags from local category visibility', () => {
     const text = getChannelCategoryHelpText();
 
-    expect(text).toContain('이름 변경은 Cloud 태그명');
+    expect(text).toContain('이름 변경은 온라인 저장소(Azure DB)의 채널 태그명');
     expect(text).toContain('숨김은 화면 카테고리 목록');
-    expect(text).toContain('Cloud 태그는 유지됩니다');
+    expect(text).toContain('온라인 저장소(Azure DB)의 채널 태그는 유지됩니다');
   });
 });

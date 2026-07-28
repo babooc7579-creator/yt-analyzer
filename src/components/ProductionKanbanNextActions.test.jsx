@@ -16,7 +16,7 @@ describe('ProductionKanbanNextActions', () => {
             key: 'upload-calendar',
             label: '업로드 일정 보기',
             onClick: noop,
-            title: '업로드 캘린더를 열어 Cloud에 저장된 목표 날짜를 확인합니다. YouTube API를 호출하지 않습니다.',
+            title: '업로드 캘린더를 열어 온라인 저장소(Azure DB)에 저장된 목표 날짜를 확인합니다. YouTube API를 호출하지 않습니다.',
             variant: 'amber',
           },
           {
@@ -44,7 +44,7 @@ describe('ProductionKanbanNextActions', () => {
     expect(html).toContain('다음 행동');
     expect(html).toContain('화면 이동만으로 YouTube API나 외부 자동 수집은 실행하지 않습니다.');
     expect(html).toContain('업로드 일정 보기');
-    expect(html).toContain('Cloud에 저장된 목표 날짜');
+    expect(html).toContain('온라인 저장소(Azure DB)에 저장된 목표 날짜');
     expect(html).toContain('수집 영상 더 보기');
     expect(html).toContain('온라인 저장소(Azure DB)에 보관된 수집 영상 정보를 조회하며 YouTube API를 새로 호출하지 않습니다.');
     expect(html).toContain('발견함 링크 정리');

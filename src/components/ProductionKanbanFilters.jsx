@@ -21,7 +21,7 @@ export default function ProductionKanbanFilters({
         <div className="min-w-0">
           <h3 className="text-sm font-extrabold text-slate-900">제작 작업 찾기</h3>
           <p className="mt-1 text-xs text-slate-500">
-            저장된 Cloud 작업 기록 안에서만 찾습니다. YouTube API를 새로 호출하지 않습니다.
+            온라인 저장소(Azure DB)에 저장된 작업 기록 안에서만 찾습니다. YouTube API를 새로 호출하지 않습니다.
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
@@ -34,7 +34,7 @@ export default function ProductionKanbanFilters({
                   ? 'border-amber-400 bg-amber-100 text-amber-900'
                   : 'border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100'
               }`}
-              title="아직 Cloud에 저장하지 않은 제작안만 표시합니다. 이 버튼은 저장을 실행하지 않습니다."
+              title="아직 온라인 저장소(Azure DB)에 저장하지 않은 제작안만 표시합니다. 이 버튼은 저장을 실행하지 않습니다."
               aria-pressed={filterMode === PRODUCTION_KANBAN_FILTER.UNSAVED}
             >
               <Save className="h-3.5 w-3.5" />
@@ -52,7 +52,7 @@ export default function ProductionKanbanFilters({
           <Save className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <div className="min-w-0">
             <p className="text-xs font-extrabold">
-              Cloud에 저장하지 않은 제작안 {filterSummary.unsavedCount}개
+              온라인 저장소(Azure DB)에 저장하지 않은 제작안 {filterSummary.unsavedCount}개
             </p>
             <p className="mt-0.5 text-xs leading-relaxed text-amber-800">
               다른 화면 이동·새로고침·탭 닫기 전에 확인합니다. 각 카드에서 온라인 저장소(Azure DB) 저장을 완료하면 이 안내와 경고가 사라집니다.

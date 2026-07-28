@@ -81,7 +81,7 @@ describe('useDiscoveryLinkRow', () => {
 
     row.handleDelete();
 
-    expect(confirm).toHaveBeenCalledWith(expect.stringContaining('Cloud 발견함에서 삭제'));
+    expect(confirm).toHaveBeenCalledWith(expect.stringContaining('온라인 발견함(Azure DB)에서 삭제'));
     expect(confirm).toHaveBeenCalledWith(expect.stringContaining('외부 링크 자체는 삭제되지 않습니다'));
     expect(onDelete).not.toHaveBeenCalled();
 

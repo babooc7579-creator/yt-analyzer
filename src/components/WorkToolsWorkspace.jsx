@@ -49,7 +49,7 @@ export default function WorkToolsWorkspace({
 
       {loading && (
         <p role="status" className="border border-blue-400/20 bg-blue-500/10 px-4 py-3 text-xs text-blue-100">
-          Cloud에서 나의 업무 도구 설정을 불러오는 중입니다.
+          온라인 저장소(Azure DB)에서 나의 업무 도구 설정을 불러오는 중입니다.
         </p>
       )}
       {error && (
@@ -132,7 +132,7 @@ export default function WorkToolsWorkspace({
       )}
 
       <aside className="border border-amber-500/20 bg-amber-500/5 p-4 text-xs leading-5 text-amber-100">
-        개인 링크 추가·수정·숨김·순서 변경은 설정의 ‘업무 도구 관리’에서 할 수 있습니다. 변경사항은 Cloud에 저장됩니다.
+        개인 링크 추가·수정·숨김·순서 변경은 설정의 ‘업무 도구 관리’에서 할 수 있습니다. 변경사항은 온라인 저장소(Azure DB)에 저장됩니다.
       </aside>
     </section>
   );

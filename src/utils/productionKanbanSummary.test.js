@@ -33,9 +33,9 @@ describe('productionKanbanSummary utils', () => {
     const items = getProductionKanbanSummaryLegendItems();
     const labelsByKey = Object.fromEntries(items.map((item) => [item.key, item.label]));
 
-    expect(labelsByKey['video-records']).toContain('Cloud 판단 기록');
+    expect(labelsByKey['video-records']).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(labelsByKey['video-records']).toContain('제작 상태');
-    expect(labelsByKey['discovery-links']).toContain('Cloud 발견함');
+    expect(labelsByKey['discovery-links']).toContain('온라인 발견함(Azure DB)');
     expect(labelsByKey['discovery-links']).toContain('제작 후보');
     expect(labelsByKey['no-youtube-api']).toBe('YouTube API 호출 없음');
   });
@@ -58,9 +58,9 @@ describe('productionKanbanSummary utils', () => {
       ['discovery-links', '링크 후보', '4개'],
     ]);
     expect(cards[3].showLinkIcon).toBe(true);
-    expect(cards[0].title).toContain('Cloud 판단 기록');
+    expect(cards[0].title).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(cards[0].title).toContain('YouTube API를 새로 호출하지 않습니다');
-    expect(cards[3].title).toContain('Cloud 발견함');
+    expect(cards[3].title).toContain('온라인 발견함(Azure DB)');
     expect(cards[3].title).toContain('별도 제작 DB');
     expect(cards[3].warningText).toBe('권리 확인 필요 1개');
     expect(cards.map(card => card.filterMode)).toEqual([

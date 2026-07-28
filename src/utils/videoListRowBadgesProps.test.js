@@ -29,7 +29,7 @@ describe('videoListRowBadgesProps utils', () => {
     ]);
     expect(badges.find(item => item.icon === 'saved')).toMatchObject({
       label: '스크랩북 보관',
-      title: 'Cloud 스크랩북에 보관된 영상입니다. 제작 후보 여부와는 별도입니다.',
+      title: '온라인 스크랩북(Azure DB)에 보관된 영상입니다. 제작 후보 여부와는 별도입니다.',
     });
     expect(badges.find(item => item.icon === 'candidate').title).toContain('제작 후보함');
   });

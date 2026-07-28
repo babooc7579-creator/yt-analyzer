@@ -44,7 +44,7 @@ describe('homeRadarJourney', () => {
 
     expect(stages[0]).toMatchObject({
       status: 'current',
-      value: 'Cloud 조회 중',
+      value: '온라인 저장소(Azure DB) 조회 중',
     });
     expect(stages[1].status).toBe('upcoming');
   });
