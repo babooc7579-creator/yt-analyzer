@@ -33,7 +33,7 @@
 - 조회수/성과배수/일조회수/좋아요 비율 정렬
 - 6개월 이상 지난 영상 기반 또터또 발굴
 - 댓글 Top 10 조회
-- Cloud 기준 영상 스크랩
+- 온라인 저장소(Azure DB) 기준 소재 보관
 - 영상별 사용자 판단 기록
 - 발견 링크 수동 저장
 - 발견 링크 제작 후보 연결
@@ -75,7 +75,7 @@ src/
 - `src/hooks`는 채널, 영상, 스크랩북, 발견함, 제작 후보, 라우트 조립 같은 상태 흐름을 담당합니다.
 - `src/components`는 실제 화면 조각을 담당합니다.
 - `src/utils`는 화면 props, 문구, 계산, 분류, 포맷팅을 담당합니다.
-- `src/services`는 Cloud Function, YouTube API, localStorage 보조 저장 접근을 담당합니다.
+- `src/services`는 Azure Functions, YouTube API, localStorage 보조 저장 접근을 담당합니다.
 - `src/constants`는 메뉴, 상태값, 옵션, 문구 상수를 담당합니다.
 
 장기적으로 `features/` 폴더를 도입할 수는 있지만, 지금은 이미 작동하는 구조를 크게 옮기지 않고 현재 분리 방향을 유지합니다.
@@ -201,7 +201,7 @@ Main Content
 
 실제로 만들 후보를 확인합니다.
 
-- 저장 영상 후보
+- 수집 영상 후보
 - 발견 링크 후보
 - 원본 링크, 제목 초안, 제작 메모, 업로드 예정일 준비 여부
 - 권리 확인/일정/후보 수 기준 우선 확인 안내
@@ -210,7 +210,7 @@ Main Content
 
 제작 후보의 원본을 분석하고 구성·작성·수정하는 작업에 집중합니다.
 
-- 제작 후보함과 동일한 Cloud `videoUserRecords` 사용
+- 제작 후보함과 동일한 온라인 저장소(Azure DB)의 `videoUserRecords` 사용
 - `draftTitle`: 내가 만들 제목
 - `scriptAnalysis`: 영상 분석
 - `scriptOutline`: 대본 구성안
@@ -218,7 +218,7 @@ Main Content
 - `scriptStatus`: 분석 중, 구성 중, 초안 작성, 수정 중, 최종본 진행 단계
 - `note`: 기존 통합 작업 메모(기존 자료 보존)
 - `targetPublishDate`: 업로드 예정일
-- 명시적 Cloud 저장과 저장 성공/실패 표시
+- 명시적 온라인 저장소(Azure DB) 저장과 저장 성공/실패 표시
 - 검색, 진행 단계 필터, 오늘 집중 작업 표시
 - 제작 후보함과 업로드 캘린더 왕복 연결
 - 화면 표시와 이동만으로 YouTube API 호출 없음
@@ -234,19 +234,19 @@ Main Content
 - 기록 원본: `src/constants/improvementLog.js`
 - 운영 기준: `docs/CREATOR_OS_IMPROVEMENT_LOG.md`
 - Git 커밋과 Pull Request로 변경 추적
-- API 호출, Cloud 조회·저장, YouTube 신규 수집 없음
+- API 호출, 온라인 저장소(Azure DB) 조회·저장, YouTube 신규 수집 없음
 
 ### 설정
 
 기술 설정과 연결 상태를 모읍니다. 2026-07-15 기준 독립 설정 메뉴의 1차 화면이 연결됐습니다.
 
 - 채널 분야 목록 관리
-- 숨긴 기본 분야/Cloud 태그의 브라우저 화면 목록 복원
-- localStorage 화면 목록과 Cloud 채널 태그의 차이 안내
+- 숨긴 기본 분야와 온라인 저장소(Azure DB) 채널 태그의 브라우저 화면 목록 복원
+- localStorage 화면 목록과 온라인 저장소(Azure DB) 채널 태그의 차이 안내
 - Azure Function API Base URL
-- 저장 영상 DB 조회와 YouTube API 수집 구분
+- 수집 영상 목록의 Azure DB 조회와 YouTube API 신규 수집 구분
 - 댓글 Top 10용 사용자 YouTube API Key 입력과 메모리 보관 원칙
-- Cloud 기록 동기화 경고, 현재 화면 오류, GitHub Actions 배포 확인 경로
+- 온라인 저장소(Azure DB) 기록 동기화 경고, 현재 화면 오류, GitHub Actions 배포 확인 경로
 - 기존 `GET /channels`를 이용한 수동 재조회와 오류 유형별 다음 행동 안내
 
 CORS의 정확한 원인 자동 판별, 로컬 실행 진단, Azure 리소스 상태 자동 확인은 후속 범위입니다.
@@ -269,7 +269,7 @@ VideosPage → useVideoCollectionActions / useVideoUserRecords → services/vide
 
 중요:
 
-- 저장 영상 불러오기는 Cloud DB 조회입니다.
+- 수집 영상 목록 불러오기는 온라인 저장소(Azure DB) 조회입니다.
 - 새 영상 수집은 YouTube API 호출과 DB 갱신이 발생할 수 있습니다.
 - 채널 선택만으로 YouTube API를 새로 호출하지 않는 방향을 유지합니다.
 
@@ -285,9 +285,9 @@ VideoCard → services/youtubeApi.js → YouTube Data API → CommentModal
 ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function → Cosmos DB
 ```
 
-현재 스크랩북은 Cloud DB를 기준 데이터로 봅니다. 백엔드에서는 별도 `scrapbook` container가 아니라 `videos` container 안의 `docType: scrapbook` 문서로 저장합니다.
+현재 소재 보관함은 온라인 저장소(Azure DB)를 기준 데이터로 봅니다. 백엔드에서는 별도 `scrapbook` container가 아니라 `videos` container 안의 `docType: scrapbook` 문서로 저장합니다.
 
-`localStorage`는 기준 저장소가 아니라 Cloud 연결 실패 시 임시 fallback과 기존 데이터 보호 용도로만 유지합니다. Cloud 조회가 성공하면 Cloud 응답이 기준이며, localStorage와 자동 병합하지 않습니다.
+`localStorage`는 기준 저장소가 아니라 온라인 저장소 연결 실패 시 임시 fallback과 기존 데이터 보호 용도로만 유지합니다. Azure DB 조회가 성공하면 온라인 저장소 응답이 기준이며, localStorage와 자동 병합하지 않습니다.
 
 ### 발견 링크 데이터
 
@@ -295,7 +295,7 @@ ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function �
 DiscoveryLinksPage → useDiscoveryLinks → services/discoveryLinksApi.js → Azure Function → Cosmos DB
 ```
 
-현재 발견 링크는 별도 `discovery_links` container가 아니라 기존 Cloud DB의 `videos` container 안에 `docType: discovery_link` 문서로 저장합니다.
+현재 발견 링크는 별도 `discovery_links` container가 아니라 기존 온라인 저장소(Azure DB)의 `videos` container 안에 `docType: discovery_link` 문서로 저장합니다.
 
 ### 제작 후보 데이터
 
@@ -303,7 +303,7 @@ DiscoveryLinksPage → useDiscoveryLinks → services/discoveryLinksApi.js → A
 ProductionKanban → videoUserRecords + discovery links status:candidate
 ```
 
-현재 별도 `production_candidates` 저장소는 없습니다. 저장 영상 후보는 영상별 판단 기록을 사용하고, 발견 링크 후보는 발견함 상태값을 사용합니다.
+현재 별도 `production_candidates` 저장소는 없습니다. 수집 영상 후보는 영상별 판단 기록을 사용하고, 발견 링크 후보는 발견함 상태값을 사용합니다.
 
 ---
 
@@ -350,4 +350,4 @@ ProductionKanban → videoUserRecords + discovery links status:candidate
 
 ## 한 줄 결론
 
-기존 핵심 기능은 보존하고, 현재의 hooks/components/services/utils 분리 구조를 깨지 않으면서 Cloud 기준 데이터, 안전한 화면 흐름, 명확한 버튼 문구를 쌓아 Creator OS형 구조로 발전시킵니다.
+기존 핵심 기능은 보존하고, 현재의 hooks/components/services/utils 분리 구조를 깨지 않으면서 온라인 저장소(Azure DB) 기준 데이터, 안전한 화면 흐름, 명확한 버튼 문구를 쌓아 Creator OS형 구조로 발전시킵니다.

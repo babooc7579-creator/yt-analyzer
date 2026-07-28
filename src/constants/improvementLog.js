@@ -39,7 +39,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '제작 후보 영상의 제목, 영상 분석, 구성안, 대본 본문, 대본 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 명시적으로 저장합니다.',
+    currentSummary: '제작 후보 영상의 제목, 영상 분석, 구성안, 대본 본문, 대본 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 명시적으로 저장합니다. 제작 후보함·대본 작업실·업로드 캘린더의 이동, 모바일 배치와 미저장 이탈 경고를 실제 화면에서 확인했습니다.',
     targetSummary: '제작 후보의 원본을 분석하고, 구성안을 만든 뒤, 대본을 작성·수정하고 최종본을 확정하는 독립 작업 공간으로 발전시킵니다.',
     nextAction: '별도 승인 후 테스트용 제작 후보에서 저장 → 새로고침 → 재조회 유지 여부를 실제 검수합니다.',
     decisions: [
@@ -77,7 +77,22 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'writing-flow',
         label: '분석 → 구성 → 초안 → 수정 → 최종본 작업 흐름 구현',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'production-script-calendar-navigation',
+        label: '제작 후보함 → 대본 작업실 → 업로드 캘린더 왕복 이동 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'script-mobile-layout',
+        label: '390×844 모바일에서 대본 입력 항목과 가로 넘침 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'script-unsaved-navigation',
+        label: '대본 수정 후 다른 메뉴 이동 시 미저장 경고 표시 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'discovery-link-source',
@@ -103,7 +118,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 이동·조회·저장·새 영상 수집 버튼의 기능 대조는 계속 진행 중입니다.',
+    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 제작 후보함·대본 작업실·업로드 캘린더와 최근 수집 상태·채널 운영실의 실제 이동을 검수해, 누락된 대본 작업실 버튼과 채널 분류 탭 연결을 보완했습니다.',
     targetSummary: '버튼 이름만 보고도 이동·조회·저장·YouTube API 수집 여부를 이해할 수 있도록 모든 화면의 용어를 통일합니다.',
     nextAction: '채널 운영실과 제작 흐름의 주요 버튼을 실제 결과 위치까지 순서대로 대조 검수합니다.',
     decisions: [
@@ -140,6 +155,16 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'channel-collection-stage-term',
         label: '채널 운영실의 온라인 저장소 조회와 YouTube 새 영상 수집 단계 이름 구분',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'production-script-calendar-route',
+        label: '제작 후보함·대본 작업실·업로드 캘린더의 버튼명과 실제 도착 위치 대조',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'recent-scan-channel-route',
+        label: '최근 수집 상태에서 선택한 채널의 관리·수집 단계와 분류 탭 연결',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],
