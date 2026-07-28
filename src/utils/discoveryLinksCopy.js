@@ -3,7 +3,7 @@ import { hasCopyableUrlValue } from './copyUrlButtonProps';
 export const getDiscoveryLinksHeaderTitleViewProps = ({ totalLinkCount = 0 } = {}) => ({
   eyebrow: '온라인 발견함(Azure DB)',
   title: `저장한 링크 ${totalLinkCount}개`,
-  description: '온라인 저장소(Azure DB)에 저장된 수동 링크입니다. 목록이 비어 있으면 온라인 저장소 기준으로 아직 저장된 링크가 없는 상태입니다.',
+  description: '온라인 저장소(Azure DB)에 저장된 수동 링크입니다. 목록이 비어 있으면 온라인 저장소(Azure DB) 기준으로 아직 저장된 링크가 없는 상태입니다.',
 });
 
 export const getDiscoveryLinksFilteredEmptyStateViewProps = ({ allLinkCount = 0 } = {}) => ({

@@ -189,7 +189,7 @@ export const getProductionKanbanPriorityGuideProps = ({
   return {
     badge: '후보 없음',
     title: '오늘 레이더나 발견함에서 후보를 먼저 채우세요',
-    description: '이 안내는 온라인 저장소(Azure DB)에 저장된 후보 기록을 읽어 표시만 합니다. 새 YouTube API 호출, 외부 자동 수집, 온라인 저장소 저장은 실행하지 않습니다.',
+    description: '이 안내는 온라인 저장소(Azure DB)에 저장된 후보 기록을 읽어 표시만 합니다. 새 YouTube API 호출, 외부 자동 수집, 온라인 저장소(Azure DB) 저장은 실행하지 않습니다.',
     nextAction: '오늘 순서: 오늘 레이더에서 수집 영상 후보 확인 또는 발견함에 수동 링크 저장',
     tone: 'idle',
   };

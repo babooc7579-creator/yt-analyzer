@@ -164,7 +164,7 @@ export default function WorkToolSettingsPanel({
           <p className="text-xs font-extrabold text-cyan-300">업무 도구 관리</p>
           <h3 id="work-tool-settings-title" className="mt-1 text-lg font-black text-white">즐겨찾기 추가·숨김·순서 변경</h3>
           <p className="mt-2 max-w-3xl text-xs leading-5 text-slate-400">
-            저장한 설정은 온라인 저장소 기준으로 모든 브라우저에 적용됩니다. 외부 사이트의 검색 데이터는 수집하지 않습니다.
+            저장한 설정은 온라인 저장소(Azure DB) 기준으로 모든 브라우저에 적용됩니다. 외부 사이트의 검색 데이터는 수집하지 않습니다.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">

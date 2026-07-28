@@ -10,13 +10,13 @@ describe('syncWarnings constants', () => {
   it('marks video record fallback data as temporary browser records, not online-storage truth', () => {
     expect(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback).toContain('온라인 저장소(Azure DB) 연결 실패');
     expect(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback).toContain('임시 기록');
-    expect(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback).toContain('온라인 저장소 기준 데이터가 아닙니다');
+    expect(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback).toContain('온라인 저장소(Azure DB) 기준 데이터가 아닙니다');
   });
 
   it('marks scrapbook fallback data as temporary browser records, not online-storage truth', () => {
     expect(SCRAPBOOK_SYNC_WARNINGS.loadFallback).toContain('온라인 저장소(Azure DB) 연결 실패');
     expect(SCRAPBOOK_SYNC_WARNINGS.loadFallback).toContain('임시 기록');
-    expect(SCRAPBOOK_SYNC_WARNINGS.loadFallback).toContain('온라인 저장소 기준 데이터가 아닙니다');
+    expect(SCRAPBOOK_SYNC_WARNINGS.loadFallback).toContain('온라인 저장소(Azure DB) 기준 데이터가 아닙니다');
   });
 
   it('keeps save failure copy from looking like local-only success', () => {
