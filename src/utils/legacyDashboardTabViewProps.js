@@ -84,6 +84,7 @@ export function getLegacyDashboardTabViewProps({
       onClearSelection: clearCheckedVideos,
       onCopyPrompt: () => copyPromptForVideos(selectedVideos),
       onManualScan: handleManualScan,
+      onResetFilters: resetFilters,
       savedChannelCount: savedChannelList.length,
       savedVideoCount: savedVideoList.length,
       scannableChannelCount,

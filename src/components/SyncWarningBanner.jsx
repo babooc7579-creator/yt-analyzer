@@ -1,13 +1,14 @@
 import { AlertTriangle } from 'lucide-react';
 import { getSyncWarningBannerViewProps } from '../utils/syncWarningBannerProps';
 
-export default function SyncWarningBanner({ message, messages }) {
+export default function SyncWarningBanner({ actions, message, messages }) {
   const {
+    actions: retryActions,
     helpText,
     isVisible,
     messages: warningMessages,
     title,
-  } = getSyncWarningBannerViewProps({ message, messages });
+  } = getSyncWarningBannerViewProps({ actions, message, messages });
 
   if (!isVisible) return null;
 
@@ -22,6 +23,21 @@ export default function SyncWarningBanner({ message, messages }) {
           ))}
         </div>
         <p className="mt-1 text-[11px] leading-relaxed text-amber-100/80">{helpText}</p>
+        {retryActions.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {retryActions.map((action) => (
+              <button
+                key={action.key}
+                type="button"
+                onClick={action.onClick}
+                title={action.title}
+                className="rounded-lg border border-amber-200/40 bg-amber-100/10 px-3 py-2 text-xs font-extrabold text-amber-50 transition hover:bg-amber-100/20"
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

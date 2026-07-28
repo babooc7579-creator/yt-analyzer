@@ -24,6 +24,7 @@ export default function CreatorAppLayout({
   progressMessage,
   savedVideoCount,
   selectedChannelCount,
+  syncWarningActions,
   syncWarnings,
   videoCount,
 }) {
@@ -58,7 +59,7 @@ export default function CreatorAppLayout({
             savedVideoCount={savedVideoCount}
           />
 
-          <SyncWarningBanner messages={syncWarnings} />
+          <SyncWarningBanner actions={syncWarningActions} messages={syncWarnings} />
 
           <CreatorActionFeedback
             error={error}

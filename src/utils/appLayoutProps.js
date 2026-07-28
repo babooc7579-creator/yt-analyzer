@@ -3,6 +3,27 @@ import { guardUnsavedSidebarNavigation } from './unsavedNavigation';
 import { WORK_TOOL_UNSAVED_NAVIGATION_MESSAGE } from './workToolSettings';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
+const isFunction = (value) => typeof value === 'function';
+
+export const getSyncWarningRetryActions = ({
+  retryScrapbookSync,
+  retryVideoUserRecordsSync,
+  scrapbookSyncWarning,
+  videoRecordsSyncWarning,
+} = {}) => ([
+  videoRecordsSyncWarning && isFunction(retryVideoUserRecordsSync) ? {
+    key: 'video-records',
+    label: '영상 판단 기록 다시 확인',
+    title: '온라인 저장소(Azure DB)의 영상 판단 기록을 다시 조회합니다. 기존 기록을 저장·삭제하거나 YouTube API를 호출하지 않습니다.',
+    onClick: retryVideoUserRecordsSync,
+  } : null,
+  scrapbookSyncWarning && isFunction(retryScrapbookSync) ? {
+    key: 'scrapbook',
+    label: '소재 보관함 다시 확인',
+    title: '온라인 저장소(Azure DB)의 소재 보관함을 다시 조회합니다. 보관 상태를 변경하거나 YouTube API를 호출하지 않습니다.',
+    onClick: retryScrapbookSync,
+  } : null,
+]).filter(Boolean);
 
 export const getCreatorSidebarHeaderViewProps = () => ({
   brandLabel: '타임머신 CRM',
@@ -135,11 +156,15 @@ export function buildLayoutProps({
   notesModal,
   onConfirmUnsavedNavigation,
   openCreatorView,
+  retryScrapbookSync,
+  retryVideoUserRecordsSync,
+  scrapbookSyncWarning,
   savedChannels,
   savedVideos,
   setError,
   selectedChannelIds,
   syncWarnings,
+  videoRecordsSyncWarning,
   videos,
   progressMsg,
 }) {
@@ -195,6 +220,12 @@ export function buildLayoutProps({
     savedVideoCount: savedVideoList.length,
     selectedChannelCount: selectedChannels.length,
     syncWarnings,
+    syncWarningActions: getSyncWarningRetryActions({
+      retryScrapbookSync,
+      retryVideoUserRecordsSync,
+      scrapbookSyncWarning,
+      videoRecordsSyncWarning,
+    }),
     videoCount: videoList.length,
   };
 }

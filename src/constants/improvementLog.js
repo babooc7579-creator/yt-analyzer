@@ -269,13 +269,14 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-29',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 일부 온라인 저장 기능 경고 범위, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인했습니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 적용 필터·선택 상태, 일부 온라인 저장 기능별 읽기 재확인, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인합니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
     nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
     decisions: [
       '버튼 존재와 자동 테스트 통과만으로 운영 확인 완료라고 표시하지 않습니다.',
       'Azure DB 실제 쓰기는 원문 보존과 원상복구가 가능한 대상을 정해 실행하고, YouTube API 신규 수집은 별도 승인 후 실행합니다.',
       '모바일 기준 화면은 390×844이며 페이지 전체 가로 넘침이 없어야 합니다.',
+      'Azure 배포의 github_id_token 경고는 입력 제거 시 실제 배포가 실패한 이력이 있어 Azure 인증 방식 결정 전까지 비차단 경고로 유지합니다.',
     ],
     checkpoints: [
       {
@@ -370,12 +371,32 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       },
       {
         id: 'mobile-list-guidance',
-        label: '390×844 리스트 보기의 내부 좌우 스크롤과 카드 보기 권장 안내',
+        label: '390×844 리스트 보기의 제목·조회수·대박 지수·게시일 중심 간결 목록',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'daily-three-minute-regression',
         label: '저장·삭제·YouTube 신규 수집 없는 매일 3분 핵심 회귀 순서',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'daily-readonly-test-command',
+        label: '매일 핵심 안전 계약을 한 번에 확인하는 npm run test:daily 자동 검수 명령',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'visible-filter-selection-state',
+        label: '적용 필터 수·화면 선택 수 표시와 선택을 유지하는 필터 초기화',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'feature-specific-storage-retry',
+        label: '영상 판단 기록·소재 보관함 오류별 Azure DB 읽기 전용 다시 확인',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'deployment-warning-decision-boundary',
+        label: 'github_id_token 경고와 실제 배포 성공의 분리 및 변경 보류 기준',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

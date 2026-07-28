@@ -70,7 +70,9 @@ export const getVideoToolbarViewProps = ({
   handleManualScan,
   isScanning,
   lengthFilter,
+  onResetFilters,
   searchKeyword,
+  selectedVideoCount,
   selectedChannelCount,
   setLengthFilter,
   setSearchKeyword,
@@ -93,7 +95,9 @@ export const getVideoToolbarViewProps = ({
   return {
     filtersProps: {
       lengthFilter,
+      onResetFilters,
       searchKeyword,
+      selectedVideoCount,
       setLengthFilter,
       setSearchKeyword,
       setShowWorkPanel,
@@ -102,6 +106,7 @@ export const getVideoToolbarViewProps = ({
       setViewMode,
       showWorkPanel,
       sortType,
+      ttoTtoMode,
       viewFilter,
       viewMode,
     },

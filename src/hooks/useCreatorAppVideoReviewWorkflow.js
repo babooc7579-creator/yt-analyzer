@@ -7,11 +7,13 @@ export function useCreatorAppVideoReviewWorkflow() {
     savedVideos,
     scrapbookSyncWarning,
     isVideoSaved,
+    retryScrapbookSync,
     toggleScrapVideo,
   } = useScrapbook();
   const {
     videoUserRecords,
     videoRecordsSyncWarning,
+    retryVideoUserRecordsSync,
     markVideoStatus: markRadarVideoStatus,
     updateVideoUserRecord,
     restoreVideoToRadar,
@@ -34,6 +36,8 @@ export function useCreatorAppVideoReviewWorkflow() {
     markRadarVideoStatus,
     promoteVideoToProduction,
     restoreVideoToRadar,
+    retryScrapbookSync,
+    retryVideoUserRecordsSync,
     savedVideos,
     scrapbookSyncWarning,
     toggleScrapVideo,

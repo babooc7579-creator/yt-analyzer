@@ -4,10 +4,13 @@ import VideoToolbarSelectFilters from './VideoToolbarSelectFilters';
 import VideoToolbarSortControl from './VideoToolbarSortControl';
 import VideoToolbarViewModeControl from './VideoToolbarViewModeControl';
 import VideoToolbarWorkPanelToggle from './VideoToolbarWorkPanelToggle';
+import VideoToolbarFilterStatus from './VideoToolbarFilterStatus';
 
 export default function VideoToolbarFilters({
   lengthFilter,
+  onResetFilters,
   searchKeyword,
+  selectedVideoCount,
   setLengthFilter,
   setSearchKeyword,
   setShowWorkPanel,
@@ -16,6 +19,7 @@ export default function VideoToolbarFilters({
   setViewMode,
   showWorkPanel,
   sortType,
+  ttoTtoMode,
   viewFilter,
   viewMode,
 }) {
@@ -23,11 +27,14 @@ export default function VideoToolbarFilters({
     searchFieldProps,
     selectFiltersProps,
     sortControlProps,
+    statusProps,
     viewModeControlProps,
     workPanelToggleProps,
   } = getVideoToolbarFiltersViewProps({
     lengthFilter,
+    onResetFilters,
     searchKeyword,
+    selectedVideoCount,
     setLengthFilter,
     setSearchKeyword,
     setShowWorkPanel,
@@ -36,6 +43,7 @@ export default function VideoToolbarFilters({
     setViewMode,
     showWorkPanel,
     sortType,
+    ttoTtoMode,
     viewFilter,
     viewMode,
   });
@@ -51,6 +59,8 @@ export default function VideoToolbarFilters({
       <VideoToolbarViewModeControl {...viewModeControlProps} />
 
       <VideoToolbarWorkPanelToggle {...workPanelToggleProps} />
+
+      <VideoToolbarFilterStatus {...statusProps} />
     </div>
   );
 }

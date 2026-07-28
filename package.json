@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "test": "vitest run",
+    "test:daily": "vitest run src/utils/appLayoutProps.test.js src/utils/legacyDashboardTabViewProps.test.js src/components/StoredVideoLoadFeedback.test.jsx src/components/SyncWarningBanner.test.jsx src/components/VideoToolbarFilterStatus.test.jsx src/components/SelectedVideosActionBar.test.jsx src/components/VideoListTable.test.jsx",
     "preview": "vite preview"
   },
   "dependencies": {
