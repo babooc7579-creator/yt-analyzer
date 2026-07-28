@@ -1,11 +1,11 @@
-import { Bookmark, Home, PlusCircle } from 'lucide-react';
+import { Bookmark, Home, ListChecks } from 'lucide-react';
 
 import { REFERENCE_VAULT_EMPTY_STATE } from '../constants/emptyStates';
 import EmptyStateActions from './EmptyStateActions';
 import EmptyStateSteps from './EmptyStateSteps';
 
 const ICONS = {
-  'add-channel': PlusCircle,
+  'channel-watchlist': ListChecks,
   home: Home,
 };
 

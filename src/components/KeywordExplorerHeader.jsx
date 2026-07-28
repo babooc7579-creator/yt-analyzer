@@ -15,7 +15,7 @@ export default function KeywordExplorerHeader({
           </span>
           <div>
             <p className="text-xs font-extrabold text-cyan-300">수집 영상 정보 기반 소재 검색</p>
-            <h2 className="mt-1 text-xl font-black text-white sm:text-2xl">키워드 탐색</h2>
+            <h2 className="mt-1 text-xl font-black text-white sm:text-2xl">키워드로 수집 영상 찾기</h2>
           </div>
         </div>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-400">

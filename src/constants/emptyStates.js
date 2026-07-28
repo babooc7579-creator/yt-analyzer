@@ -1,10 +1,10 @@
 export const REFERENCE_VAULT_EMPTY_STATE = {
-  title: '레퍼런스 금고가 비어 있습니다',
-  description: '채널을 저장한 뒤, 온라인 저장소(Azure DB)에 보관된 수집 영상 정보를 불러오면 금고에 제작 소재가 쌓입니다. 새 영상 수집은 필요할 때만 따로 실행합니다.',
+  title: '불러온 수집 영상 정보가 없습니다',
+  description: '오늘 볼 채널을 선택한 뒤, 온라인 저장소(Azure DB)에 보관된 수집 영상 정보를 불러오세요. 새 영상 수집은 필요할 때만 따로 실행합니다.',
   steps: [
     {
-      title: '1. 채널 등록·선택',
-      description: '채널을 온라인 저장소(Azure DB)에 등록하고 오늘 확인할 채널을 선택합니다. 선택만으로 영상 수집은 실행되지 않습니다.',
+      title: '1. 오늘 볼 채널 선택',
+      description: '등록된 채널 중 오늘 확인할 채널을 선택합니다. 선택만으로 영상 조회나 새 영상 수집은 실행되지 않습니다.',
     },
     {
       title: '2. 수집 영상 목록 불러오기',
@@ -20,10 +20,10 @@ export const REFERENCE_VAULT_EMPTY_STATE = {
     title: '오늘 레이더로 이동합니다. 화면 이동만으로 YouTube API를 새로 호출하지 않습니다.',
     ariaLabel: '오늘 레이더 화면 열기, 이동만으로 YouTube API 호출 없음',
   },
-  addChannelButton: {
-    label: '새 채널 등록',
-    title: '새 채널 등록 화면으로 이동합니다. 이동만으로 영상 수집이나 YouTube API 호출은 실행하지 않습니다.',
-    ariaLabel: '새 채널 등록 화면 열기, 이동만으로 영상 수집이나 YouTube API 호출 없음',
+  channelWatchlistButton: {
+    label: '오늘 볼 채널 선택',
+    title: '오늘 볼 채널 화면으로 이동합니다. 이동만으로 조회, 저장, 새 영상 수집 또는 YouTube API 호출은 실행하지 않습니다.',
+    ariaLabel: '오늘 볼 채널 화면 열기, 이동만으로 조회나 저장 또는 YouTube API 호출 없음',
   },
 };
 

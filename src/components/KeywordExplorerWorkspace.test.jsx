@@ -39,7 +39,7 @@ describe('KeywordExplorerWorkspace', () => {
       <KeywordExplorerWorkspace selectedChannelCount={2} videos={[]} />
     );
 
-    expect(html).toContain('키워드 탐색');
+    expect(html).toContain('키워드로 수집 영상 찾기');
     expect(html).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(html).toContain('수집 채널 반응도');
     expect(html).toContain('외부 검색량이나 완전한 실시간 지표가 아니며');
