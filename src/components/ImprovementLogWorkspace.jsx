@@ -10,6 +10,7 @@ import {
 
 import {
   CREATOR_OS_IMPROVEMENT_AREAS,
+  CREATOR_OS_MENU_ROLE_AUDIT,
   IMPROVEMENT_CHECKPOINT_STATUS,
   IMPROVEMENT_LOG_LAST_UPDATED,
   IMPROVEMENT_STATUS_META,
@@ -163,6 +164,40 @@ export default function ImprovementLogWorkspace() {
           이름과 기능의 일치, 필요한 경우 API·온라인 저장소(Azure DB) 결과까지 확인한 뒤 체크포인트를 갱신합니다.
         </p>
       </div>
+
+      <section className="border border-slate-800 bg-slate-900/85 p-4 sm:p-5" aria-labelledby="menu-role-audit-title">
+        <div>
+          <p className="text-xs font-extrabold text-cyan-300">메뉴 역할표</p>
+          <h3 id="menu-role-audit-title" className="mt-1 text-lg font-black text-white">제목·기능·데이터 경계를 함께 확인합니다</h3>
+          <p className="mt-2 text-xs leading-5 text-slate-400">
+            운영 클릭 확인, 로컬 클릭 확인, 코드·테스트 확인을 구분해 실제 확인 범위를 과장하지 않습니다.
+          </p>
+        </div>
+        <div className="mt-4 overflow-x-auto">
+          <table className="min-w-[920px] w-full border-collapse text-left text-xs">
+            <thead>
+              <tr className="border-y border-slate-700 bg-slate-950 text-slate-400">
+                <th className="px-3 py-3 font-black">구역</th>
+                <th className="px-3 py-3 font-black">메뉴</th>
+                <th className="px-3 py-3 font-black">존재 이유</th>
+                <th className="px-3 py-3 font-black">데이터·동작 경계</th>
+                <th className="px-3 py-3 font-black">확인 상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CREATOR_OS_MENU_ROLE_AUDIT.map((item) => (
+                <tr className="border-b border-slate-800 align-top" key={item.menu}>
+                  <td className="px-3 py-3 font-bold text-slate-500">{item.section}</td>
+                  <td className="px-3 py-3 font-extrabold text-white">{item.menu}</td>
+                  <td className="px-3 py-3 leading-5 text-slate-300">{item.role}</td>
+                  <td className="px-3 py-3 leading-5 text-slate-400">{item.dataBoundary}</td>
+                  <td className="px-3 py-3 font-bold text-cyan-200">{item.verification}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <div className="space-y-4">
         {CREATOR_OS_IMPROVEMENT_AREAS.map((area) => (

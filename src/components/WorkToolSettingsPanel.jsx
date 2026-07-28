@@ -182,6 +182,7 @@ export default function WorkToolSettingsPanel({
             type="button"
             onClick={restoreDefaults}
             disabled={saving}
+            title="이 화면의 업무 도구 목록을 기본 상태로 되돌립니다. 온라인 저장소(Azure DB)는 변경사항 저장을 눌러야 바뀝니다."
             className="inline-flex min-h-10 items-center justify-center gap-2 border border-slate-600 bg-slate-950 px-3 py-2 text-xs font-bold text-slate-200 hover:border-amber-400 disabled:opacity-50"
           >
             <RotateCcw className="h-3.5 w-3.5" />
@@ -191,6 +192,7 @@ export default function WorkToolSettingsPanel({
             type="button"
             onClick={save}
             disabled={!dirty || saving}
+            title="현재 화면의 업무 도구 변경사항을 온라인 저장소(Azure DB)에 저장합니다."
             className="inline-flex min-h-10 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Save className="h-3.5 w-3.5" />
@@ -368,6 +370,7 @@ export default function WorkToolSettingsPanel({
         <button
           type="submit"
           disabled={saving}
+          title="개인 도구를 이 화면의 목록에만 추가합니다. 온라인 저장소(Azure DB)는 변경사항 저장을 눌러야 바뀝니다."
           className="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/15 px-3 py-2 text-xs font-bold text-cyan-100 hover:bg-cyan-500/25 sm:w-auto"
         >
           <Plus className="h-3.5 w-3.5" />
@@ -385,6 +388,7 @@ export default function WorkToolSettingsPanel({
             type="button"
             onClick={save}
             disabled={saving}
+            title="현재 화면의 업무 도구 변경사항을 온라인 저장소(Azure DB)에 저장합니다."
             className="inline-flex min-h-10 w-full shrink-0 items-center justify-center gap-2 border border-cyan-400/40 bg-cyan-500/20 px-4 py-2 text-xs font-black text-cyan-50 hover:bg-cyan-500/30 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             <Save className="h-3.5 w-3.5" />

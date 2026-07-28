@@ -31,5 +31,8 @@ describe('WorkToolSettingsPanel', () => {
     expect(html).toContain('변경사항 저장');
     expect(html).toContain('개인 도구 추가');
     expect(html).toContain('<form');
+    expect(html).toContain('이 화면의 업무 도구 목록을 기본 상태로 되돌립니다');
+    expect(html).toContain('온라인 저장소(Azure DB)는 변경사항 저장을 눌러야 바뀝니다');
+    expect(html).toContain('현재 화면의 업무 도구 변경사항을 온라인 저장소(Azure DB)에 저장합니다');
   });
 });

@@ -8,14 +8,18 @@ export const CHANNEL_BULK_INPUT_PLACEHOLDER = [
   'https://youtu.be/xxxxxxxxxxx',
 ].join('\n');
 
-export const getChannelPreviewInputCopy = () => ({
+export const getChannelPreviewInputCopy = ({ hasInput = true } = {}) => ({
   inputPlaceholder: CHANNEL_INPUT_PLACEHOLDER,
   inputAriaLabel: '확인할 채널 핸들, 채널 링크 또는 영상 링크',
   inputTitle: '붙여넣기만으로는 온라인 저장소(Azure DB) 저장이나 영상 수집이 실행되지 않습니다. YouTube에서 확인 버튼으로 채널 정보만 먼저 확인합니다.',
-  previewButtonTitle: 'YouTube에서 채널 정보만 확인합니다. 온라인 저장소(Azure DB) 저장과 영상 수집은 하지 않습니다.',
+  previewButtonTitle: hasInput
+    ? 'YouTube에서 채널 정보만 확인합니다. 온라인 저장소(Azure DB) 저장과 영상 수집은 하지 않습니다.'
+    : '채널 핸들, 채널 링크 또는 영상 링크를 먼저 입력해 주세요.',
   previewButtonAriaLabel: 'YouTube에서 채널 정보 확인',
   previewButtonLabel: 'YouTube에서 확인',
-  helperText: '아직 온라인 저장소(Azure DB)에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다. 영상 수집은 하지 않습니다.',
+  helperText: hasInput
+    ? '아직 온라인 저장소(Azure DB)에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다. 영상 수집은 하지 않습니다.'
+    : '채널 정보를 입력하면 YouTube에서 정보만 확인할 수 있습니다. 입력만으로 API 호출이나 저장은 실행되지 않습니다.',
 });
 
 export const getChannelBulkInputCopy = (recognizedLineCount = 0) => ({

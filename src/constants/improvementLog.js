@@ -31,6 +31,25 @@ export const IMPROVEMENT_STATUS_META = {
 
 export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-07-28';
 
+export const CREATOR_OS_MENU_ROLE_AUDIT = [
+  { section: '디스커버리 탐색', menu: '오늘의 레이더', role: '오늘 볼 채널과 수집 영상에서 만들 소재를 결정', dataBoundary: 'Azure DB 조회·판단 기록 저장', verification: '운영 클릭 확인' },
+  { section: '디스커버리 탐색', menu: '또터또 탐색', role: '오래된 고성과 영상 후보를 별도 기준으로 탐색', dataBoundary: '불러온 수집 영상 정보 분석', verification: '코드·테스트 확인' },
+  { section: '디스커버리 탐색', menu: '키워드 탐색', role: '수집 채널의 제목 반응도와 외부 조사 연결', dataBoundary: '불러온 정보 분석·외부 링크', verification: '코드·테스트 확인' },
+  { section: '디스커버리 탐색', menu: '오늘 볼 채널', role: '오늘 조회할 채널 범위를 선택', dataBoundary: '화면 선택·Azure DB 채널 조회', verification: '운영 클릭 확인' },
+  { section: '수집 영상·링크', menu: '수집 영상 목록', role: 'Azure DB에 보관된 수집 영상 정보를 검색·검토', dataBoundary: 'Azure DB 조회·YouTube API 없음', verification: '운영 클릭 확인' },
+  { section: '수집 영상·링크', menu: '태그별 금고', role: '채널 태그별 수집 영상 묶음 탐색', dataBoundary: 'Azure DB 조회 결과 필터', verification: '통합 결정 필요' },
+  { section: '수집 영상·링크', menu: '발견 링크 저장', role: '외부에서 발견한 링크를 별도 후보로 관리', dataBoundary: '온라인 발견함(Azure DB) 조회·저장', verification: '운영 클릭 확인' },
+  { section: '제작 스튜디오', menu: '제작 후보함', role: '무엇을 만들지 후보와 우선순위를 결정', dataBoundary: '제작 기록 Azure DB 조회·저장', verification: '운영 클릭 확인' },
+  { section: '제작 스튜디오', menu: '소재 보관함', role: '나중에 다시 볼 수집 영상 소재를 보관', dataBoundary: '소재 보관함 Azure DB 조회·저장', verification: '운영 클릭 확인' },
+  { section: '제작 스튜디오', menu: '대본 작업실', role: '선택한 제작 후보의 분석·구성·대본을 작성', dataBoundary: '대본 기록 Azure DB 조회·저장', verification: '운영 클릭 확인' },
+  { section: '제작 스튜디오', menu: '업로드 캘린더', role: '제작 후보의 예정일과 준비 상태를 확인', dataBoundary: '제작 기록 Azure DB 조회·저장', verification: '운영 클릭 확인' },
+  { section: '오퍼레이션 관제', menu: '채널 운영실', role: '채널 관리·등록·기존 영상 조회·신규 수집 통제', dataBoundary: '화면 이동·Azure DB·YouTube API를 단계별 분리', verification: '운영·로컬 클릭 확인' },
+  { section: '오퍼레이션 관제', menu: '최근 수집 상태', role: '최근 수집 결과와 실패 후속 행동 확인', dataBoundary: 'Azure DB 수집 기록 조회·YouTube API 없음', verification: '운영 클릭 확인' },
+  { section: '오퍼레이션 관제', menu: '설정', role: '분야·연결 상태·업무 도구 설정 관리', dataBoundary: '브라우저 표시 설정과 Azure DB 저장 분리', verification: '로컬 클릭 확인' },
+  { section: '업무 도구', menu: '업무 도구함', role: '공식 외부 조사 도구와 개인 링크를 실행', dataBoundary: '외부 링크·Creator OS 자동 저장 없음', verification: '로컬 클릭 확인' },
+  { section: '인사이트 / 학습', menu: '개선 기록', role: '현재 상태·검수·결정·다음 작업을 추적', dataBoundary: 'Git 기반 읽기 전용 기록', verification: '운영 클릭 확인' },
+];
+
 export const CREATOR_OS_IMPROVEMENT_AREAS = [
   {
     id: 'script-workspace',
@@ -115,12 +134,12 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     id: 'navigation-terms',
     title: '메뉴·용어 정리',
     section: '전체 화면',
-    status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+    status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 제작 흐름, 최근 수집 상태, 오늘의 레이더, 수집 영상 목록, 소재 보관함과 발견함의 실제 이동을 검수하고 탭 내용과 상단 화면명이 함께 바뀌도록 보완했습니다.',
+    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 핵심 제작·탐색 흐름에 이어 설정, 업무 도구함, 채널 등록 단계의 실제 이동·버튼 상태·결과 위치·모바일 화면을 검수했습니다.',
     targetSummary: '버튼 이름만 보고도 이동·조회·저장·YouTube API 수집 여부를 이해할 수 있도록 모든 화면의 용어를 통일합니다.',
-    nextAction: '설정과 업무 도구함의 주요 버튼을 실제 결과 위치까지 대조하고, 완료된 화면은 정기 회귀 검수 대상으로 전환합니다.',
+    nextAction: '완료된 핵심 화면은 정기 회귀 검수표로 관리하고, 태그별 금고 통합 여부가 결정되면 메뉴 역할표를 갱신합니다.',
     decisions: [
       '영상 파일 자체가 아니라 영상 정보를 다루므로 수집 영상 목록이라는 표현을 사용합니다.',
       '수집 영상 정보와 발견 링크를 함께 묶는 사이드바 구역명은 수집 영상·링크로 표시합니다.',
@@ -150,7 +169,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'button-destination-audit',
         label: '모든 주요 버튼의 이름과 실제 결과 위치 대조 검수',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'channel-collection-stage-term',
@@ -170,6 +189,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'radar-vault-discovery-route',
         label: '오늘의 레이더·수집 영상 목록·소재 보관함·발견함의 이동과 빈 결과 복구 대조',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'settings-tools-channel-route',
+        label: '설정·업무 도구함 왕복과 채널 등록 입력·결과 안내 대조',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],
@@ -228,11 +252,69 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'button-safety-copy',
         label: '주요 저장·수집 버튼에 데이터 출처와 변경 여부 표시',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'cloud-round-trip',
         label: 'Azure DB 실제 저장 후 새로고침·재조회 유지 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
+      },
+    ],
+  },
+  {
+    id: 'operational-regression',
+    title: '업무 시스템 정기 회귀 검수',
+    section: '전체 핵심 화면',
+    status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+    priority: 'P1',
+    lastReviewedAt: '2026-07-28',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검하는 기준을 마련했습니다. 실제 저장과 YouTube 신규 수집은 별도 승인 대상으로 분리합니다.',
+    targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
+    nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
+    decisions: [
+      '버튼 존재와 자동 테스트 통과만으로 운영 확인 완료라고 표시하지 않습니다.',
+      'Azure DB 실제 쓰기와 YouTube API 신규 수집은 테스트 대상을 정하고 별도 승인 후 실행합니다.',
+      '모바일 기준 화면은 390×844이며 페이지 전체 가로 넘침이 없어야 합니다.',
+    ],
+    checkpoints: [
+      {
+        id: 'radar-collection-regression',
+        label: '오늘 볼 채널 → 수집 영상 목록 불러오기 → 오늘의 레이더 복귀',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'collection-vault-discovery-regression',
+        label: '수집 영상 목록·소재 보관함·발견함 이동과 빈 결과 복구',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'production-regression',
+        label: '제작 후보함 → 대본 작업실 → 업로드 캘린더 왕복',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'settings-tools-regression',
+        label: '설정 ↔ 업무 도구함 왕복, 미저장 경고와 데이터 영향 안내',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'channel-add-regression',
+        label: '채널 등록 빈 입력 차단, 중복 저장 차단, 오류 후 재시도',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'mobile-regression',
+        label: '설정·업무 도구함·채널 등록 포함 핵심 화면 390×844 가로 넘침',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'stale-route-recovery',
+        label: '배포 후 오래 열린 탭의 화면 파일 로딩 실패 시 새로고침 안내',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'write-round-trip-regression',
+        label: 'Azure DB 실제 저장 후 새로고침·재조회 유지',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
       },
     ],

@@ -96,6 +96,29 @@ describe('useChannelAddActions', () => {
     expect(deps.setChannelPreview).not.toHaveBeenCalledWith({ id: 'channel-1', title: 'Known Channel' });
   });
 
+  it('shows a preview error and allows the next confirmation attempt to recover', async () => {
+    fetchChannelPreview
+      .mockRejectedValueOnce(new Error('채널 주소를 확인해 주세요.'))
+      .mockResolvedValueOnce({
+        success: true,
+        channel: { id: 'channel-2', title: 'Recovered Channel' },
+      });
+    const deps = createDeps({ newChannelInput: '@retry-channel' });
+    const { handlePreviewChannel } = useChannelAddActions(deps);
+
+    await handlePreviewChannel();
+    await handlePreviewChannel();
+
+    expect(fetchChannelPreview).toHaveBeenCalledTimes(2);
+    expect(deps.setError).toHaveBeenCalledWith('채널 주소를 확인해 주세요.');
+    expect(deps.setError).toHaveBeenLastCalledWith('');
+    expect(deps.setChannelPreview).toHaveBeenLastCalledWith({
+      id: 'channel-2',
+      title: 'Recovered Channel',
+    });
+    expect(deps.setPreviewLoading).toHaveBeenLastCalledWith(false);
+  });
+
   it('saves a confirmed preview as a Cloud channel and selects its first tag', async () => {
     const deps = createDeps({
       channelPreview: { id: 'channel-2', title: 'Ready Channel' },

@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import CreatorHomeRoute from './CreatorHomeRoute';
 import CreatorLegacyWorkspaceRoute from './CreatorLegacyWorkspaceRoute';
+import LazyRouteErrorBoundary from './LazyRouteErrorBoundary';
 
 const CreatorComingSoonRoute = lazy(() => import('./CreatorComingSoonRoute'));
 const CreatorChannelWatchlistRoute = lazy(() => import('./CreatorChannelWatchlistRoute'));
@@ -16,18 +17,20 @@ const CreatorUploadCalendarRoute = lazy(() => import('./CreatorUploadCalendarRou
 const WorkToolsWorkspace = lazy(() => import('./WorkToolsWorkspace'));
 
 const withRouteLoading = (route) => (
-  <Suspense
-    fallback={(
-      <div
-        className="rounded-2xl border border-slate-800 bg-slate-900/60 px-5 py-8 text-center text-sm font-semibold text-slate-300"
-        role="status"
-      >
-        선택한 화면을 불러오는 중입니다...
-      </div>
-    )}
-  >
-    {route}
-  </Suspense>
+  <LazyRouteErrorBoundary>
+    <Suspense
+      fallback={(
+        <div
+          className="rounded-2xl border border-slate-800 bg-slate-900/60 px-5 py-8 text-center text-sm font-semibold text-slate-300"
+          role="status"
+        >
+          선택한 화면을 불러오는 중입니다...
+        </div>
+      )}
+    >
+      {route}
+    </Suspense>
+  </LazyRouteErrorBoundary>
 );
 
 export default function CreatorAppRoutes({

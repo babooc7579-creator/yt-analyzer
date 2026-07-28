@@ -26,6 +26,22 @@ describe('channel registration form input visibility', () => {
     expect(markup).toContain('value="@visible-channel"');
     expectVisibleLightControl(markup);
     expect(markup).toContain('placeholder:text-slate-400');
+    expect(markup).not.toContain('disabled=""');
+  });
+
+  it('disables YouTube confirmation until a channel value is entered', () => {
+    const markup = renderToStaticMarkup(
+      <ChannelPreviewInput
+        handlePreviewChannel={vi.fn()}
+        newChannelInput="   "
+        previewLoading={false}
+        setNewChannelInput={vi.fn()}
+      />,
+    );
+
+    expect(markup).toContain('disabled=""');
+    expect(markup).toContain('채널 정보를 입력하면 YouTube에서 정보만 확인할 수 있습니다');
+    expect(markup).toContain('입력만으로 API 호출이나 저장은 실행되지 않습니다');
   });
 
   it('keeps the bulk input, note, and language controls readable', () => {
