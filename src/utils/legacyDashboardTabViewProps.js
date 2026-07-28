@@ -10,6 +10,7 @@ export const LEGACY_DASHBOARD_COMMENT_NOTICE = '댓글 Top 10 보기는 YouTube 
 export function getLegacyDashboardTabViewProps({
   activeSelectedChannelCount,
   checkedVideos,
+  clearCheckedVideos,
   copiedPrompt,
   copyPromptForVideos,
   fetchTopComments,
@@ -80,6 +81,7 @@ export function getLegacyDashboardTabViewProps({
       isReferenceVaultView,
       isScanning,
       lengthFilter,
+      onClearSelection: clearCheckedVideos,
       onCopyPrompt: () => copyPromptForVideos(selectedVideos),
       onManualScan: handleManualScan,
       savedChannelCount: savedChannelList.length,

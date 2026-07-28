@@ -30,6 +30,7 @@ describe('videoDashboardControls utils', () => {
 
   it('builds dashboard control props with selected video and source summary counts', () => {
     const onCopyPrompt = () => 'copy';
+    const onClearSelection = () => 'clear';
     const onManualScan = () => 'scan';
 
     const props = getVideoDashboardControlsViewProps({
@@ -42,6 +43,7 @@ describe('videoDashboardControls utils', () => {
       isReferenceVaultView: true,
       isScanning: false,
       lengthFilter: 'shorts',
+      onClearSelection,
       onCopyPrompt,
       onManualScan,
       savedChannelCount: 10,
@@ -69,6 +71,7 @@ describe('videoDashboardControls utils', () => {
     expect(props.selectedVideosActionProps).toEqual({
       selectedCount: 1,
       copiedPrompt: 'urls',
+      onClearSelection,
       promptCopyError: '',
       onCopyPrompt,
     });

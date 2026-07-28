@@ -72,9 +72,13 @@ describe('useVideoSelection', () => {
 
     selection.clearCheckedVideos();
     expect(stateSetters[0]).toHaveBeenCalledWith([]);
+    expect(stateSetters[1]).toHaveBeenCalledWith(false);
+    expect(stateSetters[2]).toHaveBeenCalledWith(false);
 
     selection.toggleCheckVideo('video-1');
     expect(stateSetters[0]).toHaveBeenLastCalledWith(expect.any(Function));
+    expect(stateSetters[1]).toHaveBeenLastCalledWith(false);
+    expect(stateSetters[2]).toHaveBeenLastCalledWith(false);
 
     const updater = stateSetters[0].mock.calls.at(-1)[0];
     expect(updater([])).toEqual(['video-1']);
@@ -130,5 +134,18 @@ describe('useVideoSelection', () => {
     expect(clearTimeoutMock).toHaveBeenCalledWith(456);
     effectCleanups.at(-1)();
     expect(clearTimeoutMock).toHaveBeenLastCalledWith(123);
+  });
+
+  it('clears stale copy feedback and its timer when the selection changes', () => {
+    const { clearTimeoutMock } = installTimerMocks();
+    const selection = useVideoSelection();
+    refs.at(-1).current = 789;
+
+    selection.toggleCheckVideo('video-1');
+
+    expect(clearTimeoutMock).toHaveBeenCalledWith(789);
+    expect(refs.at(-1).current).toBeNull();
+    expect(stateSetters[1]).toHaveBeenCalledWith(false);
+    expect(stateSetters[2]).toHaveBeenCalledWith(false);
   });
 });

@@ -107,6 +107,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
   });
 
   it('forwards dashboard handlers and setters', () => {
+    const clearCheckedVideos = () => 'clear';
     const copyPromptForVideos = () => 'copy';
     const fetchTopComments = () => 'comments';
     const handleManualScan = () => 'scan';
@@ -125,6 +126,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
     const toggleScrapVideo = () => 'scrap';
 
     const props = getLegacyWorkspaceMainPanelViewProps({
+      clearCheckedVideos,
       copyPromptForVideos,
       fetchTopComments,
       handleManualScan,
@@ -143,6 +145,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
       toggleScrapVideo,
     });
 
+    expect(props.dashboardTabProps.clearCheckedVideos).toBe(clearCheckedVideos);
     expect(props.dashboardTabProps.copyPromptForVideos).toBe(copyPromptForVideos);
     expect(props.dashboardTabProps.fetchTopComments).toBe(fetchTopComments);
     expect(props.dashboardTabProps.handleManualScan).toBe(handleManualScan);

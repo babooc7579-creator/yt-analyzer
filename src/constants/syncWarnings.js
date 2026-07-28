@@ -13,6 +13,6 @@ export const SCRAPBOOK_SYNC_WARNINGS = {
 };
 
 export const SYNC_WARNING_BANNER_COPY = {
-  title: '온라인 저장소(Azure DB) 연결 확인 필요',
-  helpText: '온라인 저장소(Azure DB) 조회가 성공하면 해당 응답만 기준으로 사용합니다. 브라우저 임시 기록은 연결 실패 때만 표시합니다. 온라인 데이터와 자동 병합하거나 자동 업로드하지 않습니다.',
+  title: '일부 온라인 저장 기능 확인 필요',
+  helpText: '아래에 표시된 기능만 연결을 확인해 주세요. 채널 목록이나 수집 영상처럼 다른 온라인 저장소(Azure DB) 조회가 성공했다면 해당 데이터는 정상입니다. 브라우저 임시 기록은 자동 병합하거나 자동 업로드하지 않습니다.',
 };

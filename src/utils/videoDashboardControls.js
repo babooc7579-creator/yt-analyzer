@@ -23,6 +23,7 @@ export const getVideoDashboardControlsViewProps = ({
   isReferenceVaultView,
   isScanning,
   lengthFilter,
+  onClearSelection,
   onCopyPrompt,
   onManualScan,
   savedChannelCount,
@@ -53,6 +54,7 @@ export const getVideoDashboardControlsViewProps = ({
     selectedVideosActionProps: {
       selectedCount: getSelectedVideoIds(checkedVideos).length,
       copiedPrompt,
+      onClearSelection,
       promptCopyError,
       onCopyPrompt,
     },

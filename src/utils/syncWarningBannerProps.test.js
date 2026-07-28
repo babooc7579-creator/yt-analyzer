@@ -31,7 +31,9 @@ describe('syncWarningBannerProps utils', () => {
     const props = getSyncWarningBannerViewProps({ messages: ['fallback warning'] });
 
     expect(props.title).toBe(SYNC_WARNING_BANNER_COPY.title);
-    expect(props.helpText).toContain('해당 응답만 기준');
+    expect(props.title).toContain('일부 온라인 저장 기능');
+    expect(props.helpText).toContain('아래에 표시된 기능만');
+    expect(props.helpText).toContain('다른 온라인 저장소(Azure DB) 조회가 성공했다면 해당 데이터는 정상');
     expect(props.helpText).toContain('자동 병합하거나 자동 업로드하지 않습니다');
   });
 });

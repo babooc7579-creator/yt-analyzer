@@ -3,6 +3,7 @@ export function getLegacyMainPanelProps(props) {
     activeSelectedChannelCount: props.activeSelectedChannelCount,
     activeTab: props.activeTab,
     checkedVideos: props.checkedVideos,
+    clearCheckedVideos: props.clearCheckedVideos,
     copiedPrompt: props.copiedPrompt,
     copyPromptForVideos: props.copyPromptForVideos,
     creatorView: props.creatorView,

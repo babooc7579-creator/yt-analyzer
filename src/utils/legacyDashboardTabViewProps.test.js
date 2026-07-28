@@ -79,6 +79,7 @@ describe('legacyDashboardTabViewProps utils', () => {
   });
 
   it('forwards result actions, setters, and display options', () => {
+    const clearCheckedVideos = () => 'clear';
     const fetchTopComments = () => 'comments';
     const handleManualScan = () => 'scan';
     const isProductionCandidate = () => true;
@@ -100,6 +101,7 @@ describe('legacyDashboardTabViewProps utils', () => {
 
     const props = getLegacyDashboardTabViewProps({
       checkedVideos: ['video1'],
+      clearCheckedVideos,
       fetchTopComments,
       filteredAndSortedVideos: videos,
       handleManualScan,
@@ -122,6 +124,7 @@ describe('legacyDashboardTabViewProps utils', () => {
     });
 
     expect(props.controlsProps.onManualScan).toBe(handleManualScan);
+    expect(props.controlsProps.onClearSelection).toBe(clearCheckedVideos);
     expect(props.controlsProps.setLengthFilter).toBe(setLengthFilter);
     expect(props.controlsProps.setSearchKeyword).toBe(setSearchKeyword);
     expect(props.controlsProps.setShowWorkPanel).toBe(setShowWorkPanel);
