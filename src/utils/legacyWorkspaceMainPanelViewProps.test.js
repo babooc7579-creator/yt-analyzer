@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { getLegacyWorkspaceMainPanelViewProps } from './legacyWorkspaceMainPanelViewProps';
+import {
+  getLegacyWorkspaceMainPanelViewProps,
+  getWorkspaceTabTargetView,
+} from './legacyWorkspaceMainPanelViewProps';
 
 describe('legacyWorkspaceMainPanelViewProps utils', () => {
   it('builds dashboard tab props with safe video and channel lists', () => {
@@ -51,35 +54,52 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
   });
 
   it('builds workspace tab props from active tab and saved video count', () => {
-    const setActiveTab = () => 'tab';
+    const openCreatorView = vi.fn();
 
     const props = getLegacyWorkspaceMainPanelViewProps({
-      activeTab: 'vault',
-      creatorView: 'studio-candidates',
+      activeTab: 'dashboard',
+      creatorView: 'vault-videos',
+      openCreatorView,
       savedVideos: [{ videoId: 'saved1' }, { videoId: 'saved2' }],
-      setActiveTab,
     });
 
-    expect(props.workspaceTabsProps).toEqual({
-      activeTab: 'vault',
-      creatorView: 'studio-candidates',
-      onSelectTab: setActiveTab,
+    expect(props.workspaceTabsProps).toMatchObject({
+      activeTab: 'dashboard',
+      creatorView: 'vault-videos',
       savedVideoCount: 2,
     });
+    props.workspaceTabsProps.onSelectTab('scrapbook');
+    expect(openCreatorView).toHaveBeenCalledWith({ id: 'studio-scrapbook' });
+    expect(props.workspaceTabsProps.onSelectTab('dashboard')).toBe(false);
+    expect(openCreatorView).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the production candidate tab connected to its own creator view', () => {
+    expect(getWorkspaceTabTargetView({
+      creatorView: 'studio-candidates',
+      nextTab: 'scrapbook',
+    })).toBe('studio-candidates');
+    expect(getWorkspaceTabTargetView({
+      creatorView: 'studio-candidates',
+      nextTab: 'dashboard',
+    })).toBe('vault-videos');
   });
 
   it('protects workspace tab changes while production drafts are unsaved', () => {
     const onConfirmUnsavedNavigation = vi.fn(() => false);
+    const openCreatorView = vi.fn();
     const setActiveTab = vi.fn();
     const props = getLegacyWorkspaceMainPanelViewProps({
       activeTab: 'scrapbook',
       hasUnsavedProductionDrafts: true,
       onConfirmUnsavedNavigation,
+      openCreatorView,
       setActiveTab,
     });
 
     expect(props.workspaceTabsProps.onSelectTab('dashboard')).toBe(false);
     expect(onConfirmUnsavedNavigation).toHaveBeenCalledOnce();
+    expect(openCreatorView).not.toHaveBeenCalled();
     expect(setActiveTab).not.toHaveBeenCalled();
 
     expect(props.workspaceTabsProps.onSelectTab('scrapbook')).toBe(false);

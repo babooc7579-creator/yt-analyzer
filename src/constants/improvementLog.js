@@ -118,9 +118,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 제작 후보함·대본 작업실·업로드 캘린더와 최근 수집 상태·채널 운영실의 실제 이동을 검수해, 누락된 대본 작업실 버튼과 채널 분류 탭 연결을 보완했습니다.',
+    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 제작 흐름, 최근 수집 상태, 오늘의 레이더, 수집 영상 목록, 소재 보관함과 발견함의 실제 이동을 검수하고 탭 내용과 상단 화면명이 함께 바뀌도록 보완했습니다.',
     targetSummary: '버튼 이름만 보고도 이동·조회·저장·YouTube API 수집 여부를 이해할 수 있도록 모든 화면의 용어를 통일합니다.',
-    nextAction: '채널 운영실과 제작 흐름의 주요 버튼을 실제 결과 위치까지 순서대로 대조 검수합니다.',
+    nextAction: '설정과 업무 도구함의 주요 버튼을 실제 결과 위치까지 대조하고, 완료된 화면은 정기 회귀 검수 대상으로 전환합니다.',
     decisions: [
       '영상 파일 자체가 아니라 영상 정보를 다루므로 수집 영상 목록이라는 표현을 사용합니다.',
       '수집 영상 정보와 발견 링크를 함께 묶는 사이드바 구역명은 수집 영상·링크로 표시합니다.',
@@ -165,6 +165,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'recent-scan-channel-route',
         label: '최근 수집 상태에서 선택한 채널의 관리·수집 단계와 분류 탭 연결',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'radar-vault-discovery-route',
+        label: '오늘의 레이더·수집 영상 목록·소재 보관함·발견함의 이동과 빈 결과 복구 대조',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],
