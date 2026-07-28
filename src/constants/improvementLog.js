@@ -137,6 +137,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
         label: '모든 주요 버튼의 이름과 실제 결과 위치 대조 검수',
         status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
+      {
+        id: 'channel-collection-stage-term',
+        label: '채널 운영실의 온라인 저장소 조회와 YouTube 새 영상 수집 단계 이름 구분',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
     ],
   },
   {
