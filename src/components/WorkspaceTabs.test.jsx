@@ -28,4 +28,19 @@ describe('WorkspaceTabs', () => {
     expect(markup).toContain('border-yellow-100 bg-white text-yellow-700');
     expect(markup).toContain('현재 화면');
   });
+
+  it('shows the production candidate label instead of the scrapbook label in production view', () => {
+    const markup = renderToStaticMarkup(
+      <WorkspaceTabs
+        activeTab="scrapbook"
+        creatorView="studio-candidates"
+        savedVideoCount={2}
+        onSelectTab={vi.fn()}
+      />,
+    );
+
+    expect(markup).toContain('제작 후보함');
+    expect(markup).toContain('저장된 제작 후보 조회');
+    expect(markup).not.toContain('영구 스크랩북');
+  });
 });
