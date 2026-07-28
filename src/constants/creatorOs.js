@@ -11,8 +11,8 @@ export const CREATOR_OS_PRODUCT_MAP = [
     ],
   },
   {
-    title: '레퍼런스 금고',
-    description: '보관: 영상과 발견 링크를 자산처럼 쌓습니다.',
+    title: '수집 영상·링크',
+    description: '조회·보관: 수집 영상 정보와 발견 링크를 확인합니다.',
     items: [
       { id: 'vault-videos', label: '수집 영상 목록', status: 'live', summary: '수집된 영상 정보와 영상 보드를 확인합니다.' },
       { id: 'vault-tags', label: '태그별 금고', status: 'live', summary: '기존 채널 태그별로 채널을 선택하고 온라인 저장소(Azure DB)의 수집 영상을 묶어 봅니다.' },
@@ -78,8 +78,8 @@ const CREATOR_OS_VISIBLE_ITEMS = CREATOR_OS_PRODUCT_MAP.flatMap((section) => (
 
 // Duplicate legacy views remain addressable, but are hidden from the sidebar.
 export const LEGACY_REFERENCE_ITEMS = [
-  { id: 'vault-all', label: '올인원 보관함', status: 'live', summary: '수집 영상 목록 화면과 같은 기존 영상 보드입니다.', sectionTitle: '레퍼런스 금고' },
-  { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '채널 운영실로 통합하기 전의 기존 채널 목록입니다.', sectionTitle: '레퍼런스 금고' },
+  { id: 'vault-all', label: '올인원 보관함', status: 'live', summary: '수집 영상 목록 화면과 같은 기존 영상 보드입니다.', sectionTitle: '수집 영상·링크' },
+  { id: 'vault-channels', label: '저장한 채널', status: 'live', summary: '채널 운영실로 통합하기 전의 기존 채널 목록입니다.', sectionTitle: '수집 영상·링크' },
 ];
 
 // Older shortcuts keep resolving while the sidebar exposes one unified channel workspace.

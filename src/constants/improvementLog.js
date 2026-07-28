@@ -102,11 +102,12 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '수집 영상, 온라인 저장소(Azure DB), 화면 이동, 새 영상 수집을 구분하고 있으나 일부 이전 용어가 남아 있습니다.',
+    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 이동·조회·저장·새 영상 수집 버튼의 기능 대조는 계속 진행 중입니다.',
     targetSummary: '버튼 이름만 보고도 이동·조회·저장·YouTube API 수집 여부를 이해할 수 있도록 모든 화면의 용어를 통일합니다.',
-    nextAction: '오늘의 레이더 등에 남아 있는 레퍼런스 금고 표현을 수집 영상 목록으로 통일합니다.',
+    nextAction: '채널 운영실과 제작 흐름의 주요 버튼을 실제 결과 위치까지 순서대로 대조 검수합니다.',
     decisions: [
       '영상 파일 자체가 아니라 영상 정보를 다루므로 수집 영상 목록이라는 표현을 사용합니다.',
+      '수집 영상 정보와 발견 링크를 함께 묶는 사이드바 구역명은 수집 영상·링크로 표시합니다.',
       'Cloud라는 단독 표현 대신 온라인 저장소(Azure DB)처럼 실제 위치를 함께 표시합니다.',
     ],
     checkpoints: [
@@ -122,8 +123,13 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       },
       {
         id: 'remaining-reference-vault',
-        label: '화면에 남아 있는 레퍼런스 금고 표현 제거',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+        label: '화면에 남아 있던 레퍼런스 금고 표현을 실제 기능명으로 정리',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'radar-collected-video-destination',
+        label: '오늘의 레이더 이동 버튼을 수집 영상 목록이라는 실제 도착 화면명으로 통일',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'button-destination-audit',

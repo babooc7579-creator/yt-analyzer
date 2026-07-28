@@ -48,7 +48,7 @@ describe('RadarCandidateEmptyState', () => {
 
     expect(html).toContain('아직 선택한 채널이 없습니다');
     expect(html).not.toContain('오늘 볼 채널 고르기</button>');
-    expect(html).toContain('레퍼런스 금고 열기');
+    expect(html).toContain('수집 영상 목록 열기');
   });
 
   it('replaces the retry button with channel and scan paths after a successful empty lookup', () => {

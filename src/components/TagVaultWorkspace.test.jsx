@@ -18,6 +18,7 @@ describe('TagVaultWorkspace', () => {
     );
 
     expect(html).toContain('태그로 수집 영상 찾기');
+    expect(html).toContain('수집 영상·링크');
     expect(html).toContain('태그 채널 선택');
     expect(html).toContain('상단의 수집 영상 목록 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
