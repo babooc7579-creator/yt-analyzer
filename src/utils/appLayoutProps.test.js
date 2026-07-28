@@ -26,11 +26,15 @@ describe('appLayoutProps utils', () => {
       expect.objectContaining({
         key: 'video-records',
         label: '영상 판단 기록 다시 확인',
+        pendingLabel: '영상 판단 기록 확인 중...',
+        successMessage: expect.stringContaining('Azure DB'),
         onClick: retryVideoUserRecordsSync,
       }),
       expect.objectContaining({
         key: 'scrapbook',
         label: '소재 보관함 다시 확인',
+        pendingLabel: '소재 보관함 확인 중...',
+        failureMessage: expect.stringContaining('다시 시도'),
         onClick: retryScrapbookSync,
       }),
     ]);

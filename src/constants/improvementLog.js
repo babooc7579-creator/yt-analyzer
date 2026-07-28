@@ -269,7 +269,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-29',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 적용 필터·선택 상태, 일부 온라인 저장 기능별 읽기 재확인, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인합니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 검색어 빠른 지우기, 적용 필터·선택 상태, 일부 온라인 저장 기능별 읽기 재확인 처리 중·결과 안내, 긴 제목 모바일 배치, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인합니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
     nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
     decisions: [
@@ -392,6 +392,31 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'feature-specific-storage-retry',
         label: '영상 판단 기록·소재 보관함 오류별 Azure DB 읽기 전용 다시 확인',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'storage-retry-pending-state',
+        label: 'Azure DB 읽기 재확인 처리 중 표시와 중복 클릭 방지',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'storage-retry-result-feedback',
+        label: '영상 판단 기록·소재 보관함별 재확인 성공·실패 결과 안내',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'video-search-quick-clear',
+        label: '영상 선택을 유지하는 수집 영상 검색어 빠른 지우기',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'mobile-long-title-actions',
+        label: '390×844 긴 제목과 소재 보관·제작 후보 버튼 배치 보완',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'daily-readonly-github-check',
+        label: 'GitHub에서 별도 이름으로 보이는 일일 읽기 전용 자동 검수',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {

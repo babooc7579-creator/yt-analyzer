@@ -42,7 +42,7 @@ export default function VideoMobileListItem(props) {
             href={contentCellProps.videoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="line-clamp-2 text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-700"
+            className="line-clamp-3 break-words text-sm font-extrabold leading-snug text-slate-900 hover:text-indigo-700"
           >
             {contentCellProps.videoTitle}
           </a>
@@ -60,19 +60,21 @@ export default function VideoMobileListItem(props) {
               <p className="mt-0.5 text-[11px] font-extrabold text-slate-700">{stats.publishedAgeText}</p>
             </div>
           </div>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+          <div className="mt-3 grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
             <button
               type="button"
               onClick={markerCellsProps.onToggleScrap}
               disabled={markerCellsProps.scrapDisabled}
               title={scrapCopy.title}
               aria-label={scrapCopy.ariaLabel}
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-[11px] font-extrabold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex w-full min-w-0 items-center justify-center gap-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-[11px] font-extrabold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Star className={`h-3.5 w-3.5 ${markerCellsProps.isSaved ? 'fill-yellow-400 text-yellow-500' : 'text-slate-400'}`} />
               {scrapCopy.buttonLabel}
             </button>
-            <VideoListRowCandidateAction {...candidateActionProps} />
+            <div className="min-w-0 [&>button]:w-full [&>button]:min-w-0">
+              <VideoListRowCandidateAction {...candidateActionProps} />
+            </div>
           </div>
         </div>
       </div>

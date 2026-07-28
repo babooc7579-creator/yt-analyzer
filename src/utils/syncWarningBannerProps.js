@@ -20,3 +20,25 @@ export const getSyncWarningBannerViewProps = ({ actions, message, messages } = {
     title: SYNC_WARNING_BANNER_COPY.title,
   };
 };
+
+export const getSyncWarningRetryButtonViewProps = ({
+  action,
+  pendingActionKey,
+} = {}) => {
+  const isPending = Boolean(action?.key) && action.key === pendingActionKey;
+
+  return {
+    disabled: Boolean(pendingActionKey),
+    isPending,
+    label: isPending ? (action.pendingLabel || action.label) : action.label,
+  };
+};
+
+export const getSyncWarningRetryResult = ({
+  action,
+  succeeded,
+} = {}) => ({
+  actionKey: action?.key || '',
+  message: succeeded ? action?.successMessage : action?.failureMessage,
+  succeeded: Boolean(succeeded),
+});

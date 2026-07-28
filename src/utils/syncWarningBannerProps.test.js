@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { SYNC_WARNING_BANNER_COPY } from '../constants/syncWarnings';
-import { getSyncWarningBannerViewProps } from './syncWarningBannerProps';
+import {
+  getSyncWarningBannerViewProps,
+  getSyncWarningRetryButtonViewProps,
+  getSyncWarningRetryResult,
+} from './syncWarningBannerProps';
 
 describe('syncWarningBannerProps utils', () => {
   it('hides the banner when there are no warning messages', () => {
@@ -50,5 +54,39 @@ describe('syncWarningBannerProps utils', () => {
     expect(props.actions).toEqual([
       { key: 'records', label: '다시 확인', onClick: onRetry },
     ]);
+  });
+
+  it('shows a pending label and disables duplicate retry clicks', () => {
+    expect(getSyncWarningRetryButtonViewProps({
+      action: {
+        key: 'records',
+        label: '다시 확인',
+        pendingLabel: '확인 중...',
+      },
+      pendingActionKey: 'records',
+    })).toEqual({
+      disabled: true,
+      isPending: true,
+      label: '확인 중...',
+    });
+  });
+
+  it('builds feature-specific retry success and failure results', () => {
+    const action = {
+      key: 'records',
+      successMessage: '다시 확인했습니다.',
+      failureMessage: '아직 확인하지 못했습니다.',
+    };
+
+    expect(getSyncWarningRetryResult({ action, succeeded: true })).toEqual({
+      actionKey: 'records',
+      message: '다시 확인했습니다.',
+      succeeded: true,
+    });
+    expect(getSyncWarningRetryResult({ action, succeeded: false })).toEqual({
+      actionKey: 'records',
+      message: '아직 확인하지 못했습니다.',
+      succeeded: false,
+    });
   });
 });
