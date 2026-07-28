@@ -34,7 +34,7 @@ describe('videoDashboardControls utils', () => {
 
     const props = getVideoDashboardControlsViewProps({
       activeSelectedChannelCount: 2,
-      checkedVideos: [{ videoId: 'video1' }, null, 'bad'],
+      checkedVideos: ['video1', '', null],
       copiedPrompt: 'urls',
       promptCopyError: '',
       filteredCount: 3,
@@ -98,6 +98,14 @@ describe('videoDashboardControls utils', () => {
       viewMode: 'grid',
     });
     expect(props.toolbarProps.filteredVideoUrlList).toContain('First idea');
+  });
+
+  it('counts selected video id strings used by the live dashboard', () => {
+    const props = getVideoDashboardControlsViewProps({
+      checkedVideos: ['video1', 'video2'],
+    });
+
+    expect(props.selectedVideosActionProps.selectedCount).toBe(2);
   });
 
   it('uses safe defaults for optional filtered video inputs', () => {
