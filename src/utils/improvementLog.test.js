@@ -12,11 +12,11 @@ describe('improvementLog utils', () => {
 
     expect(scriptWorkspace).toMatchObject({
       priority: 'P1',
-      status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+      status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       title: '대본 작업실',
     });
     expect(scriptWorkspace.currentSummary).toContain('videoUserRecords');
-    expect(scriptWorkspace.nextAction).toContain('테스트용 제작 기록 저장');
+    expect(scriptWorkspace.nextAction).toContain('정기 회귀 검수');
     expect(scriptWorkspace.checkpoints).toEqual(expect.arrayContaining([
       expect.objectContaining({
         id: 'script-fields',
@@ -24,7 +24,7 @@ describe('improvementLog utils', () => {
       }),
       expect.objectContaining({
         id: 'discovery-link-source',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       }),
       expect.objectContaining({
         id: 'ai-assistance',
