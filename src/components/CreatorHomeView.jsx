@@ -88,6 +88,7 @@ export default function CreatorHomeView({
 
         <HomeRadarFinishStage
           onOpenProductionCandidates={() => onOpenView({ id: 'studio-candidates' })}
+          onOpenScriptBoard={() => onOpenView({ id: 'studio-script' })}
           onOpenUploadCalendar={() => onOpenView({ id: 'studio-calendar' })}
           productionCandidateCount={productionCandidateCount}
           productionFocusCount={productionFocusCount}

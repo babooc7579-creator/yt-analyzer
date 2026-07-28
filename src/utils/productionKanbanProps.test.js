@@ -223,6 +223,7 @@ describe('productionKanbanProps utils', () => {
       links: props.discoveryLinkCandidates,
       onMoveLink: props.moveDiscoveryLink,
       onOpenDiscoveryLinks: props.onOpenDiscoveryLinks,
+      onOpenScriptBoard: props.onOpenScriptBoard,
     });
     expect(viewProps.focusSectionProps).toMatchObject({
       draftRecords: props.draftRecords,

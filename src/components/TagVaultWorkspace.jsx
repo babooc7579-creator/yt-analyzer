@@ -17,6 +17,7 @@ export default function TagVaultWorkspace({
   onLoadStoredVideos,
   onOpenChannelWatchlist,
   onOpenChannels,
+  onOpenCollectedVideos,
   onOpenSelectedScan,
   onPromoteToProduction,
   onSelectTagChannels,
@@ -43,7 +44,13 @@ export default function TagVaultWorkspace({
 
   return (
     <section data-testid="creator-route-tag-vault" className="min-w-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
-      <TagVaultHeader loading={loading} onLoadStoredVideos={onLoadStoredVideos} onOpenChannels={onOpenChannels} selectedChannelCount={state.summary.selectedChannelCount} />
+      <TagVaultHeader
+        loading={loading}
+        onLoadStoredVideos={onLoadStoredVideos}
+        onOpenChannels={onOpenChannels}
+        onOpenCollectedVideos={onOpenCollectedVideos}
+        selectedChannelCount={state.summary.selectedChannelCount}
+      />
 
       <div className="mt-5 space-y-4">
         <TagVaultSummary summary={state.summary} />

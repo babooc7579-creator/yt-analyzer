@@ -1,3 +1,10 @@
+import {
+  getDiscoveryLinkIdFromScriptSourceId,
+  getDiscoveryLinkScriptSourceId,
+  getDiscoveryLinkScriptSources,
+  getScriptSourceRecordMap,
+} from './discoveryLinkScriptSource';
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -38,21 +45,31 @@ export const getUploadCalendarProductionSearchQuery = (item = {}) => String(
 
 export function buildUploadCalendarRouteProps({
   creatorViewIntent,
+  discoveryLinks,
   openCreatorView,
   savedVideos,
   videoUserRecords,
   videos,
 } = {}) {
+  const targetDiscoveryLinkId = String(creatorViewIntent?.targetDiscoveryLinkId || '').trim();
+  const initialTargetVideoId = targetDiscoveryLinkId
+    ? getDiscoveryLinkScriptSourceId({ id: targetDiscoveryLinkId })
+    : String(creatorViewIntent?.targetVideoId || '').trim();
+  const discoverySources = getDiscoveryLinkScriptSources(discoveryLinks);
+
   return {
     initialTargetPublishDate: DATE_PATTERN.test(String(creatorViewIntent?.targetPublishDate || ''))
       ? creatorViewIntent.targetPublishDate
       : '',
-    initialTargetVideoId: String(creatorViewIntent?.targetVideoId || '').trim(),
+    initialTargetVideoId,
     onOpenScriptBoard: (item) => openCreatorView({
       id: 'studio-script',
       intent: {
         source: 'upload-calendar',
         targetVideoId: String(item?.videoId || '').trim(),
+        ...(getDiscoveryLinkIdFromScriptSourceId(item?.videoId)
+          ? { targetDiscoveryLinkId: getDiscoveryLinkIdFromScriptSourceId(item.videoId) }
+          : {}),
       },
     }),
     onOpenProductionCandidate: (item) => openCreatorView({
@@ -60,11 +77,16 @@ export function buildUploadCalendarRouteProps({
       intent: {
         searchQuery: getUploadCalendarProductionSearchQuery(item),
         source: 'upload-calendar',
-        targetVideoId: String(item?.videoId || '').trim(),
+        ...(getDiscoveryLinkIdFromScriptSourceId(item?.videoId)
+          ? { targetDiscoveryLinkId: getDiscoveryLinkIdFromScriptSourceId(item.videoId) }
+          : { targetVideoId: String(item?.videoId || '').trim() }),
       },
     }),
     onOpenProductionCandidates: () => openCreatorView({ id: 'studio-candidates' }),
-    videoUserRecords: videoUserRecords && typeof videoUserRecords === 'object' ? videoUserRecords : {},
-    videos: mergeUploadCalendarVideos({ savedVideos, videos }),
+    videoUserRecords: getScriptSourceRecordMap({ discoveryLinks, videoUserRecords }),
+    videos: mergeUploadCalendarVideos({
+      savedVideos: [...toArray(savedVideos), ...discoverySources],
+      videos,
+    }),
   };
 }

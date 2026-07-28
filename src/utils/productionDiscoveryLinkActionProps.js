@@ -95,6 +95,23 @@ export const getProductionDiscoveryLinkEditButtonProps = ({ linkTitle } = {}) =>
   };
 };
 
+export const getProductionDiscoveryLinkScriptButtonProps = ({
+  link,
+  linkTitle,
+  onOpenScriptBoard,
+} = {}) => {
+  const displayTitle = getDisplayLinkTitle(linkTitle);
+  const canOpen = Boolean(link?.id) && typeof onOpenScriptBoard === 'function';
+
+  return {
+    'aria-label': `${displayTitle} 링크를 원본으로 대본 작업실 열기, 화면 이동이며 저장 및 외부 수집 없음`,
+    disabled: !canOpen,
+    label: '대본 작업 시작',
+    onClick: canOpen ? () => onOpenScriptBoard(link) : noop,
+    title: '이 발견 링크를 원본으로 대본 작업실을 엽니다. 이동만으로 온라인 저장소(Azure DB)에 저장하거나 외부 사이트를 수집하지 않습니다.',
+  };
+};
+
 export const getProductionDiscoveryLinkMoveActions = ({ link, linkTitle, onMove } = {}) => {
   const displayTitle = getDisplayLinkTitle(linkTitle);
   const linkId = link?.id;

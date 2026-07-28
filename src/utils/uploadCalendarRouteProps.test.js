@@ -47,6 +47,63 @@ describe('buildUploadCalendarRouteProps', () => {
     expect(getUploadCalendarProductionSearchQuery({ videoId: 'video-only' })).toBe('video-only');
   });
 
+  it('keeps a discovery-link script source connected in the upload calendar', () => {
+    const openCreatorView = vi.fn();
+    const link = {
+      id: 'default:link-1',
+      status: 'candidate',
+      title: '발견 소재',
+      url: 'https://example.com/source',
+    };
+    const props = buildUploadCalendarRouteProps({
+      creatorViewIntent: {
+        targetDiscoveryLinkId: link.id,
+        targetPublishDate: '2026-08-06',
+      },
+      discoveryLinks: [link],
+      openCreatorView,
+      videoUserRecords: {
+        'discovery-link:default:link-1': {
+          status: 'production_candidate',
+          targetPublishDate: '2026-08-06',
+        },
+      },
+    });
+
+    expect(props.initialTargetVideoId).toBe('discovery-link:default:link-1');
+    expect(props.videos[0]).toMatchObject({
+      discoveryLinkId: 'default:link-1',
+      sourceType: 'discovery_link',
+    });
+
+    props.onOpenProductionCandidate({
+      title: '발견 소재',
+      videoId: 'discovery-link:default:link-1',
+    });
+    props.onOpenScriptBoard({
+      videoId: 'discovery-link:default:link-1',
+    });
+
+    expect(openCreatorView.mock.calls).toEqual([
+      [{
+        id: 'studio-candidates',
+        intent: {
+          searchQuery: '발견 소재',
+          source: 'upload-calendar',
+          targetDiscoveryLinkId: 'default:link-1',
+        },
+      }],
+      [{
+        id: 'studio-script',
+        intent: {
+          source: 'upload-calendar',
+          targetDiscoveryLinkId: 'default:link-1',
+          targetVideoId: 'discovery-link:default:link-1',
+        },
+      }],
+    ]);
+  });
+
   it('keeps Cloud-saved production video details available when the current result list is empty', () => {
     expect(mergeUploadCalendarVideos({
       savedVideos: [{ videoId: 'v1', title: 'Cloud 제작 후보' }],

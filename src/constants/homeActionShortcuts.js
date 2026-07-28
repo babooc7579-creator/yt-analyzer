@@ -74,7 +74,7 @@ export const HOME_WORKSPACE_SHORTCUTS = [
   },
   {
     key: 'tag-vault',
-    title: '태그별 금고',
+    title: '채널 태그별 보기',
     description: '기존 채널 태그로 채널을 묶고, 온라인 저장소(Azure DB)에서 필요한 수집 영상 정보를 확인합니다.',
     hint: '채널 태그별 소재 묶음 열기',
     dataFlowLabels: ['기존 채널 태그', '자동 수집 없음'],

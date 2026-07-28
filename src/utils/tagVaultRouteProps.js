@@ -28,6 +28,7 @@ export function buildTagVaultRouteProps({
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
     onOpenChannelWatchlist: () => openCreatorView({ id: 'discovery-watchlist' }),
     onOpenChannels: () => openCreatorView({ id: 'ops-channels' }),
+    onOpenCollectedVideos: () => openCreatorView({ id: 'vault-videos' }),
     onOpenSelectedScan: () => openCreatorView({
       id: 'ops-channels',
       intent: { operationStage: 'scan' },

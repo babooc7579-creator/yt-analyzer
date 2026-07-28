@@ -157,7 +157,7 @@ export const getTagVaultEmptyState = ({
   return {
     action: hasActiveFilters ? 'reset' : 'select',
     actionAriaLabel: hasActiveFilters
-      ? '태그별 금고 화면 필터 초기화, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음'
+      ? '채널 태그별 보기 화면 필터 초기화, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음'
       : '현재 태그 채널 선택, 선택만 실행하며 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음',
     actionLabel: hasActiveFilters ? '화면 필터 초기화' : '이 태그 채널 선택',
     actionTitle: hasActiveFilters
