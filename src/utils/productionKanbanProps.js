@@ -63,9 +63,9 @@ export const getProductionKanbanNextActions = ({
   {
     key: 'script-board',
     iconKey: 'scriptBoard',
-    label: '대본 보드 열기',
-    title: '제작 후보의 제목, 구성 메모, 목표 날짜를 정리하는 대본 보드로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다.',
-    ariaLabel: '대본 보드 열기, 화면 이동이며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음',
+    label: '대본 작업실 열기',
+    title: '제작 후보의 원본을 확인하고 제목과 통합 작업 메모를 작성하는 대본 작업실로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다.',
+    ariaLabel: '대본 작업실 열기, 화면 이동이며 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음',
     onClick: onOpenScriptBoard,
     variant: 'indigo',
   },

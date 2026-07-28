@@ -34,6 +34,7 @@ export const getCreatorWorkspaceViewModel = (creatorView) => {
     isChannelWatchlistView: creatorView === 'discovery-watchlist',
     isDiscoveryLinksView: creatorView === 'vault-sources',
     isHomeView: creatorView === 'home',
+    isImprovementLogView: creatorView === 'insight-notes',
     isKeywordExplorerView: creatorView === 'discovery-keywords',
     isLegacyWorkspaceView: READY_CREATOR_VIEWS.includes(creatorView),
     isReferenceVaultView: REFERENCE_VAULT_VIEWS.includes(creatorView),

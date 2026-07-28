@@ -25,7 +25,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '제작 후보로 표시한 영상과 발견함 링크를 함께 봅니다.' },
       { id: 'studio-scrapbook', label: '소재 보관함', status: 'live', summary: '별표로 보관한 수집 영상을 나중에 다시 봅니다. 제작 후보함과는 별도로 관리합니다.' },
-      { id: 'studio-script', label: '대본 보드', status: 'live', summary: '제작 후보의 제목, 구성 메모, 업로드 예정일을 온라인 저장소(Azure DB)에 정리합니다.' },
+      { id: 'studio-script', label: '대본 작업실', status: 'live', summary: '제작 후보의 원본을 확인하고 제목과 통합 작업 메모를 온라인 저장소(Azure DB)에 작성합니다. 분석·구성·대본·수정 분리는 개선 기록에서 관리합니다.' },
       { id: 'studio-calendar', label: '업로드 캘린더', status: 'live', summary: '제작 후보함에 온라인 저장소(Azure DB)에 저장된 목표 업로드 날짜를 달력으로 확인합니다.' },
       { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '미검토, 분석중, 대본화, 제작완료 상태를 관리할 예정입니다.' },
     ],
@@ -66,7 +66,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'insight-report', label: '성과 리포트', status: 'soon', summary: '채널과 소재 성과를 리포트로 볼 예정입니다.' },
       { id: 'insight-patterns', label: '터진 패턴 학습', status: 'soon', summary: '반복되는 성공 패턴을 정리할 예정입니다.' },
-      { id: 'insight-notes', label: '운영 노트', status: 'soon', summary: '운영자가 남긴 판단 기록을 모아볼 예정입니다.' },
+      { id: 'insight-notes', label: '개선 기록', status: 'live', summary: '기능별 현재 상태, 목표, 체크포인트, 다음 작업과 결정 사항을 Git 이력과 함께 관리합니다.' },
       { id: 'insight-benchmark', label: '벤치마크 리포트', status: 'soon', summary: '채널별 벤치마크 분석을 준비 중입니다.' },
     ],
   },

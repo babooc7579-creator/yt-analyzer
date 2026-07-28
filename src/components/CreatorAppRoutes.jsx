@@ -6,6 +6,7 @@ const CreatorComingSoonRoute = lazy(() => import('./CreatorComingSoonRoute'));
 const CreatorChannelWatchlistRoute = lazy(() => import('./CreatorChannelWatchlistRoute'));
 const CreatorDiscoveryLinksRoute = lazy(() => import('./CreatorDiscoveryLinksRoute'));
 const CreatorKeywordExplorerRoute = lazy(() => import('./CreatorKeywordExplorerRoute'));
+const CreatorImprovementLogRoute = lazy(() => import('./CreatorImprovementLogRoute'));
 const RecentScanStatusWorkspace = lazy(() => import('./RecentScanStatusWorkspace'));
 const CreatorScriptBoardRoute = lazy(() => import('./CreatorScriptBoardRoute'));
 const CreatorSettingsRoute = lazy(() => import('./CreatorSettingsRoute'));
@@ -60,6 +61,10 @@ export default function CreatorAppRoutes({
 }) {
   if (isHomeView) {
     return <CreatorHomeRoute {...homeRouteProps} />;
+  }
+
+  if (activeCreatorItem?.id === 'insight-notes') {
+    return withRouteLoading(<CreatorImprovementLogRoute />);
   }
 
   if (isKeywordExplorerView) {

@@ -56,6 +56,7 @@
 ## Before Editing Code
 
 - 수정 전 관련 파일을 먼저 읽고 구조를 파악하세요.
+- 기능 고도화와 메뉴 역할 변경 전 `docs/CREATOR_OS_IMPROVEMENT_LOG.md`와 `src/constants/improvementLog.js`의 현재 체크포인트를 확인하세요.
 - 프론트 저장소와 백엔드 저장소를 혼동하지 마세요.
 - 현재 프론트 저장소는 React/Vite 기반입니다.
 - 주요 파일은 다음과 같습니다.
@@ -68,6 +69,8 @@
 ## After Editing Code
 
 - 가능하면 `npm run build`를 실행해 빌드가 깨지지 않는지 확인하세요.
+- 개선 기록에 등록된 기능을 변경했다면 실제 확인 결과, 상태, 다음 작업, 마지막 점검일을 `src/constants/improvementLog.js`에 함께 갱신하세요.
+- 중요한 방향 결정과 완료 내용은 `docs/HANDOFF.md`와 `docs/WORK_LOG.md`에도 남기세요.
 - 빌드가 불가능하면 그 이유를 보고하세요.
 - 수정한 파일 목록을 정리하세요.
 - 사용자가 직접 확인할 화면 위치나 버튼명을 알려주세요.

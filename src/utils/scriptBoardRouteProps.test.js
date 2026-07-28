@@ -20,6 +20,7 @@ describe('buildScriptBoardRouteProps', () => {
     });
 
     props.onOpenHome();
+    props.onOpenImprovementLog();
     props.onOpenProductionCandidates({ videoId: 'video-1', title: '원본 제목', draftTitle: '내 제목' });
     props.onOpenUploadCalendar({
       record: { targetPublishDate: '2026-08-04' },
@@ -28,6 +29,7 @@ describe('buildScriptBoardRouteProps', () => {
 
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'home' }],
+      [{ id: 'insight-notes' }],
       [{
         id: 'studio-candidates',
         intent: {

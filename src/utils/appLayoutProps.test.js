@@ -171,8 +171,8 @@ describe('appLayoutProps utils', () => {
   it('separates live navigation from the future roadmap without duplicate operations menus', () => {
     const groups = getCreatorSidebarNavigationGroups(CREATOR_OS_PRODUCT_MAP);
 
-    expect(groups.liveItemCount).toBe(15);
-    expect(groups.roadmapItemCount).toBe(14);
+    expect(groups.liveItemCount).toBe(16);
+    expect(groups.roadmapItemCount).toBe(13);
     expect(groups.liveItemCount + groups.roadmapItemCount).toBe(29);
     expect(groups.liveSections.flatMap((section) => section.items).map((item) => item.id)).not.toEqual(
       expect.arrayContaining(['vault-all', 'vault-channels']),

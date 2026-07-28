@@ -82,7 +82,7 @@ export default function ScriptBoardEditor({
           </label>
 
           <label className="block">
-            <span className="text-xs font-extrabold text-slate-200">인트로 · 구성 · 대본 초안</span>
+            <span className="text-xs font-extrabold text-slate-200">작업 메모 · 대본 초안 <span className="text-slate-500">(현재 통합 입력)</span></span>
             <textarea
               value={record.note || ''}
               onChange={(event) => onUpdateDraft(videoId, { note: event.target.value })}
