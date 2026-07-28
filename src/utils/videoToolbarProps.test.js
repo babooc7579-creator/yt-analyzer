@@ -70,13 +70,13 @@ describe('videoToolbarProps utils', () => {
     }).scanActionProps.scanTargetCount).toBe(4);
   });
 
-  it('uses all scannable channel count when no channel is selected', () => {
+  it('uses zero scan targets when no channel is selected', () => {
     expect(getVideoToolbarViewProps({
       ...baseProps,
       activeSelectedChannelCount: 0,
       scannableChannelCount: 9,
       selectedChannelCount: 0,
-    }).scanActionProps.scanTargetCount).toBe(9);
+    }).scanActionProps.scanTargetCount).toBe(0);
   });
 
   it('builds selected-channel scan copy as a YouTube API action', () => {
@@ -96,16 +96,17 @@ describe('videoToolbarProps utils', () => {
     expect(props.scanDescription).toContain('체크한 채널');
   });
 
-  it('builds all-active-channel scan copy when no channel is selected', () => {
+  it('requires an explicit channel selection before a YouTube API scan', () => {
     const props = getVideoToolbarScanActionViewProps({
       isScanning: false,
       scanTargetCount: 5,
       selectedChannelCount: 0,
     });
 
-    expect(props.scanButtonLabel).toBe('전체 운영중 채널 새 영상 수집 (5개)');
-    expect(props.scanDescription).toContain('전체 운영중 채널');
-    expect(props.isScanDisabled).toBe(false);
+    expect(props.scanButtonLabel).toBe('채널 선택 후 새 영상 수집');
+    expect(props.scanDescription).toContain('전체 채널을 수집하지 않도록');
+    expect(props.scanAriaLabel).toBe('새 영상 수집 불가, 채널 선택 필요');
+    expect(props.isScanDisabled).toBe(true);
   });
 
   it('disables scan action when there are no scan targets or scan is running', () => {
@@ -116,7 +117,7 @@ describe('videoToolbarProps utils', () => {
     })).toMatchObject({
       hasScanTargets: false,
       isScanDisabled: true,
-      scanAriaLabel: '새 영상 수집 불가, 운영중 채널 없음',
+      scanAriaLabel: '새 영상 수집 불가, 채널 선택 필요',
     });
 
     expect(getVideoToolbarScanActionViewProps({

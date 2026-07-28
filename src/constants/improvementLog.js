@@ -29,7 +29,7 @@ export const IMPROVEMENT_STATUS_META = {
   },
 };
 
-export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-07-28';
+export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-07-29';
 
 export const CREATOR_OS_MENU_ROLE_AUDIT = [
   { section: '디스커버리 탐색', menu: '오늘의 레이더', role: '오늘 볼 채널과 수집 영상에서 만들 소재를 결정', dataBoundary: 'Azure DB 조회·판단 기록 저장', verification: '운영 클릭 확인' },
@@ -45,8 +45,8 @@ export const CREATOR_OS_MENU_ROLE_AUDIT = [
   { section: '제작 스튜디오', menu: '업로드 캘린더', role: '제작 후보의 예정일과 준비 상태를 확인', dataBoundary: '제작 기록 Azure DB 조회·저장', verification: '운영 클릭 확인' },
   { section: '오퍼레이션 관제', menu: '채널 운영실', role: '채널 관리·등록·기존 영상 조회·신규 수집 통제', dataBoundary: '화면 이동·Azure DB·YouTube API를 단계별 분리', verification: '운영·로컬 클릭 확인' },
   { section: '오퍼레이션 관제', menu: '최근 수집 상태', role: '최근 수집 결과와 실패 후속 행동 확인', dataBoundary: 'Azure DB 수집 기록 조회·YouTube API 없음', verification: '운영 클릭 확인' },
-  { section: '오퍼레이션 관제', menu: '설정', role: '분야·연결 상태·업무 도구 설정 관리', dataBoundary: '브라우저 표시 설정과 Azure DB 저장 분리', verification: '로컬 클릭 확인' },
-  { section: '업무 도구', menu: '업무 도구함', role: '공식 외부 조사 도구와 개인 링크를 실행', dataBoundary: '외부 링크·Creator OS 자동 저장 없음', verification: '로컬 클릭 확인' },
+  { section: '오퍼레이션 관제', menu: '설정', role: '분야·연결 상태·업무 도구 설정 관리', dataBoundary: '브라우저 표시 설정과 Azure DB 저장 분리', verification: '운영 클릭 확인' },
+  { section: '업무 도구', menu: '업무 도구함', role: '공식 외부 조사 도구와 개인 링크를 실행', dataBoundary: '외부 링크·Creator OS 자동 저장 없음', verification: '운영 클릭 확인' },
   { section: '인사이트 / 학습', menu: '개선 기록', role: '현재 상태·검수·결정·다음 작업을 추적', dataBoundary: 'Git 기반 읽기 전용 기록', verification: '운영 클릭 확인' },
 ];
 
@@ -57,7 +57,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '제작 스튜디오',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
-    lastReviewedAt: '2026-07-28',
+    lastReviewedAt: '2026-07-29',
     currentSummary: '제작 후보 영상과 발견 링크 후보를 원본으로 제목, 분석, 구성안, 대본 본문, 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 저장합니다. 운영에서 입력 유지와 저장·새로고침·재조회·원상복구까지 확인했습니다.',
     targetSummary: '제작 후보의 원본을 분석하고, 구성안을 만든 뒤, 대본을 작성·수정하고 최종본을 확정하는 독립 작업 공간으로 발전시킵니다.',
     nextAction: '현재 수동 작성 흐름은 정기 회귀 검수로 유지하고, 수정 이력과 AI 보조는 개인용 MVP 안정화 이후 별도 결정합니다.',
@@ -268,7 +268,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '전체 핵심 화면',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
-    lastReviewedAt: '2026-07-28',
+    lastReviewedAt: '2026-07-29',
     currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 운영에서 확인했습니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
     nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
@@ -336,6 +336,21 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'discovery-operations-mobile-regression',
         label: '또터또·키워드·최근 수집 상태·채널 운영실 390×844 가로 넘침',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'recent-scan-filter-history-regression',
+        label: '최근 수집 상태 검색·조합 필터·정렬·과거 실행 상세 펼치기',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'explicit-channel-scan-safety',
+        label: '채널을 선택하지 않으면 YouTube 새 영상 수집을 실행할 수 없도록 차단',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'production-script-calendar-regression',
+        label: '제작 후보 → 대본 작업실 → 업로드 캘린더 → 대본 이어쓰기 왕복',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

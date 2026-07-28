@@ -107,6 +107,11 @@ export function useVideoCollectionActions({
   };
 
   const runScanRequest = async (tag) => {
+    if (!tag && selectedChannelIds.length === 0) {
+      setError(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE);
+      return;
+    }
+
     const scanContext = getScanRequestContext({ tag, selectedChannelIds, savedChannels });
 
     if (scanContext.scanSelectedChannels && scanContext.channelIdsForScan.length === 0) {

@@ -21,7 +21,7 @@ describe('VideoToolbarScanAction', () => {
     expect(html).not.toContain('disabled=""');
   });
 
-  it('renders disabled copy when there are no scan targets', () => {
+  it('requires channel selection before rendering an enabled scan action', () => {
     const html = renderToStaticMarkup(
       <VideoToolbarScanAction
         handleManualScan={() => 'scan'}
@@ -32,9 +32,9 @@ describe('VideoToolbarScanAction', () => {
     );
 
     expect(html).toContain('disabled=""');
-    expect(html).toContain('전체 운영중 채널 새 영상 수집 (0개)');
-    expect(html).toContain('운영중 채널이 0개라 새 영상 수집을 실행하지 않습니다');
-    expect(html).toContain('aria-label="새 영상 수집 불가, 운영중 채널 없음"');
+    expect(html).toContain('채널 선택 후 새 영상 수집');
+    expect(html).toContain('실수로 전체 채널을 수집하지 않도록 채널을 하나 이상 선택해야 합니다');
+    expect(html).toContain('aria-label="새 영상 수집 불가, 채널 선택 필요"');
   });
 
   it('renders scanning state while keeping the action disabled', () => {
