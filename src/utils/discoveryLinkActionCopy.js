@@ -4,7 +4,7 @@ export const DISCOVERY_LINK_LOAD_FAILED_MESSAGE =
   '발견함 링크를 불러오지 못했습니다.';
 
 export const DISCOVERY_LINK_LOAD_UNAVAILABLE_MESSAGE =
-  '온라인 발견함(Azure DB) 연결에 실패했습니다. 온라인 저장소 조회가 성공할 때까지 발견함 목록을 기준 데이터로 보지 않습니다.';
+  '온라인 발견함(Azure DB) 연결에 실패했습니다. 온라인 저장소(Azure DB) 조회가 성공할 때까지 발견함 목록을 기준 데이터로 보지 않습니다.';
 
 export const DISCOVERY_LINK_SAVE_FAILED_MESSAGE =
   '링크를 저장하지 못했습니다.';

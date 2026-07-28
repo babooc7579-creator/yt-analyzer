@@ -11,7 +11,7 @@ describe('scrapbookHeaderProps utils', () => {
       isProductionMode: false,
       title: '소재 보관함',
     });
-    expect(props.description).toContain('온라인 저장소 기준');
+    expect(props.description).toContain('온라인 저장소(Azure DB) 기준');
     expect(props.description).toContain('브라우저 임시 기록');
   });
 

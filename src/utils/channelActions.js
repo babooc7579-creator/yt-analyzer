@@ -78,5 +78,5 @@ export const getChannelLoadErrorMessage = (error) => {
 
 export const getChannelDeleteConfirmMessage = (title) => {
   const channelName = getChannelDeleteName(title);
-  return `'${channelName}' 채널을 온라인 저장소(Azure DB)의 채널 목록에서 삭제할까요?\n\n삭제하면 수집 영상 조회와 새 영상 수집 대상에서 빠집니다. YouTube 원본이나 이미 온라인 저장소에 수집된 영상 정보는 삭제하지 않습니다. 나중에 다시 보려면 채널을 다시 추가해야 합니다.`;
+  return `'${channelName}' 채널을 온라인 저장소(Azure DB)의 채널 목록에서 삭제할까요?\n\n삭제하면 수집 영상 조회와 새 영상 수집 대상에서 빠집니다. YouTube 원본이나 이미 온라인 저장소(Azure DB)에 수집된 영상 정보는 삭제하지 않습니다. 나중에 다시 보려면 채널을 다시 추가해야 합니다.`;
 };
