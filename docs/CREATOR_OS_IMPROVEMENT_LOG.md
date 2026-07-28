@@ -10,6 +10,7 @@ Creator OS를 고도화할 때 현재 상태, 목표 방향, 다음 작업, 결�
 - 사용자 화면: `인사이트 / 학습 → 개선 기록`
 - 구조화된 기록 원본: `src/constants/improvementLog.js`
 - 화면 컴포넌트: `src/components/ImprovementLogWorkspace.jsx`
+- 정기 검수 기준: `docs/CREATOR_OS_REGRESSION_CHECKLIST.md`
 - 변경 추적: Git 커밋과 Pull Request
 
 개선 기록 화면은 읽기 전용입니다. 화면을 열어도 API 호출, 온라인 저장소(Azure DB) 조회·저장,
@@ -46,6 +47,16 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 5. `src/constants/improvementLog.js`의 상태, 다음 작업, 마지막 점검일을 갱신합니다.
 6. 중요한 결정은 `decisions`에 남깁니다.
 7. `docs/HANDOFF.md`와 `docs/WORK_LOG.md`에 실제 완료 내용을 기록합니다.
+
+## 메뉴 역할과 확인 상태
+
+개선 기록 화면의 `메뉴 역할표`에서 다음을 함께 관리합니다.
+
+- 메뉴가 존재하는 이유
+- 실제 데이터·동작 경계
+- 운영 클릭, 로컬 클릭, 코드·테스트, 결정 필요 중 현재 확인 수준
+
+운영 화면을 누르지 않은 기능은 코드나 테스트가 있어도 `운영 클릭 확인`으로 표시하지 않습니다.
 
 ## 대본 작업실 현재 기준
 

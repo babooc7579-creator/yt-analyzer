@@ -7,7 +7,8 @@ export default function ChannelPreviewInput({
   previewLoading,
   setNewChannelInput,
 }) {
-  const copy = getChannelPreviewInputCopy();
+  const hasInput = Boolean(newChannelInput?.trim());
+  const copy = getChannelPreviewInputCopy({ hasInput });
 
   return (
     <div className="space-y-1.5">
@@ -25,7 +26,7 @@ export default function ChannelPreviewInput({
         <button
           type="button"
           onClick={handlePreviewChannel}
-          disabled={previewLoading}
+          disabled={previewLoading || !hasInput}
           className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap"
           title={copy.previewButtonTitle}
           aria-label={copy.previewButtonAriaLabel}

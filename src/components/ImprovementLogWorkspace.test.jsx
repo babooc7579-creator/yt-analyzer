@@ -15,5 +15,10 @@ describe('ImprovementLogWorkspace', () => {
     expect(html).toContain('결정 필요');
     expect(html).toContain('API 호출이나 온라인 저장소(Azure DB) 변경은 없습니다');
     expect(html).toContain('실제 클릭');
+    expect(html).toContain('메뉴 역할표');
+    expect(html).toContain('제목·기능·데이터 경계');
+    expect(html).toContain('업무 시스템 정기 회귀 검수');
+    expect(html).toContain('운영 클릭 확인');
+    expect(html).toContain('태그별 금고');
   });
 });
