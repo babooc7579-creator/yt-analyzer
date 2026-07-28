@@ -24,7 +24,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     description: '제작: 후보로 표시한 소재를 제작 흐름으로 정리합니다.',
     items: [
       { id: 'studio-candidates', label: '제작 후보함', status: 'live', summary: '제작 후보로 표시한 영상과 발견함 링크를 함께 봅니다.' },
-      { id: 'studio-scrapbook', label: '제작/스크랩북', status: 'live', summary: '별표로 보관한 영상과 제작 후보를 구분해 봅니다.' },
+      { id: 'studio-scrapbook', label: '소재 보관함', status: 'live', summary: '별표로 보관한 수집 영상을 나중에 다시 봅니다. 제작 후보함과는 별도로 관리합니다.' },
       { id: 'studio-script', label: '대본 보드', status: 'live', summary: '제작 후보의 제목, 구성 메모, 업로드 예정일을 온라인 저장소(Azure DB)에 정리합니다.' },
       { id: 'studio-calendar', label: '업로드 캘린더', status: 'live', summary: '제작 후보함에 온라인 저장소(Azure DB)에 저장된 목표 업로드 날짜를 달력으로 확인합니다.' },
       { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '미검토, 분석중, 대본화, 제작완료 상태를 관리할 예정입니다.' },

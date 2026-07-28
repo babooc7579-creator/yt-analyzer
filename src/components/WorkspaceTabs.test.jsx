@@ -10,7 +10,7 @@ describe('WorkspaceTabs', () => {
       <WorkspaceTabs activeTab="dashboard" savedVideoCount={2} onSelectTab={vi.fn()} />,
     );
 
-    expect(markup).toContain('영구 스크랩북');
+    expect(markup).toContain('소재 보관함');
     expect(markup).toContain('수집 영상 목록');
     expect(markup).toContain('현재 화면');
     expect(markup).toContain('aria-pressed="false"');
@@ -41,6 +41,6 @@ describe('WorkspaceTabs', () => {
 
     expect(markup).toContain('제작 후보함');
     expect(markup).toContain('저장된 제작 후보 조회');
-    expect(markup).not.toContain('영구 스크랩북');
+    expect(markup).not.toContain('소재 보관함');
   });
 });

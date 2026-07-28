@@ -9,7 +9,7 @@ describe('scrapbookHeaderProps utils', () => {
     expect(props).toMatchObject({
       iconName: 'bookmark',
       isProductionMode: false,
-      title: '영구 보관 스크랩북',
+      title: '소재 보관함',
     });
     expect(props.description).toContain('온라인 저장소 기준');
     expect(props.description).toContain('브라우저 임시 기록');
