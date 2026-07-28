@@ -169,6 +169,7 @@ export const getScrapbookWorkspaceViewProps = ({
   onOpenHome,
   onOpenProductionCandidates,
   onOpenReferenceVault,
+  onOpenScriptBoard,
   onOpenUploadCalendar,
   onRemoveScrap,
   onUpdateDiscoveryLink,
@@ -228,6 +229,7 @@ export const getScrapbookWorkspaceViewProps = ({
       onUpdateVideoRecord,
       onUnsavedDraftsChange,
       onOpenReferenceVault,
+      onOpenScriptBoard,
       onOpenUploadCalendar,
     },
   };
