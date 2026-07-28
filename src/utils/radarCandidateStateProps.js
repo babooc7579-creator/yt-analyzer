@@ -12,9 +12,9 @@ export const getRadarCandidateCompletedStateViewProps = () => ({
   titleText: '오늘 볼 후보를 모두 처리했습니다',
   descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 온라인 저장소(Azure DB)의 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있고, 다음 작업은 수집 영상 목록이나 제작 후보함에서 이어갈 수 있습니다.',
   openVaultButtonProps: {
-    label: '레퍼런스 금고 열기',
-    title: '수집된 영상 정보 조회 화면으로 이동',
-    'aria-label': '수집된 영상 정보 조회 화면으로 이동',
+    label: '수집 영상 목록 열기',
+    title: '수집 영상 목록 화면으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다.',
+    'aria-label': '수집 영상 목록 화면 열기, 이동만으로 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음',
   },
   openProductionButtonProps: {
     label: '제작 후보함 열기',
@@ -54,9 +54,9 @@ export const getRadarCandidateEmptyStateViewProps = ({
       show: emptyStoredVideoLoad,
     },
     openVaultButtonProps: {
-      label: '레퍼런스 금고 열기',
-      title: '수집된 영상 정보 조회 화면으로 이동',
-      'aria-label': '수집된 영상 정보 조회 화면으로 이동',
+      label: '수집 영상 목록 열기',
+      title: '수집 영상 목록 화면으로 이동합니다. 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다.',
+      'aria-label': '수집 영상 목록 화면 열기, 이동만으로 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음',
     },
     hideLoadButton: emptyStoredVideoLoad,
   });

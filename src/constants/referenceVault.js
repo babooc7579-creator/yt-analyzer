@@ -6,9 +6,9 @@ export const REFERENCE_VAULT_SUMMARY_TONES = {
 };
 
 export const REFERENCE_VAULT_HEADER = {
-  eyebrow: 'Reference Vault',
-  title: '레퍼런스 금고',
-  description: '수집된 영상 정보와 스크랩 소재를 한 곳에서 훑고, 제작 후보로 표시할 소재를 고르는 작업 캔버스입니다.',
+  eyebrow: '수집 영상 정보',
+  title: '수집 영상 목록',
+  description: '온라인 저장소(Azure DB)에 보관된 수집 영상 정보를 한곳에서 확인하고, 소재 보관 또는 제작 후보로 표시할 소재를 고릅니다.',
 };
 
 export const REFERENCE_VAULT_SUMMARY_CARDS = [

@@ -50,6 +50,9 @@ describe('creatorOs constants', () => {
   });
 
   it('keeps scan and stored-vault menu copy distinct', () => {
+    const collectedVideoSection = CREATOR_OS_PRODUCT_MAP.find(section => section.title === '수집 영상·링크');
+
+    expect(collectedVideoSection.description).toContain('수집 영상 정보');
     expect(itemsById['ops-selected-scan'].summary).toContain('YouTube API');
     expect(itemsById['vault-videos'].label).toBe('수집 영상 목록');
     expect(itemsById['vault-videos'].summary).toContain('수집된 영상 정보');
