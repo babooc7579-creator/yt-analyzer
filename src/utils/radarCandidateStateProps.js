@@ -67,8 +67,8 @@ export const getRadarCandidateProductionButtonProps = ({ videoTitle } = {}) => {
 
   return {
     label: '제작 후보로',
-    title: '스크랩북에 보관하고 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시합니다. YouTube API를 새로 호출하지 않습니다.',
-    'aria-label': `${displayTitle} 스크랩북에 보관하고 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시, YouTube API 호출 없음`,
+    title: '소재 보관함에 보관하고 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시합니다. YouTube API를 새로 호출하지 않습니다.',
+    'aria-label': `${displayTitle} 소재 보관함에 보관하고 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시, YouTube API 호출 없음`,
   };
 };
 
@@ -97,10 +97,10 @@ export const getRadarCandidateProductionButtonActionProps = ({
 };
 
 export const getRadarCandidateDecisionActionsViewProps = ({ pendingAction } = {}) => ({
-  descriptionText: '만들 만하면 제작 후보로 표시하세요. 소재 보관은 스크랩북에만 저장하고 현재 후보를 유지합니다. 봤음, 나중에 보기, 제외는 온라인 저장소(Azure DB)의 판단 기록에 저장되고 다음 후보가 자동으로 이어집니다. YouTube API를 새로 호출하지 않습니다.',
+  descriptionText: '만들 만하면 제작 후보로 표시하세요. 소재 보관은 소재 보관함에만 저장하고 현재 후보를 유지합니다. 봤음, 나중에 보기, 제외는 온라인 저장소(Azure DB)의 판단 기록에 저장되고 다음 후보가 자동으로 이어집니다. YouTube API를 새로 호출하지 않습니다.',
   pendingText: {
-    production: '스크랩북 보관과 제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중입니다.',
-    scrapbook: '스크랩북 보관 상태를 온라인 저장소(Azure DB)에 저장하는 중입니다.',
+    production: '소재 보관과 제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중입니다.',
+    scrapbook: '소재 보관 상태를 온라인 저장소(Azure DB)에 저장하는 중입니다.',
     status: '영상 판단 기록을 온라인 저장소(Azure DB)에 저장하는 중입니다.',
   }[pendingAction] || '',
 });
@@ -117,8 +117,8 @@ export const getRadarCandidateScrapButtonProps = ({
 } = {}) => {
   const displayTitle = getDisplayVideoTitle(videoTitle);
   const actionText = isSaved
-    ? '온라인 스크랩북(Azure DB)에서 보관을 해제합니다'
-    : '온라인 스크랩북(Azure DB)에 소재로 보관합니다';
+    ? '온라인 저장소(Azure DB)의 소재 보관함에서 보관을 해제합니다'
+    : '온라인 저장소(Azure DB)의 소재 보관함에 소재로 보관합니다';
 
   return {
     actionText,
@@ -149,6 +149,6 @@ export const getRadarCandidateScrapButtonActionProps = ({
       ? '다른 온라인 저장소(Azure DB)의 기록 저장이 끝날 때까지 기다려 주세요.'
       : canToggleScrap
         ? copy.title
-        : '보관할 영상 ID가 없어 온라인 스크랩북(Azure DB) 저장을 실행하지 않습니다.',
+        : '보관할 영상 ID가 없어 온라인 저장소(Azure DB)의 소재 보관함 저장을 실행하지 않습니다.',
   };
 };

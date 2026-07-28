@@ -17,7 +17,7 @@ describe('Scrapbook and reference vault flow', () => {
     expect(html).toContain('오늘 레이더로');
     expect(html).toContain('수집 영상 목록');
     expect(html).toContain('온라인 저장소(Azure DB)에 보관된 수집 영상 정보만 조회합니다. 새 YouTube API 호출은 없습니다.');
-    expect(html).toContain('온라인 스크랩북(Azure DB)에 보관합니다.');
+    expect(html).toContain('온라인 저장소(Azure DB)의 소재 보관함에 보관합니다.');
   });
 
   it('renders reference vault empty state as channel selection, stored lookup, then optional scan', () => {
@@ -62,7 +62,7 @@ describe('Scrapbook and reference vault flow', () => {
     expect(html).toContain('조회 결과를 온라인 저장소(Azure DB)에 저장하지 않습니다.');
     expect(html).toContain('제작 후보로');
     expect(html).toContain('온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시하고 제작 후보함에서 이어서 관리합니다. YouTube API를 새로 호출하지 않습니다.');
-    expect(html).toContain('온라인 스크랩북(Azure DB) 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.');
+    expect(html).toContain('온라인 저장소(Azure DB)의 소재 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.');
     expect(html).toContain('flex-wrap');
   });
 });

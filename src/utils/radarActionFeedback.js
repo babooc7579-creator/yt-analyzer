@@ -38,13 +38,13 @@ export const getRadarStatusSuccessFeedback = ({ status, video } = {}) => {
 };
 
 export const getRadarScrapbookSuccessFeedback = ({ removed = false, video } = {}) => ({
-  actionLabel: removed ? '' : '스크랩북 열기',
+  actionLabel: removed ? '' : '소재 보관함 열기',
   actionTitle: removed
     ? ''
-    : '온라인 스크랩북(Azure DB)을 엽니다. YouTube API를 호출하지 않습니다.',
+    : '온라인 저장소(Azure DB)의 소재 보관함을 엽니다. YouTube API를 호출하지 않습니다.',
   destination: removed ? '' : 'scrapbook',
   message: removed
-    ? `'${getVideoTitle(video)}' 영상을 온라인 스크랩북(Azure DB)에서 해제했습니다. 레이더 후보는 유지됩니다.`
-    : `'${getVideoTitle(video)}' 영상을 온라인 스크랩북(Azure DB)에 보관했습니다. 레이더 후보는 유지되므로 봤음, 나중에 보기, 제작 후보, 제외 중 하나로 판단을 마저 선택하세요.`,
+    ? `'${getVideoTitle(video)}' 영상을 온라인 저장소(Azure DB)의 소재 보관함에서 해제했습니다. 레이더 후보는 유지됩니다.`
+    : `'${getVideoTitle(video)}' 영상을 온라인 저장소(Azure DB)의 소재 보관함에 보관했습니다. 레이더 후보는 유지되므로 봤음, 나중에 보기, 제작 후보, 제외 중 하나로 판단을 마저 선택하세요.`,
   title: removed ? '소재 보관을 해제했습니다' : '소재로 보관했습니다',
 });

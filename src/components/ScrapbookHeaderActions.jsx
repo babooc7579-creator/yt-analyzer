@@ -14,6 +14,7 @@ export default function ScrapbookHeaderActions({
   onCopyPrompt,
   promptCopyError,
   savedVideoCount,
+  variant,
   videoUrlList,
 }) {
   const {
@@ -27,6 +28,7 @@ export default function ScrapbookHeaderActions({
     onCopyPrompt,
     promptCopyError,
     savedVideoCount,
+    variant,
     videoUrlList,
   });
   const PromptButtonIcon = PROMPT_BUTTON_ICONS[promptIconName];

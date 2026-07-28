@@ -20,7 +20,7 @@ describe('productionKanbanSummary utils', () => {
     expect(props.title).toBe('제작 후보를 실제 작업 순서로 정리합니다');
     expect(props.title).not.toContain('넘깁니다');
     expect(props.description).toContain('오늘 무엇을 만들지');
-    expect(props.description).toContain('스크랩북 전체를 자동으로 끌어오지 않고');
+    expect(props.description).toContain('소재 보관함 전체를 자동으로 끌어오지 않고');
     expect(props.description).toContain('레이더와 발견함');
     expect(props.description).toContain('제작 후보로 표시한 항목');
     expect(props.description).not.toContain('제작 후보로 지정한');

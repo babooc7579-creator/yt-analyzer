@@ -19,6 +19,7 @@ describe('scrapbookHeaderActions utils', () => {
     });
     expect(viewProps.copyUrlButtonProps.className).toContain('bg-white');
     expect(viewProps.copyUrlButtonProps.ariaLabel).toContain('2');
+    expect(viewProps.copyUrlButtonProps.ariaLabel).toContain('보관 소재');
     expect(viewProps.promptButtonProps).toMatchObject({
       disabled: false,
       onClick: onCopyPrompt,
@@ -27,6 +28,21 @@ describe('scrapbookHeaderActions utils', () => {
     expect(viewProps.promptButtonProps.className).toContain('from-yellow-500');
     expect(viewProps.promptButtonProps['aria-label']).toContain('2');
     expect(viewProps.promptIconName).toBe('lightbulb');
+  });
+
+  it('uses production candidate wording for production header actions', () => {
+    const viewProps = getScrapbookHeaderActionsViewProps({
+      copiedPrompt: '',
+      onCopyPrompt: () => 'copy prompt',
+      promptCopyError: '',
+      savedVideoCount: 1,
+      variant: 'production',
+      videoUrlList: '1. Candidate\nhttps://youtube.com/watch?v=video-1',
+    });
+
+    expect(viewProps.copyUrlButtonProps.ariaLabel).toBe('제작 후보 영상 1개 URL 목록 복사');
+    expect(viewProps.promptButtonProps['aria-label']).toContain('제작 후보 영상 1개');
+    expect(viewProps.copyUrlButtonProps.title).not.toContain('보관 소재');
   });
 
   it('disables copy actions when the scrapbook has no saved videos or URL list', () => {

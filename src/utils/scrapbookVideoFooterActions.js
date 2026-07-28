@@ -11,7 +11,7 @@ const getSafeVideoTitle = ({ video, videoTitle }) => (
 export const getScrapbookRemoveConfirmMessage = ({ video, videoTitle } = {}) => {
   const displayTitle = getSafeVideoTitle({ video, videoTitle });
 
-  return `'${displayTitle}' 영상을 온라인 스크랩북(Azure DB)에서 해제할까요?\n\n영상 원본이나 수집된 영상 정보는 삭제되지 않고, 스크랩북 보관 표시만 해제됩니다.`;
+  return `'${displayTitle}' 영상을 온라인 저장소(Azure DB)의 소재 보관함에서 해제할까요?\n\n영상 원본이나 수집된 영상 정보는 삭제되지 않고, 소재 보관 표시만 해제됩니다.`;
 };
 
 export const getScrapbookRemoveButtonProps = ({
@@ -24,7 +24,7 @@ export const getScrapbookRemoveButtonProps = ({
   const safeVideo = getSafeVideo(video);
 
   return {
-    'aria-label': `${displayTitle} 온라인 스크랩북(Azure DB)에서 해제, 원본 영상과 수집 영상 정보는 삭제하지 않음`,
+    'aria-label': `${displayTitle} 온라인 저장소(Azure DB)의 소재 보관함에서 해제, 원본 영상과 수집 영상 정보는 삭제하지 않음`,
     className: 'p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors',
     onClick: () => {
       const message = getScrapbookRemoveConfirmMessage({
@@ -34,7 +34,7 @@ export const getScrapbookRemoveButtonProps = ({
 
       if (confirmFn?.(message)) onRemoveScrap?.(safeVideo);
     },
-    title: '온라인 스크랩북(Azure DB) 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.',
+    title: '온라인 저장소(Azure DB)의 소재 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.',
     type: 'button',
   };
 };

@@ -41,9 +41,9 @@ export const getRadarCandidateStripHeaderViewProps = ({
     },
     queueHint: `오늘 화면에는 최대 ${candidateLimit}개만 보입니다. 한 건을 판단하면 다음 미판단 후보가 자동으로 들어옵니다. 별도의 다음 버튼 없이 현재 카드만 차례로 보면 됩니다.`,
     scrapbookButtonProps: {
-      'aria-label': `온라인 스크랩북(Azure DB) 화면으로 이동, 스크랩 ${savedVideoCount}개`,
+      'aria-label': `온라인 저장소(Azure DB)의 소재 보관함 화면으로 이동, 보관 소재 ${savedVideoCount}개`,
       label: `스크랩 ${savedVideoCount}개`,
-      title: '온라인 스크랩북(Azure DB) 화면으로 이동',
+      title: '온라인 저장소(Azure DB)의 소재 보관함 화면으로 이동',
     },
     summaryItems: [
       { label: '남은 후보', value: `${visibleQueueCount}개` },

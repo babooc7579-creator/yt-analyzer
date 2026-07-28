@@ -7,9 +7,9 @@ export const VIDEO_RECORDS_SYNC_WARNINGS = {
 export const VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE = '온라인 저장소(Azure DB)의 영상 판단 기록을 전체 초기화할까요?\n\n봤음, 나중에 보기, 제외, 제작 후보 같은 판단 기록이 지워지고 숨겨졌던 후보가 다시 보일 수 있습니다.';
 
 export const SCRAPBOOK_SYNC_WARNINGS = {
-  loadFallback: '온라인 저장소(Azure DB) 연결 실패로 이 브라우저에 남아 있던 스크랩북 임시 기록을 표시 중입니다. 이 목록은 온라인 저장소 기준 데이터가 아닙니다.',
-  saveFailed: '스크랩북 변경이 온라인 저장소(Azure DB)에 저장되지 않았습니다. 브라우저 임시 기록으로 저장 완료 처리하지 않습니다.',
-  cloudRequired: '온라인 스크랩북(Azure DB)을 확인하지 못해 지금은 보관 상태를 바꿀 수 없습니다. 잠시 뒤 새로고침 후 다시 시도해 주세요.',
+  loadFallback: '온라인 저장소(Azure DB) 연결 실패로 이 브라우저에 남아 있던 소재 보관함 임시 기록을 표시 중입니다. 이 목록은 온라인 저장소 기준 데이터가 아닙니다.',
+  saveFailed: '소재 보관함 변경이 온라인 저장소(Azure DB)에 저장되지 않았습니다. 브라우저 임시 기록으로 저장 완료 처리하지 않습니다.',
+  cloudRequired: '온라인 저장소(Azure DB)의 소재 보관함을 확인하지 못해 지금은 보관 상태를 바꿀 수 없습니다. 잠시 뒤 새로고침 후 다시 시도해 주세요.',
 };
 
 export const SYNC_WARNING_BANNER_COPY = {

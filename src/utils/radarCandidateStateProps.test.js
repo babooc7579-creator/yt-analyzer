@@ -86,12 +86,12 @@ describe('radarCandidateStateProps utils', () => {
     expect(decisionProps.descriptionText).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(saveProps).toMatchObject({
       buttonText: '소재 보관',
-      title: '온라인 스크랩북(Azure DB)에 소재로 보관합니다',
+      title: '온라인 저장소(Azure DB)의 소재 보관함에 소재로 보관합니다',
     });
     expect(saveProps['aria-label']).toContain('Radar clip');
     expect(unsaveProps).toMatchObject({
       buttonText: '보관 해제',
-      title: '온라인 스크랩북(Azure DB)에서 보관을 해제합니다',
+      title: '온라인 저장소(Azure DB)의 소재 보관함에서 보관을 해제합니다',
     });
     expect(getRadarCandidateScrapButtonProps()['aria-label']).toContain('이 영상');
   });
@@ -182,7 +182,7 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(missingIdProps.disabled).toBe(true);
-    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 온라인 스크랩북(Azure DB) 저장을 실행하지 않습니다.');
+    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 온라인 저장소(Azure DB)의 소재 보관함 저장을 실행하지 않습니다.');
     expect(missingHandlerProps.disabled).toBe(true);
 
     missingIdProps.onClick();

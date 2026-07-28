@@ -35,9 +35,9 @@ export default function TtoTtoExplorerHeader({
           type="button"
           onClick={onOpenScrapbook}
           className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-extrabold text-slate-200 hover:border-slate-500 hover:text-white"
-          title="온라인 스크랩북(Azure DB)으로 이동합니다."
+          title="온라인 저장소(Azure DB)의 소재 보관함으로 이동합니다."
         >
-          <Bookmark className="h-4 w-4" /> 스크랩북
+          <Bookmark className="h-4 w-4" /> 소재 보관함
         </button>
         <button
           type="button"

@@ -61,6 +61,6 @@ describe('radarActionFeedback', () => {
     expect(saved.message).toContain('레이더 후보는 유지');
     expect(saved.message).toContain('판단을 마저 선택하세요');
     expect(removed.destination).toBe('');
-    expect(removed.message).toContain('온라인 스크랩북(Azure DB)에서 해제');
+    expect(removed.message).toContain('온라인 저장소(Azure DB)의 소재 보관함에서 해제');
   });
 });
