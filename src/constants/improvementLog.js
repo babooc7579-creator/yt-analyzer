@@ -39,13 +39,14 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '제작 후보 영상의 제목, 통합 작업 메모, 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 명시적으로 저장합니다.',
+    currentSummary: '제작 후보 영상의 제목, 영상 분석, 구성안, 대본 본문, 대본 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 명시적으로 저장합니다.',
     targetSummary: '제작 후보의 원본을 분석하고, 구성안을 만든 뒤, 대본을 작성·수정하고 최종본을 확정하는 독립 작업 공간으로 발전시킵니다.',
-    nextAction: '분석·구성·대본·수정 상태를 위한 새 저장 필드와 백엔드 보존 계약을 먼저 승인합니다.',
+    nextAction: '별도 승인 후 테스트용 제작 후보에서 저장 → 새로고침 → 재조회 유지 여부를 실제 검수합니다.',
     decisions: [
       '제작 후보함과 통합하지 않고 별도 작업실로 유지합니다.',
       'AI 자동 분석과 대본 생성은 수동 작성 구조가 안정된 뒤 검토합니다.',
-      '새 필드는 현재 백엔드가 보존하지 않으므로 프론트만 먼저 추가하지 않습니다.',
+      '새 endpoint나 container 없이 기존 videoUserRecords 문서에 구조화 필드를 추가합니다.',
+      '수정 이력과 이전 버전 비교는 개인용 MVP 이후에 검토합니다.',
     ],
     checkpoints: [
       {
@@ -60,23 +61,23 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       },
       {
         id: 'current-scope',
-        label: '현재는 제목·통합 메모·업로드 예정일만 저장한다는 범위 표시',
+        label: '제목·분석·구성안·본문·진행 단계·기존 통합 메모·업로드 예정일의 현재 범위 표시',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'backend-contract',
-        label: '백엔드가 현재 draftTitle, note, targetPublishDate만 대본 관련 필드로 보존함을 확인',
+        label: '백엔드가 기존 필드와 새 구조화 대본 필드를 함께 보존하도록 계약 확장',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'script-fields',
-        label: '분석·구성·대본 본문·수정 메모·대본 상태의 저장 구조 결정',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
+        label: '영상 분석·구성안·대본 본문·대본 진행 단계의 저장 구조 결정',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'writing-flow',
         label: '분석 → 구성 → 초안 → 수정 → 최종본 작업 흐름 구현',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
       {
         id: 'discovery-link-source',

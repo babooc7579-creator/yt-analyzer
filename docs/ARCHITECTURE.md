@@ -212,16 +212,19 @@ Main Content
 
 - 제작 후보함과 동일한 Cloud `videoUserRecords` 사용
 - `draftTitle`: 내가 만들 제목
-- `note`: 작업 메모와 대본 초안을 함께 적는 현재 MVP 통합 입력
+- `scriptAnalysis`: 영상 분석
+- `scriptOutline`: 대본 구성안
+- `scriptBody`: 대본 본문
+- `scriptStatus`: 분석 중, 구성 중, 초안 작성, 수정 중, 최종본 진행 단계
+- `note`: 기존 통합 작업 메모(기존 자료 보존)
 - `targetPublishDate`: 업로드 예정일
 - 명시적 Cloud 저장과 저장 성공/실패 표시
 - 검색, 진행 단계 필터, 오늘 집중 작업 표시
 - 제작 후보함과 업로드 캘린더 왕복 연결
 - 화면 표시와 이동만으로 YouTube API 호출 없음
 
-현재 분석, 구성, 대본 본문, 수정 이력, 대본 상태는 별도 필드로 분리되지 않았습니다.
-백엔드는 `draftTitle`, `note`, `targetPublishDate`만 대본 관련 값으로 보존하므로 새 저장 필드는 프론트와 백엔드 계약을 함께 승인한 뒤 추가합니다.
-현재 별도 대본 저장소, 새 endpoint, 자동 저장, AI 생성 기능은 없습니다.
+기존 `/video-records` endpoint와 `videos` container의 `video_user_record` 문서를 그대로 사용합니다.
+수정 이력, 이전 버전 비교, 별도 대본 저장소, 새 endpoint, 자동 저장, AI 생성 기능은 없습니다.
 
 ### 개선 기록
 

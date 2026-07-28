@@ -54,6 +54,7 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - 업로드 캘린더: 언제 올릴지 확인합니다.
 - AI 공방: 이후 분석과 작성 제안을 보조합니다.
 
-현재 백엔드는 대본 관련 값으로 `draftTitle`, `note`, `targetPublishDate`만 보존합니다.
-분석, 구성, 대본 본문, 수정 메모, 대본 상태를 새 필드로 분리하려면 프론트와 백엔드 저장 계약을 함께 변경해야 합니다.
-새 필드 승인 전에는 기존 `note`의 의미를 임의로 나누거나 기존 데이터를 변환하지 않습니다.
+현재 백엔드는 기존 `draftTitle`, `note`, `targetPublishDate`와 함께
+`scriptAnalysis`, `scriptOutline`, `scriptBody`, `scriptStatus`를 보존합니다.
+기존 `note`는 변환하거나 삭제하지 않고 `기존 통합 작업 메모`로 유지합니다.
+수정 이력, 이전 버전 비교, AI 보조는 개인용 MVP 이후의 별도 작업입니다.

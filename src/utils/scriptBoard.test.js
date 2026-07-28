@@ -6,6 +6,7 @@ import {
   getScriptBoardItems,
   getScriptBoardSummary,
   getScriptBoardVisibleItems,
+  getScriptWorkspaceChecklist,
 } from './scriptBoard';
 
 const videos = [
@@ -68,6 +69,31 @@ describe('scriptBoard utils', () => {
       items,
       searchQuery: '인트로',
     }).map((item) => item.id)).toEqual(['active']);
+
+    const scriptItems = getScriptBoardItems({
+      videoUserRecords: {
+        candidate: {
+          status: PRODUCTION_STATUS.CANDIDATE,
+          scriptAnalysis: '반전 소재',
+          scriptBody: '최종 대본',
+          scriptOutline: '도입과 결론',
+        },
+      },
+      videos,
+    });
+
+    expect(getScriptBoardVisibleItems({
+      items: scriptItems,
+      searchQuery: '반전',
+    }).map((item) => item.id)).toEqual(['candidate']);
+    expect(getScriptBoardVisibleItems({
+      items: scriptItems,
+      searchQuery: '결론',
+    }).map((item) => item.id)).toEqual(['candidate']);
+    expect(getScriptBoardVisibleItems({
+      items: scriptItems,
+      searchQuery: '최종 대본',
+    }).map((item) => item.id)).toEqual(['candidate']);
   });
 
   it('summarizes stages and distinguishes source-empty from filter-empty', () => {
@@ -94,6 +120,41 @@ describe('scriptBoard utils', () => {
     expect(getScriptBoardEmptyState({ totalCount: 3, visibleCount: 0 })).toMatchObject({
       actionLabel: '전체 작업 보기',
       type: 'filter',
+    });
+  });
+
+  it('summarizes the structured script workspace preparation', () => {
+    const checklist = getScriptWorkspaceChecklist({
+      record: {
+        draftTitle: '내 제목',
+        scriptAnalysis: '핵심 분석',
+        scriptBody: '',
+        scriptOutline: '도입 → 결론',
+        targetPublishDate: '',
+      },
+      video: { videoId: 'candidate' },
+    });
+
+    expect(checklist).toMatchObject({
+      readyCount: 4,
+      summaryText: '2개 남음',
+      title: '대본 작업 체크',
+      totalCount: 6,
+    });
+    expect(checklist.remainingItems.map((item) => item.key)).toEqual(['body', 'publish-date']);
+    expect(getScriptWorkspaceChecklist({
+      record: {
+        draftTitle: '내 제목',
+        scriptAnalysis: '분석',
+        scriptBody: '본문',
+        scriptOutline: '구성',
+        targetPublishDate: '2026-08-01',
+      },
+      video: { videoId: 'candidate' },
+    })).toMatchObject({
+      summaryText: '6/6 준비',
+      title: '대본 작업 준비 완료',
+      tone: 'ready',
     });
   });
 });

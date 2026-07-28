@@ -1,8 +1,9 @@
 import { CalendarDays, Loader2, Save } from 'lucide-react';
 
+import { SCRIPT_WORKFLOW_STATUS_OPTIONS } from '../constants/scriptWorkspace';
 import {
-  getProductionVideoReadinessChecklist,
-} from '../utils/productionVideoCard';
+  getScriptWorkspaceChecklist,
+} from '../utils/scriptBoard';
 import { getProductionVideoDraftSaveButtonProps } from '../utils/productionVideoStatusProps';
 import { getYouTubeVideoUrl } from '../utils/urls';
 import ProductionVideoExternalActions from './ProductionVideoExternalActions';
@@ -31,7 +32,7 @@ export default function ScriptBoardEditor({
     isSaving,
     videoTitle,
   });
-  const readiness = getProductionVideoReadinessChecklist({ record, video });
+  const readiness = getScriptWorkspaceChecklist({ record, video });
 
   return (
     <article className="min-w-0 border border-slate-700 bg-slate-950/60">
@@ -82,15 +83,69 @@ export default function ScriptBoardEditor({
           </label>
 
           <label className="block">
-            <span className="text-xs font-extrabold text-slate-200">작업 메모 · 대본 초안 <span className="text-slate-500">(현재 통합 입력)</span></span>
+            <span className="text-xs font-extrabold text-slate-200">대본 진행 단계</span>
+            <select
+              value={record.scriptStatus || ''}
+              onChange={(event) => onUpdateDraft(videoId, { scriptStatus: event.target.value })}
+              className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-3 text-sm font-bold text-white outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+              title="현재 대본 작업 단계를 표시합니다. 변경사항 저장 버튼을 눌러야 온라인 저장소(Azure DB)에 반영됩니다."
+              aria-label={`${videoTitle} 대본 진행 단계 선택`}
+            >
+              {SCRIPT_WORKFLOW_STATUS_OPTIONS.map((option) => (
+                <option value={option.value} key={option.value || 'not-started'}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="text-xs font-extrabold text-slate-200">1. 영상 분석</span>
+            <textarea
+              value={record.scriptAnalysis || ''}
+              onChange={(event) => onUpdateDraft(videoId, { scriptAnalysis: event.target.value })}
+              placeholder={'핵심 소재와 시청자 반응 포인트\n첫 장면·훅이 강한 이유\n내 콘텐츠에서 다르게 만들 부분'}
+              rows={6}
+              className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-3 text-sm leading-6 text-slate-100 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+              title="원본 분석을 입력합니다. 변경사항 저장 버튼을 눌러야 온라인 저장소(Azure DB)에 반영됩니다."
+              aria-label={`${videoTitle} 영상 분석 입력`}
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-xs font-extrabold text-slate-200">2. 대본 구성안</span>
+            <textarea
+              value={record.scriptOutline || ''}
+              onChange={(event) => onUpdateDraft(videoId, { scriptOutline: event.target.value })}
+              placeholder={'도입: 첫 3초 훅\n전개: 장면과 핵심 정보 순서\n마무리: 결론과 다음 행동'}
+              rows={8}
+              className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-3 text-sm leading-6 text-slate-100 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+              title="대본의 순서와 장면 구성을 입력합니다. 변경사항 저장 버튼을 눌러야 온라인 저장소(Azure DB)에 반영됩니다."
+              aria-label={`${videoTitle} 대본 구성안 입력`}
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-xs font-extrabold text-slate-200">3. 대본 본문</span>
+            <textarea
+              value={record.scriptBody || ''}
+              onChange={(event) => onUpdateDraft(videoId, { scriptBody: event.target.value })}
+              placeholder="실제로 읽거나 촬영·편집에 사용할 대본을 작성하세요."
+              rows={16}
+              className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-3 text-sm leading-6 text-slate-100 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+              title="대본 본문을 입력합니다. 변경사항 저장 버튼을 눌러야 온라인 저장소(Azure DB)에 반영됩니다."
+              aria-label={`${videoTitle} 대본 본문 입력`}
+            />
+          </label>
+
+          <label className="block border border-slate-800 bg-slate-900/50 p-3">
+            <span className="text-xs font-extrabold text-slate-300">기존 통합 작업 메모 <span className="text-slate-500">(기존 자료 보존)</span></span>
             <textarea
               value={record.note || ''}
               onChange={(event) => onUpdateDraft(videoId, { note: event.target.value })}
-              placeholder={'첫 3초 훅\n장면 순서와 핵심 내용\n내 영상에서 바꿀 포인트'}
-              rows={12}
-              className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-3 text-sm leading-6 text-slate-100 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-              title="현재 단계에서는 온라인 저장소(Azure DB)의 기존 제작 메모 항목에 저장합니다. 구조화된 전체 대본 모델을 새로 만들지는 않습니다."
-              aria-label={`${videoTitle} 인트로 구성 대본 초안 입력`}
+              placeholder="기존에 작성한 훅·장면·메모가 표시됩니다."
+              rows={5}
+              className="mt-2 w-full resize-y border border-slate-700 bg-slate-950 px-3 py-3 text-sm leading-6 text-slate-200 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+              title="기존 통합 메모를 그대로 보존합니다. 필요할 때 참고하거나 수정한 뒤 함께 저장할 수 있습니다."
+              aria-label={`${videoTitle} 기존 통합 작업 메모 입력`}
             />
           </label>
 

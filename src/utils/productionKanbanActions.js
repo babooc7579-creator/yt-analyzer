@@ -29,6 +29,10 @@ export const hasProductionDraftChanges = (saved = {}, draft = {}) => {
   return (
     (savedRecord.draftTitle || '') !== (draftRecord.draftTitle || '')
     || (savedRecord.note || '') !== (draftRecord.note || '')
+    || (savedRecord.scriptAnalysis || '') !== (draftRecord.scriptAnalysis || '')
+    || (savedRecord.scriptBody || '') !== (draftRecord.scriptBody || '')
+    || (savedRecord.scriptOutline || '') !== (draftRecord.scriptOutline || '')
+    || (savedRecord.scriptStatus || '') !== (draftRecord.scriptStatus || '')
     || (savedRecord.targetPublishDate || '') !== (draftRecord.targetPublishDate || '')
   );
 };
@@ -39,6 +43,10 @@ export const getProductionDraftUpdates = (draft = {}) => {
   return {
     draftTitle: draftRecord.draftTitle || '',
     note: draftRecord.note || '',
+    scriptAnalysis: draftRecord.scriptAnalysis || '',
+    scriptBody: draftRecord.scriptBody || '',
+    scriptOutline: draftRecord.scriptOutline || '',
+    scriptStatus: draftRecord.scriptStatus || '',
     targetPublishDate: draftRecord.targetPublishDate || '',
   };
 };

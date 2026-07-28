@@ -127,6 +127,10 @@ describe('useProductionKanbanActions', () => {
           videoId: 'video1',
           draftTitle: 'Draft title',
           note: 'Draft note',
+          scriptAnalysis: 'Draft analysis',
+          scriptBody: 'Draft body',
+          scriptOutline: 'Draft outline',
+          scriptStatus: 'revision',
           targetPublishDate: '2026-07-21',
           ignored: 'not sent',
         },
@@ -141,6 +145,10 @@ describe('useProductionKanbanActions', () => {
     expect(deps.onUpdateVideoRecord).toHaveBeenCalledWith('video1', {
       draftTitle: 'Draft title',
       note: 'Draft note',
+      scriptAnalysis: 'Draft analysis',
+      scriptBody: 'Draft body',
+      scriptOutline: 'Draft outline',
+      scriptStatus: 'revision',
       targetPublishDate: '2026-07-21',
     });
     expect(runStateUpdater(stateSetters[1], { video1: 'saving' }, 1)).toEqual({ video1: 'saved' });

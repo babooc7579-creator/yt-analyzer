@@ -419,3 +419,5 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 같은 날 `대본 보드`를 `대본 작업실`로 명확히 바꾸고 현재 지원 범위를 화면에 표시했습니다. 현재 백엔드는 `draftTitle`, `note`, `targetPublishDate`만 대본 관련 값으로 보존하므로 작업 메모와 대본 초안은 기존 `note`의 통합 입력을 유지합니다. 분석·구성·대본 본문·수정 이력·대본 상태는 새 저장 계약 승인 전까지 구현 완료로 표시하지 않습니다. 제작 후보함과 업로드 캘린더의 이동 버튼도 `대본 작업실` 용어로 통일했습니다.
 
 같은 날 사용자 화면에 남아 있던 `레퍼런스 금고` 표현을 실제 기능에 맞게 정리했습니다. 사이드바 구역은 `수집 영상·링크`, 영상 조회 화면과 오늘의 레이더 이동 버튼은 `수집 영상 목록`으로 표시합니다. 화면 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출이 실행되지 않는다는 버튼 설명도 함께 명확히 했습니다. 기존 내부 view id, API, 저장 계약과 숨겨진 호환 경로는 변경하지 않았습니다.
+
+같은 날 대본 작업실의 수동 작성 흐름을 구조화했습니다. 기존 `/video-records`와 `videos` container의 `video_user_record` 문서를 유지하면서 `scriptAnalysis`, `scriptOutline`, `scriptBody`, `scriptStatus`를 프론트와 백엔드에 함께 추가했습니다. 기존 `note`는 `기존 통합 작업 메모`로 그대로 보존합니다. 백엔드 PR #19를 배포했으며 새 Azure 자원, container, endpoint, localStorage key, 자동 저장, AI 호출은 추가하지 않았습니다. 실제 Azure DB 저장 → 새로고침 → 재조회 왕복 검수는 테스트 기록을 정한 뒤 별도 승인으로 남겼습니다.

@@ -23,6 +23,7 @@ const toRecordMap = (records) => (
   records && typeof records === 'object' ? records : {}
 );
 const normalizeSearchText = (value) => String(value || '').trim().toLocaleLowerCase('ko-KR');
+const hasText = (value) => normalizeSearchText(value).length > 0;
 
 const getScriptBoardSortRank = (item) => {
   if (item.isFocus) return 0;
@@ -86,9 +87,77 @@ export const getScriptBoardVisibleItems = ({
       video.channelTitle,
       record.draftTitle,
       record.note,
+      record.scriptAnalysis,
+      record.scriptBody,
+      record.scriptOutline,
       record.targetPublishDate,
     ].some((value) => normalizeSearchText(value).includes(query));
   });
+};
+
+export const getScriptWorkspaceChecklist = ({ record, video } = {}) => {
+  const safeRecord = record && typeof record === 'object' ? record : {};
+  const safeVideo = video && typeof video === 'object' ? video : {};
+  const items = [
+    {
+      key: 'source',
+      isReady: Boolean(safeVideo.videoId),
+      label: '원본',
+      missingText: '영상 없음',
+      title: 'YouTube 원본 확인용입니다. 화면 표시만 하며 YouTube API를 호출하지 않습니다.',
+    },
+    {
+      key: 'title',
+      isReady: hasText(safeRecord.draftTitle),
+      label: '제목',
+      missingText: '제목 필요',
+      title: '내 채널에 맞게 바꿀 제목입니다. 변경사항 저장 버튼을 눌러야 온라인 저장소(Azure DB)에 반영됩니다.',
+    },
+    {
+      key: 'analysis',
+      isReady: hasText(safeRecord.scriptAnalysis),
+      label: '분석',
+      missingText: '분석 필요',
+      title: '원본의 핵심 소재, 훅과 차별화 방향을 정리합니다.',
+    },
+    {
+      key: 'outline',
+      isReady: hasText(safeRecord.scriptOutline),
+      label: '구성안',
+      missingText: '구성 필요',
+      title: '도입, 전개와 마무리 순서를 정리합니다.',
+    },
+    {
+      key: 'body',
+      isReady: hasText(safeRecord.scriptBody),
+      label: '대본 본문',
+      missingText: '본문 필요',
+      title: '실제 촬영·편집에 사용할 대본 본문입니다.',
+    },
+    {
+      key: 'publish-date',
+      isReady: hasText(safeRecord.targetPublishDate),
+      label: '업로드 일정',
+      missingText: '일정 미정',
+      title: '업로드 예정일입니다. 변경사항 저장 버튼을 눌러야 온라인 저장소(Azure DB)에 반영됩니다.',
+    },
+  ];
+  const remainingItems = items.filter((item) => !item.isReady);
+  const readyCount = items.length - remainingItems.length;
+  const isReady = remainingItems.length === 0;
+
+  return {
+    description: isReady
+      ? '원본, 제목, 분석, 구성안, 대본 본문과 일정이 모두 준비됐습니다.'
+      : '남은 항목을 채워 대본 작업을 이어가세요. 상태 확인만으로 저장이나 API 호출은 실행되지 않습니다.',
+    items,
+    readyCount,
+    remainingItems,
+    summaryText: isReady ? `${readyCount}/${items.length} 준비` : `${remainingItems.length}개 남음`,
+    title: isReady ? '대본 작업 준비 완료' : '대본 작업 체크',
+    tone: isReady ? 'ready' : 'working',
+    totalCount: items.length,
+  };
 };
 
 export const getScriptBoardSummary = (items) => toArray(items).reduce((summary, item) => {
