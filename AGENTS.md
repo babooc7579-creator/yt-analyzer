@@ -27,6 +27,14 @@
 - UI/UX 개선은 기능 변경과 분리해서 진행하세요.
 - 비용이 발생할 수 있는 API 호출은 신중하게 다루세요.
 
+## Resource And Cost Decisions
+
+- Azure, GitHub, YouTube API, AI, 저장소 또는 유료 서비스 변경 전 `.kaion/project-resources.json`과 카이온 중앙 자원 원장을 먼저 확인하세요.
+- 이미 연결된 Azure Sponsorship, Static Web Apps, Functions, Cosmos DB, YouTube Data API와 전사 구독을 새 서비스보다 먼저 활용하세요.
+- 저장된 데이터 조회와 YouTube API 신규 수집을 비용 판단에서 분리하세요.
+- 새 자원 생성, 요금제 변경, 프로젝트 연결 또는 사용 중단이 승인되면 프로젝트 선언서와 중앙 자원대장·사용 이력을 함께 갱신하세요.
+- 토큰, API 키, 연결 문자열과 결제 식별자는 선언서나 문서에 기록하지 마세요.
+
 ## Data Collection And Lookup Principles
 
 - "유튜브 새 영상 정보 수집"과 "수집 영상 목록 불러오기"는 반드시 구분해야 합니다.
