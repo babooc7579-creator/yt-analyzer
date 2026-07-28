@@ -111,9 +111,9 @@ export const getWorkspaceTabsViewProps = ({ creatorView, savedVideoCount }) => {
         title: '제작 후보로 표시한 영상과 발견 링크를 확인하는 화면입니다. 새 YouTube API 호출이나 외부 수집은 실행하지 않습니다.',
       }
       : {
-        ariaLabel: `영구 스크랩북 탭 열기, 보관 영상 ${savedVideoCount}개, 탭 이동만으로 YouTube API 호출 없음`,
+        ariaLabel: `소재 보관함 탭 열기, 보관 영상 ${savedVideoCount}개, 탭 이동만으로 YouTube API 호출 없음`,
         countLabel: savedVideoCount,
-        label: '영구 스크랩북',
+        label: '소재 보관함',
         title: `온라인 스크랩북(Azure DB) 보기 - 보관 영상 ${savedVideoCount}개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.`,
       },
   };

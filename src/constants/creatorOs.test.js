@@ -41,8 +41,11 @@ describe('creatorOs constants', () => {
     expect(itemsById['studio-candidates'].summary).toContain('표시한 영상');
     expect(itemsById['studio-candidates'].summary).toContain('발견함 링크');
     expect(itemsById['studio-candidates'].summary).not.toContain('스크랩 영상');
-    expect(itemsById['studio-scrapbook'].summary).toContain('보관한 영상');
-    expect(itemsById['studio-scrapbook'].summary).toContain('제작 후보를 구분');
+    expect(itemsById['studio-scrapbook']).toMatchObject({
+      label: '소재 보관함',
+    });
+    expect(itemsById['studio-scrapbook'].summary).toContain('보관한 수집 영상');
+    expect(itemsById['studio-scrapbook'].summary).toContain('제작 후보함과는 별도');
     expect(itemsById['studio-scrapbook'].summary).not.toContain('영상을 제작 후보로 봅니다');
   });
 
