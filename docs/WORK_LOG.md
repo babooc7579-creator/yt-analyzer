@@ -4503,6 +4503,7 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - 수집 영상 검색창에 검색어만 지우는 버튼을 추가했습니다. 영상 선택은 유지합니다.
 - 모바일 간결 목록은 긴 제목을 3줄까지 표시하고 소재 보관·제작 후보 작업을 한 열 또는 두 열로 안정적으로 배치합니다.
 - GitHub Build 워크플로에 `Daily read-only regression check` 작업을 추가해 `npm run test:daily`를 전체 테스트·빌드와 별도로 표시합니다.
+- 최초 PR에서 브랜치 push와 pull_request가 같은 Build를 두 번 실행하는 것을 확인해, push 대상은 main으로 제한했습니다. 이후 PR 검사 1회와 병합 후 main 최종 검사 1회만 실행합니다.
 
 ### 로컬 실제 확인
 

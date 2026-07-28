@@ -147,5 +147,6 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - 수집 영상 제목 검색창에 검색어만 즉시 지우는 버튼을 추가했습니다. 영상 선택은 유지하고 Azure DB나 YouTube API는 호출하지 않습니다.
 - 390×844 모바일 간결 목록은 긴 제목을 3줄까지 보여주고, 소재 보관과 제작 후보 버튼을 같은 너비의 안정적인 배치로 정리했습니다.
 - GitHub Build 워크플로에 `Daily read-only regression check` 작업을 분리해 `npm run test:daily` 결과를 일반 전체 빌드와 구분해 확인할 수 있게 했습니다.
+- PR 브랜치의 `push`와 `pull_request`가 같은 검사를 두 번 실행하지 않도록, Build의 `push` 검사는 main에만 실행되게 범위를 좁혔습니다. PR에서는 한 번, main 병합 후 최종 검사는 한 번 실행됩니다.
 - 기존 GitHub Free의 Actions 포함량을 사용하며 새 서비스, 비밀키, 유료 자원을 추가하지 않았습니다.
 - API endpoint, Cosmos DB container, localStorage key, Azure DB 쓰기 동작과 YouTube 신규 수집 조건은 변경하지 않았습니다.
