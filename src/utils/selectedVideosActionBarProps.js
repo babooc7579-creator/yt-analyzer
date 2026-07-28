@@ -27,5 +27,11 @@ export const getSelectedVideosActionBarViewProps = ({
       title: 'AI API를 호출하지 않고 선택 영상 기반 요청문만 클립보드에 복사',
       type: 'button',
     },
+    clearButtonProps: {
+      'aria-label': `선택 영상 ${selectedCount}개 모두 해제, API 호출 없음`,
+      title: '현재 영상 선택만 모두 해제합니다. 저장된 영상 정보는 바뀌지 않습니다.',
+      type: 'button',
+    },
+    clearButtonLabel: '선택 해제',
   };
 };

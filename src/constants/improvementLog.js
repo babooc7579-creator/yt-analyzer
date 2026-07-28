@@ -269,7 +269,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-29',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 운영에서 확인했습니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 일부 온라인 저장 기능 경고 범위, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인했습니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
     nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
     decisions: [
@@ -356,6 +356,26 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'collected-video-selection-regression',
         label: '수집 영상 카드·리스트 보기와 다중 선택 후 AI 요청문 작업 막대 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'partial-storage-warning-scope',
+        label: '일부 Azure DB 기능 연결 실패가 다른 정상 조회까지 실패한 것처럼 보이지 않도록 경고 범위 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'selected-video-copy-clear-regression',
+        label: 'AI 요청문 실제 클립보드 내용·복사 완료 안내·전체 선택 해제',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'mobile-list-guidance',
+        label: '390×844 리스트 보기의 내부 좌우 스크롤과 카드 보기 권장 안내',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'daily-three-minute-regression',
+        label: '저장·삭제·YouTube 신규 수집 없는 매일 3분 핵심 회귀 순서',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

@@ -16,6 +16,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
   activeSelectedChannelCount,
   activeTab,
   checkedVideos,
+  clearCheckedVideos,
   copiedPrompt,
   copyPromptForVideos,
   creatorView,
@@ -104,6 +105,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
     dashboardTabProps: {
       activeSelectedChannelCount,
       checkedVideos: checkedVideoIds,
+      clearCheckedVideos,
       copiedPrompt,
       copyPromptForVideos,
       fetchTopComments,

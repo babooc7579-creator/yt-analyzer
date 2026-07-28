@@ -55,6 +55,7 @@ describe('legacyMainPanelProps utils', () => {
   });
 
   it('forwards video action and production handlers without renaming them', () => {
+    const clearCheckedVideos = () => 'clear';
     const copyPromptForVideos = () => 'copy';
     const fetchTopComments = () => 'comments';
     const handleManualScan = () => 'scan';
@@ -68,6 +69,7 @@ describe('legacyMainPanelProps utils', () => {
     const updateVideoUserRecord = () => 'record';
 
     const props = getLegacyMainPanelProps({
+      clearCheckedVideos,
       copyPromptForVideos,
       fetchTopComments,
       handleManualScan,
@@ -81,6 +83,7 @@ describe('legacyMainPanelProps utils', () => {
       updateVideoUserRecord,
     });
 
+    expect(props.clearCheckedVideos).toBe(clearCheckedVideos);
     expect(props.copyPromptForVideos).toBe(copyPromptForVideos);
     expect(props.fetchTopComments).toBe(fetchTopComments);
     expect(props.handleManualScan).toBe(handleManualScan);

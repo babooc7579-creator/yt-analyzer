@@ -25,12 +25,23 @@ export function useVideoSelection() {
     }, 3000);
   };
 
+  const clearPromptCopyFeedback = () => {
+    if (promptCopyTimerRef.current) {
+      window.clearTimeout(promptCopyTimerRef.current);
+      promptCopyTimerRef.current = null;
+    }
+    setCopiedPrompt(false);
+    setPromptCopyError(false);
+  };
+
   const clearCheckedVideos = () => {
     setCheckedVideos([]);
+    clearPromptCopyFeedback();
   };
 
   const toggleCheckVideo = (videoId) => {
     setCheckedVideos((prev) => toggleListValue(prev, videoId));
+    clearPromptCopyFeedback();
   };
 
   const copyPromptForVideos = async (targetVideos) => {
