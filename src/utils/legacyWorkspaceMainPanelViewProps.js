@@ -6,6 +6,12 @@ const toVideoList = (videos) => (
   toArray(videos).filter(video => video && typeof video === 'object')
 );
 
+export const getWorkspaceTabTargetView = ({ creatorView, nextTab }) => {
+  if (nextTab === 'dashboard') return 'vault-videos';
+  if (creatorView === 'studio-candidates') return 'studio-candidates';
+  return 'studio-scrapbook';
+};
+
 export function getLegacyWorkspaceMainPanelViewProps({
   activeSelectedChannelCount,
   activeTab,
@@ -74,14 +80,23 @@ export function getLegacyWorkspaceMainPanelViewProps({
     }
     return false;
   };
+  const selectWorkspaceTab = (nextTab) => {
+    if (nextTab === activeTab) return false;
+    if (typeof openCreatorView === 'function') {
+      return openCreatorView({
+        id: getWorkspaceTabTargetView({ creatorView, nextTab }),
+      });
+    }
+    return setActiveTab?.(nextTab);
+  };
   const onSelectWorkspaceTab = hasUnsavedProductionDrafts
     ? guardProductionTabNavigation({
       activeTab,
       confirmNavigation,
       hasUnsavedDrafts: true,
-      onSelectTab: setActiveTab,
+      onSelectTab: selectWorkspaceTab,
     })
-    : setActiveTab;
+    : selectWorkspaceTab;
 
   return {
     activeTab,
