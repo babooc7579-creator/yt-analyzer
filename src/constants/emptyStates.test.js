@@ -12,14 +12,15 @@ describe('emptyStates constants', () => {
   it('keeps reference vault empty guidance clear about scan versus DB lookup', () => {
     expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('온라인 저장소(Azure DB)');
     expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('필요할 때만');
-    expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].description).toContain('온라인 저장소(Azure DB)');
-    expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].description).toContain('영상 수집은 실행되지 않습니다');
+    expect(REFERENCE_VAULT_EMPTY_STATE.description).toContain('오늘 볼 채널');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].title).toContain('오늘 볼 채널 선택');
+    expect(REFERENCE_VAULT_EMPTY_STATE.steps[0].description).toContain('영상 조회나 새 영상 수집은 실행되지 않습니다');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].title).toContain('수집 영상 목록 불러오기');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[2].title).toContain('필요할 때 새 영상 수집');
     expect(REFERENCE_VAULT_EMPTY_STATE.steps[2].description).toContain('YouTube API');
     expect(REFERENCE_VAULT_EMPTY_STATE.homeButton.title).toContain('YouTube API를 새로 호출하지 않습니다');
-    expect(REFERENCE_VAULT_EMPTY_STATE.addChannelButton.title).toContain('영상 수집이나 YouTube API 호출은 실행하지 않습니다');
+    expect(REFERENCE_VAULT_EMPTY_STATE.channelWatchlistButton.title).toContain('조회, 저장, 새 영상 수집 또는 YouTube API 호출은 실행하지 않습니다');
   });
 
   it('keeps scrapbook empty guidance tied to Cloud scrapbook storage', () => {

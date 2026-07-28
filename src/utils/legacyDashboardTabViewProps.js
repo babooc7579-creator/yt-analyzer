@@ -109,7 +109,7 @@ export function getLegacyDashboardTabViewProps({
       isProductionCandidate,
       isVideoSaved,
       onFetchComments: fetchTopComments,
-      onOpenAddChannel: canOpenCreatorView ? () => openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add' } }) : undefined,
+      onOpenChannelWatchlist: canOpenCreatorView ? () => openCreatorView({ id: 'discovery-watchlist' }) : undefined,
       onOpenHome: canOpenCreatorView ? () => openCreatorView({ id: 'home' }) : undefined,
       onPromoteToProduction: promoteVideoToProduction,
       onResetFilters: resetFilters,

@@ -141,10 +141,10 @@ describe('legacyDashboardTabViewProps utils', () => {
     expect(props.resultsPanelProps.isVideoSaved).toBe(isVideoSaved);
     expect(props.resultsPanelProps.onFetchComments).toBe(fetchTopComments);
     props.resultsPanelProps.onOpenHome();
-    props.resultsPanelProps.onOpenAddChannel();
+    props.resultsPanelProps.onOpenChannelWatchlist();
     expect(openedViews).toEqual([
       { id: 'home' },
-      { id: 'ops-channels', intent: { operationStage: 'add' } },
+      { id: 'discovery-watchlist' },
     ]);
     expect(props.resultsPanelProps.onPromoteToProduction).toBe(promoteVideoToProduction);
     props.resultsPanelProps.onResetFilters();
@@ -162,7 +162,7 @@ describe('legacyDashboardTabViewProps utils', () => {
     const props = getLegacyDashboardTabViewProps({});
 
     expect(props.resultsPanelProps.onOpenHome).toBeUndefined();
-    expect(props.resultsPanelProps.onOpenAddChannel).toBeUndefined();
+    expect(props.resultsPanelProps.onOpenChannelWatchlist).toBeUndefined();
     expect(props.resultsPanelProps.onResetFilters).toBeUndefined();
   });
 });

@@ -36,8 +36,8 @@ describe('Scrapbook and reference vault flow', () => {
       />,
     );
 
-    expect(html).toContain('레퍼런스 금고가 비어 있습니다');
-    expect(html).toContain('1. 채널 등록·선택');
+    expect(html).toContain('불러온 수집 영상 정보가 없습니다');
+    expect(html).toContain('1. 오늘 볼 채널 선택');
     expect(html).toContain('2. 수집 영상 목록 불러오기');
     expect(html).toContain('온라인 저장소(Azure DB)에 이미 보관된 수집 영상 정보를 먼저 조회합니다. 새 YouTube API 호출은 없습니다.');
     expect(html).toContain('3. 필요할 때 새 영상 수집');

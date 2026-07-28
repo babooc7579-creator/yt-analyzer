@@ -7,7 +7,7 @@ const toArray = (items) => (Array.isArray(items) ? items : []);
 const isFunction = (value) => typeof value === 'function';
 
 export const getReferenceVaultEmptyStateActions = ({
-  onOpenAddChannel,
+  onOpenChannelWatchlist,
   onOpenHome,
 } = {}) => ([
   isFunction(onOpenHome) ? {
@@ -18,13 +18,13 @@ export const getReferenceVaultEmptyStateActions = ({
     ariaLabel: REFERENCE_VAULT_EMPTY_STATE.homeButton.ariaLabel,
     onClick: onOpenHome,
   } : null,
-  isFunction(onOpenAddChannel) ? {
-    key: 'add-channel',
-    iconKey: 'add-channel',
-    label: REFERENCE_VAULT_EMPTY_STATE.addChannelButton.label,
-    title: REFERENCE_VAULT_EMPTY_STATE.addChannelButton.title,
-    ariaLabel: REFERENCE_VAULT_EMPTY_STATE.addChannelButton.ariaLabel,
-    onClick: onOpenAddChannel,
+  isFunction(onOpenChannelWatchlist) ? {
+    key: 'channel-watchlist',
+    iconKey: 'channel-watchlist',
+    label: REFERENCE_VAULT_EMPTY_STATE.channelWatchlistButton.label,
+    title: REFERENCE_VAULT_EMPTY_STATE.channelWatchlistButton.title,
+    ariaLabel: REFERENCE_VAULT_EMPTY_STATE.channelWatchlistButton.ariaLabel,
+    onClick: onOpenChannelWatchlist,
   } : null,
 ]).filter(Boolean);
 
@@ -47,7 +47,7 @@ export const getVideoResultsPanelViewProps = ({
   isProductionCandidate,
   isVideoSaved,
   onFetchComments,
-  onOpenAddChannel,
+  onOpenChannelWatchlist,
   onOpenHome,
   onPromoteToProduction,
   onResetFilters,
@@ -79,7 +79,7 @@ export const getVideoResultsPanelViewProps = ({
     getVideoCardProps,
     referenceVaultEmptyStateProps: {
       actions: getReferenceVaultEmptyStateActions({
-        onOpenAddChannel,
+        onOpenChannelWatchlist,
         onOpenHome,
       }),
     },
