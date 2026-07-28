@@ -207,6 +207,10 @@ describe('productionVideoCard utils', () => {
       record: {
         draftTitle: 'My title',
         note: 'Start with the result',
+        scriptAnalysis: 'The contrast drives attention',
+        scriptBody: 'Full narration',
+        scriptOutline: 'Hook → examples → conclusion',
+        scriptStatus: 'revision',
         targetPublishDate: '2026-07-20',
       },
       video: {
@@ -224,8 +228,16 @@ describe('productionVideoCard utils', () => {
     expect(packet).toContain('채널: Source channel');
     expect(packet).toContain('원본 URL: https://youtube.com/watch?v=video-1');
     expect(packet).toContain('대박 지수: 3.3x');
+    expect(packet).toContain('대본 단계: 수정 중');
     expect(packet).toContain('업로드 예정일: 2026-07-20');
     expect(packet).toContain('준비 상태: 4/4 준비');
+    expect(packet).toContain('[영상 분석]');
+    expect(packet).toContain('The contrast drives attention');
+    expect(packet).toContain('[대본 구성안]');
+    expect(packet).toContain('Hook → examples → conclusion');
+    expect(packet).toContain('[대본 본문]');
+    expect(packet).toContain('Full narration');
+    expect(packet).toContain('[기존 통합 작업 메모]');
     expect(packet).toContain('Start with the result');
   });
 

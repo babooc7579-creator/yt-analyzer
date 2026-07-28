@@ -17,6 +17,10 @@ describe('ScriptBoardWorkspace', () => {
             status: PRODUCTION_STATUS.CANDIDATE,
             draftTitle: '내가 만들 제목',
             note: '첫 3초 훅',
+            scriptAnalysis: '원본의 반전이 핵심',
+            scriptBody: '최종 대본 본문',
+            scriptOutline: '도입 → 전개 → 결론',
+            scriptStatus: 'revision',
             targetPublishDate: '2026-08-01',
           },
         }}
@@ -34,9 +38,18 @@ describe('ScriptBoardWorkspace', () => {
     expect(html).toContain('기존 온라인 저장소(Azure DB)의 제작 기록');
     expect(html).toContain('새 YouTube API 호출은 없습니다');
     expect(html).toContain('내가 만들 제목');
-    expect(html).toContain('작업 메모 · 대본 초안');
-    expect(html).toContain('현재 통합 입력');
+    expect(html).toContain('대본 진행 단계');
+    expect(html).toContain('수정 중');
+    expect(html).toContain('1. 영상 분석');
+    expect(html).toContain('2. 대본 구성안');
+    expect(html).toContain('3. 대본 본문');
+    expect(html).toContain('기존 통합 작업 메모');
+    expect(html).toContain('기존 자료 보존');
     expect(html).toContain('첫 3초 훅');
+    expect(html).toContain('원본의 반전이 핵심');
+    expect(html).toContain('도입 → 전개 → 결론');
+    expect(html).toContain('최종 대본 본문');
+    expect(html).toContain('대본 작업 준비 완료');
     expect(html).toContain('업로드 캘린더 보기');
     expect(html).toContain('변경사항 저장');
     expect(html).toContain('href="https://youtube.com/watch?v=v1"');

@@ -4,6 +4,7 @@ import {
   getRadarScore,
 } from './radarCandidates';
 import { PRODUCTION_FOCUS_COLUMN_ID } from '../constants/productionKanban';
+import { getScriptWorkflowStatusLabel } from '../constants/scriptWorkspace';
 import { PRODUCTION_STATUS_LABELS } from '../constants/status';
 import { formatCompactPublishedDate } from './dates';
 import { getYouTubeVideoUrl } from './urls';
@@ -216,7 +217,7 @@ export const getProductionVideoExternalActionsViewProps = ({
     label: '작업 묶음 복사',
     copiedLabel: '묶음 복사 완료',
     ariaLabel: `${videoTitle} 제작 작업 묶음 복사`,
-    title: '현재 카드의 원본, 제목 초안, 메모, 일정 정보를 클립보드에 복사합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다.',
+    title: '현재 카드의 원본, 제목, 분석, 구성안, 대본, 메모와 일정 정보를 클립보드에 복사합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다.',
   },
 });
 
@@ -252,10 +253,20 @@ export const getProductionWorkPacketText = ({
     `채널: ${channelTitle}`,
     `원본 URL: ${getWorkPacketValue(videoUrl || getYouTubeVideoUrl(video.videoId), '원본 URL 없음')}`,
     `대박 지수: ${multiplier}`,
+    `대본 단계: ${getScriptWorkflowStatusLabel(record.scriptStatus)}`,
     `업로드 예정일: ${getWorkPacketValue(record.targetPublishDate, '미정')}`,
     `준비 상태: ${readiness.summaryText}`,
     '',
-    '[제작 메모]',
+    '[영상 분석]',
+    getWorkPacketValue(record.scriptAnalysis),
+    '',
+    '[대본 구성안]',
+    getWorkPacketValue(record.scriptOutline),
+    '',
+    '[대본 본문]',
+    getWorkPacketValue(record.scriptBody),
+    '',
+    '[기존 통합 작업 메모]',
     getWorkPacketValue(record.note),
   ].join('\n');
 };

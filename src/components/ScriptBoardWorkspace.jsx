@@ -2,6 +2,7 @@ import { CalendarDays, ClipboardList, FilePenLine, Search, Sparkles } from 'luci
 import { useEffect, useMemo, useState } from 'react';
 
 import { PRODUCTION_STATUS } from '../constants/status';
+import { getScriptWorkflowStatusLabel } from '../constants/scriptWorkspace';
 import { useProductionKanbanActions } from '../hooks/useProductionKanbanActions';
 import {
   SCRIPT_BOARD_FILTERS,
@@ -114,7 +115,7 @@ export default function ScriptBoardWorkspace({
             </div>
             <h2 className="mt-2 text-2xl font-black text-white">대본 분석·작성·수정 작업</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-              제작 후보의 원본을 확인하고 제목과 통합 작업 메모를 작성합니다.
+              제작 후보의 원본을 분석하고 구성안과 대본 본문을 단계별로 작성·수정합니다.
               현재는 기존 온라인 저장소(Azure DB)의 제작 기록을 사용하며 새 YouTube API 호출은 없습니다.
             </p>
           </div>
@@ -147,11 +148,11 @@ export default function ScriptBoardWorkspace({
         </div>
       </header>
 
-      <div className="border border-amber-400/25 bg-amber-500/5 p-4">
-        <p className="text-xs font-black text-amber-200">현재 지원 범위</p>
+      <div className="border border-emerald-400/25 bg-emerald-500/5 p-4">
+        <p className="text-xs font-black text-emerald-200">현재 지원 범위</p>
         <p className="mt-2 text-xs leading-5 text-slate-300">
-          현재는 제목, 통합 작업 메모, 업로드 예정일을 저장합니다. 분석·구성·대본 본문·수정 이력은 아직 분리 저장하지 않으며,
-          해당 개선 순서와 결정 사항은 개선 기록에서 추적합니다.
+          제목, 영상 분석, 대본 구성안, 대본 본문, 진행 단계와 업로드 예정일을 분리해 저장합니다.
+          기존 통합 작업 메모는 그대로 보존하며, 수정 이력과 AI 작성 보조는 이후 개선 기록에서 관리합니다.
         </p>
       </div>
 
@@ -172,7 +173,7 @@ export default function ScriptBoardWorkspace({
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="원본 제목, 채널, 내 제목, 메모 검색"
+              placeholder="원본 제목, 채널, 분석, 구성안, 대본 검색"
               className="w-full border border-slate-700 bg-slate-950 py-2.5 pl-9 pr-3 text-xs font-semibold text-white outline-none focus:border-indigo-400"
               aria-label="대본 작업실 작업 검색"
             />
@@ -245,6 +246,11 @@ export default function ScriptBoardWorkspace({
                     <p className="mt-1 truncate text-[10px] text-slate-500">
                       {item.video.channel_title || item.video.channelTitle || '채널 정보 없음'}
                     </p>
+                    {item.record.scriptStatus && (
+                      <p className="mt-2 text-[10px] font-bold text-indigo-200">
+                        대본 {getScriptWorkflowStatusLabel(item.record.scriptStatus)}
+                      </p>
+                    )}
                     {item.record.targetPublishDate && (
                       <p className="mt-2 text-[10px] font-bold text-amber-200">목표 {item.record.targetPublishDate}</p>
                     )}

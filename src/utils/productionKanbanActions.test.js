@@ -65,16 +65,24 @@ describe('productionKanbanActions utils', () => {
     });
   });
 
-  it('detects production draft changes across title, note, and publish date', () => {
+  it('detects production draft changes across production and script workspace fields', () => {
     const saved = {
       draftTitle: 'Title',
       note: 'Note',
+      scriptAnalysis: 'Analysis',
+      scriptBody: 'Body',
+      scriptOutline: 'Outline',
+      scriptStatus: 'draft',
       targetPublishDate: '2026-07-15',
     };
 
     expect(hasProductionDraftChanges(saved, saved)).toBe(false);
     expect(hasProductionDraftChanges(saved, { ...saved, draftTitle: 'New title' })).toBe(true);
     expect(hasProductionDraftChanges(saved, { ...saved, note: 'New note' })).toBe(true);
+    expect(hasProductionDraftChanges(saved, { ...saved, scriptAnalysis: 'New analysis' })).toBe(true);
+    expect(hasProductionDraftChanges(saved, { ...saved, scriptOutline: 'New outline' })).toBe(true);
+    expect(hasProductionDraftChanges(saved, { ...saved, scriptBody: 'New body' })).toBe(true);
+    expect(hasProductionDraftChanges(saved, { ...saved, scriptStatus: 'revision' })).toBe(true);
     expect(hasProductionDraftChanges(saved, { ...saved, targetPublishDate: '2026-07-16' })).toBe(true);
     expect(hasProductionDraftChanges(null, null)).toBe(false);
   });
@@ -83,17 +91,29 @@ describe('productionKanbanActions utils', () => {
     expect(getProductionDraftUpdates({
       draftTitle: 'Title',
       note: 'Note',
+      scriptAnalysis: 'Analysis',
+      scriptBody: 'Body',
+      scriptOutline: 'Outline',
+      scriptStatus: 'revision',
       targetPublishDate: '2026-07-15',
       ignored: 'not saved',
     })).toEqual({
       draftTitle: 'Title',
       note: 'Note',
+      scriptAnalysis: 'Analysis',
+      scriptBody: 'Body',
+      scriptOutline: 'Outline',
+      scriptStatus: 'revision',
       targetPublishDate: '2026-07-15',
     });
 
     expect(getProductionDraftUpdates(null)).toEqual({
       draftTitle: '',
       note: '',
+      scriptAnalysis: '',
+      scriptBody: '',
+      scriptOutline: '',
+      scriptStatus: '',
       targetPublishDate: '',
     });
   });
