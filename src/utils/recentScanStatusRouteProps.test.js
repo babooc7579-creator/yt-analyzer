@@ -5,14 +5,19 @@ import { buildRecentScanStatusRouteProps } from './recentScanStatusRouteProps';
 describe('recentScanStatusRouteProps', () => {
   it('connects existing channel data and safe navigation actions', () => {
     const openCreatorView = vi.fn();
+    const setSelectedCategoryTab = vi.fn();
     const setSelectedChannelIds = vi.fn();
-    const channels = [{ id: 'channel-1' }];
+    const channels = [
+      { id: 'channel-1', tags: ['랭킹형'] },
+      { id: 'channel-2', tags: ['해외'] },
+    ];
     const runHistoricalBackfill = vi.fn();
     const props = buildRecentScanStatusRouteProps({
       channelsLoading: true,
       openCreatorView,
       savedChannels: channels,
       runHistoricalBackfill,
+      setSelectedCategoryTab,
       setSelectedChannelIds,
     });
 
@@ -27,6 +32,10 @@ describe('recentScanStatusRouteProps', () => {
       [['channel-1']],
       [['channel-2']],
     ]);
+    expect(setSelectedCategoryTab.mock.calls).toEqual([
+      ['랭킹형'],
+      ['해외'],
+    ]);
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'ops-channels', intent: { operationStage: 'manage' } }],
       [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
@@ -35,9 +44,11 @@ describe('recentScanStatusRouteProps', () => {
 
   it('keeps general navigation from replacing the current channel selection', () => {
     const openCreatorView = vi.fn();
+    const setSelectedCategoryTab = vi.fn();
     const setSelectedChannelIds = vi.fn();
     const props = buildRecentScanStatusRouteProps({
       openCreatorView,
+      setSelectedCategoryTab,
       setSelectedChannelIds,
     });
 
@@ -45,7 +56,23 @@ describe('recentScanStatusRouteProps', () => {
     props.onOpenSelectedScan();
 
     expect(setSelectedChannelIds).not.toHaveBeenCalled();
+    expect(setSelectedCategoryTab).not.toHaveBeenCalled();
     expect(openCreatorView).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps channel focus when the saved channel has no category tag', () => {
+    const setSelectedCategoryTab = vi.fn();
+    const setSelectedChannelIds = vi.fn();
+    const props = buildRecentScanStatusRouteProps({
+      savedChannels: [{ id: 'channel-1', tags: [] }],
+      setSelectedCategoryTab,
+      setSelectedChannelIds,
+    });
+
+    props.onOpenChannelOperations('channel-1');
+
+    expect(setSelectedCategoryTab).not.toHaveBeenCalled();
+    expect(setSelectedChannelIds).toHaveBeenCalledWith(['channel-1']);
   });
 
   it('uses an empty channel list when app data is unavailable', () => {
