@@ -48,7 +48,7 @@ describe('DiscoveryLinks flow states', () => {
 
     expect(html).toContain('URL 목록 복사');
     expect(html).toContain('후보함 보기');
-    expect(html).toContain('새로고침');
+    expect(html).toContain('목록 다시 조회');
     expect(html).toContain('외부 사이트 수집이나 저장 작업은 없습니다.');
     expect(html).toContain('새 YouTube API 호출이나 외부 수집은 없습니다.');
     expect(html).toContain('온라인 발견함(Azure DB) 목록을 다시 조회합니다. 외부 사이트를 새로 수집하지 않습니다.');

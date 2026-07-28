@@ -65,7 +65,7 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('quota warning');
     expect(html).toContain('새 영상 2개 · 통계 갱신 5개');
     expect(html).toContain('이 채널 관리');
-    expect((html.match(/다시 새 영상 수집 준비/g) || []).length).toBe(1);
+    expect((html.match(/다시 수집 화면 열기/g) || []).length).toBe(1);
     expect(html).toContain('한 번에 최대 500개이며');
     expect(html).toContain('과거 목록 확인 25%');
     expect(html).toContain('이어서 과거 영상 수집');
@@ -76,7 +76,7 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('이 화면은 온라인 저장소(Azure DB)만 조회합니다');
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('온라인 저장소(Azure DB)의 수집 이력을 불러오는 중입니다');
-    expect(html).toContain('새 영상 수집 준비');
+    expect(html).toContain('이 채널 수집 화면 열기');
     expect(html).toContain('과거 목록 확인 상태');
     expect(html).toContain('과거 수집 전체');
     expect(html).toContain('확인 전');

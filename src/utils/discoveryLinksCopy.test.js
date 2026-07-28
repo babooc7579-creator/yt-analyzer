@@ -117,7 +117,7 @@ describe('discoveryLinksCopy utils', () => {
     expect(headerProps.productionCandidatesButtonProps.title).toContain('외부 수집은 없습니다');
     expect(headerProps.refreshButtonProps.disabled).toBe(true);
     expect(headerProps.refreshButtonProps.onClick).toBe(onRefresh);
-    expect(headerProps.refreshButtonLabel).toBe('새로고침');
+    expect(headerProps.refreshButtonLabel).toBe('목록 다시 조회');
     expect(headerProps.isRefreshing).toBe(true);
     expect(getDiscoveryLinksHeaderActionsViewProps({
       filteredLinkCount: 0,

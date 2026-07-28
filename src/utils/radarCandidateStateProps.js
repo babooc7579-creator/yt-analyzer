@@ -48,9 +48,9 @@ export const getRadarCandidateEmptyStateViewProps = ({
       show: selectedChannelCount === 0 || emptyStoredVideoLoad,
     },
     selectedScanButtonProps: {
-      label: '새 영상 수집 준비',
+      label: '새 영상 수집 화면 열기',
       title: '선택 채널 새 영상 수집 화면으로 이동합니다. 이동만으로 수집은 실행되지 않으며 실제 수집 버튼에서 YouTube API를 사용할 수 있습니다.',
-      'aria-label': '선택 채널 새 영상 수집 준비 화면 열기, 이동만으로 YouTube API 호출 없음',
+      'aria-label': '선택 채널 새 영상 수집 화면 열기, 이동만으로 YouTube API 호출 없음',
       show: emptyStoredVideoLoad,
     },
     openVaultButtonProps: {

@@ -18,7 +18,7 @@ export default function UploadCalendarHeader({
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-amber-500/15 text-amber-300"><CalendarCheck className="h-5 w-5" /></div>
           <div>
             <p className="text-xs font-extrabold text-amber-300">제작 스튜디오</p>
-            <h2 className="mt-1 text-xl font-black text-white">업로드 캘린더</h2>
+            <h2 className="mt-1 text-xl font-black text-white">업로드 일정 보기</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
               제작 후보함에 온라인 저장소(Azure DB)에 저장된 목표 업로드 날짜를 모아 봅니다. 달력 조회만으로 YouTube API를 호출하지 않습니다.
             </p>

@@ -9,7 +9,7 @@ export default function TagVaultHeader({ loading = false, onLoadStoredVideos, on
         </div>
         <div>
           <p className="text-xs font-extrabold text-emerald-300">레퍼런스 금고</p>
-          <h2 className="mt-1 text-xl font-black text-white">태그별 금고</h2>
+          <h2 className="mt-1 text-xl font-black text-white">태그로 수집 영상 찾기</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
             채널에 이미 저장된 태그별로 온라인 저장소(Azure DB)의 수집 영상을 묶어 봅니다. 태그 선택만으로 YouTube API를 호출하지 않습니다.
           </p>

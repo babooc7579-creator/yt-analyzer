@@ -10,6 +10,6 @@ export const getScrapbookHeaderViewProps = ({ variant = 'scrapbook' } = {}) => {
       : 'w-6 h-6 text-yellow-500 fill-yellow-500',
     iconName: isProductionMode ? 'rocket' : 'bookmark',
     isProductionMode,
-    title: isProductionMode ? '제작 후보함' : '소재 보관함',
+    title: isProductionMode ? '오늘 만들 후보 정리' : '다시 볼 소재 모음',
   };
 };
