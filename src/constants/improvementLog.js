@@ -236,13 +236,14 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '전체 데이터 흐름',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
-    lastReviewedAt: '2026-07-28',
-    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 제작 기록 1건으로 실제 저장·새로고침·재조회·원상복구를 완료했습니다.',
+    lastReviewedAt: '2026-07-29',
+    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 제작 기록 1건으로 실제 저장·새로고침·재조회·원상복구를 완료했고, Jinxy 채널 1개를 명시적으로 선택해 YouTube 신규 수집 1회와 Azure DB 수집 결과 재조회까지 확인했습니다.',
     targetSummary: '화면 표시, 이동, DB 조회, DB 저장, YouTube API 수집을 모든 핵심 흐름에서 실제 결과까지 확인하고 기록합니다.',
-    nextAction: '향후 저장 계약이나 백엔드 변경 배포 때 같은 저장·재조회·원상복구 절차를 반복합니다.',
+    nextAction: '수집 실행 직후 같은 화면에서 채널명·신규 수·통계 갱신 수·결과 위치를 더 분명히 보여주는 완료 안내를 보강합니다.',
     decisions: [
       'YouTube 새 영상 수집과 Azure DB 쓰기는 화면 이동 검수와 분리합니다.',
       '실제 저장 왕복 검수는 기존 제작 기록의 원문을 먼저 보존한 뒤 검수하고 즉시 원상복구합니다.',
+      'YouTube 실제 수집 검수는 명시적으로 선택한 채널 1개를 한 번만 실행하고, 반복 실행 없이 최근 수집 상태와 Azure DB 재조회로 결과를 확인합니다.',
     ],
     checkpoints: [
       {
@@ -260,6 +261,16 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
         label: 'Azure DB 실제 저장 후 새로고침·재조회 유지 검수',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
+      {
+        id: 'single-channel-youtube-collection',
+        label: '명시적으로 선택한 채널 1개의 YouTube 신규 수집 1회와 Azure DB 결과 재조회',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'collection-result-feedback',
+        label: '수집 실행 화면에서 채널별 신규 수·통계 갱신 수·최근 수집 상태 위치를 즉시 안내',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+      },
     ],
   },
   {
@@ -269,7 +280,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-29',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 검색어 빠른 지우기, 적용 필터·선택 상태, 일부 온라인 저장 기능별 읽기 재확인 처리 중·결과 안내, 긴 제목 모바일 배치, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인합니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 검색어 빠른 지우기, 적용 필터·선택 상태, 일부 온라인 저장 기능별 읽기 재확인 처리 중·결과 안내, 긴 제목 모바일 배치, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
     nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
     decisions: [
@@ -347,6 +358,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'explicit-channel-scan-safety',
         label: '채널을 선택하지 않으면 YouTube 새 영상 수집을 실행할 수 없도록 차단',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'single-channel-live-scan-regression',
+        label: '선택 채널 1개 YouTube 신규 수집 1회 → 최근 수집 상태 → 새로고침 후 Azure DB 재조회',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
