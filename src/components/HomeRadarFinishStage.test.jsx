@@ -17,6 +17,7 @@ describe('HomeRadarFinishStage', () => {
   it('opens the production workflow after a candidate is chosen', () => {
     const html = renderToStaticMarkup(
       <HomeRadarFinishStage
+        onOpenScriptBoard={() => {}}
         onOpenUploadCalendar={() => {}}
         productionCandidateCount={2}
         productionFocusCount={1}
@@ -26,6 +27,7 @@ describe('HomeRadarFinishStage', () => {
     expect(html).toContain('제작 후보 2개가 준비됐습니다');
     expect(html).toContain('현재 오늘 집중 1개');
     expect(html).toContain('오늘 집중 계속하기');
+    expect(html).toContain('대본 작업 시작');
     expect(html).toContain('업로드 일정 정하기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
     expect(html).toContain('제작 후보함으로 이동, 후보 상태 변경 및 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음');

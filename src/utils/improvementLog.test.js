@@ -16,11 +16,15 @@ describe('improvementLog utils', () => {
       title: '대본 작업실',
     });
     expect(scriptWorkspace.currentSummary).toContain('videoUserRecords');
-    expect(scriptWorkspace.nextAction).toContain('별도 승인');
+    expect(scriptWorkspace.nextAction).toContain('테스트용 제작 기록 저장');
     expect(scriptWorkspace.checkpoints).toEqual(expect.arrayContaining([
       expect.objectContaining({
         id: 'script-fields',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      }),
+      expect.objectContaining({
+        id: 'discovery-link-source',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       }),
       expect.objectContaining({
         id: 'ai-assistance',

@@ -1,6 +1,12 @@
-import { Database, FolderOpen, Loader2, Tags } from 'lucide-react';
+import { Database, FolderOpen, ListVideo, Loader2, Tags } from 'lucide-react';
 
-export default function TagVaultHeader({ loading = false, onLoadStoredVideos, onOpenChannels, selectedChannelCount }) {
+export default function TagVaultHeader({
+  loading = false,
+  onLoadStoredVideos,
+  onOpenChannels,
+  onOpenCollectedVideos,
+  selectedChannelCount,
+}) {
   return (
     <header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div className="flex min-w-0 gap-3">
@@ -9,14 +15,23 @@ export default function TagVaultHeader({ loading = false, onLoadStoredVideos, on
         </div>
         <div>
           <p className="text-xs font-extrabold text-emerald-300">수집 영상·링크</p>
-          <h2 className="mt-1 text-xl font-black text-white">태그로 수집 영상 찾기</h2>
+          <h2 className="mt-1 text-xl font-black text-white">채널 태그별 보기</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
-            채널에 이미 저장된 태그별로 온라인 저장소(Azure DB)의 수집 영상을 묶어 봅니다. 태그 선택만으로 YouTube API를 호출하지 않습니다.
+            수집 영상 목록을 채널에 이미 저장된 태그 기준으로 좁혀 보는 화면입니다. 별도 보관 장소가 아니며, 태그 선택만으로 YouTube API를 호출하지 않습니다.
           </p>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={onOpenCollectedVideos}
+          className="inline-flex h-10 items-center gap-2 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 text-xs font-extrabold text-emerald-100 hover:bg-emerald-500/20"
+          title="전체 수집 영상 목록으로 이동합니다. 화면 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="전체 수집 영상 목록으로 이동, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
+        >
+          <ListVideo className="h-4 w-4" /> 전체 수집 영상
+        </button>
         <button
           type="button"
           onClick={onOpenChannels}

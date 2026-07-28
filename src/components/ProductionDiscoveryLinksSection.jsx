@@ -12,6 +12,7 @@ export default function ProductionDiscoveryLinksSection({
   links,
   linkMoveStates,
   onOpenDiscoveryLinks,
+  onOpenScriptBoard,
   onMoveLink,
 }) {
   const linkList = getProductionDiscoveryLinkList(links);
@@ -72,6 +73,7 @@ export default function ProductionDiscoveryLinksSection({
             linkMoveStates,
             onMoveLink,
             onOpenDiscoveryLinks,
+            onOpenScriptBoard,
           });
 
           return (

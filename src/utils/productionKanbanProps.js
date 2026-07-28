@@ -208,6 +208,7 @@ export const getProductionKanbanContentChildProps = ({
       links: discoveryLinkCandidateList,
       onMoveLink: moveDiscoveryLink,
       onOpenDiscoveryLinks,
+      onOpenScriptBoard,
     },
     focusSectionProps: {
       draftRecords,

@@ -1,4 +1,4 @@
-import { CalendarDays, Loader2, Save } from 'lucide-react';
+import { CalendarDays, Link as LinkIcon, Loader2, Save } from 'lucide-react';
 
 import { SCRIPT_WORKFLOW_STATUS_OPTIONS } from '../constants/scriptWorkspace';
 import {
@@ -23,7 +23,8 @@ export default function ScriptBoardEditor({
 
   const { groupStatus, record = {}, video = {} } = item;
   const videoId = video.videoId;
-  const videoUrl = getYouTubeVideoUrl(videoId);
+  const isDiscoveryLink = video.sourceType === 'discovery_link';
+  const videoUrl = video.sourceUrl || getYouTubeVideoUrl(videoId);
   const videoTitle = video.title || '제목 없는 영상';
   const isSaving = saveState === 'saving';
   const saveButtonProps = getProductionVideoDraftSaveButtonProps({
@@ -37,14 +38,23 @@ export default function ScriptBoardEditor({
   return (
     <article className="min-w-0 border border-slate-700 bg-slate-950/60">
       <div className="grid min-w-0 grid-cols-1 border-b border-slate-800 xl:grid-cols-[minmax(260px,0.72fr)_minmax(0,1.28fr)]">
-        <YouTubeThumbnailImage
-          src={video.thumbnail}
-          videoId={videoId}
-          alt={`${videoTitle} 썸네일`}
-          className="aspect-video h-full w-full bg-black object-cover"
-        />
+        {isDiscoveryLink ? (
+          <div className="flex aspect-video h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-amber-950 to-slate-950 p-6 text-center text-amber-100">
+            <LinkIcon className="h-9 w-9" />
+            <p className="text-xs font-extrabold">발견함 링크 원본</p>
+            <p className="max-w-sm break-all text-[11px] leading-5 text-amber-100/70">{video.sourceUrl}</p>
+          </div>
+        ) : (
+          <YouTubeThumbnailImage
+            src={video.thumbnail}
+            videoId={videoId}
+            alt={`${videoTitle} 썸네일`}
+            className="aspect-video h-full w-full bg-black object-cover"
+          />
+        )}
         <div className="min-w-0 p-4 sm:p-5">
           <div className="flex flex-wrap items-center gap-2">
+            {isDiscoveryLink && <span className="bg-amber-300 px-2 py-1 text-[10px] font-black text-amber-950">발견 링크</span>}
             {item.isFocus && <span className="bg-cyan-400 px-2 py-1 text-[10px] font-black text-slate-950">오늘 집중</span>}
             <span className="border border-indigo-400/40 bg-indigo-500/10 px-2 py-1 text-[10px] font-extrabold text-indigo-200">{item.statusLabel}</span>
             {record.targetPublishDate && (
@@ -54,7 +64,7 @@ export default function ScriptBoardEditor({
             )}
           </div>
           <h3 className="mt-3 text-lg font-black leading-snug text-white">{videoTitle}</h3>
-          <p className="mt-2 text-xs text-slate-400">{video.channel_title || video.channelTitle || '채널 정보 없음'}</p>
+          <p className="mt-2 text-xs text-slate-400">{video.channel_title || video.channelTitle || (isDiscoveryLink ? '링크 출처 정보 없음' : '채널 정보 없음')}</p>
           <div className="mt-4">
             <ProductionVideoExternalActions
               columnId={groupStatus}
@@ -197,8 +207,9 @@ export default function ScriptBoardEditor({
         <aside className="min-w-0">
           <ProductionVideoReadinessChecklist {...readiness} />
           <div className="mt-3 border border-slate-700 bg-slate-900/70 p-3 text-xs leading-5 text-slate-400">
-            이 화면은 제작 후보함과 같은 온라인 저장소(Azure DB)의 기록을 편집합니다. 저장 버튼을 누르기 전 입력은 브라우저에만 머물며,
-            YouTube API는 호출하지 않습니다.
+            {isDiscoveryLink
+              ? '이 화면은 발견함 링크를 원본으로 사용하고, 대본 내용은 기존 제작 기록 영역에 저장합니다. 저장 버튼을 누르기 전 입력은 브라우저에만 머물며 외부 사이트 수집과 YouTube API 호출은 없습니다.'
+              : '이 화면은 제작 후보함과 같은 온라인 저장소(Azure DB)의 기록을 편집합니다. 저장 버튼을 누르기 전 입력은 브라우저에만 머물며, YouTube API는 호출하지 않습니다.'}
           </div>
         </aside>
       </div>

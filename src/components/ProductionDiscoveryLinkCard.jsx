@@ -16,6 +16,7 @@ export default function ProductionDiscoveryLinkCard({
   moveState,
   onEditInDiscoveryLinks,
   onMove,
+  onOpenScriptBoard,
 }) {
   const isMoving = moveState === 'saving';
   const rightsStatus = getDiscoveryLinkRightsStatusValue(link);
@@ -45,6 +46,7 @@ export default function ProductionDiscoveryLinkCard({
         moveState={moveState}
         onEditInDiscoveryLinks={onEditInDiscoveryLinks}
         onMove={onMove}
+        onOpenScriptBoard={onOpenScriptBoard}
       />
     </article>
   );

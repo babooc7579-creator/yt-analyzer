@@ -194,19 +194,22 @@ export const getProductionVideoExternalActionsViewProps = ({
   video,
   videoTitle = '이 영상',
   videoUrl,
-} = {}) => ({
+} = {}) => {
+  const isDiscoveryLink = video?.sourceType === 'discovery_link';
+
+  return {
   copyUrlButtonProps: {
     url: videoUrl,
     label: 'URL 복사',
     copiedLabel: '복사 완료',
-    ariaLabel: `${videoTitle} YouTube 원본 URL 복사`,
-    title: 'YouTube 원본 URL을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
+    ariaLabel: `${videoTitle} ${isDiscoveryLink ? '발견 링크' : 'YouTube 원본'} URL 복사`,
+    title: `${isDiscoveryLink ? '발견함 원본 링크' : 'YouTube 원본 URL'}를 클립보드에 복사합니다. 외부 수집, YouTube API 호출이나 저장 작업은 없습니다.`,
   },
   openButtonProps: {
-    title: 'YouTube 원본 영상 열기',
-    'aria-label': `${videoTitle} YouTube 원본 보기`,
+    title: isDiscoveryLink ? '발견함 원본 링크 열기' : 'YouTube 원본 영상 열기',
+    'aria-label': `${videoTitle} ${isDiscoveryLink ? '발견함 원본 링크' : 'YouTube 원본'} 보기`,
   },
-  openButtonLabel: '원본 보기',
+  openButtonLabel: isDiscoveryLink ? '원본 링크' : '원본 보기',
   workPacketCopyButtonProps: {
     url: getProductionWorkPacketText({
       columnId,
@@ -219,7 +222,8 @@ export const getProductionVideoExternalActionsViewProps = ({
     ariaLabel: `${videoTitle} 제작 작업 묶음 복사`,
     title: '현재 카드의 원본, 제목, 분석, 구성안, 대본, 메모와 일정 정보를 클립보드에 복사합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다.',
   },
-});
+  };
+};
 
 const getProductionColumnLabel = (columnId) => (
   columnId === PRODUCTION_FOCUS_COLUMN_ID
@@ -251,7 +255,7 @@ export const getProductionWorkPacketText = ({
     `원본 제목: ${sourceTitle}`,
     `내가 만들 제목: ${getWorkPacketValue(record.draftTitle)}`,
     `채널: ${channelTitle}`,
-    `원본 URL: ${getWorkPacketValue(videoUrl || getYouTubeVideoUrl(video.videoId), '원본 URL 없음')}`,
+    `원본 URL: ${getWorkPacketValue(videoUrl || video.sourceUrl || getYouTubeVideoUrl(video.videoId), '원본 URL 없음')}`,
     `대박 지수: ${multiplier}`,
     `대본 단계: ${getScriptWorkflowStatusLabel(record.scriptStatus)}`,
     `업로드 예정일: ${getWorkPacketValue(record.targetPublishDate, '미정')}`,

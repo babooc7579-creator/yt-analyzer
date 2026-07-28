@@ -9,6 +9,7 @@ import {
   getProductionDiscoveryLinkMoveButtonViewProps,
   getProductionDiscoveryLinkMoveStatusViewProps,
   getProductionDiscoveryLinkOpenButtonProps,
+  getProductionDiscoveryLinkScriptButtonProps,
 } from './productionDiscoveryLinkActionProps';
 
 describe('productionDiscoveryLinkActionProps utils', () => {
@@ -72,6 +73,24 @@ describe('productionDiscoveryLinkActionProps utils', () => {
       label: '원본 열기',
       title: '원본 링크 URL이 없어 열 수 없습니다.',
     });
+  });
+
+  it('opens the script workspace for the same discovery link without saving', () => {
+    const onOpenScriptBoard = vi.fn();
+    const link = { id: 'link-1', title: 'Idea link' };
+    const props = getProductionDiscoveryLinkScriptButtonProps({
+      link,
+      linkTitle: 'Idea link',
+      onOpenScriptBoard,
+    });
+
+    expect(props).toMatchObject({
+      disabled: false,
+      label: '대본 작업 시작',
+    });
+    expect(props.title).toContain('이동만으로 온라인 저장소(Azure DB)에 저장하거나');
+    props.onClick();
+    expect(onOpenScriptBoard).toHaveBeenCalledWith(link);
   });
 
   it('builds move actions that update Cloud discovery status without deleting link records', () => {

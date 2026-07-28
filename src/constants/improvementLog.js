@@ -37,7 +37,7 @@ export const CREATOR_OS_MENU_ROLE_AUDIT = [
   { section: '디스커버리 탐색', menu: '키워드 탐색', role: '수집 채널의 제목 반응도와 외부 조사 연결', dataBoundary: '불러온 정보 분석·외부 링크', verification: '코드·테스트 확인' },
   { section: '디스커버리 탐색', menu: '오늘 볼 채널', role: '오늘 조회할 채널 범위를 선택', dataBoundary: '화면 선택·Azure DB 채널 조회', verification: '운영 클릭 확인' },
   { section: '수집 영상·링크', menu: '수집 영상 목록', role: 'Azure DB에 보관된 수집 영상 정보를 검색·검토', dataBoundary: 'Azure DB 조회·YouTube API 없음', verification: '운영 클릭 확인' },
-  { section: '수집 영상·링크', menu: '태그별 금고', role: '채널 태그별 수집 영상 묶음 탐색', dataBoundary: 'Azure DB 조회 결과 필터', verification: '통합 결정 필요' },
+  { section: '수집 영상·링크', menu: '채널 태그별 보기', role: '수집 영상 목록을 채널 태그 기준으로 좁혀 탐색', dataBoundary: 'Azure DB 조회 결과의 전용 필터·별도 저장 없음', verification: '로컬 클릭 확인' },
   { section: '수집 영상·링크', menu: '발견 링크 저장', role: '외부에서 발견한 링크를 별도 후보로 관리', dataBoundary: '온라인 발견함(Azure DB) 조회·저장', verification: '운영 클릭 확인' },
   { section: '제작 스튜디오', menu: '제작 후보함', role: '무엇을 만들지 후보와 우선순위를 결정', dataBoundary: '제작 기록 Azure DB 조회·저장', verification: '운영 클릭 확인' },
   { section: '제작 스튜디오', menu: '소재 보관함', role: '나중에 다시 볼 수집 영상 소재를 보관', dataBoundary: '소재 보관함 Azure DB 조회·저장', verification: '운영 클릭 확인' },
@@ -58,9 +58,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '제작 후보 영상의 제목, 영상 분석, 구성안, 대본 본문, 대본 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 명시적으로 저장합니다. 제작 후보함·대본 작업실·업로드 캘린더의 이동, 모바일 배치와 미저장 이탈 경고를 실제 화면에서 확인했습니다.',
+    currentSummary: '제작 후보 영상과 발견 링크 후보를 원본으로 제목, 분석, 구성안, 대본 본문, 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 저장합니다. 발견 링크는 별도 DB로 복사하지 않고 기존 링크 ID를 안정적인 대본 원본 ID로 연결합니다.',
     targetSummary: '제작 후보의 원본을 분석하고, 구성안을 만든 뒤, 대본을 작성·수정하고 최종본을 확정하는 독립 작업 공간으로 발전시킵니다.',
-    nextAction: '별도 승인 후 테스트용 제작 후보에서 저장 → 새로고침 → 재조회 유지 여부를 실제 검수합니다.',
+    nextAction: '배포 후 발견 링크 후보 → 대본 작업실 → 업로드 캘린더 이동과 테스트용 제작 기록 저장 → 새로고침 → 재조회 유지 여부를 운영 화면에서 검수합니다.',
     decisions: [
       '제작 후보함과 통합하지 않고 별도 작업실로 유지합니다.',
       'AI 자동 분석과 대본 생성은 수동 작성 구조가 안정된 뒤 검토합니다.',
@@ -116,7 +116,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'discovery-link-source',
         label: '발견 링크 제작 후보도 대본 작업의 원본으로 연결',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
       {
         id: 'revision-history',
@@ -137,9 +137,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 핵심 제작·탐색 흐름에 이어 설정, 업무 도구함, 채널 등록 단계의 실제 이동·버튼 상태·결과 위치·모바일 화면을 검수했습니다.',
+    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 태그별 금고는 별도 보관 장소로 오해되지 않도록 채널 태그별 보기로 바꾸고 전체 수집 영상 목록으로 돌아가는 버튼을 연결했습니다.',
     targetSummary: '버튼 이름만 보고도 이동·조회·저장·YouTube API 수집 여부를 이해할 수 있도록 모든 화면의 용어를 통일합니다.',
-    nextAction: '완료된 핵심 화면은 정기 회귀 검수표로 관리하고, 태그별 금고 통합 여부가 결정되면 메뉴 역할표를 갱신합니다.',
+    nextAction: '배포 후 채널 태그별 보기 ↔ 전체 수집 영상 목록 이동과 모바일 화면을 운영에서 재확인합니다.',
     decisions: [
       '영상 파일 자체가 아니라 영상 정보를 다루므로 수집 영상 목록이라는 표현을 사용합니다.',
       '수집 영상 정보와 발견 링크를 함께 묶는 사이드바 구역명은 수집 영상·링크로 표시합니다.',
@@ -202,14 +202,15 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     id: 'discovery-consolidation',
     title: '수집 영상 탐색 통합',
     section: '디스커버리·레퍼런스',
-    status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
+    status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P2',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '수집 영상 목록, 태그별 금고, 또터또 탐색이 각각 독립 화면으로 제공됩니다.',
-    targetSummary: '목적이 겹치는 화면은 필터와 보기 방식으로 통합하고, 또터또처럼 판단 목적이 뚜렷한 화면만 독립적으로 유지합니다.',
-    nextAction: '태그별 금고를 수집 영상 목록의 태그 필터로 통합할지 결정합니다.',
+    currentSummary: '수집 영상 목록은 전체 검색·검토, 채널 태그별 보기는 같은 수집 영상 정보를 채널 태그 기준으로 좁히는 전용 보기, 또터또 탐색은 오래된 고성과 후보 판단을 담당합니다.',
+    targetSummary: '메뉴 이름과 화면 안내만으로 전체 목록·전용 필터·독립 판단 화면의 차이를 이해할 수 있게 유지합니다.',
+    nextAction: '배포 후 채널 태그별 보기에서 전체 수집 영상 목록으로 돌아가는 흐름을 운영 화면에서 검수합니다.',
     decisions: [
       '또터또 탐색은 오래된 고성과 영상을 찾는 판단 목적이 명확하므로 독립 화면을 유지하는 방향을 권장합니다.',
+      '채널 태그별 보기는 새 보관함이 아니라 수집 영상 목록의 태그 전용 보기로 유지하며, 별도 저장소나 자동 수집을 추가하지 않습니다.',
     ],
     checkpoints: [
       {
@@ -219,8 +220,8 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       },
       {
         id: 'tag-filter-decision',
-        label: '태그별 금고를 수집 영상 목록의 필터로 통합',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
+        label: '채널 태그별 보기를 수집 영상 목록의 전용 필터 화면으로 역할 정리',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
       {
         id: 'ttotto-purpose',
@@ -238,7 +239,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     lastReviewedAt: '2026-07-28',
     currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다.',
     targetSummary: '화면 표시, 이동, DB 조회, DB 저장, YouTube API 수집을 모든 핵심 흐름에서 실제 결과까지 확인하고 기록합니다.',
-    nextAction: '별도 승인 후 실제 저장 → 새로고침 → 재조회 유지 여부를 기능별로 검수합니다.',
+    nextAction: '승인된 테스트용 제작 기록 1건을 저장하고 새로고침·재조회·원상복구까지 운영 화면에서 검수합니다.',
     decisions: [
       'YouTube 새 영상 수집과 Azure DB 쓰기는 화면 이동 검수와 분리합니다.',
       '실제 저장 왕복 검수는 테스트 데이터를 정한 뒤 별도로 승인받아 실행합니다.',
@@ -257,7 +258,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'cloud-round-trip',
         label: 'Azure DB 실제 저장 후 새로고침·재조회 유지 검수',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
     ],
   },
@@ -315,7 +316,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'write-round-trip-regression',
         label: 'Azure DB 실제 저장 후 새로고침·재조회 유지',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
     ],
   },

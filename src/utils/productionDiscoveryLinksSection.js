@@ -73,6 +73,7 @@ export const getProductionDiscoveryLinkCardProps = ({
   linkMoveStates,
   onMoveLink,
   onOpenDiscoveryLinks,
+  onOpenScriptBoard,
 }) => {
   const sourceLink = isLinkObject(link) ? link : {};
   const moveStateMap = toRecordMap(linkMoveStates);
@@ -84,5 +85,8 @@ export const getProductionDiscoveryLinkCardProps = ({
       ? () => onOpenDiscoveryLinks(sourceLink)
       : undefined,
     onMove: onMoveLink,
+    onOpenScriptBoard: isFunction(onOpenScriptBoard)
+      ? () => onOpenScriptBoard(sourceLink)
+      : undefined,
   };
 };

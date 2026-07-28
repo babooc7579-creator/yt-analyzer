@@ -50,7 +50,14 @@ export function getLegacyVaultTabViewProps({
         },
       }),
       onOpenReferenceVault: () => openCreatorView({ id: 'vault-videos' }),
-      onOpenScriptBoard: () => openCreatorView({ id: 'studio-script' }),
+      onOpenScriptBoard: (source = {}) => openCreatorView({
+        id: 'studio-script',
+        intent: source?.id ? {
+          searchQuery: source.title || source.url || '',
+          source: 'studio-candidates',
+          targetDiscoveryLinkId: source.id,
+        } : undefined,
+      }),
       onOpenUploadCalendar: () => openCreatorView({ id: 'studio-calendar' }),
       onRemoveScrap: toggleScrapVideo,
       onUpdateDiscoveryLink: updateDiscoveryLink,

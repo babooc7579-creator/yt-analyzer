@@ -47,6 +47,7 @@ describe('productionDiscoveryLinksSection utils', () => {
   it('builds card props with move state and forwarded handlers', () => {
     const link = { id: 'link-1', title: 'Reference' };
     const onOpenDiscoveryLinks = vi.fn(() => 'open');
+    const onOpenScriptBoard = vi.fn(() => 'script');
     const onMoveLink = () => 'move';
 
     const props = getProductionDiscoveryLinkCardProps({
@@ -54,6 +55,7 @@ describe('productionDiscoveryLinksSection utils', () => {
       linkMoveStates: { 'link-1': 'saving' },
       onMoveLink,
       onOpenDiscoveryLinks,
+      onOpenScriptBoard,
     });
 
     expect(props).toMatchObject({
@@ -63,7 +65,9 @@ describe('productionDiscoveryLinksSection utils', () => {
     });
     expect(props.onEditInDiscoveryLinks).toEqual(expect.any(Function));
     props.onEditInDiscoveryLinks();
+    props.onOpenScriptBoard();
     expect(onOpenDiscoveryLinks).toHaveBeenCalledWith(link);
+    expect(onOpenScriptBoard).toHaveBeenCalledWith(link);
   });
 
   it('keeps the existing undefined move state when no state exists', () => {

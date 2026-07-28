@@ -101,10 +101,12 @@ export const getScriptWorkspaceChecklist = ({ record, video } = {}) => {
   const items = [
     {
       key: 'source',
-      isReady: Boolean(safeVideo.videoId),
+      isReady: Boolean(safeVideo.sourceUrl || safeVideo.videoId),
       label: '원본',
-      missingText: '영상 없음',
-      title: 'YouTube 원본 확인용입니다. 화면 표시만 하며 YouTube API를 호출하지 않습니다.',
+      missingText: '원본 없음',
+      title: safeVideo.sourceType === 'discovery_link'
+        ? '발견함에 저장된 외부 원본 링크입니다. 링크 확인만으로 외부 수집이나 저장을 실행하지 않습니다.'
+        : 'YouTube 원본 확인용입니다. 화면 표시만 하며 YouTube API를 호출하지 않습니다.',
     },
     {
       key: 'title',
