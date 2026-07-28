@@ -3,6 +3,9 @@ import { formatNumberedUrlList, getYouTubeVideoUrl } from './urls';
 const getVideoList = (videos) => (
   Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
 );
+const getSelectedVideoIds = (videoIds) => (
+  Array.isArray(videoIds) ? videoIds.filter(videoId => typeof videoId === 'string' && videoId) : []
+);
 
 export const getFilteredVideoUrlList = (filteredVideos = []) => formatNumberedUrlList(
   getVideoList(filteredVideos)
@@ -48,7 +51,7 @@ export const getVideoDashboardControlsViewProps = ({
 
   return {
     selectedVideosActionProps: {
-      selectedCount: getVideoList(checkedVideos).length,
+      selectedCount: getSelectedVideoIds(checkedVideos).length,
       copiedPrompt,
       promptCopyError,
       onCopyPrompt,
