@@ -21,7 +21,8 @@ export const formatCoverageRate = (value) => {
   const numberValue = Number(value);
   if (!Number.isFinite(numberValue)) return null;
   const percent = numberValue <= 1 ? numberValue * 100 : numberValue;
-  return `${percent.toFixed(1).replace(/\.0$/, '')}%`;
+  const displayPercent = Math.min(Math.max(percent, 0), 100);
+  return `${displayPercent.toFixed(1).replace(/\.0$/, '')}%`;
 };
 
 export const formatPercent = (value, digits = 1) => {

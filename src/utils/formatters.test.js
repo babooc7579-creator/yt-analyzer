@@ -29,6 +29,8 @@ describe('formatters utils', () => {
     expect(formatCoverageRate(0.875)).toBe('87.5%');
     expect(formatCoverageRate(1)).toBe('100%');
     expect(formatCoverageRate(87.5)).toBe('87.5%');
+    expect(formatCoverageRate(102.1)).toBe('100%');
+    expect(formatCoverageRate(-5)).toBe('0%');
     expect(formatCoverageRate('bad')).toBeNull();
   });
 

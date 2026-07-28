@@ -29,6 +29,25 @@ describe('channelScanSummaryBoxProps utils', () => {
     expect(props.statusBadgeProps.className).toContain('rounded-full');
   });
 
+  it('explains saved history when raw coverage exceeds the current channel total', () => {
+    const props = getChannelScanSummaryBoxViewProps({
+      hasSummary: true,
+      newVideosFound: '1',
+      statsRefreshed: '177',
+      coverageRate: '100%',
+      coverageExceedsChannelTotal: true,
+      error: null,
+      scannedText: '9시간 전',
+      statusMeta: {
+        className: 'border-emerald-200 text-emerald-700',
+        label: 'success',
+      },
+    });
+
+    expect(props.summaryText).toBe('새 영상 1 · 갱신 177 · 100% · 이전 영상 이력 포함');
+    expect(props.summaryTitle).toContain('현재 YouTube 채널의 공개 영상 수보다 많아');
+  });
+
   it('omits optional coverage and error text when they are missing', () => {
     const props = getChannelScanSummaryBoxViewProps({
       hasSummary: true,
