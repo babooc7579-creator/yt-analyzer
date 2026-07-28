@@ -33,8 +33,8 @@ export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-07-28';
 
 export const CREATOR_OS_MENU_ROLE_AUDIT = [
   { section: '디스커버리 탐색', menu: '오늘의 레이더', role: '오늘 볼 채널과 수집 영상에서 만들 소재를 결정', dataBoundary: 'Azure DB 조회·판단 기록 저장', verification: '운영 클릭 확인' },
-  { section: '디스커버리 탐색', menu: '또터또 탐색', role: '오래된 고성과 영상 후보를 별도 기준으로 탐색', dataBoundary: '불러온 수집 영상 정보 분석', verification: '코드·테스트 확인' },
-  { section: '디스커버리 탐색', menu: '키워드 탐색', role: '수집 채널의 제목 반응도와 외부 조사 연결', dataBoundary: '불러온 정보 분석·외부 링크', verification: '코드·테스트 확인' },
+  { section: '디스커버리 탐색', menu: '또터또 탐색', role: '오래된 고성과 영상 후보를 별도 기준으로 탐색', dataBoundary: '불러온 수집 영상 정보 분석', verification: '운영 클릭 확인' },
+  { section: '디스커버리 탐색', menu: '키워드 탐색', role: '수집 채널의 제목 반응도와 외부 조사 연결', dataBoundary: '불러온 정보 분석·외부 링크', verification: '운영 클릭 확인' },
   { section: '디스커버리 탐색', menu: '오늘 볼 채널', role: '오늘 조회할 채널 범위를 선택', dataBoundary: '화면 선택·Azure DB 채널 조회', verification: '운영 클릭 확인' },
   { section: '수집 영상·링크', menu: '수집 영상 목록', role: 'Azure DB에 보관된 수집 영상 정보를 검색·검토', dataBoundary: 'Azure DB 조회·YouTube API 없음', verification: '운영 클릭 확인' },
   { section: '수집 영상·링크', menu: '채널 태그별 보기', role: '수집 영상 목록을 채널 태그 기준으로 좁혀 탐색', dataBoundary: 'Azure DB 조회 결과의 전용 필터·별도 저장 없음', verification: '운영 클릭 확인' },
@@ -269,7 +269,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-28',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름과 Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 운영에서 확인했습니다. Azure DB 제작 기록·업로드 일정 저장 왕복을 완료했으며 YouTube 신규 수집은 계속 별도 작업으로 분리합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
     nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
     decisions: [
@@ -321,6 +321,21 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'schedule-round-trip-regression',
         label: '업로드 예정일 저장 → 캘린더 재조회 → 날짜 미정 원상복구',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'discovery-tools-regression',
+        label: '또터또 빈 결과 복구와 키워드 추천어 선택 후 수집 영상 결과 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'recent-operations-route-regression',
+        label: '최근 수집 상태의 채널 카드 → 해당 채널이 선택된 채널 운영실 연결',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'discovery-operations-mobile-regression',
+        label: '또터또·키워드·최근 수집 상태·채널 운영실 390×844 가로 넘침',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],
