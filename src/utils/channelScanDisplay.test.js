@@ -62,8 +62,21 @@ describe('channelScanDisplay utils', () => {
       newVideosFound: '12',
       statsRefreshed: '34',
       coverageRate: '87.5%',
+      coverageExceedsChannelTotal: false,
       hasSummary: true,
       error: 'quota warning',
+    });
+  });
+
+  it('caps coverage above 100% and preserves a display explanation signal', () => {
+    expect(getChannelScanDisplay({
+      lastScanSummary: {
+        scannedAt: '2026-07-07T10:00:00.000Z',
+        coverageRate: 102.1,
+      },
+    })).toMatchObject({
+      coverageRate: '100%',
+      coverageExceedsChannelTotal: true,
     });
   });
 

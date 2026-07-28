@@ -29,6 +29,9 @@ export const getChannelScanDisplay = (channel) => {
   const scannedAt = summary?.scannedAt || channel.lastScannedAt || null;
   const status = summary?.status || (scannedAt ? 'success' : 'none');
   const coverageRate = formatCoverageRate(summary?.coverageRate);
+  const numericCoverageRate = Number(summary?.coverageRate);
+  const coverageExceedsChannelTotal = Number.isFinite(numericCoverageRate)
+    && numericCoverageRate > 100;
 
   return {
     statusMeta: getScanStatusMeta(status),
@@ -36,6 +39,7 @@ export const getChannelScanDisplay = (channel) => {
     newVideosFound: formatOptionalNumber(summary?.newVideosFound),
     statsRefreshed: formatOptionalNumber(summary?.statsRefreshed),
     coverageRate,
+    coverageExceedsChannelTotal,
     hasSummary: Boolean(summary),
     error: summary?.error || null,
   };
