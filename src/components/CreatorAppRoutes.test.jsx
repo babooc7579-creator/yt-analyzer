@@ -20,4 +20,12 @@ describe('CreatorAppRoutes', () => {
   it('renders nothing when no workspace route is active', () => {
     expect(renderToStaticMarkup(<CreatorAppRoutes />)).toBe('');
   });
+
+  it('connects the live improvement log route', () => {
+    const markup = renderToStaticMarkup(
+      <CreatorAppRoutes activeCreatorItem={{ id: 'insight-notes' }} />,
+    );
+
+    expect(markup).toContain('선택한 화면을 불러오는 중입니다');
+  });
 });

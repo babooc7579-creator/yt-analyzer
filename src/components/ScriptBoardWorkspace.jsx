@@ -1,4 +1,4 @@
-import { CalendarDays, FilePenLine, Search, Sparkles } from 'lucide-react';
+import { CalendarDays, ClipboardList, FilePenLine, Search, Sparkles } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { PRODUCTION_STATUS } from '../constants/status';
@@ -28,6 +28,7 @@ export default function ScriptBoardWorkspace({
   initialTargetVideoId = '',
   onConfirmUnsavedNavigation,
   onOpenHome,
+  onOpenImprovementLog,
   onOpenProductionCandidates,
   onOpenUploadCalendar,
   onUnsavedDraftsChange,
@@ -111,13 +112,21 @@ export default function ScriptBoardWorkspace({
               <FilePenLine className="h-5 w-5" />
               <p className="text-xs font-extrabold">제작 스튜디오</p>
             </div>
-            <h2 className="mt-2 text-2xl font-black text-white">제작 내용 작성</h2>
+            <h2 className="mt-2 text-2xl font-black text-white">대본 분석·작성·수정 작업</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-              제작 후보를 고르고 제목, 인트로·구성 메모, 업로드 예정일을 한 자리에서 정리합니다.
-              기존 온라인 저장소(Azure DB)의 제작 기록을 사용하며 새 YouTube API 호출은 없습니다.
+              제작 후보의 원본을 확인하고 제목과 통합 작업 메모를 작성합니다.
+              현재는 기존 온라인 저장소(Azure DB)의 제작 기록을 사용하며 새 YouTube API 호출은 없습니다.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={onOpenImprovementLog}
+              className="inline-flex items-center gap-2 border border-violet-300/30 bg-violet-400/10 px-3 py-2 text-xs font-extrabold text-violet-100 hover:bg-violet-400/20"
+              title="대본 작업실의 현재 지원 범위와 다음 개선 체크포인트를 확인합니다. 화면 이동만 하며 API 호출이나 온라인 저장소(Azure DB) 변경은 없습니다."
+            >
+              <ClipboardList className="h-4 w-4" /> 개선 기록
+            </button>
             <button
               type="button"
               onClick={navigation.production}
@@ -138,6 +147,14 @@ export default function ScriptBoardWorkspace({
         </div>
       </header>
 
+      <div className="border border-amber-400/25 bg-amber-500/5 p-4">
+        <p className="text-xs font-black text-amber-200">현재 지원 범위</p>
+        <p className="mt-2 text-xs leading-5 text-slate-300">
+          현재는 제목, 통합 작업 메모, 업로드 예정일을 저장합니다. 분석·구성·대본 본문·수정 이력은 아직 분리 저장하지 않으며,
+          해당 개선 순서와 결정 사항은 개선 기록에서 추적합니다.
+        </p>
+      </div>
+
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
         {SUMMARY_ITEMS.map((item) => (
           <div key={item.key} className="border border-slate-800 bg-slate-900/90 p-3">
@@ -157,10 +174,10 @@ export default function ScriptBoardWorkspace({
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="원본 제목, 채널, 내 제목, 메모 검색"
               className="w-full border border-slate-700 bg-slate-950 py-2.5 pl-9 pr-3 text-xs font-semibold text-white outline-none focus:border-indigo-400"
-              aria-label="대본 보드 작업 검색"
+              aria-label="대본 작업실 작업 검색"
             />
           </label>
-          <div className="flex flex-wrap gap-2" aria-label="대본 보드 진행 단계 필터">
+          <div className="flex flex-wrap gap-2" aria-label="대본 작업실 진행 단계 필터">
             {SCRIPT_BOARD_FILTERS.map((filter) => (
               <button
                 type="button"
@@ -202,7 +219,7 @@ export default function ScriptBoardWorkspace({
         </div>
       ) : (
         <div className="grid min-w-0 grid-cols-1 gap-4 xl:grid-cols-[300px_minmax(0,1fr)]">
-          <aside className="min-w-0 border border-slate-800 bg-slate-900/90 p-2 xl:max-h-[760px] xl:overflow-y-auto" aria-label="대본 보드 작업 목록">
+          <aside className="min-w-0 border border-slate-800 bg-slate-900/90 p-2 xl:max-h-[760px] xl:overflow-y-auto" aria-label="대본 작업실 작업 목록">
             <p className="px-2 pb-2 pt-1 text-[10px] font-extrabold text-slate-500">표시 중 {visibleItems.length}개</p>
             <div className="space-y-2">
               {visibleItems.map((item) => {

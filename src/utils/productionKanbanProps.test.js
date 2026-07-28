@@ -86,7 +86,7 @@ describe('productionKanbanProps utils', () => {
       'discovery-links',
     ]);
     expect(actions[0]).toMatchObject({
-      label: '대본 보드 열기',
+      label: '대본 작업실 열기',
       onClick: onOpenScriptBoard,
       variant: 'indigo',
     });

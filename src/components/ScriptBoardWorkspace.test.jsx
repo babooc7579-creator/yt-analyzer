@@ -28,11 +28,14 @@ describe('ScriptBoardWorkspace', () => {
       />,
     );
 
-    expect(html).toContain('제작 내용 작성');
+    expect(html).toContain('대본 분석·작성·수정 작업');
+    expect(html).toContain('현재 지원 범위');
+    expect(html).toContain('개선 기록');
     expect(html).toContain('기존 온라인 저장소(Azure DB)의 제작 기록');
     expect(html).toContain('새 YouTube API 호출은 없습니다');
     expect(html).toContain('내가 만들 제목');
-    expect(html).toContain('인트로 · 구성 · 대본 초안');
+    expect(html).toContain('작업 메모 · 대본 초안');
+    expect(html).toContain('현재 통합 입력');
     expect(html).toContain('첫 3초 훅');
     expect(html).toContain('업로드 캘린더 보기');
     expect(html).toContain('변경사항 저장');

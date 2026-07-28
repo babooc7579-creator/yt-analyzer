@@ -26,7 +26,7 @@ describe('UploadCalendarDayDetails', () => {
 
     expect(html).toContain(longTitle);
     expect(html).toContain('line-clamp-2');
-    expect(html).toContain('대본 보드 열기');
+    expect(html).toContain('대본 작업실 열기');
     expect(html).toContain('후보함에서 찾기');
     expect(html).toContain('원본 열기');
     expect(html).toContain('온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음');
@@ -43,7 +43,7 @@ describe('UploadCalendarDayDetails', () => {
       />,
     );
 
-    expect(html).not.toContain('대본 보드 열기');
+    expect(html).not.toContain('대본 작업실 열기');
     expect(html).not.toContain('후보함에서 찾기');
     expect(html).toContain('원본 열기');
   });

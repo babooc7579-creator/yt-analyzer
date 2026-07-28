@@ -30,6 +30,7 @@ export function buildScriptBoardRouteProps({
     initialTargetVideoId: String(creatorViewIntent?.targetVideoId || '').trim(),
     onConfirmUnsavedNavigation,
     onOpenHome: () => openView({ id: 'home' }),
+    onOpenImprovementLog: () => openView({ id: 'insight-notes' }),
     onOpenProductionCandidates: (video = {}) => openView({
       id: 'studio-candidates',
       intent: video?.videoId ? {
