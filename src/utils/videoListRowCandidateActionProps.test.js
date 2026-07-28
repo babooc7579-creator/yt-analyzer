@@ -19,7 +19,7 @@ describe('videoListRowCandidateActionProps utils', () => {
       type: 'button',
     });
     expect(props.buttonProps.className).toContain('bg-indigo-600');
-    expect(props.buttonProps.title).toContain('Cloud 판단 기록');
+    expect(props.buttonProps.title).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(props.buttonProps.title).toContain('제작 후보로 표시');
     expect(props.buttonProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props.buttonProps['aria-label']).toContain('First idea');
@@ -39,7 +39,7 @@ describe('videoListRowCandidateActionProps utils', () => {
     expect(props.buttonProps.className).toContain('cursor-not-allowed');
     expect(props.buttonProps.className).toContain('bg-indigo-100');
     expect(props.buttonProps['aria-label']).toContain('First idea');
-    expect(props.buttonProps.title).toContain('이미 Cloud 판단 기록');
+    expect(props.buttonProps.title).toContain('이미 온라인 저장소(Azure DB)의 판단 기록');
   });
 
   it('does not call the promote handler while building props', () => {
@@ -66,6 +66,6 @@ describe('videoListRowCandidateActionProps utils', () => {
 
     expect(props.buttonProps.disabled).toBe(true);
     expect(props.buttonProps.className).toContain('cursor-not-allowed');
-    expect(props.buttonProps.title).toBe('제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.');
+    expect(props.buttonProps.title).toBe('제작 후보로 표시할 영상 ID가 없어 온라인 저장소(Azure DB)의 판단 기록 저장을 실행하지 않습니다.');
   });
 });

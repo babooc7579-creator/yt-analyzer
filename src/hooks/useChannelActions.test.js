@@ -135,7 +135,7 @@ describe('useChannelActions', () => {
     expect(deps.setSavedChannels).not.toHaveBeenCalled();
   });
 
-  it('bulk-creates channels through the Cloud API and returns the API result', async () => {
+  it('bulk-creates channels through the 온라인 저장 API(Azure) and returns the API result', async () => {
     const bulkResult = {
       success: true,
       total: 2,

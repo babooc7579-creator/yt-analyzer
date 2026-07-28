@@ -58,7 +58,7 @@ describe('RecentScanStatusWorkspace', () => {
     );
 
     expect(html).toContain('채널별 최근 수집 상태');
-    expect(html).toContain('Cloud에 저장된 과거 수집 이력');
+    expect(html).toContain('온라인 저장소(Azure DB)에 저장된 과거 수집 이력');
     expect(html).toContain('확인 필요 채널');
     expect(html).toContain('YouTube API 사용 한도');
     expect(html).toContain('기술 오류 원문 보기');
@@ -75,7 +75,7 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('자동 반복·예약·전체 채널 일괄 실행은 하지 않습니다');
     expect(html).toContain('이 화면은 온라인 저장소(Azure DB)만 조회합니다');
     expect(html).toContain('과거 수집 이력');
-    expect(html).toContain('Cloud 수집 이력을 불러오는 중입니다');
+    expect(html).toContain('온라인 저장소(Azure DB)의 수집 이력을 불러오는 중입니다');
     expect(html).toContain('새 영상 수집 준비');
     expect(html).toContain('과거 목록 확인 상태');
     expect(html).toContain('과거 수집 전체');
@@ -104,7 +104,7 @@ describe('RecentScanStatusWorkspace', () => {
       <RecentScanStatusWorkspace channels={[]} channelsLoading />,
     );
 
-    expect(html).toContain('Cloud 채널 상태 조회 중');
+    expect(html).toContain('온라인 저장소(Azure DB)의 채널 상태 조회 중');
     expect(html).toContain('조회가 끝나기 전에는 채널이 없다고 판단하지 않습니다');
     expect(html).not.toContain('저장된 채널이 없습니다');
   });

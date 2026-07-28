@@ -37,7 +37,7 @@ describe('settingsRouteProps', () => {
       apiKeyConfigured: true,
       errorGuidance: {
         title: '현재 오류를 확인한 뒤 다시 시도해 주세요',
-        description: expect.stringContaining('Cloud 채널 다시 불러오기'),
+        description: expect.stringContaining('온라인 저장소(Azure DB)의 채널 다시 불러오기'),
       },
       runtimeError: 'Cloud 요청 실패',
       syncWarnings: ['판단 기록 임시 표시 중'],
@@ -89,7 +89,7 @@ describe('settingsRouteProps', () => {
   it('gives specific retry guidance without claiming an uncertain root cause', () => {
     expect(getSettingsErrorGuidance('401 Unauthorized').title).toContain('로그인');
     expect(getSettingsErrorGuidance('Failed to fetch due to CORS').title).toContain('연결');
-    expect(getSettingsErrorGuidance('Cloud API failed (500)').title).toContain('Cloud API');
+    expect(getSettingsErrorGuidance('온라인 저장 API(Azure) failed (500)').title).toContain('온라인 저장 API(Azure)');
     expect(getSettingsErrorGuidance('')).toBeNull();
   });
 });

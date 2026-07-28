@@ -64,7 +64,7 @@ export default function RadarDecisionLists({
                         onClick={() => handleRestoreVideo(item.video.videoId)}
                         disabled={Boolean(restoringVideoId)}
                         className="mt-1 inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-200 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                        title={restoringVideoId ? 'Cloud 판단 기록 저장이 끝날 때까지 기다려 주세요.' : item.restoreButtonProps.title}
+                        title={restoringVideoId ? '온라인 저장소(Azure DB)의 판단 기록 저장이 끝날 때까지 기다려 주세요.' : item.restoreButtonProps.title}
                         aria-label={item.restoreButtonProps['aria-label']}
                       >
                         <RotateCcw className="h-3 w-3" />{' '}

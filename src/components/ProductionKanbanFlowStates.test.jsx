@@ -36,14 +36,14 @@ describe('Production kanban flow states', () => {
       />,
     );
 
-    expect(html).toContain('Cloud 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.');
+    expect(html).toContain('온라인 저장소(Azure DB) 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.');
   });
 
   it('renders draft save success and failure messages separately', () => {
     const successHtml = renderToStaticMarkup(<ProductionVideoSaveStatus saveState="saved" />);
     const errorHtml = renderToStaticMarkup(<ProductionVideoSaveStatus saveState="error" />);
 
-    expect(successHtml).toContain('Cloud에 저장됐습니다.');
+    expect(successHtml).toContain('온라인 저장소(Azure DB)에 저장됐습니다.');
     expect(errorHtml).toContain('온라인 저장소(Azure DB) 저장 실패. 저장 완료 처리하지 않았습니다. 다시 저장해 주세요.');
   });
 
@@ -62,7 +62,7 @@ describe('Production kanban flow states', () => {
     );
 
     expect(html).toContain('링크 후보 3개');
-    expect(html).toContain('Cloud 발견함에서 제작 후보로 표시한 외부 링크 수입니다. 영상 후보와 별도로 표시합니다.');
+    expect(html).toContain('온라인 발견함(Azure DB)에서 제작 후보로 표시한 외부 링크 수입니다. 영상 후보와 별도로 표시합니다.');
     expect(html).toContain('먼저 처리할 권리 확인 링크 2개가 위에 표시됩니다.');
     expect(html).toContain('별도 제작 DB');
     expect(html).toContain('자동 수집이나 다운로드는 실행하지 않습니다.');

@@ -39,7 +39,7 @@ describe('radarDecisionViewProps utils', () => {
     expect(props.clearButtonProps).toMatchObject({
       label: '판단 초기화',
       show: true,
-      title: 'Cloud에 저장된 오늘 판단 기록을 초기화합니다',
+      title: '온라인 저장소(Azure DB)에 저장된 오늘 판단 기록을 초기화합니다',
     });
     expect(props.scrapbookButtonProps['aria-label']).toContain('스크랩 7개');
   });

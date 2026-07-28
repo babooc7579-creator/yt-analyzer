@@ -4,7 +4,7 @@ export const TAG_RENAME_FAILED_MESSAGE = '태그 이름 변경에 실패했습�
 
 export const getTagRenameErrorMessage = (error) => {
   const message = error?.message || TAG_RENAME_FAILED_MESSAGE;
-  return `${message} Cloud 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
+  return `${message} 온라인 저장소(Azure DB)의 채널 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.`;
 };
 
 export const getTagRenameConfirmMessage = (from, to) => (
@@ -12,11 +12,11 @@ export const getTagRenameConfirmMessage = (from, to) => (
 );
 
 export const getTagRenameStartMessage = (from, to) => (
-  `Cloud 태그 '${from}'을 '${to}'로 변경하는 중입니다. 이 태그가 붙은 채널에도 반영됩니다.`
+  `온라인 저장소(Azure DB)의 채널 태그 '${from}'을 '${to}'로 변경하는 중입니다. 이 태그가 붙은 채널에도 반영됩니다.`
 );
 
 export const getTagRenameCompleteMessage = ({ from, to, channelsAffected }) => (
-  `Cloud 태그 변경 완료: '${from}' → '${to}' (채널 ${channelsAffected}개 반영)`
+  `온라인 저장소(Azure DB)의 채널 태그 변경 완료: '${from}' → '${to}' (채널 ${channelsAffected}개 반영)`
 );
 
 export const getRenamedCategories = (categories = [], from, to) => (

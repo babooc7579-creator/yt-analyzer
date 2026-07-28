@@ -31,9 +31,9 @@ describe('discoveryLinksCopy utils', () => {
     const props = getDiscoveryLinksHeaderTitleViewProps({ totalLinkCount: 3 });
 
     expect(props).toEqual({
-      eyebrow: 'Cloud 발견함',
+      eyebrow: '온라인 발견함(Azure DB)',
       title: '저장한 링크 3개',
-      description: 'Cloud에 저장된 수동 링크입니다. 목록이 비어 있으면 Cloud 기준으로 아직 저장된 링크가 없는 상태입니다.',
+      description: '온라인 저장소(Azure DB)에 저장된 수동 링크입니다. 목록이 비어 있으면 온라인 저장소 기준으로 아직 저장된 링크가 없는 상태입니다.',
     });
   });
 
@@ -41,7 +41,7 @@ describe('discoveryLinksCopy utils', () => {
     const props = getDiscoveryLinksFilteredEmptyStateViewProps({ allLinkCount: 7 });
 
     expect(props.title).toBe('조건에 맞는 링크가 없습니다.');
-    expect(props.description).toContain('Cloud에는 링크 7개');
+    expect(props.description).toContain('온라인 저장소(Azure DB)에는 링크 7개');
     expect(props.description).toContain('저장 데이터나 외부 사이트에는 영향을 주지 않습니다');
     expect(props.clearButtonProps).toMatchObject({
       label: '필터 초기화',
@@ -53,7 +53,7 @@ describe('discoveryLinksCopy utils', () => {
     const props = getDiscoveryLinksRefreshButtonProps();
 
     expect(props.label).toBe('다시 조회');
-    expect(props.title).toContain('Cloud 발견함 목록');
+    expect(props.title).toContain('온라인 발견함(Azure DB) 목록');
     expect(props.title).toContain('외부 사이트 수집이나 저장 변경은 없습니다');
     expect(props['aria-label']).toContain('외부 수집이나 저장 변경 없음');
     expect(getDiscoveryLinksErrorNoticeViewProps().recoveryText).toContain('localStorage와 자동 병합');
@@ -83,7 +83,7 @@ describe('discoveryLinksCopy utils', () => {
     });
     expect(getDiscoveryLinkSearchBoxViewProps().clearButtonProps.title).toBe('검색어 지우기');
     expect(getDiscoveryLinksLoadingStateViewProps().message).toBe(
-      'Cloud 발견함을 불러오는 중입니다. 외부 사이트 수집이나 자동 업로드는 실행하지 않습니다.'
+      '온라인 발견함(Azure DB)을 불러오는 중입니다. 외부 사이트 수집이나 자동 업로드는 실행하지 않습니다.'
     );
     expect(getDiscoveryLinksActiveFilterSummaryViewProps({ filteredLinkCount: 4 }).message).toBe(
       '현재 조건에 맞는 링크 4개를 보고 있습니다.'
@@ -146,11 +146,11 @@ describe('discoveryLinksCopy utils', () => {
       label: '원본 링크',
       previewHostText: '출처 도메인: instagram.com',
       duplicateWarning: {
-        title: '이미 Cloud 발견함에 저장된 링크입니다.',
+        title: '이미 온라인 발견함(Azure DB)에 저장된 링크입니다.',
       },
     });
     expect(getDiscoveryLinkStatusControlsViewProps({ title: 'Clip' }).statusSelectProps['aria-label']).toBe(
-      'Clip 검토 상태 변경, Cloud 발견함 기록 저장'
+      'Clip 검토 상태 변경, 온라인 발견함(Azure DB) 기록 저장'
     );
     expect(getDiscoveryLinkActionsNoticeViewProps().message).toContain('외부 사이트를 새로 수집하지 않습니다');
   });

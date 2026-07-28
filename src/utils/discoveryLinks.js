@@ -20,7 +20,7 @@ const isLinkObject = (link) => link && typeof link === 'object';
 const toLinkList = (links) => toArray(links).filter(isLinkObject);
 
 export const DISCOVERY_LINK_DELETE_CONFIRM_MESSAGE =
-  '이 발견 링크를 Cloud 발견함에서 삭제할까요?\n\n원본 사이트 게시물이나 외부 링크 자체는 삭제되지 않습니다. Creator OS 안의 발견함 기록만 삭제됩니다.';
+  '이 발견 링크를 온라인 발견함(Azure DB)에서 삭제할까요?\n\n원본 사이트 게시물이나 외부 링크 자체는 삭제되지 않습니다. Creator OS 안의 발견함 기록만 삭제됩니다.';
 
 export const getSearchableDiscoveryLinkText = (link) => {
   const sourceLink = toLinkObject(link);

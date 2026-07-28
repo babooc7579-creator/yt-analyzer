@@ -3,7 +3,7 @@ export const LEGACY_WORK_PANEL_INTRO_COPY = {
   workflowDescription: '채널 등록·선택 → 수집된 영상 정보 확인 → 필요할 때만 새 영상 수집',
   workflowSteps: [
     {
-      description: '채널을 Cloud 목록에 등록하고 오늘 확인할 채널을 선택합니다. 선택만으로 새 영상 수집은 실행되지 않습니다.',
+      description: '채널을 온라인 저장소(Azure DB)에 등록하고 오늘 확인할 채널을 선택합니다. 선택만으로 새 영상 수집은 실행되지 않습니다.',
       title: '1. 채널 등록·선택',
     },
     {

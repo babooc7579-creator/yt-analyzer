@@ -23,7 +23,7 @@ describe('discoveryLinkActionProps utils', () => {
     expect(props.buttonProps.title).toContain('권리 확인 완료를 의미하지');
     expect(props.buttonProps.title).toContain('제작 후보함에서 확인');
     expect(props.buttonProps.title).toContain('외부 사이트를 새로 수집하지 않습니다');
-    expect(props.buttonProps['aria-label']).toContain('Cloud 발견함 기록');
+    expect(props.buttonProps['aria-label']).toContain('온라인 발견함(Azure DB) 기록');
     expect(props.buttonProps['aria-label']).toContain('제작 후보로 표시');
     expect(props.buttonProps.title).not.toContain('제작 후보로 저장');
   });
@@ -42,7 +42,7 @@ describe('discoveryLinkActionProps utils', () => {
       role: 'status',
       tone: 'success',
     });
-    expect(saved.message).toContain('Cloud 발견함에 제작 후보로 표시했습니다');
+    expect(saved.message).toContain('온라인 발견함(Azure DB)에 제작 후보로 표시했습니다');
     expect(saved.message).toContain('권리 상태는 별도로 확인');
     expect(saved.actionProps.onClick).toBe(onOpenProductionCandidate);
     expect(failed).toMatchObject({ role: 'alert', tone: 'danger' });

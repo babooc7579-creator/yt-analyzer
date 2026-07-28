@@ -131,7 +131,7 @@ export const getTagVaultEmptyState = ({
       actionLabel: '채널 목록 열기',
       actionTitle: '채널 목록 화면으로 이동해 태그와 분류를 정리합니다. 이동만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다.',
       description: channelCount === 0
-        ? 'Cloud 채널 목록을 먼저 불러오면 채널 태그를 기준으로 금고를 만들 수 있습니다.'
+        ? '온라인 저장소(Azure DB)의 채널 목록을 먼저 불러오면 채널 태그를 기준으로 금고를 만들 수 있습니다.'
         : '채널에 태그나 분류가 아직 없습니다. 채널 목록에서 태그를 먼저 정리하세요.',
       title: '사용할 채널 태그가 없습니다',
     };

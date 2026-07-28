@@ -159,7 +159,7 @@ export const getUploadCalendarEmptyState = ({ productionRecordCount = 0, schedul
 
   if (scheduledCount === 0) {
     return {
-      description: '제작 후보함에서 목표 업로드 날짜를 입력하고 Cloud에 저장하면 이 달력에 자동으로 표시됩니다.',
+      description: '제작 후보함에서 목표 업로드 날짜를 입력하고 온라인 저장소(Azure DB)에 저장하면 이 달력에 자동으로 표시됩니다.',
       title: '날짜가 정해진 제작 후보가 없습니다',
     };
   }

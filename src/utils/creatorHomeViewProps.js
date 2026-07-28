@@ -50,7 +50,7 @@ export const getHomeRadarStatsGridViewProps = ({
       value: channelsLoading ? '조회 중' : savedChannelCount,
       description: channelsLoading
         ? '온라인 저장소(Azure DB)에서 채널 목록을 조회하고 있습니다. YouTube API 호출은 없습니다.'
-        : 'Cloud에 저장된 채널 자산입니다. 숫자 확인만으로 YouTube API를 호출하지 않습니다.',
+        : '온라인 저장소(Azure DB)에 저장된 채널 자산입니다. 숫자 확인만으로 YouTube API를 호출하지 않습니다.',
     },
     {
       label: '현재 화면 영상',
@@ -60,7 +60,7 @@ export const getHomeRadarStatsGridViewProps = ({
     {
       label: '스크랩북 보관',
       value: savedVideoCount,
-      description: 'Cloud 스크랩북에 보관한 영상입니다. 원본 영상이나 수집 영상 정보 삭제와 다릅니다.',
+      description: '온라인 스크랩북(Azure DB)에 보관한 영상입니다. 원본 영상이나 수집 영상 정보 삭제와 다릅니다.',
     },
     {
       label: '마지막 수집 기록',
@@ -82,7 +82,7 @@ export const getHomeRadarStatsGridViewProps = ({
     {
       label: '제작 후보',
       value: productionCandidateCount,
-      description: 'Cloud 판단 기록에서 아직 제작 중·완료 전인 후보 단계 수집 영상입니다. 오늘 집중 영상도 이 숫자에 포함되며, 숫자 확인만으로 저장이나 API 호출은 실행하지 않습니다.',
+      description: '온라인 저장소(Azure DB)의 판단 기록에서 아직 제작 중·완료 전인 후보 단계 수집 영상입니다. 오늘 집중 영상도 이 숫자에 포함되며, 숫자 확인만으로 저장이나 API 호출은 실행하지 않습니다.',
       className: 'border-indigo-500/20 bg-indigo-950/30',
       labelClassName: 'text-indigo-300',
       descriptionClassName: 'text-indigo-100/70',
@@ -90,7 +90,7 @@ export const getHomeRadarStatsGridViewProps = ({
     {
       label: '오늘 집중',
       value: productionFocusCount,
-      description: 'Cloud 판단 기록에서 오늘 집중으로 고정한 영상입니다. 숫자 확인만으로 저장이나 YouTube API 호출은 실행하지 않습니다.',
+      description: '온라인 저장소(Azure DB)의 판단 기록에서 오늘 집중으로 고정한 영상입니다. 숫자 확인만으로 저장이나 YouTube API 호출은 실행하지 않습니다.',
       className: 'border-cyan-500/20 bg-cyan-950/30',
       labelClassName: 'text-cyan-300',
       descriptionClassName: 'text-cyan-100/70',
@@ -99,8 +99,8 @@ export const getHomeRadarStatsGridViewProps = ({
       label: '발견 링크 후보',
       value: discoveryCandidateCount,
       description: discoveryRightsWarningCount > 0
-        ? `Cloud 발견함에서 제작 후보로 표시한 링크입니다. 권리 확인 필요 ${discoveryRightsWarningCount}개를 먼저 확인하세요.`
-        : 'Cloud 발견함에서 제작 후보로 표시한 링크입니다. 외부 자동 수집이나 다운로드 결과가 아닙니다.',
+        ? `온라인 발견함(Azure DB)에서 제작 후보로 표시한 링크입니다. 권리 확인 필요 ${discoveryRightsWarningCount}개를 먼저 확인하세요.`
+        : '온라인 발견함(Azure DB)에서 제작 후보로 표시한 링크입니다. 외부 자동 수집이나 다운로드 결과가 아닙니다.',
       className: 'border-amber-500/20 bg-amber-950/30',
       labelClassName: 'text-amber-300',
       descriptionClassName: 'text-amber-100/70',

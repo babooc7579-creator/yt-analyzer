@@ -23,8 +23,8 @@ describe('ProductionVideoMoveActions', () => {
     expect(html).toContain('오늘 집중');
     expect(html).toContain('제작 중으로');
     expect(html).toContain('업로드 완료');
-    expect(html).toContain('검토할 영상 제작 중 상태로 변경, Cloud 판단 기록 저장, YouTube API 호출 없음');
-    expect(html).toContain('제작 진행 상태를 업로드 완료로 변경하고 완료일을 Cloud 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.');
+    expect(html).toContain('검토할 영상 제작 중 상태로 변경, 온라인 저장소(Azure DB)의 판단 기록 저장, YouTube API 호출 없음');
+    expect(html).toContain('제작 진행 상태를 업로드 완료로 변경하고 완료일을 온라인 저장소(Azure DB)의 판단 기록에 저장합니다. YouTube API를 새로 호출하지 않습니다.');
     expect(html).not.toContain('disabled=""');
   });
 

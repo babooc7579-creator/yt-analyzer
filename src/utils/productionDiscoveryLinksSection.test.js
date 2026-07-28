@@ -95,7 +95,7 @@ describe('productionDiscoveryLinksSection utils', () => {
     });
 
     expect(openDiscoveryLinksButtonProps.onClick).toBe(onOpenDiscoveryLinks);
-    expect(openDiscoveryLinksButtonProps.title).toContain('Cloud 발견함에 저장된 링크 후보');
+    expect(openDiscoveryLinksButtonProps.title).toContain('온라인 발견함(Azure DB)에 저장된 링크 후보');
     expect(openDiscoveryLinksButtonProps.title).toContain('외부 사이트 자동 수집');
     expect(openDiscoveryLinksButtonProps.title).toContain('다운로드는 실행하지 않습니다');
     expect(openDiscoveryLinksButtonProps['aria-label']).toContain('온라인 저장소(Azure DB) 저장 링크 조회와 수정');
@@ -112,7 +112,7 @@ describe('productionDiscoveryLinksSection utils', () => {
     expect(headerProps.badgeTitle).toContain('영상 후보와 별도');
     expect(headerProps.eyebrow).toBe('발견함 링크 후보');
     expect(headerProps.title).toBe('외부에서 저장한 제작 후보 링크');
-    expect(headerProps.description).toContain('Cloud 발견함 기록');
+    expect(headerProps.description).toContain('온라인 발견함(Azure DB) 기록');
     expect(headerProps.description).toContain('제작 참고 목록');
     expect(headerProps.description).toContain('별도 제작 DB');
     expect(headerProps.description).toContain('자동 수집이나 다운로드는 실행하지 않습니다');

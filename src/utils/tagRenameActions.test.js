@@ -18,23 +18,23 @@ describe('tagRenameActions utils', () => {
     expect(getTagRenameConfirmMessage('해외', '해외 레퍼런스')).toContain('온라인 저장소(Azure DB)');
     expect(getTagRenameConfirmMessage('해외', '해외 레퍼런스')).toContain('일괄 반영');
     expect(getTagRenameStartMessage('해외', '해외 레퍼런스')).toBe(
-      "Cloud 태그 '해외'을 '해외 레퍼런스'로 변경하는 중입니다. 이 태그가 붙은 채널에도 반영됩니다."
+      "온라인 저장소(Azure DB)의 채널 태그 '해외'을 '해외 레퍼런스'로 변경하는 중입니다. 이 태그가 붙은 채널에도 반영됩니다."
     );
     expect(getTagRenameCompleteMessage({
       from: '해외',
       to: '해외 레퍼런스',
       channelsAffected: 3,
     })).toBe(
-      "Cloud 태그 변경 완료: '해외' → '해외 레퍼런스' (채널 3개 반영)"
+      "온라인 저장소(Azure DB)의 채널 태그 변경 완료: '해외' → '해외 레퍼런스' (채널 3개 반영)"
     );
   });
 
   it('builds Cloud failure messages from thrown errors or fallback text', () => {
     expect(getTagRenameErrorMessage(new Error('network down'))).toBe(
-      'network down Cloud 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.'
+      'network down 온라인 저장소(Azure DB)의 채널 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.'
     );
     expect(getTagRenameErrorMessage(null)).toBe(
-      '태그 이름 변경에 실패했습니다. Cloud 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.'
+      '태그 이름 변경에 실패했습니다. 온라인 저장소(Azure DB)의 채널 태그 이름 변경을 완료 처리하지 않았습니다. 연결을 확인한 뒤 다시 시도해 주세요.'
     );
   });
 

@@ -25,12 +25,12 @@ describe('radarCandidateStatusActions utils', () => {
       '나중에 보기',
       '후보에서 제외',
     ]);
-    expect(actionProps.every(action => action.title.includes('Cloud 판단 기록'))).toBe(true);
+    expect(actionProps.every(action => action.title.includes('온라인 저장소(Azure DB)의 판단 기록'))).toBe(true);
     expect(actionProps.every(action => action.title.includes('오늘 레이더'))).toBe(true);
     expect(actionProps.map(action => action.ariaLabel)).toEqual([
-      'Display title Cloud 판단 기록에 봤음으로 저장',
-      'Display title Cloud 판단 기록에 나중에 보기로 저장',
-      'Display title Cloud 판단 기록에 후보 제외로 저장',
+      'Display title 온라인 저장소(Azure DB)의 판단 기록에 봤음으로 저장',
+      'Display title 온라인 저장소(Azure DB)의 판단 기록에 나중에 보기로 저장',
+      'Display title 온라인 저장소(Azure DB)의 판단 기록에 후보 제외로 저장',
     ]);
     expect(RADAR_STATUS_ACTION_ITEMS).toHaveLength(3);
   });

@@ -10,14 +10,14 @@ export const getVideoListRowBadgeItems = ({
     icon: 'saved',
     isVisible: isSaved,
     label: '스크랩북 보관',
-    title: 'Cloud 스크랩북에 보관된 영상입니다. 제작 후보 여부와는 별도입니다.',
+    title: '온라인 스크랩북(Azure DB)에 보관된 영상입니다. 제작 후보 여부와는 별도입니다.',
   },
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold text-indigo-700',
     icon: 'candidate',
     isVisible: isProductionCandidate,
     label: '제작 후보',
-    title: 'Cloud 판단 기록에서 제작 후보로 표시된 영상입니다. 제작 후보함에 표시됩니다.',
+    title: '온라인 저장소(Azure DB)의 판단 기록에서 제작 후보로 표시된 영상입니다. 제작 후보함에 표시됩니다.',
   },
   {
     className: 'inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-bold text-indigo-700',

@@ -8,7 +8,7 @@ describe('RadarActionSuccessFeedback', () => {
     const html = renderToStaticMarkup(
       <RadarActionSuccessFeedback
         actionLabel="제작 후보함 열기"
-        actionTitle="Cloud 제작 후보함을 엽니다. YouTube API를 호출하지 않습니다."
+        actionTitle="온라인 저장소(Azure DB)의 제작 후보함을 엽니다. YouTube API를 호출하지 않습니다."
         title="제작 후보로 저장했습니다"
         message="다음 후보가 자동으로 표시됩니다."
         onAction={() => {}}

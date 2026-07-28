@@ -82,7 +82,7 @@ export const getProductionKanbanNextActions = ({
     key: 'upload-calendar',
     iconKey: 'uploadCalendar',
     label: '업로드 일정 보기',
-    title: '업로드 캘린더를 열어 Cloud에 저장된 목표 날짜를 확인합니다. 화면 이동과 달력 조회만으로 YouTube API를 호출하지 않습니다.',
+    title: '업로드 캘린더를 열어 온라인 저장소(Azure DB)에 저장된 목표 날짜를 확인합니다. 화면 이동과 달력 조회만으로 YouTube API를 호출하지 않습니다.',
     ariaLabel: '업로드 캘린더 열기, 온라인 저장소(Azure DB) 저장 일정 조회이며 YouTube API 호출 없음',
     onClick: onOpenUploadCalendar,
     variant: 'amber',

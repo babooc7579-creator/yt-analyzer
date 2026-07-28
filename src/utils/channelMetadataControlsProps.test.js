@@ -73,7 +73,7 @@ describe('channelMetadataControlsProps utils', () => {
     expect(props.statusSelectProps).toMatchObject({
       'aria-label': 'Peak Viral Shorts 채널 상태 선택, 활성 채널만 새 영상 수집 대상',
       disabled: true,
-      title: '채널 상태 변경 - 활성 채널만 새 영상 수집 대상이며 변경 내용은 Cloud에 저장됩니다',
+      title: '채널 상태 변경 - 활성 채널만 새 영상 수집 대상이며 변경 내용은 온라인 저장소(Azure DB)에 저장됩니다',
       value: CHANNEL_STATUS.PAUSED,
     });
     expect(props.statusLabelText).toBe('채널 상태');

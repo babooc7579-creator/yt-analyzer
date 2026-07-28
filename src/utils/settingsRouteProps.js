@@ -28,27 +28,27 @@ export function getSettingsErrorGuidance(error = '') {
   if (/\b(401|403)\b|unauthorized|forbidden|권한|로그인/i.test(message)) {
     return {
       title: '로그인 또는 접근 권한을 확인해 주세요',
-      description: 'Microsoft 계정 로그인 상태와 Creator OS 접근 권한을 확인한 뒤 Cloud 채널을 다시 불러오세요.',
+      description: 'Microsoft 계정 로그인 상태와 Creator OS 접근 권한을 확인한 뒤 온라인 저장소(Azure DB)의 채널을 다시 불러오세요.',
     };
   }
 
   if (/cors|failed to fetch|networkerror|network request|네트워크/i.test(message)) {
     return {
-      title: '브라우저와 Cloud API 연결을 확인해 주세요',
+      title: '브라우저와 온라인 저장 API(Azure) 연결을 확인해 주세요',
       description: '인터넷 연결 또는 API의 허용 주소 문제일 수 있습니다. 잠시 뒤 다시 시도하고, 계속되면 배포 상태를 확인하세요.',
     };
   }
 
   if (/\b5\d\d\b|server|서버/i.test(message)) {
     return {
-      title: 'Cloud API가 요청을 처리하지 못했습니다',
-      description: '입력 데이터 문제로 단정하지 말고 잠시 뒤 Cloud 채널을 다시 불러오세요. 반복되면 GitHub Actions 배포 상태를 확인하세요.',
+      title: '온라인 저장 API(Azure)가 요청을 처리하지 못했습니다',
+      description: '입력 데이터 문제로 단정하지 말고 잠시 뒤 온라인 저장소(Azure DB)의 채널을 다시 불러오세요. 반복되면 GitHub Actions 배포 상태를 확인하세요.',
     };
   }
 
   return {
     title: '현재 오류를 확인한 뒤 다시 시도해 주세요',
-    description: '먼저 Cloud 채널 다시 불러오기를 실행하고, 같은 오류가 반복되면 배포 상태를 확인하세요.',
+    description: '먼저 온라인 저장소(Azure DB)의 채널 다시 불러오기를 실행하고, 같은 오류가 반복되면 배포 상태를 확인하세요.',
   };
 }
 

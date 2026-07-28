@@ -58,7 +58,7 @@ export default function ProductionKanbanPriorityGuide({
   return (
     <div
       className={`mt-4 flex flex-col gap-3 rounded-xl border px-4 py-3 md:flex-row md:items-start ${styles.box}`}
-      title="Cloud에 저장된 제작 후보와 발견함 후보를 기준으로 표시만 합니다. 새 API 호출이나 저장은 실행하지 않습니다."
+      title="온라인 저장소(Azure DB)에 저장된 제작 후보와 발견함 후보를 기준으로 표시만 합니다. 새 API 호출이나 저장은 실행하지 않습니다."
     >
       <Icon className={`h-5 w-5 shrink-0 ${styles.icon}`} />
       <div className="min-w-0 flex-1">

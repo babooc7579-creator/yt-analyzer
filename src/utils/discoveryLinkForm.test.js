@@ -71,7 +71,7 @@ describe('discoveryLinkForm utils', () => {
 
     const message = confirm.mock.calls[0][0];
     expect(message).toContain('제작 후보로 표시하시겠어요?');
-    expect(message).toContain('Cloud 발견함 상태만 바꾸며');
+    expect(message).toContain('온라인 발견함(Azure DB) 상태만 바꾸며');
     expect(message).toContain('권리 확인 완료를 의미하지 않습니다');
     expect(message).not.toContain('제작 후보로 보내');
   });

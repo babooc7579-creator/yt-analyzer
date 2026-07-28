@@ -43,7 +43,7 @@ describe('functionApiClient', () => {
     );
   });
 
-  it('reads JSON responses from the configured Cloud API base URL', async () => {
+  it('reads JSON responses from the configured 온라인 저장 API(Azure) base URL', async () => {
     const response = createResponse({ data: { success: true, videos: [] } });
     const fetchMock = installFetchMock(response);
 
@@ -102,7 +102,7 @@ describe('functionApiClient', () => {
     });
   });
 
-  it('falls back to a status-coded Cloud API error when failed responses are not JSON', async () => {
+  it('falls back to a status-coded 온라인 저장 API(Azure) error when failed responses are not JSON', async () => {
     installFetchMock(createResponse({
       ok: false,
       status: 503,

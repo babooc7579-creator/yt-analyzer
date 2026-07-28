@@ -14,8 +14,8 @@ describe('DiscoveryLinkSubmitButton', () => {
     );
 
     expect(html).toContain('링크 저장');
-    expect(html).toContain('title="링크와 메모를 Cloud 발견함에 저장합니다. 외부 사이트 크롤링은 하지 않습니다."');
-    expect(html).toContain('aria-label="Cloud 발견함에 링크 저장"');
+    expect(html).toContain('title="링크와 메모를 온라인 발견함(Azure DB)에 저장합니다. 외부 사이트 크롤링은 하지 않습니다."');
+    expect(html).toContain('aria-label="온라인 발견함(Azure DB)에 링크 저장"');
     expect(html).not.toContain('disabled=""');
   });
 

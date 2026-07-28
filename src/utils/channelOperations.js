@@ -16,7 +16,7 @@ export const CHANNEL_OPERATION_STAGES = [
     id: 'add',
     step: '2',
     label: '새 채널 등록',
-    description: 'YouTube 채널을 확인한 뒤 Cloud 목록에 저장합니다.',
+    description: 'YouTube 채널을 확인한 뒤 온라인 저장소(Azure DB)에 저장합니다.',
     targetId: 'channel-operations-add',
   },
   {
@@ -173,8 +173,8 @@ export const getChannelOperationsJourney = ({
 
   return {
     description: selectedScannableChannelCount > 0
-      ? '기존 Cloud 영상을 먼저 조회할 수 있습니다. 새 데이터가 필요할 때만 YouTube API 수집을 실행하세요.'
-      : '기존 Cloud 영상은 조회할 수 있지만, 현재 선택은 보류·제외 채널이라 새 영상 수집 대상은 아닙니다.',
+      ? '온라인 저장소(Azure DB)에 있는 기존 수집 영상 정보를 먼저 조회할 수 있습니다. 새 데이터가 필요할 때만 YouTube API 수집을 실행하세요.'
+      : '온라인 저장소(Azure DB)에 있는 기존 수집 영상 정보는 조회할 수 있지만, 현재 선택은 보류·제외 채널이라 새 영상 수집 대상은 아닙니다.',
     primaryAction: {
       disabled: isLoading,
       id: 'load-stored',

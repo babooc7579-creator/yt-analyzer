@@ -47,13 +47,13 @@ export const getBackfillConfirmMessage = (channelTitle) => [
   '',
   `이번 실행은 YouTube API를 사용해 선택한 채널 하나에서 최대 ${BACKFILL_MAX_ITEMS}개를 확인합니다.`,
   '목록 끝에 도달하면 완료하고, 더 많으면 현재 위치를 저장해 다음 실행에서 이어갑니다.',
-  'Cloud에 없는 영상만 새로 저장하므로 신규 저장 수는 확인 수보다 적을 수 있습니다.',
+  '온라인 저장소(Azure DB)에 없는 영상만 새로 저장하므로 신규 저장 수는 확인 수보다 적을 수 있습니다.',
   '자동 반복이나 다른 채널 수집은 실행하지 않습니다.',
 ].join('\n');
 
 export const getBackfillStartMessage = (channelTitle) => (
   `${channelTitle || '선택 채널'}의 공개 업로드 목록을 끝까지 확인하고 있습니다. `
-  + `이번 실행은 최대 ${BACKFILL_MAX_ITEMS}개까지 진행하며 Cloud에 없는 영상만 저장합니다.`
+  + `이번 실행은 최대 ${BACKFILL_MAX_ITEMS}개까지 진행하며 온라인 저장소(Azure DB)에 없는 영상만 저장합니다.`
 );
 
 export const getBackfillResultMessage = (result = {}) => {

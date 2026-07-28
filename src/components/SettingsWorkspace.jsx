@@ -14,7 +14,7 @@ const settingCards = [
   {
     icon: FolderCog,
     title: '화면 분야 목록은 브라우저 설정입니다',
-    description: '분야 추가와 숨김은 이 브라우저의 표시 목록만 바꿉니다. Cloud 채널 태그를 삭제하지 않습니다.',
+    description: '분야 추가와 숨김은 이 브라우저의 표시 목록만 바꿉니다. 온라인 저장소(Azure DB)의 채널 태그를 삭제하지 않습니다.',
     tone: 'border-amber-400/25 bg-amber-500/10 text-amber-200',
   },
   {
@@ -64,7 +64,7 @@ export default function SettingsWorkspace({
             <p className="text-xs font-extrabold text-indigo-300">운영 설정</p>
             <h3 className="mt-1 text-lg font-black text-white">앱의 기준과 채널 분야를 관리합니다</h3>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-              화면 표시 설정과 온라인 저장소(Azure DB) 데이터 변경을 구분합니다. 이름 변경은 Cloud 채널 태그를 바꾸지만, 추가와 숨김은 현재 브라우저의 화면 목록만 바꿉니다.
+              화면 표시 설정과 온라인 저장소(Azure DB) 데이터 변경을 구분합니다. 이름 변경은 온라인 저장소(Azure DB)의 채널 태그를 바꾸지만, 추가와 숨김은 현재 브라우저의 화면 목록만 바꿉니다.
             </p>
           </div>
         </div>
@@ -87,10 +87,10 @@ export default function SettingsWorkspace({
               <p className="text-xs font-extrabold text-cyan-300">채널 분야 관리</p>
               <h3 id="settings-category-title" className="mt-1 text-lg font-black text-white">분야 목록 추가·숨김·이름 변경</h3>
               <p className="mt-2 text-xs leading-5 text-slate-400">
-                레이더의 분야 필터는 실제 Cloud 채널에 붙은 태그를 자동 집계합니다. 새 분야는 채널에 적용된 뒤 레이더에 나타납니다.
+                레이더의 분야 필터는 실제 온라인 저장소(Azure DB)의 채널에 붙은 태그를 자동 집계합니다. 새 분야는 채널에 적용된 뒤 레이더에 나타납니다.
               </p>
             </div>
-            <span className="shrink-0 border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-slate-300">Cloud 채널 {savedChannelCount}개</span>
+            <span className="shrink-0 border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-slate-300">온라인 저장소(Azure DB)의 채널 {savedChannelCount}개</span>
           </div>
           <ChannelCategorySettings {...categorySettingsProps} />
         </section>
@@ -154,7 +154,7 @@ export default function SettingsWorkspace({
           <article className="border border-slate-700 bg-slate-950/70 p-4">
             <div className="flex items-center gap-2">
               {syncWarnings.length > 0 ? <AlertTriangle className="h-4 w-4 text-amber-300" /> : <CheckCircle2 className="h-4 w-4 text-emerald-300" />}
-              <p className="text-xs font-extrabold text-white">Cloud 기록 동기화</p>
+              <p className="text-xs font-extrabold text-white">온라인 저장소(Azure DB)의 기록 동기화</p>
             </div>
             {syncWarnings.length > 0 ? (
               <ul className="mt-3 space-y-2 text-xs leading-5 text-amber-100">
@@ -189,7 +189,7 @@ export default function SettingsWorkspace({
                 title="온라인 저장소(Azure DB)에서 채널 목록만 다시 조회합니다. YouTube API는 호출하지 않습니다."
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${refreshingChannels ? 'animate-spin' : ''}`} />
-                {refreshingChannels ? 'Cloud 채널 조회 중' : 'Cloud 채널 다시 불러오기'}
+                {refreshingChannels ? '온라인 저장소(Azure DB)의 채널 조회 중' : '온라인 저장소(Azure DB)의 채널 다시 불러오기'}
               </button>
               <a
                 className="inline-flex w-full items-center justify-center gap-2 border border-slate-600 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-200 hover:border-indigo-400 hover:text-white sm:w-auto"
@@ -201,7 +201,7 @@ export default function SettingsWorkspace({
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>
             </div>
-            {refreshResult === 'success' && <p role="status" className="mt-3 text-xs font-bold text-emerald-200">Cloud 채널 목록을 다시 불러왔습니다.</p>}
+            {refreshResult === 'success' && <p role="status" className="mt-3 text-xs font-bold text-emerald-200">온라인 저장소(Azure DB)의 채널 목록을 다시 불러왔습니다.</p>}
             {refreshResult === 'error' && <p role="status" className="mt-3 text-xs font-bold text-rose-200">다시 불러오지 못했습니다. 위 오류와 배포 상태를 확인해 주세요.</p>}
           </article>
         </div>

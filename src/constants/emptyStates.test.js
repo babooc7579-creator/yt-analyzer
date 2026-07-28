@@ -27,12 +27,12 @@ describe('emptyStates constants', () => {
     expect(SCRAPBOOK_EMPTY_STATE.description).toContain('제작 후보와는 별도로 관리');
     expect(SCRAPBOOK_EMPTY_STATE.steps[1].description).toContain('온라인 저장소(Azure DB)');
     expect(SCRAPBOOK_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
-    expect(SCRAPBOOK_EMPTY_STATE.steps[2].description).toContain('Cloud 스크랩북');
+    expect(SCRAPBOOK_EMPTY_STATE.steps[2].description).toContain('온라인 스크랩북(Azure DB)');
   });
 
   it('keeps discovery links empty guidance manual and non-crawling', () => {
     expect(DISCOVERY_LINKS_EMPTY_STATE.description).toContain('직접 저장');
-    expect(DISCOVERY_LINKS_EMPTY_STATE.description).toContain('Cloud 발견함');
+    expect(DISCOVERY_LINKS_EMPTY_STATE.description).toContain('온라인 발견함(Azure DB)');
     expect(DISCOVERY_LINKS_EMPTY_STATE.steps[0].description).toContain('수동');
     expect(DISCOVERY_LINKS_EMPTY_STATE.steps[2].description).toContain('자동 수집');
     expect(DISCOVERY_LINKS_EMPTY_STATE.steps[2].description).toContain('다운로드는 실행하지 않습니다');
@@ -47,7 +47,7 @@ describe('emptyStates constants', () => {
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[1].description).toContain('온라인 저장소(Azure DB)');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].title).toContain('표시하기');
-    expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].description).toContain('Cloud 발견함');
+    expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].description).toContain('온라인 발견함(Azure DB)');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.steps[2].description).toContain('제작 후보로 표시합니다');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.referenceVaultButton.title).toContain('온라인 저장소(Azure DB) 조회');
     expect(PRODUCTION_KANBAN_EMPTY_STATE.discoveryLinksButton.title).toContain('자동 수집이나 다운로드는 실행하지 않습니다');

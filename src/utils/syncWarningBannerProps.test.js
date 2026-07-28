@@ -13,10 +13,10 @@ describe('syncWarningBannerProps utils', () => {
 
   it('uses a single legacy message when no message list is provided', () => {
     expect(getSyncWarningBannerViewProps({
-      message: 'Cloud 연결 실패로 임시 기록을 표시 중입니다.',
+      message: '온라인 저장소(Azure DB) 연결 실패로 임시 기록을 표시 중입니다.',
     })).toMatchObject({
       isVisible: true,
-      messages: ['Cloud 연결 실패로 임시 기록을 표시 중입니다.'],
+      messages: ['온라인 저장소(Azure DB) 연결 실패로 임시 기록을 표시 중입니다.'],
     });
   });
 

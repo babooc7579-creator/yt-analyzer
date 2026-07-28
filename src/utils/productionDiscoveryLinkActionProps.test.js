@@ -57,7 +57,7 @@ describe('productionDiscoveryLinkActionProps utils', () => {
     expect(getProductionDiscoveryLinkEditButtonProps()).toEqual({
       'aria-label': '이 링크 발견함에서 수정',
       label: '발견함에서 수정',
-      title: '발견함 화면에서 링크 상태와 메모를 수정합니다. Cloud 발견함 기록만 바꾸며 원본 사이트를 수집하지 않습니다.',
+      title: '발견함 화면에서 링크 상태와 메모를 수정합니다. 온라인 발견함(Azure DB) 기록만 바꾸며 원본 사이트를 수집하지 않습니다.',
     });
   });
 
@@ -121,11 +121,11 @@ describe('productionDiscoveryLinkActionProps utils', () => {
 
   it('builds move status messages for saved, error, and idle states', () => {
     expect(getProductionDiscoveryLinkMoveStatusViewProps('saved')).toEqual({
-      message: 'Cloud 발견함 상태 저장 완료. 제작 후보 표시만 갱신되고 링크 기록은 유지됩니다.',
+      message: '온라인 발견함(Azure DB) 상태 저장 완료. 제작 후보 표시만 갱신되고 링크 기록은 유지됩니다.',
       tone: 'success',
     });
     expect(getProductionDiscoveryLinkMoveStatusViewProps('error')).toEqual({
-      message: 'Cloud 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.',
+      message: '온라인 발견함(Azure DB) 상태 저장 실패. 저장 완료 처리하지 않았습니다. 다시 눌러 주세요.',
       tone: 'danger',
     });
     expect(getProductionDiscoveryLinkMoveStatusViewProps('saving')).toBeNull();

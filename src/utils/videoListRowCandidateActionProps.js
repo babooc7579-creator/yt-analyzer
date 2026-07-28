@@ -27,7 +27,7 @@ export const getVideoListRowCandidateActionViewProps = ({
       disabled: isDisabled,
       onClick: onPromote,
       title: isDisabled && !isProductionCandidate
-        ? '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.'
+        ? '제작 후보로 표시할 영상 ID가 없어 온라인 저장소(Azure DB)의 판단 기록 저장을 실행하지 않습니다.'
         : title,
       'aria-label': ariaLabel,
       type: 'button',

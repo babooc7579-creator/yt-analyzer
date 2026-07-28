@@ -53,7 +53,7 @@ export default function ChannelWatchlistCard({
             ? 'border-cyan-300 bg-cyan-200 text-cyan-950'
             : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-cyan-500'
         }`}
-        title={`${viewProps.selectionLabel}. 선택만으로 Cloud 조회나 YouTube API 호출은 실행되지 않습니다.`}
+        title={`${viewProps.selectionLabel}. 선택만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다.`}
       >
         {isSelected ? <CheckSquare className="h-4 w-4" /> : <Square className="h-4 w-4" />}
         {viewProps.selectionLabel}

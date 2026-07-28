@@ -33,7 +33,7 @@ export const SCRAPBOOK_EMPTY_STATE = {
   steps: [
     {
       title: '1. 채널 저장',
-      description: '소재를 모을 채널을 Cloud 채널 목록에 저장합니다. 영상 수집은 별도 버튼에서 실행합니다.',
+      description: '소재를 모을 채널을 온라인 저장소(Azure DB)의 채널 목록에 저장합니다. 영상 수집은 별도 버튼에서 실행합니다.',
     },
     {
       title: '2. 수집 영상 목록 불러오기',
@@ -41,7 +41,7 @@ export const SCRAPBOOK_EMPTY_STATE = {
     },
     {
       title: '3. 별표 저장',
-      description: '다시 볼 영상에 별표를 눌러 Cloud 스크랩북에 보관합니다.',
+      description: '다시 볼 영상에 별표를 눌러 온라인 스크랩북(Azure DB)에 보관합니다.',
     },
   ],
   homeButton: {
@@ -58,7 +58,7 @@ export const SCRAPBOOK_EMPTY_STATE = {
 
 export const DISCOVERY_LINKS_EMPTY_STATE = {
   title: '아직 저장된 발견 링크가 없습니다.',
-  description: '왼쪽 입력창에 외부에서 본 URL을 직접 저장하면 Cloud 발견함에 검토 목록이 생깁니다.',
+  description: '왼쪽 입력창에 외부에서 본 URL을 직접 저장하면 온라인 발견함(Azure DB)에 검토 목록이 생깁니다.',
   steps: [
     {
       title: '1. URL 붙여넣기',
@@ -89,7 +89,7 @@ export const PRODUCTION_KANBAN_EMPTY_STATE = {
     },
     {
       title: '3. 발견 링크에서 표시하기',
-      description: '외부에서 본 링크를 Cloud 발견함에 저장하고 상태를 제작 후보로 표시합니다.',
+      description: '외부에서 본 링크를 온라인 발견함(Azure DB)에 저장하고 상태를 제작 후보로 표시합니다.',
     },
   ],
   referenceVaultButton: {

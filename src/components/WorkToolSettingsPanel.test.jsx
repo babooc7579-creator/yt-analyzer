@@ -28,7 +28,7 @@ describe('WorkToolSettingsPanel', () => {
     expect(html).toContain('도구함에서 숨김');
     expect(html).toContain('기본 도구');
     expect(html).toContain('기본값으로 되돌리기');
-    expect(html).toContain('변경사항 온라인 저장소(Azure DB) 저장');
+    expect(html).toContain('변경사항 저장');
     expect(html).toContain('개인 도구 추가');
     expect(html).toContain('<form');
   });

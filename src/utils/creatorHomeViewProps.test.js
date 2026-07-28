@@ -45,12 +45,12 @@ describe('creatorHomeViewProps utils', () => {
       ['오늘 집중', 2],
       ['발견 링크 후보', 6],
     ]);
-    expect(statsProps.cards[2].description).toContain('Cloud 스크랩북에 보관한 영상');
+    expect(statsProps.cards[2].description).toContain('온라인 스크랩북(Azure DB)에 보관한 영상');
     expect(statsProps.cards[0].description).toContain('YouTube API를 호출하지 않습니다');
     expect(statsProps.cards[1].description).toContain('새 YouTube API 호출 수가 아닙니다');
     expect(statsProps.cards[3].description).toContain('현재 새 수집이 실행 중이라는 뜻은 아닙니다');
     expect(statsProps.cards[4].description).toContain('판단 보조 신호');
-    expect(statsProps.cards[5].description).toContain('Cloud 판단 기록');
+    expect(statsProps.cards[5].description).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(statsProps.cards[5].description).toContain('오늘 집중 영상도 이 숫자에 포함');
     expect(statsProps.cards[5].description).toContain('저장이나 API 호출은 실행하지 않습니다');
     expect(statsProps.cards[6].description).toContain('오늘 집중으로 고정한 영상');

@@ -27,10 +27,10 @@ export const getRadarCandidateStripHeaderViewProps = ({
 
   return {
     clearButtonProps: {
-      'aria-label': 'Cloud에 저장된 오늘 레이더 판단 기록 초기화',
+      'aria-label': '온라인 저장소(Azure DB)에 저장된 오늘 레이더 판단 기록 초기화',
       label: '판단 초기화',
       show: allDecisionCount > 0,
-      title: 'Cloud에 저장된 오늘 판단 기록을 초기화합니다',
+      title: '온라인 저장소(Azure DB)에 저장된 오늘 판단 기록을 초기화합니다',
     },
     description: `수집 영상 ${currentTotalCount}개를 한꺼번에 펼치지 않고 점수순 상위 ${candidateLimit}개만 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.`,
     progressText: {
@@ -41,9 +41,9 @@ export const getRadarCandidateStripHeaderViewProps = ({
     },
     queueHint: `오늘 화면에는 최대 ${candidateLimit}개만 보입니다. 한 건을 판단하면 다음 미판단 후보가 자동으로 들어옵니다. 별도의 다음 버튼 없이 현재 카드만 차례로 보면 됩니다.`,
     scrapbookButtonProps: {
-      'aria-label': `Cloud 스크랩북 화면으로 이동, 스크랩 ${savedVideoCount}개`,
+      'aria-label': `온라인 스크랩북(Azure DB) 화면으로 이동, 스크랩 ${savedVideoCount}개`,
       label: `스크랩 ${savedVideoCount}개`,
-      title: 'Cloud 스크랩북 화면으로 이동',
+      title: '온라인 스크랩북(Azure DB) 화면으로 이동',
     },
     summaryItems: [
       { label: '남은 후보', value: `${visibleQueueCount}개` },

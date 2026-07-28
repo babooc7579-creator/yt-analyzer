@@ -75,7 +75,7 @@ describe('creatorOs constants', () => {
     expect(itemsById['studio-calendar']).toMatchObject({ status: 'live' });
     expect(itemsById['studio-calendar'].summary).toContain('목표 업로드 날짜');
     expect(itemsById['studio-script']).toMatchObject({ status: 'live' });
-    expect(itemsById['studio-script'].summary).toContain('Cloud');
+    expect(itemsById['studio-script'].summary).toContain('온라인 저장소(Azure DB)');
   });
 
   it('exposes settings as a live operations workspace', () => {

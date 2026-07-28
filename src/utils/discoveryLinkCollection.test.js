@@ -66,7 +66,7 @@ describe('discoveryLinkCollection utils', () => {
       "Clip의 권리 상태 표시를 '사용 금지'로 저장했습니다."
     );
     expect(getDiscoveryLinkUpdateNotice({ title: 'New clip', memo: 'memo' }, { title: 'Clip' })).toBe(
-      'Clip의 제목과 메모를 Cloud에 저장했습니다.'
+      'Clip의 제목과 메모를 온라인 저장소(Azure DB)에 저장했습니다.'
     );
   });
 });

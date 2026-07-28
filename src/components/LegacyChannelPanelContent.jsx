@@ -6,7 +6,7 @@ import LegacyWorkPanelIntro from './LegacyWorkPanelIntro';
 
 const OPERATION_STAGE_COPY = {
   add: {
-    description: '채널 주소나 핸들을 먼저 확인한 뒤 Cloud 채널 목록에 저장합니다. 등록만으로 영상 수집은 시작되지 않습니다.',
+    description: '채널 주소나 핸들을 먼저 확인한 뒤 온라인 저장소(Azure DB)의 채널 목록에 저장합니다. 등록만으로 영상 수집은 시작되지 않습니다.',
     eyebrow: '2단계',
     title: '새 채널 등록',
   },

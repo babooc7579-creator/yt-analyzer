@@ -27,7 +27,7 @@ describe('commentApiButtonProps utils', () => {
     expect(COMMENT_API_BUTTON_TITLE).toContain('YouTube API');
     expect(COMMENT_API_BUTTON_TITLE).toContain('버튼을 누를 때만');
     expect(COMMENT_API_BUTTON_TITLE).toContain('수집 영상 목록 불러오기');
-    expect(COMMENT_API_BUTTON_TITLE).toContain('Cloud에 저장하지 않습니다');
+    expect(COMMENT_API_BUTTON_TITLE).toContain('온라인 저장소(Azure DB)에 저장하지 않습니다');
     expect(onFetchComments).not.toHaveBeenCalled();
 
     buttonProps.onClick();

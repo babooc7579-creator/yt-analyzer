@@ -10,7 +10,7 @@ const toVideoObject = (video) => (
 
 export const getRadarCandidateCompletedStateViewProps = () => ({
   titleText: '오늘 볼 후보를 모두 처리했습니다',
-  descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 Cloud 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있고, 다음 작업은 수집 영상 목록이나 제작 후보함에서 이어갈 수 있습니다.',
+  descriptionText: '봤음, 나중에 보기, 제작 후보, 제외로 판단한 후보는 온라인 저장소(Azure DB)의 판단 기록에 저장되고 오늘의 레이더에서 숨겨집니다. 실수한 항목은 아래 처리 기록에서 되돌릴 수 있고, 다음 작업은 수집 영상 목록이나 제작 후보함에서 이어갈 수 있습니다.',
   openVaultButtonProps: {
     label: '레퍼런스 금고 열기',
     title: '수집된 영상 정보 조회 화면으로 이동',
@@ -23,8 +23,8 @@ export const getRadarCandidateCompletedStateViewProps = () => ({
   },
   clearDecisionsButtonProps: {
     label: '판단 기록 초기화',
-    title: 'Cloud에 저장된 판단 기록을 초기화',
-    'aria-label': 'Cloud에 저장된 오늘 레이더 판단 기록 초기화',
+    title: '온라인 저장소(Azure DB)에 저장된 판단 기록을 초기화',
+    'aria-label': '온라인 저장소(Azure DB)에 저장된 오늘 레이더 판단 기록 초기화',
   },
 });
 
@@ -67,8 +67,8 @@ export const getRadarCandidateProductionButtonProps = ({ videoTitle } = {}) => {
 
   return {
     label: '제작 후보로',
-    title: '스크랩북에 보관하고 Cloud 판단 기록에 제작 후보로 표시합니다. YouTube API를 새로 호출하지 않습니다.',
-    'aria-label': `${displayTitle} 스크랩북에 보관하고 Cloud 판단 기록에 제작 후보로 표시, YouTube API 호출 없음`,
+    title: '스크랩북에 보관하고 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시합니다. YouTube API를 새로 호출하지 않습니다.',
+    'aria-label': `${displayTitle} 스크랩북에 보관하고 온라인 저장소(Azure DB)의 판단 기록에 제작 후보로 표시, YouTube API 호출 없음`,
   };
 };
 
@@ -89,27 +89,27 @@ export const getRadarCandidateProductionButtonActionProps = ({
     disabled: !canPromote,
     onClick: canPromote ? () => onPromoteToProduction(safeVideo) : noop,
     title: saving
-      ? '다른 Cloud 기록 저장이 끝날 때까지 기다려 주세요.'
+      ? '다른 온라인 저장소(Azure DB)의 기록 저장이 끝날 때까지 기다려 주세요.'
       : canPromote
         ? copy.title
-        : '제작 후보로 표시할 영상 ID가 없어 Cloud 판단 기록 저장을 실행하지 않습니다.',
+        : '제작 후보로 표시할 영상 ID가 없어 온라인 저장소(Azure DB)의 판단 기록 저장을 실행하지 않습니다.',
   };
 };
 
 export const getRadarCandidateDecisionActionsViewProps = ({ pendingAction } = {}) => ({
-  descriptionText: '만들 만하면 제작 후보로 표시하세요. 소재 보관은 스크랩북에만 저장하고 현재 후보를 유지합니다. 봤음, 나중에 보기, 제외는 Cloud 판단 기록에 저장되고 다음 후보가 자동으로 이어집니다. YouTube API를 새로 호출하지 않습니다.',
+  descriptionText: '만들 만하면 제작 후보로 표시하세요. 소재 보관은 스크랩북에만 저장하고 현재 후보를 유지합니다. 봤음, 나중에 보기, 제외는 온라인 저장소(Azure DB)의 판단 기록에 저장되고 다음 후보가 자동으로 이어집니다. YouTube API를 새로 호출하지 않습니다.',
   pendingText: {
-    production: '스크랩북 보관과 제작 후보 표시를 Cloud에 저장하는 중입니다.',
-    scrapbook: '스크랩북 보관 상태를 Cloud에 저장하는 중입니다.',
-    status: '영상 판단 기록을 Cloud에 저장하는 중입니다.',
+    production: '스크랩북 보관과 제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중입니다.',
+    scrapbook: '스크랩북 보관 상태를 온라인 저장소(Azure DB)에 저장하는 중입니다.',
+    status: '영상 판단 기록을 온라인 저장소(Azure DB)에 저장하는 중입니다.',
   }[pendingAction] || '',
 });
 
 export const getRadarCandidateActionErrorMessage = (actionKey) => ({
-  production: '제작 후보 표시를 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
-  scrapbook: '소재 보관 상태를 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
-  status: '영상 판단을 Cloud에 저장하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 눌러 주세요.',
-}[actionKey] || '온라인 저장소(Azure DB) 저장을 완료하지 못했습니다. 상단 Cloud 연결 안내를 확인하고 다시 시도해 주세요.');
+  production: '제작 후보 표시를 온라인 저장소(Azure DB)에 저장하지 못했습니다. 상단 연결 안내를 확인하고 다시 눌러 주세요.',
+  scrapbook: '소재 보관 상태를 온라인 저장소(Azure DB)에 저장하지 못했습니다. 상단 연결 안내를 확인하고 다시 눌러 주세요.',
+  status: '영상 판단을 온라인 저장소(Azure DB)에 저장하지 못했습니다. 상단 연결 안내를 확인하고 다시 눌러 주세요.',
+}[actionKey] || '온라인 저장소(Azure DB) 저장을 완료하지 못했습니다. 상단 연결 안내를 확인하고 다시 시도해 주세요.');
 
 export const getRadarCandidateScrapButtonProps = ({
   isSaved = false,
@@ -117,8 +117,8 @@ export const getRadarCandidateScrapButtonProps = ({
 } = {}) => {
   const displayTitle = getDisplayVideoTitle(videoTitle);
   const actionText = isSaved
-    ? 'Cloud 스크랩북에서 보관을 해제합니다'
-    : 'Cloud 스크랩북에 소재로 보관합니다';
+    ? '온라인 스크랩북(Azure DB)에서 보관을 해제합니다'
+    : '온라인 스크랩북(Azure DB)에 소재로 보관합니다';
 
   return {
     actionText,
@@ -146,9 +146,9 @@ export const getRadarCandidateScrapButtonActionProps = ({
     disabled: !canToggleScrap,
     onClick: canToggleScrap ? () => onToggleScrap(safeVideo) : noop,
     title: saving
-      ? '다른 Cloud 기록 저장이 끝날 때까지 기다려 주세요.'
+      ? '다른 온라인 저장소(Azure DB)의 기록 저장이 끝날 때까지 기다려 주세요.'
       : canToggleScrap
         ? copy.title
-        : '보관할 영상 ID가 없어 Cloud 스크랩북 저장을 실행하지 않습니다.',
+        : '보관할 영상 ID가 없어 온라인 스크랩북(Azure DB) 저장을 실행하지 않습니다.',
   };
 };

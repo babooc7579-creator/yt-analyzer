@@ -114,7 +114,7 @@ export default function ScriptBoardWorkspace({
             <h2 className="mt-2 text-2xl font-black text-white">대본 보드</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
               제작 후보를 고르고 제목, 인트로·구성 메모, 업로드 예정일을 한 자리에서 정리합니다.
-              기존 Cloud 제작 기록을 사용하며 새 YouTube API 호출은 없습니다.
+              기존 온라인 저장소(Azure DB)의 제작 기록을 사용하며 새 YouTube API 호출은 없습니다.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -180,7 +180,7 @@ export default function ScriptBoardWorkspace({
         </div>
         {hasUnsavedDrafts && (
           <p className="mt-3 border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-200" role="status">
-            Cloud에 저장하지 않은 작업 {unsavedCount}개가 있습니다. 다른 화면으로 이동하기 전에 저장해주세요.
+            온라인 저장소(Azure DB)에 저장하지 않은 작업 {unsavedCount}개가 있습니다. 다른 화면으로 이동하기 전에 저장해주세요.
           </p>
         )}
       </div>

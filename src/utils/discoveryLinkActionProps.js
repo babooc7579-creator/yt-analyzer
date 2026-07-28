@@ -23,15 +23,15 @@ export const getDiscoveryLinkCandidateActionProps = ({
   return {
     buttonProps: {
       'aria-label': isCandidate
-        ? `${displayTitle} 이미 Cloud 발견함 기록에 제작 후보로 표시되어 후보함에서 확인 가능, 권리 확인 상태는 별도 확인 필요`
-        : `${displayTitle} Cloud 발견함 기록에 제작 후보로 표시해 후보함에서 확인, 권리 확인 완료 의미 아님`,
+        ? `${displayTitle} 이미 온라인 발견함(Azure DB) 기록에 제작 후보로 표시되어 후보함에서 확인 가능, 권리 확인 상태는 별도 확인 필요`
+        : `${displayTitle} 온라인 발견함(Azure DB) 기록에 제작 후보로 표시해 후보함에서 확인, 권리 확인 완료 의미 아님`,
       className: `inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3 text-xs font-extrabold transition disabled:cursor-not-allowed ${
         isCandidate ? candidateButtonClassNames.active : candidateButtonClassNames.enabled
       }`,
       disabled: saving || isCandidate || isSavingCandidate,
       onClick: onSendToCandidate,
       title: isCandidate
-        ? '이미 Cloud 발견함 기록에 제작 후보로 표시되어 제작 후보함에서 확인됩니다. 권리 확인 상태는 별도로 확인해야 합니다.'
+        ? '이미 온라인 발견함(Azure DB) 기록에 제작 후보로 표시되어 제작 후보함에서 확인됩니다. 권리 확인 상태는 별도로 확인해야 합니다.'
         : '검토 상태를 제작 후보로 표시하고 제작 후보함에서 확인할 수 있게 합니다. 권리 확인 완료를 의미하지 않으며, 외부 사이트를 새로 수집하지 않습니다.',
       type: 'button',
     },
@@ -52,7 +52,7 @@ export const getDiscoveryLinkCandidateFeedbackProps = ({
         title: '제작 후보함을 열고 방금 표시한 발견 링크 한 건을 바로 보여줍니다. 외부 수집이나 YouTube API 호출은 없습니다.',
       } : null,
       className: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-      message: 'Cloud 발견함에 제작 후보로 표시했습니다. 권리 상태는 별도로 확인해야 합니다.',
+      message: '온라인 발견함(Azure DB)에 제작 후보로 표시했습니다. 권리 상태는 별도로 확인해야 합니다.',
       role: 'status',
       tone: 'success',
     };
@@ -62,7 +62,7 @@ export const getDiscoveryLinkCandidateFeedbackProps = ({
     return {
       actionProps: null,
       className: 'border-red-200 bg-red-50 text-red-700',
-      message: 'Cloud 후보 표시를 완료하지 못했습니다. 연결을 확인한 뒤 다시 눌러 주세요.',
+      message: '온라인 저장소(Azure DB) 후보 표시를 완료하지 못했습니다. 연결을 확인한 뒤 다시 눌러 주세요.',
       role: 'alert',
       tone: 'danger',
     };
@@ -96,11 +96,11 @@ export const getDiscoveryLinkUtilityActionProps = ({
       url: sourceLink.url,
     },
     deleteButtonProps: {
-      'aria-label': `${displayTitle} Cloud 발견함에서 링크 기록 삭제, 원본 사이트는 삭제하지 않음`,
+      'aria-label': `${displayTitle} 온라인 발견함(Azure DB)에서 링크 기록 삭제, 원본 사이트는 삭제하지 않음`,
       className: 'inline-flex h-9 items-center justify-center rounded-lg border border-red-100 bg-red-50 px-3 text-red-600 transition hover:bg-red-100 disabled:opacity-50',
       disabled: saving,
       onClick: onDelete,
-      title: 'Cloud 발견함에서 링크 기록만 삭제합니다. 원본 사이트는 삭제되지 않습니다.',
+      title: '온라인 발견함(Azure DB)에서 링크 기록만 삭제합니다. 원본 사이트는 삭제되지 않습니다.',
       type: 'button',
     },
     editButtonLabel: isEditing ? '닫기' : '수정',
@@ -111,7 +111,7 @@ export const getDiscoveryLinkUtilityActionProps = ({
       onClick: onToggleEdit,
       title: isEditing
         ? '제목과 메모 수정 화면을 닫습니다. 저장하지 않은 입력은 적용되지 않습니다.'
-        : '제목과 메모를 수정합니다. 저장 버튼을 눌러야 Cloud 발견함에 반영됩니다.',
+        : '제목과 메모를 수정합니다. 저장 버튼을 눌러야 온라인 발견함(Azure DB)에 반영됩니다.',
       type: 'button',
     },
     editIconName: isEditing ? 'close' : 'edit',

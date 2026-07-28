@@ -3,7 +3,7 @@ export const getChannelCategoryList = (categories) => (
 );
 
 export const getCategoryHideConfirmMessage = (category) => (
-  `'${category}' 카테고리를 화면 목록에서 숨길까요?\n\n이미 채널에 붙은 Cloud 태그는 삭제되지 않습니다. 나중에 같은 이름으로 카테고리를 다시 추가하면 목록에 다시 보입니다.`
+  `'${category}' 카테고리를 화면 목록에서 숨길까요?\n\n이미 채널에 붙은 온라인 저장소(Azure DB)의 채널 태그는 삭제되지 않습니다. 나중에 같은 이름으로 카테고리를 다시 추가하면 목록에 다시 보입니다.`
 );
 
 export const getCategoriesAfterLocalHide = (categories, category) => (
@@ -79,7 +79,7 @@ export const getChannelCategoryAddInputViewProps = () => ({
 });
 
 export const getChannelCategoryHelpText = () => (
-  '이름 변경은 Cloud 태그명을 바꿉니다. 숨김은 화면 카테고리 목록에서만 빠지며, 이미 채널에 붙은 Cloud 태그는 유지됩니다.'
+  '이름 변경은 온라인 저장소(Azure DB)의 채널 태그명을 바꿉니다. 숨김은 화면 카테고리 목록에서만 빠지며, 이미 채널에 붙은 온라인 저장소(Azure DB)의 채널 태그는 유지됩니다.'
 );
 
 export const getChannelCloudOnlyTagsNoticeViewProps = (cloudOnlyTags = []) => {
@@ -88,8 +88,8 @@ export const getChannelCloudOnlyTagsNoticeViewProps = (cloudOnlyTags = []) => {
   if (tagList.length === 0) return null;
 
   return {
-    description: '카테고리를 지워도 Cloud 채널 태그는 삭제되지 않습니다. 다시 보려면 같은 이름으로 카테고리를 추가하세요.',
+    description: '카테고리를 지워도 온라인 저장소(Azure DB)의 채널 태그는 삭제되지 않습니다. 다시 보려면 같은 이름으로 카테고리를 추가하세요.',
     tagSummary: `${tagList.slice(0, 4).join(', ')}${tagList.length > 4 ? ` 외 ${tagList.length - 4}개` : ''}`,
-    title: 'Cloud에는 있지만 화면 목록에는 없는 태그가 있습니다.',
+    title: '온라인 저장소(Azure DB)에는 있지만 화면 목록에는 없는 태그가 있습니다.',
   };
 };

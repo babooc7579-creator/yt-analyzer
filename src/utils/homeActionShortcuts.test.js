@@ -69,15 +69,15 @@ describe('homeActionShortcuts utils', () => {
     const items = getHomeActionShortcutItems({});
     const shortcutsByKey = Object.fromEntries(items.map((item) => [item.key, item]));
 
-    expect(shortcutsByKey['add-channel'].description).toContain('Cloud 채널 목록에 저장');
+    expect(shortcutsByKey['add-channel'].description).toContain('온라인 저장소(Azure DB)의 채널 목록에 저장');
     expect(shortcutsByKey['add-channel'].description).toContain('영상 수집은 실행하지 않습니다');
     expect(shortcutsByKey['add-channel'].hint).toContain('채널 등록 화면');
-    expect(shortcutsByKey['add-channel'].dataFlowLabels).toEqual(['Cloud 채널 저장', '영상 수집 없음']);
+    expect(shortcutsByKey['add-channel'].dataFlowLabels).toEqual(['온라인 저장소(Azure DB)의 채널 저장', '영상 수집 없음']);
 
     expect(shortcutsByKey['selected-scan'].description).toContain('YouTube API');
     expect(shortcutsByKey['selected-scan'].description).toContain('체크한 운영중 채널');
     expect(shortcutsByKey['selected-scan'].hint).toContain('YouTube API 호출 작업');
-    expect(shortcutsByKey['selected-scan'].dataFlowLabels).toEqual(['YouTube API 가능', 'Cloud 영상 갱신 가능']);
+    expect(shortcutsByKey['selected-scan'].dataFlowLabels).toEqual(['YouTube API 가능', '온라인 저장소(Azure DB)의 수집 영상 정보 갱신 가능']);
 
     expect(shortcutsByKey.vault.description).toContain('온라인 저장소(Azure DB)');
     expect(shortcutsByKey.vault.description).toContain('수집 영상 정보');
@@ -85,11 +85,11 @@ describe('homeActionShortcuts utils', () => {
     expect(shortcutsByKey.vault.hint).toContain('온라인 저장소(Azure DB) 조회');
     expect(shortcutsByKey.vault.dataFlowLabels).toEqual(['온라인 저장소(Azure DB) 조회', '새 API 호출 없음']);
 
-    expect(shortcutsByKey['discovery-links'].description).toContain('Cloud 발견함');
+    expect(shortcutsByKey['discovery-links'].description).toContain('온라인 발견함(Azure DB)');
     expect(shortcutsByKey['discovery-links'].description).toContain('제작 후보로 표시');
     expect(shortcutsByKey['discovery-links'].description).not.toContain('제작 후보로 보냅니다');
     expect(shortcutsByKey['discovery-links'].hint).toContain('자동 수집 없이 URL만 저장');
-    expect(shortcutsByKey['discovery-links'].dataFlowLabels).toEqual(['Cloud 링크 저장', '자동 수집 없음']);
+    expect(shortcutsByKey['discovery-links'].dataFlowLabels).toEqual(['온라인 발견함(Azure DB) 저장', '자동 수집 없음']);
   });
 
   it('maps the three practical workspace shortcuts without invoking handlers', () => {
@@ -117,7 +117,7 @@ describe('homeActionShortcuts utils', () => {
     expect(itemsByKey['keyword-explorer'].dataFlowLabels).toContain('YouTube API 호출 없음');
     expect(itemsByKey['tag-vault'].description).toContain('기존 채널 태그');
     expect(itemsByKey['tag-vault'].dataFlowLabels).toContain('자동 수집 없음');
-    expect(itemsByKey['upload-calendar'].description).toContain('Cloud 제작 기록');
+    expect(itemsByKey['upload-calendar'].description).toContain('온라인 저장소(Azure DB)의 제작 기록');
     expect(itemsByKey['upload-calendar'].dataFlowLabels).toContain('데이터 변경 없음');
   });
 });
