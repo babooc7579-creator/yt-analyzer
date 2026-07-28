@@ -1,16 +1,33 @@
-import CreatorComingSoonRoute from './CreatorComingSoonRoute';
-import CreatorChannelWatchlistRoute from './CreatorChannelWatchlistRoute';
-import CreatorDiscoveryLinksRoute from './CreatorDiscoveryLinksRoute';
+import { lazy, Suspense } from 'react';
 import CreatorHomeRoute from './CreatorHomeRoute';
-import CreatorKeywordExplorerRoute from './CreatorKeywordExplorerRoute';
 import CreatorLegacyWorkspaceRoute from './CreatorLegacyWorkspaceRoute';
-import RecentScanStatusWorkspace from './RecentScanStatusWorkspace';
-import CreatorScriptBoardRoute from './CreatorScriptBoardRoute';
-import CreatorSettingsRoute from './CreatorSettingsRoute';
-import CreatorTagVaultRoute from './CreatorTagVaultRoute';
-import CreatorTtoTtoRoute from './CreatorTtoTtoRoute';
-import CreatorUploadCalendarRoute from './CreatorUploadCalendarRoute';
-import WorkToolsWorkspace from './WorkToolsWorkspace';
+
+const CreatorComingSoonRoute = lazy(() => import('./CreatorComingSoonRoute'));
+const CreatorChannelWatchlistRoute = lazy(() => import('./CreatorChannelWatchlistRoute'));
+const CreatorDiscoveryLinksRoute = lazy(() => import('./CreatorDiscoveryLinksRoute'));
+const CreatorKeywordExplorerRoute = lazy(() => import('./CreatorKeywordExplorerRoute'));
+const RecentScanStatusWorkspace = lazy(() => import('./RecentScanStatusWorkspace'));
+const CreatorScriptBoardRoute = lazy(() => import('./CreatorScriptBoardRoute'));
+const CreatorSettingsRoute = lazy(() => import('./CreatorSettingsRoute'));
+const CreatorTagVaultRoute = lazy(() => import('./CreatorTagVaultRoute'));
+const CreatorTtoTtoRoute = lazy(() => import('./CreatorTtoTtoRoute'));
+const CreatorUploadCalendarRoute = lazy(() => import('./CreatorUploadCalendarRoute'));
+const WorkToolsWorkspace = lazy(() => import('./WorkToolsWorkspace'));
+
+const withRouteLoading = (route) => (
+  <Suspense
+    fallback={(
+      <div
+        className="rounded-2xl border border-slate-800 bg-slate-900/60 px-5 py-8 text-center text-sm font-semibold text-slate-300"
+        role="status"
+      >
+        선택한 화면을 불러오는 중입니다...
+      </div>
+    )}
+  >
+    {route}
+  </Suspense>
+);
 
 export default function CreatorAppRoutes({
   activeCreatorItem,
@@ -46,47 +63,49 @@ export default function CreatorAppRoutes({
   }
 
   if (isKeywordExplorerView) {
-    return <CreatorKeywordExplorerRoute {...keywordExplorerRouteProps} />;
+    return withRouteLoading(<CreatorKeywordExplorerRoute {...keywordExplorerRouteProps} />);
   }
 
   if (isTagVaultView) {
-    return <CreatorTagVaultRoute {...tagVaultRouteProps} />;
+    return withRouteLoading(<CreatorTagVaultRoute {...tagVaultRouteProps} />);
   }
 
   if (isUploadCalendarView) {
-    return <CreatorUploadCalendarRoute {...uploadCalendarRouteProps} />;
+    return withRouteLoading(<CreatorUploadCalendarRoute {...uploadCalendarRouteProps} />);
   }
 
   if (isScriptBoardView) {
-    return <CreatorScriptBoardRoute {...scriptBoardRouteProps} />;
+    return withRouteLoading(<CreatorScriptBoardRoute {...scriptBoardRouteProps} />);
   }
 
   if (isSettingsView) {
-    return <CreatorSettingsRoute {...settingsRouteProps} />;
+    return withRouteLoading(<CreatorSettingsRoute {...settingsRouteProps} />);
   }
 
   if (isWorkToolsView) {
-    return <WorkToolsWorkspace {...workToolsRouteProps} />;
+    return withRouteLoading(<WorkToolsWorkspace {...workToolsRouteProps} />);
   }
 
   if (isRecentScanStatusView) {
-    return <RecentScanStatusWorkspace {...recentScanStatusRouteProps} />;
+    return withRouteLoading(<RecentScanStatusWorkspace {...recentScanStatusRouteProps} />);
   }
 
   if (isComingSoonView) {
-    return <CreatorComingSoonRoute item={activeCreatorItem} onOpenHome={onOpenHome} />;
+    return withRouteLoading(
+      <CreatorComingSoonRoute item={activeCreatorItem} onOpenHome={onOpenHome} />,
+    );
   }
 
   if (isDiscoveryLinksView) {
-    return <CreatorDiscoveryLinksRoute {...discoveryLinksRouteProps} />;
+    return withRouteLoading(<CreatorDiscoveryLinksRoute {...discoveryLinksRouteProps} />);
   }
 
   if (isChannelWatchlistView) {
-    return <CreatorChannelWatchlistRoute {...channelWatchlistRouteProps} />;
+    return withRouteLoading(<CreatorChannelWatchlistRoute {...channelWatchlistRouteProps} />);
   }
 
   if (isTtoTtoView) {
-    return <CreatorTtoTtoRoute {...ttoTtoRouteProps} />;
+    return withRouteLoading(<CreatorTtoTtoRoute {...ttoTtoRouteProps} />);
   }
 
   if (isLegacyWorkspaceView) {
