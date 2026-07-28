@@ -13,7 +13,9 @@ describe('videoToolbarFiltersProps utils', () => {
   it('splits toolbar filter state and handlers into child prop groups', () => {
     const props = {
       lengthFilter: 'shorts',
+      onResetFilters: () => 'reset',
       searchKeyword: 'cake',
+      selectedVideoCount: 2,
       setLengthFilter: () => 'length',
       setSearchKeyword: () => 'search',
       setShowWorkPanel: () => 'panel',
@@ -22,6 +24,7 @@ describe('videoToolbarFiltersProps utils', () => {
       setViewMode: () => 'view mode',
       showWorkPanel: true,
       sortType: 'views',
+      ttoTtoMode: true,
       viewFilter: 10000,
       viewMode: 'grid',
     };
@@ -40,6 +43,11 @@ describe('videoToolbarFiltersProps utils', () => {
       sortControlProps: {
         setSortType: props.setSortType,
         sortType: 'views',
+      },
+      statusProps: {
+        activeFilterCount: 4,
+        onResetFilters: props.onResetFilters,
+        selectedVideoCount: 2,
       },
       viewModeControlProps: {
         setViewMode: props.setViewMode,
@@ -71,6 +79,10 @@ describe('videoToolbarFiltersProps utils', () => {
     expect(props.searchFieldProps.searchKeyword).toBe('');
     expect(props.selectFiltersProps.viewFilter).toBe(0);
     expect(props.workPanelToggleProps.showWorkPanel).toBe(false);
+    expect(props.statusProps).toMatchObject({
+      activeFilterCount: 0,
+      selectedVideoCount: 0,
+    });
   });
 
   it('builds search field copy', () => {

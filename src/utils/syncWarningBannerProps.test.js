@@ -36,4 +36,19 @@ describe('syncWarningBannerProps utils', () => {
     expect(props.helpText).toContain('다른 온라인 저장소(Azure DB) 조회가 성공했다면 해당 데이터는 정상');
     expect(props.helpText).toContain('자동 병합하거나 자동 업로드하지 않습니다');
   });
+
+  it('keeps only callable retry actions', () => {
+    const onRetry = () => {};
+    const props = getSyncWarningBannerViewProps({
+      actions: [
+        { key: 'records', label: '다시 확인', onClick: onRetry },
+        { key: 'bad', label: '잘못된 작업' },
+      ],
+      messages: ['fallback warning'],
+    });
+
+    expect(props.actions).toEqual([
+      { key: 'records', label: '다시 확인', onClick: onRetry },
+    ]);
+  });
 });

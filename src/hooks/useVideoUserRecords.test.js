@@ -177,6 +177,27 @@ describe('useVideoUserRecords', () => {
     expect(writeJsonStorage).not.toHaveBeenCalled();
   });
 
+  it('retries only the Cloud read and clears the warning after recovery', async () => {
+    fetchVideoUserRecordsMock
+      .mockRejectedValueOnce(new Error('network failed'))
+      .mockResolvedValueOnce({
+        success: true,
+        records: {
+          recovered: { status: VIDEO_STATUS.REVIEWED },
+        },
+      });
+    const recordsHook = useVideoUserRecords();
+    await flushPromises();
+
+    const recovered = await recordsHook.retryVideoUserRecordsSync();
+
+    expect(recovered).toBe(true);
+    expect(fetchVideoUserRecords).toHaveBeenCalledTimes(2);
+    expect(clearVideoUserRecords).not.toHaveBeenCalled();
+    expect(saveVideoUserRecord).not.toHaveBeenCalled();
+    expect(stateSetters[1]).toHaveBeenLastCalledWith('');
+  });
+
   it('saves statusIds to Cloud and refreshes localStorage only after Cloud save succeeds', async () => {
     setVideoUserRecordsState({
       v1: {

@@ -1,6 +1,8 @@
 export const getVideoToolbarFiltersViewProps = ({
   lengthFilter,
+  onResetFilters,
   searchKeyword,
+  selectedVideoCount,
   setLengthFilter,
   setSearchKeyword,
   setShowWorkPanel,
@@ -9,6 +11,7 @@ export const getVideoToolbarFiltersViewProps = ({
   setViewMode,
   showWorkPanel,
   sortType,
+  ttoTtoMode,
   viewFilter,
   viewMode,
 }) => ({
@@ -25,6 +28,16 @@ export const getVideoToolbarFiltersViewProps = ({
   sortControlProps: {
     setSortType,
     sortType,
+  },
+  statusProps: {
+    activeFilterCount: [
+      Boolean(searchKeyword?.trim()),
+      Number(viewFilter) > 0,
+      Boolean(lengthFilter && lengthFilter !== 'all'),
+      Boolean(ttoTtoMode),
+    ].filter(Boolean).length,
+    onResetFilters,
+    selectedVideoCount: Number(selectedVideoCount) || 0,
   },
   viewModeControlProps: {
     setViewMode,

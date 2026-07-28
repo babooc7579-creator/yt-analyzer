@@ -7,11 +7,42 @@ import {
   getCreatorSidebarNavigationGroups,
   getCreatorSidebarRoadmapViewProps,
   getCreatorWorkspaceHeaderStatCards,
+  getSyncWarningRetryActions,
   getWorkspaceTabsViewProps,
 } from './appLayoutProps';
 import { CREATOR_OS_PRODUCT_MAP } from '../constants/creatorOs';
 
 describe('appLayoutProps utils', () => {
+  it('builds separate read-only retry actions only for failed storage features', () => {
+    const retryVideoUserRecordsSync = vi.fn();
+    const retryScrapbookSync = vi.fn();
+
+    expect(getSyncWarningRetryActions({
+      retryScrapbookSync,
+      retryVideoUserRecordsSync,
+      scrapbookSyncWarning: '소재 보관함 연결 실패',
+      videoRecordsSyncWarning: '영상 판단 기록 연결 실패',
+    })).toEqual([
+      expect.objectContaining({
+        key: 'video-records',
+        label: '영상 판단 기록 다시 확인',
+        onClick: retryVideoUserRecordsSync,
+      }),
+      expect.objectContaining({
+        key: 'scrapbook',
+        label: '소재 보관함 다시 확인',
+        onClick: retryScrapbookSync,
+      }),
+    ]);
+
+    expect(getSyncWarningRetryActions({
+      retryScrapbookSync,
+      retryVideoUserRecordsSync,
+      scrapbookSyncWarning: '',
+      videoRecordsSyncWarning: '영상 판단 기록 연결 실패',
+    })).toHaveLength(1);
+  });
+
   it('builds layout counts from channel, video, and selected channel lists', () => {
     const props = buildLayoutProps({
       activeCreatorItem: { id: 'today' },

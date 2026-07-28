@@ -236,3 +236,12 @@ Azure `github_id_token` 경고와 분리해서 다루는 것이 좋습니다.
 - GitHub secret 삭제
 - 배포 workflow와 앱 기능 코드를 한 PR에 섞기
 - Node 버전 변경과 Azure `github_id_token` 경고 수정을 한 PR에 섞기
+
+---
+
+## 10. 2026-07-29 재확인
+
+- 후속 개선 작업 전에 현재 workflow와 과거 배포 기록을 다시 대조했습니다.
+- `github_id_token` 입력 한 줄 제거는 과거 main Azure 배포를 실제 실패시켜 복구한 변경입니다.
+- 따라서 이번 작업에서는 경고를 제거하지 않고, 배포 성공과 Azure 인증 방식 결정을 우선하는 기존 기준을 유지합니다.
+- 이 경고는 앱 기능 오류가 아니라 현재 알려진 비차단 workflow 경고이며, Azure Portal 인증 설정과 deployment token 상태를 확인한 뒤 별도 결정합니다.

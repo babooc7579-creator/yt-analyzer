@@ -36,28 +36,29 @@ export function useVideoUserRecords() {
     setVideoUserRecords(prev => restoreVideoUserRecord(prev, videoId, previousRecord));
   };
 
+  const syncVideoUserRecordsFromCloud = async ({ isCancelled = () => false } = {}) => {
+    try {
+      const data = await fetchVideoUserRecords();
+      if (!data.success) throw new Error(data.error || VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE);
+      if (isCancelled()) return false;
+      const cloudRecords = getCloudVideoUserRecords(data.records);
+      setVideoUserRecords(cloudRecords);
+      cacheCloudRecords(cloudRecords);
+      setVideoRecordsSyncWarning('');
+      return true;
+    } catch {
+      if (!isCancelled()) {
+        const fallbackRecords = getCloudVideoUserRecords(readJsonStorage(STORAGE_KEYS.videoUserRecords, {}));
+        setVideoUserRecords(fallbackRecords);
+        setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback);
+      }
+      return false;
+    }
+  };
+
   useEffect(() => {
     let isCancelled = false;
-
-    const syncVideoUserRecordsFromCloud = async () => {
-      try {
-        const data = await fetchVideoUserRecords();
-        if (!data.success) throw new Error(data.error || VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE);
-        if (isCancelled) return;
-        const cloudRecords = getCloudVideoUserRecords(data.records);
-        setVideoUserRecords(cloudRecords);
-        cacheCloudRecords(cloudRecords);
-        setVideoRecordsSyncWarning('');
-      } catch {
-        if (!isCancelled) {
-          const fallbackRecords = getCloudVideoUserRecords(readJsonStorage(STORAGE_KEYS.videoUserRecords, {}));
-          setVideoUserRecords(fallbackRecords);
-          setVideoRecordsSyncWarning(VIDEO_RECORDS_SYNC_WARNINGS.loadFallback);
-        }
-      }
-    };
-
-    syncVideoUserRecordsFromCloud();
+    syncVideoUserRecordsFromCloud({ isCancelled: () => isCancelled });
     return () => { isCancelled = true; };
   }, []);
 
@@ -138,5 +139,6 @@ export function useVideoUserRecords() {
     updateVideoUserRecord,
     restoreVideoToRadar,
     clearRadarDecisions,
+    retryVideoUserRecordsSync: syncVideoUserRecordsFromCloud,
   };
 }

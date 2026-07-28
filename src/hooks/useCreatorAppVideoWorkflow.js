@@ -42,6 +42,8 @@ export function useCreatorAppVideoWorkflow({ videos }) {
     promoteVideoToProduction: reviewWorkflow.promoteVideoToProduction,
     promptCopyError,
     restoreVideoToRadar: reviewWorkflow.restoreVideoToRadar,
+    retryScrapbookSync: reviewWorkflow.retryScrapbookSync,
+    retryVideoUserRecordsSync: reviewWorkflow.retryVideoUserRecordsSync,
     savedVideos: reviewWorkflow.savedVideos,
     scrapbookSyncWarning: reviewWorkflow.scrapbookSyncWarning,
     searchKeyword,

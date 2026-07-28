@@ -158,6 +158,26 @@ describe('useScrapbook', () => {
     expect(writeJsonStorage).not.toHaveBeenCalled();
   });
 
+  it('retries only the Cloud read and restores the online scrapbook state', async () => {
+    fetchScrapbookMock
+      .mockRejectedValueOnce(new Error('network failed'))
+      .mockResolvedValueOnce({
+        success: true,
+        videos: [savedVideo],
+      });
+    const scrapbook = useScrapbook();
+    await flushPromises();
+
+    const recovered = await scrapbook.retryScrapbookSync();
+
+    expect(recovered).toBe(true);
+    expect(fetchScrapbook).toHaveBeenCalledTimes(2);
+    expect(saveScrapbookVideos).not.toHaveBeenCalled();
+    expect(deleteScrapbookVideo).not.toHaveBeenCalled();
+    expect(stateSetters[1]).toHaveBeenLastCalledWith(true);
+    expect(stateSetters[2]).toHaveBeenLastCalledWith('');
+  });
+
   it('does not silently save to localStorage when Cloud scrapbook is not ready', async () => {
     fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
     const scrapbook = useScrapbook();

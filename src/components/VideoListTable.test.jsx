@@ -4,10 +4,20 @@ import { describe, expect, it, vi } from 'vitest';
 import VideoListTable from './VideoListTable';
 
 describe('VideoListTable', () => {
-  it('explains the mobile horizontal-scroll behavior without changing data', () => {
+  it('renders a compact mobile list and keeps the wide table for desktop', () => {
+    const video = {
+      videoId: 'video-1',
+      title: 'Compact mobile idea',
+      view_count: 120000,
+      like_count: 3000,
+      like_ratio: 2.5,
+      multiplier: 3.2,
+      upload_date: '2026-07-01',
+      daysOld: 28,
+    };
     const html = renderToStaticMarkup(
       <VideoListTable
-        videos={[]}
+        videos={[video]}
         checkedVideos={[]}
         isVideoSaved={() => false}
         isProductionCandidate={() => false}
@@ -18,9 +28,11 @@ describe('VideoListTable', () => {
       />,
     );
 
-    expect(html).toContain('모바일에서는 카드 보기가 더 편합니다');
-    expect(html).toContain('좌우로 밀어서 확인');
+    expect(html).toContain('모바일 리스트는 제목·조회수·대박 지수·게시일과 핵심 작업만 간단히 보여줍니다');
+    expect(html).toContain('Compact mobile idea');
+    expect(html).toContain('120,000');
     expect(html).toContain('md:hidden');
+    expect(html).toContain('md:block');
     expect(html).toContain('overflow-x-auto');
   });
 });
