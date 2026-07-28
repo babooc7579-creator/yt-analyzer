@@ -208,6 +208,20 @@ describe('useVideoCollectionActions', () => {
     expect(fetchAllStoredVideosByChannelIds).not.toHaveBeenCalled();
   });
 
+  it('blocks manual scans when no channel is explicitly selected', async () => {
+    const deps = createDeps({
+      selectedChannelIds: [],
+    });
+    const actions = useVideoCollectionActions(deps);
+
+    await actions.handleManualScan();
+
+    expect(deps.setError).toHaveBeenCalledWith(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE);
+    expect(scanSelectedChannels).not.toHaveBeenCalled();
+    expect(scanChannels).not.toHaveBeenCalled();
+    expect(fetchAllStoredVideosByChannelIds).not.toHaveBeenCalled();
+  });
+
   it('uses tag scans for tag requests even when channels are selected', async () => {
     const deps = createDeps({
       selectedChannelIds: ['active-1'],
