@@ -23,7 +23,7 @@ vi.mock('react', () => ({
   }),
 }));
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useProductionKanbanActions } from './useProductionKanbanActions';
 
 const videoUserRecords = {
@@ -80,6 +80,20 @@ describe('useProductionKanbanActions', () => {
     expect(kanbanActions.saveStates).toEqual({});
     expect(kanbanActions.moveStates).toEqual({});
     expect(kanbanActions.linkMoveStates).toEqual({});
+  });
+
+  it('keeps an in-progress draft when an equivalent Cloud record map gets a new object identity', () => {
+    useRef
+      .mockImplementationOnce((initialValue) => ({ current: initialValue }))
+      .mockImplementationOnce(() => ({ current: JSON.stringify(videoUserRecords) }));
+
+    useProductionKanbanActions(createDeps({
+      videoUserRecords: {
+        video1: { ...videoUserRecords.video1 },
+      },
+    }));
+
+    expect(stateSetters[0]).not.toHaveBeenCalled();
   });
 
   it('updates a draft record using the current draft or saved Cloud record as the base', () => {
