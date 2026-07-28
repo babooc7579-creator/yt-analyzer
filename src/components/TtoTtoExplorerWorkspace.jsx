@@ -81,7 +81,7 @@ export default function TtoTtoExplorerWorkspace({
         />
 
         <p className="text-xs text-slate-400">
-          현재 표시 {filteredCandidates.length}개 · 스크랩북 {Array.isArray(savedVideos) ? savedVideos.length : 0}개 · 판단 버튼은 온라인 저장소(Azure DB)의 사용자 기록에 저장됩니다.
+          현재 표시 {filteredCandidates.length}개 · 보관 소재 {Array.isArray(savedVideos) ? savedVideos.length : 0}개 · 판단 버튼은 온라인 저장소(Azure DB)의 사용자 기록에 저장됩니다.
         </p>
 
         {summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (

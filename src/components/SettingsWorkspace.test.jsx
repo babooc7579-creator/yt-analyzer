@@ -42,7 +42,7 @@ describe('SettingsWorkspace', () => {
     expect(html).toContain('/api');
     expect(html).toContain('댓글 Top 10용 YouTube API Key');
     expect(html).toContain('새로고침하면 사라지며 온라인 저장소(Azure DB), localStorage, 저장소에 저장하지 않습니다');
-    expect(html).toContain('현재 영상 판단 기록과 스크랩북 동기화 경고가 없습니다');
+    expect(html).toContain('현재 영상 판단 기록과 소재 보관함 동기화 경고가 없습니다');
     expect(html).toContain('현재 화면에서 보고된 오류가 없습니다');
     expect(html).toContain('GitHub Actions에서 배포 상태 확인');
     expect(html).toContain('온라인 저장소(Azure DB)의 채널 다시 불러오기');

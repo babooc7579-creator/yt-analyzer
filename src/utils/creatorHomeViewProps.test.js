@@ -38,14 +38,14 @@ describe('creatorHomeViewProps utils', () => {
     expect(statsProps.cards.map(card => [card.label, card.value])).toEqual([
       ['저장된 채널', 2],
       ['현재 화면 영상', 10],
-      ['스크랩북 보관', 3],
+      ['소재 보관', 3],
       ['마지막 수집 기록', 'just now'],
       ['또터또 후보', 4],
       ['제작 후보', 5],
       ['오늘 집중', 2],
       ['발견 링크 후보', 6],
     ]);
-    expect(statsProps.cards[2].description).toContain('온라인 스크랩북(Azure DB)에 보관한 영상');
+    expect(statsProps.cards[2].description).toContain('온라인 저장소(Azure DB)의 소재 보관함에 보관한 영상');
     expect(statsProps.cards[0].description).toContain('YouTube API를 호출하지 않습니다');
     expect(statsProps.cards[1].description).toContain('새 YouTube API 호출 수가 아닙니다');
     expect(statsProps.cards[3].description).toContain('현재 새 수집이 실행 중이라는 뜻은 아닙니다');

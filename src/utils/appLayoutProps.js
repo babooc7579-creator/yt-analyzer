@@ -84,8 +84,8 @@ export const getCreatorWorkspaceHeaderStatCards = ({
   },
   {
     value: savedVideoCount,
-    label: '스크랩 영상',
-    description: '온라인 스크랩북(Azure DB)에 보관 중인 영상 수입니다.',
+    label: '보관 소재',
+    description: '온라인 저장소(Azure DB)의 소재 보관함에 보관 중인 영상 수입니다.',
   },
   {
     value: discoveryCandidateCount,
@@ -114,7 +114,7 @@ export const getWorkspaceTabsViewProps = ({ creatorView, savedVideoCount }) => {
         ariaLabel: `소재 보관함 탭 열기, 보관 영상 ${savedVideoCount}개, 탭 이동만으로 YouTube API 호출 없음`,
         countLabel: savedVideoCount,
         label: '소재 보관함',
-        title: `온라인 스크랩북(Azure DB) 보기 - 보관 영상 ${savedVideoCount}개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.`,
+        title: `온라인 저장소(Azure DB)의 소재 보관함 보기 - 보관 영상 ${savedVideoCount}개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.`,
       },
   };
 };

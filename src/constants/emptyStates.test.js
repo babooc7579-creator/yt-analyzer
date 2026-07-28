@@ -27,7 +27,7 @@ describe('emptyStates constants', () => {
     expect(SCRAPBOOK_EMPTY_STATE.description).toContain('제작 후보와는 별도로 관리');
     expect(SCRAPBOOK_EMPTY_STATE.steps[1].description).toContain('온라인 저장소(Azure DB)');
     expect(SCRAPBOOK_EMPTY_STATE.steps[1].description).toContain('새 YouTube API 호출은 없습니다');
-    expect(SCRAPBOOK_EMPTY_STATE.steps[2].description).toContain('온라인 스크랩북(Azure DB)');
+    expect(SCRAPBOOK_EMPTY_STATE.steps[2].description).toContain('온라인 저장소(Azure DB)의 소재 보관함');
   });
 
   it('keeps discovery links empty guidance manual and non-crawling', () => {

@@ -58,9 +58,9 @@ export const getHomeRadarStatsGridViewProps = ({
       description: '현재 화면에 불러온 수집 영상 정보 수입니다. 새 YouTube API 호출 수가 아닙니다.',
     },
     {
-      label: '스크랩북 보관',
+      label: '소재 보관',
       value: savedVideoCount,
-      description: '온라인 스크랩북(Azure DB)에 보관한 영상입니다. 원본 영상이나 수집 영상 정보 삭제와 다릅니다.',
+      description: '온라인 저장소(Azure DB)의 소재 보관함에 보관한 영상입니다. 원본 영상이나 수집 영상 정보 삭제와 다릅니다.',
     },
     {
       label: '마지막 수집 기록',

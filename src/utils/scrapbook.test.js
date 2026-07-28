@@ -32,9 +32,9 @@ describe('scrapbook utils', () => {
   };
 
   it('keeps Cloud scrapbook fallback copy centralized', () => {
-    expect(SCRAPBOOK_LOAD_FAILED_MESSAGE).toBe('스크랩북을 불러오지 못했습니다.');
-    expect(SCRAPBOOK_DELETE_FAILED_MESSAGE).toBe('스크랩북에서 삭제하지 못했습니다.');
-    expect(SCRAPBOOK_SAVE_FAILED_MESSAGE).toBe('스크랩북에 저장하지 못했습니다.');
+    expect(SCRAPBOOK_LOAD_FAILED_MESSAGE).toBe('소재 보관함을 불러오지 못했습니다.');
+    expect(SCRAPBOOK_DELETE_FAILED_MESSAGE).toBe('소재 보관함에서 해제하지 못했습니다.');
+    expect(SCRAPBOOK_SAVE_FAILED_MESSAGE).toBe('소재 보관함에 저장하지 못했습니다.');
   });
 
   it('keeps only object videos in the Cloud scrapbook list', () => {

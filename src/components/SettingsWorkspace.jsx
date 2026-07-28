@@ -8,7 +8,7 @@ const settingCards = [
   {
     icon: Database,
     title: '온라인 저장소(Azure DB)가 기준 데이터입니다',
-    description: '채널, 수집 영상, 판단 기록과 스크랩북은 온라인 저장소(Azure DB) 데이터를 기준으로 사용합니다.',
+    description: '채널, 수집 영상, 판단 기록과 소재 보관함은 온라인 저장소(Azure DB) 데이터를 기준으로 사용합니다.',
     tone: 'border-blue-400/25 bg-blue-500/10 text-blue-200',
   },
   {
@@ -161,7 +161,7 @@ export default function SettingsWorkspace({
                 {syncWarnings.map((warning) => <li key={warning}>{warning}</li>)}
               </ul>
             ) : (
-              <p className="mt-3 text-xs leading-5 text-emerald-200">현재 영상 판단 기록과 스크랩북 동기화 경고가 없습니다.</p>
+              <p className="mt-3 text-xs leading-5 text-emerald-200">현재 영상 판단 기록과 소재 보관함 동기화 경고가 없습니다.</p>
             )}
             <p className="mt-2 text-[11px] leading-4 text-slate-500">경고가 없다는 표시는 전체 Azure 서비스 상태를 보증한다는 의미는 아닙니다.</p>
           </article>

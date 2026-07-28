@@ -28,7 +28,7 @@ describe('Video action safety controls', () => {
       />,
     );
 
-    expect(html).toContain('스크랩');
+    expect(html).toContain('소재 보관');
     expect(html).toContain('제작 후보');
     expect(html).toContain('온라인 저장소(Azure DB)');
     expect(html).toContain('YouTube API');

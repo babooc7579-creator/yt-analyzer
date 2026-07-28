@@ -28,6 +28,7 @@ export default function ScrapbookHeader({
     onCopyPrompt,
     promptCopyError,
     savedVideoCount,
+    variant,
     videoUrlList,
   };
 

@@ -12,11 +12,11 @@ export const getVideoScrapActionCopy = ({
 }) => {
   const displayTitle = toDisplayTitle(videoTitle);
   const actionText = isSaved
-    ? '온라인 스크랩북(Azure DB)에서 보관을 해제합니다.'
-    : '온라인 스크랩북(Azure DB)에 소재로 보관합니다.';
+    ? '온라인 저장소(Azure DB)의 소재 보관함에서 보관을 해제합니다.'
+    : '온라인 저장소(Azure DB)의 소재 보관함에 소재로 보관합니다.';
 
   return {
-    ariaLabel: `${displayTitle} ${isSaved ? '온라인 스크랩북(Azure DB)에서 보관 해제' : '온라인 스크랩북(Azure DB)에 소재로 보관'}, YouTube API 호출 없음`,
+    ariaLabel: `${displayTitle} ${isSaved ? '온라인 저장소(Azure DB)의 소재 보관함에서 보관 해제' : '온라인 저장소(Azure DB)의 소재 보관함에 소재로 보관'}, YouTube API 호출 없음`,
     buttonLabel: isSaved ? '보관 해제' : '소재 보관',
     thumbnailLabel: isSaved ? '보관됨' : '소재 보관',
     title: `${actionText} YouTube API를 새로 호출하지 않습니다.`,
@@ -39,7 +39,7 @@ export const getVideoScrapButtonActionProps = ({
     onClick: canToggleScrap ? () => onToggleScrap(safeVideo) : noop,
     title: canToggleScrap
       ? copy.title
-      : '보관할 영상 ID가 없어 온라인 스크랩북(Azure DB) 저장을 실행하지 않습니다.',
+      : '보관할 영상 ID가 없어 온라인 저장소(Azure DB)의 소재 보관함 저장을 실행하지 않습니다.',
   };
 };
 

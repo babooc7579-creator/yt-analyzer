@@ -41,7 +41,7 @@ describe('radarDecisionViewProps utils', () => {
       show: true,
       title: '온라인 저장소(Azure DB)에 저장된 오늘 판단 기록을 초기화합니다',
     });
-    expect(props.scrapbookButtonProps['aria-label']).toContain('스크랩 7개');
+    expect(props.scrapbookButtonProps['aria-label']).toContain('보관 소재 7개');
   });
 
   it('hides the clear decision button when there are no decisions', () => {

@@ -212,12 +212,12 @@ describe('videoCard utils', () => {
     });
 
     expect(badges.map((badge) => badge.label)).toEqual([
-      '스크랩북 보관',
+      '소재 보관',
       '제작 후보',
       'AI 요청문 선택',
     ]);
     expect(badges.map((badge) => badge.label)).not.toContain('후보함 등록');
-    expect(badges[0].title).toContain('온라인 스크랩북(Azure DB)');
+    expect(badges[0].title).toContain('온라인 저장소(Azure DB)의 소재 보관함');
     expect(badges[1].title).toContain('제작 후보함');
     expect(badges[2].title).toContain('AI 요청문');
     expect(badges.every((badge) => badge.isVisible)).toBe(true);

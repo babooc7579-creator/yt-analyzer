@@ -214,7 +214,7 @@ describe('appLayoutProps utils', () => {
       '채널',
       '불러온 영상',
       '선택 채널',
-      '스크랩 영상',
+      '보관 소재',
       '링크 후보',
     ]);
     expect(cards.map((card) => card.value)).toEqual([10, 99, 4, 3, 2]);
@@ -248,7 +248,7 @@ describe('appLayoutProps utils', () => {
         ariaLabel: '소재 보관함 탭 열기, 보관 영상 7개, 탭 이동만으로 YouTube API 호출 없음',
         countLabel: 7,
         label: '소재 보관함',
-        title: '온라인 스크랩북(Azure DB) 보기 - 보관 영상 7개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
+        title: '온라인 저장소(Azure DB)의 소재 보관함 보기 - 보관 영상 7개. 탭 이동만으로 YouTube API를 새로 호출하지 않습니다.',
       },
     });
   });

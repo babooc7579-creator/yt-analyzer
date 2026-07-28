@@ -143,20 +143,20 @@ describe('ProductionKanbanFilters', () => {
         onReturnToSearchSource={noop}
         onSearchQueryChange={noop}
         searchContext={{
-          description: '스크랩북에서 제작 후보로 표시한 영상을 보여주고 있습니다.',
-          label: '스크랩북에서 이어온 후보',
+          description: '소재 보관함에서 제작 후보로 표시한 영상을 보여주고 있습니다.',
+          label: '소재 보관함에서 이어온 후보',
           resetLabel: '전체 작업 보기',
-          resetTitle: '스크랩북에서 이어온 후보 검색만 해제합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
-          returnLabel: '스크랩북으로 돌아가기',
-          returnTitle: '스크랩북으로 돌아갑니다. 화면 이동만 하며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
+          resetTitle: '소재 보관함에서 이어온 후보 검색만 해제합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
+          returnLabel: '소재 보관함으로 돌아가기',
+          returnTitle: '소재 보관함으로 돌아갑니다. 화면 이동만 하며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
         }}
         searchQuery="보관한 소재"
       />,
     );
 
-    expect(html).toContain('스크랩북에서 이어온 후보');
-    expect(html).toContain('스크랩북으로 돌아가기');
-    expect(html).toContain('스크랩북에서 이어온 후보 검색만 해제합니다.');
+    expect(html).toContain('소재 보관함에서 이어온 후보');
+    expect(html).toContain('소재 보관함으로 돌아가기');
+    expect(html).toContain('소재 보관함에서 이어온 후보 검색만 해제합니다.');
   });
 
   it('renders a discovery-link return path for a newly promoted candidate', () => {

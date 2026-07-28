@@ -23,7 +23,7 @@ describe('videoActionButtonProps utils', () => {
       buttonLabel: '소재 보관',
       thumbnailLabel: '소재 보관',
     });
-    expect(saveProps.title).toContain('온라인 스크랩북(Azure DB)');
+    expect(saveProps.title).toContain('온라인 저장소(Azure DB)의 소재 보관함');
     expect(saveProps.title).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(saveProps.ariaLabel).toContain('YouTube API 호출 없음');
     expect(removeProps.buttonLabel).toBe('보관 해제');
@@ -101,7 +101,7 @@ describe('videoActionButtonProps utils', () => {
     });
 
     expect(missingIdProps.disabled).toBe(true);
-    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 온라인 스크랩북(Azure DB) 저장을 실행하지 않습니다.');
+    expect(missingIdProps.title).toBe('보관할 영상 ID가 없어 온라인 저장소(Azure DB)의 소재 보관함 저장을 실행하지 않습니다.');
     expect(missingHandlerProps.disabled).toBe(true);
 
     missingIdProps.onClick();

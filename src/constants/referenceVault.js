@@ -32,7 +32,7 @@ export const REFERENCE_VAULT_GUIDE_CARDS = [
   {
     key: 'save-reference',
     title: '2. 소재 보관',
-    description: '나중에 다시 볼 영상은 소재 보관에 넣습니다. 보관한 영상은 스크랩북에서 모아볼 수 있습니다.',
+    description: '나중에 다시 볼 영상은 소재 보관에 넣습니다. 보관한 영상은 소재 보관함에서 모아볼 수 있습니다.',
     iconName: 'bookmark',
     className: 'border-yellow-100 bg-yellow-50/80',
     iconClassName: 'text-yellow-700',

@@ -10,7 +10,7 @@ export const getProductionKanbanSummaryHeaderProps = ({
   eyebrow: '제작 칸반',
   title: '제작 후보를 실제 작업 순서로 정리합니다',
   description:
-    '스크랩북 전체를 자동으로 끌어오지 않고, 레이더와 발견함에서 제작 후보로 표시한 항목만 모아 오늘 무엇을 만들지 정리하는 화면입니다. 영상 후보는 오늘 집중으로 직접 고정할 수 있으며, 저장된 데이터 기준이라 YouTube API를 새로 호출하지 않습니다.',
+    '소재 보관함 전체를 자동으로 끌어오지 않고, 레이더와 발견함에서 제작 후보로 표시한 항목만 모아 오늘 무엇을 만들지 정리하는 화면입니다. 영상 후보는 오늘 집중으로 직접 고정할 수 있으며, 저장된 데이터 기준이라 YouTube API를 새로 호출하지 않습니다.',
   metric: `영상 ${videoCount}개 관리 · 링크 ${discoveryLinkCandidateCount}개 후보`,
 });
 
