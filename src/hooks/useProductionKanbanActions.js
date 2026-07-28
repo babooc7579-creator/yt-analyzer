@@ -18,6 +18,7 @@ export function useProductionKanbanActions({
   const [moveStates, setMoveStates] = useState({});
   const [linkMoveStates, setLinkMoveStates] = useState({});
   const pendingOperationsRef = useRef(new Set());
+  const syncedRecordsSignatureRef = useRef('');
 
   const beginOperation = (operationKey) => {
     if (!operationKey || pendingOperationsRef.current.has(operationKey)) return false;
@@ -36,7 +37,15 @@ export function useProductionKanbanActions({
   };
 
   useEffect(() => {
-    setDraftRecords(videoUserRecords);
+    const nextRecords = videoUserRecords && typeof videoUserRecords === 'object'
+      ? videoUserRecords
+      : {};
+    const nextSignature = JSON.stringify(nextRecords);
+
+    if (syncedRecordsSignatureRef.current === nextSignature) return;
+
+    syncedRecordsSignatureRef.current = nextSignature;
+    setDraftRecords(nextRecords);
   }, [videoUserRecords]);
 
   const updateDraftRecord = (videoId, updates) => {
