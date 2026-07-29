@@ -12,6 +12,7 @@ import {
   STORED_VIDEO_LOAD_FAILED_MESSAGE,
   STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE,
   getScanCompleteMessage,
+  getScanCompletionFeedback,
   getScanErrorMessage,
   getScanRequestContext,
   getScanStartMessage,
@@ -109,14 +110,14 @@ export function useVideoCollectionActions({
   const runScanRequest = async (tag) => {
     if (!tag && selectedChannelIds.length === 0) {
       setError(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE);
-      return;
+      return { success: false, error: SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE };
     }
 
     const scanContext = getScanRequestContext({ tag, selectedChannelIds, savedChannels });
 
     if (scanContext.scanSelectedChannels && scanContext.channelIdsForScan.length === 0) {
       setError(SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE);
-      return;
+      return { success: false, error: SCAN_NO_SCANNABLE_CHANNEL_SELECTED_MESSAGE };
     }
 
     prepareScan(scanContext, tag);
@@ -130,9 +131,34 @@ export function useVideoCollectionActions({
       setProgressMsg(getScanCompleteMessage(data.results || []));
 
       await loadChannelsFromCloud();
-      if (selectedChannelIds.length > 0) await loadStoredVideosForSelectedChannels();
+      const storedVideoLoadResult = selectedChannelIds.length > 0
+        ? await loadStoredVideosForSelectedChannels()
+        : null;
+      const selectedScanChannels = savedChannels.filter(channel => (
+        scanContext.channelIdsForScan.includes(channel.id)
+      ));
+      const targetLabel = scanContext.scanSelectedChannels && selectedScanChannels.length === 1
+        ? (selectedScanChannels[0].title || selectedScanChannels[0].channelTitle || '선택 채널')
+        : scanContext.scanSelectedChannels
+          ? `선택 채널 ${scanContext.channelIdsForScan.length}개`
+          : tag
+            ? `'${tag}' 태그 채널`
+            : '전체 채널';
+      const feedback = getScanCompletionFeedback({
+        results: data.results || [],
+        storageReloadConfirmed: storedVideoLoadResult?.success === true,
+        targetLabel,
+      });
+
+      return {
+        feedback,
+        results: data.results || [],
+        success: true,
+      };
     } catch (err) {
-      setError(getScanErrorMessage(err));
+      const message = getScanErrorMessage(err);
+      setError(message);
+      return { success: false, error: message };
     } finally {
       finishScan();
     }

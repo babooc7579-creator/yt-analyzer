@@ -71,6 +71,7 @@ export const getVideoToolbarViewProps = ({
   isScanning,
   lengthFilter,
   onResetFilters,
+  onOpenRecentScanStatus,
   searchKeyword,
   selectedVideoCount,
   selectedChannelCount,
@@ -118,6 +119,7 @@ export const getVideoToolbarViewProps = ({
     scanActionProps: {
       handleManualScan,
       isScanning,
+      onOpenRecentScanStatus,
       scanTargetCount,
       selectedChannelCount,
     },

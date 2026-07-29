@@ -49,7 +49,7 @@ const createDeps = (overrides = {}) => ({
   clearCheckedVideos: vi.fn(),
   loadChannelsFromCloud: vi.fn(() => Promise.resolve()),
   savedChannels: [
-    { id: 'active-1', status: CHANNEL_STATUS.ACTIVE },
+    { id: 'active-1', status: CHANNEL_STATUS.ACTIVE, title: 'Jinxy' },
     { id: 'paused-1', status: CHANNEL_STATUS.PAUSED },
   ],
   selectedChannelIds: ['active-1'],
@@ -176,7 +176,7 @@ describe('useVideoCollectionActions', () => {
     });
     const actions = useVideoCollectionActions(deps);
 
-    await actions.handleManualScan();
+    const result = await actions.handleManualScan();
 
     expect(scanSelectedChannels).toHaveBeenCalledWith(['active-1']);
     expect(scanChannels).not.toHaveBeenCalled();
@@ -192,6 +192,13 @@ describe('useVideoCollectionActions', () => {
     );
     expect(deps.setIsScanning).toHaveBeenLastCalledWith(false);
     expect(deps.setScanningTag).toHaveBeenLastCalledWith(null);
+    expect(result).toMatchObject({
+      success: true,
+      feedback: {
+        title: 'Jinxy 수집 완료',
+        statsText: '신규 영상 2개 · 통계 갱신 0개 · 또터또 후보 1개',
+      },
+    });
   });
 
   it('blocks selected-channel scans when no selected channel is scannable', async () => {
