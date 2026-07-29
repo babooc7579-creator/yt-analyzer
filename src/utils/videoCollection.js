@@ -88,14 +88,32 @@ export const getScanStartMessage = ({ scanSelectedChannels, channelIdsForScan, t
 
 export const summarizeScanResults = (results = []) => (
   results.reduce((summary, result) => ({
-    totalNew: summary.totalNew + (result.newVideosFound || 0),
+    totalNew: summary.totalNew + (Number(result.newVideosFound) || 0),
+    totalStatsRefreshed: summary.totalStatsRefreshed + (Number(result.statsRefreshed) || 0),
     ttoTtoCount: summary.ttoTtoCount + (result.ttoTtoCandidates?.length || 0),
-  }), { totalNew: 0, ttoTtoCount: 0 })
+  }), { totalNew: 0, totalStatsRefreshed: 0, ttoTtoCount: 0 })
 );
 
 export const getScanCompleteMessage = (results = []) => {
-  const { totalNew, ttoTtoCount } = summarizeScanResults(results);
-  return `새 영상 수집 완료: 신규 영상 ${totalNew}개 확인${ttoTtoCount > 0 ? `, 또터또 후보 ${ttoTtoCount}개 확인` : ''}. 이후 수집 영상 목록 불러오기는 온라인 저장소(Azure DB) 조회입니다.`;
+  const { totalNew, totalStatsRefreshed, ttoTtoCount } = summarizeScanResults(results);
+  return `새 영상 수집 완료: 신규 영상 ${totalNew}개 확인, 기존 영상 통계 ${totalStatsRefreshed}개 갱신${ttoTtoCount > 0 ? `, 또터또 후보 ${ttoTtoCount}개 확인` : ''}. 이후 수집 영상 목록 불러오기는 온라인 저장소(Azure DB) 조회입니다.`;
+};
+
+export const getScanCompletionFeedback = ({
+  results = [],
+  storageReloadConfirmed = false,
+  targetLabel = '선택 채널',
+} = {}) => {
+  const { totalNew, totalStatsRefreshed, ttoTtoCount } = summarizeScanResults(results);
+
+  return {
+    detail: storageReloadConfirmed
+      ? '결과를 온라인 저장소(Azure DB)에 반영하고 수집 영상 목록을 다시 불러왔습니다. 채널별 기록과 실행 시각은 최근 수집 상태에서 확인할 수 있습니다.'
+      : 'YouTube 수집은 완료됐지만 온라인 저장소(Azure DB) 재조회 완료 여부는 확인하지 못했습니다. 최근 수집 상태에서 채널별 결과를 확인해 주세요.',
+    statsText: `신규 영상 ${totalNew}개 · 통계 갱신 ${totalStatsRefreshed}개${ttoTtoCount > 0 ? ` · 또터또 후보 ${ttoTtoCount}개` : ''}`,
+    targetLabel,
+    title: `${targetLabel} 수집 완료`,
+  };
 };
 
 export const getScanErrorMessage = (error) => {

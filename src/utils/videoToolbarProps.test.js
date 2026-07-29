@@ -15,6 +15,7 @@ describe('videoToolbarProps utils', () => {
     handleManualScan: () => 'scan',
     isScanning: false,
     lengthFilter: 'shorts',
+    onOpenRecentScanStatus: () => 'recent scans',
     scannableChannelCount: 5,
     searchKeyword: 'idea',
     selectedChannelCount: 3,
@@ -52,6 +53,7 @@ describe('videoToolbarProps utils', () => {
     expect(props.scanActionProps).toEqual({
       handleManualScan: baseProps.handleManualScan,
       isScanning: false,
+      onOpenRecentScanStatus: baseProps.onOpenRecentScanStatus,
       scanTargetCount: 2,
       selectedChannelCount: 3,
     });

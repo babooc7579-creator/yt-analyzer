@@ -32,6 +32,7 @@ describe('videoDashboardControls utils', () => {
     const onCopyPrompt = () => 'copy';
     const onClearSelection = () => 'clear';
     const onManualScan = () => 'scan';
+    const onOpenRecentScanStatus = () => 'recent scans';
 
     const props = getVideoDashboardControlsViewProps({
       activeSelectedChannelCount: 2,
@@ -46,6 +47,7 @@ describe('videoDashboardControls utils', () => {
       onClearSelection,
       onCopyPrompt,
       onManualScan,
+      onOpenRecentScanStatus,
       savedChannelCount: 10,
       savedVideoCount: 200,
       scannableChannelCount: 4,
@@ -90,6 +92,7 @@ describe('videoDashboardControls utils', () => {
       isReferenceVaultView: true,
       isScanning: false,
       lengthFilter: 'shorts',
+      onOpenRecentScanStatus,
       scannableChannelCount: 4,
       searchKeyword: 'idea',
       selectedChannelCount: 5,

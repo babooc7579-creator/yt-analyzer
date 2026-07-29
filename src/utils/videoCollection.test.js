@@ -7,6 +7,7 @@ import {
   STORED_VIDEO_LOAD_FAILED_MESSAGE,
   STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE,
   getScanCompleteMessage,
+  getScanCompletionFeedback,
   getScanErrorMessage,
   getScanRequestContext,
   getScanStartMessage,
@@ -151,20 +152,33 @@ describe('videoCollection utils', () => {
 
   it('summarizes scan results and scan completion notices', () => {
     const results = [
-      { newVideosFound: 2, ttoTtoCandidates: [{ id: 'a' }] },
-      { newVideosFound: 3, ttoTtoCandidates: [{ id: 'b' }, { id: 'c' }] },
+      { newVideosFound: 2, statsRefreshed: 7, ttoTtoCandidates: [{ id: 'a' }] },
+      { newVideosFound: 3, statsRefreshed: 8, ttoTtoCandidates: [{ id: 'b' }, { id: 'c' }] },
       {},
     ];
 
     expect(summarizeScanResults(results)).toEqual({
       totalNew: 5,
+      totalStatsRefreshed: 15,
       ttoTtoCount: 3,
     });
 
     const completeMessage = getScanCompleteMessage(results);
     expect(completeMessage).toContain('5');
+    expect(completeMessage).toContain('15');
     expect(completeMessage).toContain('3');
     expect(completeMessage).toContain('온라인 저장소(Azure DB)');
+
+    expect(getScanCompletionFeedback({
+      results,
+      storageReloadConfirmed: true,
+      targetLabel: 'Jinxy',
+    })).toEqual({
+      detail: '결과를 온라인 저장소(Azure DB)에 반영하고 수집 영상 목록을 다시 불러왔습니다. 채널별 기록과 실행 시각은 최근 수집 상태에서 확인할 수 있습니다.',
+      statsText: '신규 영상 5개 · 통계 갱신 15개 · 또터또 후보 3개',
+      targetLabel: 'Jinxy',
+      title: 'Jinxy 수집 완료',
+    });
   });
 
   it('keeps scan error messages explicit about failed collection work', () => {

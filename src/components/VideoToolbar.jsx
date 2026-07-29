@@ -28,6 +28,7 @@ export default function VideoToolbar({
   activeSelectedChannelCount,
   scannableChannelCount,
   handleManualScan,
+  onOpenRecentScanStatus,
   ttoTtoMode,
   setTtoTtoMode,
 }) {
@@ -44,6 +45,7 @@ export default function VideoToolbar({
     isScanning,
     lengthFilter,
     onResetFilters,
+    onOpenRecentScanStatus,
     scannableChannelCount,
     searchKeyword,
     selectedVideoCount,
