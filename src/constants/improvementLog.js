@@ -237,9 +237,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-07-29',
-    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 제작 기록 1건으로 실제 저장·새로고침·재조회·원상복구를 완료했고, Jinxy 채널 1개를 명시적으로 선택해 YouTube 신규 수집 1회와 Azure DB 수집 결과 재조회까지 확인했습니다.',
+    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 제작 기록 1건의 저장 왕복과 Jinxy 단일 채널 수집을 검수했으며, 수집 실행 화면의 완료 카드·최근 수집 상태 이동·새로고침 후 Azure DB 재조회까지 운영에서 확인했습니다.',
     targetSummary: '화면 표시, 이동, DB 조회, DB 저장, YouTube API 수집을 모든 핵심 흐름에서 실제 결과까지 확인하고 기록합니다.',
-    nextAction: '다음에 실제 새 영상 수집이 필요한 날 1개 채널로 완료 안내와 최근 수집 상태 이동을 운영 재확인합니다.',
+    nextAction: '향후 수집 화면이나 백엔드 계약을 변경할 때만 1개 채널·1회 원칙으로 완료 카드와 최근 수집 상태를 회귀 검수합니다.',
     decisions: [
       'YouTube 새 영상 수집과 Azure DB 쓰기는 화면 이동 검수와 분리합니다.',
       '실제 저장 왕복 검수는 기존 제작 기록의 원문을 먼저 보존한 뒤 검수하고 즉시 원상복구합니다.',
@@ -269,7 +269,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'collection-result-feedback',
         label: '수집 실행 화면에서 채널별 신규 수·통계 갱신 수·최근 수집 상태 위치를 즉시 안내',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],
   },
