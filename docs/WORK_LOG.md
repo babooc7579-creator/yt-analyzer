@@ -4658,3 +4658,25 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - 반복 수집·댓글 API 호출 없음
 - 새 Azure 자원, API endpoint, Cosmos DB container, localStorage key 변경 없음
 - 개선 기록의 `수집 실행 화면 결과 안내` 체크포인트를 확인 완료로 갱신
+
+## 184. 2026-07-31 읽기 전용 GitHub 검사 이름·검수표 정리
+
+### 확인 결과
+
+- `main`과 운영 배포는 `a1f36de`로 일치하며 작업 트리는 깨끗했습니다.
+- `npm run test:daily`는 10개 파일, 48개 테스트가 모두 통과했습니다.
+- GitHub Build의 읽기 전용 검사는 PR과 `main` push에서 실행되고 매일 예약 실행되는 작업은 아니었습니다.
+- 수집 완료 안내는 2026-07-29 실제 Jinxy 단일 채널 수집에서 이미 운영 확인을 마쳤지만 회귀 검수표에는 `다음 실제 수집 때 운영 확인` 문구가 남아 있었습니다.
+
+### 정리
+
+- GitHub 작업명을 실제 실행 조건에 맞게 `Core read-only regression check`로 변경했습니다.
+- 개선 기록과 관련 문서에서 이 검사가 PR과 `main` 반영 때 실행된다는 점을 명확히 했습니다.
+- 매일 확인이 필요할 때는 사용자가 `npm run test:daily`를 직접 실행하는 기준을 유지했습니다.
+- 수집 완료 안내의 회귀 검수표 상태를 `운영 확인 완료 (2026-07-29)`로 갱신했습니다.
+
+### 안전 범위
+
+- 새 예약 실행과 추가 GitHub Actions 사용량 없음
+- Azure DB 조회·저장, YouTube API 호출 없음
+- 앱 기능, API endpoint, DB schema, localStorage key 변경 없음

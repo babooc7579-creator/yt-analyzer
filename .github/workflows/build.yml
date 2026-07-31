@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  daily-readonly:
-    name: Daily read-only regression check
+  core-readonly:
+    name: Core read-only regression check
     runs-on: ubuntu-latest
 
     steps:

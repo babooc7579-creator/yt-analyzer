@@ -432,7 +432,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       },
       {
         id: 'daily-readonly-github-check',
-        label: 'GitHub에서 별도 이름으로 보이는 일일 읽기 전용 자동 검수',
+        label: 'PR과 main 반영 때 GitHub에서 별도 이름으로 보이는 핵심 읽기 전용 자동 검수',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
