@@ -71,7 +71,7 @@
 | 소재 보관·제작 원본 저장 | `saveScrapbookVideos` | `POST /scrapbook` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | `scrapbookPurposes`의 `material`·`production` 용도를 보존. 제작 후보 지정은 원본 저장 성공 후 판단 기록을 별도 저장 |
 | 소재 보관 해제 | `deleteScrapbookVideo` 또는 `saveScrapbookVideos` | `DELETE /scrapbook/{videoId}` 또는 `POST /scrapbook` | DB 변경 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 제작 기록이 없으면 문서 삭제. 제작 후보이면 `material` 용도만 해제하고 `production` 원본은 유지 |
 | 영상 판단 기록 불러오기 | `fetchVideoUserRecords` | `GET /video-records` | DB 조회 | 아니오 | 예 | 아니오 | localStorage 보조 | 가능 | localStorage와 Cloud 차이 가능 |
-| 영상 판단 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 기존 `status` 유지 + `statusIds` 보존 + 선택적 `focusPinnedAt` 보존. 상태/집중 저장 모두 YouTube API 호출 없음 |
+| 영상 판단·제작 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 프론트는 변경 필드만 전송하고 백엔드는 요청에 없는 상태·대본·메모·일정·업로드 기록을 보존. 명시적 빈 값은 삭제로 처리. YouTube API 호출 없음 |
 | 영상별 전체 작업 기록 삭제 | `clearVideoUserRecords` | `DELETE /video-records` | DB 변경 | 아니오 | 아니오 | 예 | 예 | 화면 사용 차단 | 판단만이 아니라 제작 후보·대본·업로드 일정도 삭제할 수 있어 2026-08-01부터 사용자 UI 실행 경로 없음. API는 호환성 목적으로 유지 |
 | 발견 링크 불러오기 | `fetchDiscoveryLinks` | `GET /discovery-links` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 기존 `videos` container의 `docType: discovery_link` 조회. 2026-07-03 배포 읽기 확인 성공 |
 | 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태와 URL 추정 `platform` 저장. 백엔드도 허용 `platform`을 보존하며, 없거나 잘못되면 URL로 재추정. 자동 크롤링 없음. 2026-07-03 smoke 성공 |
@@ -209,6 +209,10 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - 현재 단계에서는 `status`를 대표 상태로 말하고, `statusIds`는 복수 판단 보존용 보조 필드로 말합니다.
 - `focusPinnedAt`은 사용자가 직접 고른 제작 후보의 고정 시각이며, 기존 제작 상태를 변경하지 않습니다.
 - 필드가 없는 기존 record는 고정되지 않은 상태로 읽고, 필드를 보내지 않은 저장에서는 기존 Cloud 고정값을 보존합니다.
+- 2026-08-01부터 프론트는 영상별 전체 작업 기록이 아니라 사용자가 바꾼 필드만 `POST /video-records`로 전송합니다.
+- 백엔드는 요청에 없는 `status`, `statusIds`, `draftTitle`, `note`, `targetPublishDate`, `uploadedAt`, `focusPinnedAt`, 구조화 대본 필드와 `createdAt`을 기존 Cosmos DB 문서에서 보존합니다.
+- 사용자가 입력을 지우고 저장해 명시적으로 빈 문자열을 보낸 필드는 빈 값으로 갱신합니다.
+- 백엔드 보존 계약은 `yt-analyzer-functions` PR #20으로 먼저 배포한 뒤 프론트의 부분 요청을 적용했습니다.
 
 ### 5.4 `/videos` 선택형 페이지네이션
 

@@ -8,6 +8,7 @@ import {
   createRadarRestoredRecord,
   createUpdatedVideoUserRecord,
   createVideoStatusRecord,
+  createVideoUserRecordPatch,
   getCloudVideoUserRecord,
   getCloudVideoUserRecords,
   restoreVideoUserRecord,
@@ -128,6 +129,26 @@ describe('videoUserRecords utils', () => {
       titleMemo: 'good hook',
       updatedAt: 'now',
       statusIds: [VIDEO_STATUS.TITLE_REFERENCE],
+    });
+  });
+
+  it('creates a Cloud patch with only explicit updates and protected identifiers', () => {
+    expect(createVideoUserRecordPatch('v1', {
+      scriptBody: '새 대본',
+      targetPublishDate: undefined,
+    }, 'now')).toEqual({
+      scriptBody: '새 대본',
+      videoId: 'v1',
+      updatedAt: 'now',
+    });
+
+    expect(createVideoUserRecordPatch('v1', {
+      note: '',
+      videoId: 'wrong-id',
+    }, 'now')).toEqual({
+      note: '',
+      videoId: 'v1',
+      updatedAt: 'now',
     });
   });
 

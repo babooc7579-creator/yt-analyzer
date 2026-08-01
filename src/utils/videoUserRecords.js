@@ -73,6 +73,14 @@ export const createUpdatedVideoUserRecord = (records, videoId, updates, updatedA
   })
 );
 
+export const createVideoUserRecordPatch = (videoId, updates, updatedAt) => ({
+  ...Object.fromEntries(
+    Object.entries(toRecordObject(updates)).filter(([, value]) => value !== undefined),
+  ),
+  videoId,
+  updatedAt,
+});
+
 export const createRadarRestoredRecord = (record = {}, videoId, updatedAt) => {
   const sourceRecord = toRecordObject(record);
   const keptStatusIds = Array.isArray(sourceRecord.statusIds)

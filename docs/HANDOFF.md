@@ -461,3 +461,5 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 같은 날 소재 보관과 제작 후보의 저장 관계를 분리했습니다. 기존 `/scrapbook` 문서의 `scrapbookPurposes`에 `material`과 `production` 용도를 구분하며 필드가 없는 기존 문서는 소재 보관용으로 호환합니다. 제작 후보 지정은 제작 원본을 먼저 유지한 뒤 후보 상태를 저장하고, 제작 후보의 소재 보관을 해제해도 후보함·대본 작업실·업로드 캘린더 원본은 남습니다. `production` 전용 원본은 소재 보관 개수에 포함하지 않습니다. 새 Azure 자원·endpoint·container·localStorage key와 YouTube API 호출 조건은 변경하지 않았습니다. 다음 데이터 작업은 후보 상태 저장 실패 뒤 남을 수 있는 화면 비노출 제작 원본 정리와 소재 보관 영상 스냅샷 최신화 기준입니다.
 
 같은 날 소재·제작 원본의 오래된 표시 정보를 비파괴적으로 보완했습니다. 선택 채널의 수집 영상 목록을 불러오면 같은 `videoId`의 제목·조회수·채널명 등을 소재 보관함·제작 후보함·대본 작업실·업로드 캘린더에 화면용으로 우선 반영합니다. 수집 목록에 없는 소재는 기존 정보를 유지하고 `scrapbookPurposes`, `savedAt`, 스크랩 문서 `id`는 보호합니다. 이 병합 자체는 Azure DB나 localStorage를 쓰지 않고 YouTube API를 호출하지 않습니다. 다음 작업은 제작 후보 상태 저장이 실패한 직후의 원본 원상복구 가능성 점검입니다.
+
+같은 날 제작 기록 전체 덮어쓰기 위험을 순서적으로 보완했습니다. 백엔드 `yt-analyzer-functions` PR #20을 먼저 배포해 `POST /video-records`의 요청에 없는 제작 상태·제목·메모·일정·업로드 시각·구조화 대본 필드·생성 시각을 기존 Cosmos DB 문서에서 보존하게 했습니다. 이후 프론트는 사용자가 실제로 바꾼 필드만 전송하며, 명시적 빈 값은 삭제 의도로 유지합니다. 새 Azure 자원·endpoint·container·localStorage key·YouTube API 호출은 없습니다. 다음 안전 점검은 예전 제작 상태가 오늘의 레이더에서 어떻게 숨겨지는지의 정책 일치 여부입니다.
