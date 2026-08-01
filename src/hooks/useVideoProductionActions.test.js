@@ -6,9 +6,8 @@ import { useVideoProductionActions } from './useVideoProductionActions';
 describe('useVideoProductionActions', () => {
   it('checks production candidate state from Cloud video user records', () => {
     const { isProductionCandidate } = useVideoProductionActions({
-      isVideoSaved: vi.fn(),
+      ensureProductionVideoSource: vi.fn(),
       markVideoStatus: vi.fn(),
-      toggleScrapVideo: vi.fn(),
       videoUserRecords: {
         'video-1': { statusIds: [PRODUCTION_STATUS.CANDIDATE] },
         'video-2': { statusIds: [PRODUCTION_STATUS.ACTIVE] },
@@ -20,61 +19,70 @@ describe('useVideoProductionActions', () => {
     expect(isProductionCandidate('missing')).toBe(false);
   });
 
-  it('marks an already saved video as a production candidate without changing scrapbook state', async () => {
-    const isVideoSaved = vi.fn(() => true);
-    const toggleScrapVideo = vi.fn();
+  it('keeps a production source before marking the video as a candidate', async () => {
+    const ensureProductionVideoSource = vi.fn(() => Promise.resolve(true));
     const markVideoStatus = vi.fn(() => Promise.resolve(true));
     const video = { videoId: 'video-1', title: 'Clip' };
 
     const { promoteVideoToProduction } = useVideoProductionActions({
-      isVideoSaved,
+      ensureProductionVideoSource,
       markVideoStatus,
-      toggleScrapVideo,
       videoUserRecords: {},
     });
 
     await expect(promoteVideoToProduction(video)).resolves.toBe(true);
 
-    expect(isVideoSaved).toHaveBeenCalledWith('video-1');
-    expect(toggleScrapVideo).not.toHaveBeenCalled();
+    expect(ensureProductionVideoSource).toHaveBeenCalledWith(video);
     expect(markVideoStatus).toHaveBeenCalledWith('video-1', PRODUCTION_STATUS.CANDIDATE);
   });
 
-  it('stores an unsaved video in the scrapbook before marking it as a production candidate', async () => {
-    const isVideoSaved = vi.fn(() => false);
-    const toggleScrapVideo = vi.fn(() => Promise.resolve(true));
+  it('marks a video only after its production source is ready', async () => {
+    const ensureProductionVideoSource = vi.fn(() => Promise.resolve(true));
     const markVideoStatus = vi.fn(() => Promise.resolve(true));
     const video = { videoId: 'video-2', title: 'Unsaved clip' };
 
     const { promoteVideoToProduction } = useVideoProductionActions({
-      isVideoSaved,
+      ensureProductionVideoSource,
       markVideoStatus,
-      toggleScrapVideo,
       videoUserRecords: {},
     });
 
     await expect(promoteVideoToProduction(video)).resolves.toBe(true);
 
-    expect(toggleScrapVideo).toHaveBeenCalledWith(video);
+    expect(ensureProductionVideoSource).toHaveBeenCalledWith(video);
     expect(markVideoStatus).toHaveBeenCalledWith('video-2', PRODUCTION_STATUS.CANDIDATE);
   });
 
-  it('does not mark production candidate status when scrapbook storage fails', async () => {
-    const isVideoSaved = vi.fn(() => false);
-    const toggleScrapVideo = vi.fn(() => Promise.resolve(false));
+  it('does not mark production candidate status when source storage fails', async () => {
+    const ensureProductionVideoSource = vi.fn(() => Promise.resolve(false));
     const markVideoStatus = vi.fn();
     const video = { videoId: 'video-3', title: 'Failed clip' };
 
     const { promoteVideoToProduction } = useVideoProductionActions({
-      isVideoSaved,
+      ensureProductionVideoSource,
       markVideoStatus,
-      toggleScrapVideo,
       videoUserRecords: {},
     });
 
     await expect(promoteVideoToProduction(video)).resolves.toBe(false);
 
-    expect(toggleScrapVideo).toHaveBeenCalledWith(video);
+    expect(ensureProductionVideoSource).toHaveBeenCalledWith(video);
     expect(markVideoStatus).not.toHaveBeenCalled();
+  });
+
+  it('reports failure without removing the prepared source when candidate status storage fails', async () => {
+    const ensureProductionVideoSource = vi.fn(() => Promise.resolve(true));
+    const markVideoStatus = vi.fn(() => Promise.resolve(false));
+    const video = { videoId: 'video-4', title: 'Retryable clip' };
+
+    const { promoteVideoToProduction } = useVideoProductionActions({
+      ensureProductionVideoSource,
+      markVideoStatus,
+      videoUserRecords: {},
+    });
+
+    await expect(promoteVideoToProduction(video)).resolves.toBe(false);
+    expect(ensureProductionVideoSource).toHaveBeenCalledWith(video);
+    expect(markVideoStatus).toHaveBeenCalledWith('video-4', PRODUCTION_STATUS.CANDIDATE);
   });
 });

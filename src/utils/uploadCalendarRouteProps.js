@@ -47,6 +47,7 @@ export function buildUploadCalendarRouteProps({
   creatorViewIntent,
   discoveryLinks,
   openCreatorView,
+  productionSourceVideos,
   savedVideos,
   videoUserRecords,
   videos,
@@ -85,7 +86,10 @@ export function buildUploadCalendarRouteProps({
     onOpenProductionCandidates: () => openCreatorView({ id: 'studio-candidates' }),
     videoUserRecords: getScriptSourceRecordMap({ discoveryLinks, videoUserRecords }),
     videos: mergeUploadCalendarVideos({
-      savedVideos: [...toArray(savedVideos), ...discoverySources],
+      savedVideos: [
+        ...toArray(Array.isArray(productionSourceVideos) ? productionSourceVideos : savedVideos),
+        ...discoverySources,
+      ],
       videos,
     }),
   };

@@ -60,6 +60,8 @@ describe('radarCandidateStateProps utils', () => {
     });
 
     expect(props.label).toBe('제작 후보로');
+    expect(props.title).toContain('소재 보관과 별도로');
+    expect(props.title).toContain('제작 후보 원본 정보');
     expect(props.title).toContain('온라인 저장소(Azure DB)의 판단 기록');
     expect(props.title).toContain('제작 후보로 표시');
     expect(props.title).toContain('YouTube API를 새로 호출하지 않습니다');
@@ -115,7 +117,7 @@ describe('radarCandidateStateProps utils', () => {
       video: { videoId: 'video-1' },
     });
 
-    expect(productionPending.pendingText).toContain('제작 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중');
+    expect(productionPending.pendingText).toContain('제작 후보 원본 정보와 후보 표시를 온라인 저장소(Azure DB)에 저장하는 중');
     expect(statusPending.pendingText).toContain('영상 판단 기록을 온라인 저장소(Azure DB)에 저장하는 중');
     expect(getRadarCandidateDecisionActionsViewProps().pendingText).toBe('');
     expect(promotionProps.disabled).toBe(true);

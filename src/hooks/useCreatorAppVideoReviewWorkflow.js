@@ -1,14 +1,17 @@
 import { useScrapbook } from './useScrapbook';
 import { useVideoProductionActions } from './useVideoProductionActions';
 import { useVideoUserRecords } from './useVideoUserRecords';
+import { PRODUCTION_STATUSES, hasAnyProductionStatus } from '../constants/status';
 
 export function useCreatorAppVideoReviewWorkflow() {
   const {
+    ensureProductionVideoSource,
+    productionSourceVideos,
     savedVideos,
     scrapbookSyncWarning,
     isVideoSaved,
     retryScrapbookSync,
-    toggleScrapVideo,
+    toggleScrapVideo: toggleCloudScrapVideo,
   } = useScrapbook();
   const {
     videoUserRecords,
@@ -23,11 +26,17 @@ export function useCreatorAppVideoReviewWorkflow() {
     isProductionCandidate,
     promoteVideoToProduction,
   } = useVideoProductionActions({
-    isVideoSaved,
+    ensureProductionVideoSource,
     markVideoStatus: markRadarVideoStatus,
-    toggleScrapVideo,
     videoUserRecords,
   });
+  const toggleScrapVideo = (video, options = {}) => {
+    const preserveForProduction = Object.prototype.hasOwnProperty.call(options, 'preserveForProduction')
+      ? Boolean(options.preserveForProduction)
+      : hasAnyProductionStatus(videoUserRecords[video?.videoId], PRODUCTION_STATUSES);
+
+    return toggleCloudScrapVideo(video, { preserveForProduction });
+  };
 
   return {
     clearRadarDecisions,
@@ -35,6 +44,7 @@ export function useCreatorAppVideoReviewWorkflow() {
     isVideoSaved,
     markRadarVideoStatus,
     promoteVideoToProduction,
+    productionSourceVideos,
     restoreVideoToRadar,
     retryScrapbookSync,
     retryVideoUserRecordsSync,

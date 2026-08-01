@@ -102,6 +102,7 @@ export const countDiscoveryRightsWarnings = (discoveryLinks = []) => (
 export const getCreatorOsMetricsModel = ({
   categories,
   discoveryLinks = [],
+  productionSourceVideos,
   savedChannels,
   savedVideos,
   selectedChannelIds,
@@ -109,6 +110,9 @@ export const getCreatorOsMetricsModel = ({
   videos,
 } = {}) => {
   const latestScannedAt = getLatestChannelScanDate(savedChannels);
+  const productionVideos = Array.isArray(productionSourceVideos)
+    ? productionSourceVideos
+    : savedVideos;
 
   return {
     activeSelectedChannelCount: countActiveSelectedChannels(savedChannels, selectedChannelIds),
@@ -119,8 +123,8 @@ export const getCreatorOsMetricsModel = ({
       ? formatRelativeTime(latestScannedAt)
       : '수집 기록 없음',
     openRadarCandidateCount: countOpenRadarCandidates(videos, videoUserRecords),
-    productionCandidateCount: countProductionCandidates(savedVideos, videoUserRecords),
-    productionFocusCount: countProductionFocusCandidates(savedVideos, videoUserRecords),
+    productionCandidateCount: countProductionCandidates(productionVideos, videoUserRecords),
+    productionFocusCount: countProductionFocusCandidates(productionVideos, videoUserRecords),
     scannableChannelCount: countScannableChannels(savedChannels),
     ttoTtoAssetCount: countTtoTtoAssets(videos),
     visibleScrapCount: countVisibleScraps(videos, savedVideos),

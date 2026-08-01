@@ -2,7 +2,7 @@ import ProductionKanban from './ProductionKanban';
 import ScrapbookEmptyState from './ScrapbookEmptyState';
 import ScrapbookHeader from './ScrapbookHeader';
 import ScrapbookVideoCard from './ScrapbookVideoCard';
-import { getCloudScrapbookVideos, getScrapbookWorkspaceViewProps } from '../utils/scrapbook';
+import { getMaterialScrapbookVideos, getScrapbookWorkspaceViewProps } from '../utils/scrapbook';
 
 export default function ScrapbookWorkspace({
   creatorView,
@@ -10,6 +10,7 @@ export default function ScrapbookWorkspace({
   copiedPrompt,
   creatorViewIntent,
   promptCopyError,
+  productionSourceVideos,
   savedVideos,
   videoUserRecords,
   onCopyPrompt,
@@ -39,6 +40,7 @@ export default function ScrapbookWorkspace({
     copiedPrompt,
     creatorViewIntent,
     promptCopyError,
+    productionSourceVideos,
     savedVideos,
     videoUserRecords,
     onCopyPrompt,
@@ -55,7 +57,7 @@ export default function ScrapbookWorkspace({
     onUpdateVideoRecord,
     onUnsavedDraftsChange,
   });
-  const savedVideoList = getCloudScrapbookVideos(savedVideos);
+  const savedVideoList = getMaterialScrapbookVideos(savedVideos);
 
   return (
     <div className="min-h-[600px] flex-1 animate-in overflow-y-auto rounded-2xl border border-slate-300 bg-slate-100 p-4 shadow-sm fade-in duration-300 sm:p-6">

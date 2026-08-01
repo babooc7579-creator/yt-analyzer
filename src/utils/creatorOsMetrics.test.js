@@ -138,6 +138,10 @@ describe('creatorOsMetrics utils', () => {
         { videoId: 'v2' },
         { videoId: 'missing-from-current-list' },
       ],
+      productionSourceVideos: [
+        { videoId: 'v1' },
+        { videoId: 'v2' },
+      ],
       selectedChannelIds: ['active-a', 'active-b', 'paused-a'],
       videoUserRecords,
       videos,

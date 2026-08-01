@@ -199,10 +199,11 @@ describe('useScrapbook', () => {
     const changed = await scrapbook.toggleScrapVideo(savedVideo);
 
     expect(changed).toBe(true);
-    expect(saveScrapbookVideos).toHaveBeenCalledWith([savedVideo]);
+    const materialVideo = { ...savedVideo, scrapbookPurposes: ['material'] };
+    expect(saveScrapbookVideos).toHaveBeenCalledWith([materialVideo]);
     expect(deleteScrapbookVideo).not.toHaveBeenCalled();
-    expect(stateSetters[0]).toHaveBeenCalledWith([savedVideo]);
-    expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, [savedVideo]);
+    expect(stateSetters[0]).toHaveBeenCalledWith([materialVideo]);
+    expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, [materialVideo]);
     expect(stateSetters[2]).toHaveBeenCalledWith('');
   });
 
@@ -219,6 +220,49 @@ describe('useScrapbook', () => {
     expect(stateSetters[0]).toHaveBeenCalledWith([]);
     expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, []);
     expect(stateSetters[2]).toHaveBeenCalledWith('');
+  });
+
+  it('removes only the material purpose for a production candidate', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [savedVideo] });
+    const scrapbook = useScrapbook();
+
+    const changed = await scrapbook.toggleScrapVideo(savedVideo, {
+      preserveForProduction: true,
+    });
+
+    const productionVideo = { ...savedVideo, scrapbookPurposes: ['production'] };
+    expect(changed).toBe(true);
+    expect(deleteScrapbookVideo).not.toHaveBeenCalled();
+    expect(saveScrapbookVideos).toHaveBeenCalledWith([productionVideo]);
+    expect(stateSetters[0]).toHaveBeenCalledWith([productionVideo]);
+    expect(writeJsonStorage).toHaveBeenCalledWith(STORAGE_KEYS.savedVideos, [productionVideo]);
+  });
+
+  it('stores a production-only source without adding it to the material scrapbook list', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [] });
+    const scrapbook = useScrapbook();
+
+    const changed = await scrapbook.ensureProductionVideoSource(savedVideo);
+
+    const productionVideo = { ...savedVideo, scrapbookPurposes: ['production'] };
+    expect(changed).toBe(true);
+    expect(saveScrapbookVideos).toHaveBeenCalledWith([productionVideo]);
+    expect(stateSetters[0]).toHaveBeenCalledWith([productionVideo]);
+  });
+
+  it('exposes production-only sources separately from material scrapbook videos', () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    const productionVideo = { ...savedVideo, scrapbookPurposes: ['production'] };
+    setScrapbookState({ cloudReady: true, savedVideos: [productionVideo, secondVideo] });
+
+    const scrapbook = useScrapbook();
+
+    expect(scrapbook.savedVideos).toEqual([secondVideo]);
+    expect(scrapbook.productionSourceVideos).toEqual([productionVideo, secondVideo]);
+    expect(scrapbook.isVideoSaved('video-1')).toBe(false);
+    expect(scrapbook.isVideoSaved('video-2')).toBe(true);
   });
 
   it('marks Cloud as not ready and avoids cache updates when scrapbook save fails', async () => {

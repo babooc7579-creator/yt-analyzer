@@ -8,14 +8,21 @@ const getSafeVideoTitle = ({ video, videoTitle }) => (
   videoTitle || getSafeVideo(video).title || '이 영상'
 );
 
-export const getScrapbookRemoveConfirmMessage = ({ video, videoTitle } = {}) => {
+export const getScrapbookRemoveConfirmMessage = ({
+  isProductionCandidate = false,
+  video,
+  videoTitle,
+} = {}) => {
   const displayTitle = getSafeVideoTitle({ video, videoTitle });
 
-  return `'${displayTitle}' 영상을 온라인 저장소(Azure DB)의 소재 보관함에서 해제할까요?\n\n영상 원본이나 수집된 영상 정보는 삭제되지 않고, 소재 보관 표시만 해제됩니다.`;
+  return isProductionCandidate
+    ? `'${displayTitle}' 영상을 온라인 저장소(Azure DB)의 소재 보관함에서 해제할까요?\n\n소재 보관 표시만 해제되며, 제작 후보와 대본·업로드 일정의 원본 정보는 그대로 유지됩니다.`
+    : `'${displayTitle}' 영상을 온라인 저장소(Azure DB)의 소재 보관함에서 해제할까요?\n\n영상 원본이나 수집된 영상 정보는 삭제되지 않고, 소재 보관 표시만 해제됩니다.`;
 };
 
 export const getScrapbookRemoveButtonProps = ({
   confirmFn,
+  isProductionCandidate = false,
   onRemoveScrap,
   video,
   videoTitle,
@@ -28,13 +35,18 @@ export const getScrapbookRemoveButtonProps = ({
     className: 'p-1.5 text-slate-400 bg-slate-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors',
     onClick: () => {
       const message = getScrapbookRemoveConfirmMessage({
+        isProductionCandidate,
         video: safeVideo,
         videoTitle: displayTitle,
       });
 
-      if (confirmFn?.(message)) onRemoveScrap?.(safeVideo);
+      if (confirmFn?.(message)) {
+        onRemoveScrap?.(safeVideo, { preserveForProduction: isProductionCandidate });
+      }
     },
-    title: '온라인 저장소(Azure DB)의 소재 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.',
+    title: isProductionCandidate
+      ? '소재 보관 표시만 해제합니다. 제작 후보와 대본·업로드 일정 원본은 유지합니다.'
+      : '온라인 저장소(Azure DB)의 소재 보관 표시만 해제합니다. YouTube 원본이나 수집 영상 정보는 삭제하지 않습니다.',
     type: 'button',
   };
 };
@@ -101,6 +113,7 @@ export const getScrapbookVideoFooterActionsViewProps = ({
         : '제작 후보로',
     removeButtonProps: getScrapbookRemoveButtonProps({
       confirmFn,
+      isProductionCandidate,
       onRemoveScrap,
       video,
       videoTitle: displayTitle,

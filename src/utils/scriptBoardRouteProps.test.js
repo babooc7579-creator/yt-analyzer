@@ -65,6 +65,20 @@ describe('buildScriptBoardRouteProps', () => {
     expect(() => props.onOpenHome()).not.toThrow();
   });
 
+  it('uses production source videos even when they are not material scraps', () => {
+    const productionOnlyVideo = {
+      scrapbookPurposes: ['production'],
+      title: '제작 전용 원본',
+      videoId: 'video-production',
+    };
+    const props = buildScriptBoardRouteProps({
+      productionSourceVideos: [productionOnlyVideo],
+      savedVideos: [],
+    });
+
+    expect(props.videos).toEqual([productionOnlyVideo]);
+  });
+
   it('connects a discovery link candidate to script work and back to the same candidate', async () => {
     const openCreatorView = vi.fn();
     const updateVideoUserRecord = vi.fn(() => true);

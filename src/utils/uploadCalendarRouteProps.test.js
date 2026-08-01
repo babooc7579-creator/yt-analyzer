@@ -125,6 +125,21 @@ describe('buildUploadCalendarRouteProps', () => {
     ]);
   });
 
+  it('uses production source videos when the material scrapbook is empty', () => {
+    const productionOnlyVideo = {
+      scrapbookPurposes: ['production'],
+      title: '제작 전용 원본',
+      videoId: 'video-production',
+    };
+    const props = buildUploadCalendarRouteProps({
+      productionSourceVideos: [productionOnlyVideo],
+      savedVideos: [],
+      videos: [],
+    });
+
+    expect(props.videos).toEqual([productionOnlyVideo]);
+  });
+
   it('keeps older schedule items without a video id on the safe title fallback', () => {
     const openCreatorView = vi.fn();
     const props = buildUploadCalendarRouteProps({ openCreatorView });
