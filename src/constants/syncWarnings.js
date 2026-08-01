@@ -4,7 +4,14 @@ export const VIDEO_RECORDS_SYNC_WARNINGS = {
   clearFailed: '판단 기록 초기화가 온라인 저장소(Azure DB)에 반영되지 않았습니다. 기존 판단 기록을 화면에 다시 표시했습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
 };
 
-export const VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE = '온라인 저장소(Azure DB)의 영상 판단 기록을 전체 초기화할까요?\n\n봤음, 나중에 보기, 제외, 제작 후보 같은 판단 기록이 지워지고 숨겨졌던 후보가 다시 보일 수 있습니다.';
+export const VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE = '온라인 저장소(Azure DB)의 영상별 전체 작업 기록을 삭제할까요?\n\n판단만이 아니라 제작 후보 상태, 대본, 업로드 일정도 함께 삭제될 수 있어 현재 사용자 화면에서는 제공하지 않습니다.';
+
+export const VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS = {
+  'aria-label': '제작 후보, 대본, 업로드 일정 보호를 위해 전체 판단 초기화 사용 불가',
+  label: '판단 초기화',
+  show: false,
+  title: '제작 후보, 대본, 업로드 일정이 같은 기록에 함께 저장되어 전체 초기화는 현재 사용할 수 없습니다.',
+};
 
 export const SCRAPBOOK_SYNC_WARNINGS = {
   loadFallback: '온라인 저장소(Azure DB) 연결 실패로 이 브라우저에 남아 있던 소재 보관함 임시 기록을 표시 중입니다. 이 목록은 온라인 저장소(Azure DB) 기준 데이터가 아닙니다.',

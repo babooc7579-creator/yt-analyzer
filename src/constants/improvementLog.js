@@ -279,10 +279,10 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '전체 핵심 화면',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
-    lastReviewedAt: '2026-07-29',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. 일일 소재 결정 흐름, 수집 영상 카드·리스트 보기와 다중 선택·복사·선택 해제, 검색어 빠른 지우기, 적용 필터·선택 상태, 일부 온라인 저장 기능별 읽기 재확인 처리 중·결과 안내, 긴 제목 모바일 배치, 또터또·키워드 탐색, 최근 수집 상태에서 채널 운영실로 이어지는 흐름과 390×844 모바일 표시를 확인합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다.',
+    lastReviewedAt: '2026-08-01',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다. 2026-08-01 점검에서 레이더의 `판단 초기화`가 판단만이 아니라 제작 후보·대본·업로드 일정을 포함한 영상별 전체 작업 기록을 삭제할 수 있음을 확인했고, 사용자 화면의 두 실행 경로를 차단했습니다. 개별 항목의 `레이더로 되돌리기`는 그대로 유지합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
-    nextAction: '다음 배포부터 핵심 화면 변경 범위와 공통 안전 항목을 정기 회귀 검수표로 확인하고 결과를 작업 기록에 남깁니다.',
+    nextAction: '전체 작업 기록 삭제 API는 호환성 목적으로 유지하되 현재 화면에서 연결하지 않습니다. 레이더 판단만 선택적으로 초기화하려면 제작 기록 보존 규칙과 백엔드 저장 계약을 별도로 먼저 설계합니다.',
     decisions: [
       '버튼 존재와 자동 테스트 통과만으로 운영 확인 완료라고 표시하지 않습니다.',
       'Azure DB 실제 쓰기는 원문 보존과 원상복구가 가능한 대상을 정해 실행하고, YouTube API 신규 수집은 별도 승인 후 실행합니다.',
@@ -438,6 +438,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'deployment-warning-decision-boundary',
         label: 'github_id_token 경고와 실제 배포 성공의 분리 및 변경 보류 기준',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'radar-full-record-clear-protection',
+        label: '판단 초기화가 제작 후보·대본·업로드 일정을 포함한 전체 작업 기록을 삭제하지 못하도록 화면 실행 경로 차단',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

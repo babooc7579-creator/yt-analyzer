@@ -1,3 +1,4 @@
+import { VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS } from '../constants/syncWarnings';
 import { hasEmptyStoredVideoLoad } from './homeRadarJourney';
 
 const getDisplayVideoTitle = (videoTitle) => videoTitle || '이 영상';
@@ -22,9 +23,7 @@ export const getRadarCandidateCompletedStateViewProps = () => ({
     'aria-label': '제작 후보함 열기, 저장된 후보 조회이며 YouTube API 호출 없음',
   },
   clearDecisionsButtonProps: {
-    label: '판단 기록 초기화',
-    title: '온라인 저장소(Azure DB)에 저장된 판단 기록을 초기화',
-    'aria-label': '온라인 저장소(Azure DB)에 저장된 오늘 레이더 판단 기록 초기화',
+    ...VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS,
   },
 });
 
