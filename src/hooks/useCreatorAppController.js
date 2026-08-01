@@ -37,6 +37,7 @@ export function useCreatorAppController() {
     discoveryLinks: workspaceWorkflow.discoveryLinks,
     savedChannels: channelWorkflow.savedChannels,
     savedVideos: videoWorkflow.savedVideos,
+    productionSourceVideos: videoWorkflow.productionSourceVideos,
     scrapbookSyncWarning: videoWorkflow.scrapbookSyncWarning,
     selectedChannelIds: channelWorkflow.selectedChannelIds,
     videoRecordsSyncWarning: videoWorkflow.videoRecordsSyncWarning,

@@ -6,6 +6,7 @@ describe('legacyVaultTabViewProps utils', () => {
   it('builds scrapbook workspace props with vault state', () => {
     const discoveryLinks = [{ id: 'link1' }];
     const savedVideos = [{ videoId: 'saved1' }, { videoId: 'saved2' }];
+    const productionSourceVideos = [{ videoId: 'production1', scrapbookPurposes: ['production'] }];
     const videoUserRecords = { saved1: { status: 'candidate' } };
 
     const props = getLegacyVaultTabViewProps({
@@ -13,6 +14,7 @@ describe('legacyVaultTabViewProps utils', () => {
       creatorView: 'vault-all',
       discoveryLinks,
       promptCopyError: 'copy failed',
+      productionSourceVideos,
       savedVideos,
       videoUserRecords,
     });
@@ -22,6 +24,7 @@ describe('legacyVaultTabViewProps utils', () => {
       creatorView: 'vault-all',
       discoveryLinks,
       promptCopyError: 'copy failed',
+      productionSourceVideos,
       savedVideos,
       videoUserRecords,
     });

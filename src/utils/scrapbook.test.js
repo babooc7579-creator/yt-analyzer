@@ -5,7 +5,9 @@ import {
   SCRAPBOOK_DELETE_FAILED_MESSAGE,
   SCRAPBOOK_LOAD_FAILED_MESSAGE,
   SCRAPBOOK_SAVE_FAILED_MESSAGE,
+  SCRAPBOOK_PURPOSE,
   getCloudScrapbookVideos,
+  getMaterialScrapbookVideos,
   getNextScrapbookVideos,
   getProductionScopedVideos,
   getScrapbookEmptyStateActions,
@@ -16,8 +18,11 @@ import {
   getScrapbookVideoUrlList,
   getScrapbookWorkspaceViewProps,
   hasScrapbookVideo,
+  hasScrapbookPurpose,
   removeScrapbookVideo,
   upsertScrapbookVideo,
+  withScrapbookPurpose,
+  withoutScrapbookPurpose,
 } from './scrapbook';
 
 describe('scrapbook utils', () => {
@@ -43,6 +48,26 @@ describe('scrapbook utils', () => {
       secondVideo,
     ]);
     expect(getCloudScrapbookVideos(null)).toEqual([]);
+  });
+
+  it('keeps material and production purposes independent with legacy compatibility', () => {
+    const productionOnly = {
+      ...savedVideo,
+      scrapbookPurposes: [SCRAPBOOK_PURPOSE.PRODUCTION],
+    };
+    const materialAndProduction = withScrapbookPurpose(
+      savedVideo,
+      SCRAPBOOK_PURPOSE.PRODUCTION,
+    );
+
+    expect(hasScrapbookPurpose(savedVideo, SCRAPBOOK_PURPOSE.MATERIAL)).toBe(true);
+    expect(materialAndProduction.scrapbookPurposes).toEqual(['material', 'production']);
+    expect(withoutScrapbookPurpose(
+      materialAndProduction,
+      SCRAPBOOK_PURPOSE.MATERIAL,
+    ).scrapbookPurposes).toEqual(['production']);
+    expect(getMaterialScrapbookVideos([productionOnly, savedVideo])).toEqual([savedVideo]);
+    expect(hasScrapbookVideo([productionOnly], 'video-1')).toBe(false);
   });
 
   it('checks, upserts, and removes scrapbook videos by videoId', () => {
@@ -172,6 +197,7 @@ describe('scrapbook utils', () => {
       discoveryLinks: [{ id: 'link-1' }],
       promptCopyError: '',
       savedVideos: [savedVideo, secondVideo],
+      productionSourceVideos: [savedVideo, secondVideo],
       videoUserRecords: {
         'video-1': { statusIds: [PRODUCTION_STATUS.ACTIVE] },
       },
@@ -201,6 +227,22 @@ describe('scrapbook utils', () => {
       initialTargetDiscoveryLinkId: '',
       initialTargetVideoId: 'video-1',
     });
+
+    const productionOnlyProps = getScrapbookWorkspaceViewProps({
+      ...handlers,
+      creatorView: 'studio-candidates',
+      productionSourceVideos: [{
+        ...savedVideo,
+        scrapbookPurposes: [SCRAPBOOK_PURPOSE.PRODUCTION],
+      }],
+      savedVideos: [],
+      videoUserRecords: {
+        'video-1': { statusIds: [PRODUCTION_STATUS.CANDIDATE] },
+      },
+    });
+    expect(productionOnlyProps.headerProps.savedVideoCount).toBe(1);
+    expect(productionOnlyProps.headerProps.videoUrlList).toContain('video-1');
+    expect(productionOnlyProps.productionKanbanProps.videos).toHaveLength(1);
     const savedCardProps = productionProps.getScrapbookVideoCardProps(savedVideo);
     const secondCardProps = productionProps.getScrapbookVideoCardProps(secondVideo);
 
@@ -231,6 +273,7 @@ describe('scrapbook utils', () => {
       discoveryLinks: [],
       promptCopyError: '',
       savedVideos: [],
+      productionSourceVideos: [],
       videoUserRecords: {},
     });
 

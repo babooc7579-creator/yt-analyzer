@@ -77,7 +77,9 @@ vi.mock('./useDiscoveryLinks', () => ({
 
 vi.mock('./useScrapbook', () => ({
   useScrapbook: vi.fn(() => ({
+    ensureProductionVideoSource: vi.fn(),
     isVideoSaved: vi.fn(),
+    productionSourceVideos: [{ videoId: 'video-1', scrapbookPurposes: ['production'] }],
     savedVideos: [{ videoId: 'video-1' }],
     scrapbookSyncWarning: '',
     toggleScrapVideo: vi.fn(),
@@ -280,9 +282,8 @@ describe('Creator app workflow composition hooks', () => {
     const productionActions = useVideoProductionActions.mock.results[0].value;
 
     expect(useVideoProductionActions).toHaveBeenCalledWith({
-      isVideoSaved: scrapbook.isVideoSaved,
+      ensureProductionVideoSource: scrapbook.ensureProductionVideoSource,
       markVideoStatus: videoUserRecords.markVideoStatus,
-      toggleScrapVideo: scrapbook.toggleScrapVideo,
       videoUserRecords: videoUserRecords.videoUserRecords,
     });
     expect(workflow).toEqual(expect.objectContaining({
@@ -291,12 +292,25 @@ describe('Creator app workflow composition hooks', () => {
       isVideoSaved: scrapbook.isVideoSaved,
       markRadarVideoStatus: videoUserRecords.markVideoStatus,
       promoteVideoToProduction: productionActions.promoteVideoToProduction,
+      productionSourceVideos: scrapbook.productionSourceVideos,
       savedVideos: scrapbook.savedVideos,
       scrapbookSyncWarning: scrapbook.scrapbookSyncWarning,
-      toggleScrapVideo: scrapbook.toggleScrapVideo,
+      toggleScrapVideo: expect.any(Function),
       updateVideoUserRecord: videoUserRecords.updateVideoUserRecord,
       videoRecordsSyncWarning: videoUserRecords.videoRecordsSyncWarning,
       videoUserRecords: videoUserRecords.videoUserRecords,
     }));
+
+    workflow.toggleScrapVideo({ videoId: 'video-1' });
+    expect(scrapbook.toggleScrapVideo).toHaveBeenCalledWith(
+      { videoId: 'video-1' },
+      { preserveForProduction: true },
+    );
+
+    workflow.toggleScrapVideo({ videoId: 'video-2' });
+    expect(scrapbook.toggleScrapVideo).toHaveBeenLastCalledWith(
+      { videoId: 'video-2' },
+      { preserveForProduction: false },
+    );
   });
 });

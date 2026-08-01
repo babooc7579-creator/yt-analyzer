@@ -14,6 +14,44 @@ const getVideoId = (video) => toVideoObject(video).videoId;
 
 const getVideoTitle = (video) => toVideoObject(video).title || '이 영상';
 
+export const SCRAPBOOK_PURPOSE = {
+  MATERIAL: 'material',
+  PRODUCTION: 'production',
+};
+
+const SCRAPBOOK_PURPOSE_VALUES = Object.values(SCRAPBOOK_PURPOSE);
+
+export const getScrapbookPurposes = (video) => {
+  const sourceVideo = toVideoObject(video);
+  if (!Object.prototype.hasOwnProperty.call(sourceVideo, 'scrapbookPurposes')) {
+    return [SCRAPBOOK_PURPOSE.MATERIAL];
+  }
+
+  return [...new Set(
+    (Array.isArray(sourceVideo.scrapbookPurposes) ? sourceVideo.scrapbookPurposes : [])
+      .filter(purpose => SCRAPBOOK_PURPOSE_VALUES.includes(purpose)),
+  )];
+};
+
+export const hasScrapbookPurpose = (video, purpose) => (
+  getScrapbookPurposes(video).includes(purpose)
+);
+
+export const withScrapbookPurpose = (video, purpose) => {
+  const sourceVideo = toVideoObject(video);
+  if (!SCRAPBOOK_PURPOSE_VALUES.includes(purpose)) return sourceVideo;
+
+  return {
+    ...sourceVideo,
+    scrapbookPurposes: [...new Set([...getScrapbookPurposes(sourceVideo), purpose])],
+  };
+};
+
+export const withoutScrapbookPurpose = (video, purpose) => ({
+  ...toVideoObject(video),
+  scrapbookPurposes: getScrapbookPurposes(video).filter(item => item !== purpose),
+});
+
 export const SCRAPBOOK_LOAD_FAILED_MESSAGE =
   '소재 보관함을 불러오지 못했습니다.';
 
@@ -34,8 +72,14 @@ export const getCloudScrapbookVideos = (videos) => (
   Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
 );
 
+export const getMaterialScrapbookVideos = (videos) => (
+  getCloudScrapbookVideos(videos).filter(video => (
+    hasScrapbookPurpose(video, SCRAPBOOK_PURPOSE.MATERIAL)
+  ))
+);
+
 export const hasScrapbookVideo = (videos, videoId) => (
-  getCloudScrapbookVideos(videos).some(video => getVideoId(video) === videoId)
+  getMaterialScrapbookVideos(videos).some(video => getVideoId(video) === videoId)
 );
 
 export const removeScrapbookVideo = (videos, videoId) => (
@@ -161,6 +205,7 @@ export const getScrapbookWorkspaceViewProps = ({
   copiedPrompt,
   promptCopyError,
   savedVideos,
+  productionSourceVideos,
   videoUserRecords,
   onCopyPrompt,
   onFetchComments,
@@ -176,10 +221,13 @@ export const getScrapbookWorkspaceViewProps = ({
   onUpdateVideoRecord,
   onUnsavedDraftsChange,
 }) => {
-  const savedVideoList = getCloudScrapbookVideos(savedVideos);
+  const savedVideoList = getMaterialScrapbookVideos(savedVideos);
+  const productionVideoSources = Array.isArray(productionSourceVideos)
+    ? getCloudScrapbookVideos(productionSourceVideos)
+    : getCloudScrapbookVideos(savedVideos);
   const isProductionView = creatorView === 'studio-candidates';
   const headerVideos = isProductionView
-    ? getProductionScopedVideos(savedVideoList, videoUserRecords)
+    ? getProductionScopedVideos(productionVideoSources, videoUserRecords)
     : savedVideoList;
   const videoUrlList = getScrapbookVideoUrlList(headerVideos);
 
@@ -220,7 +268,7 @@ export const getScrapbookWorkspaceViewProps = ({
       initialSearchSource: creatorViewIntent?.source || '',
       initialTargetDiscoveryLinkId: creatorViewIntent?.targetDiscoveryLinkId || '',
       initialTargetVideoId: creatorViewIntent?.targetVideoId || '',
-      videos: savedVideoList,
+      videos: productionVideoSources,
       videoUserRecords,
       onMoveVideo,
       onOpenDiscoveryLinks,

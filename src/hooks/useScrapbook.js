@@ -7,8 +7,13 @@ import {
   SCRAPBOOK_LOAD_FAILED_MESSAGE,
   SCRAPBOOK_SAVE_FAILED_MESSAGE,
   getCloudScrapbookVideos,
+  getMaterialScrapbookVideos,
   getNextScrapbookVideos,
   hasScrapbookVideo,
+  SCRAPBOOK_PURPOSE,
+  withScrapbookPurpose,
+  withoutScrapbookPurpose,
+  upsertScrapbookVideo,
 } from '../utils/scrapbook';
 
 export function useScrapbook() {
@@ -53,7 +58,40 @@ export function useScrapbook() {
 
   const isVideoSaved = (videoId) => hasScrapbookVideo(savedVideos, videoId);
 
-  const toggleScrapVideo = async (video) => {
+  const saveScrapbookVideo = async (video) => {
+    const data = await saveScrapbookVideos([video]);
+    if (!data.success) throw new Error(data.error || SCRAPBOOK_SAVE_FAILED_MESSAGE);
+    const nextVideos = upsertScrapbookVideo(cloudScrapbookCacheRef.current, video);
+    setSavedVideos(nextVideos);
+    cacheCloudScrapbook(nextVideos);
+  };
+
+  const ensureProductionVideoSource = async (video) => {
+    if (!scrapbookCloudReady) {
+      setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.cloudRequired);
+      return false;
+    }
+
+    const existingVideo = cloudScrapbookCacheRef.current.find(item => item?.videoId === video?.videoId);
+    const sourceVideo = withScrapbookPurpose(
+      existingVideo
+        ? { ...existingVideo, ...(video || {}) }
+        : { ...(video || {}), scrapbookPurposes: [] },
+      SCRAPBOOK_PURPOSE.PRODUCTION,
+    );
+
+    try {
+      await saveScrapbookVideo(sourceVideo);
+      setScrapbookSyncWarning('');
+      return true;
+    } catch {
+      setScrapbookCloudReady(false);
+      setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.saveFailed);
+      return false;
+    }
+  };
+
+  const toggleScrapVideo = async (video, { preserveForProduction = false } = {}) => {
     const isSaved = isVideoSaved(video.videoId);
 
     if (!scrapbookCloudReady) {
@@ -63,17 +101,26 @@ export function useScrapbook() {
 
     try {
       if (isSaved) {
-        const data = await deleteScrapbookVideo(video.videoId);
-        if (!data.success) throw new Error(data.error || SCRAPBOOK_DELETE_FAILED_MESSAGE);
-        const nextVideos = getNextScrapbookVideos(cloudScrapbookCacheRef.current, video, true);
-        setSavedVideos(nextVideos);
-        cacheCloudScrapbook(nextVideos);
+        if (preserveForProduction) {
+          const existingVideo = cloudScrapbookCacheRef.current.find(item => item?.videoId === video.videoId) || video;
+          const productionVideo = withScrapbookPurpose(
+            withoutScrapbookPurpose(existingVideo, SCRAPBOOK_PURPOSE.MATERIAL),
+            SCRAPBOOK_PURPOSE.PRODUCTION,
+          );
+          await saveScrapbookVideo(productionVideo);
+        } else {
+          const data = await deleteScrapbookVideo(video.videoId);
+          if (!data.success) throw new Error(data.error || SCRAPBOOK_DELETE_FAILED_MESSAGE);
+          const nextVideos = getNextScrapbookVideos(cloudScrapbookCacheRef.current, video, true);
+          setSavedVideos(nextVideos);
+          cacheCloudScrapbook(nextVideos);
+        }
       } else {
-        const data = await saveScrapbookVideos([video]);
-        if (!data.success) throw new Error(data.error || SCRAPBOOK_SAVE_FAILED_MESSAGE);
-        const nextVideos = getNextScrapbookVideos(cloudScrapbookCacheRef.current, video, false);
-        setSavedVideos(nextVideos);
-        cacheCloudScrapbook(nextVideos);
+        const existingVideo = cloudScrapbookCacheRef.current.find(item => item?.videoId === video.videoId);
+        await saveScrapbookVideo(withScrapbookPurpose({
+          ...(existingVideo || {}),
+          ...video,
+        }, SCRAPBOOK_PURPOSE.MATERIAL));
       }
       setScrapbookSyncWarning('');
       return true;
@@ -85,7 +132,9 @@ export function useScrapbook() {
   };
 
   return {
-    savedVideos,
+    ensureProductionVideoSource,
+    productionSourceVideos: getCloudScrapbookVideos(savedVideos),
+    savedVideos: getMaterialScrapbookVideos(savedVideos),
     scrapbookSyncWarning,
     isVideoSaved,
     retryScrapbookSync: syncScrapbookFromCloud,

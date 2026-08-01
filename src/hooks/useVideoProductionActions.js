@@ -1,9 +1,8 @@
 import { PRODUCTION_STATUS, hasProductionStatus } from '../constants/status';
 
 export function useVideoProductionActions({
-  isVideoSaved,
+  ensureProductionVideoSource,
   markVideoStatus,
-  toggleScrapVideo,
   videoUserRecords,
 }) {
   const isProductionCandidate = (videoId) => (
@@ -11,10 +10,8 @@ export function useVideoProductionActions({
   );
 
   const promoteVideoToProduction = async (video) => {
-    if (!isVideoSaved(video.videoId)) {
-      const savedToScrapbook = await toggleScrapVideo(video);
-      if (!savedToScrapbook) return false;
-    }
+    const sourceReady = await ensureProductionVideoSource(video);
+    if (!sourceReady) return false;
 
     return markVideoStatus(video.videoId, PRODUCTION_STATUS.CANDIDATE);
   };

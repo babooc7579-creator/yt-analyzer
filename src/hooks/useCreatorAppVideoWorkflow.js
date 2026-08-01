@@ -40,6 +40,7 @@ export function useCreatorAppVideoWorkflow({ videos }) {
     lengthFilter,
     markRadarVideoStatus: reviewWorkflow.markRadarVideoStatus,
     promoteVideoToProduction: reviewWorkflow.promoteVideoToProduction,
+    productionSourceVideos: reviewWorkflow.productionSourceVideos,
     promptCopyError,
     restoreVideoToRadar: reviewWorkflow.restoreVideoToRadar,
     retryScrapbookSync: reviewWorkflow.retryScrapbookSync,

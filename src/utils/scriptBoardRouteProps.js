@@ -34,6 +34,7 @@ export function buildScriptBoardRouteProps({
   discoveryLinks,
   onConfirmUnsavedNavigation,
   openCreatorView,
+  productionSourceVideos,
   savedVideos,
   setHasUnsavedProductionDrafts,
   updateVideoUserRecord,
@@ -88,6 +89,9 @@ export function buildScriptBoardRouteProps({
     onUnsavedDraftsChange: setHasUnsavedProductionDrafts,
     onUpdateVideoRecord: updateScriptRecord,
     videoUserRecords: scriptRecordMap,
-    videos: [...toArray(savedVideos), ...discoverySources],
+    videos: [
+      ...toArray(Array.isArray(productionSourceVideos) ? productionSourceVideos : savedVideos),
+      ...discoverySources,
+    ],
   };
 }

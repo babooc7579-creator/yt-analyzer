@@ -139,7 +139,25 @@ describe('scrapbookVideoFooterActions utils', () => {
 
     expect(confirmFn).toHaveBeenCalledWith(expect.stringContaining('Display title'));
     expect(confirmFn.mock.calls[0][0]).toContain('영상 원본이나 수집된 영상 정보는 삭제되지 않고');
-    expect(onRemoveScrap).toHaveBeenCalledWith(video);
+    expect(onRemoveScrap).toHaveBeenCalledWith(video, { preserveForProduction: false });
+  });
+
+  it('keeps the production source when removing a candidate from the material scrapbook', () => {
+    const confirmFn = vi.fn(() => true);
+    const onRemoveScrap = vi.fn();
+    const buttonProps = getScrapbookRemoveButtonProps({
+      confirmFn,
+      isProductionCandidate: true,
+      onRemoveScrap,
+      video,
+      videoTitle: 'Display title',
+    });
+
+    buttonProps.onClick();
+
+    expect(confirmFn.mock.calls[0][0]).toContain('제작 후보와 대본·업로드 일정의 원본 정보는 그대로 유지');
+    expect(buttonProps.title).toContain('제작 후보와 대본·업로드 일정 원본은 유지');
+    expect(onRemoveScrap).toHaveBeenCalledWith(video, { preserveForProduction: true });
   });
 
   it('does not remove the scrapbook marker when confirm is cancelled', () => {
