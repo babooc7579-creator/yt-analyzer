@@ -3,7 +3,7 @@ import { useVideoProductionActions } from './useVideoProductionActions';
 import { useVideoUserRecords } from './useVideoUserRecords';
 import { PRODUCTION_STATUSES, hasAnyProductionStatus } from '../constants/status';
 
-export function useCreatorAppVideoReviewWorkflow() {
+export function useCreatorAppVideoReviewWorkflow({ collectedVideos = [] } = {}) {
   const {
     ensureProductionVideoSource,
     productionSourceVideos,
@@ -12,7 +12,7 @@ export function useCreatorAppVideoReviewWorkflow() {
     isVideoSaved,
     retryScrapbookSync,
     toggleScrapVideo: toggleCloudScrapVideo,
-  } = useScrapbook();
+  } = useScrapbook({ collectedVideos });
   const {
     videoUserRecords,
     videoRecordsSyncWarning,

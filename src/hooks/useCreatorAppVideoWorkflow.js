@@ -3,7 +3,7 @@ import { useVideoExplorerState } from './useVideoExplorerState';
 import { useVideoSelection } from './useVideoSelection';
 
 export function useCreatorAppVideoWorkflow({ videos }) {
-  const reviewWorkflow = useCreatorAppVideoReviewWorkflow();
+  const reviewWorkflow = useCreatorAppVideoReviewWorkflow({ collectedVideos: videos });
   const {
     filteredAndSortedVideos,
     lengthFilter,

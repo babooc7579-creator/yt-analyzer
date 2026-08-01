@@ -25,6 +25,7 @@
 - `GET /channel-preview?handle=...`는 저장 전 미리보기이지만 YouTube API 조회가 필요합니다.
 - `POST /channels`, `POST /channels/bulk`는 채널을 Cloud DB에 저장하며, 채널 정보 확인을 위해 YouTube API 조회가 필요합니다.
 - `/scrapbook`은 Cloud DB에 저장되지만 별도 container가 아니라 `videos` container 안의 `docType: scrapbook`입니다. 2026-08-01부터 `scrapbookPurposes`로 사용자 소재 보관(`material`)과 제작 후보 원본 유지(`production`) 용도를 구분하며, 이 필드가 없는 기존 문서는 소재 보관용으로 해석합니다.
+- 현재 선택 채널의 수집 영상 목록을 불러온 경우, 같은 `videoId`의 제목·조회수·채널명 등 현재 표시 정보를 소재 보관함과 제작 화면에 우선 반영합니다. 이는 프론트 화면용 병합으로 `POST /scrapbook`, YouTube API, localStorage 쓰기를 자동 실행하지 않습니다. `scrapbookPurposes`, `savedAt`, 스크랩 문서 `id`는 기존 보관 값을 유지합니다.
 - `/video-records`는 Cloud DB에 저장되며 기존 `status`를 대표 상태로 유지합니다. `statusIds`는 복수 판단 보존용 보조 필드로, `focusPinnedAt`은 제작 후보 수동 집중 고정 시각으로 저장/조회됩니다.
 - `/discovery-links`는 Cloud DB에 저장되며 기존 `videos` container 안의 `docType: discovery_link` 문서를 조회/저장/수정/삭제합니다.
 - 2026-07-03 배포 환경 읽기 전용 확인에서 `GET /discovery-links`는 200으로 성공했고 현재 링크 목록은 0개였습니다.
@@ -66,7 +67,7 @@
 | 채널별 과거 영상 채우기 | `backfillChannelHistory` | `POST /scan/backfill` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | 사용자가 채널 하나를 직접 실행. 1회 기본 2페이지·서버 최대 3페이지로 제한. 진행 커서는 채널의 `backfillState`에 저장하며 자동 반복 없음 |
 | 전체/태그 새 영상 수집 | `scanChannels` | `GET /scan`, `GET /scan?tag=...` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | GET이지만 비용성/변경 작업 |
 | 태그 이름 변경 | `renameTag` | `GET /tags/rename?from=...&to=...` | DB 변경 | 아니오 | 예 | 예 | 아니오 | 가능 | GET이지만 DB 변경. 오해 위험 높음 |
-| 스크랩북 불러오기 | `fetchScrapbook` | `GET /scrapbook` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | `videos` container 안의 `docType` 조회 |
+| 소재·제작 원본 불러오기 | `fetchScrapbook` | `GET /scrapbook` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | `videos` container 안의 `docType` 조회. 현재 불러온 수집 영상과 `videoId`가 같으면 화면에서만 최신 표시 정보 병합 |
 | 소재 보관·제작 원본 저장 | `saveScrapbookVideos` | `POST /scrapbook` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | `scrapbookPurposes`의 `material`·`production` 용도를 보존. 제작 후보 지정은 원본 저장 성공 후 판단 기록을 별도 저장 |
 | 소재 보관 해제 | `deleteScrapbookVideo` 또는 `saveScrapbookVideos` | `DELETE /scrapbook/{videoId}` 또는 `POST /scrapbook` | DB 변경 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 제작 기록이 없으면 문서 삭제. 제작 후보이면 `material` 용도만 해제하고 `production` 원본은 유지 |
 | 영상 판단 기록 불러오기 | `fetchVideoUserRecords` | `GET /video-records` | DB 조회 | 아니오 | 예 | 아니오 | localStorage 보조 | 가능 | localStorage와 Cloud 차이 가능 |

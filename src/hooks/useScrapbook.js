@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { deleteScrapbookVideo, fetchScrapbook, saveScrapbookVideos } from '../services/scrapbookApi';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
@@ -10,13 +10,14 @@ import {
   getMaterialScrapbookVideos,
   getNextScrapbookVideos,
   hasScrapbookVideo,
+  mergeScrapbookVideosWithCollectedVideos,
   SCRAPBOOK_PURPOSE,
   withScrapbookPurpose,
   withoutScrapbookPurpose,
   upsertScrapbookVideo,
 } from '../utils/scrapbook';
 
-export function useScrapbook() {
+export function useScrapbook({ collectedVideos = [] } = {}) {
   const cloudScrapbookCacheRef = useRef([]);
   const [savedVideos, setSavedVideos] = useState([]);
   const [scrapbookCloudReady, setScrapbookCloudReady] = useState(false);
@@ -102,9 +103,9 @@ export function useScrapbook() {
     try {
       if (isSaved) {
         if (preserveForProduction) {
-          const existingVideo = cloudScrapbookCacheRef.current.find(item => item?.videoId === video.videoId) || video;
+          const existingVideo = cloudScrapbookCacheRef.current.find(item => item?.videoId === video.videoId);
           const productionVideo = withScrapbookPurpose(
-            withoutScrapbookPurpose(existingVideo, SCRAPBOOK_PURPOSE.MATERIAL),
+            withoutScrapbookPurpose({ ...(existingVideo || {}), ...video }, SCRAPBOOK_PURPOSE.MATERIAL),
             SCRAPBOOK_PURPOSE.PRODUCTION,
           );
           await saveScrapbookVideo(productionVideo);
@@ -131,10 +132,15 @@ export function useScrapbook() {
     }
   };
 
+  const displayVideos = useMemo(
+    () => mergeScrapbookVideosWithCollectedVideos(savedVideos, collectedVideos),
+    [collectedVideos, savedVideos],
+  );
+
   return {
     ensureProductionVideoSource,
-    productionSourceVideos: getCloudScrapbookVideos(savedVideos),
-    savedVideos: getMaterialScrapbookVideos(savedVideos),
+    productionSourceVideos: getCloudScrapbookVideos(displayVideos),
+    savedVideos: getMaterialScrapbookVideos(displayVideos),
     scrapbookSyncWarning,
     isVideoSaved,
     retryScrapbookSync: syncScrapbookFromCloud,

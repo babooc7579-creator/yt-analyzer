@@ -81,6 +81,7 @@ describe('useCreatorAppVideoWorkflow', () => {
     const workflow = useCreatorAppVideoWorkflow({ videos });
 
     expect(useCreatorAppVideoReviewWorkflow).toHaveBeenCalledTimes(1);
+    expect(useCreatorAppVideoReviewWorkflow).toHaveBeenCalledWith({ collectedVideos: videos });
     expect(useVideoExplorerState).toHaveBeenCalledWith(videos);
     expect(useVideoSelection).toHaveBeenCalledTimes(1);
     expect(workflow).toEqual({
