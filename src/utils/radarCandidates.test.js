@@ -233,6 +233,24 @@ describe('radarCandidates utils', () => {
     ]);
   });
 
+  it('keeps every production workflow status out of today radar candidates', () => {
+    const productionStatuses = Object.values(PRODUCTION_STATUS);
+    const videos = productionStatuses.map((status, index) => ({
+      ...radarVideo,
+      videoId: `production-${index}`,
+    }));
+    const videoUserRecords = Object.fromEntries(productionStatuses.map((status, index) => ([
+      `production-${index}`,
+      { status, statusIds: [status] },
+    ])));
+
+    const model = getRadarCandidateDataModel({ videoUserRecords, videos });
+
+    expect(model.candidates).toEqual([]);
+    expect(model.allDecisionCount).toBe(productionStatuses.length);
+    expect(model.decisionSummary.production).toBe(1);
+  });
+
   it('builds radar decision buckets, summaries, groups, and queue summaries safely', () => {
     const videoList = [
       { videoId: 'reviewed' },

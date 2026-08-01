@@ -172,4 +172,21 @@ describe('videoUserRecords utils', () => {
       VIDEO_STATUS.UNSEEN,
     ]);
   });
+
+  it('removes legacy production workflow statuses when explicitly restored to radar', () => {
+    const record = createRadarRestoredRecord({
+      status: PRODUCTION_STATUS.DECIDED,
+      statusIds: [
+        PRODUCTION_STATUS.REVIEWING,
+        PRODUCTION_STATUS.DECIDED,
+        PRODUCTION_STATUS.ON_HOLD,
+        VIDEO_STATUS.TITLE_REFERENCE,
+      ],
+    }, 'v1', 'now');
+
+    expect(record.statusIds).toEqual([
+      VIDEO_STATUS.TITLE_REFERENCE,
+      VIDEO_STATUS.UNSEEN,
+    ]);
+  });
 });

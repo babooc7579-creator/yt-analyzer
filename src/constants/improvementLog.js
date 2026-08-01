@@ -280,9 +280,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-08-01',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다. 2026-08-01 점검에서 레이더 전체 작업 기록 삭제 경로를 차단했습니다. 소재 보관과 제작 후보 원본 용도를 분리했고, 현재 불러온 수집 영상 정보가 있으면 소재·제작 화면에 최신 표시 정보를 우선 반영합니다. 제작 기록 저장은 프론트에서 변경 필드만 전송하고 백엔드에서 누락 필드를 보존해 대본·일정·제작 상태가 서로를 덮어쓰지 않도록 보완했습니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다. 2026-08-01 점검에서 레이더 전체 작업 기록 삭제 경로를 차단했습니다. 소재 보관과 제작 후보 원본 용도를 분리했고, 현재 불러온 수집 영상 정보가 있으면 소재·제작 화면에 최신 표시 정보를 우선 반영합니다. 제작 기록 저장은 변경 필드만 전송하고 누락 필드를 보존합니다. 과거 호환 제작 상태를 포함한 모든 제작 진행 기록은 오늘의 레이더에서 숨기고 제작 후보함에서 계속 확인하도록 통일했습니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
-    nextAction: '예전 제작 상태와 오늘의 레이더 숨김 정책을 대조해, 이미 제작 완료된 영상이 오늘 후보에서 숨겨지는 것이 의도된 동작인지와 다시 볼 경로가 명확한지 다음으로 점검합니다.',
+    nextAction: '제작 후보 상태 저장 실패 뒤 남을 수 있는 화면 비노출 제작 원본을 자동으로 복구할지 결정합니다. 자동 삭제·복구는 Cloud 데이터 변경이므로 별도 승인 뒤 진행합니다.',
     decisions: [
       '버튼 존재와 자동 테스트 통과만으로 운영 확인 완료라고 표시하지 않습니다.',
       'Azure DB 실제 쓰기는 원문 보존과 원상복구가 가능한 대상을 정해 실행하고, YouTube API 신규 수집은 별도 승인 후 실행합니다.',
@@ -458,6 +458,16 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'production-record-partial-update-safety',
         label: '대본·일정·제작 상태의 변경 필드만 저장하고 누락 필드는 백엔드에서 보존',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'legacy-production-radar-visibility',
+        label: '과거 호환 제작 상태를 포함한 모든 제작 진행 영상을 오늘의 레이더에서 숨기고 제작 후보함에서 계속 확인',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'compatibility-facade-audit',
+        label: 'functionApi·라우팅 호환 관문을 실제 중복 로직과 구분하고 신규 코드의 도메인 모듈 직접 사용 기준 기록',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],
