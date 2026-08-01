@@ -1,3 +1,4 @@
+// Compatibility facade for older imports. New code should import the domain API module directly.
 export {
   createChannel,
   createChannelNote,

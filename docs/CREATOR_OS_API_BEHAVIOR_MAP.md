@@ -208,6 +208,7 @@ URL 복사, URL 목록 복사, AI 프롬프트 복사는 Cloud DB나 YouTube API
 - 상태 저장 화면에서는 과도한 복수 상태 기능을 확장하지 않습니다.
 - 현재 단계에서는 `status`를 대표 상태로 말하고, `statusIds`는 복수 판단 보존용 보조 필드로 말합니다.
 - `focusPinnedAt`은 사용자가 직접 고른 제작 후보의 고정 시각이며, 기존 제작 상태를 변경하지 않습니다.
+- 오늘의 레이더는 `production_candidate`, `production_reviewing`, `production_decided`, `production_on_hold`, `production_active`, `uploaded`를 모두 제작 진행 기록으로 보고 후보 목록에서 숨깁니다. 기존 세부 상태값은 바꾸지 않고 제작 후보함의 호환 그룹에서 계속 조회합니다.
 - 필드가 없는 기존 record는 고정되지 않은 상태로 읽고, 필드를 보내지 않은 저장에서는 기존 Cloud 고정값을 보존합니다.
 - 2026-08-01부터 프론트는 영상별 전체 작업 기록이 아니라 사용자가 바꾼 필드만 `POST /video-records`로 전송합니다.
 - 백엔드는 요청에 없는 `status`, `statusIds`, `draftTitle`, `note`, `targetPublishDate`, `uploadedAt`, `focusPinnedAt`, 구조화 대본 필드와 `createdAt`을 기존 Cosmos DB 문서에서 보존합니다.
