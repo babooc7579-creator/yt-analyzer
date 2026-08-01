@@ -281,6 +281,8 @@ describe('Creator app workflow composition hooks', () => {
     const videoUserRecords = useVideoUserRecords.mock.results[0].value;
     const productionActions = useVideoProductionActions.mock.results[0].value;
 
+    expect(useScrapbook).toHaveBeenCalledWith({ collectedVideos: [] });
+
     expect(useVideoProductionActions).toHaveBeenCalledWith({
       ensureProductionVideoSource: scrapbook.ensureProductionVideoSource,
       markVideoStatus: videoUserRecords.markVideoStatus,

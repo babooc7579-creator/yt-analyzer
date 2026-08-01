@@ -19,6 +19,8 @@ import {
   getScrapbookWorkspaceViewProps,
   hasScrapbookVideo,
   hasScrapbookPurpose,
+  mergeScrapbookVideoWithCollectedVideo,
+  mergeScrapbookVideosWithCollectedVideos,
   removeScrapbookVideo,
   upsertScrapbookVideo,
   withScrapbookPurpose,
@@ -68,6 +70,45 @@ describe('scrapbook utils', () => {
     ).scrapbookPurposes).toEqual(['production']);
     expect(getMaterialScrapbookVideos([productionOnly, savedVideo])).toEqual([savedVideo]);
     expect(hasScrapbookVideo([productionOnly], 'video-1')).toBe(false);
+  });
+
+  it('uses current collected display fields without replacing scrapbook ownership fields', () => {
+    const scrapbookVideo = {
+      ...savedVideo,
+      id: 'default:video-1',
+      savedAt: '2026-07-01T00:00:00.000Z',
+      scrapbookPurposes: [SCRAPBOOK_PURPOSE.PRODUCTION],
+      view_count: 10,
+      channel_title: 'Saved channel',
+    };
+    const currentVideo = {
+      ...savedVideo,
+      id: 'video-1',
+      savedAt: 'not-a-scrapbook-date',
+      scrapbookPurposes: [SCRAPBOOK_PURPOSE.MATERIAL],
+      title: 'Current title',
+      view_count: 25,
+      channel_title: '',
+      isShorts: false,
+    };
+
+    expect(mergeScrapbookVideoWithCollectedVideo(scrapbookVideo, currentVideo)).toEqual({
+      ...scrapbookVideo,
+      title: 'Current title',
+      view_count: 25,
+      isShorts: false,
+    });
+  });
+
+  it('updates only matching scrapbook videos and keeps unmatched saved snapshots', () => {
+    expect(mergeScrapbookVideosWithCollectedVideos(
+      [savedVideo, secondVideo],
+      [{ videoId: 'video-1', title: 'Current title' }, { videoId: 'other', title: 'Other' }],
+    )).toEqual([
+      { ...savedVideo, title: 'Current title' },
+      secondVideo,
+    ]);
+    expect(mergeScrapbookVideosWithCollectedVideos([savedVideo], null)).toEqual([savedVideo]);
   });
 
   it('checks, upserts, and removes scrapbook videos by videoId', () => {

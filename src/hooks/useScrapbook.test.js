@@ -26,6 +26,7 @@ vi.mock('react', () => ({
     if (typeof cleanup === 'function') effectCleanups.push(cleanup);
   }),
   useRef: vi.fn((initialValue) => ({ current: initialValue })),
+  useMemo: vi.fn(factory => factory()),
   useState: vi.fn((initialValue) => {
     const setter = vi.fn();
     stateSetters.push(setter);
@@ -52,7 +53,7 @@ vi.mock('../services/storage', () => ({
   writeJsonStorage: writeJsonStorageMock,
 }));
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { SCRAPBOOK_SYNC_WARNINGS } from '../constants/syncWarnings';
 import { STORAGE_KEYS, readJsonStorage, writeJsonStorage } from '../services/storage';
 import {
@@ -118,6 +119,7 @@ describe('useScrapbook', () => {
     await flushPromises();
 
     expect(useRef).toHaveBeenCalledWith([]);
+    expect(useMemo).toHaveBeenCalled();
     expect(useState).toHaveBeenNthCalledWith(1, []);
     expect(fetchScrapbook).toHaveBeenCalledTimes(1);
     expect(readJsonStorage).not.toHaveBeenCalled();
@@ -224,14 +226,20 @@ describe('useScrapbook', () => {
 
   it('removes only the material purpose for a production candidate', async () => {
     fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
-    setScrapbookState({ cloudReady: true, savedVideos: [savedVideo] });
+    const storedVideo = { ...savedVideo, savedAt: '2026-07-01T00:00:00.000Z' };
+    const currentVideo = { ...storedVideo, title: 'Current title', view_count: 25 };
+    setScrapbookState({ cloudReady: true, savedVideos: [storedVideo] });
     const scrapbook = useScrapbook();
 
-    const changed = await scrapbook.toggleScrapVideo(savedVideo, {
+    const changed = await scrapbook.toggleScrapVideo(currentVideo, {
       preserveForProduction: true,
     });
 
-    const productionVideo = { ...savedVideo, scrapbookPurposes: ['production'] };
+    const productionVideo = {
+      ...storedVideo,
+      ...currentVideo,
+      scrapbookPurposes: ['production'],
+    };
     expect(changed).toBe(true);
     expect(deleteScrapbookVideo).not.toHaveBeenCalled();
     expect(saveScrapbookVideos).toHaveBeenCalledWith([productionVideo]);
@@ -263,6 +271,34 @@ describe('useScrapbook', () => {
     expect(scrapbook.productionSourceVideos).toEqual([productionVideo, secondVideo]);
     expect(scrapbook.isVideoSaved('video-1')).toBe(false);
     expect(scrapbook.isVideoSaved('video-2')).toBe(true);
+  });
+
+  it('shows current collected metadata without writing it back automatically', () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    const productionVideo = {
+      ...savedVideo,
+      savedAt: '2026-07-01T00:00:00.000Z',
+      scrapbookPurposes: ['production'],
+      view_count: 10,
+    };
+    setScrapbookState({ cloudReady: true, savedVideos: [productionVideo] });
+
+    const scrapbook = useScrapbook({
+      collectedVideos: [{
+        videoId: 'video-1',
+        title: 'Current title',
+        view_count: 25,
+      }],
+    });
+
+    expect(scrapbook.productionSourceVideos).toEqual([{
+      ...productionVideo,
+      title: 'Current title',
+      view_count: 25,
+    }]);
+    expect(saveScrapbookVideos).not.toHaveBeenCalled();
+    expect(deleteScrapbookVideo).not.toHaveBeenCalled();
+    expect(writeJsonStorage).not.toHaveBeenCalled();
   });
 
   it('marks Cloud as not ready and avoids cache updates when scrapbook save fails', async () => {

@@ -280,9 +280,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-08-01',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다. 2026-08-01 점검에서 레이더 전체 작업 기록 삭제 경로를 차단했습니다. 이어 소재 보관과 제작 후보 원본 용도를 분리해 소재 보관을 해제해도 제작 후보·대본·업로드 일정의 제목과 썸네일 원본이 유지되도록 보완했습니다. 기존 소재 보관 데이터는 별도 변환 없이 소재 보관용으로 호환합니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다. 2026-08-01 점검에서 레이더 전체 작업 기록 삭제 경로를 차단했습니다. 소재 보관과 제작 후보 원본 용도를 분리했고, 현재 불러온 수집 영상 정보가 있으면 소재 보관함·제작 후보함·대본 작업실·업로드 캘린더에서 제목·조회수·채널명 등 최신 표시 정보를 우선 반영합니다. 이 병합은 화면용이며 Azure DB나 localStorage를 자동 수정하지 않고, 소재 보관 용도와 최초 보관 시각은 보호합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
-    nextAction: '제작 후보 표시 저장이 실패했을 때 남을 수 있는 화면 비노출 제작 원본 기록의 정리 기준과 소재 보관 영상 정보의 최신 수집 데이터 병합 기준을 다음 데이터 정리 단계에서 점검합니다.',
+    nextAction: '제작 후보 표시 저장이 실패했을 때 남을 수 있는 화면 비노출 제작 원본을 자동 삭제하지 않고, 생성 직후 즉시 실패한 경우에만 안전하게 원상복구할 수 있는지 저장 순서와 실패 경로를 다음으로 점검합니다.',
     decisions: [
       '버튼 존재와 자동 테스트 통과만으로 운영 확인 완료라고 표시하지 않습니다.',
       'Azure DB 실제 쓰기는 원문 보존과 원상복구가 가능한 대상을 정해 실행하고, YouTube API 신규 수집은 별도 승인 후 실행합니다.',
@@ -448,6 +448,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'scrapbook-production-source-separation',
         label: '소재 보관 해제와 제작 후보 원본 보존을 분리하고 후보함·대본 작업실·업로드 캘린더 연결 유지',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'scrapbook-current-metadata-overlay',
+        label: '현재 불러온 수집 영상의 최신 표시 정보를 소재·제작 원본에 비파괴적으로 병합',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

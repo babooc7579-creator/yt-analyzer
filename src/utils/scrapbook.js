@@ -72,6 +72,47 @@ export const getCloudScrapbookVideos = (videos) => (
   Array.isArray(videos) ? videos.filter(video => video && typeof video === 'object') : []
 );
 
+const SCRAPBOOK_OWNED_FIELDS = new Set([
+  'id',
+  'savedAt',
+  'scrapbookPurposes',
+]);
+
+const hasDisplayValue = (value) => (
+  value !== undefined && value !== null && value !== ''
+);
+
+export const mergeScrapbookVideoWithCollectedVideo = (scrapbookVideo, collectedVideo) => {
+  const savedVideo = toVideoObject(scrapbookVideo);
+  const currentVideo = toVideoObject(collectedVideo);
+  if (!getVideoId(savedVideo) || getVideoId(savedVideo) !== getVideoId(currentVideo)) {
+    return savedVideo;
+  }
+
+  const currentDisplayFields = Object.fromEntries(
+    Object.entries(currentVideo).filter(([key, value]) => (
+      !SCRAPBOOK_OWNED_FIELDS.has(key) && hasDisplayValue(value)
+    )),
+  );
+
+  return {
+    ...savedVideo,
+    ...currentDisplayFields,
+  };
+};
+
+export const mergeScrapbookVideosWithCollectedVideos = (scrapbookVideos, collectedVideos) => {
+  const currentVideosById = new Map(
+    getCloudScrapbookVideos(collectedVideos)
+      .filter(video => getVideoId(video))
+      .map(video => [getVideoId(video), video]),
+  );
+
+  return getCloudScrapbookVideos(scrapbookVideos).map(video => (
+    mergeScrapbookVideoWithCollectedVideo(video, currentVideosById.get(getVideoId(video)))
+  ));
+};
+
 export const getMaterialScrapbookVideos = (videos) => (
   getCloudScrapbookVideos(videos).filter(video => (
     hasScrapbookPurpose(video, SCRAPBOOK_PURPOSE.MATERIAL)
