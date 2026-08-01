@@ -11,6 +11,7 @@ import {
   VIDEO_USER_RECORDS_LOAD_FAILED_MESSAGE,
   createRadarRestoredRecord,
   createUpdatedVideoUserRecord,
+  createVideoUserRecordPatch,
   createVideoStatusRecord,
   getCloudVideoUserRecord,
   getCloudVideoUserRecords,
@@ -71,14 +72,14 @@ export function useVideoUserRecords() {
     return cloudRecord;
   };
 
-  const saveOptimisticVideoRecord = async (videoId, record, previousRecord) => {
+  const saveOptimisticVideoRecord = async (videoId, record, previousRecord, cloudPatch = record) => {
     setVideoUserRecords(prev => ({
       ...prev,
       [videoId]: record,
     }));
 
     try {
-      const cloudRecord = await saveRecordToCloud(record);
+      const cloudRecord = await saveRecordToCloud(cloudPatch);
       setVideoUserRecords(prev => ({
         ...prev,
         [videoId]: cloudRecord,
@@ -93,23 +94,36 @@ export function useVideoUserRecords() {
 
   const markVideoStatus = async (videoId, status, extraUpdates = {}) => {
     const previousRecord = videoUserRecords[videoId];
-    const record = createVideoStatusRecord(videoUserRecords, videoId, status, extraUpdates, new Date().toISOString());
+    const updatedAt = new Date().toISOString();
+    const record = createVideoStatusRecord(videoUserRecords, videoId, status, extraUpdates, updatedAt);
+    const cloudPatch = createVideoUserRecordPatch(videoId, {
+      ...extraUpdates,
+      status: record.status,
+      statusIds: record.statusIds,
+    }, updatedAt);
 
-    return saveOptimisticVideoRecord(videoId, record, previousRecord);
+    return saveOptimisticVideoRecord(videoId, record, previousRecord, cloudPatch);
   };
 
   const updateVideoUserRecord = async (videoId, updates) => {
     const previousRecord = videoUserRecords[videoId];
-    const record = createUpdatedVideoUserRecord(videoUserRecords, videoId, updates, new Date().toISOString());
+    const updatedAt = new Date().toISOString();
+    const record = createUpdatedVideoUserRecord(videoUserRecords, videoId, updates, updatedAt);
+    const cloudPatch = createVideoUserRecordPatch(videoId, updates, updatedAt);
 
-    return saveOptimisticVideoRecord(videoId, record, previousRecord);
+    return saveOptimisticVideoRecord(videoId, record, previousRecord, cloudPatch);
   };
 
   const restoreVideoToRadar = async (videoId) => {
     const previousRecord = videoUserRecords[videoId];
-    const record = createRadarRestoredRecord(videoUserRecords[videoId], videoId, new Date().toISOString());
+    const updatedAt = new Date().toISOString();
+    const record = createRadarRestoredRecord(videoUserRecords[videoId], videoId, updatedAt);
+    const cloudPatch = createVideoUserRecordPatch(videoId, {
+      status: record.status,
+      statusIds: record.statusIds,
+    }, updatedAt);
 
-    return saveOptimisticVideoRecord(videoId, record, previousRecord);
+    return saveOptimisticVideoRecord(videoId, record, previousRecord, cloudPatch);
   };
 
   const clearRadarDecisions = async () => {

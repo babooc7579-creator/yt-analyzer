@@ -204,6 +204,7 @@ describe('useVideoUserRecords', () => {
         videoId: 'v1',
         status: VIDEO_STATUS.WATCH_LATER,
         statusIds: [VIDEO_STATUS.WATCH_LATER],
+        scriptBody: '기존 대본',
       },
     });
     const recordsHook = useVideoUserRecords();
@@ -224,6 +225,9 @@ describe('useVideoUserRecords', () => {
         VIDEO_STATUS.PRODUCTION_CANDIDATE,
       ],
       memo: 'strong candidate',
+    }));
+    expect(saveVideoUserRecord).not.toHaveBeenCalledWith(expect.objectContaining({
+      scriptBody: '기존 대본',
     }));
     expect(stateSetters[0]).toHaveBeenNthCalledWith(2, expect.any(Function));
     expect(stateSetters[0]).toHaveBeenNthCalledWith(3, expect.any(Function));
@@ -256,6 +260,37 @@ describe('useVideoUserRecords', () => {
       }),
     });
     expect(stateSetters[1]).toHaveBeenLastCalledWith('');
+  });
+
+  it('sends only explicitly changed production fields to Cloud', async () => {
+    setVideoUserRecordsState({
+      v1: {
+        videoId: 'v1',
+        status: VIDEO_STATUS.PRODUCTION_CANDIDATE,
+        statusIds: [VIDEO_STATUS.PRODUCTION_CANDIDATE],
+        scriptBody: '기존 대본',
+        targetPublishDate: '2026-08-05',
+      },
+    });
+    const recordsHook = useVideoUserRecords();
+    await flushPromises();
+
+    const saved = await recordsHook.updateVideoUserRecord('v1', {
+      scriptBody: '수정한 대본',
+    });
+
+    expect(saved).toBe(true);
+    const cloudPayload = saveVideoUserRecordMock.mock.calls[0][0];
+    expect(cloudPayload).toMatchObject({
+      videoId: 'v1',
+      scriptBody: '수정한 대본',
+      updatedAt: expect.any(String),
+    });
+    expect(Object.keys(cloudPayload).sort()).toEqual([
+      'scriptBody',
+      'updatedAt',
+      'videoId',
+    ]);
   });
 
   it('restores the previous record and does not update localStorage when Cloud save fails', async () => {
