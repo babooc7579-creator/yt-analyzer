@@ -71,7 +71,7 @@
 | 스크랩북 삭제 | `deleteScrapbookVideo` | `DELETE /scrapbook/{videoId}` | DB 변경 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | Cloud 실패 시 화면/DB 차이 가능 |
 | 영상 판단 기록 불러오기 | `fetchVideoUserRecords` | `GET /video-records` | DB 조회 | 아니오 | 예 | 아니오 | localStorage 보조 | 가능 | localStorage와 Cloud 차이 가능 |
 | 영상 판단 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 기존 `status` 유지 + `statusIds` 보존 + 선택적 `focusPinnedAt` 보존. 상태/집중 저장 모두 YouTube API 호출 없음 |
-| 영상 판단 기록 전체 삭제 | `clearVideoUserRecords` | `DELETE /video-records` | DB 변경 | 아니오 | 아니오 | 예 | 예 | 가능 | 큰 변경. 사용자 확인 필요 |
+| 영상별 전체 작업 기록 삭제 | `clearVideoUserRecords` | `DELETE /video-records` | DB 변경 | 아니오 | 아니오 | 예 | 예 | 화면 사용 차단 | 판단만이 아니라 제작 후보·대본·업로드 일정도 삭제할 수 있어 2026-08-01부터 사용자 UI 실행 경로 없음. API는 호환성 목적으로 유지 |
 | 발견 링크 불러오기 | `fetchDiscoveryLinks` | `GET /discovery-links` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 기존 `videos` container의 `docType: discovery_link` 조회. 2026-07-03 배포 읽기 확인 성공 |
 | 발견 링크 저장 | `createDiscoveryLink` | `POST /discovery-links` | DB 저장 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 수동 입력 URL/제목/메모/상태와 URL 추정 `platform` 저장. 백엔드도 허용 `platform`을 보존하며, 없거나 잘못되면 URL로 재추정. 자동 크롤링 없음. 2026-07-03 smoke 성공 |
 | 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 제목, 메모 변경. 2026-07-03 smoke 성공 |

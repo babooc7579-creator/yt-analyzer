@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import {
   SCRAPBOOK_SYNC_WARNINGS,
   SYNC_WARNING_BANNER_COPY,
+  VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE,
+  VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS,
   VIDEO_RECORDS_SYNC_WARNINGS,
 } from './syncWarnings';
 
@@ -29,5 +31,12 @@ describe('syncWarnings constants', () => {
     expect(SYNC_WARNING_BANNER_COPY.helpText).toContain('아래에 표시된 기능만');
     expect(SYNC_WARNING_BANNER_COPY.helpText).toContain('다른 온라인 저장소(Azure DB) 조회가 성공했다면 해당 데이터는 정상');
     expect(SYNC_WARNING_BANNER_COPY.helpText).toContain('자동 병합하거나 자동 업로드하지 않습니다');
+  });
+
+  it('keeps the full video-record delete action unavailable and describes its real scope', () => {
+    expect(VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS.show).toBe(false);
+    expect(VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS.title).toContain('제작 후보, 대본, 업로드 일정');
+    expect(VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE).toContain('영상별 전체 작업 기록');
+    expect(VIDEO_RECORDS_CLEAR_CONFIRM_MESSAGE).toContain('현재 사용자 화면에서는 제공하지 않습니다');
   });
 });

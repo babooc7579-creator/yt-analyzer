@@ -38,13 +38,16 @@ describe('radarDecisionViewProps utils', () => {
     ]);
     expect(props.clearButtonProps).toMatchObject({
       label: '판단 초기화',
-      show: true,
-      title: '온라인 저장소(Azure DB)에 저장된 오늘 판단 기록을 초기화합니다',
+      show: false,
     });
+    expect(props.clearButtonProps.title).toContain('제작 후보, 대본, 업로드 일정');
     expect(props.scrapbookButtonProps['aria-label']).toContain('보관 소재 7개');
   });
 
-  it('hides the clear decision button when there are no decisions', () => {
+  it('keeps the unsafe full-record clear action hidden regardless of decision count', () => {
+    expect(getRadarCandidateStripHeaderViewProps({
+      allDecisionCount: 3,
+    }).clearButtonProps.show).toBe(false);
     expect(getRadarCandidateStripHeaderViewProps({
       allDecisionCount: 0,
     }).clearButtonProps.show).toBe(false);

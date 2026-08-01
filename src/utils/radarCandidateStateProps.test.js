@@ -28,7 +28,8 @@ describe('radarCandidateStateProps utils', () => {
       title: '제작 후보로 표시한 영상과 발견함 링크를 확인합니다. 저장된 후보 조회이며 YouTube API를 새로 호출하지 않습니다.',
     });
     expect(props.openProductionButtonProps['aria-label']).toContain('YouTube API 호출 없음');
-    expect(props.clearDecisionsButtonProps['aria-label']).toContain('온라인 저장소(Azure DB)에 저장된');
+    expect(props.clearDecisionsButtonProps.show).toBe(false);
+    expect(props.clearDecisionsButtonProps.title).toContain('제작 후보, 대본, 업로드 일정');
   });
 
   it('describes the empty radar state as stored-video lookup guidance', () => {

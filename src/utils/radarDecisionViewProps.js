@@ -1,3 +1,4 @@
+import { VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS } from '../constants/syncWarnings';
 import { getYouTubeVideoUrl } from './urls';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
@@ -27,10 +28,7 @@ export const getRadarCandidateStripHeaderViewProps = ({
 
   return {
     clearButtonProps: {
-      'aria-label': '온라인 저장소(Azure DB)에 저장된 오늘 레이더 판단 기록 초기화',
-      label: '판단 초기화',
-      show: allDecisionCount > 0,
-      title: '온라인 저장소(Azure DB)에 저장된 오늘 판단 기록을 초기화합니다',
+      ...VIDEO_RECORDS_FULL_CLEAR_SAFETY_PROPS,
     },
     description: `수집 영상 ${currentTotalCount}개를 한꺼번에 펼치지 않고 점수순 상위 ${candidateLimit}개만 보여줍니다. 새 YouTube 스캔이 아니라 이미 불러온 데이터 기준입니다.`,
     progressText: {

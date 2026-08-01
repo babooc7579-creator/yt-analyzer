@@ -23,5 +23,6 @@ describe('RadarCandidateStripHeader', () => {
     expect(html).toContain('3개 완료 · 9개 남음');
     expect(html).toContain('aria-live="polite"');
     expect(html).toContain('width:25%');
+    expect(html).not.toContain('판단 초기화');
   });
 });
