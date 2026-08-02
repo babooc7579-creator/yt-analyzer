@@ -467,3 +467,5 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 같은 날 예전 제작 상태와 오늘의 레이더 정책을 대조했습니다. 제작 후보·검토 중·제작 결정·보류·제작 중·업로드 완료는 모두 이미 제작 흐름에 들어간 기록이므로 레이더 후보에서 숨기고, 기존 상태값을 바꾸지 않은 채 제작 후보함에서 계속 찾도록 통일했습니다. `functionApi.js`와 `appRouteProps.js`는 실제 중복 구현이 아니라 호환·라우팅 관문이라 삭제하지 않았습니다. 프론트의 `github_id_token` 경고는 과거 제거 시 배포 실패 이력 때문에 유지합니다. 당시 다음 데이터 작업으로 후보 상태 저장 실패 뒤 남는 제작 원본의 자동 복구 정책 결정을 남겼습니다.
 
 2026-08-02 제작 후보 지정의 부분 실패 복구를 보완했습니다. 제작 원본 저장은 성공했지만 후보 상태 저장이 실패한 경우, 이 작업에서 방금 만든 `production` 전용 원본만 기존 scrapbook 삭제 API로 정리합니다. 기존 소재 기록이나 `material` 용도가 함께 있는 문서는 자동 삭제하지 않습니다. 정리도 실패하면 온라인 저장소 재확인 경고를 남기고 브라우저 임시 목록을 성공한 것처럼 지우지 않습니다. 기존 Azure Functions와 Cosmos DB를 그대로 사용하며 새 자원·endpoint·container·localStorage key·YouTube API 호출은 없습니다. 운영 DB 실제 부분 실패 검수와 다중 브라우저 동시 변경 보호는 별도 결정 사항입니다.
+
+같은 날 백엔드 PR 사전 검수를 추가했습니다. `yt-analyzer-functions` PR #21은 Node.js 24와 잠금 파일 기준 전체 테스트를 통과했고 PR에서는 패키징·Azure 로그인·배포가 모두 건너뛰어졌습니다. 병합 커밋 `ff61533`의 `main` 실행에서 테스트·패키징·기존 Azure Function App 배포가 성공했습니다. Node 20 Action 런타임 경고는 제거됐으며 Functions test mode 안내와 최신 artifact Action 내부의 `Buffer()` 경고는 성공 결과와 분리해 비차단 경고로 유지합니다. 새 자원·비밀키·endpoint·DB·YouTube API 호출 변경은 없습니다.

@@ -4803,3 +4803,26 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - 기존 Azure Functions·Cosmos DB·endpoint 사용, 새 자원·container·localStorage key 없음
 - 운영 Azure DB 실제 저장·삭제와 YouTube API 호출 없음
 - 다중 브라우저에서 같은 영상을 동시에 바꾸는 경우의 서버 조건부 삭제는 후속 결정 항목
+
+## 191. 2026-08-02 백엔드 PR 검수와 main 배포 분리
+
+### 확인한 문제
+
+- 백엔드 workflow는 `main` 반영 뒤 테스트와 배포를 함께 실행해 Pull Request에서 오류를 미리 차단하지 못했습니다.
+- 오래된 checkout·setup-node Action은 GitHub의 Node 20 사용 중단 경고를 발생시켰고 `npm install`은 잠금 파일과 다른 의존성 조합을 허용할 수 있었습니다.
+
+### 보완
+
+- Pull Request에서도 Node.js 24, `npm ci`, 전체 단위 테스트를 실행합니다.
+- Pull Request에서는 zip 패키징, artifact 업로드, Azure 로그인, Function App 배포를 모두 건너뜁니다.
+- `main` 반영과 수동 실행에서만 기존 배포 절차를 유지합니다.
+- checkout v7, setup-node v7, upload-artifact v7, download-artifact v8, Azure login v3 기준으로 갱신했습니다.
+
+### 실제 검수
+
+- 백엔드 PR #21: build 성공, package·artifact·deploy 건너뜀
+- 병합 커밋 `ff61533`: build·package·Azure Function 배포 성공
+- Node 20·punycode Action 경고 제거 확인
+- Azure Functions test mode 안내는 예상 단위 테스트 메시지로 유지
+- 최신 download-artifact 내부 `Buffer()` 경고 1건은 배포 성공과 분리한 비차단 상위 도구 경고
+- 새 Azure 자원·비밀키·API·DB·YouTube 수집 조건 변경 없음

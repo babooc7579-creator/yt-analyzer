@@ -230,3 +230,12 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - 정리 요청도 실패하면 브라우저 임시 목록을 성공한 것처럼 지우지 않고, 온라인 저장소(Azure DB)를 다시 확인하라는 전용 경고를 표시합니다.
 - 기존 Azure Functions·Cosmos DB·endpoint를 그대로 사용하며 새 자원·container·localStorage key·YouTube API 호출은 없습니다.
 - 이번 검수에서는 운영 Azure DB의 실제 저장·삭제를 실행하지 않았습니다. 강제 부분 실패 검수와 다중 브라우저 동시 변경 보호는 별도 결정 항목입니다.
+
+## 2026-08-02 백엔드 Pull Request 사전 검수
+
+- 백엔드 변경은 이제 Pull Request에서 Node.js 24, `package-lock.json` 기준 의존성 설치, 전체 단위 테스트를 먼저 통과해야 합니다.
+- Pull Request에서는 패키징·Azure 로그인·운영 배포를 실행하지 않고, `main` 반영 또는 수동 실행에서만 기존 Azure Function App에 배포합니다.
+- 오래된 Action 런타임의 Node 20 사용 중단 경고를 제거하고 checkout·setup-node·artifact·Azure login Action을 현재 주버전으로 갱신했습니다.
+- 백엔드 PR #21의 사전 테스트와 배포 건너뜀, 병합 후 `main`의 테스트·패키징·Azure 배포 성공을 확인했습니다.
+- Azure Functions 단위 테스트의 test mode 안내는 예상 메시지로 유지합니다. 최신 artifact Action 내부의 `Buffer()` 경고는 배포 성공과 분리한 비차단 상위 도구 경고입니다.
+- Functions 코드·API endpoint·Cosmos DB·YouTube API 호출 조건은 변경하지 않았고 기존 GitHub Actions 포함량과 Azure Sponsorship 자원만 사용했습니다.
