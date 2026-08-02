@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { searchYoutubeChannels } from '../services/youtubeSearchApi';
 
 const INITIAL_FILTERS = {
@@ -7,15 +7,19 @@ const INITIAL_FILTERS = {
   language: '',
 };
 
-export function useYoutubeChannelSearch() {
-  const [filters, setFilters] = useState(INITIAL_FILTERS);
-  const [items, setItems] = useState([]);
+export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
+  const [filters, setFilters] = useState(() => ({ ...INITIAL_FILTERS, ...initialState?.filters }));
+  const [items, setItems] = useState(() => initialState?.items || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [notice, setNotice] = useState('');
-  const [nextPageToken, setNextPageToken] = useState('');
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [lastQuery, setLastQuery] = useState('');
+  const [notice, setNotice] = useState(initialState?.notice || '');
+  const [nextPageToken, setNextPageToken] = useState(initialState?.nextPageToken || '');
+  const [selectedIds, setSelectedIds] = useState(() => initialState?.selectedIds || []);
+  const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
+
+  useEffect(() => {
+    onStateChange?.({ filters, items, lastQuery, nextPageToken, notice, selectedIds });
+  }, [filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
 
   const changeFilter = (key, value) => {
     setFilters((current) => ({ ...current, [key]: value }));

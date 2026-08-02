@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { searchYoutubeVideos } from '../services/youtubeSearchApi';
 import {
   buildYoutubeSearchOptions,
@@ -15,15 +15,19 @@ const INITIAL_FILTERS = {
   order: 'relevance',
 };
 
-export function useYoutubeKeywordSearch() {
-  const [filters, setFilters] = useState(INITIAL_FILTERS);
-  const [items, setItems] = useState([]);
+export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
+  const [filters, setFilters] = useState(() => ({ ...INITIAL_FILTERS, ...initialState?.filters }));
+  const [items, setItems] = useState(() => initialState?.items || []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [notice, setNotice] = useState('');
-  const [nextPageToken, setNextPageToken] = useState('');
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [lastQuery, setLastQuery] = useState('');
+  const [notice, setNotice] = useState(initialState?.notice || '');
+  const [nextPageToken, setNextPageToken] = useState(initialState?.nextPageToken || '');
+  const [selectedIds, setSelectedIds] = useState(() => initialState?.selectedIds || []);
+  const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
+
+  useEffect(() => {
+    onStateChange?.({ filters, items, lastQuery, nextPageToken, notice, selectedIds });
+  }, [filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
 
   const displayedItems = useMemo(
     () => filterYoutubeSearchResults(items, filters.minimumViews),

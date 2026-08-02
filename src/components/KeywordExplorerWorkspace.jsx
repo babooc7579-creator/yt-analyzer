@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useKeywordExplorerState } from '../hooks/useKeywordExplorerState';
 import { getKeywordExplorerEmptyState } from '../utils/keywordExplorer';
 import KeywordExplorerFilters from './KeywordExplorerFilters';
@@ -17,6 +17,7 @@ export default function KeywordExplorerWorkspace({
   discoveryLinksSaving,
   isProductionCandidate,
   isVideoSaved,
+  keywordExplorerSession,
   loadResult,
   loading = false,
   onFetchComments,
@@ -26,6 +27,7 @@ export default function KeywordExplorerWorkspace({
   onOpenSelectedScan,
   onOpenWorkTools,
   onOpenVault,
+  onKeywordExplorerSessionChange,
   onPromoteToProduction,
   onPrepareChannelRegistration,
   onSaveDiscoveryLink,
@@ -35,7 +37,20 @@ export default function KeywordExplorerWorkspace({
   registeredChannelIds,
   videos,
 }) {
-  const [source, setSource] = useState('stored');
+  const [source, setSource] = useState(keywordExplorerSession?.source || 'stored');
+  const handleSourceChange = useCallback((nextSource) => {
+    setSource(nextSource);
+    onKeywordExplorerSessionChange?.('source', nextSource);
+  }, [onKeywordExplorerSessionChange]);
+  const handleVideoSearchSessionChange = useCallback((nextSession) => {
+    onKeywordExplorerSessionChange?.('videoSearch', nextSession);
+  }, [onKeywordExplorerSessionChange]);
+  const handleChannelSearchSessionChange = useCallback((nextSession) => {
+    onKeywordExplorerSessionChange?.('channelSearch', nextSession);
+  }, [onKeywordExplorerSessionChange]);
+  const handleSearchTargetChange = useCallback((nextTarget) => {
+    onKeywordExplorerSessionChange?.('searchTarget', nextTarget);
+  }, [onKeywordExplorerSessionChange]);
   const state = useKeywordExplorerState({ videos });
   const emptyState = getKeywordExplorerEmptyState({
     hasQuery: state.hasQuery,
@@ -50,7 +65,7 @@ export default function KeywordExplorerWorkspace({
 
   return (
     <section data-testid="creator-route-keyword-explorer" className="min-w-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
-      <KeywordExplorerSourceTabs source={source} onChange={setSource} />
+      <KeywordExplorerSourceTabs source={source} onChange={handleSourceChange} />
 
       <div className="mt-5 space-y-4">
         {source === 'youtube' ? (
@@ -60,7 +75,13 @@ export default function KeywordExplorerWorkspace({
             onOpenDiscoveryLinks={onOpenDiscoveryLinks}
             onPrepareChannelRegistration={onPrepareChannelRegistration}
             onSaveDiscoveryLink={onSaveDiscoveryLink}
+            onChannelSearchSessionChange={handleChannelSearchSessionChange}
+            onSearchTargetChange={handleSearchTargetChange}
+            onVideoSearchSessionChange={handleVideoSearchSessionChange}
             registeredChannelIds={registeredChannelIds}
+            searchTargetSession={keywordExplorerSession?.searchTarget}
+            channelSearchSession={keywordExplorerSession?.channelSearch}
+            videoSearchSession={keywordExplorerSession?.videoSearch}
           />
         ) : (
           <>

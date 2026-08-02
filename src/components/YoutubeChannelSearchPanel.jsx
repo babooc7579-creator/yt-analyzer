@@ -68,8 +68,11 @@ function ChannelSearchResultCard({ item, registered, selected, onPrepare, onTogg
   );
 }
 
-export default function YoutubeChannelSearchPanel({ onPrepareChannelRegistration, registeredChannelIds = [] }) {
-  const search = useYoutubeChannelSearch();
+export default function YoutubeChannelSearchPanel({ channelSearchSession, onChannelSearchSessionChange, onPrepareChannelRegistration, registeredChannelIds = [] }) {
+  const search = useYoutubeChannelSearch({
+    initialState: channelSearchSession,
+    onStateChange: onChannelSearchSessionChange,
+  });
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const comparedItems = search.items.filter((item) => search.selectedIds.includes(item.channelId));
 
@@ -83,7 +86,7 @@ export default function YoutubeChannelSearchPanel({ onPrepareChannelRegistration
       <div className="rounded-xl border border-violet-500/30 bg-violet-500/5 p-4">
         <p className="text-xs font-extrabold text-violet-300">새 참고 채널 검색</p>
         <h2 className="mt-1 text-xl font-black text-white">키워드로 YouTube 채널 찾기</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">검색 버튼을 눌렀을 때만 YouTube API를 사용합니다. 결과와 수치는 현재 시점의 임시 조회이며 자동 등록하거나 Azure DB에 저장하지 않습니다.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-400">검색 버튼을 눌렀을 때만 YouTube API를 사용합니다. 결과와 수치는 다른 화면에 다녀와도 유지되고 새로고침하면 초기화되는 임시 조회이며, 자동 등록하거나 Azure DB에 저장하지 않습니다.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-950/55 p-4">
