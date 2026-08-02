@@ -5,6 +5,7 @@ import { getLegacyMainPanelProps } from './legacyMainPanelProps';
 describe('legacyMainPanelProps utils', () => {
   it('preserves main panel view, filter, and video state props', () => {
     const filteredAndSortedVideos = [{ videoId: 'video1' }];
+    const productionSourceVideos = [{ videoId: 'production1' }];
     const savedChannels = [{ id: 'channel1' }];
     const selectedChannelIds = ['channel1'];
     const videos = [{ videoId: 'video1' }, { videoId: 'video2' }];
@@ -16,6 +17,7 @@ describe('legacyMainPanelProps utils', () => {
       filteredAndSortedVideos,
       isReferenceVaultView: true,
       lengthFilter: 'shorts',
+      productionSourceVideos,
       savedChannels,
       scannableChannelCount: 2,
       searchKeyword: 'table',
@@ -38,6 +40,7 @@ describe('legacyMainPanelProps utils', () => {
       filteredAndSortedVideos,
       isReferenceVaultView: true,
       lengthFilter: 'shorts',
+      productionSourceVideos,
       savedChannels,
       scannableChannelCount: 2,
       searchKeyword: 'table',
