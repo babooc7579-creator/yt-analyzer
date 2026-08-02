@@ -4,6 +4,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
   useYoutubeKeywordSearch: vi.fn(() => ({
     appliedFilters: { query: '아이디어', regionCode: 'KR', language: 'ko', dateRange: '30', duration: '', minimumViews: 0, order: 'relevance' },
+    channelRegistrationFilter: 'all',
+    changeChannelRegistrationFilter: vi.fn(),
     changeFilter: vi.fn(),
     clearSelected: vi.fn(),
     displayedItems: [{
@@ -62,6 +64,12 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('포르투갈어 우선');
     expect(html).toContain('대한민국·한국어 우선 빠른 설정');
     expect(html).toContain('검색 조건이 바뀌었습니다');
+    expect(html).toContain('표시 결과 1개 / 검색 결과 1개');
+    expect(html).toContain('미등록 채널만');
+    expect(html).toContain('영상 아이디어 작업');
+    expect(html).toContain('영상 후보 선택 해제');
+    expect(html).toContain('출처 채널 작업');
+    expect(html).toContain('자동 등록하거나 영상을 저장하지 않습니다');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {

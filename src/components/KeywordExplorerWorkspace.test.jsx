@@ -126,6 +126,7 @@ describe('KeywordExplorerWorkspace', () => {
           source: 'youtube',
           searchTarget: 'video',
           videoSearch: {
+            channelRegistrationFilter: 'unregistered',
             filters: {
               query: '바이브 코딩',
               regionCode: '',
@@ -163,5 +164,38 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('키워드로 YouTube 영상 찾기');
     expect(html).toContain('다시 검색하지 않아도 남아 있는 영상');
     expect(html).toContain('25개 영상을 찾았습니다. 결과는 아직 저장되지 않았습니다.');
+    expect(html).toContain('value="unregistered" selected=""');
+  });
+
+  it('restores channel result view filters and comparison selection after returning', () => {
+    const html = renderToStaticMarkup(
+      <KeywordExplorerWorkspace
+        keywordExplorerSession={{
+          source: 'youtube',
+          searchTarget: 'channel',
+          channelSearch: {
+            filters: { query: '바이브 코딩', regionCode: 'KR', language: 'ko' },
+            items: [{
+              channelId: 'channel-restored', title: '복귀 비교 채널', country: 'KR', subscriberCount: 1000,
+              totalVideoCount: 20, totalViewCount: 50000, avgViewCount: 2500, url: 'https://www.youtube.com/channel/channel-restored',
+            }],
+            lastQuery: '바이브 코딩',
+            nextPageToken: '',
+            selectedIds: ['channel-restored'],
+            sortBy: 'subscriberCount',
+            viewFilters: { registration: 'registered', country: 'declared', selection: 'selected' },
+          },
+        }}
+        registeredChannelIds={['channel-restored']}
+        selectedChannelCount={2}
+        videos={[]}
+      />
+    );
+
+    expect(html).toContain('복귀 비교 채널');
+    expect(html).toContain('비교 중 1개 / 최대 4개 채널');
+    expect(html).toContain('value="registered" selected=""');
+    expect(html).toContain('value="declared" selected=""');
+    expect(html).toContain('value="selected" selected=""');
   });
 });

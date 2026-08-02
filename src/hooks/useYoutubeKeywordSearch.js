@@ -25,10 +25,11 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   const [selectedIds, setSelectedIds] = useState(() => initialState?.selectedIds || []);
   const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
   const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
+  const [channelRegistrationFilter, setChannelRegistrationFilter] = useState(() => initialState?.channelRegistrationFilter || 'all');
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds });
-  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
+    onStateChange?.({ appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, selectedIds });
+  }, [appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
 
   const displayedItems = useMemo(
     () => filterYoutubeSearchResults(items, filters.minimumViews),
@@ -90,6 +91,8 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
 
   return {
     appliedFilters,
+    channelRegistrationFilter,
+    changeChannelRegistrationFilter: setChannelRegistrationFilter,
     changeFilter,
     clearSelected,
     displayedItems,

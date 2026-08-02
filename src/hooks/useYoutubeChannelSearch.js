@@ -8,6 +8,12 @@ const INITIAL_FILTERS = {
   language: '',
 };
 
+const INITIAL_VIEW_FILTERS = {
+  registration: 'all',
+  country: 'all',
+  selection: 'all',
+};
+
 export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
   const [filters, setFilters] = useState(() => ({ ...INITIAL_FILTERS, ...initialState?.filters }));
   const [items, setItems] = useState(() => initialState?.items || []);
@@ -19,16 +25,21 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
   const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
   const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
   const [sortBy, setSortBy] = useState(() => initialState?.sortBy || 'relevance');
+  const [viewFilters, setViewFilters] = useState(() => ({ ...INITIAL_VIEW_FILTERS, ...initialState?.viewFilters }));
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds, sortBy });
-  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds, sortBy]);
+    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds, sortBy, viewFilters });
+  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds, sortBy, viewFilters]);
 
   const displayedItems = useMemo(() => sortYoutubeChannelResults(items, sortBy), [items, sortBy]);
 
   const changeFilter = (key, value) => {
     setFilters((current) => ({ ...current, [key]: value }));
     setNextPageToken('');
+  };
+
+  const changeViewFilter = (key, value) => {
+    setViewFilters((current) => ({ ...current, [key]: value }));
   };
 
   const runSearch = async ({ append = false } = {}) => {
@@ -88,6 +99,8 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
     appliedFilters,
     changeFilter,
     changeSort: setSortBy,
+    changeViewFilter,
+    clearSelected: () => setSelectedIds([]),
     displayedItems,
     error,
     filters,
@@ -100,5 +113,7 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
     selectedIds,
     sortBy,
     toggleSelected,
+    resetViewFilters: () => setViewFilters(INITIAL_VIEW_FILTERS),
+    viewFilters,
   };
 }

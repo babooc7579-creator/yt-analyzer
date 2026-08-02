@@ -61,6 +61,23 @@ export const YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS = [
   { value: 'totalVideoCount', label: '영상 수 많은순' },
 ];
 
+export const YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS = [
+  { value: 'all', label: '등록 상태 전체' },
+  { value: 'unregistered', label: '미등록 채널만' },
+  { value: 'registered', label: '등록된 채널만' },
+];
+
+export const YOUTUBE_CHANNEL_COUNTRY_FILTER_OPTIONS = [
+  { value: 'all', label: '채널 국가 전체' },
+  { value: 'declared', label: '국가 등록 채널만' },
+  { value: 'undeclared', label: '국가 미등록 채널만' },
+];
+
+export const YOUTUBE_CHANNEL_SELECTION_FILTER_OPTIONS = [
+  { value: 'all', label: '비교 선택 전체' },
+  { value: 'selected', label: '비교 선택만 보기' },
+];
+
 export function getPublishedAfter(days, now = new Date()) {
   const dayCount = Number(days || 0);
   if (!Number.isFinite(dayCount) || dayCount <= 0) return '';
@@ -126,6 +143,33 @@ export function sortYoutubeChannelResults(items, sortBy = 'relevance') {
 export function formatYoutubeChannelCountry(country) {
   if (!country) return '미등록';
   return findOptionLabel(YOUTUBE_SEARCH_REGION_OPTIONS, String(country).toUpperCase());
+}
+
+export function filterYoutubeChannelResults(items, filters = {}, { registeredIds = [], selectedIds = [] } = {}) {
+  const registeredSet = registeredIds instanceof Set ? registeredIds : new Set(registeredIds.map(String));
+  const selectedSet = selectedIds instanceof Set ? selectedIds : new Set(selectedIds.map(String));
+  return (Array.isArray(items) ? items : []).filter((item) => {
+    const channelId = String(item?.channelId || '');
+    const registered = registeredSet.has(channelId);
+    const selected = selectedSet.has(channelId);
+    const hasCountry = Boolean(String(item?.country || '').trim());
+    if (filters.registration === 'registered' && !registered) return false;
+    if (filters.registration === 'unregistered' && registered) return false;
+    if (filters.country === 'declared' && !hasCountry) return false;
+    if (filters.country === 'undeclared' && hasCountry) return false;
+    if (filters.selection === 'selected' && !selected) return false;
+    return true;
+  });
+}
+
+export function filterYoutubeVideoResultsByChannelRegistration(items, registration = 'all', registeredIds = []) {
+  const registeredSet = registeredIds instanceof Set ? registeredIds : new Set(registeredIds.map(String));
+  return (Array.isArray(items) ? items : []).filter((item) => {
+    const registered = registeredSet.has(String(item?.channelId || ''));
+    if (registration === 'registered') return registered;
+    if (registration === 'unregistered') return !registered;
+    return true;
+  });
 }
 
 export function filterYoutubeSearchResults(items, minimumViews = 0) {
