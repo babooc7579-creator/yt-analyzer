@@ -2,8 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
   buildYoutubeSearchOptions,
   filterYoutubeSearchResults,
+  formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
   getPublishedAfter,
+  hasYoutubeSearchCriteriaChanges,
+  sortYoutubeChannelResults,
   toDiscoveryLinkPayload,
 } from './youtubeKeywordSearch';
 
@@ -32,5 +35,23 @@ describe('youtubeKeywordSearch', () => {
     })).toBe('대한민국에서 시청 가능 · 한국어 우선 · 최근 30일 · 영상 길이 전체 · 관련도순');
     expect(formatYoutubeSearchCriteria({ regionCode: 'GB', language: 'en' }, { includeVideoFilters: false }))
       .toBe('영국에서 시청 가능 · 영어 우선');
+  });
+
+  it('detects unapplied API criteria but ignores locally applied view thresholds', () => {
+    const applied = { query: 'copilot', regionCode: 'KR', language: 'ko', dateRange: '30', duration: '', order: 'relevance' };
+    expect(hasYoutubeSearchCriteriaChanges({ ...applied, minimumViews: 10000 }, applied)).toBe(false);
+    expect(hasYoutubeSearchCriteriaChanges({ ...applied, language: 'en' }, applied)).toBe(true);
+    expect(hasYoutubeSearchCriteriaChanges({ query: 'copilot', regionCode: 'KR', language: '' }, applied, { includeVideoFilters: false })).toBe(true);
+  });
+
+  it('sorts already received channels locally and explains declared country', () => {
+    const channels = [
+      { channelId: 'a', title: '가', subscriberCount: 100, avgViewCount: 500, totalVideoCount: 20 },
+      { channelId: 'b', title: '나', subscriberCount: 300, avgViewCount: 100, totalVideoCount: 10 },
+    ];
+    expect(sortYoutubeChannelResults(channels, 'subscriberCount').map((item) => item.channelId)).toEqual(['b', 'a']);
+    expect(sortYoutubeChannelResults(channels, 'avgViewCount').map((item) => item.channelId)).toEqual(['a', 'b']);
+    expect(formatYoutubeChannelCountry('KR')).toBe('대한민국');
+    expect(formatYoutubeChannelCountry('')).toBe('미등록');
   });
 });

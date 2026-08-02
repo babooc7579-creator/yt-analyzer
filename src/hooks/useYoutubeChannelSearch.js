@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { searchYoutubeChannels } from '../services/youtubeSearchApi';
+import { sortYoutubeChannelResults } from '../utils/youtubeKeywordSearch';
 
 const INITIAL_FILTERS = {
   query: '',
@@ -17,10 +18,13 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
   const [selectedIds, setSelectedIds] = useState(() => initialState?.selectedIds || []);
   const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
   const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
+  const [sortBy, setSortBy] = useState(() => initialState?.sortBy || 'relevance');
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds });
-  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
+    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds, sortBy });
+  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds, sortBy]);
+
+  const displayedItems = useMemo(() => sortYoutubeChannelResults(items, sortBy), [items, sortBy]);
 
   const changeFilter = (key, value) => {
     setFilters((current) => ({ ...current, [key]: value }));
@@ -83,6 +87,8 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
   return {
     appliedFilters,
     changeFilter,
+    changeSort: setSortBy,
+    displayedItems,
     error,
     filters,
     items,
@@ -92,6 +98,7 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
     notice,
     runSearch,
     selectedIds,
+    sortBy,
     toggleSelected,
   };
 }

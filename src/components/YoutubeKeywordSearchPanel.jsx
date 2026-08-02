@@ -12,6 +12,7 @@ import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
 import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import {
   formatYoutubeSearchCriteria,
+  hasYoutubeSearchCriteriaChanges,
   toDiscoveryLinkPayload,
   YOUTUBE_SEARCH_DATE_OPTIONS,
   YOUTUBE_SEARCH_DURATION_OPTIONS,
@@ -132,6 +133,12 @@ function YoutubeVideoSearchPanel({
   ), [discoveryLinks]);
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const selectedItems = search.items.filter((item) => search.selectedIds.includes(item.videoId) && !savedVideoIds.has(item.videoId));
+  const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters);
+
+  const applyKoreanPreset = () => {
+    search.changeFilter('regionCode', 'KR');
+    search.changeFilter('language', 'ko');
+  };
 
   const saveSelected = async () => {
     if (selectedItems.length === 0 || typeof onSaveDiscoveryLink !== 'function') return;
@@ -195,6 +202,7 @@ function YoutubeVideoSearchPanel({
           <SearchSelect label="최소 조회수" options={YOUTUBE_SEARCH_MINIMUM_VIEW_OPTIONS} value={search.filters.minimumViews} onChange={(value) => search.changeFilter('minimumViews', Number(value))} />
           <SearchSelect label="정렬" options={YOUTUBE_SEARCH_ORDER_OPTIONS} value={search.filters.order} onChange={(value) => search.changeFilter('order', value)} />
         </div>
+        <button type="button" onClick={applyKoreanPreset} className="mt-3 rounded-lg border border-red-500/40 px-3 py-2 text-xs font-black text-red-200 hover:bg-red-500/10" title="대한민국 검색 지역과 한국어 우선을 한 번에 선택합니다. YouTube API는 호출하지 않습니다.">대한민국·한국어 우선 빠른 설정</button>
         <p className="mt-3 text-[11px] leading-5 text-slate-500">검색 지역은 해당 나라에서 시청 가능한 결과이며 제작 국가 제한이 아닙니다. 우선 언어는 관련 결과를 앞세우지만 다른 언어도 포함될 수 있습니다.</p>
         <p className="mt-1 text-[11px] leading-5 text-slate-500">기본 25개 · 자동검색 없음 · 조건 변경 후 검색 버튼을 눌러야 새 API 요청이 실행됩니다. 최소 조회수는 받은 결과를 화면에서만 좁힙니다.</p>
       </form>
@@ -207,6 +215,7 @@ function YoutubeVideoSearchPanel({
           <p className="mt-1 text-xs leading-5 text-slate-400">{formatYoutubeSearchCriteria(search.appliedFilters)}</p>
         </div>
       ) : null}
+      {hasPendingCriteria ? <p role="status" className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-100">검색 조건이 바뀌었습니다. 새 조건을 결과에 적용하려면 검색 버튼을 눌러주세요.</p> : null}
 
       {search.items.length > 0 ? (
         <>

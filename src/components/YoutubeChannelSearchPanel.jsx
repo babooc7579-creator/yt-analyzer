@@ -2,7 +2,10 @@ import { Check, ExternalLink, Loader2, Search, UserPlus, Users } from 'lucide-re
 import { useMemo } from 'react';
 import { useYoutubeChannelSearch } from '../hooks/useYoutubeChannelSearch';
 import {
+  formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
+  hasYoutubeSearchCriteriaChanges,
+  YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS,
   YOUTUBE_SEARCH_LANGUAGE_OPTIONS,
   YOUTUBE_SEARCH_REGION_OPTIONS,
 } from '../utils/youtubeKeywordSearch';
@@ -28,6 +31,7 @@ function ChannelSearchResultCard({ item, registered, selected, onPrepare, onTogg
             <div className="min-w-0">
               <h3 className="truncate text-sm font-black text-white">{item.title}</h3>
               <p className="mt-1 truncate text-[11px] text-slate-500">{item.customUrl || item.channelId}</p>
+              <p className="mt-1 text-[11px] font-bold text-slate-500">채널 설정 국가: {formatYoutubeChannelCountry(item.country)}</p>
             </div>
             {registered ? <span className="shrink-0 rounded-full bg-emerald-500/20 px-2 py-1 text-[10px] font-black text-emerald-200">등록됨</span> : null}
           </div>
@@ -76,6 +80,12 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
   });
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const comparedItems = search.items.filter((item) => search.selectedIds.includes(item.channelId));
+  const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters, { includeVideoFilters: false });
+
+  const applyKoreanPreset = () => {
+    search.changeFilter('regionCode', 'KR');
+    search.changeFilter('language', 'ko');
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -115,6 +125,7 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
           </button>
         </div>
         <p className="mt-3 text-[11px] leading-5 text-slate-500">검색 지역은 해당 나라에서 시청 가능한 결과이며 채널의 운영 국가 제한이 아닙니다. 우선 언어는 관련 결과를 앞세우지만 다른 언어도 포함될 수 있습니다.</p>
+        <button type="button" onClick={applyKoreanPreset} className="mt-3 rounded-lg border border-violet-500/40 px-3 py-2 text-xs font-black text-violet-200 hover:bg-violet-500/10" title="대한민국 검색 지역과 한국어 우선을 한 번에 선택합니다. YouTube API는 호출하지 않습니다.">대한민국·한국어 우선 빠른 설정</button>
         <p className="mt-1 text-[11px] leading-5 text-slate-500">기본 12개 · 자동검색 없음 · 키워드나 조건 변경 후 검색 버튼을 눌러야 API 요청이 실행됩니다.</p>
       </form>
 
@@ -126,6 +137,7 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
           <p className="mt-1 text-xs leading-5 text-slate-400">{formatYoutubeSearchCriteria(search.appliedFilters, { includeVideoFilters: false })}</p>
         </div>
       ) : null}
+      {hasPendingCriteria ? <p role="status" className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-100">검색 조건이 바뀌었습니다. 새 조건을 결과에 적용하려면 채널 검색 버튼을 눌러주세요.</p> : null}
 
       {comparedItems.length > 0 ? (
         <div className="rounded-xl border border-violet-500/30 bg-violet-500/10 p-4">
@@ -143,8 +155,21 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
 
       {search.items.length > 0 ? (
         <>
+          <div className="flex flex-col gap-2 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-black text-white">검색 결과 {search.displayedItems.length}개</p>
+              <p className="mt-1 text-xs text-slate-500">받은 결과만 화면에서 정렬하며 YouTube API를 다시 호출하지 않습니다.</p>
+              <p className="mt-1 text-xs text-slate-500">채널 설정 국가는 채널 운영자가 YouTube에 등록한 값이며 미등록일 수 있습니다.</p>
+            </div>
+            <label className="sm:w-52">
+              <span className="sr-only">채널 결과 정렬</span>
+              <select value={search.sortBy} onChange={(event) => search.changeSort(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 채널 결과만 화면에서 정렬합니다. YouTube API는 호출하지 않습니다.">
+                {YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
+          </div>
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            {search.items.map((item) => (
+            {search.displayedItems.map((item) => (
               <ChannelSearchResultCard key={item.channelId} item={item} registered={registeredIds.has(String(item.channelId))} selected={search.selectedIds.includes(item.channelId)} onPrepare={onPrepareChannelRegistration} onToggle={search.toggleSelected} />
             ))}
           </div>
