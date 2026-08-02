@@ -77,7 +77,7 @@ export const DISCOVERY_LINKS_EMPTY_STATE = {
 
 export const PRODUCTION_KANBAN_EMPTY_STATE = {
   title: '아직 제작 후보가 없습니다',
-  description: '제작 후보함은 오늘 무엇을 만들지 고르는 작업 공간입니다. 소재 보관함의 모든 영상이 자동으로 제작 후보가 되지는 않습니다. 오늘의 레이더, 수집 영상 목록, 발견 링크 저장에서 만들 만한 항목만 제작 후보로 표시하면 이곳에 보입니다.',
+  description: '제작 후보함은 오늘 무엇을 만들지 고르는 작업 공간입니다. 소재 보관함의 모든 영상이 자동으로 제작 후보가 되지는 않습니다. 오늘의 레이더, 수집 영상 목록, 발견 링크함에서 만들 만한 항목만 제작 후보로 표시하면 이곳에 보입니다.',
   steps: [
     {
       title: '1. 오늘 레이더에서 고르기',
@@ -98,9 +98,9 @@ export const PRODUCTION_KANBAN_EMPTY_STATE = {
     ariaLabel: '수집 영상 목록 화면 열기, 온라인 저장소(Azure DB) 조회이며 YouTube API 호출 없음',
   },
   discoveryLinksButton: {
-    label: '발견 링크 저장',
-    title: '발견 링크 저장 화면을 엽니다. 외부 사이트 자동 수집이나 다운로드는 실행하지 않습니다.',
-    ariaLabel: '발견 링크 저장 화면 열기, 외부 자동 수집이나 다운로드 없음',
+    label: '발견 링크함',
+    title: '발견 링크함을 엽니다. 외부 사이트 자동 수집이나 다운로드는 실행하지 않습니다.',
+    ariaLabel: '발견 링크함 화면 열기, 외부 자동 수집이나 다운로드 없음',
   },
 };
 

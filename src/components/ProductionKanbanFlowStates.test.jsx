@@ -23,7 +23,7 @@ describe('Production kanban flow states', () => {
     expect(html).toContain('아직 제작 후보가 없습니다');
     expect(html).toContain('오늘 레이더로');
     expect(html).toContain('수집 영상 목록');
-    expect(html).toContain('발견 링크 저장');
+    expect(html).toContain('발견 링크함');
     expect(html).toContain('온라인 저장소(Azure DB) 조회이며 YouTube API를 새로 호출하지 않습니다.');
     expect(html).toContain('외부 사이트 자동 수집이나 다운로드는 실행하지 않습니다.');
   });

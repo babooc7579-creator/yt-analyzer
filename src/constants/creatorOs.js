@@ -16,7 +16,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'vault-videos', label: '수집 영상 목록', status: 'live', summary: '수집된 영상 정보와 영상 보드를 확인합니다.' },
       { id: 'vault-tags', label: '채널 태그별 보기', status: 'live', summary: '수집 영상 목록을 기존 채널 태그 기준으로 좁혀 보는 전용 필터 화면입니다.' },
-      { id: 'vault-sources', label: '발견 링크 저장', status: 'live', summary: '외부에서 발견한 링크를 온라인 발견함(Azure DB)에 수동 저장하고 검토 상태를 관리합니다.' },
+      { id: 'vault-sources', label: '발견 링크함', status: 'live', summary: '외부에서 발견한 링크를 온라인 발견함(Azure DB)에 수동 저장하고 검색·검토·상태 관리합니다.' },
     ],
   },
   {

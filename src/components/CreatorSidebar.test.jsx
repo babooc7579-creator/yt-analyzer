@@ -16,7 +16,7 @@ describe('CreatorSidebar', () => {
     expect(html).toContain('오늘의 레이더');
     expect(html).toContain('또터또 탐색');
     expect(html).toContain('오늘 볼 채널');
-    expect(html).toContain('발견 링크 저장');
+    expect(html).toContain('발견 링크함');
     expect(html).toContain('제작 후보함');
     expect(html).toContain('채널 운영실');
     expect(html).toContain('최근 수집 상태');
