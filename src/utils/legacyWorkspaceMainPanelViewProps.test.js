@@ -170,6 +170,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
     const fetchTopComments = () => 'comments';
     const markRadarVideoStatus = () => 'mark';
     const openCreatorView = () => 'open';
+    const productionSourceVideos = [{ videoId: 'production1' }, null];
     const savedVideos = [{ videoId: 'saved1' }, null];
     const toggleScrapVideo = () => 'scrap';
     const updateDiscoveryLink = () => 'link';
@@ -185,6 +186,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
       markRadarVideoStatus,
       openCreatorView,
       promptCopyError: 'copy failed',
+      productionSourceVideos,
       savedVideos,
       toggleScrapVideo,
       updateDiscoveryLink,
@@ -197,6 +199,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
       copiedPrompt: 'prompt',
       discoveryLinks,
       promptCopyError: 'copy failed',
+      productionSourceVideos: [{ videoId: 'production1' }],
       savedVideos: [{ videoId: 'saved1' }],
       videoUserRecords,
     });
