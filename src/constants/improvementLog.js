@@ -237,7 +237,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P0',
     lastReviewedAt: '2026-08-03',
-    currentSummary: '수집 영상 검색과 명시적 YouTube 검색을 분리했고, YouTube 검색 안에서 영상 찾기와 채널 찾기·비교를 다시 구분했습니다. 채널 검색은 현재 구독자·영상 수·누적 조회수·영상당 평균을 임시 결과로 보여주며 최대 4개를 비교할 수 있습니다. 등록 검토하기는 기존 채널 운영실 입력칸만 채우고 이동하며, 실제 YouTube 확인과 Azure DB 저장은 기존 등록 단계에서 별도로 실행합니다. 운영에서 바이브 코딩 채널 검색 1회로 12개 결과, 1개 비교 선택, 코딩알려주는누나 채널 주소의 등록 입력 전달을 확인했습니다. 채널 정보 확인·Azure DB 저장은 실행하지 않았고 등록 채널 수는 12개 그대로였습니다.',
+    currentSummary: '수집 영상 검색과 명시적 YouTube 검색을 분리했고, YouTube 검색 안에서 영상 찾기와 채널 찾기·비교를 다시 구분했습니다. 채널 검색은 현재 구독자·영상 수·누적 조회수·영상당 평균을 임시 결과로 보여주며 최대 4개를 비교할 수 있습니다. 채널 검색뿐 아니라 영상 검색 결과에도 채널 등록 상태와 `이 채널 등록 검토`를 표시해, 좋은 영상을 발견한 자리에서 해당 채널을 기존 채널 운영실 등록 단계로 이어갑니다. 영상의 발견 링크 저장과 채널 등록 검토는 독립된 선택입니다. 등록 검토는 입력칸만 채우고 이동하며 실제 YouTube 확인과 Azure DB 저장은 기존 등록 단계에서 별도로 실행합니다. 운영에서 바이브 코딩 채널 검색 1회로 12개 결과, 1개 비교 선택, 코딩알려주는누나 채널 주소의 등록 입력 전달을 확인했습니다. 채널 정보 확인·Azure DB 저장은 실행하지 않았고 등록 채널 수는 12개 그대로였습니다.',
     targetSummary: '키워드만 입력해도 새 영상 후보를 비교하고 필요한 항목만 아이디어 창고와 제작 흐름으로 안전하게 이어갈 수 있게 합니다.',
     nextAction: '검색 API를 다시 호출하지 않고 현재 12개 결과를 구독자·영상당 평균·영상 수 기준으로 화면에서 정렬하는 작은 개선을 진행합니다. 검색 결과 후보를 별도 Cloud 보관할지는 저장 계약이 필요한 결정 사항으로 분리합니다.',
     decisions: [
@@ -248,6 +248,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '새 Azure 자원·Cosmos DB container·유료 서비스를 추가하지 않고 기존 자원을 재사용합니다.',
       '채널 검색 결과는 현재 시점의 누적 통계이며 실제 최근 성장률이나 추세로 표시하지 않습니다.',
       '채널 검색 결과에서 자동 등록하지 않고 기존 채널 등록의 확인·저장 단계를 유지합니다.',
+      '영상 검색 결과에서도 영상 후보 저장과 출처 채널 등록 검토를 분리해 둘 다 선택할 수 있게 합니다.',
     ],
     checkpoints: [
       {
@@ -278,6 +279,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-channel-search',
         label: '키워드 기반 채널 검색·비교·채널 등록 연결',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-video-channel-handoff',
+        label: '키워드 영상 검색 결과의 중요 채널을 기존 채널 등록 검토로 연결',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {

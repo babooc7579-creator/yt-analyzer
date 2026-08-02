@@ -9,6 +9,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
       videoId: 'video-1',
       title: '좋은 아이디어 영상',
       channelTitle: '아이디어 채널',
+      channelId: 'channel-1',
       publishedAt: '2026-08-01T00:00:00Z',
       duration: '08:03',
       viewCount: 10000,
@@ -21,7 +22,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     error: '',
     filters: { query: '아이디어', regionCode: '', language: '', dateRange: '30', duration: '', minimumViews: 0, order: 'relevance' },
     items: [{
-      videoId: 'video-1', title: '좋은 아이디어 영상', channelTitle: '아이디어 채널', publishedAt: '2026-08-01T00:00:00Z',
+      videoId: 'video-1', title: '좋은 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-01T00:00:00Z',
       duration: '08:03', viewCount: 10000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 500,
       lifetimeViewsPerDay: 5000, url: 'https://www.youtube.com/watch?v=video-1',
     }],
@@ -51,6 +52,8 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('영상 파일은 저장하지 않습니다');
     expect(html).toContain('대박 비율은 현재 조회수÷현재 구독자 수의 추정값');
     expect(html).toContain('다음 결과 25개 불러오기');
+    expect(html).toContain('이 채널 등록 검토');
+    expect(html).toContain('이 영상의 채널 주소를 채웁니다');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {
@@ -59,5 +62,18 @@ describe('YoutubeKeywordSearchPanel', () => {
     );
     expect(html).toContain('발견 링크함에 저장됨');
     expect(html).toContain('선택 0개 발견 링크함에 담기');
+  });
+
+  it('marks the source channel as already registered and prevents duplicate registration review', () => {
+    const html = renderToStaticMarkup(
+      <YoutubeKeywordSearchPanel
+        discoveryLinks={[]}
+        onPrepareChannelRegistration={vi.fn()}
+        onSaveDiscoveryLink={vi.fn()}
+        registeredChannelIds={['channel-1']}
+      />
+    );
+    expect(html).toContain('등록 채널');
+    expect(html).toContain('이미 등록된 채널');
   });
 });
