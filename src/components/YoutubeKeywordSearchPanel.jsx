@@ -117,9 +117,14 @@ function YoutubeVideoSearchPanel({
   onOpenDiscoveryLinks,
   onPrepareChannelRegistration,
   onSaveDiscoveryLink,
+  onVideoSearchSessionChange,
   registeredChannelIds = [],
+  videoSearchSession,
 }) {
-  const search = useYoutubeKeywordSearch();
+  const search = useYoutubeKeywordSearch({
+    initialState: videoSearchSession,
+    onStateChange: onVideoSearchSessionChange,
+  });
   const [savingSelected, setSavingSelected] = useState(false);
   const savedVideoIds = useMemo(() => new Set(
     discoveryLinks.map((link) => String(link?.linkedVideoId || '')).filter(Boolean),
@@ -154,7 +159,7 @@ function YoutubeVideoSearchPanel({
         <p className="text-xs font-extrabold text-red-300">새 영상 후보 검색</p>
         <h2 className="mt-1 text-xl font-black text-white">키워드로 YouTube 영상 찾기</h2>
         <p className="mt-2 text-sm leading-6 text-slate-400">
-          검색 버튼을 눌렀을 때만 YouTube API로 영상·통계·채널 정보를 확인합니다. 검색 결과는 임시이며 선택한 영상만 발견 링크함에 저장됩니다.
+          검색 버튼을 눌렀을 때만 YouTube API로 영상·통계·채널 정보를 확인합니다. 검색 결과는 다른 화면에 다녀와도 유지되며, 새로고침하면 초기화됩니다. 선택한 영상만 발견 링크함에 저장됩니다.
         </p>
       </div>
 
@@ -253,16 +258,20 @@ function YoutubeVideoSearchPanel({
 }
 
 export default function YoutubeKeywordSearchPanel(props) {
-  const [searchTarget, setSearchTarget] = useState('video');
+  const [searchTarget, setSearchTarget] = useState(props.searchTargetSession || 'video');
+  const changeSearchTarget = (nextTarget) => {
+    setSearchTarget(nextTarget);
+    props.onSearchTargetChange?.(nextTarget);
+  };
 
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-2 rounded-xl border border-slate-800 bg-slate-950/70 p-2">
-        <button type="button" onClick={() => setSearchTarget('video')} aria-pressed={searchTarget === 'video'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'video' ? 'bg-red-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>영상 찾기</button>
-        <button type="button" onClick={() => setSearchTarget('channel')} aria-pressed={searchTarget === 'channel'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'channel' ? 'bg-violet-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>채널 찾기·비교</button>
+        <button type="button" onClick={() => changeSearchTarget('video')} aria-pressed={searchTarget === 'video'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'video' ? 'bg-red-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>영상 찾기</button>
+        <button type="button" onClick={() => changeSearchTarget('channel')} aria-pressed={searchTarget === 'channel'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'channel' ? 'bg-violet-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>채널 찾기·비교</button>
       </div>
       {searchTarget === 'channel'
-        ? <YoutubeChannelSearchPanel onPrepareChannelRegistration={props.onPrepareChannelRegistration} registeredChannelIds={props.registeredChannelIds} />
+        ? <YoutubeChannelSearchPanel channelSearchSession={props.channelSearchSession} onChannelSearchSessionChange={props.onChannelSearchSessionChange} onPrepareChannelRegistration={props.onPrepareChannelRegistration} registeredChannelIds={props.registeredChannelIds} />
         : <YoutubeVideoSearchPanel {...props} />}
     </div>
   );

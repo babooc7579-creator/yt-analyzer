@@ -118,4 +118,50 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('새 영상 수집 화면 열기');
     expect(html).toContain('이동만으로 YouTube API를 호출하지 않습니다');
   });
+
+  it('restores temporary YouTube video results after returning from another workspace', () => {
+    const html = renderToStaticMarkup(
+      <KeywordExplorerWorkspace
+        keywordExplorerSession={{
+          source: 'youtube',
+          searchTarget: 'video',
+          videoSearch: {
+            filters: {
+              query: '바이브 코딩',
+              regionCode: '',
+              language: '',
+              dateRange: '30',
+              duration: '',
+              minimumViews: 0,
+              order: 'relevance',
+            },
+            items: [{
+              videoId: 'video-restored',
+              channelId: 'channel-restored',
+              channelTitle: '복귀 확인 채널',
+              title: '다시 검색하지 않아도 남아 있는 영상',
+              url: 'https://www.youtube.com/watch?v=video-restored',
+              publishedAt: '2026-08-02T00:00:00Z',
+              duration: '08:03',
+              viewCount: 1000,
+              subscriberCount: 500,
+              hiddenSubscriberCount: false,
+              viralRatio: 200,
+              lifetimeViewsPerDay: 100,
+            }],
+            lastQuery: '바이브 코딩',
+            nextPageToken: '',
+            notice: '25개 영상을 찾았습니다. 결과는 아직 저장되지 않았습니다.',
+            selectedIds: [],
+          },
+        }}
+        selectedChannelCount={2}
+        videos={[]}
+      />
+    );
+
+    expect(html).toContain('키워드로 YouTube 영상 찾기');
+    expect(html).toContain('다시 검색하지 않아도 남아 있는 영상');
+    expect(html).toContain('25개 영상을 찾았습니다. 결과는 아직 저장되지 않았습니다.');
+  });
 });
