@@ -57,6 +57,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | 채널 목록 불러오기 | `fetchChannels` | `GET /channels` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | 낮음 |
 | 채널 미리보기 | `fetchChannelPreview` | `GET /channel-preview?handle=...` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 저장은 안 하지만 quota 사용 가능 |
+| 키워드 채널 검색 | `searchYoutubeChannels` | `GET /youtube-channel-search?q=...` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 배포 예정 | 검색 버튼과 다음 결과 버튼에서만 실행. 현재 시점 통계의 임시 결과이며 자동 등록 없음 |
 | 채널 저장 | `createChannel` | `POST /channels` | YouTube API + DB 저장 | 예 | 아니오 | 예 | 아니오 | 가능 | 채널 정보 조회 후 Cloud DB 저장 |
 | 채널 일괄 저장 | `createChannelsBulk` | `POST /channels/bulk` | YouTube API + DB 저장 | 예 | 아니오 | 예 | 아니오 | 가능 | 여러 채널이면 quota 사용 증가 |
 | 채널 삭제 | `removeChannel` | `DELETE /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 삭제 전 확인 필요 |
@@ -78,6 +79,7 @@
 | 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 제목, 메모 변경. 2026-07-03 smoke 성공 |
 | 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음. 2026-07-03 smoke 성공, 임시 링크 잔여 0개 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용. API Key가 없거나 YouTube 오류/비JSON 응답이 오면 저장 작업 없이 오류 안내 |
+| 키워드 영상 검색 | `searchYoutubeVideos` | `GET /youtube-search?q=...` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 검색 버튼과 다음 결과 버튼에서만 실행. 임시 결과 중 선택한 영상만 별도 발견 링크 저장 가능 |
 | URL 복사 / URL 목록 복사 | `CopyUrlButton`, `formatNumberedUrlList` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 채널/영상/오늘 레이더/스크랩북/발견 링크 URL을 클립보드에 복사합니다. API 호출, DB 변경, localStorage 변경 없음 |
 | AI 리메이크 프롬프트 복사 | `copyPromptForVideos`, `copyTextToClipboard` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 선택/스크랩 영상 기반 요청문을 클립보드에 복사하고, 브라우저가 막으면 실패 안내를 표시 |
 | 준비중 메뉴 | `ComingSoonView` | 없음 | 준비중 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 실제 기능처럼 보이면 안 됨 |

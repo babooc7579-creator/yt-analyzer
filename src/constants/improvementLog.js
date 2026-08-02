@@ -29,12 +29,12 @@ export const IMPROVEMENT_STATUS_META = {
   },
 };
 
-export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-08-02';
+export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-08-03';
 
 export const CREATOR_OS_MENU_ROLE_AUDIT = [
   { section: '디스커버리 탐색', menu: '오늘의 레이더', role: '오늘 볼 채널과 수집 영상에서 만들 소재를 결정', dataBoundary: 'Azure DB 조회·판단 기록 저장', verification: '운영 클릭 확인' },
   { section: '디스커버리 탐색', menu: '또터또 탐색', role: '오래된 고성과 영상 후보를 별도 기준으로 탐색', dataBoundary: '불러온 수집 영상 정보 분석', verification: '운영 클릭 확인' },
-  { section: '디스커버리 탐색', menu: '키워드 탐색', role: '기존 수집 영상 검색과 YouTube의 새 영상 후보 발굴', dataBoundary: 'Azure DB 조회 탭·명시적 YouTube API 검색 탭 분리', verification: '운영 검색·저장 왕복 확인' },
+  { section: '디스커버리 탐색', menu: '키워드 탐색', role: '기존 수집 영상 검색과 YouTube의 새 영상·채널 후보 발굴', dataBoundary: 'Azure DB 조회 탭·명시적 YouTube API 검색 탭 분리', verification: '영상 운영 검수 완료·채널 운영 검수 예정' },
   { section: '디스커버리 탐색', menu: '오늘 볼 채널', role: '오늘 조회할 채널 범위를 선택', dataBoundary: '화면 선택·Azure DB 채널 조회', verification: '운영 클릭 확인' },
   { section: '수집 영상·링크', menu: '수집 영상 목록', role: 'Azure DB에 보관된 수집 영상 정보를 검색·검토', dataBoundary: 'Azure DB 조회·YouTube API 없음', verification: '운영 클릭 확인' },
   { section: '수집 영상·링크', menu: '채널 태그별 보기', role: '수집 영상 목록을 채널 태그 기준으로 좁혀 탐색', dataBoundary: 'Azure DB 조회 결과의 전용 필터·별도 저장 없음', verification: '운영 클릭 확인' },
@@ -236,16 +236,18 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '디스커버리 탐색',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P0',
-    lastReviewedAt: '2026-08-02',
-    currentSummary: '기존 키워드 탐색을 수집 영상 검색과 YouTube 새 영상 검색으로 분리했습니다. 검색은 버튼을 눌렀을 때만 실행하며 영상·통계·채널 정보를 임시 결과로 보여주고 선택한 영상만 발견 링크함으로 전달합니다. 운영에서 바이브 코딩 검색 1회로 25개 결과 표시, 1건 저장, Azure DB 재조회와 검수 기록 원상복구까지 확인했습니다. 저장 후 발견 링크함 열기가 오늘의 레이더로 잘못 이동하는 문제도 운영에서 찾아 실제 메뉴 연결로 수정·배포했습니다.',
+    lastReviewedAt: '2026-08-03',
+    currentSummary: '수집 영상 검색과 명시적 YouTube 검색을 분리했고, YouTube 검색 안에서 영상 찾기와 채널 찾기·비교를 다시 구분했습니다. 채널 검색은 현재 구독자·영상 수·누적 조회수·영상당 평균을 임시 결과로 보여주며 최대 4개를 비교할 수 있습니다. 등록 검토하기는 기존 채널 운영실 입력칸만 채우고 이동하며, 실제 YouTube 확인과 Azure DB 저장은 기존 등록 단계에서 별도로 실행합니다. 로컬 화면·자동 테스트·production build는 확인했고 운영 검색 1회와 등록 화면 연결 검수는 배포 후 진행합니다.',
     targetSummary: '키워드만 입력해도 새 영상 후보를 비교하고 필요한 항목만 아이디어 창고와 제작 흐름으로 안전하게 이어갈 수 있게 합니다.',
-    nextAction: '영상 검색 1차 흐름은 정기 회귀 검수로 유지하고, 다음 작은 단계에서 키워드 기반 채널 검색·비교·기존 채널 등록 연결을 설계합니다.',
+    nextAction: '백엔드와 프런트를 순서대로 배포한 뒤 운영에서 채널 검색을 1회만 실행하고, 결과 표시·비교 선택·등록 입력 전달을 확인합니다. 실제 채널 저장은 실행하지 않습니다.',
     decisions: [
       '기존 수집 영상 검색과 YouTube 신규 검색은 같은 작업 공간의 별도 탭으로 유지합니다.',
       '검색 결과 전체는 자동 저장하지 않고 사용자가 선택한 영상만 발견 링크함에 저장합니다.',
       '자동 입력 검색은 사용하지 않으며 검색과 다음 페이지는 명시적 YouTube API 작업으로 표시합니다.',
       '대박 비율과 하루 평균 조회수는 공식 지표가 아니라 앱 계산 추정값으로 표시합니다.',
       '새 Azure 자원·Cosmos DB container·유료 서비스를 추가하지 않고 기존 자원을 재사용합니다.',
+      '채널 검색 결과는 현재 시점의 누적 통계이며 실제 최근 성장률이나 추세로 표시하지 않습니다.',
+      '채널 검색 결과에서 자동 등록하지 않고 기존 채널 등록의 확인·저장 단계를 유지합니다.',
     ],
     checkpoints: [
       {
@@ -276,7 +278,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-channel-search',
         label: '키워드 기반 채널 검색·비교·채널 등록 연결',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
       {
         id: 'youtube-trend-history',

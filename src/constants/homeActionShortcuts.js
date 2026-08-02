@@ -61,7 +61,7 @@ export const HOME_WORKSPACE_SHORTCUTS = [
   {
     key: 'keyword-explorer',
     title: '키워드 탐색',
-    description: '현재 불러온 수집 영상의 제목과 채널명에서 찾거나, 필요할 때 검색 버튼으로 YouTube의 새 영상 후보를 찾습니다.',
+    description: '현재 불러온 수집 영상의 제목과 채널명에서 찾거나, 필요할 때 검색 버튼으로 YouTube의 새 영상·채널 후보를 찾습니다.',
     hint: '기존 수집 영상 검색 · 새 YouTube 후보 검색',
     dataFlowLabels: ['YouTube API 호출 없음', '검색 버튼은 YouTube API 사용'],
     iconName: 'search',
