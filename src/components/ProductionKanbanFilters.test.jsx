@@ -169,19 +169,19 @@ describe('ProductionKanbanFilters', () => {
         onReturnToSearchSource={noop}
         onSearchQueryChange={noop}
         searchContext={{
-          description: '발견 링크 저장에서 제작 후보로 표시한 링크를 보여주고 있습니다.',
+          description: '발견 링크함에서 제작 후보로 표시한 링크를 보여주고 있습니다.',
           label: '발견 링크에서 이어온 후보',
           resetLabel: '전체 작업 보기',
           resetTitle: '발견 링크에서 이어온 후보 검색만 해제합니다. 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
-          returnLabel: '발견 링크 저장으로 돌아가기',
-          returnTitle: '발견 링크 저장 화면으로 돌아갑니다. 화면 이동만 하며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
+          returnLabel: '발견 링크함으로 돌아가기',
+          returnTitle: '발견 링크함으로 돌아갑니다. 화면 이동만 하며 온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.',
         }}
         searchQuery="참고할 오프닝"
       />,
     );
 
     expect(html).toContain('발견 링크에서 이어온 후보');
-    expect(html).toContain('발견 링크 저장으로 돌아가기');
+    expect(html).toContain('발견 링크함으로 돌아가기');
     expect(html).toContain('온라인 저장소(Azure DB) 데이터는 변경하지 않습니다.');
   });
 });
