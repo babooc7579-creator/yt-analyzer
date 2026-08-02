@@ -23,6 +23,7 @@ export function getLegacyMainPanelProps(props) {
     onConfirmUnsavedNavigation: props.onConfirmUnsavedNavigation,
     promoteVideoToProduction: props.promoteVideoToProduction,
     promptCopyError: props.promptCopyError,
+    productionSourceVideos: props.productionSourceVideos,
     savedChannels: props.savedChannels,
     savedVideos: props.savedVideos,
     scannableChannelCount: props.scannableChannelCount,
