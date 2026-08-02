@@ -4826,3 +4826,22 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - Azure Functions test mode 안내는 예상 단위 테스트 메시지로 유지
 - 최신 download-artifact 내부 `Buffer()` 경고 1건은 배포 성공과 분리한 비차단 상위 도구 경고
 - 새 Azure 자원·비밀키·API·DB·YouTube 수집 조건 변경 없음
+
+## 192. 2026-08-02 프론트 CI Node.js 실행 환경 일치
+
+### 확인한 문제
+
+- GitHub의 프론트 읽기 전용·전체 검사는 Node.js 20을 사용했습니다.
+- 같은 소스를 실제 배포하는 Azure Static Web Apps Oryx 빌드는 로그 기준 Node.js 22.22.0을 사용했습니다.
+
+### 보완
+
+- 두 프론트 검사 job을 Node.js 22로 통일했습니다.
+- `actions/setup-node`를 현재 주버전 v7로 갱신했습니다.
+- 실제 배포 환경과 가까운 Node 계열에서 PR·main 회귀 검사를 수행합니다.
+
+### 안전 범위
+
+- 앱 코드·의존성·API·Azure DB·YouTube API 호출 조건 변경 없음
+- Azure Static Web Apps 인증·배포 workflow 변경 없음
+- 기존 GitHub Actions 포함량 사용, 새 자원·비밀키 없음
