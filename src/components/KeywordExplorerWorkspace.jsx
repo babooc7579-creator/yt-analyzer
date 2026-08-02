@@ -27,10 +27,12 @@ export default function KeywordExplorerWorkspace({
   onOpenWorkTools,
   onOpenVault,
   onPromoteToProduction,
+  onPrepareChannelRegistration,
   onSaveDiscoveryLink,
   onToggleCheck,
   onToggleScrap,
   selectedChannelCount,
+  registeredChannelIds,
   videos,
 }) {
   const [source, setSource] = useState('stored');
@@ -56,7 +58,9 @@ export default function KeywordExplorerWorkspace({
             discoveryLinks={discoveryLinks}
             discoveryLinksSaving={discoveryLinksSaving}
             onOpenDiscoveryLinks={onOpenDiscoveryLinks}
+            onPrepareChannelRegistration={onPrepareChannelRegistration}
             onSaveDiscoveryLink={onSaveDiscoveryLink}
+            registeredChannelIds={registeredChannelIds}
           />
         ) : (
           <>

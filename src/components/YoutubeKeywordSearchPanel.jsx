@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
+import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import {
   toDiscoveryLinkPayload,
   YOUTUBE_SEARCH_DATE_OPTIONS,
@@ -91,7 +92,7 @@ function Metric({ label, tone, value }) {
   );
 }
 
-export default function YoutubeKeywordSearchPanel({
+function YoutubeVideoSearchPanel({
   discoveryLinks = [],
   discoveryLinksSaving = false,
   onOpenDiscoveryLinks,
@@ -224,5 +225,21 @@ export default function YoutubeKeywordSearchPanel({
         </div>
       ) : null}
     </section>
+  );
+}
+
+export default function YoutubeKeywordSearchPanel(props) {
+  const [searchTarget, setSearchTarget] = useState('video');
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-2 rounded-xl border border-slate-800 bg-slate-950/70 p-2">
+        <button type="button" onClick={() => setSearchTarget('video')} aria-pressed={searchTarget === 'video'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'video' ? 'bg-red-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>영상 찾기</button>
+        <button type="button" onClick={() => setSearchTarget('channel')} aria-pressed={searchTarget === 'channel'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'channel' ? 'bg-violet-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>채널 찾기·비교</button>
+      </div>
+      {searchTarget === 'channel'
+        ? <YoutubeChannelSearchPanel onPrepareChannelRegistration={props.onPrepareChannelRegistration} registeredChannelIds={props.registeredChannelIds} />
+        : <YoutubeVideoSearchPanel {...props} />}
+    </div>
   );
 }
