@@ -280,9 +280,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-08-02',
-    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다. 레이더 전체 작업 기록 삭제 경로를 차단했고, 소재 보관과 제작 후보 원본 용도를 분리했습니다. 현재 불러온 수집 영상 정보가 있으면 소재·제작 화면에 최신 표시 정보를 우선 반영합니다. 제작 기록 저장은 변경 필드만 전송하고 누락 필드를 보존합니다. 모든 제작 진행 기록은 오늘의 레이더에서 숨기고 제작 후보함에서 계속 확인합니다. 제작 후보 상태 저장이 실패하면 이 작업이 방금 만든 제작 전용 원본만 자동 정리하며 기존 소재 기록은 삭제하지 않습니다. 백엔드는 Pull Request에서 Node.js 24 잠금 파일 설치와 전체 테스트만 실행하고 main에서만 기존 Azure Function App을 배포합니다. 프론트 CI는 Azure Static Web Apps 실제 Oryx 빌드와 같은 Node.js 22 계열로 검수합니다.',
+    currentSummary: '핵심 화면을 화면 표시, 실제 클릭, 보이는 변화, 결과 위치, 데이터 영향, 오류 복구, 모바일 순서로 점검합니다. Azure DB 제작 기록·업로드 일정 저장 왕복과 Jinxy 단일 채널 YouTube 신규 수집 1회 및 최근 수집 결과 재조회를 완료했습니다. 레이더 전체 작업 기록 삭제 경로를 차단했고, 소재 보관과 제작 후보 원본 용도를 분리했습니다. 현재 불러온 수집 영상 정보가 있으면 소재·제작 화면에 최신 표시 정보를 우선 반영합니다. 제작 기록 저장은 변경 필드만 전송하고 누락 필드를 보존합니다. 모든 제작 진행 기록은 오늘의 레이더에서 숨기고 제작 후보함에서 계속 확인합니다. 제작 후보 상태 저장이 실패하면 이 작업이 방금 만든 제작 전용 원본만 자동 정리하며 기존 소재 기록은 삭제하지 않습니다. 제작 원본 목록이 상위 라우팅 관문과 작업 화면 조립 관문을 모두 지나 후보함·대본 작업실·업로드 캘린더에 전달되도록 복구했습니다. 백엔드는 Pull Request에서 Node.js 24 잠금 파일 설치와 전체 테스트만 실행하고 main에서만 기존 Azure Function App을 배포합니다. 프론트 CI는 Azure Static Web Apps 실제 Oryx 빌드와 같은 Node.js 22 계열로 검수합니다.',
     targetSummary: '배포마다 핵심 업무 흐름의 이름·버튼·결과·데이터 경계를 같은 기준으로 빠짐없이 재확인합니다.',
-    nextAction: '배포 후 로그인된 운영 화면에서 읽기 전용 핵심 흐름을 확인합니다. 실제 부분 실패를 강제로 만드는 Azure DB 쓰기·삭제 검수와 다중 브라우저 동시 변경 보호는 별도 결정 뒤 진행합니다.',
+    nextAction: '배포마다 제작 원본 수와 후보함·대본 작업실·업로드 캘린더의 표시 수가 같은지 읽기 전용 회귀 검수합니다. 실제 부분 실패를 강제로 만드는 Azure DB 쓰기·삭제 검수와 다중 브라우저 동시 변경 보호는 별도 결정 뒤 진행합니다.',
     decisions: [
       '버튼 존재와 자동 테스트 통과만으로 운영 확인 완료라고 표시하지 않습니다.',
       'Azure DB 실제 쓰기는 원문 보존과 원상복구가 가능한 대상을 정해 실행하고, YouTube API 신규 수집은 별도 승인 후 실행합니다.',
@@ -468,6 +468,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'production-source-failure-rollback',
         label: '제작 후보 상태 저장 실패 시 방금 만든 제작 전용 원본만 자동 정리하고 기존 소재 기록 보호',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'production-source-route-continuity',
+        label: '소재 보관함·제작 후보함·대본 작업실·업로드 캘린더의 제작 원본 목록 전달 경로와 후보 수 일치',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {

@@ -4845,3 +4845,23 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - 앱 코드·의존성·API·Azure DB·YouTube API 호출 조건 변경 없음
 - Azure Static Web Apps 인증·배포 workflow 변경 없음
 - 기존 GitHub Actions 포함량 사용, 새 자원·비밀키 없음
+
+## 193. 2026-08-02 제작 후보 원본 전달 경로 복구
+
+### 확인한 문제
+
+- 운영 화면에서 같은 Jinxy 제작 후보가 소재 보관함·대본 작업실·업로드 캘린더에는 이어졌지만 제작 후보함은 영상 0개·링크 1개로 표시됐습니다.
+- 제작 원본 목록이 `getLegacyMainPanelProps`와 `getLegacyWorkspaceMainPanelViewProps` 두 조립 관문에서 각각 다음 단계로 전달되지 않았습니다.
+
+### 보완
+
+- PR #1035에서 작업 화면 조립 관문이 `productionSourceVideos`를 제작 후보함 속성으로 전달하도록 복구했습니다.
+- PR #1036에서 상위 라우팅 관문도 같은 속성을 작업 화면 조립 관문으로 전달하도록 복구했습니다.
+- 각 관문의 전용 테스트에 원본 목록 보존 조건을 추가했습니다.
+
+### 검수와 안전 범위
+
+- 관련 테스트 30개, 일일 회귀 테스트 156개, 전체 테스트 1,172개와 production build 통과
+- 두 PR의 GitHub 검사와 병합 후 Azure Static Web Apps 배포 성공
+- API endpoint, Azure DB, localStorage, YouTube API 호출 조건 변경 없음
+- 운영 Azure DB 쓰기·삭제와 YouTube 신규 수집 실행 없음
