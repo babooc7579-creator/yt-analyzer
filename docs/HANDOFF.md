@@ -469,3 +469,5 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 2026-08-02 제작 후보 지정의 부분 실패 복구를 보완했습니다. 제작 원본 저장은 성공했지만 후보 상태 저장이 실패한 경우, 이 작업에서 방금 만든 `production` 전용 원본만 기존 scrapbook 삭제 API로 정리합니다. 기존 소재 기록이나 `material` 용도가 함께 있는 문서는 자동 삭제하지 않습니다. 정리도 실패하면 온라인 저장소 재확인 경고를 남기고 브라우저 임시 목록을 성공한 것처럼 지우지 않습니다. 기존 Azure Functions와 Cosmos DB를 그대로 사용하며 새 자원·endpoint·container·localStorage key·YouTube API 호출은 없습니다. 운영 DB 실제 부분 실패 검수와 다중 브라우저 동시 변경 보호는 별도 결정 사항입니다.
 
 같은 날 백엔드 PR 사전 검수를 추가했습니다. `yt-analyzer-functions` PR #21은 Node.js 24와 잠금 파일 기준 전체 테스트를 통과했고 PR에서는 패키징·Azure 로그인·배포가 모두 건너뛰어졌습니다. 병합 커밋 `ff61533`의 `main` 실행에서 테스트·패키징·기존 Azure Function App 배포가 성공했습니다. Node 20 Action 런타임 경고는 제거됐으며 Functions test mode 안내와 최신 artifact Action 내부의 `Buffer()` 경고는 성공 결과와 분리해 비차단 경고로 유지합니다. 새 자원·비밀키·endpoint·DB·YouTube API 호출 변경은 없습니다.
+
+프론트 CI도 실제 Azure Static Web Apps Oryx 빌드가 사용하는 Node.js 22 계열과 맞췄습니다. PR·main의 읽기 전용 회귀 검사와 React/Vite 전체 검사는 `setup-node@v7`·Node.js 22를 사용합니다. 앱 기능·의존성·배포 인증 설정은 변경하지 않았습니다.

@@ -239,3 +239,9 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - 백엔드 PR #21의 사전 테스트와 배포 건너뜀, 병합 후 `main`의 테스트·패키징·Azure 배포 성공을 확인했습니다.
 - Azure Functions 단위 테스트의 test mode 안내는 예상 메시지로 유지합니다. 최신 artifact Action 내부의 `Buffer()` 경고는 배포 성공과 분리한 비차단 상위 도구 경고입니다.
 - Functions 코드·API endpoint·Cosmos DB·YouTube API 호출 조건은 변경하지 않았고 기존 GitHub Actions 포함량과 Azure Sponsorship 자원만 사용했습니다.
+
+## 2026-08-02 프론트 CI·운영 빌드 Node.js 일치
+
+- 프론트 Pull Request 검사는 Node.js 20을 사용했지만 Azure Static Web Apps의 실제 Oryx 빌드는 Node.js 22.22.0을 사용해 검수 환경과 배포 환경이 달랐습니다.
+- `Core read-only regression check`와 `React/Vite build check`를 Node.js 22 및 현재 `setup-node` 주버전으로 맞췄습니다.
+- 앱 의존성·기능·Azure Static Web Apps 배포 설정은 바꾸지 않았으며 기존 GitHub Actions 포함량만 사용합니다.
