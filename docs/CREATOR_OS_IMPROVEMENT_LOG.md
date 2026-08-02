@@ -252,5 +252,6 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - 원인은 Azure DB 데이터나 제작 상태가 아니라, 제작 원본 목록 `productionSourceVideos`가 두 단계의 프론트 화면 조립 관문에서 누락된 것이었습니다.
 - PR #1035에서 작업 화면 조립 관문, PR #1036에서 상위 라우팅 관문에 같은 원본 목록을 전달하도록 복구했습니다.
 - 두 관문 모두 전용 회귀 테스트로 보호했으며 전체 테스트 1,172개와 production build를 통과했습니다.
+- 운영 배포 후 제작 후보함에서 영상 1개·링크 1개·작업 항목 2개와 `Ranking The Funniest Same Energy Moments` 원본 표시를 실제 확인했습니다.
 - API endpoint, Azure DB 문서, localStorage key와 YouTube API 호출 조건은 변경하지 않았습니다. 운영 Azure DB 쓰기·삭제와 YouTube 신규 수집도 실행하지 않았습니다.
 - 배포마다 소재 보관함의 제작 원본과 제작 후보함·대본 작업실·업로드 캘린더의 영상 후보 수가 같은지 읽기 전용으로 다시 확인합니다.

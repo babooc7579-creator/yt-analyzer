@@ -472,4 +472,4 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 
 프론트 CI도 실제 Azure Static Web Apps Oryx 빌드가 사용하는 Node.js 22 계열과 맞췄습니다. PR·main의 읽기 전용 회귀 검사와 React/Vite 전체 검사는 `setup-node@v7`·Node.js 22를 사용합니다. 앱 기능·의존성·배포 인증 설정은 변경하지 않았습니다.
 
-같은 날 운영 화면에서 소재 보관함과 대본 작업실에는 Jinxy 제작 후보가 보이지만 제작 후보함에는 영상 0개·링크 1개만 표시되는 불일치를 발견했습니다. Azure DB 데이터 문제는 아니었고 `productionSourceVideos`가 상위 라우팅 관문과 작업 화면 조립 관문에서 차례로 누락된 것이 원인이었습니다. 프론트 PR #1035와 #1036으로 두 전달 경로를 복구하고 관문별 회귀 테스트, 전체 테스트 1,172개, production build와 Azure Static Web Apps 배포를 통과했습니다. API·Azure DB·localStorage·YouTube API 계약은 변경하지 않았고 운영 저장·삭제·신규 수집도 실행하지 않았습니다.
+같은 날 운영 화면에서 소재 보관함과 대본 작업실에는 Jinxy 제작 후보가 보이지만 제작 후보함에는 영상 0개·링크 1개만 표시되는 불일치를 발견했습니다. Azure DB 데이터 문제는 아니었고 `productionSourceVideos`가 상위 라우팅 관문과 작업 화면 조립 관문에서 차례로 누락된 것이 원인이었습니다. 프론트 PR #1035와 #1036으로 두 전달 경로를 복구하고 관문별 회귀 테스트, 전체 테스트 1,172개, production build와 Azure Static Web Apps 배포를 통과했습니다. 배포 후 제작 후보함에서 영상 1개·링크 1개·작업 항목 2개와 Jinxy 원본 제목 표시를 실제 확인했습니다. API·Azure DB·localStorage·YouTube API 계약은 변경하지 않았고 운영 저장·삭제·신규 수집도 실행하지 않았습니다.
