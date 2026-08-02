@@ -12,6 +12,7 @@ import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
 import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import {
   formatYoutubeSearchCriteria,
+  filterYoutubeVideoResultsByChannelRegistration,
   hasYoutubeSearchCriteriaChanges,
   toDiscoveryLinkPayload,
   YOUTUBE_SEARCH_DATE_OPTIONS,
@@ -20,6 +21,7 @@ import {
   YOUTUBE_SEARCH_MINIMUM_VIEW_OPTIONS,
   YOUTUBE_SEARCH_ORDER_OPTIONS,
   YOUTUBE_SEARCH_REGION_OPTIONS,
+  YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS,
 } from '../utils/youtubeKeywordSearch';
 
 const formatNumber = (value) => Number(value || 0).toLocaleString('ko-KR');
@@ -75,7 +77,23 @@ function YoutubeSearchResultCard({ item, selected, saved, registeredChannel, onP
         <p className="mt-3 text-[11px] leading-5 text-slate-500">
           대박 비율은 현재 조회수÷현재 구독자 수의 추정값이며, 하루 평균 {item.lifetimeViewsPerDay === null ? '-' : formatNumber(item.lifetimeViewsPerDay)}회는 게시 후 전체 기간 평균입니다.
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+        <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/5 p-3">
+          <p className="text-[11px] font-black text-red-200">영상 아이디어 작업</p>
+          <button
+            type="button"
+            onClick={() => onToggle(item.videoId)}
+            disabled={saved}
+            className="mt-2 inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg border border-red-500/40 px-3 text-xs font-black text-red-100 hover:bg-red-500/10 disabled:cursor-default disabled:border-emerald-500/30 disabled:text-emerald-200"
+            title="영상 후보를 선택합니다. 선택만으로 저장되지 않으며 화면 상단의 발견 링크함에 담기 버튼을 눌러야 Azure DB에 저장됩니다."
+          >
+            {saved || selected ? <Check className="h-3.5 w-3.5" /> : <Inbox className="h-3.5 w-3.5" />}
+            {saved ? '발견 링크함에 저장됨' : selected ? '영상 후보 선택 해제' : '영상 후보로 선택'}
+          </button>
+          <p className="mt-2 text-[11px] leading-5 text-slate-500">선택만으로 저장되지 않습니다. 상단의 `발견 링크함에 담기`에서 저장합니다.</p>
+        </div>
+        <div className="mt-3 rounded-lg border border-violet-500/20 bg-violet-500/5 p-3">
+          <p className="text-[11px] font-black text-violet-200">출처 채널 작업</p>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => onPrepareChannelRegistration?.({
@@ -98,6 +116,8 @@ function YoutubeSearchResultCard({ item, selected, saved, registeredChannel, onP
           >
             <ExternalLink className="h-3.5 w-3.5" /> YouTube 원본 보기
           </a>
+          </div>
+          <p className="mt-2 text-[11px] leading-5 text-slate-500">채널 등록 검토는 채널 운영실 입력 준비만 하며 자동 등록하거나 영상을 저장하지 않습니다.</p>
         </div>
       </div>
     </article>
@@ -133,6 +153,11 @@ function YoutubeVideoSearchPanel({
   ), [discoveryLinks]);
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const selectedItems = search.items.filter((item) => search.selectedIds.includes(item.videoId) && !savedVideoIds.has(item.videoId));
+  const visibleItems = useMemo(() => filterYoutubeVideoResultsByChannelRegistration(
+    search.displayedItems,
+    search.channelRegistrationFilter,
+    registeredIds,
+  ), [registeredIds, search.channelRegistrationFilter, search.displayedItems]);
   const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters);
 
   const applyKoreanPreset = () => {
@@ -221,10 +246,16 @@ function YoutubeVideoSearchPanel({
         <>
           <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-black text-white">검색 결과 {search.displayedItems.length}개 · 선택 {selectedItems.length}개</p>
+              <p className="text-sm font-black text-white">표시 결과 {visibleItems.length}개 / 검색 결과 {search.displayedItems.length}개 · 선택 {selectedItems.length}개</p>
               <p className="mt-1 text-xs text-slate-500">선택하지 않은 검색 결과는 Azure DB에 저장되지 않습니다.</p>
             </div>
             <div className="flex flex-wrap gap-2">
+              <label className="min-w-40 flex-1 sm:flex-none">
+                <span className="sr-only">출처 채널 등록 상태 필터</span>
+                <select value={search.channelRegistrationFilter} onChange={(event) => search.changeChannelRegistrationFilter(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 영상 결과를 출처 채널의 등록 여부로만 좁힙니다. YouTube API는 호출하지 않습니다.">
+                  {YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
               <button
                 type="button"
                 onClick={saveSelected}
@@ -238,8 +269,8 @@ function YoutubeVideoSearchPanel({
               <button type="button" onClick={onOpenDiscoveryLinks} className="h-10 rounded-lg border border-slate-700 px-4 text-xs font-extrabold text-slate-300 hover:bg-slate-800">발견 링크함 열기</button>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
-            {search.displayedItems.map((item) => (
+          {visibleItems.length > 0 ? <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+            {visibleItems.map((item) => (
               <YoutubeSearchResultCard
                 key={item.videoId}
                 item={item}
@@ -250,7 +281,7 @@ function YoutubeVideoSearchPanel({
                 selected={search.selectedIds.includes(item.videoId)}
               />
             ))}
-          </div>
+          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">현재 채널 등록 필터에 맞는 영상이 없습니다</h3><p className="mt-2 text-sm text-slate-500">검색 결과는 그대로 유지됩니다. 등록 상태 전체로 바꾸면 모든 결과를 다시 볼 수 있습니다.</p><button type="button" onClick={() => search.changeChannelRegistrationFilter('all')} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">등록 상태 전체 보기</button></div>}
           {search.nextPageToken ? (
             <button
               type="button"

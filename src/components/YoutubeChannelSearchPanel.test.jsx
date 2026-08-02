@@ -6,6 +6,8 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
     appliedFilters: { query: '바이브 코딩', regionCode: 'JP', language: 'ja' },
     changeFilter: vi.fn(),
     changeSort: vi.fn(),
+    changeViewFilter: vi.fn(),
+    clearSelected: vi.fn(),
     displayedItems: [{
       channelId: 'channel-1', title: '아이디어 채널', customUrl: '@idea', description: '아이디어를 찾는 채널', country: 'KR', subscriberCount: 2000, hiddenSubscriberCount: false, totalVideoCount: 100, totalViewCount: 1000000, avgViewCount: 10000, url: 'https://www.youtube.com/channel/channel-1',
     }],
@@ -29,9 +31,11 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
     nextPageToken: 'next',
     notice: '1개 채널을 찾았습니다. 결과는 아직 등록되지 않았습니다.',
     runSearch: vi.fn(),
+    resetViewFilters: vi.fn(),
     selectedIds: ['channel-1'],
     sortBy: 'relevance',
     toggleSelected: vi.fn(),
+    viewFilters: { registration: 'all', country: 'all', selection: 'all' },
   })),
 }));
 
@@ -42,7 +46,8 @@ describe('YoutubeChannelSearchPanel', () => {
     const html = renderToStaticMarkup(<YoutubeChannelSearchPanel onPrepareChannelRegistration={vi.fn()} />);
     expect(html).toContain('키워드로 YouTube 채널 찾기');
     expect(html).toContain('자동 등록하거나 Azure DB에 저장하지 않습니다');
-    expect(html).toContain('비교 중 1개 채널');
+    expect(html).toContain('비교 중 1개 / 최대 4개 채널');
+    expect(html).toContain('비교 선택 전체 해제');
     expect(html).toContain('최근 성장률을 뜻하지 않습니다');
     expect(html).toContain('등록 검토하기');
     expect(html).toContain('다음 채널 12개 찾기');
@@ -55,6 +60,11 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('채널 설정 국가: 대한민국');
     expect(html).toContain('채널 운영자가 YouTube에 등록한 값이며 미등록일 수 있습니다');
     expect(html).toContain('현재 받은 채널 결과만 화면에서 정렬');
+    expect(html).toContain('표시 결과 1개 / 받은 결과 1개');
+    expect(html).toContain('미등록 채널만');
+    expect(html).toContain('국가 미등록 채널만');
+    expect(html).toContain('비교 선택만 보기');
+    expect(html).toContain('화면 필터 초기화');
   });
 
   it('marks a channel already present in the channel registry', () => {

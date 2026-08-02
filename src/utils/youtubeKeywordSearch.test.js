@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildYoutubeSearchOptions,
+  filterYoutubeChannelResults,
+  filterYoutubeVideoResultsByChannelRegistration,
   filterYoutubeSearchResults,
   formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
@@ -53,5 +55,26 @@ describe('youtubeKeywordSearch', () => {
     expect(sortYoutubeChannelResults(channels, 'avgViewCount').map((item) => item.channelId)).toEqual(['a', 'b']);
     expect(formatYoutubeChannelCountry('KR')).toBe('대한민국');
     expect(formatYoutubeChannelCountry('')).toBe('미등록');
+  });
+
+  it('filters received channels locally by registration, country, and comparison selection', () => {
+    const channels = [
+      { channelId: 'a', country: 'KR' },
+      { channelId: 'b', country: '' },
+      { channelId: 'c', country: 'US' },
+    ];
+    expect(filterYoutubeChannelResults(channels, { registration: 'unregistered', country: 'declared', selection: 'all' }, {
+      registeredIds: ['a'], selectedIds: ['c'],
+    }).map((item) => item.channelId)).toEqual(['c']);
+    expect(filterYoutubeChannelResults(channels, { registration: 'all', country: 'all', selection: 'selected' }, {
+      registeredIds: new Set(['a']), selectedIds: new Set(['b']),
+    }).map((item) => item.channelId)).toEqual(['b']);
+  });
+
+  it('filters video results by the source channel registration state without changing the result set', () => {
+    const videos = [{ videoId: '1', channelId: 'a' }, { videoId: '2', channelId: 'b' }];
+    expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'registered', ['a'])).toEqual([videos[0]]);
+    expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'unregistered', new Set(['a']))).toEqual([videos[1]]);
+    expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'all', ['a'])).toEqual(videos);
   });
 });

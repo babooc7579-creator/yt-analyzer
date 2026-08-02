@@ -4,8 +4,12 @@ import { useYoutubeChannelSearch } from '../hooks/useYoutubeChannelSearch';
 import {
   formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
+  filterYoutubeChannelResults,
   hasYoutubeSearchCriteriaChanges,
+  YOUTUBE_CHANNEL_COUNTRY_FILTER_OPTIONS,
+  YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS,
   YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS,
+  YOUTUBE_CHANNEL_SELECTION_FILTER_OPTIONS,
   YOUTUBE_SEARCH_LANGUAGE_OPTIONS,
   YOUTUBE_SEARCH_REGION_OPTIONS,
 } from '../utils/youtubeKeywordSearch';
@@ -80,6 +84,11 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
   });
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const comparedItems = search.items.filter((item) => search.selectedIds.includes(item.channelId));
+  const visibleItems = useMemo(() => filterYoutubeChannelResults(search.displayedItems, search.viewFilters, {
+    registeredIds,
+    selectedIds: search.selectedIds,
+  }), [registeredIds, search.displayedItems, search.selectedIds, search.viewFilters]);
+  const hasViewFilters = Object.values(search.viewFilters).some((value) => value !== 'all');
   const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters, { includeVideoFilters: false });
 
   const applyKoreanPreset = () => {
@@ -141,12 +150,24 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
 
       {comparedItems.length > 0 ? (
         <div className="rounded-xl border border-violet-500/30 bg-violet-500/10 p-4">
-          <p className="text-sm font-black text-white">비교 중 {comparedItems.length}개 채널</p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-black text-white">비교 중 {comparedItems.length}개 / 최대 4개 채널</p>
+              <p className="mt-1 text-xs text-slate-400">현재 받은 통계의 단순 비교이며 최근 성장률은 아닙니다.</p>
+            </div>
+            <button type="button" onClick={search.clearSelected} className="h-9 rounded-lg border border-violet-400/40 px-3 text-xs font-black text-violet-100 hover:bg-violet-500/20">비교 선택 전체 해제</button>
+          </div>
           <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
             {comparedItems.map((item) => (
               <div key={item.channelId} className="rounded-lg bg-slate-950/70 p-3">
                 <p className="truncate text-xs font-black text-white">{item.title}</p>
-                <p className="mt-2 text-[11px] text-slate-400">구독자 {item.hiddenSubscriberCount ? '비공개' : formatNumber(item.subscriberCount)} · 영상당 평균 {formatNumber(item.avgViewCount)}</p>
+                <dl className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-[11px]">
+                  <div><dt className="text-slate-600">구독자</dt><dd className="font-bold text-slate-300">{item.hiddenSubscriberCount ? '비공개' : formatNumber(item.subscriberCount)}</dd></div>
+                  <div><dt className="text-slate-600">영상 수</dt><dd className="font-bold text-slate-300">{formatNumber(item.totalVideoCount)}</dd></div>
+                  <div><dt className="text-slate-600">누적 조회수</dt><dd className="font-bold text-slate-300">{formatNumber(item.totalViewCount)}</dd></div>
+                  <div><dt className="text-slate-600">영상당 평균</dt><dd className="font-bold text-slate-300">{formatNumber(item.avgViewCount)}</dd></div>
+                </dl>
+                <p className="mt-1 text-[11px] text-slate-500">{registeredIds.has(String(item.channelId)) ? '등록됨' : '미등록'} · 채널 국가 {formatYoutubeChannelCountry(item.country)}</p>
               </div>
             ))}
           </div>
@@ -155,10 +176,11 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
 
       {search.items.length > 0 ? (
         <>
-          <div className="flex flex-col gap-2 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-black text-white">검색 결과 {search.displayedItems.length}개</p>
-              <p className="mt-1 text-xs text-slate-500">받은 결과만 화면에서 정렬하며 YouTube API를 다시 호출하지 않습니다.</p>
+              <p className="text-sm font-black text-white">표시 결과 {visibleItems.length}개 / 받은 결과 {search.displayedItems.length}개</p>
+              <p className="mt-1 text-xs text-slate-500">받은 결과만 화면에서 필터·정렬하며 YouTube API를 다시 호출하지 않습니다.</p>
               <p className="mt-1 text-xs text-slate-500">채널 설정 국가는 채널 운영자가 YouTube에 등록한 값이며 미등록일 수 있습니다.</p>
             </div>
             <label className="sm:w-52">
@@ -167,12 +189,34 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
                 {YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
               </select>
             </label>
+            </div>
+            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
+              <label>
+                <span className="sr-only">채널 등록 상태 필터</span>
+                <select value={search.viewFilters.registration} onChange={(event) => search.changeViewFilter('registration', event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 결과의 채널 등록 상태만 화면에서 좁힙니다.">
+                  {YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
+              <label>
+                <span className="sr-only">채널 설정 국가 필터</span>
+                <select value={search.viewFilters.country} onChange={(event) => search.changeViewFilter('country', event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 결과에서 채널 설정 국가의 등록 여부만 화면에서 좁힙니다.">
+                  {YOUTUBE_CHANNEL_COUNTRY_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
+              <label>
+                <span className="sr-only">비교 선택 필터</span>
+                <select value={search.viewFilters.selection} onChange={(event) => search.changeViewFilter('selection', event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 비교 대상으로 선택한 채널 카드만 보여줍니다.">
+                  {YOUTUBE_CHANNEL_SELECTION_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
+              <button type="button" onClick={search.resetViewFilters} disabled={!hasViewFilters} className="h-10 rounded-lg border border-slate-700 px-3 text-xs font-black text-slate-200 hover:bg-slate-800 disabled:cursor-default disabled:text-slate-600">화면 필터 초기화</button>
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            {search.displayedItems.map((item) => (
+          {visibleItems.length > 0 ? <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+            {visibleItems.map((item) => (
               <ChannelSearchResultCard key={item.channelId} item={item} registered={registeredIds.has(String(item.channelId))} selected={search.selectedIds.includes(item.channelId)} onPrepare={onPrepareChannelRegistration} onToggle={search.toggleSelected} />
             ))}
-          </div>
+          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">현재 화면 필터에 맞는 채널이 없습니다</h3><p className="mt-2 text-sm text-slate-500">검색 결과는 그대로 유지됩니다. 화면 필터만 초기화해 전체 결과를 다시 보세요.</p><button type="button" onClick={search.resetViewFilters} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">화면 필터 초기화</button></div>}
           {search.nextPageToken ? <button type="button" onClick={() => search.runSearch({ append: true })} disabled={search.loading} className="mx-auto flex h-10 items-center gap-2 rounded-lg border border-slate-700 px-5 text-xs font-extrabold text-slate-200 hover:bg-slate-800 disabled:cursor-not-allowed"><Users className="h-4 w-4" /> 다음 채널 12개 찾기</button> : null}
         </>
       ) : !search.loading && search.lastQuery ? (

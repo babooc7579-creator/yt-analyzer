@@ -239,7 +239,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     lastReviewedAt: '2026-08-03',
     currentSummary: '수집 영상 검색과 명시적 YouTube 검색을 분리했고, YouTube 검색 안에서 영상 찾기와 채널 찾기·비교를 다시 구분했습니다. 채널 검색은 현재 구독자·영상 수·누적 조회수·영상당 평균을 임시 결과로 보여주며 최대 4개를 비교할 수 있습니다. 채널 검색뿐 아니라 영상 검색 결과에도 채널 등록 상태와 `이 채널 등록 검토`를 표시해, 좋은 영상을 발견한 자리에서 해당 채널을 기존 채널 운영실 등록 단계로 이어갑니다. 영상의 발견 링크 저장과 채널 등록 검토는 독립된 선택입니다. 등록 검토는 입력칸만 채우고 이동하며 실제 YouTube 확인과 Azure DB 저장은 기존 등록 단계에서 별도로 실행합니다. 운영에서 바이브 코딩 채널 검색 1회로 12개 결과, 영상 검색 1회로 25개 결과와 투쏠ㅣAI 에이전트 채널 주소 전달을 확인했습니다. 이 검수 중 다른 화면에 다녀오면 임시 결과가 사라지는 문제를 발견해, 영상·채널 검색 조건과 결과를 앱 메모리에 유지하고 새로고침 때만 초기화하도록 보완했습니다. 배포 후 같은 흐름을 다시 검수해 검색 버튼을 다시 누르지 않고 YouTube 탭·검색어·25개 결과·첫 영상 카드가 복원되는 것을 확인했습니다. `국가`는 제작 국가 제한이 아니라 YouTube의 시청 가능 지역이고 `언어`는 완전 제한이 아니라 관련 결과 우선 조건임을 화면에 명시했습니다. 주요 검색 지역 11개와 우선 언어 10개를 선택할 수 있고, 결과에는 현재 선택값이 아니라 마지막 API 검색에 실제 적용된 조건을 따로 표시합니다. PR #1048 배포 뒤 운영에서 `copilot`·대한민국·한국어 우선·최근 30일 검색을 한 번 실행해 25개 결과와 `대한민국에서 시청 가능 · 한국어 우선 · 최근 30일 · 영상 길이 전체 · 관련도순` 표시를 확인했습니다. 채널 정보 확인·Azure DB 저장은 실행하지 않았고 등록 채널 수는 12개 그대로였습니다. PR #1050 배포 뒤 `바이브 코딩`·대한민국·한국어 우선 채널 검색을 한 번 실행해 12개 결과와 채널 설정 국가를 확인했습니다. 영상당 평균순 변경은 새 API 호출 없이 첫 결과를 `바이브코딩 레인 RaiN`으로 바꿨고, 언어 조건 변경 시 재검색 안내가 나타났다 원래 조건으로 복구하면 사라졌습니다.',
     targetSummary: '키워드만 입력해도 새 영상 후보를 비교하고 필요한 항목만 아이디어 창고와 제작 흐름으로 안전하게 이어갈 수 있게 합니다.',
-    nextAction: '무결정 다음 작업은 채널 검색 결과에서 등록됨·미등록과 채널 설정 국가 유무를 화면에서 좁혀 보는 필터입니다. 한국어 영상만 남기는 엄격한 필터와 검색 결과 후보의 별도 온라인 저장은 누락 데이터 처리와 저장 계약 결정 뒤 진행합니다.',
+    nextAction: '무결정 다음 작업은 7번 모바일 검색 결과의 필터·정렬·작업 버튼 밀도와 가로 넘침 검수입니다. 이어서 8번 화면 왕복 상태 유지까지 확인하고, 엄격한 언어 제한과 검색 후보 온라인 저장은 9~10번 결정 항목으로 멈춰 논의합니다.',
     decisions: [
       '기존 수집 영상 검색과 YouTube 신규 검색은 같은 작업 공간의 별도 탭으로 유지합니다.',
       '검색 결과 전체는 자동 저장하지 않고 사용자가 선택한 영상만 발견 링크함에 저장합니다.',
@@ -253,6 +253,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '대한민국·한국어 우선 빠른 설정은 선택값만 바꾸며 검색 버튼을 누르기 전에는 YouTube API를 호출하지 않습니다.',
       '채널 결과 정렬은 이미 받은 결과에만 적용하며 정렬 변경으로 YouTube API를 다시 호출하지 않습니다.',
       '채널 설정 국가는 채널 운영자가 YouTube에 등록한 값만 표시하고 미등록 값을 추정하지 않습니다.',
+      '등록 상태·채널 국가 유무·비교 선택 필터는 이미 받은 결과만 화면에서 좁히며 YouTube API나 Azure DB를 호출하지 않습니다.',
     ],
     checkpoints: [
       {
@@ -304,6 +305,51 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
         id: 'youtube-channel-result-local-sort',
         label: '채널 결과의 화면 정렬과 채널 설정 국가 표시',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-channel-result-view-filters',
+        label: '1~2. 등록 상태·채널 국가 유무·비교 선택만 보기와 화면 필터 초기화',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-channel-comparison-summary',
+        label: '3. 비교 선택 채널의 핵심 수치·등록·국가 상태 요약 보강',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-channel-comparison-clear',
+        label: '4. 비교 선택 전체 해제와 최대 4개 안내 보강',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-video-channel-registration-filter',
+        label: '5. 영상 검색 결과를 출처 채널 등록 여부로 화면 필터',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-video-action-hierarchy',
+        label: '6. 영상 후보 저장과 출처 채널 등록 검토의 버튼 우선순위 정돈',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-search-mobile-controls',
+        label: '7. 모바일 검색 결과 필터·정렬·작업 버튼 밀도 점검',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+      },
+      {
+        id: 'youtube-search-session-regression',
+        label: '8. 화면 왕복 시 검색 조건·결과·화면 필터 유지 회귀 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+      },
+      {
+        id: 'youtube-strict-language-filter-decision',
+        label: '9. 언어 정보가 비어 있는 결과 처리와 엄격한 언어 전용 필터',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
+      },
+      {
+        id: 'youtube-search-candidate-storage-decision',
+        label: '10. 검색 후보 전체 또는 채널 후보의 온라인 저장 범위와 보존 기간',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
       },
       {
         id: 'youtube-trend-history',
