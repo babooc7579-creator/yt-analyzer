@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 vi.mock('../hooks/useYoutubeChannelSearch', () => ({
   useYoutubeChannelSearch: vi.fn(() => ({
+    appliedFilters: { query: '바이브 코딩', regionCode: 'JP', language: 'ja' },
     changeFilter: vi.fn(),
     error: '',
     filters: { query: '바이브 코딩', regionCode: '', language: '' },
@@ -39,6 +40,8 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('최근 성장률을 뜻하지 않습니다');
     expect(html).toContain('등록 검토하기');
     expect(html).toContain('다음 채널 12개 찾기');
+    expect(html).toContain('채널의 운영 국가 제한이 아닙니다');
+    expect(html).toContain('일본에서 시청 가능 · 일본어 우선');
   });
 
   it('marks a channel already present in the channel registry', () => {

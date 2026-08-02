@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildYoutubeSearchOptions,
   filterYoutubeSearchResults,
+  formatYoutubeSearchCriteria,
   getPublishedAfter,
   toDiscoveryLinkPayload,
 } from './youtubeKeywordSearch';
@@ -23,5 +24,13 @@ describe('youtubeKeywordSearch', () => {
         url: 'https://www.youtube.com/watch?v=2', platform: 'youtube', title: '좋은 영상', linkedVideoId: '2', status: 'inbox',
         memo: '키워드 검색: 경제 · 채널: 좋은 채널',
       });
+  });
+
+  it('explains region availability and language priority in applied criteria', () => {
+    expect(formatYoutubeSearchCriteria({
+      regionCode: 'KR', language: 'ko', dateRange: '30', duration: '', order: 'relevance',
+    })).toBe('대한민국에서 시청 가능 · 한국어 우선 · 최근 30일 · 영상 길이 전체 · 관련도순');
+    expect(formatYoutubeSearchCriteria({ regionCode: 'GB', language: 'en' }, { includeVideoFilters: false }))
+      .toBe('영국에서 시청 가능 · 영어 우선');
   });
 });

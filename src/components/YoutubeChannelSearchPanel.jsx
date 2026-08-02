@@ -2,6 +2,7 @@ import { Check, ExternalLink, Loader2, Search, UserPlus, Users } from 'lucide-re
 import { useMemo } from 'react';
 import { useYoutubeChannelSearch } from '../hooks/useYoutubeChannelSearch';
 import {
+  formatYoutubeSearchCriteria,
   YOUTUBE_SEARCH_LANGUAGE_OPTIONS,
   YOUTUBE_SEARCH_REGION_OPTIONS,
 } from '../utils/youtubeKeywordSearch';
@@ -96,22 +97,35 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <input type="search" value={search.filters.query} onChange={(event) => search.changeFilter('query', event.target.value)} placeholder="예: 경제 해설, 바이브 코딩, 반전 이야기" className="h-11 w-full rounded-lg border border-slate-700 bg-slate-900 pl-9 pr-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-violet-400" />
           </label>
-          <select value={search.filters.regionCode} onChange={(event) => search.changeFilter('regionCode', event.target.value)} className="h-11 rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="국가 조건 변경만으로 API를 호출하지 않습니다.">
-            {YOUTUBE_SEARCH_REGION_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-          </select>
-          <select value={search.filters.language} onChange={(event) => search.changeFilter('language', event.target.value)} className="h-11 rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="언어 조건 변경만으로 API를 호출하지 않습니다.">
-            {YOUTUBE_SEARCH_LANGUAGE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-          </select>
+          <label>
+            <span className="sr-only">검색 지역</span>
+            <select value={search.filters.regionCode} onChange={(event) => search.changeFilter('regionCode', event.target.value)} className="h-11 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="검색 지역 변경만으로 API를 호출하지 않습니다.">
+              {YOUTUBE_SEARCH_REGION_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </select>
+          </label>
+          <label>
+            <span className="sr-only">우선 언어</span>
+            <select value={search.filters.language} onChange={(event) => search.changeFilter('language', event.target.value)} className="h-11 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="우선 언어 변경만으로 API를 호출하지 않습니다.">
+              {YOUTUBE_SEARCH_LANGUAGE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </select>
+          </label>
           <button type="submit" disabled={search.loading || !search.filters.query.trim()} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-violet-500 px-5 text-sm font-black text-white hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400" title="YouTube 채널 검색 1회와 채널 상세 정보 조회를 실행합니다.">
             {search.loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
             {search.loading ? '채널 검색 중...' : 'YouTube에서 채널 검색'}
           </button>
         </div>
-        <p className="mt-3 text-[11px] leading-5 text-slate-500">기본 12개 · 자동검색 없음 · 키워드나 조건 변경 후 검색 버튼을 눌러야 API 요청이 실행됩니다.</p>
+        <p className="mt-3 text-[11px] leading-5 text-slate-500">검색 지역은 해당 나라에서 시청 가능한 결과이며 채널의 운영 국가 제한이 아닙니다. 우선 언어는 관련 결과를 앞세우지만 다른 언어도 포함될 수 있습니다.</p>
+        <p className="mt-1 text-[11px] leading-5 text-slate-500">기본 12개 · 자동검색 없음 · 키워드나 조건 변경 후 검색 버튼을 눌러야 API 요청이 실행됩니다.</p>
       </form>
 
       {search.error ? <p role="alert" className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm font-bold text-rose-200">{search.error}</p> : null}
       {search.notice ? <p className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-100">{search.notice}</p> : null}
+      {search.appliedFilters ? (
+        <div className="rounded-lg border border-slate-700 bg-slate-900/80 px-4 py-3">
+          <p className="text-xs font-black text-slate-200">마지막 검색에 적용된 조건</p>
+          <p className="mt-1 text-xs leading-5 text-slate-400">{formatYoutubeSearchCriteria(search.appliedFilters, { includeVideoFilters: false })}</p>
+        </div>
+      ) : null}
 
       {comparedItems.length > 0 ? (
         <div className="rounded-xl border border-violet-500/30 bg-violet-500/10 p-4">
