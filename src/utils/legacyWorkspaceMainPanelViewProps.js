@@ -155,6 +155,7 @@ export function getLegacyWorkspaceMainPanelViewProps({
       markRadarVideoStatus,
       openCreatorView,
       promptCopyError,
+      productionSourceVideos: toVideoList(productionSourceVideos),
       savedVideos: savedVideoList,
       setHasUnsavedProductionDrafts,
       toggleScrapVideo,
