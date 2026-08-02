@@ -4,6 +4,7 @@ import {
   Inbox,
   Loader2,
   Search,
+  UserPlus,
   Users,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -41,7 +42,7 @@ function SearchSelect({ label, options, value, onChange }) {
   );
 }
 
-function YoutubeSearchResultCard({ item, selected, saved, onToggle }) {
+function YoutubeSearchResultCard({ item, selected, saved, registeredChannel, onPrepareChannelRegistration, onToggle }) {
   return (
     <article className={`overflow-hidden rounded-xl border bg-slate-950/70 ${selected ? 'border-red-400 ring-2 ring-red-400/20' : 'border-slate-800'}`}>
       <button
@@ -59,7 +60,10 @@ function YoutubeSearchResultCard({ item, selected, saved, onToggle }) {
       </button>
       <div className="p-4">
         <h3 className="line-clamp-2 min-h-12 text-sm font-black leading-6 text-white">{item.title}</h3>
-        <p className="mt-2 truncate text-xs font-bold text-slate-400">{item.channelTitle}</p>
+        <div className="mt-2 flex items-center gap-2">
+          <p className="min-w-0 flex-1 truncate text-xs font-bold text-slate-400">{item.channelTitle}</p>
+          {registeredChannel ? <span className="shrink-0 rounded-full bg-emerald-500/20 px-2 py-1 text-[10px] font-black text-emerald-200">등록 채널</span> : null}
+        </div>
         <p className="mt-1 text-[11px] text-slate-500">게시 {formatDate(item.publishedAt)}</p>
         <div className="mt-4 grid grid-cols-3 gap-2 text-center">
           <Metric label="조회수" value={formatNumber(item.viewCount)} tone="text-cyan-300" />
@@ -69,15 +73,30 @@ function YoutubeSearchResultCard({ item, selected, saved, onToggle }) {
         <p className="mt-3 text-[11px] leading-5 text-slate-500">
           대박 비율은 현재 조회수÷현재 구독자 수의 추정값이며, 하루 평균 {item.lifetimeViewsPerDay === null ? '-' : formatNumber(item.lifetimeViewsPerDay)}회는 게시 후 전체 기간 평균입니다.
         </p>
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold text-red-300 hover:text-red-200"
-          title="YouTube 원본을 새 창에서 엽니다. API 호출이나 저장은 실행하지 않습니다."
-        >
-          <ExternalLink className="h-3.5 w-3.5" /> YouTube 원본 보기
-        </a>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => onPrepareChannelRegistration?.({
+              channelId: item.channelId,
+              title: item.channelTitle,
+              url: `https://www.youtube.com/channel/${item.channelId}`,
+            })}
+            disabled={registeredChannel || !item.channelId}
+            className="inline-flex h-9 items-center gap-1 rounded-lg bg-violet-500 px-3 text-xs font-black text-white hover:bg-violet-400 disabled:cursor-default disabled:bg-slate-700 disabled:text-slate-400"
+            title="채널 운영실의 등록 입력칸에 이 영상의 채널 주소를 채웁니다. 이동만으로 YouTube API 호출이나 Azure DB 저장은 실행되지 않습니다."
+          >
+            <UserPlus className="h-3.5 w-3.5" /> {registeredChannel ? '이미 등록된 채널' : '이 채널 등록 검토'}
+          </button>
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-9 items-center gap-1 px-2 text-xs font-extrabold text-red-300 hover:text-red-200"
+            title="YouTube 원본을 새 창에서 엽니다. API 호출이나 저장은 실행하지 않습니다."
+          >
+            <ExternalLink className="h-3.5 w-3.5" /> YouTube 원본 보기
+          </a>
+        </div>
       </div>
     </article>
   );
@@ -96,13 +115,16 @@ function YoutubeVideoSearchPanel({
   discoveryLinks = [],
   discoveryLinksSaving = false,
   onOpenDiscoveryLinks,
+  onPrepareChannelRegistration,
   onSaveDiscoveryLink,
+  registeredChannelIds = [],
 }) {
   const search = useYoutubeKeywordSearch();
   const [savingSelected, setSavingSelected] = useState(false);
   const savedVideoIds = useMemo(() => new Set(
     discoveryLinks.map((link) => String(link?.linkedVideoId || '')).filter(Boolean),
   ), [discoveryLinks]);
+  const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const selectedItems = search.items.filter((item) => search.selectedIds.includes(item.videoId) && !savedVideoIds.has(item.videoId));
 
   const saveSelected = async () => {
@@ -200,6 +222,8 @@ function YoutubeVideoSearchPanel({
                 key={item.videoId}
                 item={item}
                 onToggle={search.toggleSelected}
+                onPrepareChannelRegistration={onPrepareChannelRegistration}
+                registeredChannel={registeredIds.has(String(item.channelId || ''))}
                 saved={savedVideoIds.has(item.videoId)}
                 selected={search.selectedIds.includes(item.videoId)}
               />
