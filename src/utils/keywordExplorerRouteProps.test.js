@@ -6,7 +6,10 @@ describe('keywordExplorerRouteProps', () => {
   it('connects stored-video actions without invoking them while building props', () => {
     const openCreatorView = vi.fn();
     const props = buildKeywordExplorerRouteProps({
+      addDiscoveryLink: vi.fn(),
       checkedVideos: ['v1'],
+      discoveryLinks: [{ id: 'link-1' }],
+      discoveryLinksSaving: true,
       loading: true,
       openCreatorView,
       selectedChannelIds: ['c1', 'c2'],
@@ -15,6 +18,8 @@ describe('keywordExplorerRouteProps', () => {
 
     expect(props).toMatchObject({
       checkedVideos: ['v1'],
+      discoveryLinks: [{ id: 'link-1' }],
+      discoveryLinksSaving: true,
       loading: true,
       selectedChannelCount: 2,
       selectedChannelKey: 'c1|c2',
@@ -26,11 +31,13 @@ describe('keywordExplorerRouteProps', () => {
     props.onOpenSelectedScan();
     props.onOpenVault();
     props.onOpenWorkTools();
+    props.onOpenDiscoveryLinks();
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'discovery-watchlist' }],
       [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
       [{ id: 'vault-videos' }],
       [{ id: 'tools-bookmarks' }],
+      [{ id: 'discovery-links' }],
     ]);
   });
 });

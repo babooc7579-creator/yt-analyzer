@@ -1,31 +1,39 @@
+import { useState } from 'react';
 import { useKeywordExplorerState } from '../hooks/useKeywordExplorerState';
 import { getKeywordExplorerEmptyState } from '../utils/keywordExplorer';
 import KeywordExplorerFilters from './KeywordExplorerFilters';
 import KeywordExplorerHeader from './KeywordExplorerHeader';
 import KeywordExplorerSummary from './KeywordExplorerSummary';
+import KeywordExplorerSourceTabs from './KeywordExplorerSourceTabs';
 import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import KeywordSuggestionChips from './KeywordSuggestionChips';
 import StoredVideoActionGrid from './StoredVideoActionGrid';
 import StoredVideoLoadFeedback from './StoredVideoLoadFeedback';
+import YoutubeKeywordSearchPanel from './YoutubeKeywordSearchPanel';
 
 export default function KeywordExplorerWorkspace({
   checkedVideos,
+  discoveryLinks,
+  discoveryLinksSaving,
   isProductionCandidate,
   isVideoSaved,
   loadResult,
   loading = false,
   onFetchComments,
   onLoadStoredVideos,
+  onOpenDiscoveryLinks,
   onOpenChannelWatchlist,
   onOpenSelectedScan,
   onOpenWorkTools,
   onOpenVault,
   onPromoteToProduction,
+  onSaveDiscoveryLink,
   onToggleCheck,
   onToggleScrap,
   selectedChannelCount,
   videos,
 }) {
+  const [source, setSource] = useState('stored');
   const state = useKeywordExplorerState({ videos });
   const emptyState = getKeywordExplorerEmptyState({
     hasQuery: state.hasQuery,
@@ -40,14 +48,24 @@ export default function KeywordExplorerWorkspace({
 
   return (
     <section data-testid="creator-route-keyword-explorer" className="min-w-0 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-xl shadow-slate-950/30 sm:p-6">
-      <KeywordExplorerHeader
-        loading={loading}
-        onLoadStoredVideos={onLoadStoredVideos}
-        onOpenVault={onOpenVault}
-        selectedChannelCount={selectedChannelCount}
-      />
+      <KeywordExplorerSourceTabs source={source} onChange={setSource} />
 
       <div className="mt-5 space-y-4">
+        {source === 'youtube' ? (
+          <YoutubeKeywordSearchPanel
+            discoveryLinks={discoveryLinks}
+            discoveryLinksSaving={discoveryLinksSaving}
+            onOpenDiscoveryLinks={onOpenDiscoveryLinks}
+            onSaveDiscoveryLink={onSaveDiscoveryLink}
+          />
+        ) : (
+          <>
+        <KeywordExplorerHeader
+          loading={loading}
+          onLoadStoredVideos={onLoadStoredVideos}
+          onOpenVault={onOpenVault}
+          selectedChannelCount={selectedChannelCount}
+        />
         <KeywordExplorerSummary summary={state.summary} />
         <KeywordExplorerFilters
           ageFilter={state.ageFilter}
@@ -117,6 +135,8 @@ export default function KeywordExplorerWorkspace({
               </button>
             )}
           </div>
+        )}
+          </>
         )}
       </div>
     </section>

@@ -6,7 +6,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
       { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
       { id: 'discovery-trends', label: '트렌드 스캐너', status: 'soon', summary: '외부 트렌드와 급상승 신호를 연결할 예정입니다.' },
       { id: 'discovery-ttotto', label: '또터또 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 수집 영상을 전용 화면에서 검토합니다.' },
-      { id: 'discovery-keywords', label: '키워드 탐색', status: 'live', summary: '온라인 저장소(Azure DB)에 보관된 수집 영상의 제목과 채널명을 검색하고 판단 작업으로 연결합니다.' },
+      { id: 'discovery-keywords', label: '키워드 탐색', status: 'live', summary: '온라인 저장소(Azure DB)의 수집 영상에서 찾거나, 검색 버튼을 눌러 YouTube의 새 영상 후보를 찾고 발견 링크함으로 연결합니다.' },
       { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'live', summary: '운영중 채널을 등급과 마지막 수집일 기준으로 정렬하고 오늘 확인할 범위를 고릅니다.' },
     ],
   },
