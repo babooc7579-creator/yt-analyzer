@@ -252,12 +252,67 @@ describe('useScrapbook', () => {
     setScrapbookState({ cloudReady: true, savedVideos: [] });
     const scrapbook = useScrapbook();
 
-    const changed = await scrapbook.ensureProductionVideoSource(savedVideo);
+    const result = await scrapbook.ensureProductionVideoSource(savedVideo);
 
     const productionVideo = { ...savedVideo, scrapbookPurposes: ['production'] };
-    expect(changed).toBe(true);
+    expect(result).toEqual({
+      ready: true,
+      createdProductionOnlySource: true,
+    });
     expect(saveScrapbookVideos).toHaveBeenCalledWith([productionVideo]);
     expect(stateSetters[0]).toHaveBeenCalledWith([productionVideo]);
+  });
+
+  it('rolls back a source created only for a failed production candidate save', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [] });
+    const scrapbook = useScrapbook();
+
+    await scrapbook.ensureProductionVideoSource(savedVideo);
+    const cleanedUp = await scrapbook.rollbackCreatedProductionVideoSource('video-1');
+
+    expect(cleanedUp).toBe(true);
+    expect(deleteScrapbookVideo).toHaveBeenCalledWith('video-1');
+    expect(stateSetters[0]).toHaveBeenLastCalledWith([]);
+    expect(writeJsonStorage).toHaveBeenLastCalledWith(STORAGE_KEYS.savedVideos, []);
+    expect(stateSetters[2]).toHaveBeenLastCalledWith('');
+  });
+
+  it('never deletes a source that already has the material purpose', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [] });
+    const scrapbook = useScrapbook();
+
+    await scrapbook.toggleScrapVideo(savedVideo);
+    const result = await scrapbook.ensureProductionVideoSource(savedVideo);
+    const cleanedUp = await scrapbook.rollbackCreatedProductionVideoSource('video-1');
+
+    expect(result).toEqual({
+      ready: true,
+      createdProductionOnlySource: false,
+    });
+    expect(cleanedUp).toBe(true);
+    expect(deleteScrapbookVideo).not.toHaveBeenCalled();
+  });
+
+  it('keeps the cached source and shows a warning when automatic cleanup fails', async () => {
+    fetchScrapbookMock.mockReturnValueOnce(new Promise(() => {}));
+    setScrapbookState({ cloudReady: true, savedVideos: [] });
+    deleteScrapbookVideoMock.mockResolvedValueOnce({
+      success: false,
+      error: 'delete failed',
+    });
+    const scrapbook = useScrapbook();
+
+    await scrapbook.ensureProductionVideoSource(savedVideo);
+    const cleanedUp = await scrapbook.rollbackCreatedProductionVideoSource('video-1');
+
+    expect(cleanedUp).toBe(false);
+    expect(stateSetters[1]).toHaveBeenCalledWith(false);
+    expect(stateSetters[2]).toHaveBeenCalledWith(
+      SCRAPBOOK_SYNC_WARNINGS.productionSourceCleanupFailed,
+    );
+    expect(stateSetters[0]).not.toHaveBeenCalledWith([]);
   });
 
   it('exposes production-only sources separately from material scrapbook videos', () => {

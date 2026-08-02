@@ -221,3 +221,12 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - `functionApi.js`는 도메인 API의 중복 구현이 아니라 예전 import 경로를 위한 re-export 관문이며, `appRouteProps.js`는 실제 사용 중인 화면 라우팅 관문임을 재확인했습니다. 삭제하지 않고 신규 코드는 도메인 모듈을 직접 사용합니다.
 - Azure Static Web Apps의 `github_id_token`은 제거 시 운영 배포 실패 이력이 있어 비차단 경고로 유지합니다. 프론트 Build action은 현재 `checkout@v7`, `setup-node@v6`입니다.
 - Azure DB 쓰기·삭제, localStorage 쓰기, YouTube API 호출은 실행하지 않았습니다.
+
+## 2026-08-02 제작 후보 부분 실패 원상복구
+
+- `제작 후보로`는 제작 화면에 필요한 원본을 먼저 저장하고 영상 판단 기록에 제작 후보 상태를 이어서 저장합니다. 두 번째 저장만 실패하면 제작 상태 없이 화면에도 보이지 않는 `production` 전용 원본이 남을 수 있었습니다.
+- 이번 작업이 새로 만든 `production` 전용 원본인 경우에만 기존 `DELETE /scrapbook/{videoId}`로 자동 정리합니다.
+- 이미 있던 소재 기록, `material` 용도가 함께 있는 기록, 이전 작업에서 만들어진 기록은 자동 삭제하지 않습니다.
+- 정리 요청도 실패하면 브라우저 임시 목록을 성공한 것처럼 지우지 않고, 온라인 저장소(Azure DB)를 다시 확인하라는 전용 경고를 표시합니다.
+- 기존 Azure Functions·Cosmos DB·endpoint를 그대로 사용하며 새 자원·container·localStorage key·YouTube API 호출은 없습니다.
+- 이번 검수에서는 운영 Azure DB의 실제 저장·삭제를 실행하지 않았습니다. 강제 부분 실패 검수와 다중 브라우저 동시 변경 보호는 별도 결정 항목입니다.

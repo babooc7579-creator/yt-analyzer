@@ -24,6 +24,7 @@ describe('syncWarnings constants', () => {
   it('keeps save failure copy from looking like local-only success', () => {
     expect(VIDEO_RECORDS_SYNC_WARNINGS.saveFailed).toContain('온라인 저장소(Azure DB)에 저장되지 않았습니다');
     expect(SCRAPBOOK_SYNC_WARNINGS.saveFailed).toContain('브라우저 임시 기록으로 저장 완료 처리하지 않습니다');
+    expect(SCRAPBOOK_SYNC_WARNINGS.productionSourceCleanupFailed).toContain('기존 소재 보관 기록은 삭제하지 않았습니다');
   });
 
   it('states the online-storage-first fallback policy in the banner help text', () => {
