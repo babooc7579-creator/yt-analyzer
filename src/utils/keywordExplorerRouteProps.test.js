@@ -37,7 +37,7 @@ describe('keywordExplorerRouteProps', () => {
       [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
       [{ id: 'vault-videos' }],
       [{ id: 'tools-bookmarks' }],
-      [{ id: 'discovery-links' }],
+      [{ id: 'vault-sources' }],
     ]);
   });
 });
