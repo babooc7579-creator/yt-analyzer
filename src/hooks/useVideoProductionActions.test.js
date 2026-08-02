@@ -70,19 +70,45 @@ describe('useVideoProductionActions', () => {
     expect(markVideoStatus).not.toHaveBeenCalled();
   });
 
-  it('reports failure without removing the prepared source when candidate status storage fails', async () => {
-    const ensureProductionVideoSource = vi.fn(() => Promise.resolve(true));
+  it('keeps an existing prepared source when candidate status storage fails', async () => {
+    const ensureProductionVideoSource = vi.fn(() => Promise.resolve({
+      ready: true,
+      createdProductionOnlySource: false,
+    }));
     const markVideoStatus = vi.fn(() => Promise.resolve(false));
+    const rollbackCreatedProductionVideoSource = vi.fn(() => Promise.resolve(true));
     const video = { videoId: 'video-4', title: 'Retryable clip' };
 
     const { promoteVideoToProduction } = useVideoProductionActions({
       ensureProductionVideoSource,
       markVideoStatus,
+      rollbackCreatedProductionVideoSource,
       videoUserRecords: {},
     });
 
     await expect(promoteVideoToProduction(video)).resolves.toBe(false);
     expect(ensureProductionVideoSource).toHaveBeenCalledWith(video);
     expect(markVideoStatus).toHaveBeenCalledWith('video-4', PRODUCTION_STATUS.CANDIDATE);
+    expect(rollbackCreatedProductionVideoSource).not.toHaveBeenCalled();
+  });
+
+  it('rolls back only a newly created production-only source when candidate status storage fails', async () => {
+    const ensureProductionVideoSource = vi.fn(() => Promise.resolve({
+      ready: true,
+      createdProductionOnlySource: true,
+    }));
+    const markVideoStatus = vi.fn(() => Promise.resolve(false));
+    const rollbackCreatedProductionVideoSource = vi.fn(() => Promise.resolve(true));
+    const video = { videoId: 'video-5', title: 'New source' };
+
+    const { promoteVideoToProduction } = useVideoProductionActions({
+      ensureProductionVideoSource,
+      markVideoStatus,
+      rollbackCreatedProductionVideoSource,
+      videoUserRecords: {},
+    });
+
+    await expect(promoteVideoToProduction(video)).resolves.toBe(false);
+    expect(rollbackCreatedProductionVideoSource).toHaveBeenCalledWith('video-5');
   });
 });

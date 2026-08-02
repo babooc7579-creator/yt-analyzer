@@ -10,7 +10,9 @@ import {
   getMaterialScrapbookVideos,
   getNextScrapbookVideos,
   hasScrapbookVideo,
+  isProductionOnlyScrapbookVideo,
   mergeScrapbookVideosWithCollectedVideos,
+  removeScrapbookVideo,
   SCRAPBOOK_PURPOSE,
   withScrapbookPurpose,
   withoutScrapbookPurpose,
@@ -70,7 +72,7 @@ export function useScrapbook({ collectedVideos = [] } = {}) {
   const ensureProductionVideoSource = async (video) => {
     if (!scrapbookCloudReady) {
       setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.cloudRequired);
-      return false;
+      return { ready: false, createdProductionOnlySource: false };
     }
 
     const existingVideo = cloudScrapbookCacheRef.current.find(item => item?.videoId === video?.videoId);
@@ -84,10 +86,32 @@ export function useScrapbook({ collectedVideos = [] } = {}) {
     try {
       await saveScrapbookVideo(sourceVideo);
       setScrapbookSyncWarning('');
-      return true;
+      return {
+        ready: true,
+        createdProductionOnlySource: !existingVideo,
+      };
     } catch {
       setScrapbookCloudReady(false);
       setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.saveFailed);
+      return { ready: false, createdProductionOnlySource: false };
+    }
+  };
+
+  const rollbackCreatedProductionVideoSource = async (videoId) => {
+    const currentVideo = cloudScrapbookCacheRef.current.find(item => item?.videoId === videoId);
+    if (!currentVideo || !isProductionOnlyScrapbookVideo(currentVideo)) return true;
+
+    try {
+      const data = await deleteScrapbookVideo(videoId);
+      if (!data.success) throw new Error(data.error || SCRAPBOOK_DELETE_FAILED_MESSAGE);
+      const nextVideos = removeScrapbookVideo(cloudScrapbookCacheRef.current, videoId);
+      setSavedVideos(nextVideos);
+      cacheCloudScrapbook(nextVideos);
+      setScrapbookSyncWarning('');
+      return true;
+    } catch {
+      setScrapbookCloudReady(false);
+      setScrapbookSyncWarning(SCRAPBOOK_SYNC_WARNINGS.productionSourceCleanupFailed);
       return false;
     }
   };
@@ -144,6 +168,7 @@ export function useScrapbook({ collectedVideos = [] } = {}) {
     scrapbookSyncWarning,
     isVideoSaved,
     retryScrapbookSync: syncScrapbookFromCloud,
+    rollbackCreatedProductionVideoSource,
     toggleScrapVideo,
   };
 }

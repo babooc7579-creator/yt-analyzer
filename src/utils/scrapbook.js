@@ -37,6 +37,11 @@ export const hasScrapbookPurpose = (video, purpose) => (
   getScrapbookPurposes(video).includes(purpose)
 );
 
+export const isProductionOnlyScrapbookVideo = (video) => {
+  const purposes = getScrapbookPurposes(video);
+  return purposes.length === 1 && purposes[0] === SCRAPBOOK_PURPOSE.PRODUCTION;
+};
+
 export const withScrapbookPurpose = (video, purpose) => {
   const sourceVideo = toVideoObject(video);
   if (!SCRAPBOOK_PURPOSE_VALUES.includes(purpose)) return sourceVideo;

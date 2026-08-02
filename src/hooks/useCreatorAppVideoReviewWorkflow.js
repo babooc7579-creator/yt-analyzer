@@ -11,6 +11,7 @@ export function useCreatorAppVideoReviewWorkflow({ collectedVideos = [] } = {}) 
     scrapbookSyncWarning,
     isVideoSaved,
     retryScrapbookSync,
+    rollbackCreatedProductionVideoSource,
     toggleScrapVideo: toggleCloudScrapVideo,
   } = useScrapbook({ collectedVideos });
   const {
@@ -28,6 +29,7 @@ export function useCreatorAppVideoReviewWorkflow({ collectedVideos = [] } = {}) 
   } = useVideoProductionActions({
     ensureProductionVideoSource,
     markVideoStatus: markRadarVideoStatus,
+    rollbackCreatedProductionVideoSource,
     videoUserRecords,
   });
   const toggleScrapVideo = (video, options = {}) => {

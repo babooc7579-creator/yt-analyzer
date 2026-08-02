@@ -3,6 +3,7 @@ import { PRODUCTION_STATUS, hasProductionStatus } from '../constants/status';
 export function useVideoProductionActions({
   ensureProductionVideoSource,
   markVideoStatus,
+  rollbackCreatedProductionVideoSource,
   videoUserRecords,
 }) {
   const isProductionCandidate = (videoId) => (
@@ -10,10 +11,21 @@ export function useVideoProductionActions({
   );
 
   const promoteVideoToProduction = async (video) => {
-    const sourceReady = await ensureProductionVideoSource(video);
+    const sourceResult = await ensureProductionVideoSource(video);
+    const sourceReady = sourceResult === true || sourceResult?.ready === true;
     if (!sourceReady) return false;
 
-    return markVideoStatus(video.videoId, PRODUCTION_STATUS.CANDIDATE);
+    const statusSaved = await markVideoStatus(video.videoId, PRODUCTION_STATUS.CANDIDATE);
+    if (statusSaved) return true;
+
+    if (
+      sourceResult?.createdProductionOnlySource
+      && typeof rollbackCreatedProductionVideoSource === 'function'
+    ) {
+      await rollbackCreatedProductionVideoSource(video.videoId);
+    }
+
+    return false;
   };
 
   return {

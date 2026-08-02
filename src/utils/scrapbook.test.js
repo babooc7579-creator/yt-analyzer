@@ -19,6 +19,7 @@ import {
   getScrapbookWorkspaceViewProps,
   hasScrapbookVideo,
   hasScrapbookPurpose,
+  isProductionOnlyScrapbookVideo,
   mergeScrapbookVideoWithCollectedVideo,
   mergeScrapbookVideosWithCollectedVideos,
   removeScrapbookVideo,
@@ -70,6 +71,18 @@ describe('scrapbook utils', () => {
     ).scrapbookPurposes).toEqual(['production']);
     expect(getMaterialScrapbookVideos([productionOnly, savedVideo])).toEqual([savedVideo]);
     expect(hasScrapbookVideo([productionOnly], 'video-1')).toBe(false);
+  });
+
+  it('identifies only an explicit production-only source as safe for whole-document cleanup', () => {
+    expect(isProductionOnlyScrapbookVideo({
+      ...savedVideo,
+      scrapbookPurposes: [SCRAPBOOK_PURPOSE.PRODUCTION],
+    })).toBe(true);
+    expect(isProductionOnlyScrapbookVideo({
+      ...savedVideo,
+      scrapbookPurposes: [SCRAPBOOK_PURPOSE.MATERIAL, SCRAPBOOK_PURPOSE.PRODUCTION],
+    })).toBe(false);
+    expect(isProductionOnlyScrapbookVideo(savedVideo)).toBe(false);
   });
 
   it('uses current collected display fields without replacing scrapbook ownership fields', () => {

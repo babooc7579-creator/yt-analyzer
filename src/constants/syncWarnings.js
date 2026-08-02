@@ -17,6 +17,7 @@ export const SCRAPBOOK_SYNC_WARNINGS = {
   loadFallback: '온라인 저장소(Azure DB) 연결 실패로 이 브라우저에 남아 있던 소재 보관함 임시 기록을 표시 중입니다. 이 목록은 온라인 저장소(Azure DB) 기준 데이터가 아닙니다.',
   saveFailed: '소재 보관함 변경이 온라인 저장소(Azure DB)에 저장되지 않았습니다. 브라우저 임시 기록으로 저장 완료 처리하지 않습니다.',
   cloudRequired: '온라인 저장소(Azure DB)의 소재 보관함을 확인하지 못해 지금은 보관 상태를 바꿀 수 없습니다. 잠시 뒤 새로고침 후 다시 시도해 주세요.',
+  productionSourceCleanupFailed: '제작 후보 표시는 저장되지 않았고, 방금 만든 제작 전용 원본도 자동으로 정리하지 못했습니다. 기존 소재 보관 기록은 삭제하지 않았습니다. 온라인 저장소(Azure DB)의 소재 보관함을 다시 확인해 주세요.',
 };
 
 export const SYNC_WARNING_BANNER_COPY = {

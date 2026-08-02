@@ -68,7 +68,7 @@
 | 전체/태그 새 영상 수집 | `scanChannels` | `GET /scan`, `GET /scan?tag=...` | YouTube API + DB 갱신 | 예 | 예 | 예 | 아니오 | 가능 | GET이지만 비용성/변경 작업 |
 | 태그 이름 변경 | `renameTag` | `GET /tags/rename?from=...&to=...` | DB 변경 | 아니오 | 예 | 예 | 아니오 | 가능 | GET이지만 DB 변경. 오해 위험 높음 |
 | 소재·제작 원본 불러오기 | `fetchScrapbook` | `GET /scrapbook` | DB 조회 | 아니오 | 예 | 아니오 | 아니오 | 가능 | `videos` container 안의 `docType` 조회. 현재 불러온 수집 영상과 `videoId`가 같으면 화면에서만 최신 표시 정보 병합 |
-| 소재 보관·제작 원본 저장 | `saveScrapbookVideos` | `POST /scrapbook` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | `scrapbookPurposes`의 `material`·`production` 용도를 보존. 제작 후보 지정은 원본 저장 성공 후 판단 기록을 별도 저장 |
+| 소재 보관·제작 원본 저장 | `saveScrapbookVideos` | `POST /scrapbook` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | `scrapbookPurposes`의 `material`·`production` 용도를 보존. 제작 후보 지정은 원본 저장 성공 후 판단 기록을 별도 저장. 판단 기록 저장 실패 시 이 작업이 새로 만든 `production` 전용 문서만 `DELETE /scrapbook/{videoId}`로 정리하고 기존 `material` 문서는 삭제하지 않음 |
 | 소재 보관 해제 | `deleteScrapbookVideo` 또는 `saveScrapbookVideos` | `DELETE /scrapbook/{videoId}` 또는 `POST /scrapbook` | DB 변경 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 제작 기록이 없으면 문서 삭제. 제작 후보이면 `material` 용도만 해제하고 `production` 원본은 유지 |
 | 영상 판단 기록 불러오기 | `fetchVideoUserRecords` | `GET /video-records` | DB 조회 | 아니오 | 예 | 아니오 | localStorage 보조 | 가능 | localStorage와 Cloud 차이 가능 |
 | 영상 판단·제작 기록 저장 | `saveVideoUserRecord` | `POST /video-records` | DB 저장 | 아니오 | 아니오 | 예 | localStorage 보조 | 가능 | 프론트는 변경 필드만 전송하고 백엔드는 요청에 없는 상태·대본·메모·일정·업로드 기록을 보존. 명시적 빈 값은 삭제로 처리. YouTube API 호출 없음 |
