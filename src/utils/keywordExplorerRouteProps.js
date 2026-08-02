@@ -28,7 +28,7 @@ export function buildKeywordExplorerRouteProps({
     loading: Boolean(loading),
     onFetchComments: fetchTopComments,
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
-    onOpenDiscoveryLinks: () => openCreatorView({ id: 'discovery-links' }),
+    onOpenDiscoveryLinks: () => openCreatorView({ id: 'vault-sources' }),
     onOpenChannelWatchlist: () => openCreatorView({ id: 'discovery-watchlist' }),
     onOpenSelectedScan: () => openCreatorView({
       id: 'ops-channels',
