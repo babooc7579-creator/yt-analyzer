@@ -245,3 +245,12 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - 프론트 Pull Request 검사는 Node.js 20을 사용했지만 Azure Static Web Apps의 실제 Oryx 빌드는 Node.js 22.22.0을 사용해 검수 환경과 배포 환경이 달랐습니다.
 - `Core read-only regression check`와 `React/Vite build check`를 Node.js 22 및 현재 `setup-node` 주버전으로 맞췄습니다.
 - 앱 의존성·기능·Azure Static Web Apps 배포 설정은 바꾸지 않았으며 기존 GitHub Actions 포함량만 사용합니다.
+
+## 2026-08-02 제작 후보 원본 전달 경로 복구
+
+- 운영 화면에서 소재 보관함과 대본 작업실에는 Jinxy 영상 후보가 보이지만 제작 후보함에는 영상 0개·링크 1개만 표시되는 불일치를 확인했습니다.
+- 원인은 Azure DB 데이터나 제작 상태가 아니라, 제작 원본 목록 `productionSourceVideos`가 두 단계의 프론트 화면 조립 관문에서 누락된 것이었습니다.
+- PR #1035에서 작업 화면 조립 관문, PR #1036에서 상위 라우팅 관문에 같은 원본 목록을 전달하도록 복구했습니다.
+- 두 관문 모두 전용 회귀 테스트로 보호했으며 전체 테스트 1,172개와 production build를 통과했습니다.
+- API endpoint, Azure DB 문서, localStorage key와 YouTube API 호출 조건은 변경하지 않았습니다. 운영 Azure DB 쓰기·삭제와 YouTube 신규 수집도 실행하지 않았습니다.
+- 배포마다 소재 보관함의 제작 원본과 제작 후보함·대본 작업실·업로드 캘린더의 영상 후보 수가 같은지 읽기 전용으로 다시 확인합니다.

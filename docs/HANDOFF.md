@@ -471,3 +471,5 @@ DB schema, endpoint, localStorage key, YouTube API 호출량이 바뀔 수 있�
 같은 날 백엔드 PR 사전 검수를 추가했습니다. `yt-analyzer-functions` PR #21은 Node.js 24와 잠금 파일 기준 전체 테스트를 통과했고 PR에서는 패키징·Azure 로그인·배포가 모두 건너뛰어졌습니다. 병합 커밋 `ff61533`의 `main` 실행에서 테스트·패키징·기존 Azure Function App 배포가 성공했습니다. Node 20 Action 런타임 경고는 제거됐으며 Functions test mode 안내와 최신 artifact Action 내부의 `Buffer()` 경고는 성공 결과와 분리해 비차단 경고로 유지합니다. 새 자원·비밀키·endpoint·DB·YouTube API 호출 변경은 없습니다.
 
 프론트 CI도 실제 Azure Static Web Apps Oryx 빌드가 사용하는 Node.js 22 계열과 맞췄습니다. PR·main의 읽기 전용 회귀 검사와 React/Vite 전체 검사는 `setup-node@v7`·Node.js 22를 사용합니다. 앱 기능·의존성·배포 인증 설정은 변경하지 않았습니다.
+
+같은 날 운영 화면에서 소재 보관함과 대본 작업실에는 Jinxy 제작 후보가 보이지만 제작 후보함에는 영상 0개·링크 1개만 표시되는 불일치를 발견했습니다. Azure DB 데이터 문제는 아니었고 `productionSourceVideos`가 상위 라우팅 관문과 작업 화면 조립 관문에서 차례로 누락된 것이 원인이었습니다. 프론트 PR #1035와 #1036으로 두 전달 경로를 복구하고 관문별 회귀 테스트, 전체 테스트 1,172개, production build와 Azure Static Web Apps 배포를 통과했습니다. API·Azure DB·localStorage·YouTube API 계약은 변경하지 않았고 운영 저장·삭제·신규 수집도 실행하지 않았습니다.
