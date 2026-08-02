@@ -54,6 +54,13 @@ export const YOUTUBE_SEARCH_MINIMUM_VIEW_OPTIONS = [
   { value: 1000000, label: '100만 이상' },
 ];
 
+export const YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS = [
+  { value: 'relevance', label: 'YouTube 관련도순' },
+  { value: 'subscriberCount', label: '구독자 많은순' },
+  { value: 'avgViewCount', label: '영상당 평균 높은순' },
+  { value: 'totalVideoCount', label: '영상 수 많은순' },
+];
+
 export function getPublishedAfter(days, now = new Date()) {
   const dayCount = Number(days || 0);
   if (!Number.isFinite(dayCount) || dayCount <= 0) return '';
@@ -92,6 +99,33 @@ export function formatYoutubeSearchCriteria(filters = {}, { includeVideoFilters 
   }
 
   return parts.join(' · ');
+}
+
+export function hasYoutubeSearchCriteriaChanges(filters = {}, appliedFilters, { includeVideoFilters = true } = {}) {
+  if (!appliedFilters) return false;
+  const keys = includeVideoFilters
+    ? ['query', 'regionCode', 'language', 'dateRange', 'duration', 'order']
+    : ['query', 'regionCode', 'language'];
+  return keys.some((key) => {
+    const currentValue = key === 'query' ? String(filters[key] || '').trim() : String(filters[key] || '');
+    const appliedValue = key === 'query' ? String(appliedFilters[key] || '').trim() : String(appliedFilters[key] || '');
+    return currentValue !== appliedValue;
+  });
+}
+
+export function sortYoutubeChannelResults(items, sortBy = 'relevance') {
+  const source = Array.isArray(items) ? items : [];
+  if (sortBy === 'relevance') return [...source];
+  return [...source].sort((left, right) => {
+    const difference = Number(right?.[sortBy] || 0) - Number(left?.[sortBy] || 0);
+    if (difference !== 0) return difference;
+    return String(left?.title || '').localeCompare(String(right?.title || ''), 'ko');
+  });
+}
+
+export function formatYoutubeChannelCountry(country) {
+  if (!country) return '미등록';
+  return findOptionLabel(YOUTUBE_SEARCH_REGION_OPTIONS, String(country).toUpperCase());
 }
 
 export function filterYoutubeSearchResults(items, minimumViews = 0) {

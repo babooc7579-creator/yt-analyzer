@@ -5,6 +5,10 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
   useYoutubeChannelSearch: vi.fn(() => ({
     appliedFilters: { query: '바이브 코딩', regionCode: 'JP', language: 'ja' },
     changeFilter: vi.fn(),
+    changeSort: vi.fn(),
+    displayedItems: [{
+      channelId: 'channel-1', title: '아이디어 채널', customUrl: '@idea', description: '아이디어를 찾는 채널', country: 'KR', subscriberCount: 2000, hiddenSubscriberCount: false, totalVideoCount: 100, totalViewCount: 1000000, avgViewCount: 10000, url: 'https://www.youtube.com/channel/channel-1',
+    }],
     error: '',
     filters: { query: '바이브 코딩', regionCode: '', language: '' },
     items: [{
@@ -12,6 +16,7 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
       title: '아이디어 채널',
       customUrl: '@idea',
       description: '아이디어를 찾는 채널',
+      country: 'KR',
       subscriberCount: 2000,
       hiddenSubscriberCount: false,
       totalVideoCount: 100,
@@ -25,6 +30,7 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
     notice: '1개 채널을 찾았습니다. 결과는 아직 등록되지 않았습니다.',
     runSearch: vi.fn(),
     selectedIds: ['channel-1'],
+    sortBy: 'relevance',
     toggleSelected: vi.fn(),
   })),
 }));
@@ -42,6 +48,13 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('다음 채널 12개 찾기');
     expect(html).toContain('채널의 운영 국가 제한이 아닙니다');
     expect(html).toContain('일본에서 시청 가능 · 일본어 우선');
+    expect(html).toContain('대한민국·한국어 우선 빠른 설정');
+    expect(html).toContain('검색 조건이 바뀌었습니다');
+    expect(html).toContain('YouTube 관련도순');
+    expect(html).toContain('구독자 많은순');
+    expect(html).toContain('채널 설정 국가: 대한민국');
+    expect(html).toContain('채널 운영자가 YouTube에 등록한 값이며 미등록일 수 있습니다');
+    expect(html).toContain('현재 받은 채널 결과만 화면에서 정렬');
   });
 
   it('marks a channel already present in the channel registry', () => {

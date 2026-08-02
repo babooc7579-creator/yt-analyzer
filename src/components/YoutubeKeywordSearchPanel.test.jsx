@@ -60,6 +60,8 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('대한민국에서 시청 가능 · 한국어 우선 · 최근 30일');
     expect(html).toContain('싱가포르');
     expect(html).toContain('포르투갈어 우선');
+    expect(html).toContain('대한민국·한국어 우선 빠른 설정');
+    expect(html).toContain('검색 조건이 바뀌었습니다');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {
