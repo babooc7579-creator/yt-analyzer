@@ -4863,5 +4863,6 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 
 - 관련 테스트 30개, 일일 회귀 테스트 156개, 전체 테스트 1,172개와 production build 통과
 - 두 PR의 GitHub 검사와 병합 후 Azure Static Web Apps 배포 성공
+- 운영 제작 후보함에서 영상 1개·링크 1개·작업 항목 2개와 Jinxy 원본 제목 표시 확인
 - API endpoint, Azure DB, localStorage, YouTube API 호출 조건 변경 없음
 - 운영 Azure DB 쓰기·삭제와 YouTube 신규 수집 실행 없음
