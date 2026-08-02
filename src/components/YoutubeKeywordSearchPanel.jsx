@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react';
 import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
 import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import {
+  formatYoutubeSearchCriteria,
   toDiscoveryLinkPayload,
   YOUTUBE_SEARCH_DATE_OPTIONS,
   YOUTUBE_SEARCH_DURATION_OPTIONS,
@@ -187,18 +188,25 @@ function YoutubeVideoSearchPanel({
           </button>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-6">
-          <SearchSelect label="국가" options={YOUTUBE_SEARCH_REGION_OPTIONS} value={search.filters.regionCode} onChange={(value) => search.changeFilter('regionCode', value)} />
-          <SearchSelect label="언어" options={YOUTUBE_SEARCH_LANGUAGE_OPTIONS} value={search.filters.language} onChange={(value) => search.changeFilter('language', value)} />
+          <SearchSelect label="검색 지역" options={YOUTUBE_SEARCH_REGION_OPTIONS} value={search.filters.regionCode} onChange={(value) => search.changeFilter('regionCode', value)} />
+          <SearchSelect label="우선 언어" options={YOUTUBE_SEARCH_LANGUAGE_OPTIONS} value={search.filters.language} onChange={(value) => search.changeFilter('language', value)} />
           <SearchSelect label="업로드 시기" options={YOUTUBE_SEARCH_DATE_OPTIONS} value={search.filters.dateRange} onChange={(value) => search.changeFilter('dateRange', value)} />
           <SearchSelect label="영상 길이" options={YOUTUBE_SEARCH_DURATION_OPTIONS} value={search.filters.duration} onChange={(value) => search.changeFilter('duration', value)} />
           <SearchSelect label="최소 조회수" options={YOUTUBE_SEARCH_MINIMUM_VIEW_OPTIONS} value={search.filters.minimumViews} onChange={(value) => search.changeFilter('minimumViews', Number(value))} />
           <SearchSelect label="정렬" options={YOUTUBE_SEARCH_ORDER_OPTIONS} value={search.filters.order} onChange={(value) => search.changeFilter('order', value)} />
         </div>
-        <p className="mt-3 text-[11px] leading-5 text-slate-500">기본 25개 · 자동검색 없음 · 조건 변경 후 검색 버튼을 눌러야 새 API 요청이 실행됩니다. 최소 조회수는 받은 결과를 화면에서만 좁힙니다.</p>
+        <p className="mt-3 text-[11px] leading-5 text-slate-500">검색 지역은 해당 나라에서 시청 가능한 결과이며 제작 국가 제한이 아닙니다. 우선 언어는 관련 결과를 앞세우지만 다른 언어도 포함될 수 있습니다.</p>
+        <p className="mt-1 text-[11px] leading-5 text-slate-500">기본 25개 · 자동검색 없음 · 조건 변경 후 검색 버튼을 눌러야 새 API 요청이 실행됩니다. 최소 조회수는 받은 결과를 화면에서만 좁힙니다.</p>
       </form>
 
       {search.error ? <p role="alert" className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm font-bold text-rose-200">{search.error}</p> : null}
       {search.notice ? <p className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-100">{search.notice}</p> : null}
+      {search.appliedFilters ? (
+        <div className="rounded-lg border border-slate-700 bg-slate-900/80 px-4 py-3">
+          <p className="text-xs font-black text-slate-200">마지막 검색에 적용된 조건</p>
+          <p className="mt-1 text-xs leading-5 text-slate-400">{formatYoutubeSearchCriteria(search.appliedFilters)}</p>
+        </div>
+      ) : null}
 
       {search.items.length > 0 ? (
         <>

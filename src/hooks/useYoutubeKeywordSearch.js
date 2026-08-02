@@ -24,10 +24,11 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   const [nextPageToken, setNextPageToken] = useState(initialState?.nextPageToken || '');
   const [selectedIds, setSelectedIds] = useState(() => initialState?.selectedIds || []);
   const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
+  const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
 
   useEffect(() => {
-    onStateChange?.({ filters, items, lastQuery, nextPageToken, notice, selectedIds });
-  }, [filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
+    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds });
+  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
 
   const displayedItems = useMemo(
     () => filterYoutubeSearchResults(items, filters.minimumViews),
@@ -60,6 +61,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
         return [...merged.values()];
       });
       if (!append) setSelectedIds([]);
+      if (!append) setAppliedFilters({ ...filters, query });
       setNextPageToken(data.nextPageToken || '');
       setLastQuery(query);
       setNotice(incoming.length > 0
@@ -87,6 +89,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   };
 
   return {
+    appliedFilters,
     changeFilter,
     clearSelected,
     displayedItems,

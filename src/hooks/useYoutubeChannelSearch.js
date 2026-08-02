@@ -16,10 +16,11 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
   const [nextPageToken, setNextPageToken] = useState(initialState?.nextPageToken || '');
   const [selectedIds, setSelectedIds] = useState(() => initialState?.selectedIds || []);
   const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
+  const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
 
   useEffect(() => {
-    onStateChange?.({ filters, items, lastQuery, nextPageToken, notice, selectedIds });
-  }, [filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
+    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds });
+  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
 
   const changeFilter = (key, value) => {
     setFilters((current) => ({ ...current, [key]: value }));
@@ -53,6 +54,7 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
         return [...merged.values()];
       });
       if (!append) setSelectedIds([]);
+      if (!append) setAppliedFilters({ ...filters, query });
       setNextPageToken(data.nextPageToken || '');
       setLastQuery(query);
       setNotice(incoming.length > 0
@@ -79,6 +81,7 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
   };
 
   return {
+    appliedFilters,
     changeFilter,
     error,
     filters,

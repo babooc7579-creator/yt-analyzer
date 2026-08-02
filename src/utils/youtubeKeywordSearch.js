@@ -1,15 +1,30 @@
 export const YOUTUBE_SEARCH_REGION_OPTIONS = [
-  { value: '', label: '국가 전체' },
+  { value: '', label: '검색 지역 전체' },
   { value: 'KR', label: '대한민국' },
   { value: 'US', label: '미국' },
   { value: 'JP', label: '일본' },
+  { value: 'GB', label: '영국' },
+  { value: 'CA', label: '캐나다' },
+  { value: 'AU', label: '호주' },
+  { value: 'IN', label: '인도' },
+  { value: 'DE', label: '독일' },
+  { value: 'FR', label: '프랑스' },
+  { value: 'TW', label: '대만' },
+  { value: 'SG', label: '싱가포르' },
 ];
 
 export const YOUTUBE_SEARCH_LANGUAGE_OPTIONS = [
-  { value: '', label: '언어 전체' },
-  { value: 'ko', label: '한국어 중심' },
-  { value: 'en', label: '영어 중심' },
-  { value: 'ja', label: '일본어 중심' },
+  { value: '', label: '우선 언어 없음' },
+  { value: 'ko', label: '한국어 우선' },
+  { value: 'en', label: '영어 우선' },
+  { value: 'ja', label: '일본어 우선' },
+  { value: 'zh', label: '중국어 우선' },
+  { value: 'es', label: '스페인어 우선' },
+  { value: 'de', label: '독일어 우선' },
+  { value: 'fr', label: '프랑스어 우선' },
+  { value: 'hi', label: '힌디어 우선' },
+  { value: 'pt', label: '포르투갈어 우선' },
+  { value: 'th', label: '태국어 우선' },
 ];
 
 export const YOUTUBE_SEARCH_DATE_OPTIONS = [
@@ -56,6 +71,27 @@ export function buildYoutubeSearchOptions(filters, pageToken = '') {
     publishedAfter: getPublishedAfter(filters.dateRange),
     pageToken,
   };
+}
+
+const findOptionLabel = (options, value) => options.find((option) => option.value === value)?.label || value;
+
+export function formatYoutubeSearchCriteria(filters = {}, { includeVideoFilters = true } = {}) {
+  const regionLabel = findOptionLabel(YOUTUBE_SEARCH_REGION_OPTIONS, filters.regionCode || '');
+  const languageLabel = findOptionLabel(YOUTUBE_SEARCH_LANGUAGE_OPTIONS, filters.language || '');
+  const parts = [
+    filters.regionCode ? `${regionLabel}에서 시청 가능` : regionLabel,
+    languageLabel,
+  ];
+
+  if (includeVideoFilters) {
+    parts.push(
+      findOptionLabel(YOUTUBE_SEARCH_DATE_OPTIONS, filters.dateRange || 'all'),
+      findOptionLabel(YOUTUBE_SEARCH_DURATION_OPTIONS, filters.duration || ''),
+      findOptionLabel(YOUTUBE_SEARCH_ORDER_OPTIONS, filters.order || 'relevance'),
+    );
+  }
+
+  return parts.join(' · ');
 }
 
 export function filterYoutubeSearchResults(items, minimumViews = 0) {
