@@ -239,7 +239,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     lastReviewedAt: '2026-08-03',
     currentSummary: '수집 영상 검색과 명시적 YouTube 검색을 분리했고, YouTube 검색 안에서 영상 찾기와 채널 찾기·비교를 다시 구분했습니다. 채널 검색은 현재 구독자·영상 수·누적 조회수·영상당 평균을 임시 결과로 보여주며 최대 4개를 비교할 수 있습니다. 채널 검색뿐 아니라 영상 검색 결과에도 채널 등록 상태와 `이 채널 등록 검토`를 표시해, 좋은 영상을 발견한 자리에서 해당 채널을 기존 채널 운영실 등록 단계로 이어갑니다. 영상의 발견 링크 저장과 채널 등록 검토는 독립된 선택입니다. 등록 검토는 입력칸만 채우고 이동하며 실제 YouTube 확인과 Azure DB 저장은 기존 등록 단계에서 별도로 실행합니다. 운영에서 바이브 코딩 채널 검색 1회로 12개 결과, 영상 검색 1회로 25개 결과와 투쏠ㅣAI 에이전트 채널 주소 전달을 확인했습니다. 이 검수 중 다른 화면에 다녀오면 임시 결과가 사라지는 문제를 발견해, 영상·채널 검색 조건과 결과를 앱 메모리에 유지하고 새로고침 때만 초기화하도록 보완했습니다. 배포 후 같은 흐름을 다시 검수해 검색 버튼을 다시 누르지 않고 YouTube 탭·검색어·25개 결과·첫 영상 카드가 복원되는 것을 확인했습니다. `국가`는 제작 국가 제한이 아니라 YouTube의 시청 가능 지역이고 `언어`는 완전 제한이 아니라 관련 결과 우선 조건임을 화면에 명시했습니다. 주요 검색 지역 11개와 우선 언어 10개를 선택할 수 있고, 결과에는 현재 선택값이 아니라 마지막 API 검색에 실제 적용된 조건을 따로 표시합니다. PR #1048 배포 뒤 운영에서 `copilot`·대한민국·한국어 우선·최근 30일 검색을 한 번 실행해 25개 결과와 `대한민국에서 시청 가능 · 한국어 우선 · 최근 30일 · 영상 길이 전체 · 관련도순` 표시를 확인했습니다. 채널 정보 확인·Azure DB 저장은 실행하지 않았고 등록 채널 수는 12개 그대로였습니다. PR #1050 배포 뒤 `바이브 코딩`·대한민국·한국어 우선 채널 검색을 한 번 실행해 12개 결과와 채널 설정 국가를 확인했습니다. 영상당 평균순 변경은 새 API 호출 없이 첫 결과를 `바이브코딩 레인 RaiN`으로 바꿨고, 언어 조건 변경 시 재검색 안내가 나타났다 원래 조건으로 복구하면 사라졌습니다.',
     targetSummary: '키워드만 입력해도 새 영상 후보를 비교하고 필요한 항목만 아이디어 창고와 제작 흐름으로 안전하게 이어갈 수 있게 합니다.',
-    nextAction: '첫 진행 순서 1~8은 완료했고 9번 엄격한 언어 제한은 보류, 10번 검색 결과 전체 자동 저장은 하지 않는 것으로 확정했습니다. 두 번째 진행 순서는 임시 결과 정리와 복구 검수 1~9를 진행하고, 자동 만료·영구 후보함은 개인용 MVP 이후로 미룹니다.',
+    nextAction: '첫 번째와 두 번째 무결정 순서는 완료했습니다. 세 번째 순서는 비교 요약에서 중요한 채널을 등록 검토로 바로 연결하는 1~9를 진행하고, 여러 채널의 일괄 등록은 YouTube 확인·Azure DB 저장 방식 결정이 필요하므로 10번에서 멈춰 논의합니다.',
     decisions: [
       '기존 수집 영상 검색과 YouTube 신규 검색은 같은 작업 공간의 별도 탭으로 유지합니다.',
       '검색 결과 전체는 자동 저장하지 않고 사용자가 선택한 영상만 발견 링크함에 저장합니다.',
@@ -386,22 +386,72 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-result-clear-mobile',
         label: '두 번째 7. 모바일 결과 정리 버튼 배치와 가로 넘침 검수',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'youtube-result-clear-session',
         label: '두 번째 8. 결과 정리 후 화면 왕복에서도 빈 임시 세션 유지',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'youtube-registration-return-regression',
         label: '두 번째 9. 채널 등록 검토 왕복과 결과 정리의 상호 영향 회귀 검수',
-        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
         id: 'youtube-search-session-expiration',
         label: '두 번째 10. 임시 검색 세션 자동 만료·영구 후보함은 개인용 MVP 이후 검토',
         status: IMPROVEMENT_CHECKPOINT_STATUS.LATER,
+      },
+      {
+        id: 'youtube-comparison-registration-action',
+        label: '세 번째 1. 비교 요약에서 중요 채널 등록 검토로 바로 이동',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-comparison-original-link',
+        label: '세 번째 2. 비교 요약에서 YouTube 채널 원본 바로 열기',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-comparison-item-remove',
+        label: '세 번째 3. 비교 요약에서 채널별 비교 선택 해제',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-comparison-registered-guard',
+        label: '세 번째 4. 이미 등록된 채널의 중복 등록 검토 차단',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-comparison-action-boundary',
+        label: '세 번째 5. 비교 요약 작업의 화면 이동·API·Azure DB 영향 안내',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-comparison-action-mobile',
+        label: '세 번째 6. 모바일 비교 요약 작업 버튼 배치와 가로 넘침 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+      },
+      {
+        id: 'youtube-comparison-registration-return',
+        label: '세 번째 7. 비교 요약 등록 검토 왕복 뒤 검색 결과·비교 선택 유지',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+      },
+      {
+        id: 'youtube-comparison-registered-refresh',
+        label: '세 번째 8. 등록 채널 목록 갱신 시 비교 요약의 등록 상태 즉시 반영',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+      },
+      {
+        id: 'youtube-comparison-action-accessibility',
+        label: '세 번째 9. 비교 요약 작업 버튼·링크의 키보드 접근과 명확한 이름 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.PLANNED,
+      },
+      {
+        id: 'youtube-channel-batch-registration-decision',
+        label: '세 번째 10. 여러 검색 채널의 일괄 YouTube 확인·Azure DB 등록',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
       },
       {
         id: 'youtube-trend-history',

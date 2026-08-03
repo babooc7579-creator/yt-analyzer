@@ -168,6 +168,21 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
                   <div><dt className="text-slate-600">영상당 평균</dt><dd className="font-bold text-slate-300">{formatNumber(item.avgViewCount)}</dd></div>
                 </dl>
                 <p className="mt-1 text-[11px] text-slate-500">{registeredIds.has(String(item.channelId)) ? '등록됨' : '미등록'} · 채널 국가 {formatYoutubeChannelCountry(item.country)}</p>
+                <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => onPrepareChannelRegistration(item)}
+                    disabled={registeredIds.has(String(item.channelId))}
+                    className="inline-flex h-9 items-center justify-center gap-1 rounded-lg bg-emerald-500 px-3 text-[11px] font-black text-white disabled:cursor-default disabled:bg-slate-700 disabled:text-slate-400"
+                    title="채널 운영실의 등록 입력칸을 준비합니다. 이동만으로 YouTube API나 Azure DB를 호출하지 않습니다."
+                  >
+                    <UserPlus className="h-3.5 w-3.5" /> {registeredIds.has(String(item.channelId)) ? '이미 등록됨' : '등록 검토'}
+                  </button>
+                  <a href={item.url} target="_blank" rel="noreferrer" className="inline-flex h-9 items-center justify-center gap-1 rounded-lg border border-slate-700 px-3 text-[11px] font-black text-violet-200" title="YouTube 채널을 새 창에서 엽니다. API 호출이나 저장은 없습니다.">
+                    <ExternalLink className="h-3.5 w-3.5" /> YouTube 보기
+                  </a>
+                  <button type="button" onClick={() => search.toggleSelected(item.channelId)} className="h-9 rounded-lg border border-slate-700 px-3 text-[11px] font-black text-slate-300 sm:col-span-2">비교에서 빼기</button>
+                </div>
               </div>
             ))}
           </div>

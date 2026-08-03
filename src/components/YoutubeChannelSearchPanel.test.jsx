@@ -49,6 +49,9 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('자동 등록하거나 Azure DB에 저장하지 않습니다');
     expect(html).toContain('비교 중 1개 / 최대 4개 채널');
     expect(html).toContain('비교 선택 전체 해제');
+    expect(html).toContain('등록 검토');
+    expect(html).toContain('비교에서 빼기');
+    expect(html).toContain('채널 운영실의 등록 입력칸을 준비합니다');
     expect(html).toContain('최근 성장률을 뜻하지 않습니다');
     expect(html).toContain('등록 검토하기');
     expect(html).toContain('다음 채널 12개 찾기');
