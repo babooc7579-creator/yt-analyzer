@@ -45,10 +45,13 @@ export function buildKeywordExplorerRouteProps({
     onPrepareChannelRegistration: (channel = {}) => {
       const channelInput = String(channel.url || channel.channelId || '').trim();
       if (!channelInput) return;
+      const registrationSource = channel.registrationSource === 'youtube-video-search'
+        ? 'youtube-video-search'
+        : 'youtube-channel-search';
       setAddMode?.('single');
       setChannelPreview?.(null);
       setNewChannelInput?.(channelInput);
-      openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search' } });
+      openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add', source: registrationSource } });
     },
     onPrepareBulkChannelRegistration: (channels = []) => {
       const channelInputs = [...new Set(toArray(channels).map((channel) => (

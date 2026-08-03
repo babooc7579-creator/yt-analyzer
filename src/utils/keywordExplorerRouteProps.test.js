@@ -44,7 +44,11 @@ describe('keywordExplorerRouteProps', () => {
     props.onOpenVault();
     props.onOpenWorkTools();
     props.onOpenDiscoveryLinks();
-    props.onPrepareChannelRegistration({ channelId: 'new-channel', url: 'https://www.youtube.com/channel/new-channel' });
+    props.onPrepareChannelRegistration({
+      channelId: 'new-channel',
+      registrationSource: 'youtube-video-search',
+      url: 'https://www.youtube.com/channel/new-channel',
+    });
     props.onPrepareBulkChannelRegistration([
       { channelId: 'bulk-1', url: 'https://www.youtube.com/channel/bulk-1' },
       { channelId: 'bulk-2' },
@@ -61,8 +65,23 @@ describe('keywordExplorerRouteProps', () => {
       [{ id: 'vault-videos' }],
       [{ id: 'tools-bookmarks' }],
       [{ id: 'vault-sources' }],
-      [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search' } }],
+      [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-video-search' } }],
       [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search-bulk' } }],
     ]);
+  });
+
+  it('uses the channel-search source for a direct channel result', () => {
+    const openCreatorView = vi.fn();
+    const props = buildKeywordExplorerRouteProps({
+      openCreatorView,
+      setNewChannelInput: vi.fn(),
+    });
+
+    props.onPrepareChannelRegistration({ channelId: 'channel-result' });
+
+    expect(openCreatorView).toHaveBeenCalledWith({
+      id: 'ops-channels',
+      intent: { operationStage: 'add', source: 'youtube-channel-search' },
+    });
   });
 });

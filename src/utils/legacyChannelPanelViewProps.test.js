@@ -20,6 +20,7 @@ describe('legacyChannelPanelViewProps utils', () => {
       categories,
       error: 'load failed',
       loading: false,
+      operationSource: 'youtube-video-search',
       progressMsg: 'ready',
       savedChannels,
       selectedCategoryTab: 'news',
@@ -28,6 +29,7 @@ describe('legacyChannelPanelViewProps utils', () => {
     });
 
     expect(props).toMatchObject({
+      operationSource: 'youtube-video-search',
       showWorkPanel: true,
       introProps: {
         apiKey: 'api-key',

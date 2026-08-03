@@ -12,13 +12,14 @@ vi.mock('./ChannelTagTabs', () => ({
 vi.mock('./LegacyChannelPanelFooter', () => ({ default: () => <div>load-stored-footer</div> }));
 vi.mock('./LegacyWorkPanelIntro', () => ({ default: () => <div>legacy-intro</div> }));
 
-const renderPanel = (operationStage) => renderToStaticMarkup(
+const renderPanel = (operationStage, operationSource) => renderToStaticMarkup(
   <LegacyChannelPanelContent
     channelAddFormProps={{}}
     channelListProps={{}}
     footerProps={{}}
     introProps={{}}
     operationStage={operationStage}
+    operationSource={operationSource}
     showWorkPanel
     tagTabsProps={{}}
   />,
@@ -42,6 +43,13 @@ describe('LegacyChannelPanelContent operation stages', () => {
     expect(html).toContain('add-form');
     expect(html).not.toContain('channel-list');
     expect(html).not.toContain('load-stored-footer');
+  });
+
+  it('explains when registration started from a video search result', () => {
+    const html = renderPanel('add', 'youtube-video-search');
+
+    expect(html).toContain('검색 영상의 출처 채널을 등록 검토 중입니다');
+    expect(html).toContain('이동만으로 YouTube API 호출이나 영상 수집은 실행되지 않습니다');
   });
 
   it('shows channel selection and stored-video loading in scan stage', () => {

@@ -100,6 +100,7 @@ function YoutubeSearchResultCard({ item, selected, saved, registeredChannel, onP
             type="button"
             onClick={() => onPrepareChannelRegistration?.({
               channelId: item.channelId,
+              registrationSource: 'youtube-video-search',
               title: item.channelTitle,
               url: `https://www.youtube.com/channel/${item.channelId}`,
             })}
