@@ -136,8 +136,8 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '전체 화면',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
-    lastReviewedAt: '2026-07-28',
-    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 태그별 금고는 별도 보관 장소로 오해되지 않도록 채널 태그별 보기로 바꾸고 전체 수집 영상 목록으로 돌아가는 버튼을 연결했습니다.',
+    lastReviewedAt: '2026-08-03',
+    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 태그별 금고는 별도 보관 장소로 오해되지 않도록 채널 태그별 보기로 바꾸고 전체 수집 영상 목록으로 돌아가는 버튼을 연결했습니다. 운영 전 화면 검수에서 반복되던 내부 H2는 태그로 수집 영상 좁히기와 조사 도구 바로가기로 구체화해 메뉴 제목과 실제 작업 제목을 분리했습니다.',
     targetSummary: '버튼 이름만 보고도 이동·조회·저장·YouTube API 수집 여부를 이해할 수 있도록 모든 화면의 용어를 통일합니다.',
     nextAction: '향후 메뉴 변경 시 채널 태그별 보기가 별도 저장 장소로 오해되지 않는지 정기 회귀 검수합니다.',
     decisions: [
@@ -194,6 +194,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'settings-tools-channel-route',
         label: '설정·업무 도구함 왕복과 채널 등록 입력·결과 안내 대조',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'duplicate-workspace-heading',
+        label: '채널 태그별 보기·업무 도구함의 반복 H2를 실제 작업 제목으로 구분',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

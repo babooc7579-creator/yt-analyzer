@@ -142,6 +142,10 @@ Microsoft 계정 로그인, 개인 owner 역할, 연결된 Function API를 이�
 
 Static Web Apps Standard, API 연결, 역할 부여, 인증 배포 또는 롤백 전에 확인합니다.
 
+추가 장애 기록: `CREATOR_OS_AUTH_INCIDENT_2026-08-03.md`
+
+Azure 자동 생성 주소의 인증 완료 문제, `creator.kaion.co.kr` 연결 근거, 확인된 사실과 미확정 원인, 재발 시 점검 순서를 기록합니다.
+
 20. `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md`
 
 프론트 테스트 도구를 도입할지, 도입한다면 어디서부터 시작할지 정리합니다.
@@ -187,6 +191,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 | `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` | GitHub Actions/Azure 배포 경고 선택지 | 예 | 일부 | 배포 workflow 수정 전 필수 |
 | `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md` | Azure 구독 이동/비용/배포 연결 확인 | 예 | 일부 | 구독/배포/비용 확인 전 필수 |
 | `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md` | 개인 owner 로그인과 연결 API 보호 기준 | 예 | 일부 | 인증/권한/Standard 변경 전 필수 |
+| `CREATOR_OS_AUTH_INCIDENT_2026-08-03.md` | Azure 기본 주소 인증 장애 증거와 사용자 지정 주소 전환 기록 | 예 | 아니오 | 인증 장애 재발 시 필수 |
 | `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` | 프론트 테스트 도입 선택지 | 예 | 일부 | test/package 변경 전 필수 |
 | `CREATOR_OS_PUBLIC_APP_SMOKE_CHECK.md` | 공개 앱 최소 응답 확인 절차 | 예 | 아니오 | 배포 확인 전 참고 |
 | `CREATOR_OS_NEXT_IMPLEMENTATION_ISSUES.md` | 다음 구현 Issue 순서 | 예 | 예 | 필수 |
@@ -211,6 +216,7 @@ main 병합 후 공개 앱이 최소 정상 응답하는지 확인하는 읽기 
 | GitHub Actions 또는 Azure 배포 workflow 수정 | `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` |
 | Azure 구독, 비용, 스폰서십 크레딧, 배포 연결 확인 | `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md`, `CREATOR_OS_DEPLOY_WORKFLOW_WARNING_OPTIONS.md` |
 | 개인용 로그인, 역할, API 접근 보호 적용 | `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md`, `CREATOR_OS_AZURE_SUBSCRIPTION_MIGRATION_CHECK.md` |
+| 운영 주소 로그인 장애 또는 인증 완료 실패 | `CREATOR_OS_AUTH_INCIDENT_2026-08-03.md`, `CREATOR_OS_PERSONAL_ACCESS_PROTECTION.md` |
 | 테스트 도구 또는 `package.json` test script 추가 | `CREATOR_OS_TESTING_STRATEGY_OPTIONS.md` |
 
 ---

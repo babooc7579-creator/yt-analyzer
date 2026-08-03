@@ -27,7 +27,7 @@ export default function WorkToolsWorkspace({
             <LibraryBig aria-hidden="true" className="h-6 w-6 text-cyan-300" />
             <div>
               <p className="text-xs font-extrabold text-cyan-300">업무 바로가기</p>
-              <h2 className="mt-1 text-xl font-black text-white">업무 도구함</h2>
+              <h2 className="mt-1 text-xl font-black text-white">조사 도구 바로가기</h2>
             </div>
           </div>
           <button
