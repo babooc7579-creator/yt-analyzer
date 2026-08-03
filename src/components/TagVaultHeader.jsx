@@ -15,7 +15,7 @@ export default function TagVaultHeader({
         </div>
         <div>
           <p className="text-xs font-extrabold text-emerald-300">수집 영상·링크</p>
-          <h2 className="mt-1 text-xl font-black text-white">채널 태그별 보기</h2>
+          <h2 className="mt-1 text-xl font-black text-white">태그로 수집 영상 좁히기</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
             수집 영상 목록을 채널에 이미 저장된 태그 기준으로 좁혀 보는 화면입니다. 별도 보관 장소가 아니며, 태그 선택만으로 YouTube API를 호출하지 않습니다.
           </p>

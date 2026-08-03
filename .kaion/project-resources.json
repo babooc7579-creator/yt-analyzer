@@ -11,6 +11,8 @@
   "activeResourceIds": [
     "azure-sponsorship",
     "github-account",
+    "kaion-domain",
+    "uhost-dns",
     "azure-yt-analyzer-static-web-app",
     "azure-yt-analyzer-function",
     "azure-yt-analyzer-cosmos",

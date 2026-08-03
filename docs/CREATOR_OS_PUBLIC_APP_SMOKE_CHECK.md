@@ -19,8 +19,16 @@
 현재 운영 앱 URL:
 
 ```txt
+https://creator.kaion.co.kr/
+```
+
+Azure 자동 생성 복구 주소:
+
+```txt
 https://lively-dune-0af1d2a00.7.azurestaticapps.net/
 ```
+
+일상적인 운영 확인은 사용자 지정 주소를 기준으로 합니다. Azure 자동 생성 주소는 배포 연결과 장애 복구를 확인할 때만 사용합니다.
 
 현재 GitHub Actions 확인 대상:
 
@@ -56,7 +64,7 @@ gh run list --branch main --limit 6 --json databaseId,name,status,conclusion,cre
 PowerShell에서 아래 명령을 실행합니다.
 
 ```powershell
-$url = 'https://lively-dune-0af1d2a00.7.azurestaticapps.net/?verify=' + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+$url = 'https://creator.kaion.co.kr/?verify=' + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
 try {
   $response = Invoke-WebRequest -Uri $url -Headers @{ 'Cache-Control' = 'no-cache'; 'Pragma' = 'no-cache' } -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop
 } catch {
@@ -80,7 +88,7 @@ PowerShell 버전에 따라 리디렉션 응답이 예외로 표시될 수 있�
 
 ## 4. 소유자 로그인 화면 확인
 
-Microsoft Edge에서 운영 앱 URL을 엽니다.
+운영 앱 URL을 브라우저에서 엽니다.
 
 통과 기준:
 
@@ -89,7 +97,7 @@ Microsoft Edge에서 운영 앱 URL을 엽니다.
 - 저장 영상 불러오기가 정상 동작합니다.
 - 읽기 확인 중에는 새 영상 수집, 저장, 삭제 버튼을 누르지 않습니다.
 
-Chrome에서는 Azure Static Web Apps 초대 동의 완료 주소가 확장 또는 보안 필터에 의해 차단된 이력이 있으므로, 현재 운영 확인은 정상 동작이 검증된 Edge를 우선 사용합니다.
+2026-08-03 기준 Edge에서 사용자 지정 주소의 Microsoft 로그인과 새로고침 후 세션 유지가 확인됐습니다. Azure 자동 생성 주소의 인증 완료 문제가 다시 나타나면 브라우저 확장 문제로 단정하지 말고 `CREATOR_OS_AUTH_INCIDENT_2026-08-03.md`의 분리 점검 순서를 따릅니다.
 
 ---
 
@@ -127,6 +135,14 @@ backend Function App 배포 확인과 Azure Sponsorship 비용 반영 확인은 
 ---
 
 ## 7. 최근 읽기 전용 운영 확인
+
+2026-08-03 사용자 지정 운영 주소에서 아래 항목을 확인했습니다.
+
+- `https://creator.kaion.co.kr/` Microsoft 계정 로그인 성공
+- `creator_owner` 보호 화면과 전체 메뉴 표시
+- 새로고침 후 로그인 유지
+- 온라인 저장소(Azure DB)에서 채널 17개, 보관 소재 1개, 링크 후보 1개 재조회
+- 새 영상 수집, YouTube API 호출, 저장·수정·삭제 동작 없음
 
 2026-07-18 로그인된 운영 앱에서 아래 항목을 확인했습니다.
 

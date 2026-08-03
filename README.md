@@ -10,6 +10,10 @@
 
 이 저장소는 React + Vite 기반의 프론트엔드 앱입니다. 현재 코드에는 다음 기능들이 포함되어 있습니다.
 
+운영 주소: [https://creator.kaion.co.kr/](https://creator.kaion.co.kr/)
+
+Azure가 자동 생성한 `lively-dune-0af1d2a00.7.azurestaticapps.net` 주소는 배포·복구 확인용으로 유지하며, 일상적인 접속과 운영 안내에는 위 사용자 지정 주소를 사용합니다.
+
 - 유튜브 채널 등록
 - 채널 미리보기
 - 여러 채널 일괄 추가

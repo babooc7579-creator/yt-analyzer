@@ -8,7 +8,7 @@ describe('WorkToolsWorkspace', () => {
     const html = renderToStaticMarkup(<WorkToolsWorkspace />);
 
     expect(html).toContain('data-testid="creator-route-work-tools"');
-    expect(html).toContain('업무 도구함');
+    expect(html).toContain('조사 도구 바로가기');
     expect(html).toContain('외부 데이터를 자동 수집하거나');
     expect(html).toContain('Google Trends');
     expect(html).toContain('네이버 DataLab');
