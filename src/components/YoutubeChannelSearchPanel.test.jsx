@@ -8,7 +8,9 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
     changeSort: vi.fn(),
     changeViewFilter: vi.fn(),
     clearResults: vi.fn(),
+    clearRegistration: vi.fn(),
     clearSelected: vi.fn(),
+    addRegistrationIds: vi.fn(),
     displayedItems: [{
       channelId: 'channel-1', title: '아이디어 채널', customUrl: '@idea', description: '아이디어를 찾는 채널', country: 'KR', subscriberCount: 2000, hiddenSubscriberCount: false, totalVideoCount: 100, totalViewCount: 1000000, avgViewCount: 10000, url: 'https://www.youtube.com/channel/channel-1',
     }],
@@ -31,11 +33,13 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
     loading: false,
     nextPageToken: 'next',
     notice: '1개 채널을 찾았습니다. 결과는 아직 등록되지 않았습니다.',
+    registrationIds: ['channel-1'],
     runSearch: vi.fn(),
     resetViewFilters: vi.fn(),
     selectedIds: ['channel-1'],
     sortBy: 'relevance',
     toggleSelected: vi.fn(),
+    toggleRegistration: vi.fn(),
     viewFilters: { registration: 'all', country: 'all', selection: 'all' },
   })),
 }));
@@ -53,8 +57,9 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('비교에서 빼기');
     expect(html).toContain('채널 운영실의 등록 입력칸을 준비합니다');
     expect(html).toContain('최근 성장률을 뜻하지 않습니다');
-    expect(html).toContain('등록 검토하기');
-    expect(html).toContain('다음 채널 12개 찾기');
+    expect(html).toContain('등록 후보 선택됨');
+    expect(html).toContain('등록 후보 1개 / 최대 50개');
+    expect(html).toContain('다음 채널 25개 찾기');
     expect(html).toContain('채널의 운영 국가 제한이 아닙니다');
     expect(html).toContain('일본에서 시청 가능 · 일본어 우선');
     expect(html).toContain('대한민국·한국어 우선 빠른 설정');
@@ -70,7 +75,7 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('비교 선택만 보기');
     expect(html).toContain('화면 필터 초기화');
     expect(html).toContain('임시 결과 지우기');
-    expect(html).toContain('검색 조건을 남기고 결과·비교 선택·화면 필터만 정리');
+    expect(html).toContain('검색 조건을 남기고 결과·비교 선택·등록 후보·화면 필터만 정리');
     expect(html).toContain('YouTube API나 Azure DB를 호출하지 않습니다');
   });
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   BULK_CHANNEL_EMPTY_INPUT_MESSAGE,
+  BULK_CHANNEL_LIMIT_MESSAGE,
   BULK_CHANNEL_SAVE_ACTION_LABEL,
   CHANNEL_PREVIEW_DUPLICATE_MESSAGE,
   CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE,
@@ -16,6 +17,7 @@ import {
   getChannelSaveStartMessage,
   getTrimmedChannelInput,
   isDuplicateChannel,
+  MAX_BULK_CHANNELS,
 } from './channelAddActions';
 
 describe('channelAddActions utils', () => {
@@ -23,6 +25,8 @@ describe('channelAddActions utils', () => {
     expect(CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE).toBe('채널을 불러오지 못했습니다.');
     expect(CHANNEL_PREVIEW_DUPLICATE_MESSAGE).toBe('이미 등록된 채널입니다.');
     expect(BULK_CHANNEL_EMPTY_INPUT_MESSAGE).toBe('등록할 채널을 한 줄에 하나씩 입력해 주세요.');
+    expect(BULK_CHANNEL_LIMIT_MESSAGE).toBe('채널은 한 번에 최대 50개까지 등록할 수 있습니다.');
+    expect(MAX_BULK_CHANNELS).toBe(50);
     expect(CHANNEL_SAVE_ACTION_LABEL).toBe('저장');
     expect(BULK_CHANNEL_SAVE_ACTION_LABEL).toBe('일괄 저장');
   });
@@ -36,6 +40,7 @@ describe('channelAddActions utils', () => {
       'https://youtube.com/@c',
     ]);
     expect(getBulkChannelHandles(null)).toEqual([]);
+    expect(getBulkChannelHandles('@a\n@a\n@b')).toEqual(['@a', '@b']);
   });
 
   it('detects duplicate channels by id while ignoring invalid rows', () => {
@@ -108,8 +113,8 @@ describe('channelAddActions utils', () => {
     expect(getBulkChannelSaveStartMessage(3)).toBe(
       '3개 채널 정보를 YouTube에서 확인한 뒤 온라인 저장소(Azure DB)에 저장하는 중입니다. 영상 수집은 실행하지 않습니다.',
     );
-    expect(getBulkChannelSaveCompleteMessage({ total: 5, added: 4 })).toBe(
-      '온라인 저장소(Azure DB) 일괄 추가 완료: 5개 중 4개가 저장되었습니다. 새 영상 수집은 실행하지 않았습니다.',
+    expect(getBulkChannelSaveCompleteMessage({ total: 6, added: 2, existing: 2, duplicate: 1, failed: 1 })).toBe(
+      '채널 등록 처리 완료: 전체 6개 · 새로 저장 2개 · 기존 등록 2개 · 중복 입력 1개 · 실패 1개. 새 영상 수집은 실행하지 않았습니다.',
     );
   });
 });

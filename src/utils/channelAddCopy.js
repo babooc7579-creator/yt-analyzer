@@ -25,7 +25,7 @@ export const getChannelPreviewInputCopy = ({ hasInput = true } = {}) => ({
 export const getChannelBulkInputCopy = (recognizedLineCount = 0) => ({
   placeholder: CHANNEL_BULK_INPUT_PLACEHOLDER,
   ariaLabel: '일괄 추가할 채널 목록',
-  helperText: `${recognizedLineCount}개 줄 인식됨. YouTube에서 채널 정보만 확인한 뒤 온라인 저장소(Azure DB)에 저장합니다. 영상 수집은 하지 않습니다.`,
+  helperText: `${recognizedLineCount}/50개 인식됨. 최대 50개를 10개씩 확인해 온라인 저장소(Azure DB)에 등록합니다. 영상 수집은 하지 않습니다.`,
 });
 
 export const getChannelBulkSubmitButtonCopy = ({ bulkLoading = false } = {}) => ({
@@ -99,10 +99,21 @@ export const getChannelAddFormHeaderCopy = () => ({
 export const getChannelBulkResultPanelViewProps = (bulkResult = {}) => {
   const resultSummary = bulkResult && typeof bulkResult === 'object' ? bulkResult : {};
   const results = Array.isArray(resultSummary.results) ? resultSummary.results : [];
-  const failedResults = results.filter(result => !result.success);
+  const failedResults = results.filter(result => result.status === 'failed' || !result.success);
   const failedResultMessages = failedResults.map(result => (
     `실패: ${result.handle} - ${result.error}`
   ));
+  const resultMessages = results.map((result, index) => {
+    const status = result.status || (result.success ? 'added' : 'failed');
+    const prefix = status === 'existing' ? '기존 등록' : status === 'duplicate' ? '중복 입력' : status === 'added' ? '새로 저장' : '실패';
+    return {
+      key: result.handle || String(index),
+      status,
+      text: status === 'failed'
+        ? `${prefix}: ${result.handle} - ${result.error}`
+        : `${prefix}: ${result.handle}`,
+    };
+  });
 
   return {
     closeButtonProps: {
@@ -112,6 +123,7 @@ export const getChannelBulkResultPanelViewProps = (bulkResult = {}) => {
     },
     failedResultMessages,
     failedResults,
-    summaryText: `총 ${resultSummary.total || 0}개 중 ${resultSummary.added || 0}개 성공`,
+    resultMessages,
+    summaryText: `전체 ${resultSummary.total || 0}개 · 새로 저장 ${resultSummary.added || 0}개 · 기존 등록 ${resultSummary.existing || 0}개 · 중복 입력 ${resultSummary.duplicate || 0}개 · 실패 ${resultSummary.failed || failedResults.length}개`,
   };
 };

@@ -10,6 +10,7 @@ import {
 import { fetchChannelPreview } from '../services/channelApi';
 import {
   BULK_CHANNEL_EMPTY_INPUT_MESSAGE,
+  BULK_CHANNEL_LIMIT_MESSAGE,
   CHANNEL_PREVIEW_DUPLICATE_MESSAGE,
 } from '../utils/channelAddActions';
 import { useChannelAddActions } from './useChannelAddActions';
@@ -150,6 +151,17 @@ describe('useChannelAddActions', () => {
     await handleBulkAdd();
 
     expect(deps.setError).toHaveBeenCalledWith(BULK_CHANNEL_EMPTY_INPUT_MESSAGE);
+    expect(deps.bulkCreateChannels).not.toHaveBeenCalled();
+    expect(deps.setBulkLoading).not.toHaveBeenCalled();
+  });
+
+  it('blocks more than 50 bulk channels before any YouTube or Azure request', async () => {
+    const deps = createDeps({ bulkInput: Array.from({ length: 51 }, (_, index) => `@channel-${index}`).join('\n') });
+    const { handleBulkAdd } = useChannelAddActions(deps);
+
+    await handleBulkAdd();
+
+    expect(deps.setError).toHaveBeenCalledWith(BULK_CHANNEL_LIMIT_MESSAGE);
     expect(deps.bulkCreateChannels).not.toHaveBeenCalled();
     expect(deps.setBulkLoading).not.toHaveBeenCalled();
   });

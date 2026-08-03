@@ -29,6 +29,7 @@ export default function KeywordExplorerWorkspace({
   onOpenVault,
   onKeywordExplorerSessionChange,
   onPromoteToProduction,
+  onPrepareBulkChannelRegistration,
   onPrepareChannelRegistration,
   onSaveDiscoveryLink,
   onToggleCheck,
@@ -73,6 +74,7 @@ export default function KeywordExplorerWorkspace({
             discoveryLinks={discoveryLinks}
             discoveryLinksSaving={discoveryLinksSaving}
             onOpenDiscoveryLinks={onOpenDiscoveryLinks}
+            onPrepareBulkChannelRegistration={onPrepareBulkChannelRegistration}
             onPrepareChannelRegistration={onPrepareChannelRegistration}
             onSaveDiscoveryLink={onSaveDiscoveryLink}
             onChannelSearchSessionChange={handleChannelSearchSessionChange}

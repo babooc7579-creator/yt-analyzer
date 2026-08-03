@@ -36,7 +36,7 @@ describe('channelAddCopy utils', () => {
 
     expect(inputCopy.placeholder).toBe(CHANNEL_BULK_INPUT_PLACEHOLDER);
     expect(inputCopy.helperText).toBe(
-      '3개 줄 인식됨. YouTube에서 채널 정보만 확인한 뒤 온라인 저장소(Azure DB)에 저장합니다. 영상 수집은 하지 않습니다.'
+      '3/50개 인식됨. 최대 50개를 10개씩 확인해 온라인 저장소(Azure DB)에 등록합니다. 영상 수집은 하지 않습니다.'
     );
     expect(idleButtonCopy.title).toContain('온라인 저장소(Azure DB)의 채널 목록에 저장');
     expect(idleButtonCopy.title).toContain('영상 수집은 하지 않습니다');
@@ -83,19 +83,23 @@ describe('channelAddCopy utils', () => {
       total: 3,
     });
 
-    expect(props.summaryText).toBe('총 3개 중 2개 성공');
+    expect(props.summaryText).toBe('전체 3개 · 새로 저장 2개 · 기존 등록 0개 · 중복 입력 0개 · 실패 1개');
     expect(props.failedResults).toEqual([
       { error: 'Not found', handle: '@missing', success: false },
     ]);
     expect(props.failedResultMessages).toEqual([
       '실패: @missing - Not found',
     ]);
+    expect(props.resultMessages).toEqual([
+      { key: '@ok', status: 'added', text: '새로 저장: @ok' },
+      { key: '@missing', status: 'failed', text: '실패: @missing - Not found' },
+    ]);
     expect(props.closeButtonProps).toMatchObject({
       label: '닫기',
       title: '일괄 저장 결과 닫기',
     });
 
-    expect(getChannelBulkResultPanelViewProps(null).summaryText).toBe('총 0개 중 0개 성공');
+    expect(getChannelBulkResultPanelViewProps(null).summaryText).toBe('전체 0개 · 새로 저장 0개 · 기존 등록 0개 · 중복 입력 0개 · 실패 0개');
   });
 
   it('builds channel tag selector and language selector copy', () => {

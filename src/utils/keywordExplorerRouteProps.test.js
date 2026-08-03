@@ -6,6 +6,8 @@ describe('keywordExplorerRouteProps', () => {
   it('connects stored-video actions without invoking them while building props', () => {
     const openCreatorView = vi.fn();
     const setAddMode = vi.fn();
+    const setBulkInput = vi.fn();
+    const setBulkResult = vi.fn();
     const setChannelPreview = vi.fn();
     const setNewChannelInput = vi.fn();
     const props = buildKeywordExplorerRouteProps({
@@ -18,6 +20,8 @@ describe('keywordExplorerRouteProps', () => {
       selectedChannelIds: ['c1', 'c2'],
       savedChannels: [{ id: 'registered-1' }],
       setAddMode,
+      setBulkInput,
+      setBulkResult,
       setChannelPreview,
       setNewChannelInput,
       videos: [{ videoId: 'v1' }],
@@ -41,9 +45,16 @@ describe('keywordExplorerRouteProps', () => {
     props.onOpenWorkTools();
     props.onOpenDiscoveryLinks();
     props.onPrepareChannelRegistration({ channelId: 'new-channel', url: 'https://www.youtube.com/channel/new-channel' });
+    props.onPrepareBulkChannelRegistration([
+      { channelId: 'bulk-1', url: 'https://www.youtube.com/channel/bulk-1' },
+      { channelId: 'bulk-2' },
+    ]);
     expect(setAddMode).toHaveBeenCalledWith('single');
     expect(setChannelPreview).toHaveBeenCalledWith(null);
     expect(setNewChannelInput).toHaveBeenCalledWith('https://www.youtube.com/channel/new-channel');
+    expect(setAddMode).toHaveBeenLastCalledWith('bulk');
+    expect(setBulkResult).toHaveBeenCalledWith(null);
+    expect(setBulkInput).toHaveBeenCalledWith('https://www.youtube.com/channel/bulk-1\nbulk-2');
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'discovery-watchlist' }],
       [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
@@ -51,6 +62,7 @@ describe('keywordExplorerRouteProps', () => {
       [{ id: 'tools-bookmarks' }],
       [{ id: 'vault-sources' }],
       [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search' } }],
+      [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search-bulk' } }],
     ]);
   });
 });

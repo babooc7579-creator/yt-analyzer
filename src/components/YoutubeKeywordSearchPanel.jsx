@@ -324,7 +324,7 @@ export default function YoutubeKeywordSearchPanel(props) {
         <button type="button" onClick={() => changeSearchTarget('channel')} aria-pressed={searchTarget === 'channel'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'channel' ? 'bg-violet-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>채널 찾기·비교</button>
       </div>
       {searchTarget === 'channel'
-        ? <YoutubeChannelSearchPanel channelSearchSession={props.channelSearchSession} onChannelSearchSessionChange={props.onChannelSearchSessionChange} onPrepareChannelRegistration={props.onPrepareChannelRegistration} registeredChannelIds={props.registeredChannelIds} />
+        ? <YoutubeChannelSearchPanel channelSearchSession={props.channelSearchSession} onChannelSearchSessionChange={props.onChannelSearchSessionChange} onPrepareBulkChannelRegistration={props.onPrepareBulkChannelRegistration} onPrepareChannelRegistration={props.onPrepareChannelRegistration} registeredChannelIds={props.registeredChannelIds} />
         : <YoutubeVideoSearchPanel {...props} />}
     </div>
   );

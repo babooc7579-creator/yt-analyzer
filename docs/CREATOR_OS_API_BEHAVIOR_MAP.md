@@ -59,7 +59,7 @@
 | 채널 미리보기 | `fetchChannelPreview` | `GET /channel-preview?handle=...` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 저장은 안 하지만 quota 사용 가능 |
 | 키워드 채널 검색 | `searchYoutubeChannels` | `GET /youtube-channel-search?q=...` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 검색 버튼과 다음 결과 버튼에서만 실행. 현재 시점 통계의 임시 결과이며 자동 등록 없음 |
 | 채널 저장 | `createChannel` | `POST /channels` | YouTube API + DB 저장 | 예 | 아니오 | 예 | 아니오 | 가능 | 채널 정보 조회 후 Cloud DB 저장 |
-| 채널 일괄 저장 | `createChannelsBulk` | `POST /channels/bulk` | YouTube API + DB 저장 | 예 | 아니오 | 예 | 아니오 | 가능 | 여러 채널이면 quota 사용 증가 |
+| 채널 일괄 저장 | `createChannelsBulk` | `POST /channels/bulk` | YouTube API + DB 저장 | 예 | 예 | 예 | 아니오 | 가능 | 최대 50개. 10개씩 채널 정보를 확인하며 기존 등록·중복 입력은 재저장하지 않고 항목별 결과를 반환. 영상 수집 없음 |
 | 채널 삭제 | `removeChannel` | `DELETE /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 삭제 전 확인 필요 |
 | 채널 등급/상태/태그 수정 | `updateChannel` | `PATCH /channels/{id}?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`는 스캔 대상 여부에 영향 |
 | 채널 기록 추가 | `createChannelNote` | `POST /channels/{id}/notes?category=...` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | 낮음 |
