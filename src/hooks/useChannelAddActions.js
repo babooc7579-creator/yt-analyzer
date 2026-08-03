@@ -1,6 +1,7 @@
 import { fetchChannelPreview } from '../services/channelApi';
 import {
   BULK_CHANNEL_EMPTY_INPUT_MESSAGE,
+  BULK_CHANNEL_LIMIT_MESSAGE,
   BULK_CHANNEL_SAVE_ACTION_LABEL,
   CHANNEL_PREVIEW_DUPLICATE_MESSAGE,
   CHANNEL_PREVIEW_LOAD_FAILED_MESSAGE,
@@ -15,6 +16,7 @@ import {
   getChannelCreatePayload,
   getTrimmedChannelInput,
   isDuplicateChannel,
+  MAX_BULK_CHANNELS,
 } from '../utils/channelAddActions';
 
 export function useChannelAddActions({
@@ -92,6 +94,10 @@ export function useChannelAddActions({
     const handles = getBulkChannelHandles(bulkInput);
     if (handles.length === 0) {
       setError(BULK_CHANNEL_EMPTY_INPUT_MESSAGE);
+      return;
+    }
+    if (handles.length > MAX_BULK_CHANNELS) {
+      setError(BULK_CHANNEL_LIMIT_MESSAGE);
       return;
     }
 

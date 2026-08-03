@@ -15,6 +15,11 @@ export const CHANNEL_PREVIEW_DUPLICATE_MESSAGE =
 export const BULK_CHANNEL_EMPTY_INPUT_MESSAGE =
   '등록할 채널을 한 줄에 하나씩 입력해 주세요.';
 
+export const MAX_BULK_CHANNELS = 50;
+
+export const BULK_CHANNEL_LIMIT_MESSAGE =
+  `채널은 한 번에 최대 ${MAX_BULK_CHANNELS}개까지 등록할 수 있습니다.`;
+
 export const CHANNEL_SAVE_ACTION_LABEL = '저장';
 
 export const BULK_CHANNEL_SAVE_ACTION_LABEL = '일괄 저장';
@@ -22,10 +27,10 @@ export const BULK_CHANNEL_SAVE_ACTION_LABEL = '일괄 저장';
 export const getTrimmedChannelInput = (input = '') => toText(input).trim();
 
 export const getBulkChannelHandles = (bulkInput = '') => (
-  toText(bulkInput)
+  [...new Set(toText(bulkInput)
     .split('\n')
     .map(line => line.trim())
-    .filter(Boolean)
+    .filter(Boolean))]
 );
 
 export const isDuplicateChannel = (channels = [], channelId) => (
@@ -72,6 +77,6 @@ export const getBulkChannelSaveStartMessage = (channelCount) => (
   `${channelCount}개 채널 정보를 YouTube에서 확인한 뒤 온라인 저장소(Azure DB)에 저장하는 중입니다. 영상 수집은 실행하지 않습니다.`
 );
 
-export const getBulkChannelSaveCompleteMessage = ({ total, added }) => (
-  `온라인 저장소(Azure DB) 일괄 추가 완료: ${total}개 중 ${added}개가 저장되었습니다. 새 영상 수집은 실행하지 않았습니다.`
+export const getBulkChannelSaveCompleteMessage = ({ total, added, existing = 0, duplicate = 0, failed = 0 }) => (
+  `채널 등록 처리 완료: 전체 ${total}개 · 새로 저장 ${added}개 · 기존 등록 ${existing}개 · 중복 입력 ${duplicate}개 · 실패 ${failed}개. 새 영상 수집은 실행하지 않았습니다.`
 );

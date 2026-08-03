@@ -237,9 +237,9 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P0',
     lastReviewedAt: '2026-08-03',
-    currentSummary: '수집 영상 검색과 명시적 YouTube 검색을 분리했고, YouTube 검색 안에서 영상 찾기와 채널 찾기·비교를 다시 구분했습니다. 채널 검색은 현재 구독자·영상 수·누적 조회수·영상당 평균을 임시 결과로 보여주며 최대 4개를 비교할 수 있습니다. 채널 검색뿐 아니라 영상 검색 결과에도 채널 등록 상태와 `이 채널 등록 검토`를 표시해, 좋은 영상을 발견한 자리에서 해당 채널을 기존 채널 운영실 등록 단계로 이어갑니다. 영상의 발견 링크 저장과 채널 등록 검토는 독립된 선택입니다. 등록 검토는 입력칸만 채우고 이동하며 실제 YouTube 확인과 Azure DB 저장은 기존 등록 단계에서 별도로 실행합니다. 운영에서 바이브 코딩 채널 검색 1회로 12개 결과, 영상 검색 1회로 25개 결과와 투쏠ㅣAI 에이전트 채널 주소 전달을 확인했습니다. 이 검수 중 다른 화면에 다녀오면 임시 결과가 사라지는 문제를 발견해, 영상·채널 검색 조건과 결과를 앱 메모리에 유지하고 새로고침 때만 초기화하도록 보완했습니다. 배포 후 같은 흐름을 다시 검수해 검색 버튼을 다시 누르지 않고 YouTube 탭·검색어·25개 결과·첫 영상 카드가 복원되는 것을 확인했습니다. `국가`는 제작 국가 제한이 아니라 YouTube의 시청 가능 지역이고 `언어`는 완전 제한이 아니라 관련 결과 우선 조건임을 화면에 명시했습니다. 주요 검색 지역 11개와 우선 언어 10개를 선택할 수 있고, 결과에는 현재 선택값이 아니라 마지막 API 검색에 실제 적용된 조건을 따로 표시합니다. PR #1048 배포 뒤 운영에서 `copilot`·대한민국·한국어 우선·최근 30일 검색을 한 번 실행해 25개 결과와 `대한민국에서 시청 가능 · 한국어 우선 · 최근 30일 · 영상 길이 전체 · 관련도순` 표시를 확인했습니다. 채널 정보 확인·Azure DB 저장은 실행하지 않았고 등록 채널 수는 12개 그대로였습니다. PR #1050 배포 뒤 `바이브 코딩`·대한민국·한국어 우선 채널 검색을 한 번 실행해 12개 결과와 채널 설정 국가를 확인했습니다. 영상당 평균순 변경은 새 API 호출 없이 첫 결과를 `바이브코딩 레인 RaiN`으로 바꿨고, 언어 조건 변경 시 재검색 안내가 나타났다 원래 조건으로 복구하면 사라졌습니다.',
+    currentSummary: '수집 영상 검색과 명시적 YouTube 검색을 분리했고, YouTube 검색 안에서 영상 찾기와 채널 찾기·비교를 다시 구분했습니다. 채널 검색은 현재 구독자·영상 수·누적 조회수·영상당 평균을 임시 결과로 보여주며 최대 4개를 비교할 수 있습니다. 채널 검색뿐 아니라 영상 검색 결과에도 채널 등록 상태와 `이 채널 등록 검토`를 표시해, 좋은 영상을 발견한 자리에서 해당 채널을 기존 채널 운영실 등록 단계로 이어갑니다. 영상의 발견 링크 저장과 채널 등록 검토는 독립된 선택입니다. 등록 검토는 입력칸만 채우고 이동하며 실제 YouTube 확인과 Azure DB 저장은 기존 등록 단계에서 별도로 실행합니다. 운영에서 바이브 코딩 채널 검색 1회로 12개 결과, 영상 검색 1회로 25개 결과와 투쏠ㅣAI 에이전트 채널 주소 전달을 확인했습니다. 이 검수 중 다른 화면에 다녀오면 임시 결과가 사라지는 문제를 발견해, 영상·채널 검색 조건과 결과를 앱 메모리에 유지하고 새로고침 때만 초기화하도록 보완했습니다. 배포 후 같은 흐름을 다시 검수해 검색 버튼을 다시 누르지 않고 YouTube 탭·검색어·25개 결과·첫 영상 카드가 복원되는 것을 확인했습니다. `국가`는 제작 국가 제한이 아니라 YouTube의 시청 가능 지역이고 `언어`는 완전 제한이 아니라 관련 결과 우선 조건임을 화면에 명시했습니다. 주요 검색 지역 11개와 우선 언어 10개를 선택할 수 있고, 결과에는 현재 선택값이 아니라 마지막 API 검색에 실제 적용된 조건을 따로 표시합니다. PR #1048 배포 뒤 운영에서 `copilot`·대한민국·한국어 우선·최근 30일 검색을 한 번 실행해 25개 결과와 `대한민국에서 시청 가능 · 한국어 우선 · 최근 30일 · 영상 길이 전체 · 관련도순` 표시를 확인했습니다. 채널 정보 확인·Azure DB 저장은 실행하지 않았고 등록 채널 수는 12개 그대로였습니다. PR #1050 배포 뒤 `바이브 코딩`·대한민국·한국어 우선 채널 검색을 한 번 실행해 12개 결과와 채널 설정 국가를 확인했습니다. 영상당 평균순 변경은 새 API 호출 없이 첫 결과를 `바이브코딩 레인 RaiN`으로 바꿨고, 언어 조건 변경 시 재검색 안내가 나타났다 원래 조건으로 복구하면 사라졌습니다. 등록 후보는 비교 선택과 분리해 최대 50개까지 고르고 채널 운영실 일괄 추가에서 최종 확인합니다. 백엔드는 최대 10개씩 확인하며 기존 등록·중복 입력을 재저장하지 않고 채널별 결과를 반환하며 영상 수집은 실행하지 않습니다.',
     targetSummary: '키워드만 입력해도 새 영상 후보를 비교하고 필요한 항목만 아이디어 창고와 제작 흐름으로 안전하게 이어갈 수 있게 합니다.',
-    nextAction: '첫 번째·두 번째·세 번째 무결정 순서 1~9는 완료했습니다. 다음은 여러 검색 채널의 일괄 YouTube 확인·Azure DB 등록이며, API 비용·중복·부분 실패·저장 전 최종 확인 방식이 필요한 중요한 결정이므로 구현을 멈추고 사용자와 논의합니다.',
+    nextAction: '세 번째 순서 10번은 최대 50개 선택·10개 단위 처리로 확정했습니다. 네 번째 순서 1~9는 구현·로컬 화면 검수를 완료했습니다. 실제 일괄 등록은 선택 채널·태그를 사용자와 정한 뒤 한 번만 실행합니다.',
     decisions: [
       '기존 수집 영상 검색과 YouTube 신규 검색은 같은 작업 공간의 별도 탭으로 유지합니다.',
       '검색 결과 전체는 자동 저장하지 않고 사용자가 선택한 영상만 발견 링크함에 저장합니다.',
@@ -256,6 +256,8 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '등록 상태·채널 국가 유무·비교 선택 필터는 이미 받은 결과만 화면에서 좁히며 YouTube API나 Azure DB를 호출하지 않습니다.',
       '엄격한 언어 전용 필터는 언어 정보가 비어 있는 유효 결과를 숨길 수 있어 추가하지 않고 우선 언어 방식을 유지합니다.',
       '검색 결과 전체나 채널 후보를 자동으로 온라인 저장하지 않고, 사용자가 선택한 영상만 발견 링크함에 저장하며 중요 채널은 등록 검토로 연결합니다.',
+      '비교 선택은 최대 4개, 등록 후보 선택은 최대 50개로 분리하고 실제 일괄 등록은 10개 단위로 처리합니다.',
+      '일괄 등록은 기존 등록·중복 입력을 재저장하지 않고 채널별 결과를 표시하며 새 영상 수집을 자동 실행하지 않습니다.',
     ],
     checkpoints: [
       {
@@ -451,6 +453,51 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-channel-batch-registration-decision',
         label: '세 번째 10. 여러 검색 채널의 일괄 YouTube 확인·Azure DB 등록',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-registration-selection-separation',
+        label: '네 번째 1~2. 비교 최대 4개와 등록 후보 최대 50개 선택 분리',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-channel-search-page-size',
+        label: '네 번째 3. 채널 검색 기본 25개·다음 25개 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-bulk-registration-handoff',
+        label: '네 번째 4. 선택 후보를 채널 운영실 일괄 등록 검토로 전달',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-bulk-registration-limit',
+        label: '네 번째 5. 51개 이상 일괄 등록 요청의 프론트·백엔드 사전 차단',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-bulk-registration-batches',
+        label: '네 번째 6. 최대 50개를 10개 단위로 YouTube 확인·Azure DB 처리',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-bulk-registration-deduplication',
+        label: '네 번째 7. 기존 등록 채널·같은 요청 중복 입력 재저장 방지',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-bulk-registration-results',
+        label: '네 번째 8. 새로 저장·기존 등록·중복 입력·실패의 채널별 결과 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-bulk-registration-local-verification',
+        label: '네 번째 9. 모바일 배치·화면 왕복·검색 세션 유지 검수',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-bulk-registration-live-write',
+        label: '네 번째 10. 사용자가 선택한 실제 채널 일괄 등록·Azure DB 재조회',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DECISION_REQUIRED,
       },
       {

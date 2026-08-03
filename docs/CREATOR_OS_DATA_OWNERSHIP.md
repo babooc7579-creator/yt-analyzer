@@ -24,6 +24,7 @@ v2.2 문서는 제품 목표 설계도입니다. 이 문서는 현재 repo와 Ba
 - `local_assets` 별도 저장소는 없습니다.
 - `GET /videos?channelIds=...`는 저장된 영상 데이터를 읽는 DB 조회입니다.
 - `POST /scan/selected`, `GET /scan`, `GET /scan?tag=...`는 YouTube API 호출과 DB 갱신이 발생할 수 있습니다.
+- `POST /channels/bulk`는 사용자가 최종 저장을 눌렀을 때 최대 50개 채널을 10개씩 YouTube에서 확인하고 기존 `channels` 저장소에 등록합니다. 기존 등록·중복 입력은 재저장하지 않으며 영상 수집은 실행하지 않습니다.
 
 중요: 위 항목은 "현재 구현된 사실"입니다. 부족한 부분은 오류라기보다 v2.2 목표로 가기 위한 전환 경로가 필요한 부분입니다.
 

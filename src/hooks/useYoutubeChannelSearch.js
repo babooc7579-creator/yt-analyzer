@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { searchYoutubeChannels } from '../services/youtubeSearchApi';
-import { sortYoutubeChannelResults } from '../utils/youtubeKeywordSearch';
+import {
+  addYoutubeChannelRegistrationSelections,
+  sortYoutubeChannelResults,
+  toggleYoutubeChannelRegistrationSelection,
+} from '../utils/youtubeKeywordSearch';
 
 const INITIAL_FILTERS = {
   query: '',
@@ -22,14 +26,15 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
   const [notice, setNotice] = useState(initialState?.notice || '');
   const [nextPageToken, setNextPageToken] = useState(initialState?.nextPageToken || '');
   const [selectedIds, setSelectedIds] = useState(() => initialState?.selectedIds || []);
+  const [registrationIds, setRegistrationIds] = useState(() => initialState?.registrationIds || []);
   const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
   const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
   const [sortBy, setSortBy] = useState(() => initialState?.sortBy || 'relevance');
   const [viewFilters, setViewFilters] = useState(() => ({ ...INITIAL_VIEW_FILTERS, ...initialState?.viewFilters }));
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, selectedIds, sortBy, viewFilters });
-  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds, sortBy, viewFilters]);
+    onStateChange?.({ appliedFilters, filters, items, lastQuery, nextPageToken, notice, registrationIds, selectedIds, sortBy, viewFilters });
+  }, [appliedFilters, filters, items, lastQuery, nextPageToken, notice, onStateChange, registrationIds, selectedIds, sortBy, viewFilters]);
 
   const displayedItems = useMemo(() => sortYoutubeChannelResults(items, sortBy), [items, sortBy]);
 
@@ -55,7 +60,7 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
     try {
       const data = await searchYoutubeChannels({
         q: query,
-        maxResults: 12,
+        maxResults: 25,
         regionCode: filters.regionCode,
         relevanceLanguage: filters.language,
         pageToken: append ? nextPageToken : '',
@@ -68,7 +73,10 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
         incoming.forEach((item) => merged.set(item.channelId, item));
         return [...merged.values()];
       });
-      if (!append) setSelectedIds([]);
+      if (!append) {
+        setSelectedIds([]);
+        setRegistrationIds([]);
+      }
       if (!append) setAppliedFilters({ ...filters, query });
       setNextPageToken(data.nextPageToken || '');
       setLastQuery(query);
@@ -95,25 +103,46 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
     });
   };
 
+  const toggleRegistration = (channelId) => {
+    setRegistrationIds((current) => {
+      const result = toggleYoutubeChannelRegistrationSelection(current, channelId);
+      if (result.limitReached) setNotice('등록 후보는 한 번에 최대 50개까지 선택할 수 있습니다.');
+      return result.ids;
+    });
+  };
+
+  const addRegistrationIds = (channelIds) => {
+    setRegistrationIds((current) => {
+      const result = addYoutubeChannelRegistrationSelections(current, channelIds);
+      setNotice(result.limitReached
+        ? '등록 후보 50개를 선택했습니다. 나머지 채널은 현재 등록 후보에 포함하지 않았습니다.'
+        : `등록 후보 ${result.ids.length}개를 선택했습니다.`);
+      return result.ids;
+    });
+  };
+
   const clearResults = () => {
     setItems([]);
     setSelectedIds([]);
+    setRegistrationIds([]);
     setNextPageToken('');
     setLastQuery('');
     setAppliedFilters(null);
     setSortBy('relevance');
     setViewFilters({ ...INITIAL_VIEW_FILTERS });
     setError('');
-    setNotice('임시 채널 검색 결과를 지웠습니다. 입력한 검색 조건은 그대로 유지됩니다.');
+    setNotice('임시 채널 검색 결과와 비교·등록 후보 선택을 지웠습니다. 입력한 검색 조건은 그대로 유지됩니다.');
   };
 
   return {
     appliedFilters,
+    addRegistrationIds,
     changeFilter,
     changeSort: setSortBy,
     changeViewFilter,
     clearResults,
     clearSelected: () => setSelectedIds([]),
+    clearRegistration: () => setRegistrationIds([]),
     displayedItems,
     error,
     filters,
@@ -122,10 +151,12 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
     loading,
     nextPageToken,
     notice,
+    registrationIds,
     runSearch,
     selectedIds,
     sortBy,
     toggleSelected,
+    toggleRegistration,
     resetViewFilters: () => setViewFilters(INITIAL_VIEW_FILTERS),
     viewFilters,
   };

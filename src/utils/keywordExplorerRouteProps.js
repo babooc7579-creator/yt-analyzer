@@ -14,6 +14,8 @@ export function buildKeywordExplorerRouteProps({
   promoteVideoToProduction,
   savedChannels,
   setAddMode,
+  setBulkInput,
+  setBulkResult,
   setChannelPreview,
   setNewChannelInput,
   selectedChannelIds,
@@ -47,6 +49,17 @@ export function buildKeywordExplorerRouteProps({
       setChannelPreview?.(null);
       setNewChannelInput?.(channelInput);
       openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search' } });
+    },
+    onPrepareBulkChannelRegistration: (channels = []) => {
+      const channelInputs = [...new Set(toArray(channels).map((channel) => (
+        String(channel?.url || channel?.channelId || '').trim()
+      )).filter(Boolean))].slice(0, 50);
+      if (channelInputs.length === 0) return;
+      setAddMode?.('bulk');
+      setChannelPreview?.(null);
+      setBulkResult?.(null);
+      setBulkInput?.(channelInputs.join('\n'));
+      openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search-bulk' } });
     },
     onPromoteToProduction: promoteVideoToProduction,
     onSaveDiscoveryLink: addDiscoveryLink,

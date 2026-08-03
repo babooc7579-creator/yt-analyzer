@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildYoutubeSearchOptions,
+  addYoutubeChannelRegistrationSelections,
   filterYoutubeChannelResults,
   filterYoutubeVideoResultsByChannelRegistration,
   filterYoutubeSearchResults,
@@ -8,7 +9,9 @@ import {
   formatYoutubeSearchCriteria,
   getPublishedAfter,
   hasYoutubeSearchCriteriaChanges,
+  MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION,
   sortYoutubeChannelResults,
+  toggleYoutubeChannelRegistrationSelection,
   toDiscoveryLinkPayload,
 } from './youtubeKeywordSearch';
 
@@ -69,6 +72,15 @@ describe('youtubeKeywordSearch', () => {
     expect(filterYoutubeChannelResults(channels, { registration: 'all', country: 'all', selection: 'selected' }, {
       registeredIds: new Set(['a']), selectedIds: new Set(['b']),
     }).map((item) => item.channelId)).toEqual(['b']);
+  });
+
+  it('keeps registration candidates separate from comparison and caps them at 50', () => {
+    expect(MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION).toBe(50);
+    expect(toggleYoutubeChannelRegistrationSelection(['a'], 'b')).toEqual({ ids: ['a', 'b'], limitReached: false });
+    expect(toggleYoutubeChannelRegistrationSelection(['a', 'b'], 'a')).toEqual({ ids: ['b'], limitReached: false });
+    const selection = addYoutubeChannelRegistrationSelections([], Array.from({ length: 51 }, (_, index) => `c-${index}`));
+    expect(selection.ids).toHaveLength(50);
+    expect(selection.limitReached).toBe(true);
   });
 
   it('filters video results by the source channel registration state without changing the result set', () => {

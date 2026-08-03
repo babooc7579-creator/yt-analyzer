@@ -78,6 +78,32 @@ export const YOUTUBE_CHANNEL_SELECTION_FILTER_OPTIONS = [
   { value: 'selected', label: '비교 선택만 보기' },
 ];
 
+export const MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION = 50;
+
+export function toggleYoutubeChannelRegistrationSelection(selectedIds = [], channelId) {
+  const normalizedId = String(channelId || '');
+  const current = [...new Set((Array.isArray(selectedIds) ? selectedIds : []).map(String).filter(Boolean))];
+  if (!normalizedId) return { ids: current, limitReached: false };
+  if (current.includes(normalizedId)) {
+    return { ids: current.filter((id) => id !== normalizedId), limitReached: false };
+  }
+  if (current.length >= MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION) {
+    return { ids: current, limitReached: true };
+  }
+  return { ids: [...current, normalizedId], limitReached: false };
+}
+
+export function addYoutubeChannelRegistrationSelections(selectedIds = [], channelIds = []) {
+  const merged = [...new Set([
+    ...(Array.isArray(selectedIds) ? selectedIds : []),
+    ...(Array.isArray(channelIds) ? channelIds : []),
+  ].map(String).filter(Boolean))];
+  return {
+    ids: merged.slice(0, MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION),
+    limitReached: merged.length > MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION,
+  };
+}
+
 export function getPublishedAfter(days, now = new Date()) {
   const dayCount = Number(days || 0);
   if (!Number.isFinite(dayCount) || dayCount <= 0) return '';
