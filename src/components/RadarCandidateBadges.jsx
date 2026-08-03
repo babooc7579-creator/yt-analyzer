@@ -1,15 +1,16 @@
-import { Layers3, Rocket, TrendingUp } from 'lucide-react';
+import { Layers3, Medal, Rocket, TrendingUp } from 'lucide-react';
 
 import { getRadarCandidateBadgesViewProps } from '../utils/radarCandidates';
 
 const BADGE_ICONS = {
   strong: TrendingUp,
   similarTopic: Layers3,
+  topicRepresentative: Medal,
   ttoTto: Rocket,
 };
 
-export default function RadarCandidateBadges({ isStrong, isTtoTto, similarTopicCount }) {
-  const { badges } = getRadarCandidateBadgesViewProps({ isStrong, isTtoTto, similarTopicCount });
+export default function RadarCandidateBadges({ isStrong, isTtoTto, isTopicRepresentative, similarTopicCount }) {
+  const { badges } = getRadarCandidateBadgesViewProps({ isStrong, isTtoTto, isTopicRepresentative, similarTopicCount });
 
   return (
     <div className="mb-2 flex flex-wrap gap-1.5">

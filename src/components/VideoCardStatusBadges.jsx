@@ -1,10 +1,11 @@
 import { getVideoCardStatusBadgeItems } from '../utils/videoCard';
 
-export default function VideoCardStatusBadges({ isChecked, isProductionCandidate, isSaved, similarTopicCount }) {
+export default function VideoCardStatusBadges({ isChecked, isProductionCandidate, isSaved, isTopicRepresentative, similarTopicCount }) {
   const badgeItems = getVideoCardStatusBadgeItems({
     isChecked,
     isProductionCandidate,
     isSaved,
+    isTopicRepresentative,
     similarTopicCount,
   });
 

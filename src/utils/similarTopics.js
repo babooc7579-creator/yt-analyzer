@@ -83,6 +83,7 @@ export const getSimilarTopicGroups = (videos = [], { limit = 6 } = {}) => {
         id: `similar-topic-${index}-${group.members[0].id}`,
         label: labelTokens.join(' · '),
         maxViews: Math.max(...group.members.map((member) => toNumber(member.video?.view_count))),
+        representativeVideoId: group.members[0].id,
         videoIds: group.members.map((member) => member.id),
       };
     })
@@ -104,6 +105,7 @@ export const annotateSimilarTopicVideos = (videos = [], groups = getSimilarTopic
       similarTopic: {
         count: group.count,
         id: group.id,
+        isRepresentative: group.representativeVideoId === getVideoId(video, index),
         label: group.label,
       },
     };

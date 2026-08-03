@@ -10,6 +10,7 @@ describe('VideoCardStatusBadges', () => {
         isChecked
         isProductionCandidate
         isSaved
+        isTopicRepresentative
         similarTopicCount={3}
       />,
     );
@@ -20,6 +21,8 @@ describe('VideoCardStatusBadges', () => {
     expect(html).toContain('온라인 저장소(Azure DB)의 판단 기록에서 제작 후보로 표시된 영상입니다. 제작 후보함에 표시됩니다.');
     expect(html).toContain('AI 요청문 선택');
     expect(html).toContain('AI 요청문에 포함할 영상으로 화면에서 선택한 상태입니다.');
+    expect(html).toContain('묶음 대표');
+    expect(html).toContain('현재 정렬에서 이 비슷한 주제 묶음에 가장 먼저 표시되는 영상입니다.');
     expect(html).toContain('비슷한 주제 3개');
     expect(html).toContain('AI 분석이나 저장 데이터 통합은 아닙니다.');
   });

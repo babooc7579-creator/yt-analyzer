@@ -62,6 +62,7 @@ describe('radarCandidates utils', () => {
     expect(viewProps.badgesProps).toEqual({
       isStrong: true,
       isTtoTto: true,
+      isTopicRepresentative: false,
       similarTopicCount: 0,
     });
     expect(viewProps.decisionActionsProps).toMatchObject({
@@ -91,7 +92,8 @@ describe('radarCandidates utils', () => {
     expect(getRadarCandidateBadgesViewProps({
       isStrong: true,
       isTtoTto: true,
-    }).badges.map(badge => badge.label)).toEqual(['또터또', '강한 반응']);
+      isTopicRepresentative: true,
+    }).badges.map(badge => badge.label)).toEqual(['묶음 대표', '또터또', '강한 반응']);
     expect(getRadarCandidateMetricsViewProps(radarVideo).items).toEqual([
       { label: '대박 지수', value: '4.0x' },
       { label: '게시일 · 경과', value: '25.09.16, 300일' },

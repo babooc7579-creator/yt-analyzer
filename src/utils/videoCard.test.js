@@ -70,6 +70,7 @@ describe('videoCard utils', () => {
       isChecked: true,
       isProductionCandidate: true,
       isSaved: true,
+      isTopicRepresentative: false,
       similarTopicCount: 0,
     });
     expect(props.metaActionsProps).toMatchObject({
@@ -210,19 +211,22 @@ describe('videoCard utils', () => {
       isChecked: true,
       isProductionCandidate: true,
       isSaved: true,
+      isTopicRepresentative: true,
       similarTopicCount: 2,
     });
 
     expect(badges.map((badge) => badge.label)).toEqual([
+      '묶음 대표',
       '소재 보관',
       '제작 후보',
       'AI 요청문 선택',
       '비슷한 주제 2개',
     ]);
     expect(badges.map((badge) => badge.label)).not.toContain('후보함 등록');
-    expect(badges[0].title).toContain('온라인 저장소(Azure DB)의 소재 보관함');
-    expect(badges[1].title).toContain('제작 후보함');
-    expect(badges[2].title).toContain('AI 요청문');
+    expect(badges[0].title).toContain('현재 정렬');
+    expect(badges[1].title).toContain('온라인 저장소(Azure DB)의 소재 보관함');
+    expect(badges[2].title).toContain('제작 후보함');
+    expect(badges[3].title).toContain('AI 요청문');
     expect(badges.every((badge) => badge.isVisible)).toBe(true);
   });
 

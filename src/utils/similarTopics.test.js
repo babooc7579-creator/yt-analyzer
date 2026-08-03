@@ -32,6 +32,7 @@ describe('similar topic grouping', () => {
 
     expect(groups).toHaveLength(1);
     expect(groups[0]).toMatchObject({ count: 2, label: 'microsoft · copilot · 업무' });
+    expect(groups[0].representativeVideoId).toBe('v1');
     expect(groups[0].videoIds).toEqual(['v1', 'v2']);
   });
 
@@ -52,8 +53,8 @@ describe('similar topic grouping', () => {
   it('adds temporary group metadata without changing unrelated videos', () => {
     const annotated = annotateSimilarTopicVideos(videos);
 
-    expect(annotated[0].similarTopic).toMatchObject({ count: 2 });
-    expect(annotated[1].similarTopic).toMatchObject({ count: 2 });
+    expect(annotated[0].similarTopic).toMatchObject({ count: 2, isRepresentative: true });
+    expect(annotated[1].similarTopic).toMatchObject({ count: 2, isRepresentative: false });
     expect(annotated[2]).toBe(videos[2]);
     expect(annotated[3]).toBe(videos[3]);
   });

@@ -51,8 +51,15 @@ export const getVideoCardStatusBadgeItems = ({
   isChecked,
   isProductionCandidate,
   isSaved,
+  isTopicRepresentative = false,
   similarTopicCount = 0,
 }) => [
+  {
+    className: 'rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800',
+    isVisible: isTopicRepresentative,
+    label: '묶음 대표',
+    title: '현재 정렬에서 이 비슷한 주제 묶음에 가장 먼저 표시되는 영상입니다. 별도 점수를 새로 만들거나 저장하지 않습니다.',
+  },
   {
     className: 'rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700',
     isVisible: isSaved,
@@ -187,6 +194,7 @@ export const getVideoCardViewProps = ({
       isChecked,
       isProductionCandidate,
       isSaved,
+      isTopicRepresentative: Boolean(video?.similarTopic?.isRepresentative),
       similarTopicCount: video?.similarTopic?.count || 0,
     },
     metaActionsProps: {
