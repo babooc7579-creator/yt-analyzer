@@ -7,6 +7,7 @@ import KeywordExplorerSummary from './KeywordExplorerSummary';
 import KeywordExplorerSourceTabs from './KeywordExplorerSourceTabs';
 import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import KeywordSuggestionChips from './KeywordSuggestionChips';
+import SimilarTopicSummary from './SimilarTopicSummary';
 import StoredVideoActionGrid from './StoredVideoActionGrid';
 import StoredVideoLoadFeedback from './StoredVideoLoadFeedback';
 import YoutubeKeywordSearchPanel from './YoutubeKeywordSearchPanel';
@@ -110,6 +111,7 @@ export default function KeywordExplorerWorkspace({
         />
         <KeywordSuggestionChips onSelect={state.setSearchQuery} suggestions={state.suggestions} />
         <KeywordResearchShortcuts keyword={state.searchQuery} onOpenWorkTools={onOpenWorkTools} />
+        <SimilarTopicSummary groups={state.topicGroups} />
 
         {state.summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (
           <StoredVideoLoadFeedback

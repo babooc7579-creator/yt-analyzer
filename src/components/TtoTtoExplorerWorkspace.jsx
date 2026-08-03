@@ -2,6 +2,7 @@ import { useTtoTtoExplorerState } from '../hooks/useTtoTtoExplorerState';
 import { getTtoTtoExplorerEmptyState } from '../utils/ttoTtoExplorer';
 import RadarCandidateGrid from './RadarCandidateGrid';
 import RadarDecisionPanel from './RadarDecisionPanel';
+import SimilarTopicSummary from './SimilarTopicSummary';
 import StoredVideoLoadFeedback from './StoredVideoLoadFeedback';
 import TtoTtoExplorerEmptyState from './TtoTtoExplorerEmptyState';
 import TtoTtoExplorerFilters from './TtoTtoExplorerFilters';
@@ -32,6 +33,7 @@ export default function TtoTtoExplorerWorkspace({
     decisionGroups,
     decisionSummary,
     filteredCandidates,
+    groupedCandidates,
     hasActiveFilters,
     lengthFilter,
     loadedDecisionCount,
@@ -45,6 +47,7 @@ export default function TtoTtoExplorerWorkspace({
     setSortType,
     sortType,
     summary,
+    topicGroups,
   } = useTtoTtoExplorerState({ videoUserRecords, videos });
   const emptyState = getTtoTtoExplorerEmptyState({
     hasActiveFilters,
@@ -88,6 +91,8 @@ export default function TtoTtoExplorerWorkspace({
           현재 표시 {filteredCandidates.length}개 · 보관 소재 {Array.isArray(savedVideos) ? savedVideos.length : 0}개 · 판단 버튼은 온라인 저장소(Azure DB)의 사용자 기록에 저장됩니다.
         </p>
 
+        <SimilarTopicSummary groups={topicGroups} />
+
         {summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (
           <StoredVideoLoadFeedback
             loadResult={loadResult}
@@ -100,7 +105,7 @@ export default function TtoTtoExplorerWorkspace({
 
         {filteredCandidates.length > 0 ? (
           <RadarCandidateGrid
-            candidates={filteredCandidates}
+            candidates={groupedCandidates}
             isVideoSaved={isVideoSaved}
             onMarkVideoStatus={onMarkVideoStatus}
             onPromoteToProduction={onPromoteToProduction}
