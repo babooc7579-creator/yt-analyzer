@@ -264,6 +264,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '업로드 기간 필터는 최신성 범위를 좁히는 역할로 사용하고, 서로 비슷한 제목·주제를 묶는 기능은 별도 후속 분석으로 분리합니다.',
       '비슷한 주제 1차 묶음은 제목 핵심어 겹침만 화면에서 계산하고, 결과 대부분에 반복되는 공통어·일반 형식어·연도는 제외합니다. 원본 영상·Azure DB 기록을 합치거나 AI·YouTube API를 호출하지 않습니다.',
       '비슷한 주제 칩을 누르면 해당 묶음만 화면에 표시하고, 같은 칩을 다시 누르거나 검색 조건을 바꾸면 전체 결과로 돌아갑니다.',
+      '묶음 대표는 별도 종합 점수를 만들지 않고 현재 사용자가 선택한 정렬에서 가장 먼저 나온 영상으로 표시합니다.',
     ],
     checkpoints: [
       {
@@ -288,7 +289,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       },
       {
         id: 'local-similar-topic-groups',
-        label: '수집 영상 검색·또터또의 제목 핵심어 기반 비슷한 주제 묶음·카드 표시·선택 모아보기',
+        label: '수집 영상 검색·또터또의 비슷한 주제 묶음·선택 모아보기·현재 정렬 대표 표시',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
