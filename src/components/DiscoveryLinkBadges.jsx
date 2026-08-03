@@ -1,4 +1,5 @@
 import {
+  getDiscoveryLinkTags,
   getDiscoveryLinkStatusLabel,
   getDiscoveryRightsStatusLabel,
 } from '../constants/discoveryLinks';
@@ -10,6 +11,7 @@ export default function DiscoveryLinkBadges({
   platformLabel,
   rightsTone,
   sourceHost,
+  tags,
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -25,6 +27,11 @@ export default function DiscoveryLinkBadges({
       <span className={`rounded-full px-2 py-1 text-[10px] font-extrabold ${rightsTone.badge}`}>
         {getDiscoveryRightsStatusLabel(currentRightsStatus)}
       </span>
+      {getDiscoveryLinkTags({ tags }).map((tag) => (
+        <span key={tag} className="rounded-full bg-violet-100 px-2 py-1 text-[10px] font-extrabold text-violet-700">
+          {tag}
+        </span>
+      ))}
     </div>
   );
 }

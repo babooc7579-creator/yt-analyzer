@@ -28,6 +28,7 @@ const baseLink = {
   url: 'https://www.instagram.com/reel/abc/',
   status: 'saved',
   rightsStatus: 'unknown',
+  tags: ['업무'],
 };
 
 const createChangeEvent = (value) => ({
@@ -60,6 +61,7 @@ describe('useDiscoveryLinkRow', () => {
     expect(row).toMatchObject({
       currentRightsStatus: 'unknown',
       currentStatus: 'saved',
+      currentTags: ['업무'],
       draftMemo: 'Check source',
       draftTitle: 'Cake table',
       isEditing: false,
@@ -105,6 +107,21 @@ describe('useDiscoveryLinkRow', () => {
     expect(onUpdate).toHaveBeenNthCalledWith(1, 'link-1', { status: 'reviewing' });
     expect(onUpdate).toHaveBeenNthCalledWith(2, 'link-1', { rightsStatus: 'needs_check' });
     expect(stateSetters[3]).toHaveBeenCalledWith('');
+  });
+
+  it('adds and removes the Kaion learning tag without dropping other tags', () => {
+    const onUpdate = vi.fn();
+    const row = useDiscoveryLinkRow({
+      link: baseLink,
+      onDelete: vi.fn(),
+      onUpdate,
+    });
+
+    row.handleTagsChange(createChangeEvent('카이온학습'));
+    row.handleTagsChange(createChangeEvent(''));
+
+    expect(onUpdate).toHaveBeenNthCalledWith(1, 'link-1', { tags: ['업무', '카이온학습'] });
+    expect(onUpdate).toHaveBeenNthCalledWith(2, 'link-1', { tags: ['업무'] });
   });
 
   it('reverts risky status or rights changes when the user declines confirmation', () => {
