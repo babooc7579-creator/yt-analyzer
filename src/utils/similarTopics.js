@@ -1,6 +1,7 @@
 const TITLE_STOP_WORDS = new Set([
   'about', 'and', 'best', 'complete', 'episode', 'for', 'from', 'guide', 'how',
-  'official', 'part', 'shorts', 'the', 'this', 'video', 'with', 'youtube',
+  'learn', 'new', 'official', 'part', 'shorts', 'the', 'this', 'tips', 'tutorial',
+  'update', 'updates', 'use', 'using', 'video', 'with', 'youtube',
   '가이드', '강의', '공개', '방법', '사용법', '실제', '영상', '완벽', '유튜브',
   '이것', '정리', '추천', '최신', '총정리', '하는', '해보기',
 ]);
@@ -40,15 +41,29 @@ const getCommonTokens = (members) => {
 
 export const getSimilarTopicGroups = (videos = [], { limit = 6 } = {}) => {
   const candidateGroups = [];
+  const preparedVideos = toArray(videos).map((video, index) => ({
+    id: getVideoId(video, index),
+    tokens: getTitleTopicTokens(video?.title),
+    video,
+  }));
+  const tokenFrequency = new Map();
+  preparedVideos.forEach((member) => {
+    member.tokens.forEach((token) => tokenFrequency.set(token, (tokenFrequency.get(token) || 0) + 1));
+  });
+  const frequentTokenThreshold = preparedVideos.length >= 8
+    ? Math.ceil(preparedVideos.length * 0.65)
+    : Number.POSITIVE_INFINITY;
 
-  toArray(videos).forEach((video, index) => {
-    const tokens = getTitleTopicTokens(video?.title);
+  preparedVideos.forEach((preparedVideo) => {
+    const tokens = preparedVideo.tokens.filter((token) => (
+      (tokenFrequency.get(token) || 0) < frequentTokenThreshold
+    ));
     if (tokens.length < 2) return;
 
     const member = {
-      id: getVideoId(video, index),
+      id: preparedVideo.id,
       tokens,
-      video,
+      video: preparedVideo.video,
     };
     const matchingGroup = candidateGroups.find((group) => (
       areTopicTokensSimilar(group.anchorTokens, tokens)

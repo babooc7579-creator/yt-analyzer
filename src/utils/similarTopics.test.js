@@ -28,6 +28,20 @@ describe('similar topic grouping', () => {
     expect(groups[0].videoIds).toEqual(['v1', 'v2']);
   });
 
+  it('ignores words repeated across most of a large result set', () => {
+    const repeatedVideos = Array.from({ length: 10 }, (_, index) => ({
+      videoId: `common-${index}`,
+      title: index < 2
+        ? `Microsoft Copilot Excel formula automation ${index}`
+        : `Microsoft Copilot distinct topic ${index}`,
+    }));
+
+    const groups = getSimilarTopicGroups(repeatedVideos);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]).toMatchObject({ count: 2, label: 'excel · formula · automation' });
+  });
+
   it('adds temporary group metadata without changing unrelated videos', () => {
     const annotated = annotateSimilarTopicVideos(videos);
 
