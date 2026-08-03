@@ -109,3 +109,11 @@ export const annotateSimilarTopicVideos = (videos = [], groups = getSimilarTopic
     };
   });
 };
+
+export const filterVideosByTopicGroup = (videos = [], groups = [], activeGroupId = '') => {
+  if (!activeGroupId) return toArray(videos);
+  const activeGroup = toArray(groups).find((group) => group.id === activeGroupId);
+  if (!activeGroup) return toArray(videos);
+  const videoIds = new Set(toArray(activeGroup.videoIds).map(String));
+  return toArray(videos).filter((video, index) => videoIds.has(getVideoId(video, index)));
+};

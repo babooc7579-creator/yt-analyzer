@@ -111,7 +111,11 @@ export default function KeywordExplorerWorkspace({
         />
         <KeywordSuggestionChips onSelect={state.setSearchQuery} suggestions={state.suggestions} />
         <KeywordResearchShortcuts keyword={state.searchQuery} onOpenWorkTools={onOpenWorkTools} />
-        <SimilarTopicSummary groups={state.topicGroups} />
+        <SimilarTopicSummary
+          activeGroupId={state.activeTopicGroupId}
+          groups={state.topicGroups}
+          onSelect={state.setSelectedTopicGroupId}
+        />
 
         {state.summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (
           <StoredVideoLoadFeedback

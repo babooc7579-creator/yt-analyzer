@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   annotateSimilarTopicVideos,
+  filterVideosByTopicGroup,
   getSimilarTopicGroups,
   getTitleTopicTokens,
 } from './similarTopics';
@@ -55,5 +56,15 @@ describe('similar topic grouping', () => {
     expect(annotated[1].similarTopic).toMatchObject({ count: 2 });
     expect(annotated[2]).toBe(videos[2]);
     expect(annotated[3]).toBe(videos[3]);
+  });
+
+  it('filters only the selected topic group and restores the full list when cleared', () => {
+    const groups = getSimilarTopicGroups(videos);
+
+    expect(filterVideosByTopicGroup(videos, groups, groups[0].id).map((video) => video.videoId)).toEqual([
+      'v1', 'v2',
+    ]);
+    expect(filterVideosByTopicGroup(videos, groups, '')).toEqual(videos);
+    expect(filterVideosByTopicGroup(videos, groups, 'missing-group')).toEqual(videos);
   });
 });

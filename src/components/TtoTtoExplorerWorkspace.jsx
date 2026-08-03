@@ -30,6 +30,7 @@ export default function TtoTtoExplorerWorkspace({
 }) {
   const {
     ageFilter,
+    activeTopicGroupId,
     decisionGroups,
     decisionSummary,
     filteredCandidates,
@@ -44,6 +45,7 @@ export default function TtoTtoExplorerWorkspace({
     setLengthFilter,
     setMinimumViews,
     setSearchQuery,
+    setSelectedTopicGroupId,
     setSortType,
     sortType,
     summary,
@@ -88,10 +90,14 @@ export default function TtoTtoExplorerWorkspace({
         />
 
         <p className="text-xs text-slate-400">
-          현재 표시 {filteredCandidates.length}개 · 보관 소재 {Array.isArray(savedVideos) ? savedVideos.length : 0}개 · 판단 버튼은 온라인 저장소(Azure DB)의 사용자 기록에 저장됩니다.
+          현재 표시 {groupedCandidates.length}개 · 보관 소재 {Array.isArray(savedVideos) ? savedVideos.length : 0}개 · 판단 버튼은 온라인 저장소(Azure DB)의 사용자 기록에 저장됩니다.
         </p>
 
-        <SimilarTopicSummary groups={topicGroups} />
+        <SimilarTopicSummary
+          activeGroupId={activeTopicGroupId}
+          groups={topicGroups}
+          onSelect={setSelectedTopicGroupId}
+        />
 
         {summary.loadedVideoCount > 0 && loadResult?.success !== true && loadResult && (
           <StoredVideoLoadFeedback
