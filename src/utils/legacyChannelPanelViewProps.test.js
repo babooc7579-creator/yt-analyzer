@@ -20,6 +20,7 @@ describe('legacyChannelPanelViewProps utils', () => {
       categories,
       error: 'load failed',
       loading: false,
+      onReturnToKeywordExplorer: () => 'return',
       operationSource: 'youtube-video-search',
       progressMsg: 'ready',
       savedChannels,
@@ -42,6 +43,7 @@ describe('legacyChannelPanelViewProps utils', () => {
       },
     });
     expect(props.channelAddFormProps.categories).toEqual(categories);
+    expect(props.onReturnToKeywordExplorer()).toBe('return');
     expect(props.channelListProps.channels).toEqual(savedChannels.slice(0, 2));
     expect(props.channelListProps.selectedChannelIds).toEqual(selectedChannelIds);
     expect(props.tagTabsProps.categories).toEqual(categories);

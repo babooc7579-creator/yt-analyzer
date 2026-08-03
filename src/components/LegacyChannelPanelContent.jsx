@@ -3,6 +3,7 @@ import ChannelList from './ChannelList';
 import ChannelTagTabs from './ChannelTagTabs';
 import LegacyChannelPanelFooter from './LegacyChannelPanelFooter';
 import LegacyWorkPanelIntro from './LegacyWorkPanelIntro';
+import { ArrowLeft } from 'lucide-react';
 
 const OPERATION_STAGE_COPY = {
   add: {
@@ -33,6 +34,7 @@ export default function LegacyChannelPanelContent({
   channelListProps,
   footerProps,
   introProps,
+  onReturnToKeywordExplorer,
   operationSource,
   operationStage,
   showWorkPanel,
@@ -54,9 +56,19 @@ export default function LegacyChannelPanelContent({
             <h2 className="mt-1 text-lg font-extrabold text-slate-950">{stageCopy.title}</h2>
             <p className="mt-1 text-xs leading-5 text-slate-600">{stageCopy.description}</p>
             {sourceCopy ? (
-              <p role="status" className="mt-3 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold leading-5 text-violet-800">
-                {sourceCopy} 이동만으로 YouTube API 호출이나 영상 수집은 실행되지 않습니다.
-              </p>
+              <div role="status" className="mt-3 rounded-lg border border-violet-200 bg-violet-50 px-3 py-3 text-xs font-bold leading-5 text-violet-800">
+                <p>{sourceCopy} 이동만으로 YouTube API 호출이나 영상 수집은 실행되지 않습니다.</p>
+                {onReturnToKeywordExplorer ? (
+                  <button
+                    type="button"
+                    onClick={onReturnToKeywordExplorer}
+                    className="mt-2 inline-flex h-9 items-center gap-1 rounded-lg border border-violet-300 bg-white px-3 text-xs font-black text-violet-800 hover:bg-violet-100"
+                    title="기존 임시 검색 결과가 유지된 키워드 탐색 화면으로 돌아갑니다. YouTube API나 Azure DB를 호출하지 않습니다."
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" /> 검색 결과로 돌아가기
+                  </button>
+                ) : null}
+              </div>
             ) : null}
           </div>
         ) : (

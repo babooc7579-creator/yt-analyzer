@@ -29,6 +29,9 @@ export function getLegacyChannelPanelProps(props) {
     onDeleteChannel: props.deleteChannel,
     onLoadStoredVideos: props.loadStoredVideosForSelectedChannels,
     onOpenNotes: props.openNotesModal,
+    onReturnToKeywordExplorer: typeof props.openCreatorView === 'function'
+      ? () => props.openCreatorView({ id: 'discovery-keywords' })
+      : undefined,
     onToggleChannelSelection: props.toggleChannelSelection,
     onUpdateChannelMetadata: props.updateChannelMetadata,
     operationSource: props.creatorViewIntent?.source,
