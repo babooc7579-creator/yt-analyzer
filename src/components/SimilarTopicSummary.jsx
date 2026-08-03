@@ -2,7 +2,7 @@ import { Layers3 } from 'lucide-react';
 
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
-export default function SimilarTopicSummary({ groups }) {
+export default function SimilarTopicSummary({ activeGroupId = '', groups, onSelect }) {
   const groupList = toArray(groups);
   if (groupList.length === 0) return null;
 
@@ -24,16 +24,30 @@ export default function SimilarTopicSummary({ groups }) {
         </span>
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
-        {groupList.map((group) => (
-          <span
-            key={group.id}
-            className="rounded-full border border-cyan-300/20 bg-slate-950/50 px-3 py-1.5 text-[11px] font-bold text-slate-200"
-            title="제목 핵심어가 비슷한 항목 수입니다. 원본 영상이나 저장 데이터는 합치지 않습니다."
-          >
-            {group.label} · {group.count}개
-          </span>
-        ))}
+        {groupList.map((group) => {
+          const isActive = group.id === activeGroupId;
+          const Component = onSelect ? 'button' : 'span';
+          return (
+            <Component
+              key={group.id}
+              type={onSelect ? 'button' : undefined}
+              aria-pressed={onSelect ? isActive : undefined}
+              className={`rounded-full border px-3 py-1.5 text-[11px] font-bold transition ${isActive ? 'border-cyan-300 bg-cyan-300 text-slate-950' : 'border-cyan-300/20 bg-slate-950/50 text-slate-200 hover:border-cyan-300/60'}`}
+              onClick={onSelect ? () => onSelect(isActive ? '' : group.id) : undefined}
+              title={onSelect
+                ? `${group.label} 영상만 모아봅니다. 화면 필터이며 저장 데이터는 바뀌지 않습니다.`
+                : '제목 핵심어가 비슷한 항목 수입니다. 원본 영상이나 저장 데이터는 합치지 않습니다.'}
+            >
+              {group.label} · {group.count}개
+            </Component>
+          );
+        })}
       </div>
+      {activeGroupId && (
+        <p className="mt-2 text-[11px] font-bold text-cyan-100/80">
+          선택한 묶음만 표시 중 · 같은 묶음을 다시 누르면 전체 결과로 돌아갑니다.
+        </p>
+      )}
     </aside>
   );
 }

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   KEYWORD_EXPLORER_RESULT_LIMIT,
@@ -6,7 +6,7 @@ import {
   getKeywordExplorerSummary,
   getKeywordSuggestions,
 } from '../utils/keywordExplorer';
-import { annotateSimilarTopicVideos, getSimilarTopicGroups } from '../utils/similarTopics';
+import { annotateSimilarTopicVideos, filterVideosByTopicGroup, getSimilarTopicGroups } from '../utils/similarTopics';
 
 export function useKeywordExplorerState({ videos }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,6 +14,7 @@ export function useKeywordExplorerState({ videos }) {
   const [ageFilter, setAgeFilter] = useState('all');
   const [minimumViews, setMinimumViews] = useState(0);
   const [sortType, setSortType] = useState('relevance');
+  const [selectedTopicGroupId, setSelectedTopicGroupId] = useState('');
 
   const matchedVideos = useMemo(() => filterKeywordExplorerVideos({
     ageFilter,
@@ -24,11 +25,23 @@ export function useKeywordExplorerState({ videos }) {
     videos,
   }), [ageFilter, lengthFilter, minimumViews, searchQuery, sortType, videos]);
 
+  useEffect(() => {
+    setSelectedTopicGroupId('');
+  }, [ageFilter, lengthFilter, minimumViews, searchQuery, sortType]);
+
   const topicGroups = useMemo(() => getSimilarTopicGroups(matchedVideos), [matchedVideos]);
-  const displayedVideos = useMemo(() => annotateSimilarTopicVideos(
-    matchedVideos.slice(0, KEYWORD_EXPLORER_RESULT_LIMIT),
+  const activeTopicGroupId = topicGroups.some((group) => group.id === selectedTopicGroupId)
+    ? selectedTopicGroupId
+    : '';
+  const topicFilteredVideos = useMemo(() => filterVideosByTopicGroup(
+    matchedVideos,
     topicGroups,
-  ), [matchedVideos, topicGroups]);
+    activeTopicGroupId,
+  ), [activeTopicGroupId, matchedVideos, topicGroups]);
+  const displayedVideos = useMemo(() => annotateSimilarTopicVideos(
+    topicFilteredVideos.slice(0, KEYWORD_EXPLORER_RESULT_LIMIT),
+    topicGroups,
+  ), [topicFilteredVideos, topicGroups]);
   const suggestions = useMemo(() => getKeywordSuggestions(videos), [videos]);
   const summary = useMemo(() => getKeywordExplorerSummary({
     matchedVideos,
@@ -50,10 +63,12 @@ export function useKeywordExplorerState({ videos }) {
     setAgeFilter('all');
     setMinimumViews(0);
     setSortType('relevance');
+    setSelectedTopicGroupId('');
   };
 
   return {
     ageFilter,
+    activeTopicGroupId,
     displayedVideos,
     hasActiveFilters,
     hasQuery,
@@ -66,6 +81,7 @@ export function useKeywordExplorerState({ videos }) {
     setLengthFilter,
     setMinimumViews,
     setSearchQuery,
+    setSelectedTopicGroupId,
     setSortType,
     sortType,
     suggestions,
