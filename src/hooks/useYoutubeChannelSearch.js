@@ -95,11 +95,24 @@ export function useYoutubeChannelSearch({ initialState, onStateChange } = {}) {
     });
   };
 
+  const clearResults = () => {
+    setItems([]);
+    setSelectedIds([]);
+    setNextPageToken('');
+    setLastQuery('');
+    setAppliedFilters(null);
+    setSortBy('relevance');
+    setViewFilters({ ...INITIAL_VIEW_FILTERS });
+    setError('');
+    setNotice('임시 채널 검색 결과를 지웠습니다. 입력한 검색 조건은 그대로 유지됩니다.');
+  };
+
   return {
     appliedFilters,
     changeFilter,
     changeSort: setSortBy,
     changeViewFilter,
+    clearResults,
     clearSelected: () => setSelectedIds([]),
     displayedItems,
     error,

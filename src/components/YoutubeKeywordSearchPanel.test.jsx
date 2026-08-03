@@ -7,6 +7,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     channelRegistrationFilter: 'all',
     changeChannelRegistrationFilter: vi.fn(),
     changeFilter: vi.fn(),
+    clearResults: vi.fn(),
     clearSelected: vi.fn(),
     displayedItems: [{
       videoId: 'video-1',
@@ -70,6 +71,9 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('영상 후보 선택 해제');
     expect(html).toContain('출처 채널 작업');
     expect(html).toContain('자동 등록하거나 영상을 저장하지 않습니다');
+    expect(html).toContain('임시 결과 지우기');
+    expect(html).toContain('검색 조건을 남기고 결과·영상 선택·화면 필터만 정리');
+    expect(html).toContain('발견 링크함에 이미 저장한 항목은 삭제하지 않습니다');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {

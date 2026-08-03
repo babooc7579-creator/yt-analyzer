@@ -1,4 +1,4 @@
-import { Check, ExternalLink, Loader2, Search, UserPlus, Users } from 'lucide-react';
+import { Check, ExternalLink, Loader2, Search, Trash2, UserPlus, Users } from 'lucide-react';
 import { useMemo } from 'react';
 import { useYoutubeChannelSearch } from '../hooks/useYoutubeChannelSearch';
 import {
@@ -183,13 +183,19 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
               <p className="mt-1 text-xs text-slate-500">받은 결과만 화면에서 필터·정렬하며 YouTube API를 다시 호출하지 않습니다.</p>
               <p className="mt-1 text-xs text-slate-500">채널 설정 국가는 채널 운영자가 YouTube에 등록한 값이며 미등록일 수 있습니다.</p>
             </div>
-            <label className="sm:w-52">
-              <span className="sr-only">채널 결과 정렬</span>
-              <select value={search.sortBy} onChange={(event) => search.changeSort(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 채널 결과만 화면에서 정렬합니다. YouTube API는 호출하지 않습니다.">
-                {YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-              </select>
-            </label>
+            <div className="flex flex-col gap-2 sm:w-auto sm:flex-row">
+              <label className="sm:w-52">
+                <span className="sr-only">채널 결과 정렬</span>
+                <select value={search.sortBy} onChange={(event) => search.changeSort(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 채널 결과만 화면에서 정렬합니다. YouTube API는 호출하지 않습니다.">
+                  {YOUTUBE_CHANNEL_RESULT_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
+              <button type="button" onClick={search.clearResults} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-rose-500/40 px-3 text-xs font-black text-rose-200 hover:bg-rose-500/10" title="현재 브라우저의 임시 채널 결과·비교 선택·화면 필터만 지웁니다. 입력한 검색 조건은 유지되며 YouTube API나 Azure DB를 호출하지 않습니다.">
+                <Trash2 className="h-3.5 w-3.5" /> 임시 결과 지우기
+              </button>
             </div>
+            </div>
+            <p className="mt-2 text-[11px] leading-5 text-slate-500">임시 결과 지우기는 검색 조건을 남기고 결과·비교 선택·화면 필터만 정리합니다. 다시 검색하기 전에는 YouTube API를 호출하지 않습니다.</p>
             <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
               <label>
                 <span className="sr-only">채널 등록 상태 필터</span>
