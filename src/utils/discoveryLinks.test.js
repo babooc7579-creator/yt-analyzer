@@ -36,6 +36,7 @@ describe('discoveryLinks utils', () => {
     memo: 'Safe reference',
     status: 'saved',
     rightsStatus: 'cleared',
+    tags: ['카이온학습'],
   };
 
   it('keeps destructive discovery link confirmation copy explicit', () => {
@@ -52,6 +53,7 @@ describe('discoveryLinks utils', () => {
     expect(searchableText).toContain('instagram');
     expect(searchableText).toContain('instagram.com');
     expect(getSearchableDiscoveryLinkText(null)).toContain('unknown');
+    expect(getSearchableDiscoveryLinkText(youtubeLink)).toContain('카이온학습');
   });
 
   it('counts discovery links by status and rights status with fallback values', () => {
@@ -97,6 +99,7 @@ describe('discoveryLinks utils', () => {
     expect(getDiscoveryLinkRowMeta(instagramLink)).toMatchObject({
       currentRightsStatus: 'needs_check',
       currentStatus: 'candidate',
+      currentTags: [],
       platformLabel: 'Instagram',
       rightsTone: DISCOVERY_RIGHTS_TONES.needs_check,
       sourceHost: 'instagram.com',

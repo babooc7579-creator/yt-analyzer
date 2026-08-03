@@ -53,6 +53,8 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('검색 버튼을 눌렀을 때만 YouTube API');
     expect(html).toContain('결과는 아직 저장되지 않았습니다');
     expect(html).toContain('선택 1개 발견 링크함에 담기');
+    expect(html).toContain('선택 영상 저장 분류');
+    expect(html).toContain('카이온학습');
     expect(html).toContain('영상 파일은 저장하지 않습니다');
     expect(html).toContain('대박 비율은 현재 조회수÷현재 구독자 수의 추정값');
     expect(html).toContain('다음 결과 25개 불러오기');

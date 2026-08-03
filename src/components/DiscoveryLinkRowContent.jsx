@@ -25,6 +25,7 @@ export default function DiscoveryLinkRowContent({
       <DiscoveryLinkBadges
         currentRightsStatus={currentRightsStatus}
         currentStatus={currentStatus}
+        tags={link.tags}
         platformLabel={platformLabel}
         rightsTone={rightsTone}
         sourceHost={sourceHost}

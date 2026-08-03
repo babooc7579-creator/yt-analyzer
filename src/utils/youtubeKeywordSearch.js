@@ -203,13 +203,14 @@ export function filterYoutubeSearchResults(items, minimumViews = 0) {
   return (Array.isArray(items) ? items : []).filter((item) => Number(item?.viewCount || 0) >= threshold);
 }
 
-export function toDiscoveryLinkPayload(video, query) {
+export function toDiscoveryLinkPayload(video, query, tags = []) {
   return {
     url: video.url || `https://www.youtube.com/watch?v=${video.videoId}`,
     platform: 'youtube',
     title: video.title || '',
     linkedVideoId: video.videoId || '',
     status: 'inbox',
+    tags: [...new Set((Array.isArray(tags) ? tags : []).map((tag) => String(tag || '').trim()).filter(Boolean))],
     memo: [`키워드 검색: ${String(query || '').trim()}`, video.channelTitle ? `채널: ${video.channelTitle}` : '']
       .filter(Boolean)
       .join(' · '),

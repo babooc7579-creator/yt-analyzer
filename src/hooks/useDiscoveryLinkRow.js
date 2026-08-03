@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { DISCOVERY_LINK_TAGS } from '../constants/discoveryLinks';
 
 import {
   confirmRiskyDiscoveryCandidate,
@@ -51,6 +52,14 @@ export function useDiscoveryLinkRow({
     }
 
     onUpdate(link.id, { rightsStatus: nextRightsStatus });
+  };
+
+  const handleTagsChange = (event) => {
+    const nextLearningTag = event.target.value;
+    const otherTags = rowMeta.currentTags.filter((tag) => tag !== DISCOVERY_LINK_TAGS.KAION_LEARNING);
+    onUpdate(link.id, {
+      tags: nextLearningTag ? [...otherTags, nextLearningTag] : otherTags,
+    });
   };
 
   const handleSendToCandidate = async () => {
@@ -111,10 +120,12 @@ export function useDiscoveryLinkRow({
     candidateSaveState,
     currentRightsStatus: rowMeta.currentRightsStatus,
     currentStatus: rowMeta.currentStatus,
+    currentTags: rowMeta.currentTags,
     draftMemo,
     draftTitle,
     handleDelete,
     handleRightsStatusChange,
+    handleTagsChange,
     handleSaveEdit,
     handleSendToCandidate,
     handleStatusChange,

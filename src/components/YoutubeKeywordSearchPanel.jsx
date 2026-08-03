@@ -9,6 +9,7 @@ import {
   Users,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { DISCOVERY_LINK_SAVE_TAG_OPTIONS } from '../constants/discoveryLinks';
 import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
 import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import {
@@ -149,6 +150,7 @@ function YoutubeVideoSearchPanel({
     onStateChange: onVideoSearchSessionChange,
   });
   const [savingSelected, setSavingSelected] = useState(false);
+  const [saveTag, setSaveTag] = useState('');
   const savedVideoIds = useMemo(() => new Set(
     discoveryLinks.map((link) => String(link?.linkedVideoId || '')).filter(Boolean),
   ), [discoveryLinks]);
@@ -171,7 +173,11 @@ function YoutubeVideoSearchPanel({
     setSavingSelected(true);
     let savedCount = 0;
     for (const item of selectedItems) {
-      const saved = await onSaveDiscoveryLink(toDiscoveryLinkPayload(item, search.lastQuery || search.filters.query));
+      const saved = await onSaveDiscoveryLink(toDiscoveryLinkPayload(
+        item,
+        search.lastQuery || search.filters.query,
+        saveTag ? [saveTag] : [],
+      ));
       if (!saved) break;
       savedCount += 1;
     }
@@ -251,6 +257,19 @@ function YoutubeVideoSearchPanel({
               <p className="mt-1 text-xs text-slate-500">선택하지 않은 검색 결과는 Azure DB에 저장되지 않습니다.</p>
             </div>
             <div className="flex flex-wrap gap-2">
+              <label className="min-w-40 flex-1 sm:flex-none">
+                <span className="sr-only">선택 영상 저장 분류</span>
+                <select
+                  value={saveTag}
+                  onChange={(event) => setSaveTag(event.target.value)}
+                  className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200"
+                  title="선택한 영상을 발견 링크함에 저장할 때 함께 기록할 분류입니다. 선택만으로 Azure DB에 저장되지 않습니다."
+                >
+                  {DISCOVERY_LINK_SAVE_TAG_OPTIONS.map((option) => (
+                    <option key={option.value || 'none'} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+              </label>
               <label className="min-w-40 flex-1 sm:flex-none">
                 <span className="sr-only">출처 채널 등록 상태 필터</span>
                 <select value={search.channelRegistrationFilter} onChange={(event) => search.changeChannelRegistrationFilter(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 영상 결과를 출처 채널의 등록 여부로만 좁힙니다. YouTube API는 호출하지 않습니다.">

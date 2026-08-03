@@ -1,5 +1,6 @@
 import {
   DISCOVERY_RIGHTS_TONES,
+  getDiscoveryLinkTags,
   getDiscoveryLinkHost,
   getDiscoveryLinkPlatform,
   getDiscoveryLinkRightsStatusValue,
@@ -29,6 +30,7 @@ export const getSearchableDiscoveryLinkText = (link) => {
     sourceLink.title,
     sourceLink.url,
     sourceLink.memo,
+    ...getDiscoveryLinkTags(sourceLink),
     getDiscoveryLinkPlatform(sourceLink),
     getDiscoveryLinkHost(sourceLink.url),
   ]
@@ -99,6 +101,7 @@ export const getDiscoveryLinkRowMeta = (link = {}) => {
   const currentRightsStatus = getDiscoveryLinkRightsStatusValue(sourceLink);
 
   return {
+    currentTags: getDiscoveryLinkTags(sourceLink),
     currentRightsStatus,
     currentStatus: getDiscoveryLinkStatusValue(sourceLink),
     platformLabel: getDiscoveryPlatformLabel(getDiscoveryLinkPlatform(sourceLink)),
@@ -113,10 +116,12 @@ export const getDiscoveryLinkRowViewProps = ({
   candidateSaveState,
   currentRightsStatus,
   currentStatus,
+  currentTags,
   draftMemo,
   draftTitle,
   handleDelete,
   handleRightsStatusChange,
+  handleTagsChange,
   handleSaveEdit,
   handleSendToCandidate,
   handleStatusChange,
@@ -135,11 +140,13 @@ export const getDiscoveryLinkRowViewProps = ({
   actionsProps: {
     currentRightsStatus,
     currentStatus,
+    currentTags,
     candidateSaveState,
     isEditing,
     link,
     onDelete: handleDelete,
     onRightsStatusChange: handleRightsStatusChange,
+    onTagsChange: handleTagsChange,
     onOpenProductionCandidate: openProductionCandidate,
     onSendToCandidate: handleSendToCandidate,
     onStatusChange: handleStatusChange,
@@ -152,6 +159,7 @@ export const getDiscoveryLinkRowViewProps = ({
     cancelEdit,
     currentRightsStatus,
     currentStatus,
+    currentTags,
     draftMemo,
     draftTitle,
     handleSaveEdit,

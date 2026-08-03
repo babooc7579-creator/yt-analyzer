@@ -67,6 +67,21 @@ export const getDiscoveryLinkRightsStatusValue = (link) => link?.rightsStatus ||
 
 export const ALL_DISCOVERY_RIGHTS_STATUS_OPTION = { value: 'all', label: '권리 전체' };
 
+export const DISCOVERY_LINK_TAGS = {
+  KAION_LEARNING: '카이온학습',
+};
+
+export const DISCOVERY_LINK_SAVE_TAG_OPTIONS = [
+  { value: '', label: '저장 분류 없음' },
+  { value: DISCOVERY_LINK_TAGS.KAION_LEARNING, label: DISCOVERY_LINK_TAGS.KAION_LEARNING },
+];
+
+export const getDiscoveryLinkTags = (link) => (
+  Array.isArray(link?.tags)
+    ? [...new Set(link.tags.map((tag) => String(tag || '').trim()).filter(Boolean))]
+    : []
+);
+
 export const DISCOVERY_RIGHTS_TONES = {
   unknown: {
     card: 'border-slate-200 bg-white',
