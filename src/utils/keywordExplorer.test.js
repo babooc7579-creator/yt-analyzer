@@ -61,8 +61,23 @@ describe('keywordExplorer utils', () => {
 
   it('searches title and channel text and applies view, length, and age filters', () => {
     expect(filterKeywordExplorerVideos({ videos, searchQuery: 'cake' }).map(video => video.videoId)).toEqual(['v1', 'v2']);
+    expect(filterKeywordExplorerVideos({ videos, searchQuery: 'cake', ageFilter: 'recent7' })).toEqual([]);
+    expect(filterKeywordExplorerVideos({ videos, searchQuery: 'cake', ageFilter: 'recent60' }).map(video => video.videoId)).toEqual(['v2']);
     expect(filterKeywordExplorerVideos({ videos, searchQuery: 'maker', ageFilter: 'legacy180', lengthFilter: 'long' }).map(video => video.videoId)).toEqual(['v3']);
     expect(filterKeywordExplorerVideos({ videos, searchQuery: 'table', minimumViews: 500000 }).map(video => video.videoId)).toEqual(['v3']);
+  });
+
+  it('filters stored videos uploaded in the current calendar year', () => {
+    const year = new Date().getFullYear();
+    const currentYearVideos = [
+      { videoId: 'current', title: 'Copilot current', upload_date: `${year}-01-02`, daysOld: 999 },
+      { videoId: 'previous', title: 'Copilot previous', upload_date: `${year - 1}-12-31`, daysOld: 1 },
+    ];
+    expect(filterKeywordExplorerVideos({
+      videos: currentYearVideos,
+      searchQuery: 'copilot',
+      ageFilter: 'thisYear',
+    }).map(video => video.videoId)).toEqual(['current']);
   });
 
   it('sorts results by the selected stored-video signal', () => {

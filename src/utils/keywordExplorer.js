@@ -8,8 +8,10 @@ export const KEYWORD_LENGTH_OPTIONS = [
 
 export const KEYWORD_AGE_OPTIONS = [
   { value: 'all', label: '업로드 시기 전체' },
+  { value: 'recent7', label: '최근 7일' },
   { value: 'recent30', label: '최근 30일' },
-  { value: 'recent90', label: '최근 90일' },
+  { value: 'recent60', label: '최근 60일' },
+  { value: 'thisYear', label: '올해' },
   { value: 'legacy180', label: '6개월 이상' },
 ];
 
@@ -214,8 +216,15 @@ const getSearchScore = (video, query, tokens) => {
 
 const matchesAgeFilter = (video, ageFilter) => {
   const daysOld = toNumber(video?.daysOld);
+  if (ageFilter === 'recent7') return daysOld <= 7;
   if (ageFilter === 'recent30') return daysOld <= 30;
-  if (ageFilter === 'recent90') return daysOld <= 90;
+  if (ageFilter === 'recent60') return daysOld <= 60;
+  if (ageFilter === 'thisYear') {
+    const uploadDate = new Date(video?.upload_date || video?.uploadDate || '');
+    return Number.isFinite(uploadDate.getTime())
+      ? uploadDate.getFullYear() === new Date().getFullYear()
+      : daysOld <= Math.ceil((Date.now() - new Date(new Date().getFullYear(), 0, 1).getTime()) / 86400000);
+  }
   if (ageFilter === 'legacy180') return daysOld >= 180;
   return true;
 };

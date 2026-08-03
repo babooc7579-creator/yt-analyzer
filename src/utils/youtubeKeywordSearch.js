@@ -31,7 +31,8 @@ export const YOUTUBE_SEARCH_DATE_OPTIONS = [
   { value: 'all', label: '업로드 시기 전체' },
   { value: '7', label: '최근 7일' },
   { value: '30', label: '최근 30일' },
-  { value: '90', label: '최근 90일' },
+  { value: '60', label: '최근 60일' },
+  { value: 'year', label: '올해' },
 ];
 
 export const YOUTUBE_SEARCH_DURATION_OPTIONS = [
@@ -105,6 +106,9 @@ export function addYoutubeChannelRegistrationSelections(selectedIds = [], channe
 }
 
 export function getPublishedAfter(days, now = new Date()) {
+  if (days === 'year') {
+    return new Date(Date.UTC(now.getUTCFullYear(), 0, 1)).toISOString();
+  }
   const dayCount = Number(days || 0);
   if (!Number.isFinite(dayCount) || dayCount <= 0) return '';
   return new Date(now.getTime() - dayCount * 86400000).toISOString();

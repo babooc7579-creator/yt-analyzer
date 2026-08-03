@@ -70,6 +70,22 @@ describe('ttoTtoExplorer utils', () => {
       videos,
       sortType: 'oldest',
     }).map(video => video.videoId)).toEqual(['old-strong-short', 'old-steady-long']);
+
+    expect(filterAndSortTtoTtoCandidates({
+      videos,
+      ageFilter: 'sixToTwelveMonths',
+    }).map(video => video.videoId)).toEqual(['old-steady-long']);
+    expect(filterAndSortTtoTtoCandidates({
+      videos,
+      ageFilter: 'oneToTwoYears',
+    }).map(video => video.videoId)).toEqual(['old-strong-short']);
+  });
+
+  it('separates candidates older than two years', () => {
+    expect(filterAndSortTtoTtoCandidates({
+      videos: [...videos, { videoId: 'archive', daysOld: 900, multiplier: 2 }],
+      ageFilter: 'overTwoYears',
+    }).map(video => video.videoId)).toEqual(['archive']);
   });
 
   it('keeps large candidate lists searchable and sorted', () => {

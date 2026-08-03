@@ -28,6 +28,7 @@ export default function TtoTtoExplorerWorkspace({
   videos,
 }) {
   const {
+    ageFilter,
     decisionGroups,
     decisionSummary,
     filteredCandidates,
@@ -37,6 +38,7 @@ export default function TtoTtoExplorerWorkspace({
     minimumViews,
     resetFilters,
     searchQuery,
+    setAgeFilter,
     setLengthFilter,
     setMinimumViews,
     setSearchQuery,
@@ -68,6 +70,7 @@ export default function TtoTtoExplorerWorkspace({
         <TtoTtoExplorerSummary summary={summary} />
 
         <TtoTtoExplorerFilters
+          ageFilter={ageFilter}
           hasActiveFilters={hasActiveFilters}
           lengthFilter={lengthFilter}
           minimumViews={minimumViews}
@@ -75,6 +78,7 @@ export default function TtoTtoExplorerWorkspace({
           onChangeMinimumViews={setMinimumViews}
           onChangeSearchQuery={setSearchQuery}
           onChangeSortType={setSortType}
+          onChangeAgeFilter={setAgeFilter}
           onResetFilters={resetFilters}
           searchQuery={searchQuery}
           sortType={sortType}
