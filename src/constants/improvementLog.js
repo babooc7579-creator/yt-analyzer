@@ -261,6 +261,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '`카이온학습`은 개인 업무 지식 습득 목적의 분류이며, 출처 채널 태그와 개별 발견 영상 태그를 별도 데이터로 관리합니다.',
       '선택한 검색 영상만 기존 발견 링크 문서의 `tags`에 저장하며, 검색 결과 전체 자동 저장이나 새 Cosmos DB container는 추가하지 않습니다.',
       '`카이온학습` 채널은 자동 일괄 수집하지 않고 사용자가 고른 채널을 1개씩 명시적으로 수집합니다.',
+      '업로드 기간 필터는 최신성 범위를 좁히는 역할로 사용하고, 서로 비슷한 제목·주제를 묶는 기능은 별도 후속 분석으로 분리합니다.',
     ],
     checkpoints: [
       {
@@ -276,6 +277,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-search-filters-results',
         label: '검색 지역·우선 언어·기간·길이·조회수·정렬 조건과 실제 적용 조건·임시 결과 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'purpose-specific-upload-date-filters',
+        label: '새 YouTube 검색·수집 영상 검색·또터또 목적에 맞춘 업로드 기간 필터',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {

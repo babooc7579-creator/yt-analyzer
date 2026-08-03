@@ -13,15 +13,17 @@ export function useTtoTtoExplorerState({
   const [minimumViews, setMinimumViews] = useState(0);
   const [lengthFilter, setLengthFilter] = useState('all');
   const [sortType, setSortType] = useState('priority');
+  const [ageFilter, setAgeFilter] = useState('all');
 
   const filteredCandidates = useMemo(() => filterAndSortTtoTtoCandidates({
+    ageFilter,
     lengthFilter,
     minimumViews,
     searchQuery,
     sortType,
     videoUserRecords,
     videos,
-  }), [lengthFilter, minimumViews, searchQuery, sortType, videoUserRecords, videos]);
+  }), [ageFilter, lengthFilter, minimumViews, searchQuery, sortType, videoUserRecords, videos]);
 
   const dataModel = useMemo(() => getTtoTtoExplorerDataModel({
     filteredCandidates,
@@ -31,6 +33,7 @@ export function useTtoTtoExplorerState({
 
   const hasActiveFilters = Boolean(
     searchQuery.trim()
+    || ageFilter !== 'all'
     || Number(minimumViews) > 0
     || lengthFilter !== 'all',
   );
@@ -39,16 +42,19 @@ export function useTtoTtoExplorerState({
     setSearchQuery('');
     setMinimumViews(0);
     setLengthFilter('all');
+    setAgeFilter('all');
   };
 
   return {
     ...dataModel,
+    ageFilter,
     filteredCandidates,
     hasActiveFilters,
     lengthFilter,
     minimumViews,
     resetFilters,
     searchQuery,
+    setAgeFilter,
     setLengthFilter,
     setMinimumViews,
     setSearchQuery,

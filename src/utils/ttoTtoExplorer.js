@@ -22,6 +22,13 @@ export const TTOTTO_LENGTH_OPTIONS = [
   { value: 'long', label: '롱폼' },
 ];
 
+export const TTOTTO_AGE_OPTIONS = [
+  { value: 'all', label: '후보 시기 전체' },
+  { value: 'sixToTwelveMonths', label: '6개월~1년' },
+  { value: 'oneToTwoYears', label: '1~2년' },
+  { value: 'overTwoYears', label: '2년 이상' },
+];
+
 export const TTOTTO_VIEW_OPTIONS = [
   { value: 0, label: '조회수 전체' },
   { value: 10000, label: '1만 이상' },
@@ -77,6 +84,7 @@ const sortTtoTtoCandidates = (videos, sortType) => {
 };
 
 export const filterAndSortTtoTtoCandidates = ({
+  ageFilter = 'all',
   lengthFilter = 'all',
   minimumViews = 0,
   searchQuery = '',
@@ -97,6 +105,14 @@ export const filterAndSortTtoTtoCandidates = ({
 
   if (minimumViewCount > 0) {
     result = result.filter((video) => toNumber(video.view_count) >= minimumViewCount);
+  }
+
+  if (ageFilter === 'sixToTwelveMonths') {
+    result = result.filter((video) => toNumber(video.daysOld) >= 180 && toNumber(video.daysOld) < 365);
+  } else if (ageFilter === 'oneToTwoYears') {
+    result = result.filter((video) => toNumber(video.daysOld) >= 365 && toNumber(video.daysOld) < 730);
+  } else if (ageFilter === 'overTwoYears') {
+    result = result.filter((video) => toNumber(video.daysOld) >= 730);
   }
 
   if (lengthFilter === 'shorts') {

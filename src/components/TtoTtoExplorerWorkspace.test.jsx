@@ -47,6 +47,10 @@ describe('TtoTtoExplorerWorkspace', () => {
     expect(html).toContain('Validated idea');
     expect(html).toContain('제목 또는 채널 검색');
     expect(html).toContain('추천순');
+    expect(html).toContain('후보 시기 전체');
+    expect(html).toContain('6개월~1년');
+    expect(html).toContain('1~2년');
+    expect(html).toContain('2년 이상');
     expect(html).toContain('현재 표시 1개');
   });
 
