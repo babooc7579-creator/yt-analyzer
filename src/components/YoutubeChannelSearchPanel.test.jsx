@@ -78,5 +78,6 @@ describe('YoutubeChannelSearchPanel', () => {
     const html = renderToStaticMarkup(<YoutubeChannelSearchPanel registeredChannelIds={['channel-1']} onPrepareChannelRegistration={vi.fn()} />);
     expect(html).toContain('등록됨');
     expect(html).toContain('이미 등록된 채널');
+    expect(html).toContain('이미 등록됨');
   });
 });
