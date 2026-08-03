@@ -4,6 +4,7 @@ import {
   filterAndSortTtoTtoCandidates,
   getTtoTtoExplorerDataModel,
 } from '../utils/ttoTtoExplorer';
+import { annotateSimilarTopicVideos, getSimilarTopicGroups } from '../utils/similarTopics';
 
 export function useTtoTtoExplorerState({
   videoUserRecords,
@@ -30,6 +31,11 @@ export function useTtoTtoExplorerState({
     videoUserRecords,
     videos,
   }), [filteredCandidates, videoUserRecords, videos]);
+  const topicGroups = useMemo(() => getSimilarTopicGroups(filteredCandidates), [filteredCandidates]);
+  const groupedCandidates = useMemo(() => annotateSimilarTopicVideos(
+    filteredCandidates,
+    topicGroups,
+  ), [filteredCandidates, topicGroups]);
 
   const hasActiveFilters = Boolean(
     searchQuery.trim()
@@ -49,6 +55,7 @@ export function useTtoTtoExplorerState({
     ...dataModel,
     ageFilter,
     filteredCandidates,
+    groupedCandidates,
     hasActiveFilters,
     lengthFilter,
     minimumViews,
@@ -60,5 +67,6 @@ export function useTtoTtoExplorerState({
     setSearchQuery,
     setSortType,
     sortType,
+    topicGroups,
   };
 }

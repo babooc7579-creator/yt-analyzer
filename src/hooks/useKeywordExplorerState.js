@@ -6,6 +6,7 @@ import {
   getKeywordExplorerSummary,
   getKeywordSuggestions,
 } from '../utils/keywordExplorer';
+import { annotateSimilarTopicVideos, getSimilarTopicGroups } from '../utils/similarTopics';
 
 export function useKeywordExplorerState({ videos }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,7 +24,11 @@ export function useKeywordExplorerState({ videos }) {
     videos,
   }), [ageFilter, lengthFilter, minimumViews, searchQuery, sortType, videos]);
 
-  const displayedVideos = matchedVideos.slice(0, KEYWORD_EXPLORER_RESULT_LIMIT);
+  const topicGroups = useMemo(() => getSimilarTopicGroups(matchedVideos), [matchedVideos]);
+  const displayedVideos = useMemo(() => annotateSimilarTopicVideos(
+    matchedVideos.slice(0, KEYWORD_EXPLORER_RESULT_LIMIT),
+    topicGroups,
+  ), [matchedVideos, topicGroups]);
   const suggestions = useMemo(() => getKeywordSuggestions(videos), [videos]);
   const summary = useMemo(() => getKeywordExplorerSummary({
     matchedVideos,
@@ -65,5 +70,6 @@ export function useKeywordExplorerState({ videos }) {
     sortType,
     suggestions,
     summary,
+    topicGroups,
   };
 }

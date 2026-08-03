@@ -137,8 +137,15 @@ export const getRadarDecisionGroups = (decisionBuckets = {}) => [
 export const getRadarCandidateBadgesViewProps = ({
   isStrong = false,
   isTtoTto = false,
+  similarTopicCount = 0,
 } = {}) => ({
   badges: [
+    similarTopicCount >= 2 && {
+      className: 'inline-flex items-center gap-1 rounded-full bg-cyan-100 px-2 py-1 text-[10px] font-bold text-cyan-800',
+      iconName: 'similarTopic',
+      key: 'similarTopic',
+      label: `비슷한 주제 ${similarTopicCount}개`,
+    },
     isTtoTto && {
       className: 'inline-flex items-center gap-1 rounded-full bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white',
       iconName: 'ttoTto',
@@ -308,6 +315,7 @@ export const getRadarCandidateCardViewProps = ({
     badgesProps: {
       isStrong,
       isTtoTto,
+      similarTopicCount: sourceVideo?.similarTopic?.count || 0,
     },
     decisionActionsProps: {
       isSaved,

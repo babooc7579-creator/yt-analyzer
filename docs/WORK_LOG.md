@@ -5272,3 +5272,13 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - YouTube 신규 수집과 AI 생성은 서로 다른 사용자 동작으로 유지합니다. API 파일럿은 한 후보 단위, 자동 반복 없음, 사람 검수 필수입니다.
 - 실제 API 연결 전에는 요청량·모델 사용량·예상 비용·승인 결과·출력 위치 기록 방식을 먼저 확정합니다.
 - 이번 변경은 정책과 자원 선언 기록만 다루며 OpenAI 호출, YouTube API 호출, Azure DB 쓰기, 새 Azure 자원 생성은 실행하지 않았습니다.
+
+## 216. 2026-08-03 선언 자원 재확인·비슷한 주제 1차 묶음
+
+- 프로젝트 `.kaion/project-resources.json`과 중앙 자원 원장 2026-07-29 기준을 대조했습니다.
+- 선언된 운영 핵심은 Azure Sponsorship, GitHub, Static Web Apps, Azure Functions, Cosmos DB, YouTube Data API이며 ChatGPT·Canva·Typecast는 선택 제작 자원입니다.
+- Azure CLI 읽기 전용 확인에서 구독은 활성 상태이고 `yt-analyzer-rg`의 Static Web App·Function·Cosmos DB를 포함한 기존 지원 자원 8개를 확인했습니다.
+- GitHub 저장소의 `main` 기본 브랜치와 API 접근도 확인했습니다. YouTube 실제 할당량은 원장과 동일하게 Google Cloud Console 확인 필요 상태로 유지합니다.
+- 수집 영상 검색과 또터또 결과에서 제목 핵심어가 충분히 겹치는 항목을 최대 6개 묶음으로 계산합니다.
+- 묶음 요약과 카드의 `비슷한 주제 N개` 표시는 화면 참고 신호이며 영상·DB 문서를 통합하거나 숨기지 않습니다.
+- 새 Azure 자원·유료 서비스·백엔드 endpoint·DB 구조·AI API·YouTube API 호출은 없습니다.

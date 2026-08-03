@@ -70,6 +70,7 @@ describe('videoCard utils', () => {
       isChecked: true,
       isProductionCandidate: true,
       isSaved: true,
+      similarTopicCount: 0,
     });
     expect(props.metaActionsProps).toMatchObject({
       onFetchComments,
@@ -209,12 +210,14 @@ describe('videoCard utils', () => {
       isChecked: true,
       isProductionCandidate: true,
       isSaved: true,
+      similarTopicCount: 2,
     });
 
     expect(badges.map((badge) => badge.label)).toEqual([
       '소재 보관',
       '제작 후보',
       'AI 요청문 선택',
+      '비슷한 주제 2개',
     ]);
     expect(badges.map((badge) => badge.label)).not.toContain('후보함 등록');
     expect(badges[0].title).toContain('온라인 저장소(Azure DB)의 소재 보관함');

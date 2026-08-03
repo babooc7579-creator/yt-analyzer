@@ -62,6 +62,7 @@ describe('radarCandidates utils', () => {
     expect(viewProps.badgesProps).toEqual({
       isStrong: true,
       isTtoTto: true,
+      similarTopicCount: 0,
     });
     expect(viewProps.decisionActionsProps).toMatchObject({
       isSaved: true,

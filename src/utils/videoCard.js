@@ -51,6 +51,7 @@ export const getVideoCardStatusBadgeItems = ({
   isChecked,
   isProductionCandidate,
   isSaved,
+  similarTopicCount = 0,
 }) => [
   {
     className: 'rounded-full bg-yellow-100 px-2 py-0.5 text-[10px] font-bold text-yellow-700',
@@ -69,6 +70,12 @@ export const getVideoCardStatusBadgeItems = ({
     isVisible: isChecked,
     label: 'AI 요청문 선택',
     title: 'AI 요청문에 포함할 영상으로 화면에서 선택한 상태입니다.',
+  },
+  {
+    className: 'rounded-full bg-cyan-100 px-2 py-0.5 text-[10px] font-bold text-cyan-800',
+    isVisible: similarTopicCount >= 2,
+    label: `비슷한 주제 ${similarTopicCount}개`,
+    title: '현재 결과에서 제목 핵심어가 비슷한 영상 수입니다. AI 분석이나 저장 데이터 통합은 아닙니다.',
   },
 ];
 
@@ -180,6 +187,7 @@ export const getVideoCardViewProps = ({
       isChecked,
       isProductionCandidate,
       isSaved,
+      similarTopicCount: video?.similarTopic?.count || 0,
     },
     metaActionsProps: {
       onFetchComments,

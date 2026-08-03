@@ -262,6 +262,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '선택한 검색 영상만 기존 발견 링크 문서의 `tags`에 저장하며, 검색 결과 전체 자동 저장이나 새 Cosmos DB container는 추가하지 않습니다.',
       '`카이온학습` 채널은 자동 일괄 수집하지 않고 사용자가 고른 채널을 1개씩 명시적으로 수집합니다.',
       '업로드 기간 필터는 최신성 범위를 좁히는 역할로 사용하고, 서로 비슷한 제목·주제를 묶는 기능은 별도 후속 분석으로 분리합니다.',
+      '비슷한 주제 1차 묶음은 제목 핵심어 겹침만 화면에서 계산하며 원본 영상·Azure DB 기록을 합치거나 AI·YouTube API를 호출하지 않습니다.',
     ],
     checkpoints: [
       {
@@ -282,6 +283,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'purpose-specific-upload-date-filters',
         label: '새 YouTube 검색·수집 영상 검색·또터또 목적에 맞춘 업로드 기간 필터',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'local-similar-topic-groups',
+        label: '수집 영상 검색·또터또의 제목 핵심어 기반 비슷한 주제 묶음과 카드 표시',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
