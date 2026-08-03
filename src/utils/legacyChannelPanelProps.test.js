@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { getLegacyChannelPanelProps } from './legacyChannelPanelProps';
 
@@ -43,6 +43,7 @@ describe('legacyChannelPanelProps utils', () => {
     const deleteChannel = () => 'delete';
     const loadStoredVideosForSelectedChannels = () => 'load';
     const openNotesModal = () => 'notes';
+    const openCreatorView = vi.fn();
     const setApiKey = () => 'api';
     const toggleChannelSelection = () => 'toggle';
     const updateChannelMetadata = () => 'metadata';
@@ -51,6 +52,7 @@ describe('legacyChannelPanelProps utils', () => {
       deleteChannel,
       loadStoredVideosForSelectedChannels,
       openNotesModal,
+      openCreatorView,
       setApiKey,
       toggleChannelSelection,
       updateChannelMetadata,
@@ -60,6 +62,8 @@ describe('legacyChannelPanelProps utils', () => {
     expect(props.onDeleteChannel).toBe(deleteChannel);
     expect(props.onLoadStoredVideos).toBe(loadStoredVideosForSelectedChannels);
     expect(props.onOpenNotes).toBe(openNotesModal);
+    props.onReturnToKeywordExplorer();
+    expect(openCreatorView).toHaveBeenCalledWith({ id: 'discovery-keywords' });
     expect(props.onToggleChannelSelection).toBe(toggleChannelSelection);
     expect(props.onUpdateChannelMetadata).toBe(updateChannelMetadata);
   });

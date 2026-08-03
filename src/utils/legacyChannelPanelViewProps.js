@@ -43,6 +43,7 @@ export function getLegacyChannelPanelViewProps({
   onDeleteChannel,
   onLoadStoredVideos,
   onOpenNotes,
+  onReturnToKeywordExplorer,
   onToggleChannelSelection,
   onUpdateChannelMetadata,
   operationSource,
@@ -117,6 +118,7 @@ export function getLegacyChannelPanelViewProps({
     },
     operationSource,
     operationStage,
+    onReturnToKeywordExplorer,
     channelListProps: {
       channels: channelList,
       channelsLoading,
