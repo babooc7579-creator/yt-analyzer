@@ -20,6 +20,12 @@ describe('similar topic grouping', () => {
     ]);
   });
 
+  it('excludes years, pronouns, and recommendation phrasing from topic tokens', () => {
+    expect(getTitleTopicTokens('5 Copilot features you should use in 2026')).toEqual([
+      'copilot', 'features',
+    ]);
+  });
+
   it('groups only titles with at least two sufficiently overlapping topic tokens', () => {
     const groups = getSimilarTopicGroups(videos);
 

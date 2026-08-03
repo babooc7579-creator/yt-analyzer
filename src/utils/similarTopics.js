@@ -1,7 +1,7 @@
 const TITLE_STOP_WORDS = new Set([
   'about', 'and', 'best', 'complete', 'episode', 'for', 'from', 'guide', 'how',
-  'learn', 'new', 'official', 'part', 'shorts', 'the', 'this', 'tips', 'tutorial',
-  'update', 'updates', 'use', 'using', 'video', 'with', 'youtube',
+  'learn', 'new', 'official', 'part', 'shorts', 'should', 'the', 'this', 'tips', 'tutorial',
+  'update', 'updates', 'use', 'using', 'video', 'with', 'you', 'your', 'youtube',
   '가이드', '강의', '공개', '방법', '사용법', '실제', '영상', '완벽', '유튜브',
   '이것', '정리', '추천', '최신', '총정리', '하는', '해보기',
 ]);
@@ -15,7 +15,7 @@ export const getTitleTopicTokens = (title = '') => (
     String(title)
       .normalize('NFKC')
       .toLowerCase()
-      .match(/[가-힣]{2,}|[a-z]{3,}|\d{4}/g) || [],
+      .match(/[가-힣]{2,}|[a-z]{3,}/g) || [],
   )).filter((token) => !TITLE_STOP_WORDS.has(token))
 );
 
