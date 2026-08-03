@@ -7,6 +7,7 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
     changeFilter: vi.fn(),
     changeSort: vi.fn(),
     changeViewFilter: vi.fn(),
+    clearResults: vi.fn(),
     clearSelected: vi.fn(),
     displayedItems: [{
       channelId: 'channel-1', title: '아이디어 채널', customUrl: '@idea', description: '아이디어를 찾는 채널', country: 'KR', subscriberCount: 2000, hiddenSubscriberCount: false, totalVideoCount: 100, totalViewCount: 1000000, avgViewCount: 10000, url: 'https://www.youtube.com/channel/channel-1',
@@ -65,6 +66,9 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('국가 미등록 채널만');
     expect(html).toContain('비교 선택만 보기');
     expect(html).toContain('화면 필터 초기화');
+    expect(html).toContain('임시 결과 지우기');
+    expect(html).toContain('검색 조건을 남기고 결과·비교 선택·화면 필터만 정리');
+    expect(html).toContain('YouTube API나 Azure DB를 호출하지 않습니다');
   });
 
   it('marks a channel already present in the channel registry', () => {

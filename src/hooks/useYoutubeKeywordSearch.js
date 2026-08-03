@@ -84,6 +84,16 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   };
 
   const clearSelected = () => setSelectedIds([]);
+  const clearResults = () => {
+    setItems([]);
+    setSelectedIds([]);
+    setNextPageToken('');
+    setLastQuery('');
+    setAppliedFilters(null);
+    setChannelRegistrationFilter('all');
+    setError('');
+    setNotice('임시 영상 검색 결과를 지웠습니다. 입력한 검색 조건은 그대로 유지됩니다.');
+  };
   const removeSelected = (videoIds) => {
     const removedIds = new Set(videoIds);
     setSelectedIds((current) => current.filter((id) => !removedIds.has(id)));
@@ -94,6 +104,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     channelRegistrationFilter,
     changeChannelRegistrationFilter: setChannelRegistrationFilter,
     changeFilter,
+    clearResults,
     clearSelected,
     displayedItems,
     error,
