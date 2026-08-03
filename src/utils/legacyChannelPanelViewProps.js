@@ -45,6 +45,7 @@ export function getLegacyChannelPanelViewProps({
   onOpenNotes,
   onToggleChannelSelection,
   onUpdateChannelMetadata,
+  operationSource,
   operationStage,
   previewLoading,
   progressMsg,
@@ -114,6 +115,7 @@ export function getLegacyChannelPanelViewProps({
       startRenameCategory,
       toggleNewChannelTag,
     },
+    operationSource,
     operationStage,
     channelListProps: {
       channels: channelList,

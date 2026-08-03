@@ -31,6 +31,7 @@ export function getLegacyChannelPanelProps(props) {
     onOpenNotes: props.openNotesModal,
     onToggleChannelSelection: props.toggleChannelSelection,
     onUpdateChannelMetadata: props.updateChannelMetadata,
+    operationSource: props.creatorViewIntent?.source,
     previewLoading: props.previewLoading,
     progressMsg: props.progressMsg,
     renameLoading: props.renameLoading,

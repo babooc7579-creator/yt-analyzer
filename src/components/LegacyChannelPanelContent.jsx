@@ -22,17 +22,25 @@ const OPERATION_STAGE_COPY = {
   },
 };
 
+const OPERATION_SOURCE_COPY = {
+  'youtube-video-search': '검색 영상의 출처 채널을 등록 검토 중입니다. 주소만 미리 채웠으며, 아래에서 채널 확인과 최종 저장을 해야 등록됩니다.',
+  'youtube-channel-search': 'YouTube 채널 검색에서 찾은 채널을 등록 검토 중입니다. 주소만 미리 채웠으며, 아래에서 채널 확인과 최종 저장을 해야 등록됩니다.',
+  'youtube-channel-search-bulk': 'YouTube 채널 검색에서 고른 채널을 일괄 등록 검토 중입니다. 목록만 미리 채웠으며, 아래에서 확인과 최종 등록을 해야 저장됩니다.',
+};
+
 export default function LegacyChannelPanelContent({
   channelAddFormProps,
   channelListProps,
   footerProps,
   introProps,
+  operationSource,
   operationStage,
   showWorkPanel,
   tagTabsProps,
 }) {
   const isOperationsView = Boolean(operationStage);
   const stageCopy = OPERATION_STAGE_COPY[operationStage];
+  const sourceCopy = operationStage === 'add' ? OPERATION_SOURCE_COPY[operationSource] : null;
   const showChannelSelection = !isOperationsView || operationStage === 'manage' || operationStage === 'scan';
   const showAddForm = !isOperationsView || operationStage === 'add';
   const showFooter = !isOperationsView || operationStage === 'scan';
@@ -45,6 +53,11 @@ export default function LegacyChannelPanelContent({
             <p className="text-[10px] font-black text-indigo-600">{stageCopy.eyebrow}</p>
             <h2 className="mt-1 text-lg font-extrabold text-slate-950">{stageCopy.title}</h2>
             <p className="mt-1 text-xs leading-5 text-slate-600">{stageCopy.description}</p>
+            {sourceCopy ? (
+              <p role="status" className="mt-3 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold leading-5 text-violet-800">
+                {sourceCopy} 이동만으로 YouTube API 호출이나 영상 수집은 실행되지 않습니다.
+              </p>
+            ) : null}
           </div>
         ) : (
           <LegacyWorkPanelIntro {...introProps} />

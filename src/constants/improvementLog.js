@@ -249,6 +249,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '채널 검색 결과는 현재 시점의 누적 통계이며 실제 최근 성장률이나 추세로 표시하지 않습니다.',
       '채널 검색 결과에서 자동 등록하지 않고 기존 채널 등록의 확인·저장 단계를 유지합니다.',
       '영상 검색 결과에서도 영상 후보 저장과 출처 채널 등록 검토를 분리해 둘 다 선택할 수 있게 합니다.',
+      '채널 운영실 등록 단계에서 영상 검색·채널 검색·채널 일괄 선택 중 어느 경로에서 왔는지 표시하되, 주소와 목록만 미리 채우고 최종 확인·저장은 기존 등록 절차에서 수행합니다.',
       '검색 지역은 해당 국가에서 시청 가능한 결과, 우선 언어는 관련 결과의 우선순위라는 YouTube API 의미를 그대로 안내하며 제작 국가·엄격한 언어 제한으로 표현하지 않습니다.',
       '대한민국·한국어 우선 빠른 설정은 선택값만 바꾸며 검색 버튼을 누르기 전에는 YouTube API를 호출하지 않습니다.',
       '채널 결과 정렬은 이미 받은 결과에만 적용하며 정렬 변경으로 YouTube API를 다시 호출하지 않습니다.',
@@ -310,6 +311,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-video-channel-handoff',
         label: '키워드 영상 검색 결과의 중요 채널을 기존 채널 등록 검토로 연결',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-channel-handoff-context',
+        label: '채널 등록 검토 화면에서 영상 검색·채널 검색·일괄 선택의 출발 경로와 저장 전 상태 안내',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
