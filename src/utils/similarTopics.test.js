@@ -17,7 +17,7 @@ const videos = [
 describe('similar topic grouping', () => {
   it('normalizes titles while removing generic title words', () => {
     expect(getTitleTopicTokens('Microsoft Copilot 업무 자동화 완벽 가이드')).toEqual([
-      'microsoft', 'copilot', '업무', '자동화',
+      'copilot', '업무', '자동화',
     ]);
   });
 
@@ -31,7 +31,7 @@ describe('similar topic grouping', () => {
     const groups = getSimilarTopicGroups(videos);
 
     expect(groups).toHaveLength(1);
-    expect(groups[0]).toMatchObject({ count: 2, label: 'microsoft · copilot · 업무' });
+    expect(groups[0]).toMatchObject({ count: 2, label: 'copilot · 업무 · 자동화' });
     expect(groups[0].representativeVideoId).toBe('v1');
     expect(groups[0].videoIds).toEqual(['v1', 'v2']);
   });
@@ -48,6 +48,25 @@ describe('similar topic grouping', () => {
 
     expect(groups).toHaveLength(1);
     expect(groups[0]).toMatchObject({ count: 2, label: 'excel · formula · automation' });
+  });
+
+  it('does not group different SharePoint objects using only generic platform wording', () => {
+    const groups = getSimilarTopicGroups([
+      { videoId: 'library', title: 'How to Create a Document Library in SharePoint Online' },
+      { videoId: 'communication', title: 'How To Create Communication Site in SharePoint Online' },
+      { videoId: 'hub', title: 'Create Hub Sites in SharePoint Online' },
+    ]);
+
+    expect(groups).toEqual([]);
+  });
+
+  it('does not mix Microsoft Lists with an Excel drop-down list', () => {
+    const groups = getSimilarTopicGroups([
+      { videoId: 'lists', title: 'Microsoft Lists: The Ultimate Tutorial' },
+      { videoId: 'excel', title: 'How to Create Drop Down Lists in Microsoft Excel Cells' },
+    ]);
+
+    expect(groups).toEqual([]);
   });
 
   it('adds temporary group metadata without changing unrelated videos', () => {
