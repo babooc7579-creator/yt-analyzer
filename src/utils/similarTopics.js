@@ -1,7 +1,7 @@
 const TITLE_STOP_WORDS = new Set([
-  'about', 'and', 'best', 'complete', 'episode', 'for', 'from', 'guide', 'how',
+  'about', 'and', 'best', 'complete', 'create', 'episode', 'for', 'from', 'guide', 'how',
   'learn', 'new', 'official', 'part', 'shorts', 'should', 'the', 'this', 'tips', 'tutorial',
-  'update', 'updates', 'use', 'using', 'video', 'with', 'you', 'your', 'youtube',
+  'microsoft', 'online', 'update', 'updates', 'use', 'using', 'video', 'with', 'you', 'your', 'youtube',
   '가이드', '강의', '공개', '방법', '사용법', '실제', '영상', '완벽', '유튜브',
   '이것', '정리', '추천', '최신', '총정리', '하는', '해보기',
 ]);
