@@ -60,11 +60,13 @@
 
 | 저장값 | 화면 표시 | 의미 |
 |---|---|---|
-| `active` | 활성 | 정상 수집 대상 |
+| `active` | 활성 | 사용자가 수동 수집 대상으로 선택할 수 있음. 자동 수집 승인은 아님 |
 | `paused` | 보류 | 스캔 제외, 나중에 재검토 |
 | `discarded` | 폐기 | 자동 수집 완전 제외, 기본 숨김 |
 
 주의: `grade`와 `status`는 별개입니다. S등급 채널도 보류가 될 수 있고, C등급 채널도 활성일 수 있습니다.
+
+자동 수집 여부는 `status`가 아니라 `collectionMode`로 별도 판단합니다. 새 채널의 기본값은 `manual`이며, 야간 자동 수집은 `status: active`이면서 `collectionMode: auto`로 명시된 채널만 대상으로 합니다.
 
 ### 영상 상태 `video_user_records.statusIds`
 
