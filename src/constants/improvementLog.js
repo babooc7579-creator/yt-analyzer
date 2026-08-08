@@ -29,7 +29,7 @@ export const IMPROVEMENT_STATUS_META = {
   },
 };
 
-export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-08-03';
+export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-08-08';
 
 export const CREATOR_OS_MENU_ROLE_AUDIT = [
   { section: '디스커버리 탐색', menu: '오늘의 레이더', role: '오늘 볼 채널과 수집 영상에서 만들 소재를 결정', dataBoundary: 'Azure DB 조회·판단 기록 저장', verification: '운영 클릭 확인' },
@@ -556,16 +556,17 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     id: 'data-safety',
     title: '데이터·API 안전 검수',
     section: '전체 데이터 흐름',
-    status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+    status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
     priority: 'P1',
-    lastReviewedAt: '2026-08-03',
-    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 제작 기록 1건의 저장 왕복과 Jinxy 단일 채널 수집을 검수했으며, 수집 실행 화면의 완료 카드·최근 수집 상태 이동·새로고침 후 Azure DB 재조회까지 운영에서 확인했습니다. `카이온학습`에서는 Mike Tholfsen 1개 채널만 한 번 수집해 신규 250개·통계 갱신 250개와 Azure DB 250개 재조회를 확인했습니다. 당시 수집 완료 카드는 백엔드의 오래된 3배 기준으로 또터또 후보 19개를 표시했지만 또터또 탐색 화면은 제품 기준인 6개월 이상·1.5배 이상으로 44개를 표시했습니다. 백엔드 PR #26에서 완료 집계도 1.5배 기준으로 통일했으며 실제 재수집은 실행하지 않았습니다. 최근 수집 상태의 부분 성공은 실행 실패가 아니라 채널 전체 545개 중 현재 범위 250개가 저장되고 과거 295개가 남은 범위 상태입니다.',
+    lastReviewedAt: '2026-08-08',
+    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 운영 사용량 재점검에서 채널 등록 뒤 매일 새벽 3시 모든 활성 채널을 자동 수집하고, 채널의 전체 영상 대박지수를 매번 다시 저장하는 백엔드 불일치를 확인했습니다. 백엔드 수정안은 기존 collectionMode를 실제 실행 경계로 사용해 manual 등록 채널을 야간 자동 수집에서 제외하고, 통계 갱신과 대박지수를 합쳐 변경된 영상만 한 번 저장합니다. 자동 실행 로그도 영상 상세 배열 대신 대상 채널·실패·신규·통계 갱신·실제 저장 건수만 남기도록 축소했습니다. 로컬 백엔드 전체 테스트는 통과했으며 운영 배포와 다음 야간 실행 검수는 아직 남아 있습니다.',
     targetSummary: '화면 표시, 이동, DB 조회, DB 저장, YouTube API 수집을 모든 핵심 흐름에서 실제 결과까지 확인하고 기록합니다.',
-    nextAction: 'Mike Tholfsen 수집 영상 250개와 화면 기준 또터또 후보 44개를 Azure DB 조회만으로 검토합니다. 나머지 `카이온학습` 채널 수집은 별도 채널 선택 뒤 1개·1회 원칙으로 진행합니다.',
+    nextAction: '백엔드 Pull Request 검사 후 main 배포를 별도 승인받아 진행하고, 다음 야간 실행에서 manual 채널 0건 자동 수집·429 감소·작은 완료 로그를 읽기 전용으로 검수합니다. 자동 수집 채널 지정 화면은 필요성이 확인될 때 별도 결정합니다.',
     decisions: [
       'YouTube 새 영상 수집과 Azure DB 쓰기는 화면 이동 검수와 분리합니다.',
       '실제 저장 왕복 검수는 기존 제작 기록의 원문을 먼저 보존한 뒤 검수하고 즉시 원상복구합니다.',
       'YouTube 실제 수집 검수는 명시적으로 선택한 채널 1개를 한 번만 실행하고, 반복 실행 없이 최근 수집 상태와 Azure DB 재조회로 결과를 확인합니다.',
+      '채널의 active 상태는 수동 수집 가능 여부이고, 야간 자동 수집은 collectionMode가 auto로 명시된 경우에만 허용합니다.',
     ],
     checkpoints: [
       {
@@ -597,6 +598,21 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
         id: 'tteotteotto-threshold-alignment',
         label: '수집 완료 카드와 또터또 탐색의 후보 기준을 6개월 이상·채널 평균 1.5배 이상으로 통일',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'registered-channel-auto-scan-boundary',
+        label: '채널 등록과 야간 자동 수집 승인을 collectionMode로 분리',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+      },
+      {
+        id: 'changed-video-single-write',
+        label: '통계·대박지수 갱신을 합쳐 변경된 영상만 한 번 저장',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
+      },
+      {
+        id: 'timer-summary-observability',
+        label: '야간 자동 실행에 대상·실패·신규·갱신·저장 건수 요약 로그',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.IN_PROGRESS,
       },
     ],
   },
