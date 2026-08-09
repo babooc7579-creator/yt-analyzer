@@ -39,7 +39,11 @@ export default function ReferenceVaultSummary({
       .map(scope => ({
         id: scope.id || scope.title.trim(),
         title: scope.title.trim(),
-        videoCount: Number.isFinite(Number(scope.videoCount)) ? Math.max(0, Number(scope.videoCount)) : null,
+        videoCount: scope.videoCount !== null
+          && scope.videoCount !== undefined
+          && Number.isFinite(Number(scope.videoCount))
+          ? Math.max(0, Number(scope.videoCount))
+          : null,
       }))
     : [];
   const selectedChannelScopeList = normalizedSelectedChannelScopes.length > 0

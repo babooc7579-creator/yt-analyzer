@@ -54,4 +54,17 @@ describe('ReferenceVaultSummary', () => {
     expect(html).toContain('현재 조회 대상 · 선택 채널 0개');
     expect(html).toContain('오늘 볼 채널을 선택하면 어떤 채널의 영상인지 여기에 표시됩니다.');
   });
+
+  it('keeps a channel in the lookup-before state when its count is not available yet', () => {
+    const html = renderToStaticMarkup(
+      <ReferenceVaultSummary
+        selectedChannelCount={1}
+        selectedChannelScopes={[{ id: '1', title: 'TechByTosh', videoCount: null }]}
+      />,
+    );
+
+    expect(html).toContain('TechByTosh');
+    expect(html).toContain('조회 전');
+    expect(html).not.toContain('TechByTosh</span><span class="ml-1 text-indigo-500">· 0개');
+  });
 });
