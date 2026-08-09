@@ -41,7 +41,9 @@ describe('ReferenceVaultSummary', () => {
     expect(html).toContain('95개');
     expect(html).toContain('Mike Tholfsen');
     expect(html).toContain('외 2개');
-    expect(html).not.toContain('Scott Brant');
+    expect(html).toContain('선택 채널 전체 7개 보기');
+    expect(html).toContain('선택한 채널 전체 목록');
+    expect(html).toContain('Scott Brant');
     expect(html).toContain('선택 채널 변경');
     expect(html).toContain('sm:w-auto');
   });
@@ -66,5 +68,18 @@ describe('ReferenceVaultSummary', () => {
     expect(html).toContain('TechByTosh');
     expect(html).toContain('조회 전');
     expect(html).not.toContain('TechByTosh</span><span class="ml-1 text-indigo-500">· 0개');
+  });
+
+  it('distinguishes a completed zero-result channel from the lookup-before state', () => {
+    const html = renderToStaticMarkup(
+      <ReferenceVaultSummary
+        selectedChannelCount={1}
+        selectedChannelScopes={[{ id: '1', title: 'Zero Channel', videoCount: 0 }]}
+      />,
+    );
+
+    expect(html).toContain('Zero Channel');
+    expect(html).toContain('· 0개');
+    expect(html).not.toContain('· 조회 전');
   });
 });

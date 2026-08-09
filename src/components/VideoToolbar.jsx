@@ -15,6 +15,7 @@ export default function VideoToolbar({
   setViewFilter,
   lengthFilter,
   quickFilter,
+  quickFilterCounts,
   onResetFilters,
   selectedVideoCount,
   setLengthFilter,
@@ -82,6 +83,7 @@ export default function VideoToolbar({
 
       <VideoToolbarQuickFilters
         quickFilter={quickFilter}
+        quickFilterCounts={quickFilterCounts}
         setQuickFilter={setQuickFilter}
         setSortType={setSortType}
         {...ttoTtoButtonProps}

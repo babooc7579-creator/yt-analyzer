@@ -123,6 +123,21 @@ export default function ReferenceVaultSummary({
                 선택 채널 변경
               </button>
             ) : null}
+            {hiddenSelectedChannelCount > 0 ? (
+              <details className="w-full rounded-lg border border-indigo-200 bg-white p-2 text-left lg:max-w-2xl">
+                <summary className="cursor-pointer text-xs font-extrabold text-indigo-700">
+                  선택 채널 전체 {selectedChannelScopeList.length}개 보기
+                </summary>
+                <div className="mt-2 max-h-48 space-y-1 overflow-y-auto pr-1" aria-label="선택한 채널 전체 목록">
+                  {selectedChannelScopeList.map(scope => (
+                    <p key={`all-${scope.id}`} className="flex items-start justify-between gap-3 rounded-md bg-indigo-50 px-2.5 py-1.5 text-[11px] font-bold text-slate-700">
+                      <span className="break-all">{scope.title}</span>
+                      <span className="shrink-0 text-indigo-600">{scope.videoCount === null ? '조회 전' : `${scope.videoCount}개`}</span>
+                    </p>
+                  ))}
+                </div>
+              </details>
+            ) : null}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { Rocket } from 'lucide-react';
 import { getVideoToolbarTtoTtoButtonViewProps } from '../utils/videoToolbarProps';
 
 export default function VideoToolbarTtoTtoButton({
+  count = 0,
   setTtoTtoMode,
   ttoTtoMode,
 }) {
@@ -22,6 +23,9 @@ export default function VideoToolbarTtoTtoButton({
     >
       <Rocket className={`w-5 h-5 ${ttoTtoMode ? 'animate-bounce' : ''}`} />
       {label}
+      <span className={`rounded-full px-1.5 py-0.5 text-[10px] ${ttoTtoMode ? 'bg-white/20 text-white' : 'bg-white/70 text-orange-700'}`} aria-label={`또터또 대상 ${count === '조회 전' ? count : `${Number(count) || 0}개`}`}>
+        {count === '조회 전' ? count : Number(count) || 0}
+      </span>
     </button>
   );
 }
