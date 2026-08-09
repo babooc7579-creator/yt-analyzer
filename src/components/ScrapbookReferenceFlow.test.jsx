@@ -37,12 +37,45 @@ describe('Scrapbook and reference vault flow', () => {
     );
 
     expect(html).toContain('불러온 수집 영상 정보가 없습니다');
+    expect(html).toContain('현재 상태 · 선택 채널 0개 · 불러온 영상 0개');
+    expect(html).toContain('먼저 오늘 확인할 채널을 선택하세요');
+    expect(html).toContain('영상 자체를 고르는 것이 아니라');
     expect(html).toContain('1. 오늘 볼 채널 선택');
     expect(html).toContain('2. 수집 영상 목록 불러오기');
     expect(html).toContain('온라인 저장소(Azure DB)에 이미 보관된 수집 영상 정보를 먼저 조회합니다. 새 YouTube API 호출은 없습니다.');
     expect(html).toContain('3. 필요할 때 새 영상 수집');
     expect(html).toContain('새 데이터가 필요할 때만 선택 채널을 수집합니다. 이 단계는 YouTube API를 호출할 수 있습니다.');
     expect(html).toContain('오늘 레이더로');
+  });
+
+  it('shows a direct Azure DB lookup action when channels are already selected', () => {
+    const html = renderToStaticMarkup(
+      <ReferenceVaultEmptyState
+        actions={[]}
+        onLoadStoredVideos={noop}
+        selectedChannelCount={2}
+      />,
+    );
+
+    expect(html).toContain('오늘 볼 채널 2개가 선택되었습니다');
+    expect(html).toContain('선택 채널 수집 영상 목록 불러오기 (2개)');
+    expect(html).toContain('YouTube API를 새로 호출하지 않습니다');
+  });
+
+  it('explains the next safe action after an empty Azure DB lookup', () => {
+    const html = renderToStaticMarkup(
+      <ReferenceVaultEmptyState
+        actions={[]}
+        loadResult={{ success: true, videoCount: 0 }}
+        onLoadStoredVideos={noop}
+        onOpenSelectedScan={noop}
+        selectedChannelCount={1}
+      />,
+    );
+
+    expect(html).toContain('조회는 완료됐지만 수집된 영상 정보가 없습니다');
+    expect(html).toContain('새 영상 수집 화면 열기');
+    expect(html).toContain('이동만으로 YouTube API 호출이나 수집은 시작되지 않습니다');
   });
 
   it('renders scrapbook card buttons as URL copy, comment API, and Cloud scrapbook removal actions', () => {

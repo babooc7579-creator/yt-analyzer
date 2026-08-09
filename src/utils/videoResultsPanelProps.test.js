@@ -114,19 +114,19 @@ describe('videoResultsPanelProps utils', () => {
     });
 
     expect(actions).toHaveLength(2);
-    expect(actions.map(action => action.key)).toEqual(['home', 'channel-watchlist']);
+    expect(actions.map(action => action.key)).toEqual(['channel-watchlist', 'home']);
     expect(actions[0]).toMatchObject({
-      iconKey: 'home',
-      label: '오늘 레이더로',
-      onClick: onOpenHome,
-    });
-    expect(actions[1]).toMatchObject({
       iconKey: 'channel-watchlist',
       label: '오늘 볼 채널 선택',
       onClick: onOpenChannelWatchlist,
     });
-    expect(actions[0].title).toContain('YouTube API를 새로 호출하지 않습니다');
-    expect(actions[1].title).toContain('조회, 저장, 새 영상 수집 또는 YouTube API 호출은 실행하지 않습니다');
+    expect(actions[1]).toMatchObject({
+      iconKey: 'home',
+      label: '오늘 레이더로',
+      onClick: onOpenHome,
+    });
+    expect(actions[0].title).toContain('조회, 저장, 새 영상 수집 또는 YouTube API 호출은 실행하지 않습니다');
+    expect(actions[1].title).toContain('YouTube API를 새로 호출하지 않습니다');
   });
 
   it('omits reference vault actions when navigation handlers are unavailable', () => {
@@ -150,9 +150,32 @@ describe('videoResultsPanelProps utils', () => {
     });
 
     expect(props.referenceVaultEmptyStateProps.actions.map(action => action.key)).toEqual([
-      'home',
       'channel-watchlist',
+      'home',
     ]);
+  });
+
+  it('passes selected channel and stored lookup state to the reference vault empty state', () => {
+    const onLoadStoredVideos = () => 'load';
+    const onOpenSelectedScan = () => 'scan';
+    const storedVideoLoadResult = { success: true, videoCount: 0 };
+    const props = getVideoResultsPanelViewProps({
+      ...baseHandlers,
+      onLoadStoredVideos,
+      onOpenSelectedScan,
+      selectedChannelCount: 3,
+      storedVideoLoadPending: true,
+      storedVideoLoadResult,
+      videos: [],
+    });
+
+    expect(props.referenceVaultEmptyStateProps).toMatchObject({
+      loading: true,
+      loadResult: storedVideoLoadResult,
+      onLoadStoredVideos,
+      onOpenSelectedScan,
+      selectedChannelCount: 3,
+    });
   });
 
   it('builds a filter empty-state reset action without scan, save, or API side effects', () => {

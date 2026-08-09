@@ -10,14 +10,6 @@ export const getReferenceVaultEmptyStateActions = ({
   onOpenChannelWatchlist,
   onOpenHome,
 } = {}) => ([
-  isFunction(onOpenHome) ? {
-    key: 'home',
-    iconKey: 'home',
-    label: REFERENCE_VAULT_EMPTY_STATE.homeButton.label,
-    title: REFERENCE_VAULT_EMPTY_STATE.homeButton.title,
-    ariaLabel: REFERENCE_VAULT_EMPTY_STATE.homeButton.ariaLabel,
-    onClick: onOpenHome,
-  } : null,
   isFunction(onOpenChannelWatchlist) ? {
     key: 'channel-watchlist',
     iconKey: 'channel-watchlist',
@@ -25,6 +17,14 @@ export const getReferenceVaultEmptyStateActions = ({
     title: REFERENCE_VAULT_EMPTY_STATE.channelWatchlistButton.title,
     ariaLabel: REFERENCE_VAULT_EMPTY_STATE.channelWatchlistButton.ariaLabel,
     onClick: onOpenChannelWatchlist,
+  } : null,
+  isFunction(onOpenHome) ? {
+    key: 'home',
+    iconKey: 'home',
+    label: REFERENCE_VAULT_EMPTY_STATE.homeButton.label,
+    title: REFERENCE_VAULT_EMPTY_STATE.homeButton.title,
+    ariaLabel: REFERENCE_VAULT_EMPTY_STATE.homeButton.ariaLabel,
+    onClick: onOpenHome,
   } : null,
 ]).filter(Boolean);
 
@@ -49,11 +49,16 @@ export const getVideoResultsPanelViewProps = ({
   onFetchComments,
   onOpenChannelWatchlist,
   onOpenHome,
+  onOpenSelectedScan,
+  onLoadStoredVideos,
   onPromoteToProduction,
   onResetFilters,
   onToggleCheck,
   onToggleScrap,
   showWorkPanel,
+  selectedChannelCount,
+  storedVideoLoadPending,
+  storedVideoLoadResult,
   videos,
 }) => {
   const checkedVideoList = toArray(checkedVideos);
@@ -82,6 +87,11 @@ export const getVideoResultsPanelViewProps = ({
         onOpenChannelWatchlist,
         onOpenHome,
       }),
+      loading: storedVideoLoadPending,
+      loadResult: storedVideoLoadResult,
+      onLoadStoredVideos,
+      onOpenSelectedScan,
+      selectedChannelCount,
     },
     listTableProps: {
       videos: filteredVideoList,

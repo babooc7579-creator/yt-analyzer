@@ -114,6 +114,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
     const isProductionCandidate = () => true;
     const isVideoSaved = () => true;
     const openCreatorView = () => 'open';
+    const loadStoredVideosForSelectedChannels = () => 'load';
     const promoteVideoToProduction = () => 'promote';
     const setLengthFilter = () => 'length';
     const setSearchKeyword = () => 'search';
@@ -132,6 +133,7 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
       handleManualScan,
       isProductionCandidate,
       isVideoSaved,
+      loadStoredVideosForSelectedChannels,
       openCreatorView,
       promoteVideoToProduction,
       setLengthFilter,
@@ -141,6 +143,8 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
       setTtoTtoMode,
       setViewFilter,
       setViewMode,
+      storedVideoLoadPending: true,
+      storedVideoLoadResult: { success: true, videoCount: 0 },
       toggleCheckVideo,
       toggleScrapVideo,
     });
@@ -152,6 +156,9 @@ describe('legacyWorkspaceMainPanelViewProps utils', () => {
     expect(props.dashboardTabProps.isProductionCandidate).toBe(isProductionCandidate);
     expect(props.dashboardTabProps.isVideoSaved).toBe(isVideoSaved);
     expect(props.dashboardTabProps.openCreatorView).toBe(openCreatorView);
+    expect(props.dashboardTabProps.loadStoredVideosForSelectedChannels).toBe(loadStoredVideosForSelectedChannels);
+    expect(props.dashboardTabProps.storedVideoLoadPending).toBe(true);
+    expect(props.dashboardTabProps.storedVideoLoadResult).toEqual({ success: true, videoCount: 0 });
     expect(props.dashboardTabProps.promoteVideoToProduction).toBe(promoteVideoToProduction);
     expect(props.dashboardTabProps.setLengthFilter).toBe(setLengthFilter);
     expect(props.dashboardTabProps.setSearchKeyword).toBe(setSearchKeyword);
