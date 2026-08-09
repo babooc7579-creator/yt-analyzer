@@ -1,3 +1,5 @@
+import { getCollectedVideoQuickFilterCounts } from './video';
+
 const toArray = (items) => (Array.isArray(items) ? items : []);
 
 const toVideoList = (videos) => (
@@ -66,6 +68,9 @@ export function getLegacyDashboardTabViewProps({
     .map(title => title.trim());
   const videoList = toVideoList(videos);
   const hasLoadedSelectedChannels = Boolean(storedVideoLoadResult?.success);
+  const quickFilterCounts = hasLoadedSelectedChannels
+    ? getCollectedVideoQuickFilterCounts(videoList)
+    : { recent30: null, oldPopular: null, ttoTto: null };
   const selectedChannelScopes = savedChannelList
     .filter(channel => channel && selectedChannelIdSet.has(channel.id))
     .map((channel) => ({
@@ -119,6 +124,7 @@ export function getLegacyDashboardTabViewProps({
         : undefined,
       onResetFilters: resetFilters,
       quickFilter,
+      quickFilterCounts,
       savedChannelCount: savedChannelList.length,
       savedVideoCount: savedVideoList.length,
       scannableChannelCount,

@@ -5,6 +5,7 @@ import {
   TTOTTO_MIN_DAYS_OLD,
   TTOTTO_MIN_MULTIPLIER,
   filterAndSortVideos,
+  getCollectedVideoQuickFilterCounts,
   hasStrongReaction,
   isTtoTtoCandidate,
   mapCloudVideoToViewModel,
@@ -233,6 +234,15 @@ describe('video utils', () => {
       quickFilter: 'recent30',
       sortType: 'recommended',
     })).toEqual([]);
+  });
+
+  it('counts each collected-video quick view from the loaded list', () => {
+    expect(getCollectedVideoQuickFilterCounts([
+      { videoId: 'recent', daysOld: 7, view_count: 10, multiplier: 1 },
+      { videoId: 'old-popular', daysOld: 200, view_count: 100000, multiplier: 1 },
+      { videoId: 'tteotteotto', daysOld: 300, view_count: 20000, multiplier: 2 },
+      null,
+    ])).toEqual({ recent30: 1, oldPopular: 1, ttoTto: 1 });
   });
 
   it('sorts numeric string fields without mutating the source list', () => {

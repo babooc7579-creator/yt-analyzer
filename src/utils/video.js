@@ -88,6 +88,15 @@ export const isOldPopularCollectedVideo = (video) => (
   && Number(video?.view_count || 0) >= 100000
 );
 
+export const getCollectedVideoQuickFilterCounts = (videos) => {
+  const videoList = toVideoList(videos);
+  return {
+    recent30: videoList.filter(isRecentCollectedVideo).length,
+    oldPopular: videoList.filter(isOldPopularCollectedVideo).length,
+    ttoTto: videoList.filter(isTtoTtoCandidate).length,
+  };
+};
+
 const compareRecommendedVideos = (left, right) => {
   const ttoTtoDifference = Number(isTtoTtoCandidate(right)) - Number(isTtoTtoCandidate(left));
   if (ttoTtoDifference !== 0) return ttoTtoDifference;

@@ -21,11 +21,18 @@ const QUICK_FILTERS = [
 
 export default function VideoToolbarQuickFilters({
   quickFilter,
+  quickFilterCounts = {},
   setQuickFilter,
   setSortType,
   setTtoTtoMode,
   ttoTtoMode,
 }) {
+  const getCountLabel = (filterId) => {
+    const value = quickFilterCounts[filterId];
+    return value !== null && value !== undefined && Number.isFinite(Number(value))
+      ? Number(value)
+      : '조회 전';
+  };
   const selectQuickFilter = (filter) => {
     const nextFilter = quickFilter === filter.id ? 'all' : filter.id;
     setQuickFilter(nextFilter);
@@ -49,6 +56,7 @@ export default function VideoToolbarQuickFilters({
       {QUICK_FILTERS.map((filter) => {
         const Icon = filter.icon;
         const isActive = quickFilter === filter.id;
+        const countLabel = getCountLabel(filter.id);
         return (
           <button
             key={filter.id}
@@ -61,11 +69,15 @@ export default function VideoToolbarQuickFilters({
           >
             <Icon className="h-3.5 w-3.5" />
             {filter.label}
+            <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] text-slate-600" aria-label={`${filter.label} 대상 ${countLabel === '조회 전' ? countLabel : `${countLabel}개`}`}>
+              {countLabel}
+            </span>
           </button>
         );
       })}
       <div className="w-full sm:w-auto [&>button]:w-full sm:[&>button]:w-auto">
         <VideoToolbarTtoTtoButton
+          count={getCountLabel('ttoTto')}
           setTtoTtoMode={toggleTtoTtoMode}
           ttoTtoMode={ttoTtoMode}
         />

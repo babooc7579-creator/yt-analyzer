@@ -42,6 +42,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       isScanning: false,
       lengthFilter: 'shorts',
       promptCopyError: 'copy failed',
+      quickFilterCounts: { recent30: null, oldPopular: null, ttoTto: null },
       savedChannelCount: 2,
       savedVideoCount: 1,
       scannableChannelCount: 2,
@@ -103,6 +104,18 @@ describe('legacyDashboardTabViewProps utils', () => {
     }).controlsProps.selectedChannelScopes).toEqual([
       { id: 'channel1', title: 'TechByTosh', videoCount: 2 },
       { id: 'channel2', title: 'David Fortin', videoCount: 1 },
+    ]);
+    expect(getLegacyDashboardTabViewProps({
+      ...baseProps,
+      storedVideoLoadResult: { success: true, videoCount: 3 },
+    }).controlsProps.quickFilterCounts).toEqual({ recent30: 0, oldPopular: 0, ttoTto: 0 });
+    expect(getLegacyDashboardTabViewProps({
+      savedChannels: [{ id: 'channel1', title: 'Zero Channel' }],
+      selectedChannelIds: ['channel1'],
+      videos: [],
+      storedVideoLoadResult: { success: true, videoCount: 0 },
+    }).controlsProps.selectedChannelScopes).toEqual([
+      { id: 'channel1', title: 'Zero Channel', videoCount: 0 },
     ]);
   });
 
