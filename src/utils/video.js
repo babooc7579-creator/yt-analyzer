@@ -74,11 +74,39 @@ export const hasStrongReaction = (video) => (
   Number(video?.multiplier || 0) >= STRONG_REACTION_MULTIPLIER
 );
 
+export const isRecentCollectedVideo = (video) => {
+  const daysOld = Number(video?.daysOld);
+  return video?.daysOld !== null
+    && video?.daysOld !== undefined
+    && Number.isFinite(daysOld)
+    && daysOld >= 0
+    && daysOld <= 30;
+};
+
+export const isOldPopularCollectedVideo = (video) => (
+  Number(video?.daysOld || 0) >= TTOTTO_MIN_DAYS_OLD
+  && Number(video?.view_count || 0) >= 100000
+);
+
+const compareRecommendedVideos = (left, right) => {
+  const ttoTtoDifference = Number(isTtoTtoCandidate(right)) - Number(isTtoTtoCandidate(left));
+  if (ttoTtoDifference !== 0) return ttoTtoDifference;
+
+  const multiplierDifference = toNumber(right.multiplier) - toNumber(left.multiplier);
+  if (multiplierDifference !== 0) return multiplierDifference;
+
+  const velocityDifference = toNumber(right.views_per_day) - toNumber(left.views_per_day);
+  if (velocityDifference !== 0) return velocityDifference;
+
+  return toNumber(right.view_count) - toNumber(left.view_count);
+};
+
 export const filterAndSortVideos = ({
   videos,
   searchKeyword,
   viewFilter,
   lengthFilter,
+  quickFilter,
   ttoTtoMode,
   sortType,
 }) => {
@@ -93,9 +121,12 @@ export const filterAndSortVideos = ({
   if (minimumViews > 0) result = result.filter((video) => toNumber(video.view_count) >= minimumViews);
   if (lengthFilter === 'shorts') result = result.filter((video) => video.isShorts);
   else if (lengthFilter === 'long') result = result.filter((video) => !video.isShorts);
+  if (quickFilter === 'recent30') result = result.filter(isRecentCollectedVideo);
+  else if (quickFilter === 'oldPopular') result = result.filter(isOldPopularCollectedVideo);
   if (ttoTtoMode) result = result.filter(isTtoTtoCandidate);
 
-  if (sortType === 'date') result.sort((a, b) => toNumber(a.daysOld) - toNumber(b.daysOld));
+  if (sortType === 'recommended') result.sort(compareRecommendedVideos);
+  else if (sortType === 'date') result.sort((a, b) => toNumber(a.daysOld) - toNumber(b.daysOld));
   else if (sortType === 'views') result.sort((a, b) => toNumber(b.view_count) - toNumber(a.view_count));
   else if (sortType === 'multiplier') result.sort((a, b) => toNumber(b.multiplier) - toNumber(a.multiplier));
   else if (sortType === 'viral') result.sort((a, b) => toNumber(b.views_per_day) - toNumber(a.views_per_day));

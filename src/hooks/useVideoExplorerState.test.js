@@ -35,14 +35,16 @@ describe('useVideoExplorerState', () => {
     expect(useState).toHaveBeenNthCalledWith(1, '');
     expect(useState).toHaveBeenNthCalledWith(2, 0);
     expect(useState).toHaveBeenNthCalledWith(3, 'all');
-    expect(useState).toHaveBeenNthCalledWith(4, false);
-    expect(useState).toHaveBeenNthCalledWith(5, 'multiplier');
-    expect(useState).toHaveBeenNthCalledWith(6, 'card');
+    expect(useState).toHaveBeenNthCalledWith(4, 'all');
+    expect(useState).toHaveBeenNthCalledWith(5, false);
+    expect(useState).toHaveBeenNthCalledWith(6, 'recommended');
+    expect(useState).toHaveBeenNthCalledWith(7, 'card');
     expect(explorerState.searchKeyword).toBe('');
     expect(explorerState.viewFilter).toBe(0);
     expect(explorerState.lengthFilter).toBe('all');
+    expect(explorerState.quickFilter).toBe('all');
     expect(explorerState.ttoTtoMode).toBe(false);
-    expect(explorerState.sortType).toBe('multiplier');
+    expect(explorerState.sortType).toBe('recommended');
     expect(explorerState.viewMode).toBe('card');
   });
 
@@ -56,16 +58,18 @@ describe('useVideoExplorerState', () => {
       '',
       0,
       'all',
+      'all',
       false,
-      'multiplier',
+      'recommended',
     ]);
     expect(filterAndSortVideos).toHaveBeenCalledWith({
       videos,
       searchKeyword: '',
       viewFilter: 0,
       lengthFilter: 'all',
+      quickFilter: 'all',
       ttoTtoMode: false,
-      sortType: 'multiplier',
+      sortType: 'recommended',
     });
     expect(explorerState.filteredAndSortedVideos).toEqual([{ videoId: 'filtered-video' }]);
   });
@@ -76,8 +80,9 @@ describe('useVideoExplorerState', () => {
     expect(explorerState.setSearchKeyword).toBe(stateSetters[0]);
     expect(explorerState.setViewFilter).toBe(stateSetters[1]);
     expect(explorerState.setLengthFilter).toBe(stateSetters[2]);
-    expect(explorerState.setTtoTtoMode).toBe(stateSetters[3]);
-    expect(explorerState.setSortType).toBe(stateSetters[4]);
-    expect(explorerState.setViewMode).toBe(stateSetters[5]);
+    expect(explorerState.setQuickFilter).toBe(stateSetters[3]);
+    expect(explorerState.setTtoTtoMode).toBe(stateSetters[4]);
+    expect(explorerState.setSortType).toBe(stateSetters[5]);
+    expect(explorerState.setViewMode).toBe(stateSetters[6]);
   });
 });

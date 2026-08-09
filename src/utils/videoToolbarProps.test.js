@@ -15,11 +15,13 @@ describe('videoToolbarProps utils', () => {
     handleManualScan: () => 'scan',
     isScanning: false,
     lengthFilter: 'shorts',
+    quickFilter: 'recent30',
     onOpenRecentScanStatus: () => 'recent scans',
     scannableChannelCount: 5,
     searchKeyword: 'idea',
     selectedChannelCount: 3,
     setLengthFilter: () => 'length',
+    setQuickFilter: () => 'quick filter',
     setSearchKeyword: () => 'search',
     setShowWorkPanel: () => 'panel',
     setSortType: () => 'sort',
@@ -39,6 +41,7 @@ describe('videoToolbarProps utils', () => {
 
     expect(props.filtersProps).toMatchObject({
       lengthFilter: 'shorts',
+      quickFilter: 'recent30',
       searchKeyword: 'idea',
       showWorkPanel: true,
       sortType: 'views',

@@ -1,8 +1,8 @@
 import { getVideoToolbarViewProps } from '../utils/videoToolbarProps';
 import VideoToolbarFilters from './VideoToolbarFilters';
 import VideoToolbarReferenceHeader from './VideoToolbarReferenceHeader';
+import VideoToolbarQuickFilters from './VideoToolbarQuickFilters';
 import VideoToolbarScanAction from './VideoToolbarScanAction';
-import VideoToolbarTtoTtoButton from './VideoToolbarTtoTtoButton';
 
 export default function VideoToolbar({
   isReferenceVaultView,
@@ -14,9 +14,11 @@ export default function VideoToolbar({
   viewFilter,
   setViewFilter,
   lengthFilter,
+  quickFilter,
   onResetFilters,
   selectedVideoCount,
   setLengthFilter,
+  setQuickFilter,
   sortType,
   setSortType,
   viewMode,
@@ -44,6 +46,7 @@ export default function VideoToolbar({
     handleManualScan,
     isScanning,
     lengthFilter,
+    quickFilter,
     onResetFilters,
     onOpenRecentScanStatus,
     scannableChannelCount,
@@ -51,6 +54,7 @@ export default function VideoToolbar({
     selectedVideoCount,
     selectedChannelCount,
     setLengthFilter,
+    setQuickFilter,
     setSearchKeyword,
     setShowWorkPanel,
     setSortType,
@@ -76,7 +80,12 @@ export default function VideoToolbar({
 
       <VideoToolbarScanAction {...scanActionProps} />
 
-      <VideoToolbarTtoTtoButton {...ttoTtoButtonProps} />
+      <VideoToolbarQuickFilters
+        quickFilter={quickFilter}
+        setQuickFilter={setQuickFilter}
+        setSortType={setSortType}
+        {...ttoTtoButtonProps}
+      />
     </div>
   );
 }

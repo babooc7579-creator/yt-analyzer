@@ -20,7 +20,7 @@ export default function VideoToolbarSelectFilters({
       <select
         value={viewFilter}
         onChange={(e) => setViewFilter(Number(e.target.value))}
-        className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none cursor-pointer text-slate-700 font-medium"
+        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none cursor-pointer text-slate-700 font-medium sm:w-auto"
         title={viewFilterTitle}
         aria-label={viewFilterAriaLabel}
       >
@@ -32,7 +32,7 @@ export default function VideoToolbarSelectFilters({
       <select
         value={lengthFilter}
         onChange={(e) => setLengthFilter(e.target.value)}
-        className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none cursor-pointer text-slate-700 font-medium"
+        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm outline-none cursor-pointer text-slate-700 font-medium sm:w-auto"
         title={lengthFilterTitle}
         aria-label={lengthFilterAriaLabel}
       >

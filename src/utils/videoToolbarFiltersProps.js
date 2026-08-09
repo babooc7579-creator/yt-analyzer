@@ -1,9 +1,11 @@
 export const getVideoToolbarFiltersViewProps = ({
   lengthFilter,
   onResetFilters,
+  quickFilter,
   searchKeyword,
   selectedVideoCount,
   setLengthFilter,
+  setQuickFilter,
   setSearchKeyword,
   setShowWorkPanel,
   setSortType,
@@ -34,6 +36,7 @@ export const getVideoToolbarFiltersViewProps = ({
       Boolean(searchKeyword?.trim()),
       Number(viewFilter) > 0,
       Boolean(lengthFilter && lengthFilter !== 'all'),
+      Boolean(quickFilter && quickFilter !== 'all'),
       Boolean(ttoTtoMode),
     ].filter(Boolean).length,
     onResetFilters,
@@ -77,6 +80,15 @@ export const getVideoToolbarSelectFiltersViewProps = () => ({
 });
 
 export const getVideoToolbarSortControlOptions = () => [
+  {
+    value: 'recommended',
+    label: '추천순',
+    title: '또터또 후보를 먼저 두고 대박 지수, 일평균 반응, 조회수 순으로 현재 수집 영상 정보를 정렬합니다. YouTube API를 새로 호출하지 않습니다.',
+    ariaLabel: '추천순 정렬, 또터또 여부와 대박 지수 및 반응 기준, 화면 정렬만 변경, YouTube API 호출 없음',
+    activeClassName: 'text-emerald-700',
+    inactiveClassName: 'text-slate-500 hover:text-slate-800',
+    fontClassName: 'font-bold',
+  },
   {
     value: 'multiplier',
     label: '대박지수',

@@ -79,6 +79,33 @@ describe('legacyDashboardTabViewProps utils', () => {
     expect(copiedVideos).toEqual([selectedVideo]);
   });
 
+  it('summarizes selected channel video counts only after a successful Azure DB lookup', () => {
+    const baseProps = {
+      savedChannels: [
+        { id: 'channel1', title: 'TechByTosh' },
+        { id: 'channel2', title: 'David Fortin' },
+      ],
+      selectedChannelIds: ['channel1', 'channel2'],
+      videos: [
+        { videoId: 'v1', channel_id: 'channel1', channel_title: 'TechByTosh' },
+        { videoId: 'v2', channel_id: 'channel1', channel_title: 'TechByTosh' },
+        { videoId: 'v3', channel_id: 'channel2', channel_title: 'David Fortin' },
+      ],
+    };
+
+    expect(getLegacyDashboardTabViewProps(baseProps).controlsProps.selectedChannelScopes).toEqual([
+      { id: 'channel1', title: 'TechByTosh', videoCount: null },
+      { id: 'channel2', title: 'David Fortin', videoCount: null },
+    ]);
+    expect(getLegacyDashboardTabViewProps({
+      ...baseProps,
+      storedVideoLoadResult: { success: true, videoCount: 3 },
+    }).controlsProps.selectedChannelScopes).toEqual([
+      { id: 'channel1', title: 'TechByTosh', videoCount: 2 },
+      { id: 'channel2', title: 'David Fortin', videoCount: 1 },
+    ]);
+  });
+
   it('forwards result actions, setters, and display options', () => {
     const clearCheckedVideos = () => 'clear';
     const fetchTopComments = () => 'comments';
@@ -91,6 +118,7 @@ describe('legacyDashboardTabViewProps utils', () => {
     const promoteVideoToProduction = () => 'promote';
     const filterResets = [];
     const setLengthFilter = (value) => filterResets.push(['length', value]);
+    const setQuickFilter = (value) => filterResets.push(['quick', value]);
     const setSearchKeyword = (value) => filterResets.push(['search', value]);
     const setShowWorkPanel = () => 'work';
     const setSortType = () => 'sort';
@@ -113,6 +141,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       openCreatorView,
       promoteVideoToProduction,
       setLengthFilter,
+      setQuickFilter,
       setSearchKeyword,
       setShowWorkPanel,
       setSortType,
@@ -130,6 +159,7 @@ describe('legacyDashboardTabViewProps utils', () => {
     });
 
     expect(props.controlsProps.onManualScan).toBe(handleManualScan);
+    props.controlsProps.onChangeSelectedChannels();
     expect(props.controlsProps.onClearSelection).toBe(clearCheckedVideos);
     expect(props.controlsProps.setLengthFilter).toBe(setLengthFilter);
     expect(props.controlsProps.setSearchKeyword).toBe(setSearchKeyword);
@@ -153,6 +183,7 @@ describe('legacyDashboardTabViewProps utils', () => {
     props.resultsPanelProps.onOpenChannelWatchlist();
     props.resultsPanelProps.onOpenSelectedScan();
     expect(openedViews).toEqual([
+      { id: 'discovery-watchlist' },
       { id: 'home' },
       { id: 'discovery-watchlist' },
       { id: 'ops-channels', intent: { operationStage: 'scan' } },
@@ -167,6 +198,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       ['search', ''],
       ['view', 0],
       ['length', 'all'],
+      ['quick', 'all'],
       ['tteotteotto', false],
     ]);
     expect(props.resultsPanelProps.onToggleCheck).toBe(toggleCheckVideo);

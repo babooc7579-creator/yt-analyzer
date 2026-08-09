@@ -118,14 +118,15 @@ describe('videoToolbarFiltersProps utils', () => {
 
   it('builds sort control options in display order', () => {
     expect(getVideoToolbarSortControlOptions().map((option) => option.value)).toEqual([
+      'recommended',
       'multiplier',
       'viral',
       'date',
       'likes',
     ]);
     expect(getVideoToolbarSortControlOptions()[0]).toMatchObject({
-      ariaLabel: '대박 지수 높은 순 정렬, 화면 정렬만 변경, YouTube API 호출 없음',
-      label: '대박지수',
+      ariaLabel: '추천순 정렬, 또터또 여부와 대박 지수 및 반응 기준, 화면 정렬만 변경, YouTube API 호출 없음',
+      label: '추천순',
     });
     expect(getVideoToolbarSortControlOptions().every(option => (
       option.title.includes('YouTube API를 새로 호출하지 않습니다')
