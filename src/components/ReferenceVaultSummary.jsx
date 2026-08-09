@@ -18,9 +18,25 @@ export default function ReferenceVaultSummary({
   videoCount,
   channelCount,
   scrapCount,
+  selectedChannelCount = 0,
+  selectedChannelTitles = [],
   visibleScrapCount,
   ttoTtoCount,
 }) {
+  const safeSelectedChannelCount = Number.isFinite(Number(selectedChannelCount))
+    ? Math.max(0, Number(selectedChannelCount))
+    : 0;
+  const normalizedSelectedChannelTitles = Array.isArray(selectedChannelTitles)
+    ? [...new Set(selectedChannelTitles
+      .filter(title => typeof title === 'string' && title.trim())
+      .map(title => title.trim()))]
+    : [];
+  const visibleSelectedChannelTitles = normalizedSelectedChannelTitles.slice(0, 5);
+  const hiddenSelectedChannelCount = Math.max(
+    0,
+    safeSelectedChannelCount - visibleSelectedChannelTitles.length,
+    normalizedSelectedChannelTitles.length - visibleSelectedChannelTitles.length,
+  );
   const summaryValues = {
     videoCount,
     channelCount,
@@ -48,6 +64,33 @@ export default function ReferenceVaultSummary({
               tone={tone}
             />
           ))}
+        </div>
+      </div>
+
+      <div className="border-t border-slate-300/70 bg-indigo-50/70 px-5 py-3" role="region" aria-label="현재 수집 영상 조회 대상 채널">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="text-[11px] font-black text-indigo-700">현재 조회 대상 · 선택 채널 {safeSelectedChannelCount}개</p>
+            <p className="mt-0.5 text-xs text-slate-600">
+              {safeSelectedChannelCount > 0
+                ? '선택한 채널 범위의 수집 영상 정보를 Azure DB에서 조회합니다.'
+                : '오늘 볼 채널을 선택하면 어떤 채널의 영상인지 여기에 표시됩니다.'}
+            </p>
+          </div>
+          {visibleSelectedChannelTitles.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5" aria-label="선택한 채널 이름">
+              {visibleSelectedChannelTitles.map(title => (
+                <span key={title} className="rounded-full border border-indigo-200 bg-white px-2.5 py-1 text-[11px] font-extrabold text-indigo-800">
+                  {title}
+                </span>
+              ))}
+              {hiddenSelectedChannelCount > 0 ? (
+                <span className="rounded-full border border-slate-300 bg-slate-100 px-2.5 py-1 text-[11px] font-extrabold text-slate-700">
+                  외 {hiddenSelectedChannelCount}개
+                </span>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
 
