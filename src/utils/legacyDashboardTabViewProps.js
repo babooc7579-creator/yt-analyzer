@@ -25,12 +25,14 @@ export function getLegacyDashboardTabViewProps({
   openCreatorView,
   promoteVideoToProduction,
   promptCopyError,
+  quickFilter,
   savedChannels,
   savedVideos,
   scannableChannelCount,
   searchKeyword,
   selectedChannelIds,
   setLengthFilter,
+  setQuickFilter,
   setSearchKeyword,
   setShowWorkPanel,
   setSortType,
@@ -63,10 +65,25 @@ export function getLegacyDashboardTabViewProps({
     .filter(title => typeof title === 'string' && title.trim())
     .map(title => title.trim());
   const videoList = toVideoList(videos);
+  const hasLoadedSelectedChannels = Boolean(storedVideoLoadResult?.success);
+  const selectedChannelScopes = savedChannelList
+    .filter(channel => channel && selectedChannelIdSet.has(channel.id))
+    .map((channel) => ({
+      id: channel.id,
+      title: typeof channel.title === 'string' ? channel.title.trim() : '',
+      videoCount: hasLoadedSelectedChannels
+        ? videoList.filter(video => (
+          video.channel_id === channel.id
+          || (!video.channel_id && video.channel_title === channel.title)
+        )).length
+        : null,
+    }))
+    .filter(channel => channel.title);
   const selectedVideos = videoList.filter(video => checkedVideoIds.includes(video.videoId));
   const canOpenCreatorView = isFunction(openCreatorView);
   const canResetFilters = [
     setLengthFilter,
+    setQuickFilter,
     setSearchKeyword,
     setTtoTtoMode,
     setViewFilter,
@@ -75,6 +92,7 @@ export function getLegacyDashboardTabViewProps({
     setSearchKeyword('');
     setViewFilter(0);
     setLengthFilter('all');
+    setQuickFilter('all');
     setTtoTtoMode(false);
   } : undefined;
 
@@ -90,6 +108,9 @@ export function getLegacyDashboardTabViewProps({
       isReferenceVaultView,
       isScanning,
       lengthFilter,
+      onChangeSelectedChannels: canOpenCreatorView
+        ? () => openCreatorView({ id: 'discovery-watchlist' })
+        : undefined,
       onClearSelection: clearCheckedVideos,
       onCopyPrompt: () => copyPromptForVideos(selectedVideos),
       onManualScan: handleManualScan,
@@ -97,13 +118,16 @@ export function getLegacyDashboardTabViewProps({
         ? () => openCreatorView({ id: 'ops-scan-log' })
         : undefined,
       onResetFilters: resetFilters,
+      quickFilter,
       savedChannelCount: savedChannelList.length,
       savedVideoCount: savedVideoList.length,
       scannableChannelCount,
       searchKeyword,
       selectedChannelCount: selectedChannels.length,
+      selectedChannelScopes,
       selectedChannelTitles,
       setLengthFilter,
+      setQuickFilter,
       setSearchKeyword,
       setShowWorkPanel,
       setSortType,

@@ -204,6 +204,37 @@ describe('video utils', () => {
     ]);
   });
 
+  it('uses explainable recommended order and quick collected-video filters', () => {
+    expect(filterAndSortVideos({ videos, sortType: 'recommended' }).map(video => video.videoId)).toEqual([
+      'old-viral-short',
+      'old-steady-long',
+      'new-long',
+    ]);
+
+    expect(filterAndSortVideos({
+      videos,
+      quickFilter: 'recent30',
+      sortType: 'recommended',
+    }).map(video => video.videoId)).toEqual(['new-long']);
+
+    expect(filterAndSortVideos({
+      videos: [
+        ...videos,
+        { videoId: 'old-popular', daysOld: 181, view_count: 100000, multiplier: 1 },
+      ],
+      quickFilter: 'oldPopular',
+      sortType: 'recommended',
+    }).map(video => video.videoId)).toEqual(['old-popular']);
+  });
+
+  it('does not treat a video with missing age data as recently uploaded', () => {
+    expect(filterAndSortVideos({
+      videos: [{ videoId: 'unknown-age', daysOld: undefined, view_count: 100 }],
+      quickFilter: 'recent30',
+      sortType: 'recommended',
+    })).toEqual([]);
+  });
+
   it('sorts numeric string fields without mutating the source list', () => {
     const sourceVideos = [
       { videoId: 'low', view_count: '10', views_per_day: '1', multiplier: '1' },

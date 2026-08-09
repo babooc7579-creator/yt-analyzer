@@ -9,7 +9,17 @@ describe('ReferenceVaultSummary', () => {
       <ReferenceVaultSummary
         channelCount={21}
         scrapCount={1}
+        onChangeSelectedChannels={() => {}}
         selectedChannelCount={7}
+        selectedChannelScopes={[
+          { id: '1', title: 'TechByTosh', videoCount: 95 },
+          { id: '2', title: 'David Fortin', videoCount: 251 },
+          { id: '3', title: 'Kevin Stratvert', videoCount: 120 },
+          { id: '4', title: 'The AI Productivity Coach', videoCount: 80 },
+          { id: '5', title: 'Mike Tholfsen', videoCount: 70 },
+          { id: '6', title: 'Scott Brant', videoCount: 40 },
+          { id: '7', title: 'Office Skills with Amy', videoCount: 30 },
+        ]}
         selectedChannelTitles={[
           'TechByTosh',
           'David Fortin',
@@ -28,9 +38,12 @@ describe('ReferenceVaultSummary', () => {
     expect(html).toContain('현재 수집 영상 조회 대상 채널');
     expect(html).toContain('현재 조회 대상 · 선택 채널 7개');
     expect(html).toContain('TechByTosh');
+    expect(html).toContain('95개');
     expect(html).toContain('Mike Tholfsen');
     expect(html).toContain('외 2개');
     expect(html).not.toContain('Scott Brant');
+    expect(html).toContain('선택 채널 변경');
+    expect(html).toContain('sm:w-auto');
   });
 
   it('explains that no channel has been selected yet', () => {

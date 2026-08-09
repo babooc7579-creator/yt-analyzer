@@ -9,9 +9,11 @@ import VideoToolbarFilterStatus from './VideoToolbarFilterStatus';
 export default function VideoToolbarFilters({
   lengthFilter,
   onResetFilters,
+  quickFilter,
   searchKeyword,
   selectedVideoCount,
   setLengthFilter,
+  setQuickFilter,
   setSearchKeyword,
   setShowWorkPanel,
   setSortType,
@@ -33,9 +35,11 @@ export default function VideoToolbarFilters({
   } = getVideoToolbarFiltersViewProps({
     lengthFilter,
     onResetFilters,
+    quickFilter,
     searchKeyword,
     selectedVideoCount,
     setLengthFilter,
+    setQuickFilter,
     setSearchKeyword,
     setShowWorkPanel,
     setSortType,
