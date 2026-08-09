@@ -10,6 +10,7 @@ import {
   getPublishedAfter,
   hasYoutubeSearchCriteriaChanges,
   MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION,
+  prepareYoutubeSearchTargetSession,
   sortYoutubeChannelResults,
   toggleYoutubeChannelRegistrationSelection,
   toDiscoveryLinkPayload,
@@ -51,6 +52,18 @@ describe('youtubeKeywordSearch', () => {
     expect(hasYoutubeSearchCriteriaChanges({ ...applied, minimumViews: 10000 }, applied)).toBe(false);
     expect(hasYoutubeSearchCriteriaChanges({ ...applied, language: 'en' }, applied)).toBe(true);
     expect(hasYoutubeSearchCriteriaChanges({ query: 'copilot', regionCode: 'KR', language: '' }, applied, { includeVideoFilters: false })).toBe(true);
+  });
+
+  it('carries common filters into an empty video or channel search without replacing existing work', () => {
+    const sourceSession = { filters: { query: 'MS Copilot', regionCode: 'KR', language: 'ko', dateRange: '30' } };
+    expect(prepareYoutubeSearchTargetSession({ sourceSession, targetLabel: '채널 찾기' })).toMatchObject({
+      filters: { query: 'MS Copilot', regionCode: 'KR', language: 'ko' },
+      notice: expect.stringContaining('검색 버튼을 누르기 전에는 YouTube API를 호출하지 않습니다'),
+    });
+
+    const existingTarget = { filters: { query: '바이브 코딩', regionCode: 'US', language: 'en' }, items: [{ channelId: '1' }] };
+    expect(prepareYoutubeSearchTargetSession({ sourceSession, targetSession: existingTarget, targetLabel: '채널 찾기' }))
+      .toBe(existingTarget);
   });
 
   it('sorts already received channels locally and explains declared country', () => {

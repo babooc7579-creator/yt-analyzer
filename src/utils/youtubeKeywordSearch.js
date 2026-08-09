@@ -160,6 +160,33 @@ export function hasYoutubeSearchCriteriaChanges(filters = {}, appliedFilters, { 
   });
 }
 
+export function prepareYoutubeSearchTargetSession({ sourceSession, targetSession, targetLabel }) {
+  const targetHasOwnContext = Boolean(
+    String(targetSession?.filters?.query || '').trim()
+    || targetSession?.appliedFilters
+    || targetSession?.items?.length,
+  );
+  if (targetHasOwnContext) return targetSession;
+
+  const commonFilters = {
+    query: String(sourceSession?.filters?.query || ''),
+    regionCode: String(sourceSession?.filters?.regionCode || ''),
+    language: String(sourceSession?.filters?.language || ''),
+  };
+  if (!commonFilters.query.trim() && !commonFilters.regionCode && !commonFilters.language) {
+    return targetSession;
+  }
+
+  return {
+    ...(targetSession || {}),
+    filters: {
+      ...(targetSession?.filters || {}),
+      ...commonFilters,
+    },
+    notice: `${targetLabel}에 검색어·지역·언어 조건을 가져왔습니다. 검색 버튼을 누르기 전에는 YouTube API를 호출하지 않습니다.`,
+  };
+}
+
 export function sortYoutubeChannelResults(items, sortBy = 'relevance') {
   const source = Array.isArray(items) ? items : [];
   if (sortBy === 'relevance') return [...source];
