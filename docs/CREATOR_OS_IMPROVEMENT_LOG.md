@@ -456,3 +456,12 @@ YouTube API 수집, localStorage 변경이 발생하지 않습니다.
 - 자동 실행 완료 로그는 후보 영상 전체 배열 대신 대상 채널·실패·신규·통계 갱신·실제 저장 건수만 남깁니다.
 - 백엔드 회귀 테스트에 등록 기본값 manual, Timer의 auto 전용 대상, 수동 수집 보존, 변경 영상 단일 저장, 작은 실행 요약을 추가했습니다.
 - 로컬 테스트는 통과했으며 운영 배포, 실제 Cosmos DB 429 감소와 다음 야간 Timer 완료 여부는 아직 확인하지 않았습니다.
+
+### 2026-08-09 운영 검수 완료
+
+- 백엔드 PR #28과 프론트 기록 PR #1077을 main에 병합했고 Azure Functions·Static Web Apps 배포가 성공했습니다.
+- Cloud DB 원본 채널 21개를 읽기 전용으로 집계한 결과 `active + manual` 11개, 이전 구조의 수동 취급 채널 10개, `active + auto` 0개였습니다.
+- 새벽 3시 Timer는 341ms 만에 성공했고 `channels 0 · failed 0 · newVideosFound 0 · statsRefreshed 0 · videosWritten 0` 완료 로그를 남겼습니다.
+- 이전 실행과 같은 15분 구간 비교에서 Cosmos 요청은 13,296건에서 4건, 429는 7,161건에서 0건, Upsert는 13,146건에서 0건, RU는 61,464에서 4로 감소했습니다.
+- Functions 실행 단위도 110,336,000에서 512,000으로 줄었고 예외는 0건이었습니다.
+- 자동 수집 채널은 당분간 0개로 유지합니다. Timer 수동 실행, YouTube API 신규 수집, DB 쓰기·설정 변경은 검수 중 실행하지 않았습니다.
