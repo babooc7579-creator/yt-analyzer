@@ -47,7 +47,12 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     activeOperationStage: isChannelOperationsView ? activeOperationStage : null,
     asideProps: getLegacyAsideProps(props),
     channelPanelProps: getLegacyChannelPanelProps(props),
-    mainPanelProps: getLegacyMainPanelProps(props),
+    mainPanelProps: getLegacyMainPanelProps({
+      ...props,
+      loadStoredVideosForSelectedChannels: loadStoredVideos,
+      storedVideoLoadPending,
+      storedVideoLoadResult,
+    }),
     operationsNavProps: isChannelOperationsView ? {
       activeStage: activeOperationStage,
       isLoading: storedVideoLoadPending,

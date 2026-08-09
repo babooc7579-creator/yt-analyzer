@@ -86,6 +86,7 @@ describe('legacyDashboardTabViewProps utils', () => {
     const isVideoSaved = () => true;
     const openedViews = [];
     const openCreatorView = (item) => openedViews.push(item);
+    const loadStoredVideosForSelectedChannels = () => 'load stored';
     const promoteVideoToProduction = () => 'promote';
     const filterResets = [];
     const setLengthFilter = (value) => filterResets.push(['length', value]);
@@ -107,6 +108,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       handleManualScan,
       isProductionCandidate,
       isVideoSaved,
+      loadStoredVideosForSelectedChannels,
       openCreatorView,
       promoteVideoToProduction,
       setLengthFilter,
@@ -117,6 +119,9 @@ describe('legacyDashboardTabViewProps utils', () => {
       setViewFilter,
       setViewMode,
       showWorkPanel: false,
+      selectedChannelIds: ['channel-1', 'channel-2'],
+      storedVideoLoadPending: true,
+      storedVideoLoadResult: { success: true, videoCount: 0 },
       toggleCheckVideo,
       toggleScrapVideo,
       videos,
@@ -145,10 +150,16 @@ describe('legacyDashboardTabViewProps utils', () => {
     expect(props.resultsPanelProps.onFetchComments).toBe(fetchTopComments);
     props.resultsPanelProps.onOpenHome();
     props.resultsPanelProps.onOpenChannelWatchlist();
+    props.resultsPanelProps.onOpenSelectedScan();
     expect(openedViews).toEqual([
       { id: 'home' },
       { id: 'discovery-watchlist' },
+      { id: 'ops-channels', intent: { operationStage: 'scan' } },
     ]);
+    expect(props.resultsPanelProps.onLoadStoredVideos).toBe(loadStoredVideosForSelectedChannels);
+    expect(props.resultsPanelProps.selectedChannelCount).toBe(2);
+    expect(props.resultsPanelProps.storedVideoLoadPending).toBe(true);
+    expect(props.resultsPanelProps.storedVideoLoadResult).toEqual({ success: true, videoCount: 0 });
     expect(props.resultsPanelProps.onPromoteToProduction).toBe(promoteVideoToProduction);
     props.resultsPanelProps.onResetFilters();
     expect(filterResets).toEqual([

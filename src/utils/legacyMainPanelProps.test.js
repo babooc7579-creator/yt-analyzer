@@ -66,6 +66,7 @@ describe('legacyMainPanelProps utils', () => {
     const isVideoSaved = () => true;
     const markRadarVideoStatus = () => 'mark';
     const openCreatorView = () => 'open';
+    const loadStoredVideosForSelectedChannels = () => 'load';
     const promoteVideoToProduction = () => 'promote';
     const toggleCheckVideo = () => 'check';
     const toggleScrapVideo = () => 'scrap';
@@ -79,10 +80,13 @@ describe('legacyMainPanelProps utils', () => {
       isProductionCandidate,
       isVideoSaved,
       markRadarVideoStatus,
+      loadStoredVideosForSelectedChannels,
       openCreatorView,
       promoteVideoToProduction,
       toggleCheckVideo,
       toggleScrapVideo,
+      storedVideoLoadPending: true,
+      storedVideoLoadResult: { success: true, videoCount: 0 },
       updateVideoUserRecord,
     });
 
@@ -94,6 +98,9 @@ describe('legacyMainPanelProps utils', () => {
     expect(props.isVideoSaved).toBe(isVideoSaved);
     expect(props.markRadarVideoStatus).toBe(markRadarVideoStatus);
     expect(props.openCreatorView).toBe(openCreatorView);
+    expect(props.loadStoredVideosForSelectedChannels).toBe(loadStoredVideosForSelectedChannels);
+    expect(props.storedVideoLoadPending).toBe(true);
+    expect(props.storedVideoLoadResult).toEqual({ success: true, videoCount: 0 });
     expect(props.promoteVideoToProduction).toBe(promoteVideoToProduction);
     expect(props.toggleCheckVideo).toBe(toggleCheckVideo);
     expect(props.toggleScrapVideo).toBe(toggleScrapVideo);

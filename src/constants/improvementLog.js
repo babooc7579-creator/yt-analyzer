@@ -134,10 +134,10 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '전체 화면',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
-    lastReviewedAt: '2026-08-03',
-    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 태그별 금고는 별도 보관 장소로 오해되지 않도록 채널 태그별 보기로 바꾸고 전체 수집 영상 목록으로 돌아가는 버튼을 연결했습니다. 운영 전 화면 검수에서 반복되던 내부 H2는 태그로 수집 영상 좁히기와 조사 도구 바로가기로 구체화해 메뉴 제목과 실제 작업 제목을 분리했습니다.',
+    lastReviewedAt: '2026-08-09',
+    currentSummary: '사용자 화면의 레퍼런스 금고 표현을 수집 영상·링크 구역과 수집 영상 목록으로 정리했습니다. 태그별 금고는 별도 보관 장소로 오해되지 않도록 채널 태그별 보기로 바꾸고 전체 수집 영상 목록으로 돌아가는 버튼을 연결했습니다. 운영 전 화면 검수에서 반복되던 내부 H2는 태그로 수집 영상 좁히기와 조사 도구 바로가기로 구체화해 메뉴 제목과 실제 작업 제목을 분리했습니다. 수집 영상 목록의 초기 상태는 선택 채널 수와 불러온 영상 수를 먼저 보여주고, 채널이 없으면 오늘 볼 채널 선택을 강조하며 채널이 있으면 같은 화면에서 Azure DB 조회를 바로 실행하도록 연결했습니다.',
     targetSummary: '버튼 이름만 보고도 이동·조회·저장·YouTube API 수집 여부를 이해할 수 있도록 모든 화면의 용어를 통일합니다.',
-    nextAction: '향후 메뉴 변경 시 채널 태그별 보기가 별도 저장 장소로 오해되지 않는지 정기 회귀 검수합니다.',
+    nextAction: '배포 후 채널 0개·선택 채널 있음·Azure DB 조회 결과 0개 상태에서 다음 행동과 버튼이 각각 정확히 표시되는지 운영 화면으로 확인합니다.',
     decisions: [
       '영상 파일 자체가 아니라 영상 정보를 다루므로 수집 영상 목록이라는 표현을 사용합니다.',
       '수집 영상 정보와 발견 링크를 함께 묶는 사이드바 구역명은 수집 영상·링크로 표시합니다.',
@@ -197,6 +197,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'duplicate-workspace-heading',
         label: '채널 태그별 보기·업무 도구함의 반복 H2를 실제 작업 제목으로 구분',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'reference-vault-empty-next-action',
+        label: '수집 영상 목록 빈 상태에서 채널 선택·Azure DB 조회·필요 시 신규 수집의 다음 행동 구분',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

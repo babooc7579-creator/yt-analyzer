@@ -1,6 +1,6 @@
 export const REFERENCE_VAULT_EMPTY_STATE = {
   title: '불러온 수집 영상 정보가 없습니다',
-  description: '오늘 볼 채널을 선택한 뒤, 온라인 저장소(Azure DB)에 보관된 수집 영상 정보를 불러오세요. 새 영상 수집은 필요할 때만 따로 실행합니다.',
+  description: '영상 파일을 저장하는 화면이 아닙니다. 오늘 볼 채널을 선택한 뒤, 온라인 저장소(Azure DB)에 기록된 영상 정보를 불러와 검토하며 새 영상 수집은 필요할 때만 따로 실행합니다.',
   steps: [
     {
       title: '1. 오늘 볼 채널 선택',
