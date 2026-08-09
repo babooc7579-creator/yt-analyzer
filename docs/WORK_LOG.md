@@ -5433,3 +5433,10 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - Functions 실행 단위는 110,336,000→512,000이었고 Application Insights 예외는 0건입니다.
 - 검수는 Azure 관리 지표·Application Insights·Cloud DB 설정 조회만 사용했습니다. Timer 수동 실행, YouTube API 호출, DB 쓰기·설정 변경은 하지 않았습니다.
 - 데이터·API 안전 검수와 자동 수집 경계·변경 영상 단일 저장·Timer 요약 로그 체크포인트를 확인 완료로 전환합니다.
+
+## 230. 2026-08-09 Static Web Apps 배포 경고 정리
+
+- 정상 배포 뒤 GitHub Actions에 `github_id_token`이 지원되지 않는 입력이라는 경고가 남는 것을 확인했습니다.
+- 현재 배포는 기존 `AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_DUNE_0AF1D2A00` secret을 사용하는 방식이므로, 실제로 쓰이지 않는 OIDC 권한·토큰 생성 단계·`github_id_token` 입력을 제거했습니다.
+- Static Web App, 요금제, 배포 토큰 secret과 앱 빌드 위치는 변경하지 않았습니다.
+- 운영 로그인 재검수 중 배포 직후 최신 화면 다시 불러오기를 누르면 Azure 관리형 인증 완료 주소가 Edge에서 차단되는 기존 증상이 재현됐습니다. 앱 인증 경로와 서버의 302 응답은 정상이며, 실제 앱 재진입은 사용자 로그인 후 별도로 확인합니다.
