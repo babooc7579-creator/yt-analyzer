@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useKeywordExplorerState } from '../hooks/useKeywordExplorerState';
 import { getKeywordExplorerEmptyState } from '../utils/keywordExplorer';
+import { prepareYoutubeSearchTargetSession } from '../utils/youtubeKeywordSearch';
 import KeywordExplorerFilters from './KeywordExplorerFilters';
 import KeywordExplorerHeader from './KeywordExplorerHeader';
 import KeywordExplorerSummary from './KeywordExplorerSummary';
@@ -51,8 +52,18 @@ export default function KeywordExplorerWorkspace({
     onKeywordExplorerSessionChange?.('channelSearch', nextSession);
   }, [onKeywordExplorerSessionChange]);
   const handleSearchTargetChange = useCallback((nextTarget) => {
+    const sourceKey = nextTarget === 'channel' ? 'videoSearch' : 'channelSearch';
+    const targetKey = nextTarget === 'channel' ? 'channelSearch' : 'videoSearch';
+    const preparedTargetSession = prepareYoutubeSearchTargetSession({
+      sourceSession: keywordExplorerSession?.[sourceKey],
+      targetSession: keywordExplorerSession?.[targetKey],
+      targetLabel: nextTarget === 'channel' ? '채널 찾기' : '영상 찾기',
+    });
+    if (preparedTargetSession !== keywordExplorerSession?.[targetKey]) {
+      onKeywordExplorerSessionChange?.(targetKey, preparedTargetSession);
+    }
     onKeywordExplorerSessionChange?.('searchTarget', nextTarget);
-  }, [onKeywordExplorerSessionChange]);
+  }, [keywordExplorerSession, onKeywordExplorerSessionChange]);
   const state = useKeywordExplorerState({ videos });
   const emptyState = getKeywordExplorerEmptyState({
     hasQuery: state.hasQuery,
