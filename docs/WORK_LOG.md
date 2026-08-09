@@ -5434,9 +5434,10 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - 검수는 Azure 관리 지표·Application Insights·Cloud DB 설정 조회만 사용했습니다. Timer 수동 실행, YouTube API 호출, DB 쓰기·설정 변경은 하지 않았습니다.
 - 데이터·API 안전 검수와 자동 수집 경계·변경 영상 단일 저장·Timer 요약 로그 체크포인트를 확인 완료로 전환합니다.
 
-## 230. 2026-08-09 Static Web Apps 배포 경고 정리
+## 230. 2026-08-09 Static Web Apps OIDC 배포 구성 재확인
 
-- 정상 배포 뒤 GitHub Actions에 `github_id_token`이 지원되지 않는 입력이라는 경고가 남는 것을 확인했습니다.
-- 현재 배포는 기존 `AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_DUNE_0AF1D2A00` secret을 사용하는 방식이므로, 실제로 쓰이지 않는 OIDC 권한·토큰 생성 단계·`github_id_token` 입력을 제거했습니다.
-- Static Web App, 요금제, 배포 토큰 secret과 앱 빌드 위치는 변경하지 않았습니다.
+- 정상 배포 뒤 `github_id_token`이 지원되지 않는 입력이라는 경고를 없애려고 PR #1079에서 OIDC 권한·토큰 생성 단계·입력을 제거했습니다.
+- main 배포는 즉시 `No matching Static Web App was found or the api key was invalid`로 실패했습니다. 저장된 배포 토큰 secret만으로는 현재 앱을 배포할 수 없고, 기존 OIDC 토큰이 실제 인증 경계임을 확인했습니다.
+- 같은 구성을 제거했다가 PR #900에서 복원한 과거 이력과 Microsoft의 Static Web Apps OIDC 워크플로 예시도 재확인했습니다. OIDC 권한·토큰 생성·`github_id_token` 입력을 원상복구합니다.
+- 입력 경고는 현재 액션 메타데이터와 실제 배포 컨테이너 동작 사이의 차이로 남기며, 배포 성공을 우선합니다. Static Web App, 요금제, secret과 빌드 위치는 변경하지 않습니다.
 - 운영 로그인 재검수 중 배포 직후 최신 화면 다시 불러오기를 누르면 Azure 관리형 인증 완료 주소가 Edge에서 차단되는 기존 증상이 재현됐습니다. 앱 인증 경로와 서버의 302 응답은 정상이며, 실제 앱 재진입은 사용자 로그인 후 별도로 확인합니다.
