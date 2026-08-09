@@ -52,7 +52,12 @@ export default function VideoToolbarQuickFilters({
 
   return (
     <div className="flex w-full flex-col gap-2 rounded-xl border border-slate-200 bg-white/70 p-2 sm:flex-row sm:flex-wrap sm:items-center" aria-label="수집 영상 빠른 필터">
-      <span className="px-1 text-[11px] font-black text-slate-500">빠른 보기</span>
+      <div className="w-full px-1 sm:w-auto">
+        <p className="text-[11px] font-black text-slate-500">빠른 보기</p>
+        <p className="mt-0.5 text-[10px] font-semibold leading-relaxed text-slate-400 sm:max-w-48">
+          개수는 불러온 전체 목록 기준입니다. 다른 필터를 함께 쓰면 실제 표시 수가 줄어듭니다.
+        </p>
+      </div>
       {QUICK_FILTERS.map((filter) => {
         const Icon = filter.icon;
         const isActive = quickFilter === filter.id;
