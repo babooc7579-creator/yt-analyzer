@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   CREATOR_OS_IMPROVEMENT_AREAS,
+  CREATOR_OS_MENU_ROLE_AUDIT,
   IMPROVEMENT_CHECKPOINT_STATUS,
+  IMPROVEMENT_LOG_LAST_UPDATED,
 } from '../constants/improvementLog';
 import { getImprovementLogSummary } from './improvementLog';
 
@@ -49,5 +51,16 @@ describe('improvementLog utils', () => {
       doneCount: 1,
       inProgressCount: 1,
     });
+  });
+
+  it('derives the displayed update date from the newest area review', () => {
+    const newestReviewDate = CREATOR_OS_IMPROVEMENT_AREAS
+      .map((area) => area.lastReviewedAt)
+      .sort()
+      .at(-1);
+
+    expect(IMPROVEMENT_LOG_LAST_UPDATED).toBe(newestReviewDate);
+    expect(CREATOR_OS_MENU_ROLE_AUDIT.find((item) => item.menu === '키워드 탐색')?.verification)
+      .toBe('영상·채널 운영 검수 완료');
   });
 });
