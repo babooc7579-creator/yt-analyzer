@@ -56,6 +56,12 @@ export function getLegacyDashboardTabViewProps({
   const savedChannelList = toArray(savedChannels);
   const savedVideoList = toVideoList(savedVideos);
   const selectedChannels = toArray(selectedChannelIds);
+  const selectedChannelIdSet = new Set(selectedChannels);
+  const selectedChannelTitles = savedChannelList
+    .filter(channel => channel && selectedChannelIdSet.has(channel.id))
+    .map(channel => channel.title)
+    .filter(title => typeof title === 'string' && title.trim())
+    .map(title => title.trim());
   const videoList = toVideoList(videos);
   const selectedVideos = videoList.filter(video => checkedVideoIds.includes(video.videoId));
   const canOpenCreatorView = isFunction(openCreatorView);
@@ -96,6 +102,7 @@ export function getLegacyDashboardTabViewProps({
       scannableChannelCount,
       searchKeyword,
       selectedChannelCount: selectedChannels.length,
+      selectedChannelTitles,
       setLengthFilter,
       setSearchKeyword,
       setShowWorkPanel,

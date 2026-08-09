@@ -5,7 +5,7 @@ import { getLegacyDashboardTabViewProps } from './legacyDashboardTabViewProps';
 describe('legacyDashboardTabViewProps utils', () => {
   it('builds dashboard controls with safe lists and counts', () => {
     const filteredVideos = [{ videoId: 'video1' }, null, 'bad'];
-    const savedChannels = [{ id: 'channel1' }, undefined];
+    const savedChannels = [{ id: 'channel1', title: 'TechByTosh' }, undefined];
     const savedVideos = [{ videoId: 'saved1' }, false];
 
     const props = getLegacyDashboardTabViewProps({
@@ -47,6 +47,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       scannableChannelCount: 2,
       searchKeyword: 'table',
       selectedChannelCount: 2,
+      selectedChannelTitles: ['TechByTosh'],
       showWorkPanel: true,
       sortType: 'views',
       totalVideoCount: 3,

@@ -5,6 +5,8 @@ export default function VideoDashboardSourceSummary({
   isReferenceVaultView,
   savedChannelCount,
   savedVideoCount,
+  selectedChannelCount,
+  selectedChannelTitles,
   totalVideoCount,
   ttoTtoAssetCount,
   visibleScrapCount,
@@ -18,6 +20,8 @@ export default function VideoDashboardSourceSummary({
       videoCount={totalVideoCount}
       channelCount={savedChannelCount}
       scrapCount={savedVideoCount}
+      selectedChannelCount={selectedChannelCount}
+      selectedChannelTitles={selectedChannelTitles}
       visibleScrapCount={visibleScrapCount}
       ttoTtoCount={ttoTtoAssetCount}
     />
