@@ -23,6 +23,8 @@ describe('VideoToolbarQuickFilters', () => {
     expect(html).toContain('최근 30일 대상 11개');
     expect(html).toContain('오래된 인기 대상 12개');
     expect(html).toContain('또터또 대상 29개');
+    expect(html).toContain('개수는 불러온 전체 목록 기준입니다');
+    expect(html).toContain('다른 필터를 함께 쓰면 실제 표시 수가 줄어듭니다');
     expect(html).toContain('YouTube API 호출 없음');
     expect(html).toContain('w-full');
     expect(html).toContain('sm:w-auto');
