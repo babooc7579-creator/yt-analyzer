@@ -29,12 +29,10 @@ export const IMPROVEMENT_STATUS_META = {
   },
 };
 
-export const IMPROVEMENT_LOG_LAST_UPDATED = '2026-08-08';
-
 export const CREATOR_OS_MENU_ROLE_AUDIT = [
   { section: '디스커버리 탐색', menu: '오늘의 레이더', role: '오늘 볼 채널과 수집 영상에서 만들 소재를 결정', dataBoundary: 'Azure DB 조회·판단 기록 저장', verification: '운영 클릭 확인' },
   { section: '디스커버리 탐색', menu: '또터또 탐색', role: '오래된 고성과 영상 후보를 별도 기준으로 탐색', dataBoundary: '불러온 수집 영상 정보 분석', verification: '운영 클릭 확인' },
-  { section: '디스커버리 탐색', menu: '키워드 탐색', role: '기존 수집 영상 검색과 YouTube의 새 영상·채널 후보 발굴', dataBoundary: 'Azure DB 조회 탭·명시적 YouTube API 검색 탭 분리', verification: '영상 운영 검수 완료·채널 운영 검수 예정' },
+  { section: '디스커버리 탐색', menu: '키워드 탐색', role: '기존 수집 영상 검색과 YouTube의 새 영상·채널 후보 발굴', dataBoundary: 'Azure DB 조회 탭·명시적 YouTube API 검색 탭 분리', verification: '영상·채널 운영 검수 완료' },
   { section: '디스커버리 탐색', menu: '오늘 볼 채널', role: '오늘 조회할 채널 범위를 선택', dataBoundary: '화면 선택·Azure DB 채널 조회', verification: '운영 클릭 확인' },
   { section: '수집 영상·링크', menu: '수집 영상 목록', role: 'Azure DB에 보관된 수집 영상 정보를 검색·검토', dataBoundary: 'Azure DB 조회·YouTube API 없음', verification: '운영 클릭 확인' },
   { section: '수집 영상·링크', menu: '채널 태그별 보기', role: '수집 영상 목록을 채널 태그 기준으로 좁혀 탐색', dataBoundary: 'Azure DB 조회 결과의 전용 필터·별도 저장 없음', verification: '운영 클릭 확인' },
@@ -846,3 +844,8 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     ],
   },
 ];
+
+export const IMPROVEMENT_LOG_LAST_UPDATED = CREATOR_OS_IMPROVEMENT_AREAS.reduce(
+  (latestDate, area) => (area.lastReviewedAt > latestDate ? area.lastReviewedAt : latestDate),
+  '',
+);
