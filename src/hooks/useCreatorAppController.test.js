@@ -7,6 +7,11 @@ const controllerMocks = vi.hoisted(() => {
     setLoading: vi.fn(),
     setProgressMsg: vi.fn(),
     setUpdatingChannelId: vi.fn(),
+    storedVideoLoadResult: {
+      success: true,
+      selectionKey: 'channel-1',
+      videoCount: 1,
+    },
     videos: [{ videoId: 'video-1' }],
   };
 
@@ -96,6 +101,11 @@ import { useCreatorAppWorkspaceWorkflow } from './useCreatorAppWorkspaceWorkflow
 describe('useCreatorAppController', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    controllerMocks.runtime.storedVideoLoadResult = {
+      success: true,
+      selectionKey: 'channel-1',
+      videoCount: 1,
+    };
   });
 
   it('wires runtime, workflows, derived state, and view props in order', () => {
@@ -139,7 +149,22 @@ describe('useCreatorAppController', () => {
       ...controllerMocks.workspaceWorkflow,
       ...controllerMocks.collectionWorkflow,
       ...controllerMocks.derivedState,
+      videos: controllerMocks.runtime.videos,
     });
     expect(result).toBe(controllerMocks.viewProps);
+  });
+
+  it('does not pass videos from a different selected-channel lookup to any workspace', () => {
+    controllerMocks.runtime.storedVideoLoadResult = {
+      success: true,
+      selectionKey: 'previous-channel',
+      videoCount: 1,
+    };
+
+    useCreatorAppController();
+
+    expect(useCreatorAppVideoWorkflow).toHaveBeenCalledWith({ videos: [] });
+    expect(useCreatorAppDerivedState).toHaveBeenCalledWith(expect.objectContaining({ videos: [] }));
+    expect(useCreatorAppViewProps).toHaveBeenCalledWith(expect.objectContaining({ videos: [] }));
   });
 });
