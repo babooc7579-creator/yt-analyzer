@@ -8,21 +8,19 @@ import {
 } from './referenceVault';
 
 describe('referenceVault constants', () => {
-  it('keeps the reference vault positioned as a production material workspace', () => {
+  it('distinguishes the page name from the video review task', () => {
     expect(REFERENCE_VAULT_HEADER).toMatchObject({
-      eyebrow: '수집 영상 정보',
-      title: '수집 영상 목록',
+      eyebrow: '현재 작업',
+      title: '영상 검토 보드',
     });
     expect(REFERENCE_VAULT_HEADER.description).toContain('온라인 저장소(Azure DB)');
-    expect(REFERENCE_VAULT_HEADER.description).toContain('제작 후보로 표시할 소재');
+    expect(REFERENCE_VAULT_HEADER.description).toContain('제작 후보로 표시할 항목');
     expect(REFERENCE_VAULT_HEADER.description).not.toContain('제작에 활용할 후보');
   });
 
-  it('keeps summary card keys stable for the vault dashboard', () => {
+  it('keeps only task-specific summary cards in the review board', () => {
     expect(REFERENCE_VAULT_SUMMARY_CARDS.map((card) => card.key)).toEqual([
       'videoCount',
-      'channelCount',
-      'scrapCount',
       'visibleScrapCount',
       'ttoTtoCount',
     ]);

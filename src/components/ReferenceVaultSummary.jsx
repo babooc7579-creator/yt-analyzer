@@ -1,4 +1,4 @@
-import { Bookmark, ListChecks, Play, Sparkles } from 'lucide-react';
+import { Bookmark, ChevronDown, ListChecks, Play, Sparkles } from 'lucide-react';
 
 import {
   REFERENCE_VAULT_GUIDE_CARDS,
@@ -16,8 +16,6 @@ const REFERENCE_VAULT_GUIDE_ICONS = {
 
 export default function ReferenceVaultSummary({
   videoCount,
-  channelCount,
-  scrapCount,
   onChangeSelectedChannels,
   selectedChannelCount = 0,
   selectedChannelScopes = [],
@@ -57,8 +55,6 @@ export default function ReferenceVaultSummary({
   );
   const summaryValues = {
     videoCount,
-    channelCount,
-    scrapCount,
     visibleScrapCount,
     ttoTtoCount,
   };
@@ -73,7 +69,7 @@ export default function ReferenceVaultSummary({
             {REFERENCE_VAULT_HEADER.description}
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-5">
+        <div className="grid grid-cols-3 gap-2">
           {REFERENCE_VAULT_SUMMARY_CARDS.map(({ key, label, tone }) => (
             <ReferenceVaultSummaryCard
               key={key}
@@ -142,8 +138,12 @@ export default function ReferenceVaultSummary({
         </div>
       </div>
 
-      <div className="border-t border-slate-300/70 bg-white/60 px-4 py-4 sm:px-5">
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+      <details className="group border-t border-slate-300/70 bg-white/60 px-4 py-3 sm:px-5">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-xs font-extrabold text-slate-700">
+          <span>이 화면 작업 순서 보기</span>
+          <ChevronDown className="h-4 w-4 text-slate-500 transition group-open:rotate-180" />
+        </summary>
+        <div className="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-3">
           {REFERENCE_VAULT_GUIDE_CARDS.map(({ key, iconName, ...guideCard }) => (
             <ReferenceVaultGuideCard
               key={key}
@@ -152,7 +152,7 @@ export default function ReferenceVaultSummary({
             />
           ))}
         </div>
-      </div>
+      </details>
     </div>
   );
 }

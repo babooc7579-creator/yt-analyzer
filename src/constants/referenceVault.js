@@ -6,16 +6,14 @@ export const REFERENCE_VAULT_SUMMARY_TONES = {
 };
 
 export const REFERENCE_VAULT_HEADER = {
-  eyebrow: '수집 영상 정보',
-  title: '수집 영상 목록',
-  description: '온라인 저장소(Azure DB)에 보관된 수집 영상 정보를 한곳에서 확인하고, 소재 보관 또는 제작 후보로 표시할 소재를 고릅니다.',
+  eyebrow: '현재 작업',
+  title: '영상 검토 보드',
+  description: '온라인 저장소(Azure DB)에서 불러온 영상 정보를 검토하고, 소재 보관 또는 제작 후보로 표시할 항목을 고릅니다.',
 };
 
 export const REFERENCE_VAULT_SUMMARY_CARDS = [
   { key: 'videoCount', label: '불러온 영상' },
-  { key: 'channelCount', label: '등록 채널' },
-  { key: 'scrapCount', label: '스크랩 소재', tone: 'yellow' },
-  { key: 'visibleScrapCount', label: '현재 보드 스크랩', tone: 'indigo' },
+  { key: 'visibleScrapCount', label: '보관 표시', tone: 'indigo' },
   { key: 'ttoTtoCount', label: '또터또 후보', tone: 'rose' },
 ];
 

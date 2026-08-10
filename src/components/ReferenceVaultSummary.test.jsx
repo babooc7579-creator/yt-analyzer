@@ -36,6 +36,11 @@ describe('ReferenceVaultSummary', () => {
     );
 
     expect(html).toContain('현재 수집 영상 조회 대상 채널');
+    expect(html).toContain('영상 검토 보드');
+    expect(html).toContain('이 화면 작업 순서 보기');
+    expect(html).toContain('보관 표시');
+    expect(html).not.toContain('등록 채널');
+    expect(html).not.toContain('스크랩 소재');
     expect(html).toContain('현재 조회 대상 · 선택 채널 7개');
     expect(html).toContain('TechByTosh');
     expect(html).toContain('95개');
