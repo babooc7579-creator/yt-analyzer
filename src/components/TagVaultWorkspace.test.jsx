@@ -20,7 +20,8 @@ describe('TagVaultWorkspace', () => {
     expect(html).toContain('태그로 수집 영상 좁히기');
     expect(html).toContain('수집 영상·링크');
     expect(html).toContain('별도 보관 장소가 아니며');
-    expect(html).toContain('태그 채널 선택');
+    expect(html).toContain('이 태그 채널로 조회 준비');
+    expect(html).toContain('태그 채널로 조회 준비 → 상단의 수집 영상 목록 불러오기(Azure DB)');
     expect(html).toContain('상단의 수집 영상 목록 불러오기');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
     expect(html).toContain('채널 목록 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음');

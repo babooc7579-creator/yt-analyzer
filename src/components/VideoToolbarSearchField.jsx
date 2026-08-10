@@ -15,14 +15,14 @@ export default function VideoToolbarSearchField({
   } = getVideoToolbarSearchFieldViewProps({ searchKeyword });
 
   return (
-    <div className="relative">
+    <div className="relative w-full min-w-0">
       <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
       <input
         type="text"
         value={searchKeyword}
         onChange={(e) => setSearchKeyword(e.target.value)}
         placeholder={placeholder}
-        className="pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm w-56 focus:ring-2 focus:ring-indigo-500 outline-none"
+        className="w-full min-w-0 rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-9 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
         title={title}
         aria-label={ariaLabel}
       />

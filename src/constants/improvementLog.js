@@ -292,10 +292,10 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     section: '디스커버리·레퍼런스',
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P2',
-    lastReviewedAt: '2026-07-28',
-    currentSummary: '수집 영상 목록은 전체 검색·검토, 채널 태그별 보기는 같은 수집 영상 정보를 채널 태그 기준으로 좁히는 전용 보기, 또터또 탐색은 오래된 고성과 후보 판단을 담당합니다.',
+    lastReviewedAt: '2026-08-10',
+    currentSummary: '수집 영상 목록은 전체 검색·검토, 채널 태그별 보기는 같은 수집 영상 정보를 채널 태그 기준으로 좁히는 전용 보기, 또터또 탐색은 오래된 고성과 후보 판단을 담당합니다. 채널 태그별 보기에서 선택 채널을 바꾸고 곧바로 전체 목록으로 자동 이동하면 이전 범위의 영상이 잠시 새 태그 결과처럼 보일 수 있어 자동 이동은 추가하지 않습니다. 대신 `이 태그 채널로 조회 준비 → 수집 영상 목록 불러오기(Azure DB) → 전체 수집 영상에서 검토` 순서를 화면에 표시합니다. 수집 영상 목록의 모바일 도구는 기본 필터·정렬·보기와 선택 상태의 세 묶음으로 재배치하고 검색 입력이 남은 너비를 사용하도록 정리했습니다.',
     targetSummary: '메뉴 이름과 화면 안내만으로 전체 목록·전용 필터·독립 판단 화면의 차이를 이해할 수 있게 유지합니다.',
-    nextAction: '수집 영상 목록과 채널 태그별 보기의 역할 설명 및 왕복 이동을 정기 회귀 검수합니다.',
+    nextAction: '배포 후 로그인 가능한 운영 화면에서 수집 영상 모바일 필터 묶음과 채널 태그 조회 준비 순서를 확인합니다. 태그 선택 즉시 전체 목록으로 이동하는 기능은 조회 범위와 표시 데이터의 일치 방식을 먼저 설계한 뒤 결정합니다.',
     decisions: [
       '또터또 탐색은 오래된 고성과 영상을 찾는 판단 목적이 명확하므로 독립 화면을 유지하는 방향을 권장합니다.',
       '채널 태그별 보기는 새 보관함이 아니라 수집 영상 목록의 태그 전용 보기로 유지하며, 별도 저장소나 자동 수집을 추가하지 않습니다.',
@@ -314,6 +314,16 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'ttotto-purpose',
         label: '또터또 탐색의 독립 판단 화면 역할 유지',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'tag-channel-load-sequence',
+        label: '태그 채널 선택·Azure DB 조회·전체 수집 영상 검토 순서 안내',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'collected-video-mobile-filter-groups',
+        label: '모바일 수집 영상 도구를 기본 필터·정렬·보기와 선택 상태로 묶어 표시',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],
