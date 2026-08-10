@@ -68,8 +68,15 @@ export function getLegacyDashboardTabViewProps({
     .map(title => title.trim());
   const videoList = toVideoList(videos);
   const hasLoadedSelectedChannels = Boolean(storedVideoLoadResult?.success);
+  const shouldHideUnconfirmedScopeVideos = Boolean(
+    isReferenceVaultView
+    && !hasLoadedSelectedChannels
+  );
+  const visibleVideoList = shouldHideUnconfirmedScopeVideos ? [] : videoList;
+  const visibleFilteredVideos = shouldHideUnconfirmedScopeVideos ? [] : filteredVideos;
+  const visibleCheckedVideoIds = shouldHideUnconfirmedScopeVideos ? [] : checkedVideoIds;
   const quickFilterCounts = hasLoadedSelectedChannels
-    ? getCollectedVideoQuickFilterCounts(videoList)
+    ? getCollectedVideoQuickFilterCounts(visibleVideoList)
     : { recent30: null, oldPopular: null, ttoTto: null };
   const selectedChannelScopes = savedChannelList
     .filter(channel => channel && selectedChannelIdSet.has(channel.id))
@@ -77,14 +84,14 @@ export function getLegacyDashboardTabViewProps({
       id: channel.id,
       title: typeof channel.title === 'string' ? channel.title.trim() : '',
       videoCount: hasLoadedSelectedChannels
-        ? videoList.filter(video => (
+        ? visibleVideoList.filter(video => (
           video.channel_id === channel.id
           || (!video.channel_id && video.channel_title === channel.title)
         )).length
         : null,
     }))
     .filter(channel => channel.title);
-  const selectedVideos = videoList.filter(video => checkedVideoIds.includes(video.videoId));
+  const selectedVideos = visibleVideoList.filter(video => visibleCheckedVideoIds.includes(video.videoId));
   const canOpenCreatorView = isFunction(openCreatorView);
   const canResetFilters = [
     setLengthFilter,
@@ -105,11 +112,11 @@ export function getLegacyDashboardTabViewProps({
     commentApiNotice: LEGACY_DASHBOARD_COMMENT_NOTICE,
     controlsProps: {
       activeSelectedChannelCount,
-      checkedVideos: checkedVideoIds,
+      checkedVideos: visibleCheckedVideoIds,
       copiedPrompt,
       promptCopyError,
-      filteredCount: filteredVideos.length,
-      filteredVideos,
+      filteredCount: visibleFilteredVideos.length,
+      filteredVideos: visibleFilteredVideos,
       isReferenceVaultView,
       isScanning,
       lengthFilter,
@@ -142,7 +149,7 @@ export function getLegacyDashboardTabViewProps({
       setViewMode,
       showWorkPanel,
       sortType,
-      totalVideoCount,
+      totalVideoCount: shouldHideUnconfirmedScopeVideos ? 0 : totalVideoCount,
       ttoTtoAssetCount,
       ttoTtoMode,
       viewFilter,
@@ -150,8 +157,8 @@ export function getLegacyDashboardTabViewProps({
       visibleScrapCount,
     },
     resultsPanelProps: {
-      checkedVideos: checkedVideoIds,
-      filteredVideos,
+      checkedVideos: visibleCheckedVideoIds,
+      filteredVideos: visibleFilteredVideos,
       isProductionCandidate,
       isVideoSaved,
       onFetchComments: fetchTopComments,
@@ -169,7 +176,7 @@ export function getLegacyDashboardTabViewProps({
       selectedChannelCount: selectedChannels.length,
       storedVideoLoadPending,
       storedVideoLoadResult,
-      videos: videoList,
+      videos: visibleVideoList,
       viewMode,
     },
   };
