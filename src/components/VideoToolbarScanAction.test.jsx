@@ -18,6 +18,8 @@ describe('VideoToolbarScanAction', () => {
     expect(html).toContain('aria-label="선택 범위 새 영상 수집, YouTube API 호출"');
     expect(html).toContain('체크한 채널 중 운영중 채널만 YouTube API로 새 영상 여부를 확인합니다');
     expect(html).toContain('보류/제외 채널은 수집하지 않습니다');
+    expect(html).toContain('class="flex w-full items-center justify-center');
+    expect(html).not.toContain('sm:max-w-[260px]');
     expect(html).not.toContain('disabled=""');
   });
 

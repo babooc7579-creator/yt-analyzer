@@ -71,23 +71,24 @@ export default function VideoToolbar({
   });
 
   return (
-    <div className="bg-slate-100 rounded-2xl shadow-sm border border-slate-300 p-4 flex flex-col 2xl:flex-row gap-4 justify-between items-stretch z-20">
-      <div className="flex flex-col gap-3 min-w-0 flex-1">
+    <div className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-300 bg-slate-100 p-4 shadow-sm 2xl:grid-cols-[minmax(0,1fr)_22rem] 2xl:items-start">
+      <div className="flex min-w-0 flex-col gap-3">
         {isReferenceVaultView && (
           <VideoToolbarReferenceHeader {...referenceHeaderProps} />
         )}
+
+        <VideoToolbarQuickFilters
+          quickFilter={quickFilter}
+          quickFilterCounts={quickFilterCounts}
+          setQuickFilter={setQuickFilter}
+          setSortType={setSortType}
+          {...ttoTtoButtonProps}
+        />
+
         <VideoToolbarFilters {...filtersProps} />
       </div>
 
       <VideoToolbarScanAction {...scanActionProps} />
-
-      <VideoToolbarQuickFilters
-        quickFilter={quickFilter}
-        quickFilterCounts={quickFilterCounts}
-        setQuickFilter={setQuickFilter}
-        setSortType={setSortType}
-        {...ttoTtoButtonProps}
-      />
     </div>
   );
 }
