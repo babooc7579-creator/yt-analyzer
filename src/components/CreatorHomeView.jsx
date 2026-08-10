@@ -27,6 +27,7 @@ export default function CreatorHomeView({
   selectedChannelIds,
   selectedChannelCount,
   selectedChannelKey,
+  storedVideoLoadResult: sharedStoredVideoLoadResult,
   toggleChannelSelection,
   toggleScrapVideo,
   ttoTtoAssetCount,
@@ -40,6 +41,7 @@ export default function CreatorHomeView({
   } = useStoredVideoLoadFeedback({
     onLoad: loadStoredVideosForSelectedChannels,
     selectionKey: selectedChannelKey,
+    sharedLoadResult: sharedStoredVideoLoadResult,
   });
 
   const {

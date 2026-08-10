@@ -28,6 +28,7 @@ export default function ChannelWatchlistWorkspace({
   onSetSelectedChannelIds,
   onToggleSelection,
   selectedChannelIds,
+  storedVideoLoadResult: sharedStoredVideoLoadResult,
 }) {
   const selectedChannelKey = [...(Array.isArray(selectedChannelIds) ? selectedChannelIds : [])]
     .sort()
@@ -39,6 +40,7 @@ export default function ChannelWatchlistWorkspace({
   } = useStoredVideoLoadFeedback({
     onLoad: onLoadStoredVideos,
     selectionKey: selectedChannelKey,
+    sharedLoadResult: sharedStoredVideoLoadResult,
   });
 
   const {

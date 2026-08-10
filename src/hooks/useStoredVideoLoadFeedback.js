@@ -1,9 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+export function getEffectiveStoredVideoLoadResult({
+  loadResult,
+  selectionKey = '',
+  sharedLoadResult,
+}) {
+  if (loadResult !== null && loadResult !== undefined) return loadResult;
+  return sharedLoadResult?.selectionKey === selectionKey ? sharedLoadResult : null;
+}
+
 export function useStoredVideoLoadFeedback({
   loading = false,
   onLoad,
   selectionKey = '',
+  sharedLoadResult = null,
 } = {}) {
   const [loadResult, setLoadResult] = useState(null);
   const [localPending, setLocalPending] = useState(false);
@@ -47,7 +57,11 @@ export function useStoredVideoLoadFeedback({
   }, [loading, onLoad]);
 
   return {
-    loadResult,
+    loadResult: getEffectiveStoredVideoLoadResult({
+      loadResult,
+      selectionKey,
+      sharedLoadResult,
+    }),
     loading: Boolean(loading || localPending),
     onLoadStoredVideos: loadStoredVideos,
   };

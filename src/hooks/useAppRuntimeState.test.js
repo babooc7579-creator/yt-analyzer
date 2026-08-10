@@ -32,6 +32,7 @@ describe('useAppRuntimeState', () => {
     expect(useState).toHaveBeenNthCalledWith(6, false);
     expect(useState).toHaveBeenNthCalledWith(7, '');
     expect(useState).toHaveBeenNthCalledWith(8, '');
+    expect(useState).toHaveBeenNthCalledWith(9, null);
     expect(runtimeState).toMatchObject({
       apiKey: '',
       error: '',
@@ -39,6 +40,7 @@ describe('useAppRuntimeState', () => {
       loading: false,
       progressMsg: '',
       scanningTag: null,
+      storedVideoLoadResult: null,
       updatingChannelId: null,
       videos: [],
     });
@@ -55,5 +57,6 @@ describe('useAppRuntimeState', () => {
     expect(runtimeState.setLoading).toBe(stateSetters[5]);
     expect(runtimeState.setProgressMsg).toBe(stateSetters[6]);
     expect(runtimeState.setError).toBe(stateSetters[7]);
+    expect(runtimeState.setStoredVideoLoadResult).toBe(stateSetters[8]);
   });
 });

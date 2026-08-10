@@ -6,6 +6,7 @@ export default function CreatorTtoTtoRoute(props) {
     loading: props.loading,
     onLoad: props.onLoadStoredVideos,
     selectionKey: props.selectedChannelKey,
+    sharedLoadResult: props.storedVideoLoadResult,
   });
 
   return <TtoTtoExplorerWorkspace {...props} {...feedback} />;

@@ -19,6 +19,7 @@ export function buildKeywordExplorerRouteProps({
   setChannelPreview,
   setNewChannelInput,
   selectedChannelIds,
+  storedVideoLoadResult,
   toggleCheckVideo,
   toggleScrapVideo,
   videos,
@@ -70,6 +71,7 @@ export function buildKeywordExplorerRouteProps({
     onToggleScrap: toggleScrapVideo,
     selectedChannelCount: normalizedSelectedChannelIds.length,
     selectedChannelKey: [...normalizedSelectedChannelIds].sort().join('|'),
+    storedVideoLoadResult,
     registeredChannelIds: toArray(savedChannels).map((channel) => String(channel?.id || '')).filter(Boolean),
     videos: toArray(videos),
   };

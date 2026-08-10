@@ -18,6 +18,7 @@ export function useCreatorAppCollectionWorkflow({
     setLoading: runtime.setLoading,
     setProgressMsg: runtime.setProgressMsg,
     setScanningTag: runtime.setScanningTag,
+    setStoredVideoLoadResult: runtime.setStoredVideoLoadResult,
     setVideos: runtime.setVideos,
   });
   if (!workspaceWorkflow.hasUnsavedProductionDrafts) return collectionActions;

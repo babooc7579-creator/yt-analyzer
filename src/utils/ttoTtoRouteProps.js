@@ -10,6 +10,7 @@ export function buildTtoTtoRouteProps({
   restoreVideoToRadar,
   savedVideos,
   selectedChannelIds,
+  storedVideoLoadResult,
   toggleScrapVideo,
   videoUserRecords,
   videos,
@@ -35,6 +36,7 @@ export function buildTtoTtoRouteProps({
     savedVideos: toArray(savedVideos),
     selectedChannelCount: normalizedSelectedChannelIds.length,
     selectedChannelKey: [...normalizedSelectedChannelIds].sort().join('|'),
+    storedVideoLoadResult,
     videoUserRecords,
     videos: toArray(videos),
   };

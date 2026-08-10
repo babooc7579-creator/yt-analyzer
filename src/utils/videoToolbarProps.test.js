@@ -149,7 +149,7 @@ describe('videoToolbarProps utils', () => {
       copyButtonDisabled: true,
       copyButtonLabel: '영상 URL 목록 복사',
       statusText: '현재 표시 3개 / 전체 12개',
-      title: '보관함 도구막대',
+      title: '영상 검토 도구',
     });
     expect(props.description).toContain('화면 표시 조건만 바꿉니다');
     expect(props.description).toContain('YouTube API를 새로 호출하지 않습니다');

@@ -6,6 +6,7 @@ export default function CreatorKeywordExplorerRoute(props) {
     loading: props.loading,
     onLoad: props.onLoadStoredVideos,
     selectionKey: props.selectedChannelKey,
+    sharedLoadResult: props.storedVideoLoadResult,
   });
 
   return <KeywordExplorerWorkspace {...props} {...feedback} />;
