@@ -40,8 +40,15 @@ export function useVideoCollectionActions({
   setLoading,
   setProgressMsg,
   setScanningTag,
+  setStoredVideoLoadResult,
   setVideos,
 }) {
+  const selectedChannelKey = [...selectedChannelIds].sort().join('|');
+  const recordStoredVideoLoadResult = (result) => {
+    if (typeof setStoredVideoLoadResult === 'function') {
+      setStoredVideoLoadResult({ ...result, selectionKey: selectedChannelKey });
+    }
+  };
   const clearProgressMessageAfter = (delay) => {
     setTimeout(() => setProgressMsg(''), delay);
   };
@@ -77,9 +84,11 @@ export function useVideoCollectionActions({
   const loadStoredVideosForSelectedChannels = async () => {
     if (selectedChannelIds.length === 0) {
       setError(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE);
+      recordStoredVideoLoadResult({ success: false, videoCount: 0 });
       return { success: false, videoCount: 0 };
     }
 
+    if (typeof setStoredVideoLoadResult === 'function') setStoredVideoLoadResult(null);
     prepareStoredVideoLoad();
     const loadStartedAt = Date.now();
 
@@ -97,10 +106,12 @@ export function useVideoCollectionActions({
       const mapped = mapStoredVideosToViewModels(data.videos || []);
 
       finishStoredVideoLoad(mapped, data.pageCount, Date.now() - loadStartedAt);
+      recordStoredVideoLoadResult({ success: true, videoCount: mapped.length });
       return { success: true, videoCount: mapped.length };
     } catch (err) {
       setError(getStoredVideoLoadErrorMessage(err));
       setProgressMsg('');
+      recordStoredVideoLoadResult({ success: false, videoCount: 0 });
       return { success: false, videoCount: 0 };
     } finally {
       setLoading(false);

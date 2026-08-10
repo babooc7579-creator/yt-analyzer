@@ -24,6 +24,7 @@ export default function CreatorLegacyWorkspaceRoute(props) {
     loading: props.loading,
     onLoad: props.loadStoredVideosForSelectedChannels,
     selectionKey: selectedChannelKey,
+    sharedLoadResult: props.storedVideoLoadResult,
   });
 
   const scrollToOperationStage = (stageId, behavior = 'smooth') => {

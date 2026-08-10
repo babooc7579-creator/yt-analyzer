@@ -12,6 +12,7 @@ export function buildTagVaultRouteProps({
   savedChannels,
   selectedChannelIds,
   setSelectedChannelIds,
+  storedVideoLoadResult,
   toggleCheckVideo,
   toggleScrapVideo,
   videos,
@@ -39,6 +40,7 @@ export function buildTagVaultRouteProps({
     onToggleScrap: toggleScrapVideo,
     selectedChannelIds: normalizedSelectedChannelIds,
     selectedChannelKey: [...normalizedSelectedChannelIds].sort().join('|'),
+    storedVideoLoadResult,
     videos: toArray(videos),
   };
 }

@@ -59,6 +59,7 @@ const createDeps = (overrides = {}) => ({
   setLoading: vi.fn(),
   setProgressMsg: vi.fn(),
   setScanningTag: vi.fn(),
+  setStoredVideoLoadResult: vi.fn(),
   setVideos: vi.fn(),
   ...overrides,
 });
@@ -106,6 +107,11 @@ describe('useVideoCollectionActions', () => {
 
     expect(result).toEqual({ success: false, videoCount: 0 });
     expect(deps.setError).toHaveBeenCalledWith(STORED_VIDEO_NO_CHANNEL_SELECTED_MESSAGE);
+    expect(deps.setStoredVideoLoadResult).toHaveBeenCalledWith({
+      success: false,
+      videoCount: 0,
+      selectionKey: '',
+    });
     expect(fetchAllStoredVideosByChannelIds).not.toHaveBeenCalled();
     expect(deps.setLoading).not.toHaveBeenCalled();
     expect(scanChannels).not.toHaveBeenCalled();
@@ -144,6 +150,12 @@ describe('useVideoCollectionActions', () => {
       '온라인 저장소(Azure DB) 조회 완료 · 1초 미만 경과: 수집된 영상 정보 1개를 불러왔습니다. 새 YouTube API 호출은 없었습니다.',
     );
     expect(deps.setLoading).toHaveBeenLastCalledWith(false);
+    expect(deps.setStoredVideoLoadResult).toHaveBeenNthCalledWith(1, null);
+    expect(deps.setStoredVideoLoadResult).toHaveBeenNthCalledWith(2, {
+      success: true,
+      videoCount: 1,
+      selectionKey: 'active-1|active-2',
+    });
 
     vi.runOnlyPendingTimers();
 
@@ -166,6 +178,11 @@ describe('useVideoCollectionActions', () => {
     );
     expect(deps.setProgressMsg).toHaveBeenLastCalledWith('');
     expect(deps.setLoading).toHaveBeenLastCalledWith(false);
+    expect(deps.setStoredVideoLoadResult).toHaveBeenLastCalledWith({
+      success: false,
+      videoCount: 0,
+      selectionKey: 'active-1',
+    });
     expect(scanChannels).not.toHaveBeenCalled();
     expect(scanSelectedChannels).not.toHaveBeenCalled();
   });

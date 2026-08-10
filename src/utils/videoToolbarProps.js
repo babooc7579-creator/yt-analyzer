@@ -50,7 +50,7 @@ export const getVideoToolbarReferenceHeaderViewProps = ({
   copyButtonTitle: '현재 검색/필터/정렬 조건으로 보이는 영상 제목과 YouTube URL 목록을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
   description: '검색, 필터, 정렬, 보기 방식은 현재 불러온 수집 영상 정보의 화면 표시 조건만 바꿉니다. YouTube API를 새로 호출하지 않습니다.',
   statusText: `현재 표시 ${filteredCount}개 / 전체 ${totalCount}개`,
-  title: '보관함 도구막대',
+  title: '영상 검토 도구',
 });
 
 export const getVideoToolbarTtoTtoButtonViewProps = ({ ttoTtoMode }) => ({

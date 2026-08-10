@@ -9,6 +9,7 @@ export function useAppRuntimeState() {
   const [loading, setLoading] = useState(false);
   const [progressMsg, setProgressMsg] = useState('');
   const [error, setError] = useState('');
+  const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
 
   return {
     apiKey,
@@ -23,9 +24,11 @@ export function useAppRuntimeState() {
     setLoading,
     setProgressMsg,
     setScanningTag,
+    setStoredVideoLoadResult,
     setUpdatingChannelId,
     setVideos,
     updatingChannelId,
     videos,
+    storedVideoLoadResult,
   };
 }

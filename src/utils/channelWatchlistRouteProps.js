@@ -8,6 +8,7 @@ export function buildChannelWatchlistRouteProps({
   savedChannels,
   selectedChannelIds,
   setSelectedChannelIds,
+  storedVideoLoadResult,
   toggleChannelSelection,
 } = {}) {
   return {
@@ -23,5 +24,6 @@ export function buildChannelWatchlistRouteProps({
     onSetSelectedChannelIds: setSelectedChannelIds,
     onToggleSelection: toggleChannelSelection,
     selectedChannelIds: toArray(selectedChannelIds),
+    storedVideoLoadResult,
   };
 }
