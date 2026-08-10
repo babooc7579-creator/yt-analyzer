@@ -4,8 +4,6 @@ import StoredVideoGuide from './StoredVideoGuide';
 export default function VideoDashboardSourceSummary({
   isReferenceVaultView,
   onChangeSelectedChannels,
-  savedChannelCount,
-  savedVideoCount,
   selectedChannelCount,
   selectedChannelScopes,
   selectedChannelTitles,
@@ -20,8 +18,6 @@ export default function VideoDashboardSourceSummary({
   return (
     <ReferenceVaultSummary
       videoCount={totalVideoCount}
-      channelCount={savedChannelCount}
-      scrapCount={savedVideoCount}
       onChangeSelectedChannels={onChangeSelectedChannels}
       selectedChannelCount={selectedChannelCount}
       selectedChannelScopes={selectedChannelScopes}
