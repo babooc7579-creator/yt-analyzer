@@ -7,6 +7,7 @@ export default function VideoToolbarReferenceHeader({
   totalCount,
 }) {
   const {
+    actionResultGuide,
     copyButtonAriaLabel,
     copyButtonCopiedLabel,
     copyButtonDisabled,
@@ -26,6 +27,9 @@ export default function VideoToolbarReferenceHeader({
       <div>
         <p className="text-xs font-extrabold text-slate-900">{title}</p>
         <p className="text-[11px] text-slate-500">{description}</p>
+        <p className="mt-1 text-[11px] font-bold text-indigo-700" aria-label="영상 결정 버튼 결과 위치">
+          버튼 결과 · {actionResultGuide}
+        </p>
       </div>
       <div className="flex flex-col gap-1 sm:items-end">
         <p className="text-[10px] font-semibold text-slate-500">{statusText}</p>
