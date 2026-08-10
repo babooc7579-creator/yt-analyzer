@@ -27,12 +27,20 @@ describe('VideoCard decision-first layout', () => {
     expect(html).toContain('26.04.01, 150일');
   });
 
-  it('keeps a neutral comparison reason when candidate reasons are empty', () => {
+  it('hides the repeated comparison box when candidate reasons are empty', () => {
     const html = renderToStaticMarkup(<VideoCardCandidateReasons candidateReasons={[]} />);
 
-    expect(html).toContain('비교 참고');
-    expect(html).toContain('현재 또터또 기준에는 해당하지 않는 비교 참고 영상입니다.');
-    expect(html).toContain('min-h-[58px]');
+    expect(html).toBe('');
+  });
+
+  it('shows actual candidate reasons in one compact row', () => {
+    const html = renderToStaticMarkup(
+      <VideoCardCandidateReasons candidateReasons={['평균 대비 2.4배', '150일 지난 소재']} />,
+    );
+
+    expect(html).toContain('검토 이유');
+    expect(html).toContain('평균 대비 2.4배 · 150일 지난 소재');
+    expect(html).not.toContain('min-h-[58px]');
   });
 
   it('renders production candidate before the secondary scrapbook action', () => {

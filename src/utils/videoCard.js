@@ -21,13 +21,11 @@ export const getVideoCardCandidateReasonsViewProps = ({ candidateReasons }) => {
   const isCandidate = reasonList.length > 0;
 
   return {
-    description: isCandidate
-      ? reasonList.join(' · ')
-      : '현재 또터또 기준에는 해당하지 않는 비교 참고 영상입니다.',
+    description: reasonList.join(' · '),
     isCandidate,
     reasonList,
-    shouldShow: true,
-    title: isCandidate ? '판단 신호' : '비교 참고',
+    shouldShow: isCandidate,
+    title: '검토 이유',
   };
 };
 

@@ -144,6 +144,7 @@ describe('videoToolbarProps utils', () => {
     });
 
     expect(props).toMatchObject({
+      actionResultGuide: '제작 후보로 → 제작 후보함 · 소재 보관 → 소재 보관함',
       copyButtonAriaLabel: '현재 표시된 수집 영상 3개 URL 목록 복사',
       copyButtonCopiedLabel: '목록 복사 완료',
       copyButtonDisabled: true,

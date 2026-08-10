@@ -148,16 +148,16 @@ describe('videoCard utils', () => {
       isCandidate: true,
       reasonList: ['평균 대비 3.2배', '200일 지난 소재'],
       shouldShow: true,
-      title: '판단 신호',
+      title: '검토 이유',
     });
 
     expect(getVideoCardCandidateReasonsViewProps({
       candidateReasons: null,
     })).toMatchObject({
-      description: '현재 또터또 기준에는 해당하지 않는 비교 참고 영상입니다.',
+      description: '',
       isCandidate: false,
-      shouldShow: true,
-      title: '비교 참고',
+      shouldShow: false,
+      title: '검토 이유',
     });
   });
 

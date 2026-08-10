@@ -42,5 +42,8 @@ describe('VideoToolbar layout', () => {
     expect(html).toContain('2xl:grid-cols-[minmax(0,1fr)_22rem]');
     expect(html).not.toContain('2xl:flex-row');
     expect(html.indexOf('수집 영상 빠른 필터')).toBeLessThan(html.indexOf('channel-operations-scan'));
+    expect(html).toContain('버튼 결과');
+    expect(html).toContain('제작 후보로 → 제작 후보함');
+    expect(html).toContain('소재 보관 → 소재 보관함');
   });
 });
