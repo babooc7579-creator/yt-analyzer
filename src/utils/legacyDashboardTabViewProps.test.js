@@ -22,6 +22,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       scannableChannelCount: 2,
       searchKeyword: 'table',
       selectedChannelIds: ['channel1', 'channel2'],
+      storedVideoLoadResult: { success: true, videoCount: 1 },
       showWorkPanel: true,
       sortType: 'views',
       totalVideoCount: 3,
@@ -42,7 +43,7 @@ describe('legacyDashboardTabViewProps utils', () => {
       isScanning: false,
       lengthFilter: 'shorts',
       promptCopyError: 'copy failed',
-      quickFilterCounts: { recent30: null, oldPopular: null, ttoTto: null },
+      quickFilterCounts: { recent30: 0, oldPopular: 0, ttoTto: 0 },
       savedChannelCount: 2,
       savedVideoCount: 1,
       scannableChannelCount: 2,
@@ -60,6 +61,81 @@ describe('legacyDashboardTabViewProps utils', () => {
     });
     expect(props.commentApiNotice).toContain('YouTube API');
     expect(props.commentApiNotice).toContain('수집 영상 목록 불러오기');
+  });
+
+  it('hides videos from a previous channel scope until the selected channels are loaded', () => {
+    const staleVideo = { videoId: 'old-video', channel_id: 'old-channel' };
+    const baseProps = {
+      checkedVideos: ['old-video'],
+      filteredAndSortedVideos: [staleVideo],
+      isReferenceVaultView: true,
+      selectedChannelIds: ['new-channel'],
+      totalVideoCount: 1,
+      videos: [staleVideo],
+    };
+
+    const beforeLookup = getLegacyDashboardTabViewProps(baseProps);
+
+    expect(beforeLookup.controlsProps).toMatchObject({
+      checkedVideos: [],
+      filteredCount: 0,
+      filteredVideos: [],
+      totalVideoCount: 0,
+    });
+    expect(beforeLookup.resultsPanelProps).toMatchObject({
+      checkedVideos: [],
+      filteredVideos: [],
+      videos: [],
+    });
+
+    const failedLookup = getLegacyDashboardTabViewProps({
+      ...baseProps,
+      storedVideoLoadResult: { success: false, videoCount: 0 },
+    });
+
+    expect(failedLookup.controlsProps.filteredCount).toBe(0);
+    expect(failedLookup.resultsPanelProps.videos).toEqual([]);
+
+    const afterLookup = getLegacyDashboardTabViewProps({
+      ...baseProps,
+      storedVideoLoadResult: { success: true, videoCount: 1 },
+    });
+
+    expect(afterLookup.controlsProps).toMatchObject({
+      checkedVideos: ['old-video'],
+      filteredCount: 1,
+      filteredVideos: [staleVideo],
+      totalVideoCount: 1,
+    });
+    expect(afterLookup.resultsPanelProps.videos).toEqual([staleVideo]);
+  });
+
+  it('keeps videos available outside the collected-video reference view', () => {
+    const video = { videoId: 'video1' };
+    const props = getLegacyDashboardTabViewProps({
+      filteredAndSortedVideos: [video],
+      isReferenceVaultView: false,
+      selectedChannelIds: ['channel1'],
+      videos: [video],
+    });
+
+    expect(props.controlsProps.filteredVideos).toEqual([video]);
+    expect(props.resultsPanelProps.videos).toEqual([video]);
+  });
+
+  it('does not show a previous lookup after all channels are cleared', () => {
+    const staleVideo = { videoId: 'old-video' };
+    const props = getLegacyDashboardTabViewProps({
+      filteredAndSortedVideos: [staleVideo],
+      isReferenceVaultView: true,
+      selectedChannelIds: [],
+      totalVideoCount: 1,
+      videos: [staleVideo],
+    });
+
+    expect(props.controlsProps.filteredCount).toBe(0);
+    expect(props.controlsProps.totalVideoCount).toBe(0);
+    expect(props.resultsPanelProps.videos).toEqual([]);
   });
 
   it('copies only checked videos from the full video list', () => {
