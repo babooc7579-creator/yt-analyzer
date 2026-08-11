@@ -5,6 +5,7 @@ import { useCreatorAppDerivedState } from './useCreatorAppDerivedState';
 import { useCreatorAppVideoWorkflow } from './useCreatorAppVideoWorkflow';
 import { useCreatorAppViewProps } from './useCreatorAppViewProps';
 import { useCreatorAppWorkspaceWorkflow } from './useCreatorAppWorkspaceWorkflow';
+import { getConfirmedStoredVideos } from '../utils/storedVideoScope';
 
 export function useCreatorAppController() {
   const runtime = useAppRuntimeState();
@@ -15,9 +16,19 @@ export function useCreatorAppController() {
     setProgressMsg: runtime.setProgressMsg,
     setUpdatingChannelId: runtime.setUpdatingChannelId,
   });
+  const selectedChannelKey = [...(
+    Array.isArray(channelWorkflow.selectedChannelIds)
+      ? channelWorkflow.selectedChannelIds
+      : []
+  )].sort().join('|');
+  const confirmedVideos = getConfirmedStoredVideos({
+    selectedChannelKey,
+    storedVideoLoadResult: runtime.storedVideoLoadResult,
+    videos: runtime.videos,
+  });
 
   const videoWorkflow = useCreatorAppVideoWorkflow({
-    videos: runtime.videos,
+    videos: confirmedVideos,
   });
 
   const workspaceWorkflow = useCreatorAppWorkspaceWorkflow({
@@ -42,7 +53,7 @@ export function useCreatorAppController() {
     selectedChannelIds: channelWorkflow.selectedChannelIds,
     videoRecordsSyncWarning: videoWorkflow.videoRecordsSyncWarning,
     videoUserRecords: videoWorkflow.videoUserRecords,
-    videos: runtime.videos,
+    videos: confirmedVideos,
   });
 
   return useCreatorAppViewProps({
@@ -52,5 +63,6 @@ export function useCreatorAppController() {
     ...workspaceWorkflow,
     ...collectionWorkflow,
     ...derivedState,
+    videos: confirmedVideos,
   });
 }
