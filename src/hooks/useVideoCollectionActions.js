@@ -42,8 +42,27 @@ export function useVideoCollectionActions({
   setScanningTag,
   setStoredVideoLoadResult,
   setVideos,
+  storedVideoLoadRequestRef,
 }) {
   const selectedChannelKey = [...selectedChannelIds].sort().join('|');
+  const requestState = storedVideoLoadRequestRef?.current || {
+    activeRequestId: null,
+    requestId: 0,
+    selectionKey: selectedChannelKey,
+  };
+  if (requestState.selectionKey !== selectedChannelKey) {
+    requestState.requestId += 1;
+    requestState.selectionKey = selectedChannelKey;
+  }
+  const beginStoredVideoLoadRequest = () => {
+    requestState.requestId += 1;
+    requestState.activeRequestId = requestState.requestId;
+    return requestState.requestId;
+  };
+  const isCurrentStoredVideoLoadRequest = (requestId) => (
+    requestState.requestId === requestId
+    && requestState.selectionKey === selectedChannelKey
+  );
   const recordStoredVideoLoadResult = (result) => {
     if (typeof setStoredVideoLoadResult === 'function') {
       setStoredVideoLoadResult({ ...result, selectionKey: selectedChannelKey });
@@ -89,18 +108,23 @@ export function useVideoCollectionActions({
     }
 
     if (typeof setStoredVideoLoadResult === 'function') setStoredVideoLoadResult(null);
+    const requestId = beginStoredVideoLoadRequest();
     prepareStoredVideoLoad();
     const loadStartedAt = Date.now();
 
     try {
       const data = await fetchAllStoredVideosByChannelIds(selectedChannelIds, {
         onPage: (progress) => {
+          if (!isCurrentStoredVideoLoadRequest(requestId)) return;
           setProgressMsg(getStoredVideoLoadProgressMessage({
             ...progress,
             elapsedMs: Date.now() - loadStartedAt,
           }));
         },
       });
+      if (!isCurrentStoredVideoLoadRequest(requestId)) {
+        return { success: false, videoCount: 0, ignored: true };
+      }
       if (!data.success) throw new Error(data.error || STORED_VIDEO_LOAD_FAILED_MESSAGE);
 
       const mapped = mapStoredVideosToViewModels(data.videos || []);
@@ -109,12 +133,18 @@ export function useVideoCollectionActions({
       recordStoredVideoLoadResult({ success: true, videoCount: mapped.length });
       return { success: true, videoCount: mapped.length };
     } catch (err) {
+      if (!isCurrentStoredVideoLoadRequest(requestId)) {
+        return { success: false, videoCount: 0, ignored: true };
+      }
       setError(getStoredVideoLoadErrorMessage(err));
       setProgressMsg('');
       recordStoredVideoLoadResult({ success: false, videoCount: 0 });
       return { success: false, videoCount: 0 };
     } finally {
-      setLoading(false);
+      if (requestState.activeRequestId === requestId) {
+        requestState.activeRequestId = null;
+        setLoading(false);
+      }
     }
   };
 

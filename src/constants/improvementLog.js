@@ -658,7 +658,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-08-10',
-    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 야간 Timer가 모든 활성 채널을 자동 수집하고 전체 영상 대박지수를 반복 저장하던 문제를 백엔드 PR #28로 수정·배포했습니다. 2026-08-09 새벽 3시 첫 운영 실행은 341ms 만에 대상 채널 0·실패 0·신규 0·통계 갱신 0·영상 저장 0으로 완료됐습니다. 같은 15분 구간 비교에서 Cosmos 요청은 13,296건에서 4건, 429는 7,161건에서 0건, Upsert는 13,146건에서 0건, RU는 61,464에서 4로 줄었습니다. 등록 채널 21개는 모두 수동 취급 상태이며 active+auto 채널은 0개입니다. 프론트는 현재 선택 채널 키와 Azure DB 조회 성공 키가 일치하는 영상만 중앙 데이터 관문에서 업무 화면에 전달해, 레이더·수집 영상 목록·채널 태그별 보기·또터또·수집 영상 검색에 이전 범위 결과가 섞이지 않게 합니다.',
+    currentSummary: '온라인 저장소(Azure DB) 조회와 YouTube 새 영상 수집을 분리하고, 중요한 저장 버튼에는 데이터 변경 여부를 안내합니다. 야간 Timer가 모든 활성 채널을 자동 수집하고 전체 영상 대박지수를 반복 저장하던 문제를 백엔드 PR #28로 수정·배포했습니다. 2026-08-09 새벽 3시 첫 운영 실행은 341ms 만에 대상 채널 0·실패 0·신규 0·통계 갱신 0·영상 저장 0으로 완료됐습니다. 같은 15분 구간 비교에서 Cosmos 요청은 13,296건에서 4건, 429는 7,161건에서 0건, Upsert는 13,146건에서 0건, RU는 61,464에서 4로 줄었습니다. 등록 채널 21개는 모두 수동 취급 상태이며 active+auto 채널은 0개입니다. 프론트는 현재 선택 채널 키와 Azure DB 조회 성공 키가 일치하는 영상만 중앙 데이터 관문에서 업무 화면에 전달해, 레이더·수집 영상 목록·채널 태그별 보기·또터또·수집 영상 검색에 이전 범위 결과가 섞이지 않게 합니다. 채널 범위를 바꾼 뒤 늦게 도착한 이전 Azure DB 조회 응답도 중앙 영상·결과·진행 상태를 덮어쓰지 않도록 요청 순서를 함께 검증합니다.',
     targetSummary: '화면 표시, 이동, DB 조회, DB 저장, YouTube API 수집을 모든 핵심 흐름에서 실제 결과까지 확인하고 기록합니다.',
     nextAction: '자동 수집 채널은 0개로 유지하고, 운영 화면에서 채널 A 조회 후 채널 B 선택 시 모든 수집 영상 기반 화면이 조회 전 상태로 함께 전환되는지 확인합니다. Azure 지표는 비용·429 이상 징후가 있을 때 읽기 전용으로 재점검합니다.',
     decisions: [
@@ -711,6 +711,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'timer-summary-observability',
         label: '야간 자동 실행에 대상·실패·신규·갱신·저장 건수 요약 로그',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'stored-video-stale-response-guard',
+        label: '채널 범위 변경 후 늦게 도착한 이전 Azure DB 조회 응답 무시',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

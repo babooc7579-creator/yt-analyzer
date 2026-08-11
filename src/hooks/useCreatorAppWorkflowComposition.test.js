@@ -199,6 +199,7 @@ describe('Creator app workflow composition hooks', () => {
       setProgressMsg: vi.fn(),
       setScanningTag: vi.fn(),
       setVideos: vi.fn(),
+      storedVideoLoadRequestRef: { current: {} },
     };
     const videoWorkflow = {
       clearCheckedVideos: vi.fn(),
@@ -226,6 +227,7 @@ describe('Creator app workflow composition hooks', () => {
       setProgressMsg: runtime.setProgressMsg,
       setScanningTag: runtime.setScanningTag,
       setVideos: runtime.setVideos,
+      storedVideoLoadRequestRef: runtime.storedVideoLoadRequestRef,
     });
     expect(workflow).toEqual({
       loadStoredVideos: expect.any(Function),

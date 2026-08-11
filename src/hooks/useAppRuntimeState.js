@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 export function useAppRuntimeState() {
   const [apiKey, setApiKey] = useState('');
@@ -10,6 +10,11 @@ export function useAppRuntimeState() {
   const [progressMsg, setProgressMsg] = useState('');
   const [error, setError] = useState('');
   const [storedVideoLoadResult, setStoredVideoLoadResult] = useState(null);
+  const storedVideoLoadRequestRef = useRef({
+    activeRequestId: null,
+    requestId: 0,
+    selectionKey: '',
+  });
 
   return {
     apiKey,
@@ -30,5 +35,6 @@ export function useAppRuntimeState() {
     updatingChannelId,
     videos,
     storedVideoLoadResult,
+    storedVideoLoadRequestRef,
   };
 }
