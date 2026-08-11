@@ -22,9 +22,11 @@ describe('channelAddCopy utils', () => {
     const copy = getChannelPreviewInputCopy();
 
     expect(copy.inputPlaceholder).toBe(CHANNEL_INPUT_PLACEHOLDER);
-    expect(copy.inputTitle).toContain('붙여넣기만으로는 온라인 저장소(Azure DB) 저장이나 영상 수집이 실행되지 않습니다');
-    expect(copy.previewButtonTitle).toContain('YouTube에서 채널 정보만 확인');
+    expect(copy.inputTitle).toContain('붙여넣기만으로는 YouTube API 호출');
+    expect(copy.previewButtonTitle).toContain('YouTube API를 사용해 채널 정보만 확인');
     expect(copy.previewButtonTitle).toContain('온라인 저장소(Azure DB) 저장과 영상 수집은 하지 않습니다');
+    expect(copy.previewButtonLabel).toBe('YouTube API로 확인');
+    expect(copy.helperText).toContain('YouTube API로 채널 정보만 확인');
     expect(copy.helperText).toContain('아직 온라인 저장소(Azure DB)에 저장하지 않고');
     expect(copy.helperText).toContain('영상 수집은 하지 않습니다');
   });
@@ -36,12 +38,13 @@ describe('channelAddCopy utils', () => {
 
     expect(inputCopy.placeholder).toBe(CHANNEL_BULK_INPUT_PLACEHOLDER);
     expect(inputCopy.helperText).toBe(
-      '3/50개 인식됨. 최대 50개를 10개씩 확인해 온라인 저장소(Azure DB)에 등록합니다. 영상 수집은 하지 않습니다.'
+      '3/50개 인식됨. 최대 50개를 10개씩 YouTube API로 확인해 온라인 저장소(Azure DB)에 등록합니다. 영상 수집은 하지 않습니다.'
     );
+    expect(idleButtonCopy.title).toContain('YouTube API로 채널 정보를 확인');
     expect(idleButtonCopy.title).toContain('온라인 저장소(Azure DB)의 채널 목록에 저장');
     expect(idleButtonCopy.title).toContain('영상 수집은 하지 않습니다');
-    expect(idleButtonCopy.label).toBe('YouTube 확인 후 일괄 저장');
-    expect(loadingButtonCopy.label).toBe('YouTube 확인 후 온라인 저장소(Azure DB) 저장 중');
+    expect(idleButtonCopy.label).toBe('YouTube API 확인 후 일괄 저장');
+    expect(loadingButtonCopy.label).toBe('YouTube API 확인 후 온라인 저장소(Azure DB) 저장 중');
   });
 
   it('builds preview save action copy as Cloud storage only', () => {

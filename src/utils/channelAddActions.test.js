@@ -111,7 +111,7 @@ describe('channelAddActions utils', () => {
       '채널이 온라인 저장소(Azure DB)에 추가되었습니다. 새 영상은 선택 채널 새 영상 수집 버튼을 눌렀을 때만 확인합니다.',
     );
     expect(getBulkChannelSaveStartMessage(3)).toBe(
-      '3개 채널 정보를 YouTube에서 확인한 뒤 온라인 저장소(Azure DB)에 저장하는 중입니다. 영상 수집은 실행하지 않습니다.',
+      '3개 채널 정보를 YouTube API로 확인한 뒤 온라인 저장소(Azure DB)에 저장하는 중입니다. 영상 수집은 실행하지 않습니다.',
     );
     expect(getBulkChannelSaveCompleteMessage({ total: 6, added: 2, existing: 2, duplicate: 1, failed: 1 })).toBe(
       '채널 등록 처리 완료: 전체 6개 · 새로 저장 2개 · 기존 등록 2개 · 중복 입력 1개 · 실패 1개. 새 영상 수집은 실행하지 않았습니다.',

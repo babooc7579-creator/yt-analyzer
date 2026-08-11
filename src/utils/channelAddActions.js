@@ -74,7 +74,7 @@ export const getChannelSaveCompleteMessage = () => (
 );
 
 export const getBulkChannelSaveStartMessage = (channelCount) => (
-  `${channelCount}개 채널 정보를 YouTube에서 확인한 뒤 온라인 저장소(Azure DB)에 저장하는 중입니다. 영상 수집은 실행하지 않습니다.`
+  `${channelCount}개 채널 정보를 YouTube API로 확인한 뒤 온라인 저장소(Azure DB)에 저장하는 중입니다. 영상 수집은 실행하지 않습니다.`
 );
 
 export const getBulkChannelSaveCompleteMessage = ({ total, added, existing = 0, duplicate = 0, failed = 0 }) => (
