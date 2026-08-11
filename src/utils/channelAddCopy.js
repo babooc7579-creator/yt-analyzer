@@ -11,27 +11,27 @@ export const CHANNEL_BULK_INPUT_PLACEHOLDER = [
 export const getChannelPreviewInputCopy = ({ hasInput = true } = {}) => ({
   inputPlaceholder: CHANNEL_INPUT_PLACEHOLDER,
   inputAriaLabel: '확인할 채널 핸들, 채널 링크 또는 영상 링크',
-  inputTitle: '붙여넣기만으로는 온라인 저장소(Azure DB) 저장이나 영상 수집이 실행되지 않습니다. YouTube에서 확인 버튼으로 채널 정보만 먼저 확인합니다.',
+  inputTitle: '붙여넣기만으로는 YouTube API 호출, 온라인 저장소(Azure DB) 저장, 영상 수집이 실행되지 않습니다. 확인 버튼을 눌러야 채널 정보를 조회합니다.',
   previewButtonTitle: hasInput
-    ? 'YouTube에서 채널 정보만 확인합니다. 온라인 저장소(Azure DB) 저장과 영상 수집은 하지 않습니다.'
+    ? 'YouTube API를 사용해 채널 정보만 확인합니다. 온라인 저장소(Azure DB) 저장과 영상 수집은 하지 않습니다.'
     : '채널 핸들, 채널 링크 또는 영상 링크를 먼저 입력해 주세요.',
-  previewButtonAriaLabel: 'YouTube에서 채널 정보 확인',
-  previewButtonLabel: 'YouTube에서 확인',
+  previewButtonAriaLabel: 'YouTube API로 채널 정보 확인',
+  previewButtonLabel: 'YouTube API로 확인',
   helperText: hasInput
-    ? '아직 온라인 저장소(Azure DB)에 저장하지 않고 YouTube에서 채널 정보만 먼저 확인합니다. 영상 수집은 하지 않습니다.'
+    ? '이 버튼은 YouTube API로 채널 정보만 확인합니다. 아직 온라인 저장소(Azure DB)에 저장하지 않고 영상 수집은 하지 않습니다.'
     : '채널 정보를 입력하면 YouTube에서 정보만 확인할 수 있습니다. 입력만으로 API 호출이나 저장은 실행되지 않습니다.',
 });
 
 export const getChannelBulkInputCopy = (recognizedLineCount = 0) => ({
   placeholder: CHANNEL_BULK_INPUT_PLACEHOLDER,
   ariaLabel: '일괄 추가할 채널 목록',
-  helperText: `${recognizedLineCount}/50개 인식됨. 최대 50개를 10개씩 확인해 온라인 저장소(Azure DB)에 등록합니다. 영상 수집은 하지 않습니다.`,
+  helperText: `${recognizedLineCount}/50개 인식됨. 최대 50개를 10개씩 YouTube API로 확인해 온라인 저장소(Azure DB)에 등록합니다. 영상 수집은 하지 않습니다.`,
 });
 
 export const getChannelBulkSubmitButtonCopy = ({ bulkLoading = false } = {}) => ({
-  title: 'YouTube에서 채널 정보를 확인한 뒤 온라인 저장소(Azure DB)의 채널 목록에 저장합니다. 영상 수집은 하지 않습니다.',
-  ariaLabel: 'YouTube 확인 후 채널 일괄 저장',
-  label: bulkLoading ? 'YouTube 확인 후 온라인 저장소(Azure DB) 저장 중' : 'YouTube 확인 후 일괄 저장',
+  title: 'YouTube API로 채널 정보를 확인한 뒤 온라인 저장소(Azure DB)의 채널 목록에 저장합니다. 영상 수집은 하지 않습니다.',
+  ariaLabel: 'YouTube API 확인 후 채널 일괄 저장',
+  label: bulkLoading ? 'YouTube API 확인 후 온라인 저장소(Azure DB) 저장 중' : 'YouTube API 확인 후 일괄 저장',
 });
 
 export const getChannelPreviewActionsCopy = () => ({
