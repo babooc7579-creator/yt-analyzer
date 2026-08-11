@@ -9,7 +9,7 @@ export default function VideoToolbarFilterStatus({
   const hasActiveFilters = activeFilterCount > 0;
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
       <span
         className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600"
         title="AI 요청문에 포함하려고 화면에서 선택한 영상 수입니다. API 호출이나 저장 작업은 없습니다."
@@ -19,7 +19,7 @@ export default function VideoToolbarFilterStatus({
       {hasActiveFilters && (
         <>
           <span
-            className="rounded-lg border border-indigo-200 bg-indigo-100 px-3 py-2 text-xs font-extrabold text-indigo-800"
+            className="min-w-0 max-w-full break-words rounded-lg border border-indigo-200 bg-indigo-100 px-3 py-2 text-xs font-extrabold text-indigo-800"
             title={`현재 화면 필터: ${activeFilterLabels.join(' · ')}`}
           >
             필터 {activeFilterCount}개 적용 · {activeFilterLabels.join(' · ')}
