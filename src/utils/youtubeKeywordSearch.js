@@ -122,7 +122,7 @@ export function buildYoutubeSearchOptions(filters, pageToken = '') {
     videoDuration: filters.duration || '',
     regionCode: filters.regionCode || '',
     relevanceLanguage: filters.language || '',
-    publishedAfter: getPublishedAfter(filters.dateRange),
+    publishedAfter: filters.publishedAfter || getPublishedAfter(filters.dateRange),
     pageToken,
   };
 }

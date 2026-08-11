@@ -308,15 +308,18 @@ function YoutubeVideoSearchPanel({
             ))}
           </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">현재 채널 등록 필터에 맞는 영상이 없습니다</h3><p className="mt-2 text-sm text-slate-500">검색 결과는 그대로 유지됩니다. 등록 상태 전체로 바꾸면 모든 결과를 다시 볼 수 있습니다.</p><button type="button" onClick={() => search.changeChannelRegistrationFilter('all')} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">등록 상태 전체 보기</button></div>}
           {search.nextPageToken ? (
-            <button
-              type="button"
-              onClick={() => search.runSearch({ append: true })}
-              disabled={search.loading}
-              className="mx-auto flex h-10 items-center gap-2 rounded-lg border border-slate-700 px-5 text-xs font-extrabold text-slate-200 hover:bg-slate-800 disabled:cursor-not-allowed"
-              title="다음 검색 결과 25개를 YouTube API로 추가 조회합니다."
-            >
-              {search.loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null} 다음 결과 25개 불러오기
-            </button>
+            <div className="space-y-2 text-center">
+              <button
+                type="button"
+                onClick={() => search.runSearch({ append: true })}
+                disabled={search.loading}
+                className="mx-auto flex h-10 items-center gap-2 rounded-lg border border-slate-700 px-5 text-xs font-extrabold text-slate-200 hover:bg-slate-800 disabled:cursor-not-allowed"
+                title="첫 검색의 키워드·국가·언어·기간·길이·정렬 조건을 그대로 유지해 다음 검색 결과 25개를 YouTube API로 추가 조회합니다."
+              >
+                {search.loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null} 다음 결과 25개 불러오기
+              </button>
+              <p className="text-[11px] leading-5 text-slate-500">첫 검색의 국가·언어·기간·길이·정렬 조건을 유지해 YouTube API로 다음 결과를 불러옵니다.</p>
+            </div>
           ) : null}
         </>
       ) : !search.loading && search.lastQuery ? (

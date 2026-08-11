@@ -42,7 +42,8 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   };
 
   const runSearch = async ({ append = false } = {}) => {
-    const query = filters.query.trim();
+    const requestFilters = append && appliedFilters ? appliedFilters : filters;
+    const query = String(requestFilters.query || '').trim();
     if (!query) {
       setError('찾고 싶은 영상의 검색 키워드를 입력해 주세요.');
       return false;
@@ -52,7 +53,8 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     setNotice('');
 
     try {
-      const data = await searchYoutubeVideos(buildYoutubeSearchOptions(filters, append ? nextPageToken : ''));
+      const searchOptions = buildYoutubeSearchOptions(requestFilters, append ? nextPageToken : '');
+      const data = await searchYoutubeVideos(searchOptions);
       if (!data?.success) throw new Error(data?.error || 'YouTube 검색 결과를 불러오지 못했습니다.');
       const incoming = Array.isArray(data.items) ? data.items : [];
       setItems((current) => {
@@ -62,7 +64,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
         return [...merged.values()];
       });
       if (!append) setSelectedIds([]);
-      if (!append) setAppliedFilters({ ...filters, query });
+      if (!append) setAppliedFilters({ ...filters, query, publishedAfter: searchOptions.publishedAfter });
       setNextPageToken(data.nextPageToken || '');
       setLastQuery(query);
       setNotice(incoming.length > 0
