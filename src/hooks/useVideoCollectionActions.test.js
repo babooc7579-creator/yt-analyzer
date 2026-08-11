@@ -61,6 +61,9 @@ const createDeps = (overrides = {}) => ({
   setScanningTag: vi.fn(),
   setStoredVideoLoadResult: vi.fn(),
   setVideos: vi.fn(),
+  storedVideoLoadRequestRef: {
+    current: { activeRequestId: null, requestId: 0, selectionKey: '' },
+  },
   ...overrides,
 });
 
@@ -185,6 +188,51 @@ describe('useVideoCollectionActions', () => {
     });
     expect(scanChannels).not.toHaveBeenCalled();
     expect(scanSelectedChannels).not.toHaveBeenCalled();
+  });
+
+  it('ignores a late DB response after the selected channel scope changes', async () => {
+    let resolveFirst;
+    let resolveSecond;
+    fetchAllStoredVideosByChannelIdsMock
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveFirst = resolve; }))
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveSecond = resolve; }));
+    const sharedDeps = createDeps({ selectedChannelIds: ['channel-a'] });
+    const firstActions = useVideoCollectionActions(sharedDeps);
+    const firstLoad = firstActions.loadStoredVideosForSelectedChannels();
+    const secondActions = useVideoCollectionActions({
+      ...sharedDeps,
+      selectedChannelIds: ['channel-b'],
+    });
+    const secondLoad = secondActions.loadStoredVideosForSelectedChannels();
+
+    resolveSecond({
+      success: true,
+      videos: [{ ...storedVideo, id: 'video-b', channelId: 'channel-b' }],
+      pageCount: 1,
+    });
+    await expect(secondLoad).resolves.toEqual({ success: true, videoCount: 1 });
+    resolveFirst({
+      success: true,
+      videos: [{ ...storedVideo, id: 'video-a', channelId: 'channel-a' }],
+      pageCount: 1,
+    });
+    await expect(firstLoad).resolves.toEqual({
+      success: false,
+      videoCount: 0,
+      ignored: true,
+    });
+
+    expect(sharedDeps.setVideos).toHaveBeenCalledTimes(3);
+    expect(sharedDeps.setVideos).toHaveBeenLastCalledWith([
+      expect.objectContaining({ videoId: 'video-b', channel_id: 'channel-b' }),
+    ]);
+    expect(sharedDeps.setStoredVideoLoadResult).toHaveBeenCalledTimes(3);
+    expect(sharedDeps.setStoredVideoLoadResult).toHaveBeenLastCalledWith({
+      success: true,
+      videoCount: 1,
+      selectionKey: 'channel-b',
+    });
+    expect(sharedDeps.setLoading.mock.calls.filter(([value]) => value === false)).toHaveLength(1);
   });
 
   it('runs selected-channel scans only for active selected channels and then refreshes stored videos', async () => {

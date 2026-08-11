@@ -5,6 +5,7 @@ const { stateSetters } = vi.hoisted(() => ({
 }));
 
 vi.mock('react', () => ({
+  useRef: vi.fn((initialValue) => ({ current: initialValue })),
   useState: vi.fn((initialValue) => {
     const setter = vi.fn();
     stateSetters.push(setter);
@@ -12,7 +13,7 @@ vi.mock('react', () => ({
   }),
 }));
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useAppRuntimeState } from './useAppRuntimeState';
 
 describe('useAppRuntimeState', () => {
@@ -43,6 +44,16 @@ describe('useAppRuntimeState', () => {
       storedVideoLoadResult: null,
       updatingChannelId: null,
       videos: [],
+    });
+    expect(useRef).toHaveBeenCalledWith({
+      activeRequestId: null,
+      requestId: 0,
+      selectionKey: '',
+    });
+    expect(runtimeState.storedVideoLoadRequestRef.current).toEqual({
+      activeRequestId: null,
+      requestId: 0,
+      selectionKey: '',
     });
   });
 

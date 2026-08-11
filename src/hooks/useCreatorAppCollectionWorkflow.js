@@ -20,6 +20,7 @@ export function useCreatorAppCollectionWorkflow({
     setScanningTag: runtime.setScanningTag,
     setStoredVideoLoadResult: runtime.setStoredVideoLoadResult,
     setVideos: runtime.setVideos,
+    storedVideoLoadRequestRef: runtime.storedVideoLoadRequestRef,
   });
   if (!workspaceWorkflow.hasUnsavedProductionDrafts) return collectionActions;
 
