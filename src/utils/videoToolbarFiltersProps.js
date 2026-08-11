@@ -1,3 +1,17 @@
+const getActiveFilterLabels = ({
+  lengthFilter,
+  quickFilter,
+  searchKeyword,
+  ttoTtoMode,
+  viewFilter,
+}) => [
+  searchKeyword?.trim() ? `검색 ‘${searchKeyword.trim()}’` : '',
+  Number(viewFilter) > 0 ? `조회수 ${Number(viewFilter).toLocaleString('ko-KR')}+` : '',
+  lengthFilter === 'shorts' ? '쇼츠만' : lengthFilter === 'long' ? '롱폼만' : '',
+  quickFilter === 'recent30' ? '최근 30일' : quickFilter === 'oldPopular' ? '오래된 인기' : '',
+  ttoTtoMode ? '또터또' : '',
+].filter(Boolean);
+
 export const getVideoToolbarFiltersViewProps = ({
   lengthFilter,
   onResetFilters,
@@ -16,7 +30,16 @@ export const getVideoToolbarFiltersViewProps = ({
   ttoTtoMode,
   viewFilter,
   viewMode,
-}) => ({
+}) => {
+  const activeFilterLabels = getActiveFilterLabels({
+    lengthFilter,
+    quickFilter,
+    searchKeyword,
+    ttoTtoMode,
+    viewFilter,
+  });
+
+  return ({
   searchFieldProps: {
     searchKeyword,
     setSearchKeyword,
@@ -32,13 +55,8 @@ export const getVideoToolbarFiltersViewProps = ({
     sortType,
   },
   statusProps: {
-    activeFilterCount: [
-      Boolean(searchKeyword?.trim()),
-      Number(viewFilter) > 0,
-      Boolean(lengthFilter && lengthFilter !== 'all'),
-      Boolean(quickFilter && quickFilter !== 'all'),
-      Boolean(ttoTtoMode),
-    ].filter(Boolean).length,
+    activeFilterCount: activeFilterLabels.length,
+    activeFilterLabels,
     onResetFilters,
     selectedVideoCount: Number(selectedVideoCount) || 0,
   },
@@ -50,7 +68,8 @@ export const getVideoToolbarFiltersViewProps = ({
     setShowWorkPanel,
     showWorkPanel,
   },
-});
+  });
+};
 
 export const getVideoToolbarSearchFieldViewProps = ({ searchKeyword } = {}) => ({
   ariaLabel: '수집 영상 제목 검색',

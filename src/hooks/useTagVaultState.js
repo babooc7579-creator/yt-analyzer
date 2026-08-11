@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   TAG_VAULT_RESULT_LIMIT,
@@ -12,6 +12,7 @@ export function useTagVaultState({ channels, selectedChannelIds, videos }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [lengthFilter, setLengthFilter] = useState('all');
   const [sortType, setSortType] = useState('multiplier');
+  const [visibleCount, setVisibleCount] = useState(TAG_VAULT_RESULT_LIMIT);
 
   const facets = useMemo(() => getTagVaultFacets(channels), [channels]);
   const effectiveTag = facets.some((facet) => facet.label === selectedTag)
@@ -26,7 +27,11 @@ export function useTagVaultState({ channels, selectedChannelIds, videos }) {
     sortType,
     videos,
   }), [channels, effectiveTag, lengthFilter, searchQuery, sortType, videos]);
-  const displayedVideos = matchedVideos.slice(0, TAG_VAULT_RESULT_LIMIT);
+  const displayedVideos = matchedVideos.slice(0, visibleCount);
+
+  useEffect(() => {
+    setVisibleCount(TAG_VAULT_RESULT_LIMIT);
+  }, [effectiveTag, lengthFilter, searchQuery, sortType, videos]);
   const summary = useMemo(() => getTagVaultSummary({
     channels,
     matchedVideos,
@@ -41,6 +46,12 @@ export function useTagVaultState({ channels, selectedChannelIds, videos }) {
     setSearchQuery('');
     setLengthFilter('all');
     setSortType('multiplier');
+  };
+  const showMoreVideos = () => {
+    setVisibleCount((current) => Math.min(
+      current + TAG_VAULT_RESULT_LIMIT,
+      matchedVideos.length,
+    ));
   };
 
   return {
@@ -57,6 +68,7 @@ export function useTagVaultState({ channels, selectedChannelIds, videos }) {
     setSearchQuery,
     setSelectedTag,
     setSortType,
+    showMoreVideos,
     sortType,
     summary,
   };

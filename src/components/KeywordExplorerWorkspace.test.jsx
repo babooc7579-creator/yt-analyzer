@@ -47,6 +47,8 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('수집 채널 반응도');
     expect(html).toContain('외부 검색량이나 완전한 실시간 지표가 아니며');
     expect(html).toContain('반응도 87');
+    expect(html).toContain('제목 영상 3');
+    expect(html).toContain('검색은 제목과 채널명을 함께 확인하므로 결과 수가 달라질 수 있습니다');
     expect(html).toContain('cake');
     expect(html).toContain('외부 관심도 확인');
     expect(html).toContain('외부 검색량을 자동 수집하지 않습니다');

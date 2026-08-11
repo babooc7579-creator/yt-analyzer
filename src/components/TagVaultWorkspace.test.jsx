@@ -47,6 +47,42 @@ describe('TagVaultWorkspace', () => {
     expect(html).toContain('상단의 ‘수집 영상 목록 불러오기’ 버튼');
   });
 
+  it('offers progressive display for large tag results without another DB or API action', () => {
+    const largeVideos = Array.from({ length: 65 }, (_, index) => ({
+      channel_id: 'c1',
+      channel_title: '공예 채널',
+      daysOld: index,
+      duration: '00:30',
+      isShorts: true,
+      like_count: 0,
+      like_ratio: 0,
+      multiplier: 65 - index,
+      thumbnail: '',
+      title: `공예 영상 ${index + 1}`,
+      upload_date: '2026-08-01',
+      videoId: `v${index + 1}`,
+      view_count: 1000,
+      views_per_day: 100,
+    }));
+    const html = renderToStaticMarkup(
+      <TagVaultWorkspace
+        channels={[{ id: 'c1', tags: ['공예'] }]}
+        checkedVideos={[]}
+        isProductionCandidate={() => false}
+        isVideoSaved={() => false}
+        onLoadStoredVideos={vi.fn()}
+        onOpenChannels={vi.fn()}
+        onSelectTagChannels={vi.fn()}
+        selectedChannelIds={['c1']}
+        videos={largeVideos}
+      />,
+    );
+
+    expect(html).toContain('검색 결과 65개 중 60개 표시 중');
+    expect(html).toContain('영상 5개 더 보기 (60/65)');
+    expect(html).toContain('Azure DB 재조회·저장이나 YouTube API 호출은 없습니다');
+  });
+
   it('disables the single stored-video lookup while Azure DB data is loading', () => {
     const html = renderToStaticMarkup(
       <TagVaultWorkspace
