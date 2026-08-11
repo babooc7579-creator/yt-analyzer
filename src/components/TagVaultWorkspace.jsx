@@ -110,16 +110,17 @@ export default function TagVaultWorkspace({
           <div className="border border-dashed border-slate-700 bg-slate-950/40 px-5 py-12 text-center">
             <h3 className="text-base font-extrabold text-white">{emptyState.title}</h3>
             <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-400">{emptyState.description}</p>
-            <button
-              type="button"
-              onClick={handleEmptyAction}
-              disabled={emptyState.action === 'load' && loading}
-              title={emptyState.actionTitle}
-              aria-label={emptyState.actionAriaLabel || emptyState.actionLabel}
-              className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
-            >
-              {emptyState.action === 'load' && loading ? '수집 영상 불러오는 중...' : emptyState.actionLabel}
-            </button>
+            {emptyState.action !== 'load' && (
+              <button
+                type="button"
+                onClick={handleEmptyAction}
+                title={emptyState.actionTitle}
+                aria-label={emptyState.actionAriaLabel || emptyState.actionLabel}
+                className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-slate-950"
+              >
+                {emptyState.actionLabel}
+              </button>
+            )}
           </div>
         )}
       </div>

@@ -148,7 +148,7 @@ export const getTagVaultEmptyState = ({
         ? `온라인 저장소(Azure DB)에서 선택 채널 ${selectedChannelCount}개의 수집 영상을 조회합니다. 새 YouTube API 호출은 없습니다.`
         : '현재 태그에 속한 채널을 선택합니다. 선택만으로 온라인 저장소(Azure DB) 조회나 YouTube API 호출은 실행되지 않습니다.',
       description: selectedChannelCount > 0
-        ? '온라인 저장소(Azure DB)에서 현재 선택한 채널의 수집 영상 정보를 불러오세요. 이 작업은 YouTube API를 호출하지 않습니다.'
+        ? '상단의 ‘수집 영상 목록 불러오기’ 버튼으로 온라인 저장소(Azure DB)의 현재 선택 채널 영상을 조회하세요. 이 작업은 YouTube API를 호출하지 않습니다.'
         : '1. 이 태그에 속한 채널을 선택한 뒤, 2. 상단의 수집 영상 목록 불러오기를 누르세요. 선택만으로 YouTube API를 호출하지 않습니다.',
       title: '불러온 수집 영상 정보가 없습니다',
     };
