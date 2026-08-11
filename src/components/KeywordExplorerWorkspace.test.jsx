@@ -40,6 +40,9 @@ describe('KeywordExplorerWorkspace', () => {
     );
 
     expect(html).toContain('키워드로 수집 영상 찾기');
+    expect(html).toContain('또터또 후보 보기');
+    expect(html).toContain('현재 키워드 필터 전달 없음');
+    expect(html).toContain('Azure DB 조회 저장 및 YouTube API 호출 없음');
     expect(html).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(html).toContain('수집 채널 반응도');
     expect(html).toContain('외부 검색량이나 완전한 실시간 지표가 아니며');
