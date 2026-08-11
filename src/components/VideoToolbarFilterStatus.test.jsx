@@ -18,6 +18,8 @@ describe('VideoToolbarFilterStatus', () => {
     expect(html).toContain('필터 2개 적용 · 최근 30일 · 쇼츠만');
     expect(html).toContain('필터 초기화');
     expect(html).toContain('영상 선택 유지, API 호출 없음');
+    expect(html).toContain('flex min-w-0 max-w-full flex-wrap');
+    expect(html).toContain('min-w-0 max-w-full break-words');
   });
 
   it('shows zero selection without adding a redundant reset button', () => {
