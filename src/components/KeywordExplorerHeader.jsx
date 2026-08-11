@@ -1,8 +1,9 @@
-import { BookOpen, Database, Loader2, Search } from 'lucide-react';
+import { BookOpen, Database, Loader2, Search, Sparkles } from 'lucide-react';
 
 export default function KeywordExplorerHeader({
   loading = false,
   onLoadStoredVideos,
+  onOpenTtoTto,
   onOpenVault,
   selectedChannelCount,
 }) {
@@ -24,6 +25,15 @@ export default function KeywordExplorerHeader({
       </div>
 
       <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={onOpenTtoTto}
+          className="inline-flex h-10 items-center gap-2 rounded-lg border border-rose-400/30 bg-rose-500/10 px-3 text-xs font-extrabold text-rose-100 hover:bg-rose-500/20"
+          title="같은 수집 영상 범위의 또터또 탐색 화면으로 이동합니다. 현재 키워드 필터는 전달하지 않으며, 이동만으로 Azure DB 조회·저장이나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="같은 수집 영상 범위에서 또터또 후보 보기, 현재 키워드 필터 전달 없음, Azure DB 조회 저장 및 YouTube API 호출 없음"
+        >
+          <Sparkles className="h-4 w-4" /> 또터또 후보 보기
+        </button>
         <button
           type="button"
           onClick={onOpenVault}

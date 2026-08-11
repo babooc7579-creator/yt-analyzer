@@ -40,6 +40,7 @@ describe('keywordExplorerRouteProps', () => {
     expect(openCreatorView).not.toHaveBeenCalled();
 
     props.onOpenChannelWatchlist();
+    props.onOpenTtoTto();
     props.onOpenSelectedScan();
     props.onOpenVault();
     props.onOpenWorkTools();
@@ -61,6 +62,7 @@ describe('keywordExplorerRouteProps', () => {
     expect(setBulkInput).toHaveBeenCalledWith('https://www.youtube.com/channel/bulk-1\nbulk-2');
     expect(openCreatorView.mock.calls).toEqual([
       [{ id: 'discovery-watchlist' }],
+      [{ id: 'discovery-ttotto' }],
       [{ id: 'ops-channels', intent: { operationStage: 'scan' } }],
       [{ id: 'vault-videos' }],
       [{ id: 'tools-bookmarks' }],

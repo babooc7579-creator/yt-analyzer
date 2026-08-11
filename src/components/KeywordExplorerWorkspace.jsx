@@ -27,6 +27,7 @@ export default function KeywordExplorerWorkspace({
   onOpenDiscoveryLinks,
   onOpenChannelWatchlist,
   onOpenSelectedScan,
+  onOpenTtoTto,
   onOpenWorkTools,
   onOpenVault,
   onKeywordExplorerSessionChange,
@@ -102,6 +103,7 @@ export default function KeywordExplorerWorkspace({
         <KeywordExplorerHeader
           loading={loading}
           onLoadStoredVideos={onLoadStoredVideos}
+          onOpenTtoTto={onOpenTtoTto}
           onOpenVault={onOpenVault}
           selectedChannelCount={selectedChannelCount}
         />

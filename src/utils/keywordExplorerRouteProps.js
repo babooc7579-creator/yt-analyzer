@@ -37,6 +37,7 @@ export function buildKeywordExplorerRouteProps({
     onLoadStoredVideos: loadStoredVideosForSelectedChannels,
     onOpenDiscoveryLinks: () => openCreatorView({ id: 'vault-sources' }),
     onOpenChannelWatchlist: () => openCreatorView({ id: 'discovery-watchlist' }),
+    onOpenTtoTto: () => openCreatorView({ id: 'discovery-ttotto' }),
     onOpenSelectedScan: () => openCreatorView({
       id: 'ops-channels',
       intent: { operationStage: 'scan' },
