@@ -27,6 +27,9 @@ describe('channel registration form input visibility', () => {
     expectVisibleLightControl(markup);
     expect(markup).toContain('placeholder:text-slate-400');
     expect(markup).not.toContain('disabled=""');
+    expect(markup).toContain('flex flex-col gap-2 sm:flex-row');
+    expect(markup).toContain('min-w-0 w-full');
+    expect(markup).toContain('sm:w-auto');
   });
 
   it('disables YouTube confirmation until a channel value is entered', () => {
