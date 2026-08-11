@@ -2,6 +2,7 @@ import { RotateCcw } from 'lucide-react';
 
 export default function VideoToolbarFilterStatus({
   activeFilterCount,
+  activeFilterLabels = [],
   onResetFilters,
   selectedVideoCount,
 }) {
@@ -17,8 +18,11 @@ export default function VideoToolbarFilterStatus({
       </span>
       {hasActiveFilters && (
         <>
-          <span className="rounded-full bg-indigo-100 px-3 py-1.5 text-xs font-bold text-indigo-700">
-            필터 {activeFilterCount}개 적용 중
+          <span
+            className="rounded-lg border border-indigo-200 bg-indigo-100 px-3 py-2 text-xs font-extrabold text-indigo-800"
+            title={`현재 화면 필터: ${activeFilterLabels.join(' · ')}`}
+          >
+            필터 {activeFilterCount}개 적용 · {activeFilterLabels.join(' · ')}
           </span>
           <button
             type="button"

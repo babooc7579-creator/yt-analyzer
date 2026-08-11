@@ -46,6 +46,7 @@ describe('videoToolbarFiltersProps utils', () => {
       },
       statusProps: {
         activeFilterCount: 4,
+        activeFilterLabels: ['검색 ‘cake’', '조회수 10,000+', '쇼츠만', '또터또'],
         onResetFilters: props.onResetFilters,
         selectedVideoCount: 2,
       },
@@ -81,6 +82,7 @@ describe('videoToolbarFiltersProps utils', () => {
     expect(props.workPanelToggleProps.showWorkPanel).toBe(false);
     expect(props.statusProps).toMatchObject({
       activeFilterCount: 0,
+      activeFilterLabels: [],
       selectedVideoCount: 0,
     });
   });

@@ -1,10 +1,11 @@
 import { useTagVaultState } from '../hooks/useTagVaultState';
-import { getTagVaultEmptyState } from '../utils/tagVault';
+import { TAG_VAULT_RESULT_LIMIT, getTagVaultEmptyState } from '../utils/tagVault';
 import StoredVideoActionGrid from './StoredVideoActionGrid';
 import StoredVideoLoadFeedback from './StoredVideoLoadFeedback';
 import TagVaultFilters from './TagVaultFilters';
 import TagVaultHeader from './TagVaultHeader';
 import TagVaultSummary from './TagVaultSummary';
+import VideoResultsProgress from './VideoResultsProgress';
 
 export default function TagVaultWorkspace({
   channels,
@@ -96,6 +97,12 @@ export default function TagVaultWorkspace({
               onToggleCheck={onToggleCheck}
               onToggleScrap={onToggleScrap}
               videos={state.displayedVideos}
+            />
+            <VideoResultsProgress
+              displayedCount={state.displayedVideos.length}
+              onShowMore={state.showMoreVideos}
+              pageSize={TAG_VAULT_RESULT_LIMIT}
+              totalCount={state.matchedVideos.length}
             />
           </>
         ) : state.summary.loadedVideoCount === 0 && loadResult ? (
