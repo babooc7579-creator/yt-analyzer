@@ -44,7 +44,7 @@ export default function TagVaultFilters({
         </button>
       </div>
       <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
-        순서 · 태그 채널로 조회 준비 → 상단의 수집 영상 목록 불러오기(Azure DB) → 필요하면 전체 수집 영상에서 검토
+        순서 · 태그 채널로 조회 준비 → 상단의 수집 영상 목록 불러오기(Azure DB) → 수집 영상 목록에서 현재 화면 필터를 확인해 검토
       </p>
     </section>
   );

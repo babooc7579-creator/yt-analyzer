@@ -23,11 +23,31 @@ describe('TagVaultWorkspace', () => {
     expect(html).toContain('이 태그 채널로 조회 준비');
     expect(html).toContain('태그 채널로 조회 준비 → 상단의 수집 영상 목록 불러오기(Azure DB)');
     expect(html).toContain('상단의 수집 영상 목록 불러오기');
+    expect(html).toContain('수집 영상 목록에서 현재 화면 필터를 확인해 검토');
+    expect(html).toContain('수집 영상 목록 화면으로 이동');
+    expect(html).toContain('현재 목록 필터 유지 가능');
     expect(html).toContain('YouTube API를 호출하지 않습니다');
     expect(html).toContain('채널 목록 화면으로 이동, 온라인 저장소(Azure DB) 조회 및 YouTube API 호출 없음');
   });
 
-  it('disables duplicate stored-video lookup while Cloud data is loading', () => {
+  it('shows one Azure DB load action after tag channels are selected', () => {
+    const html = renderToStaticMarkup(
+      <TagVaultWorkspace
+        channels={[{ id: 'c1', tags: ['공예'] }]}
+        checkedVideos={[]}
+        onLoadStoredVideos={vi.fn()}
+        onOpenChannels={vi.fn()}
+        onSelectTagChannels={vi.fn()}
+        selectedChannelIds={['c1']}
+        videos={[]}
+      />,
+    );
+
+    expect(html.match(/선택 채널 1개 수집 영상 목록 불러오기/g)).toHaveLength(1);
+    expect(html).toContain('상단의 ‘수집 영상 목록 불러오기’ 버튼');
+  });
+
+  it('disables the single stored-video lookup while Azure DB data is loading', () => {
     const html = renderToStaticMarkup(
       <TagVaultWorkspace
         channels={[{ id: 'c1', tags: ['공예'] }]}
@@ -43,7 +63,7 @@ describe('TagVaultWorkspace', () => {
 
     expect(html).toContain('수집 영상 불러오는 중...');
     expect(html).toContain('disabled');
-    expect(html).toContain('온라인 저장소(Azure DB) 조회이며 YouTube API 호출 없음');
+    expect(html).toContain('온라인 저장소(Azure DB)에서 수집 영상 불러오는 중, YouTube API 호출 없음');
   });
 
   it('offers safe next actions when a successful Cloud lookup returns zero videos', () => {

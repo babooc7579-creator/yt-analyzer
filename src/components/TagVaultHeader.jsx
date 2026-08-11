@@ -27,10 +27,10 @@ export default function TagVaultHeader({
           type="button"
           onClick={onOpenCollectedVideos}
           className="inline-flex h-10 items-center gap-2 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 text-xs font-extrabold text-emerald-100 hover:bg-emerald-500/20"
-          title="전체 수집 영상 목록으로 이동합니다. 화면 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
-          aria-label="전체 수집 영상 목록으로 이동, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
+          title="수집 영상 목록 화면으로 이동합니다. 이 화면에서 사용하던 목록 필터가 남아 있을 수 있으며, 이동만으로 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 실행되지 않습니다."
+          aria-label="수집 영상 목록 화면으로 이동, 현재 목록 필터 유지 가능, 온라인 저장소(Azure DB) 데이터 변경 및 YouTube API 호출 없음"
         >
-          <ListVideo className="h-4 w-4" /> 전체 수집 영상
+          <ListVideo className="h-4 w-4" /> 수집 영상 목록
         </button>
         <button
           type="button"
