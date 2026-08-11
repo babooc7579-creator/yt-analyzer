@@ -12,13 +12,13 @@ export default function ChannelPreviewInput({
 
   return (
     <div className="space-y-1.5">
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <input
           type="text"
           value={newChannelInput}
           onChange={(event) => setNewChannelInput(event.target.value)}
           placeholder={copy.inputPlaceholder}
-          className="w-full rounded-lg border border-indigo-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-400"
+          className="min-w-0 w-full rounded-lg border border-indigo-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-400"
           aria-label={copy.inputAriaLabel}
           title={copy.inputTitle}
           onKeyDown={(event) => event.key === 'Enter' && handlePreviewChannel()}
@@ -27,7 +27,7 @@ export default function ChannelPreviewInput({
           type="button"
           onClick={handlePreviewChannel}
           disabled={previewLoading || !hasInput}
-          className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-lg text-sm font-semibold transition-colors flex items-center gap-1 whitespace-nowrap"
+          className="flex w-full items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:bg-slate-300 sm:w-auto"
           title={copy.previewButtonTitle}
           aria-label={copy.previewButtonAriaLabel}
         >
