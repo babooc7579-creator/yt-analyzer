@@ -27,6 +27,19 @@ describe('youtubeKeywordSearch', () => {
     })).toMatchObject({ q: '아이디어', maxResults: 25, order: 'viewCount', videoDuration: 'medium', regionCode: 'KR' });
   });
 
+  it('keeps the first search date boundary when loading a later result page', () => {
+    const publishedAfter = '2026-07-12T03:00:00.000Z';
+    expect(buildYoutubeSearchOptions({
+      query: 'copilot',
+      dateRange: '30',
+      publishedAfter,
+    }, 'next-page')).toMatchObject({
+      q: 'copilot',
+      pageToken: 'next-page',
+      publishedAfter,
+    });
+  });
+
   it('filters locally and turns only a selected result into a discovery link', () => {
     expect(filterYoutubeSearchResults([{ videoId: '1', viewCount: 9999 }, { videoId: '2', viewCount: 10000 }], 10000))
       .toEqual([{ videoId: '2', viewCount: 10000 }]);

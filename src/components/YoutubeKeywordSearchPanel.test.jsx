@@ -58,6 +58,7 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('영상 파일은 저장하지 않습니다');
     expect(html).toContain('대박 비율은 현재 조회수÷현재 구독자 수의 추정값');
     expect(html).toContain('다음 결과 25개 불러오기');
+    expect(html).toContain('첫 검색의 국가·언어·기간·길이·정렬 조건을 유지');
     expect(html).toContain('이 채널 등록 검토');
     expect(html).toContain('이 영상의 채널 주소를 채웁니다');
     expect(html).toContain('검색 지역은 해당 나라에서 시청 가능한 결과');
