@@ -243,6 +243,27 @@ export default function RecentScanStatusWorkspace({
           </div>
         </div>
 
+        <div className="mt-5 grid gap-2 lg:grid-cols-3" aria-label="수집과 API 사용 기준">
+          <div className="border border-emerald-400/25 bg-emerald-500/10 p-3">
+            <p className="text-xs font-black text-emerald-100">현재 화면 조회</p>
+            <p className="mt-1 text-[11px] leading-5 text-emerald-100/80">
+              온라인 저장소(Azure DB)의 채널 상태와 수집 이력만 읽습니다. YouTube API를 사용하거나 데이터를 새로 저장하지 않습니다.
+            </p>
+          </div>
+          <div className="border border-amber-400/25 bg-amber-500/10 p-3">
+            <p className="text-xs font-black text-amber-100">새 영상 수집</p>
+            <p className="mt-1 text-[11px] leading-5 text-amber-100/80">
+              채널을 고른 뒤 수집 버튼을 직접 실행할 때만 YouTube API를 사용하고 결과를 온라인 저장소(Azure DB)에 갱신합니다.
+            </p>
+          </div>
+          <div className="border border-slate-600 bg-slate-950/70 p-3">
+            <p className="text-xs font-black text-slate-100">정확한 API 사용량</p>
+            <p className="mt-1 text-[11px] leading-5 text-slate-400">
+              앱에는 아직 정확한 쿼터 장부가 없습니다. 실제 사용량은 Google Cloud Console을 최종 기준으로 확인합니다.
+            </p>
+          </div>
+        </div>
+
         <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-5" aria-label="최근 수집 상태 요약">
           {SUMMARY_ITEMS.map((item) => (
             <button
@@ -568,7 +589,8 @@ export default function RecentScanStatusWorkspace({
           채널 요약은 마지막 결과 한 건을 유지하고, 과거 이력은 최근 채널 기록 100건을 같은 수집 실행끼리 묶어 표시합니다. API 쿼터 추정은 아직 제공하지 않습니다.
         </p>
         <p className="mt-2 text-xs leading-5 text-amber-100/80">
-          “선택 채널 전체 과거 영상 수집”은 선택한 채널 하나만 목록 끝까지 진행합니다. 한 번에 최대 500개이며, 더 많으면 현재 위치를 저장해 다음 실행에서 이어갑니다. 자동 반복·예약·전체 채널 일괄 실행은 하지 않습니다.
+          “선택 채널 전체 과거 영상 수집”은 선택한 채널 하나만 목록 끝까지 진행합니다. 한 번에 최대 500개이며, 더 많으면 현재 위치를 저장해 다음 실행에서 이어갑니다.
+          이 과거 목록 수집 버튼은 자동 반복·예약·전체 채널 일괄 실행을 하지 않습니다. 위 이력의 “예약 수집”은 최신 영상 확인을 위한 별도 실행 기록입니다.
         </p>
       </div>
     </section>

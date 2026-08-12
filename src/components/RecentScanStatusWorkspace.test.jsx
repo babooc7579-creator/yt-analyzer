@@ -72,7 +72,13 @@ describe('RecentScanStatusWorkspace', () => {
     expect(html).toContain('업로드 목록 확인 25%');
     expect(html).toContain('100/400개 확인');
     expect(html).toContain('온라인 저장소(Azure DB) 저장 50%');
-    expect(html).toContain('자동 반복·예약·전체 채널 일괄 실행은 하지 않습니다');
+    expect(html).toContain('수집과 API 사용 기준');
+    expect(html).toContain('현재 화면 조회');
+    expect(html).toContain('채널을 고른 뒤 수집 버튼을 직접 실행할 때만 YouTube API를 사용');
+    expect(html).toContain('앱에는 아직 정확한 쿼터 장부가 없습니다');
+    expect(html).toContain('Google Cloud Console을 최종 기준');
+    expect(html).toContain('이 과거 목록 수집 버튼은 자동 반복·예약·전체 채널 일괄 실행을 하지 않습니다');
+    expect(html).toContain('“예약 수집”은 최신 영상 확인을 위한 별도 실행 기록입니다');
     expect(html).toContain('이 화면은 온라인 저장소(Azure DB)만 조회합니다');
     expect(html).toContain('과거 수집 이력');
     expect(html).toContain('온라인 저장소(Azure DB)의 수집 이력을 불러오는 중입니다');
