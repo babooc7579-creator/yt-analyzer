@@ -9,7 +9,7 @@ export const WORK_TOOL_GROUPS = [
         label: 'Google Trends',
         description: '키워드의 기간별·지역별 상대 검색 관심도를 비교합니다.',
         href: 'https://trends.google.com/trends/explore?geo=KR',
-        keywordUrl: (keyword) => `https://trends.google.com/trends/explore?geo=KR&q=${encodeURIComponent(keyword)}`,
+        keywordUrl: (keyword, { regionCode = 'KR' } = {}) => `https://trends.google.com/trends/explore?geo=${encodeURIComponent(regionCode || 'KR')}&q=${encodeURIComponent(keyword)}`,
         badge: '키워드 자동 전달',
       },
       {
@@ -52,10 +52,10 @@ export const WORK_TOOL_GROUPS = [
   },
 ];
 
-export const getWorkToolUrl = (tool, keyword = '') => {
+export const getWorkToolUrl = (tool, keyword = '', options = {}) => {
   const normalizedKeyword = String(keyword || '').trim();
   if (normalizedKeyword && typeof tool?.keywordUrl === 'function') {
-    return tool.keywordUrl(normalizedKeyword);
+    return tool.keywordUrl(normalizedKeyword, options);
   }
   return tool?.href || '#';
 };

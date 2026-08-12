@@ -77,6 +77,9 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('임시 결과 지우기');
     expect(html).toContain('검색 조건을 남기고 결과·영상 선택·화면 필터만 정리');
     expect(html).toContain('발견 링크함에 이미 저장한 항목은 삭제하지 않습니다');
+    expect(html).toContain('외부 관심도 확인');
+    expect(html).toContain('Google Trends 기준 지역: 대한민국(기본)');
+    expect(html).toContain('geo=KR&amp;q=%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {

@@ -24,6 +24,9 @@ describe('workTools constants', () => {
     expect(getWorkToolUrl(tools['google-trends'], '고양이 행동')).toContain(
       'q=%EA%B3%A0%EC%96%91%EC%9D%B4%20%ED%96%89%EB%8F%99'
     );
+    expect(getWorkToolUrl(tools['google-trends'], 'copilot', { regionCode: 'US' })).toContain(
+      'geo=US&q=copilot'
+    );
     expect(getWorkToolUrl(tools['youtube-search'], '고양이 행동')).toContain(
       'search_query=%EA%B3%A0%EC%96%91%EC%9D%B4%20%ED%96%89%EB%8F%99'
     );

@@ -1,6 +1,7 @@
 import { Check, ExternalLink, Loader2, Search, Trash2, UserPlus, Users } from 'lucide-react';
 import { useMemo } from 'react';
 import { useYoutubeChannelSearch } from '../hooks/useYoutubeChannelSearch';
+import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import {
   formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
@@ -78,7 +79,7 @@ function ChannelSearchResultCard({ item, registered, registrationSelected, selec
   );
 }
 
-export default function YoutubeChannelSearchPanel({ channelSearchSession, onChannelSearchSessionChange, onPrepareBulkChannelRegistration, onPrepareChannelRegistration, registeredChannelIds = [] }) {
+export default function YoutubeChannelSearchPanel({ channelSearchSession, onChannelSearchSessionChange, onOpenWorkTools, onPrepareBulkChannelRegistration, onPrepareChannelRegistration, registeredChannelIds = [] }) {
   const search = useYoutubeChannelSearch({
     initialState: channelSearchSession,
     onStateChange: onChannelSearchSessionChange,
@@ -94,6 +95,9 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
   const visibleRegistrationIds = visibleItems.filter((item) => !registeredIds.has(String(item.channelId))).map((item) => item.channelId);
   const hasViewFilters = Object.values(search.viewFilters).some((value) => value !== 'all');
   const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters, { includeVideoFilters: false });
+  const trendRegionOption = YOUTUBE_SEARCH_REGION_OPTIONS.find((option) => option.value === search.filters.regionCode);
+  const trendRegionCode = search.filters.regionCode || 'KR';
+  const trendRegionLabel = search.filters.regionCode ? trendRegionOption?.label || search.filters.regionCode : '대한민국(기본)';
 
   const applyKoreanPreset = () => {
     search.changeFilter('regionCode', 'KR');
@@ -146,6 +150,13 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
         <button type="button" onClick={applyKoreanPreset} className="mt-3 rounded-lg border border-violet-500/40 px-3 py-2 text-xs font-black text-violet-200 hover:bg-violet-500/10" title="대한민국 검색 지역과 한국어 우선을 한 번에 선택합니다. YouTube API는 호출하지 않습니다.">대한민국·한국어 우선 빠른 설정</button>
         <p className="mt-1 text-[11px] leading-5 text-slate-500">기본 25개 · 자동검색 없음 · 키워드나 조건 변경 후 검색 버튼을 눌러야 API 요청이 실행됩니다.</p>
       </form>
+
+      <KeywordResearchShortcuts
+        keyword={search.filters.query}
+        onOpenWorkTools={onOpenWorkTools}
+        trendRegionCode={trendRegionCode}
+        trendRegionLabel={trendRegionLabel}
+      />
 
       {search.error ? <p role="alert" className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm font-bold text-rose-200">{search.error}</p> : null}
       {search.notice ? <p className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-100">{search.notice}</p> : null}

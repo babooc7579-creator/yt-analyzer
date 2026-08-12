@@ -5,7 +5,12 @@ import { WORK_TOOL_GROUPS, getWorkToolUrl } from '../constants/workTools';
 
 const keywordTools = WORK_TOOL_GROUPS.find((group) => group.id === 'keyword-research')?.tools || [];
 
-export default function KeywordResearchShortcuts({ keyword, onOpenWorkTools }) {
+export default function KeywordResearchShortcuts({
+  keyword,
+  onOpenWorkTools,
+  trendRegionCode = 'KR',
+  trendRegionLabel = '대한민국',
+}) {
   const normalizedKeyword = String(keyword || '').trim();
   const [copied, setCopied] = useState(false);
 
@@ -40,7 +45,10 @@ export default function KeywordResearchShortcuts({ keyword, onOpenWorkTools }) {
       </div>
 
       {normalizedKeyword ? (
-        <p className="mt-3 text-xs font-bold text-emerald-100">확인할 키워드: {normalizedKeyword}</p>
+        <div className="mt-3 space-y-1 text-xs font-bold text-emerald-100">
+          <p>확인할 키워드: {normalizedKeyword}</p>
+          <p className="text-emerald-100/70">Google Trends 기준 지역: {trendRegionLabel}</p>
+        </div>
       ) : (
         <p className="mt-3 text-xs font-bold text-slate-500">먼저 검색창에 키워드를 입력하거나 위 추천 키워드를 선택하세요.</p>
       )}
@@ -49,7 +57,7 @@ export default function KeywordResearchShortcuts({ keyword, onOpenWorkTools }) {
         {keywordTools.map((tool) => (
           <a
             key={tool.id}
-            href={getWorkToolUrl(tool, normalizedKeyword)}
+            href={getWorkToolUrl(tool, normalizedKeyword, { regionCode: trendRegionCode })}
             target="_blank"
             rel="noreferrer"
             title={`${tool.label} 외부 사이트를 새 창으로 엽니다. Creator OS 데이터는 변경되지 않습니다.`}
