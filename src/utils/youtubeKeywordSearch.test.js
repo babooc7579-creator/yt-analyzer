@@ -12,6 +12,7 @@ import {
   MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION,
   prepareYoutubeSearchTargetSession,
   sortYoutubeChannelResults,
+  summarizeYoutubeVideoSearchResults,
   toggleYoutubeChannelRegistrationSelection,
   toDiscoveryLinkPayload,
 } from './youtubeKeywordSearch';
@@ -118,5 +119,25 @@ describe('youtubeKeywordSearch', () => {
     expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'registered', ['a'])).toEqual([videos[0]]);
     expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'unregistered', new Set(['a']))).toEqual([videos[1]]);
     expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'all', ['a'])).toEqual(videos);
+  });
+
+  it('summarizes only the currently received video results without a new API request', () => {
+    const now = new Date('2026-08-12T00:00:00.000Z');
+    const videos = [
+      { channelId: 'a', publishedAt: '2026-08-10T00:00:00.000Z', viewCount: 1000 },
+      { channelId: 'b', publishedAt: '2026-07-20T00:00:00.000Z', viewCount: 3000 },
+      { channelId: 'b', publishedAt: '2026-06-20T00:00:00.000Z', viewCount: 5000 },
+      { channelId: 'c', publishedAt: 'invalid', viewCount: 7000 },
+    ];
+
+    expect(summarizeYoutubeVideoSearchResults(videos, ['a'], now)).toEqual({
+      averageViews: 4000,
+      last7Days: 1,
+      last30Days: 2,
+      last60Days: 3,
+      totalResults: 4,
+      uniqueChannels: 3,
+      unregisteredChannels: 2,
+    });
   });
 });

@@ -17,6 +17,7 @@ import {
   formatYoutubeSearchCriteria,
   filterYoutubeVideoResultsByChannelRegistration,
   hasYoutubeSearchCriteriaChanges,
+  summarizeYoutubeVideoSearchResults,
   toDiscoveryLinkPayload,
   YOUTUBE_SEARCH_DATE_OPTIONS,
   YOUTUBE_SEARCH_DURATION_OPTIONS,
@@ -96,30 +97,30 @@ function YoutubeSearchResultCard({ item, selected, saved, registeredChannel, onP
         </div>
         <div className="mt-3 rounded-lg border border-violet-500/20 bg-violet-500/5 p-3">
           <p className="text-[11px] font-black text-violet-200">출처 채널 작업</p>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => onPrepareChannelRegistration?.({
-              channelId: item.channelId,
-              registrationSource: 'youtube-video-search',
-              title: item.channelTitle,
-              url: `https://www.youtube.com/channel/${item.channelId}`,
-            })}
-            disabled={registeredChannel || !item.channelId}
-            className="inline-flex h-9 items-center gap-1 rounded-lg bg-violet-500 px-3 text-xs font-black text-white hover:bg-violet-400 disabled:cursor-default disabled:bg-slate-700 disabled:text-slate-400"
-            title="채널 운영실의 등록 입력칸에 이 영상의 채널 주소를 채웁니다. 이동만으로 YouTube API 호출이나 Azure DB 저장은 실행되지 않습니다."
-          >
-            <UserPlus className="h-3.5 w-3.5" /> {registeredChannel ? '이미 등록된 채널' : '이 채널 등록 검토'}
-          </button>
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-9 items-center gap-1 px-2 text-xs font-extrabold text-red-300 hover:text-red-200"
-            title="YouTube 원본을 새 창에서 엽니다. API 호출이나 저장은 실행하지 않습니다."
-          >
-            <ExternalLink className="h-3.5 w-3.5" /> YouTube 원본 보기
-          </a>
+          <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => onPrepareChannelRegistration?.({
+                channelId: item.channelId,
+                registrationSource: 'youtube-video-search',
+                title: item.channelTitle,
+                url: `https://www.youtube.com/channel/${item.channelId}`,
+              })}
+              disabled={registeredChannel || !item.channelId}
+              className="inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg bg-violet-500 px-3 text-xs font-black text-white hover:bg-violet-400 disabled:cursor-default disabled:bg-slate-700 disabled:text-slate-400"
+              title="채널 운영실의 등록 입력칸에 이 영상의 채널 주소를 채웁니다. 이동만으로 YouTube API 호출이나 Azure DB 저장은 실행되지 않습니다."
+            >
+              <UserPlus className="h-3.5 w-3.5" /> {registeredChannel ? '이미 등록된 채널' : '이 채널 등록 검토'}
+            </button>
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg border border-slate-700 px-2 text-xs font-extrabold text-red-300 hover:bg-slate-900 hover:text-red-200"
+              title="YouTube 원본을 새 창에서 엽니다. API 호출이나 저장은 실행하지 않습니다."
+            >
+              <ExternalLink className="h-3.5 w-3.5" /> YouTube 원본 보기
+            </a>
           </div>
           <p className="mt-2 text-[11px] leading-5 text-slate-500">채널 등록 검토는 채널 운영실 입력 준비만 하며 자동 등록하거나 영상을 저장하지 않습니다.</p>
         </div>
@@ -165,6 +166,10 @@ function YoutubeVideoSearchPanel({
     registeredIds,
   ), [registeredIds, search.channelRegistrationFilter, search.displayedItems]);
   const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters);
+  const resultSummary = useMemo(() => summarizeYoutubeVideoSearchResults(
+    search.displayedItems,
+    registeredIds,
+  ), [registeredIds, search.displayedItems]);
   const trendRegionOption = YOUTUBE_SEARCH_REGION_OPTIONS.find((option) => option.value === search.filters.regionCode);
   const trendRegionCode = search.filters.regionCode || 'KR';
   const trendRegionLabel = search.filters.regionCode ? trendRegionOption?.label || search.filters.regionCode : '대한민국(기본)';
@@ -264,6 +269,31 @@ function YoutubeVideoSearchPanel({
 
       {search.items.length > 0 ? (
         <>
+          <section className="rounded-xl border border-cyan-500/25 bg-cyan-500/5 p-4" aria-label="현재 검색 결과 요약">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="text-xs font-extrabold text-cyan-300">현재 받아온 결과 기준</p>
+                <h3 className="mt-1 text-base font-black text-white">검색 결과 구성 요약</h3>
+                <p className="mt-1 text-xs leading-5 text-slate-400">YouTube 전체 검색량이나 급상승 판정이 아닙니다. 현재 받아온 최대 25개씩의 임시 결과를 화면에서만 계산합니다.</p>
+              </div>
+              {resultSummary.unregisteredChannels > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => search.changeChannelRegistrationFilter('unregistered')}
+                  className="h-10 shrink-0 rounded-lg border border-violet-400/50 px-4 text-xs font-black text-violet-100 hover:bg-violet-500/10"
+                  title="현재 받은 결과를 미등록 출처 채널의 영상만 보이도록 좁힙니다. YouTube API나 Azure DB를 호출하지 않습니다."
+                >미등록 채널 영상만 보기</button>
+              ) : null}
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-6">
+              <Metric label="최근 7일" value={`${resultSummary.last7Days}개`} tone="text-cyan-200" />
+              <Metric label="최근 30일" value={`${resultSummary.last30Days}개`} tone="text-cyan-200" />
+              <Metric label="최근 60일" value={`${resultSummary.last60Days}개`} tone="text-cyan-200" />
+              <Metric label="출처 채널" value={`${resultSummary.uniqueChannels}개`} tone="text-violet-200" />
+              <Metric label="미등록 채널" value={`${resultSummary.unregisteredChannels}개`} tone="text-violet-200" />
+              <Metric label="평균 조회수" value={formatNumber(resultSummary.averageViews)} tone="text-emerald-200" />
+            </div>
+          </section>
           <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-black text-white">표시 결과 {visibleItems.length}개 / 검색 결과 {search.displayedItems.length}개 · 선택 {selectedItems.length}개</p>

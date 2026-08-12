@@ -80,6 +80,10 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('외부 관심도 확인');
     expect(html).toContain('Google Trends 기준 지역: 대한민국(기본)');
     expect(html).toContain('geo=KR&amp;q=%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4');
+    expect(html).toContain('검색 결과 구성 요약');
+    expect(html).toContain('YouTube 전체 검색량이나 급상승 판정이 아닙니다');
+    expect(html).toContain('미등록 채널 영상만 보기');
+    expect(html).toContain('평균 조회수');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {

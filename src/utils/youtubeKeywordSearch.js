@@ -234,6 +234,32 @@ export function filterYoutubeSearchResults(items, minimumViews = 0) {
   return (Array.isArray(items) ? items : []).filter((item) => Number(item?.viewCount || 0) >= threshold);
 }
 
+export function summarizeYoutubeVideoSearchResults(items, registeredIds = [], now = new Date()) {
+  const source = Array.isArray(items) ? items : [];
+  const registeredSet = registeredIds instanceof Set ? registeredIds : new Set(registeredIds.map(String));
+  const nowTime = now instanceof Date ? now.getTime() : new Date(now).getTime();
+  const countSinceDays = (days) => {
+    if (!Number.isFinite(nowTime)) return 0;
+    const cutoff = nowTime - days * 86400000;
+    return source.filter((item) => {
+      const publishedTime = new Date(item?.publishedAt).getTime();
+      return Number.isFinite(publishedTime) && publishedTime >= cutoff && publishedTime <= nowTime;
+    }).length;
+  };
+  const channelIds = new Set(source.map((item) => String(item?.channelId || '')).filter(Boolean));
+  const totalViews = source.reduce((sum, item) => sum + Number(item?.viewCount || 0), 0);
+
+  return {
+    averageViews: source.length > 0 ? Math.round(totalViews / source.length) : 0,
+    last7Days: countSinceDays(7),
+    last30Days: countSinceDays(30),
+    last60Days: countSinceDays(60),
+    totalResults: source.length,
+    uniqueChannels: channelIds.size,
+    unregisteredChannels: [...channelIds].filter((channelId) => !registeredSet.has(channelId)).length,
+  };
+}
+
 export function toDiscoveryLinkPayload(video, query, tags = []) {
   return {
     url: video.url || `https://www.youtube.com/watch?v=${video.videoId}`,
