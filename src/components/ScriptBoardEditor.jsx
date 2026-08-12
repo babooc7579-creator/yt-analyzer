@@ -9,6 +9,7 @@ import { getYouTubeVideoUrl } from '../utils/urls';
 import ProductionVideoExternalActions from './ProductionVideoExternalActions';
 import ProductionVideoReadinessChecklist from './ProductionVideoReadinessChecklist';
 import ProductionVideoSaveStatus from './ProductionVideoSaveStatus';
+import ScriptBoardWritingGuide from './ScriptBoardWritingGuide';
 import YouTubeThumbnailImage from './YouTubeThumbnailImage';
 
 export default function ScriptBoardEditor({
@@ -79,6 +80,8 @@ export default function ScriptBoardEditor({
 
       <div className="grid min-w-0 grid-cols-1 gap-4 p-4 sm:p-5 2xl:grid-cols-[minmax(0,1fr)_280px]">
         <div className="min-w-0 space-y-4">
+          <ScriptBoardWritingGuide />
+
           <label className="block">
             <span className="text-xs font-extrabold text-slate-200">내가 만들 제목</span>
             <input
