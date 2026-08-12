@@ -87,6 +87,7 @@ export default function KeywordExplorerWorkspace({
             discoveryLinks={discoveryLinks}
             discoveryLinksSaving={discoveryLinksSaving}
             onOpenDiscoveryLinks={onOpenDiscoveryLinks}
+            onOpenWorkTools={onOpenWorkTools}
             onPrepareBulkChannelRegistration={onPrepareBulkChannelRegistration}
             onPrepareChannelRegistration={onPrepareChannelRegistration}
             onSaveDiscoveryLink={onSaveDiscoveryLink}

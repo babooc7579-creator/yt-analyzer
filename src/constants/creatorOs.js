@@ -4,7 +4,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     description: '발굴: 오늘 볼 만한 소재 신호를 찾습니다.',
     items: [
       { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
-      { id: 'discovery-trends', label: '키워드 트렌드 신호', status: 'soon', summary: '별도 탐색 메뉴를 늘리지 않고 키워드 탐색 안에서 외부 트렌드와 급상승 신호를 함께 확인할 예정입니다.' },
+      { id: 'discovery-trends', label: '키워드 트렌드 신호', status: 'soon', summary: '키워드 탐색의 영상·채널 검색에서 Google Trends와 네이버 공식 도구로 외부 관심도를 직접 확인합니다. 앱 내부 급상승 자동 판정은 아직 제공하지 않습니다.' },
       { id: 'discovery-ttotto', label: '또터또 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 수집 영상을 전용 화면에서 검토합니다.' },
       { id: 'discovery-keywords', label: '키워드 탐색', status: 'live', summary: '온라인 저장소(Azure DB)의 수집 영상에서 소재를 찾거나, 검색 버튼으로 YouTube의 새 영상·채널 후보를 찾고 다음 작업으로 연결합니다.' },
       { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'live', summary: '운영중 채널을 등급과 마지막 수집일 기준으로 정렬하고 오늘 확인할 범위를 고릅니다.' },

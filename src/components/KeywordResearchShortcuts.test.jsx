@@ -22,4 +22,17 @@ describe('KeywordResearchShortcuts', () => {
     expect(html).toContain('먼저 검색창에 키워드를 입력');
     expect(html).toContain('disabled');
   });
+
+  it('uses the selected YouTube search region for Google Trends', () => {
+    const html = renderToStaticMarkup(
+      <KeywordResearchShortcuts
+        keyword="copilot"
+        trendRegionCode="US"
+        trendRegionLabel="미국"
+      />
+    );
+
+    expect(html).toContain('Google Trends 기준 지역: 미국');
+    expect(html).toContain('geo=US&amp;q=copilot');
+  });
 });

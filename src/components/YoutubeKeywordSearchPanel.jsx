@@ -11,6 +11,7 @@ import {
 import { useMemo, useState } from 'react';
 import { DISCOVERY_LINK_SAVE_TAG_OPTIONS } from '../constants/discoveryLinks';
 import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
+import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import {
   formatYoutubeSearchCriteria,
@@ -140,6 +141,7 @@ function YoutubeVideoSearchPanel({
   discoveryLinks = [],
   discoveryLinksSaving = false,
   onOpenDiscoveryLinks,
+  onOpenWorkTools,
   onPrepareChannelRegistration,
   onSaveDiscoveryLink,
   onVideoSearchSessionChange,
@@ -163,6 +165,9 @@ function YoutubeVideoSearchPanel({
     registeredIds,
   ), [registeredIds, search.channelRegistrationFilter, search.displayedItems]);
   const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters);
+  const trendRegionOption = YOUTUBE_SEARCH_REGION_OPTIONS.find((option) => option.value === search.filters.regionCode);
+  const trendRegionCode = search.filters.regionCode || 'KR';
+  const trendRegionLabel = search.filters.regionCode ? trendRegionOption?.label || search.filters.regionCode : '대한민국(기본)';
 
   const applyKoreanPreset = () => {
     search.changeFilter('regionCode', 'KR');
@@ -239,6 +244,13 @@ function YoutubeVideoSearchPanel({
         <p className="mt-3 text-[11px] leading-5 text-slate-500">검색 지역은 해당 나라에서 시청 가능한 결과이며 제작 국가 제한이 아닙니다. 우선 언어는 관련 결과를 앞세우지만 다른 언어도 포함될 수 있습니다.</p>
         <p className="mt-1 text-[11px] leading-5 text-slate-500">기본 25개 · 자동검색 없음 · 조건 변경 후 검색 버튼을 눌러야 새 API 요청이 실행됩니다. 최소 조회수는 받은 결과를 화면에서만 좁힙니다.</p>
       </form>
+
+      <KeywordResearchShortcuts
+        keyword={search.filters.query}
+        onOpenWorkTools={onOpenWorkTools}
+        trendRegionCode={trendRegionCode}
+        trendRegionLabel={trendRegionLabel}
+      />
 
       {search.error ? <p role="alert" className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm font-bold text-rose-200">{search.error}</p> : null}
       {search.notice ? <p className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-100">{search.notice}</p> : null}
@@ -347,7 +359,7 @@ export default function YoutubeKeywordSearchPanel(props) {
         <button type="button" onClick={() => changeSearchTarget('channel')} aria-pressed={searchTarget === 'channel'} className={`rounded-lg px-4 py-3 text-sm font-black ${searchTarget === 'channel' ? 'bg-violet-500 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}`}>채널 찾기·비교</button>
       </div>
       {searchTarget === 'channel'
-        ? <YoutubeChannelSearchPanel channelSearchSession={props.channelSearchSession} onChannelSearchSessionChange={props.onChannelSearchSessionChange} onPrepareBulkChannelRegistration={props.onPrepareBulkChannelRegistration} onPrepareChannelRegistration={props.onPrepareChannelRegistration} registeredChannelIds={props.registeredChannelIds} />
+        ? <YoutubeChannelSearchPanel channelSearchSession={props.channelSearchSession} onChannelSearchSessionChange={props.onChannelSearchSessionChange} onOpenWorkTools={props.onOpenWorkTools} onPrepareBulkChannelRegistration={props.onPrepareBulkChannelRegistration} onPrepareChannelRegistration={props.onPrepareChannelRegistration} registeredChannelIds={props.registeredChannelIds} />
         : <YoutubeVideoSearchPanel {...props} />}
     </div>
   );

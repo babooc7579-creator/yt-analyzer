@@ -77,6 +77,9 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('임시 결과 지우기');
     expect(html).toContain('검색 조건을 남기고 결과·비교 선택·등록 후보·화면 필터만 정리');
     expect(html).toContain('YouTube API나 Azure DB를 호출하지 않습니다');
+    expect(html).toContain('외부 관심도 확인');
+    expect(html).toContain('Google Trends 기준 지역: 대한민국(기본)');
+    expect(html).toContain('geo=KR&amp;q=%EB%B0%94%EC%9D%B4%EB%B8%8C%20%EC%BD%94%EB%94%A9');
   });
 
   it('marks a channel already present in the channel registry', () => {
