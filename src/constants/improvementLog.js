@@ -56,7 +56,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
     status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
     priority: 'P1',
     lastReviewedAt: '2026-08-12',
-    currentSummary: '제작 후보 영상과 발견 링크 후보를 원본으로 제목, 분석, 구성안, 대본 본문, 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 저장합니다. 운영에서 입력 유지와 저장·새로고침·재조회·원상복구까지 확인했습니다. AI 연결 전에도 바로 쓸 수 있도록 원본 분석·구성안·대본 본문의 수동 작성 기준을 접이식 안내로 추가했습니다. 각 단계는 5개 점검 질문을 제공하며 펼치기만으로 DB 저장·YouTube API·AI 요청이 실행되지 않습니다.',
+    currentSummary: '제작 후보 영상과 발견 링크 후보를 원본으로 제목, 분석, 구성안, 대본 본문, 진행 단계, 기존 통합 작업 메모와 업로드 예정일을 기존 온라인 저장소(Azure DB)의 videoUserRecords에 저장합니다. 운영에서 입력 유지와 저장·새로고침·재조회·원상복구까지 확인했습니다. AI 연결 전에도 바로 쓸 수 있도록 원본 분석·구성안·대본 본문의 수동 작성 기준을 접이식 안내로 추가했습니다. 각 단계는 5개 점검 질문을 제공하며 펼치기만으로 DB 저장·YouTube API·AI 요청이 실행되지 않습니다. 기존 작업 묶음 복사는 AI 작업 자료 복사로 명확히 하고, 보유 ChatGPT 등 사용자가 선택한 AI에 직접 붙여넣을 안전 요청문과 제작 정보를 함께 복사합니다.',
     targetSummary: '제작 후보의 원본을 분석하고, 구성안을 만든 뒤, 대본을 작성·수정하고 최종본을 확정하는 독립 작업 공간으로 발전시킵니다.',
     nextAction: '배포 후 운영 대본 작업실에서 수동 작성 기준의 기본 접힘·모바일 배치·입력 및 저장 버튼 비간섭을 정기 회귀 검수합니다. AI 보조는 보유 자원과 비용을 확인한 뒤 별도 결정합니다.',
     decisions: [
@@ -129,6 +129,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'manual-writing-guide',
         label: 'AI 없이 사용할 수 있는 원본 분석·구성안·대본 본문 단계별 점검 기준',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'manual-ai-work-packet',
+        label: '기존 제작 작업 묶음에 복제 금지·사실 확인 기준을 포함한 수동 AI 전달 자료',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
     ],

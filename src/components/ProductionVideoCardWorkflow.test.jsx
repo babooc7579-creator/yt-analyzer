@@ -41,7 +41,7 @@ describe('ProductionVideoCard workflow', () => {
     expect(draftStepIndex).toBeGreaterThan(sourceStepIndex);
     expect(moveStepIndex).toBeGreaterThan(draftStepIndex);
     expect(html).toContain('원본 보기');
-    expect(html).toContain('작업 묶음 복사');
+    expect(html).toContain('AI 작업 자료 복사');
     expect(html).toContain('URL 복사');
     expect(html).toContain('업로드 26.07.30');
     expect(html).toContain('작업 준비 완료');

@@ -182,8 +182,8 @@ describe('productionVideoCard utils', () => {
         'aria-label': 'Clip YouTube 원본 보기',
       },
       workPacketCopyButtonProps: {
-        ariaLabel: 'Clip 제작 작업 묶음 복사',
-        label: '작업 묶음 복사',
+        ariaLabel: 'Clip AI 작업 자료 복사',
+        label: 'AI 작업 자료 복사',
       },
     });
 
@@ -222,6 +222,9 @@ describe('productionVideoCard utils', () => {
     });
 
     expect(packet).toContain('[Creator OS 제작 작업 묶음]');
+    expect(packet).toContain('[AI 작업 요청]');
+    expect(packet).toContain('원본의 문장이나 구성을 그대로 복제하지 말고');
+    expect(packet).toContain('정책·가격·수치·사실은 확인 필요라고 표시');
     expect(packet).toContain('진행 단계: 제작 중');
     expect(packet).toContain('원본 제목: Source title');
     expect(packet).toContain('내가 만들 제목: My title');
