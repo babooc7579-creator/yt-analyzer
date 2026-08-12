@@ -44,13 +44,13 @@ export const getVideoToolbarReferenceHeaderViewProps = ({
   totalCount,
 }) => ({
   actionResultGuide: '제작 후보로 → 제작 후보함 · 소재 보관 → 소재 보관함',
-  copyButtonAriaLabel: `현재 표시된 수집 영상 ${filteredCount}개 URL 목록 복사`,
+  copyButtonAriaLabel: `현재 필터 결과 수집 영상 ${filteredCount}개 URL 목록 복사`,
   copyButtonCopiedLabel: '목록 복사 완료',
   copyButtonDisabled: !hasCopyableUrlValue(filteredVideoUrlList),
   copyButtonLabel: '영상 URL 목록 복사',
-  copyButtonTitle: '현재 검색/필터/정렬 조건으로 보이는 영상 제목과 YouTube URL 목록을 클립보드에 복사합니다. YouTube API 호출이나 저장 작업은 없습니다.',
+  copyButtonTitle: '현재 검색/필터/정렬 조건에 맞는 전체 영상 제목과 YouTube URL 목록을 클립보드에 복사합니다. 화면에 단계 표시된 카드 수와 다를 수 있으며 YouTube API 호출이나 저장 작업은 없습니다.',
   description: '검색, 필터, 정렬, 보기 방식은 현재 불러온 수집 영상 정보의 화면 표시 조건만 바꿉니다. YouTube API를 새로 호출하지 않습니다.',
-  statusText: `현재 표시 ${filteredCount}개 / 전체 ${totalCount}개`,
+  statusText: `필터 결과 ${filteredCount}개 / 불러온 전체 ${totalCount}개`,
   title: '영상 검토 도구',
 });
 

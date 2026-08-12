@@ -145,16 +145,17 @@ describe('videoToolbarProps utils', () => {
 
     expect(props).toMatchObject({
       actionResultGuide: '제작 후보로 → 제작 후보함 · 소재 보관 → 소재 보관함',
-      copyButtonAriaLabel: '현재 표시된 수집 영상 3개 URL 목록 복사',
+      copyButtonAriaLabel: '현재 필터 결과 수집 영상 3개 URL 목록 복사',
       copyButtonCopiedLabel: '목록 복사 완료',
       copyButtonDisabled: true,
       copyButtonLabel: '영상 URL 목록 복사',
-      statusText: '현재 표시 3개 / 전체 12개',
+      statusText: '필터 결과 3개 / 불러온 전체 12개',
       title: '영상 검토 도구',
     });
     expect(props.description).toContain('화면 표시 조건만 바꿉니다');
     expect(props.description).toContain('YouTube API를 새로 호출하지 않습니다');
     expect(props.copyButtonTitle).toContain('YouTube API 호출이나 저장 작업은 없습니다');
+    expect(props.copyButtonTitle).toContain('화면에 단계 표시된 카드 수와 다를 수 있으며');
   });
 
   it('enables reference header URL copy when list exists', () => {
