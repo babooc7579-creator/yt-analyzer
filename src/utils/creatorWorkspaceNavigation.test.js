@@ -134,6 +134,10 @@ describe('creator workspace navigation utils', () => {
 
     expect(model.activeCreatorItem.id).toBe('ai-hook');
     expect(model.isComingSoonView).toBe(true);
+
+    const consolidatedModel = getCreatorWorkspaceViewModel('studio-script-tools');
+    expect(consolidatedModel.activeCreatorItem.id).toBe('studio-script-tools');
+    expect(consolidatedModel.isComingSoonView).toBe(true);
   });
 
   it('opens channel workspaces on the dashboard with the work panel visible', () => {

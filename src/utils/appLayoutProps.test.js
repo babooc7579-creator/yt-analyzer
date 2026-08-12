@@ -207,8 +207,8 @@ describe('appLayoutProps utils', () => {
     const groups = getCreatorSidebarNavigationGroups(CREATOR_OS_PRODUCT_MAP);
 
     expect(groups.liveItemCount).toBe(16);
-    expect(groups.roadmapItemCount).toBe(13);
-    expect(groups.liveItemCount + groups.roadmapItemCount).toBe(29);
+    expect(groups.roadmapItemCount).toBe(4);
+    expect(groups.liveItemCount + groups.roadmapItemCount).toBe(20);
     expect(groups.liveSections.flatMap((section) => section.items).map((item) => item.id)).not.toEqual(
       expect.arrayContaining(['vault-all', 'vault-channels']),
     );
@@ -216,7 +216,13 @@ describe('appLayoutProps utils', () => {
     expect(groups.liveSections.flatMap((section) => section.items).every((item) => item.status !== 'soon')).toBe(true);
     expect(groups.roadmapSections.flatMap((section) => section.items).every((item) => item.status === 'soon')).toBe(true);
     expect(groups.liveSections.some((section) => section.title === 'AI 공방')).toBe(false);
-    expect(groups.roadmapSections.some((section) => section.title === 'AI 공방')).toBe(true);
+    expect(groups.roadmapSections.some((section) => section.title === 'AI 공방')).toBe(false);
+    expect(groups.roadmapSections.flatMap((section) => section.items).map((item) => item.id)).toEqual([
+      'discovery-trends',
+      'studio-script-tools',
+      'ops-api',
+      'insight-learning',
+    ]);
   });
 
   it('builds accessible roadmap toggle copy without implying data work', () => {
