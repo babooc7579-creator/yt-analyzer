@@ -37,6 +37,11 @@ describe('ScriptBoardWorkspace', () => {
     expect(html).toContain('개선 기록');
     expect(html).toContain('기존 온라인 저장소(Azure DB)의 제작 기록');
     expect(html).toContain('새 YouTube API 호출은 없습니다');
+    expect(html).toContain('AI 없이 작성하는 대본 작업 기준');
+    expect(html).toContain('오래된 정보·정책·가격을 다시 확인할 항목');
+    expect(html).toContain('도입 훅 → 문제 → 핵심 정보·사례 → 전환 → 결론 순서');
+    expect(html).toContain('원본 표현과 지나치게 비슷한 문장 제거');
+    expect(html).toContain('AI 요청은 실행되지 않습니다');
     expect(html).toContain('내가 만들 제목');
     expect(html).toContain('대본 진행 단계');
     expect(html).toContain('수정 중');

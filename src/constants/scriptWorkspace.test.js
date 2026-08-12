@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   SCRIPT_WORKFLOW_STATUS,
   SCRIPT_WORKFLOW_STATUS_OPTIONS,
+  SCRIPT_MANUAL_GUIDE_SECTIONS,
   getScriptWorkflowStatusLabel,
 } from './scriptWorkspace';
 
@@ -18,5 +19,14 @@ describe('scriptWorkspace constants', () => {
     ]);
     expect(getScriptWorkflowStatusLabel(SCRIPT_WORKFLOW_STATUS.REVISION)).toBe('수정 중');
     expect(getScriptWorkflowStatusLabel('unknown')).toBe('시작 전');
+  });
+
+  it('provides a concise manual guide before AI assistance is connected', () => {
+    expect(SCRIPT_MANUAL_GUIDE_SECTIONS.map((section) => section.id)).toEqual([
+      'analysis',
+      'outline',
+      'body',
+    ]);
+    expect(SCRIPT_MANUAL_GUIDE_SECTIONS.every((section) => section.checks.length === 5)).toBe(true);
   });
 });
