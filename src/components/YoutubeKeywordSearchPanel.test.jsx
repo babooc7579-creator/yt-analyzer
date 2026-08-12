@@ -22,6 +22,10 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
       viralRatio: 500,
       lifetimeViewsPerDay: 5000,
       url: 'https://www.youtube.com/watch?v=video-1',
+    }, {
+      videoId: 'video-2', title: '두 번째 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-02T00:00:00Z',
+      duration: '05:00', viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
+      lifetimeViewsPerDay: 2500, url: 'https://www.youtube.com/watch?v=video-2',
     }],
     error: '',
     filters: { query: '아이디어', regionCode: '', language: '', dateRange: '30', duration: '', minimumViews: 0, order: 'relevance' },
@@ -29,6 +33,10 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
       videoId: 'video-1', title: '좋은 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-01T00:00:00Z',
       duration: '08:03', viewCount: 10000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 500,
       lifetimeViewsPerDay: 5000, url: 'https://www.youtube.com/watch?v=video-1',
+    }, {
+      videoId: 'video-2', title: '두 번째 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-02T00:00:00Z',
+      duration: '05:00', viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
+      lifetimeViewsPerDay: 2500, url: 'https://www.youtube.com/watch?v=video-2',
     }],
     lastQuery: '아이디어',
     loading: false,
@@ -68,7 +76,7 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('포르투갈어 우선');
     expect(html).toContain('대한민국·한국어 우선 빠른 설정');
     expect(html).toContain('검색 조건이 바뀌었습니다');
-    expect(html).toContain('표시 결과 1개 / 검색 결과 1개');
+    expect(html).toContain('표시 결과 2개 / 검색 결과 2개');
     expect(html).toContain('미등록 채널만');
     expect(html).toContain('영상 아이디어 작업');
     expect(html).toContain('영상 후보 선택 해제');
@@ -84,6 +92,8 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('YouTube 전체 검색량이나 급상승 판정이 아닙니다');
     expect(html).toContain('미등록 채널 영상만 보기');
     expect(html).toContain('평균 조회수');
+    expect(html).toContain('반복 등장한 미등록 출처 채널');
+    expect(html).toContain('영상 2개 · 등록 검토');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {
