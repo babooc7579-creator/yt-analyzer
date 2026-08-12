@@ -248,6 +248,20 @@ export function summarizeYoutubeVideoSearchResults(items, registeredIds = [], no
   };
   const channelIds = new Set(source.map((item) => String(item?.channelId || '')).filter(Boolean));
   const totalViews = source.reduce((sum, item) => sum + Number(item?.viewCount || 0), 0);
+  const channelAppearances = new Map();
+  source.forEach((item) => {
+    const channelId = String(item?.channelId || '');
+    if (!channelId || registeredSet.has(channelId)) return;
+    const current = channelAppearances.get(channelId) || {
+      channelId,
+      count: 0,
+      title: String(item?.channelTitle || '이름 미확인 채널'),
+      totalViews: 0,
+    };
+    current.count += 1;
+    current.totalViews += Number(item?.viewCount || 0);
+    channelAppearances.set(channelId, current);
+  });
 
   return {
     averageViews: source.length > 0 ? Math.round(totalViews / source.length) : 0,
@@ -257,6 +271,10 @@ export function summarizeYoutubeVideoSearchResults(items, registeredIds = [], no
     totalResults: source.length,
     uniqueChannels: channelIds.size,
     unregisteredChannels: [...channelIds].filter((channelId) => !registeredSet.has(channelId)).length,
+    repeatedUnregisteredChannels: [...channelAppearances.values()]
+      .filter((channel) => channel.count >= 2)
+      .sort((left, right) => right.count - left.count || right.totalViews - left.totalViews)
+      .slice(0, 3),
   };
 }
 

@@ -413,6 +413,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '외부 관심도는 새 트렌드 API를 만들지 않고 기존 Google Trends·네이버 공식 도구로 직접 확인하며, Google Trends에는 현재 YouTube 검색 지역을 전달합니다.',
       '현재 조회수·구독자·게시 후 하루 평균만으로 급상승이나 실제 성장률을 자동 판정하지 않습니다.',
       '최근 7일·30일·60일과 평균 조회수·출처 채널 수는 현재 받아온 임시 검색 결과만 화면에서 계산하며 YouTube 전체 검색량이나 시장 추세로 표현하지 않습니다.',
+      '같은 임시 결과에 2개 이상 영상이 나온 미등록 출처 채널은 최대 3개까지 반복 등장 채널로 모으되, 반복 횟수를 성장률이나 자동 등록 추천 점수로 사용하지 않습니다.',
     ],
     checkpoints: [
       {
@@ -428,6 +429,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-search-result-evidence-summary',
         label: '현재 받은 영상 결과의 기간 분포·평균 조회수·미등록 출처 채널 요약과 빠른 보기',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-search-repeated-channel-handoff',
+        label: '현재 영상 결과에서 반복 등장한 미등록 출처 채널을 모아 등록 검토로 연결',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {

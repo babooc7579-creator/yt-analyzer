@@ -293,6 +293,31 @@ function YoutubeVideoSearchPanel({
               <Metric label="미등록 채널" value={`${resultSummary.unregisteredChannels}개`} tone="text-violet-200" />
               <Metric label="평균 조회수" value={formatNumber(resultSummary.averageViews)} tone="text-emerald-200" />
             </div>
+            {resultSummary.repeatedUnregisteredChannels.length > 0 ? (
+              <div className="mt-4 border-t border-cyan-500/20 pt-4">
+                <p className="text-xs font-black text-violet-100">반복 등장한 미등록 출처 채널</p>
+                <p className="mt-1 text-[11px] leading-5 text-slate-500">현재 결과에 2개 이상 영상이 나온 채널만 표시합니다. 반복 등장은 등록 추천 점수나 성장률이 아니며, 버튼은 등록 입력만 준비합니다.</p>
+                <div className="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-3">
+                  {resultSummary.repeatedUnregisteredChannels.map((channel) => (
+                    <button
+                      key={channel.channelId}
+                      type="button"
+                      onClick={() => onPrepareChannelRegistration?.({
+                        channelId: channel.channelId,
+                        registrationSource: 'youtube-video-search',
+                        title: channel.title,
+                        url: `https://www.youtube.com/channel/${channel.channelId}`,
+                      })}
+                      className="flex min-h-12 items-center justify-between gap-3 rounded-lg border border-violet-500/30 bg-violet-500/5 px-3 py-2 text-left hover:bg-violet-500/10"
+                      title="채널 운영실의 등록 입력칸을 준비합니다. YouTube API 호출이나 Azure DB 저장은 실행되지 않습니다."
+                    >
+                      <span className="min-w-0 truncate text-xs font-black text-white">{channel.title}</span>
+                      <span className="shrink-0 text-[11px] font-black text-violet-200">영상 {channel.count}개 · 등록 검토</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </section>
           <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center sm:justify-between">
             <div>

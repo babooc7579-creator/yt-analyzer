@@ -138,6 +138,12 @@ describe('youtubeKeywordSearch', () => {
       totalResults: 4,
       uniqueChannels: 3,
       unregisteredChannels: 2,
+      repeatedUnregisteredChannels: [{
+        channelId: 'b',
+        count: 2,
+        title: '이름 미확인 채널',
+        totalViews: 8000,
+      }],
     });
   });
 });
