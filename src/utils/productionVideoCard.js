@@ -217,10 +217,10 @@ export const getProductionVideoExternalActionsViewProps = ({
       video,
       videoUrl,
     }),
-    label: '작업 묶음 복사',
-    copiedLabel: '묶음 복사 완료',
-    ariaLabel: `${videoTitle} 제작 작업 묶음 복사`,
-    title: '현재 카드의 원본, 제목, 분석, 구성안, 대본, 메모와 일정 정보를 클립보드에 복사합니다. 온라인 저장소(Azure DB) 저장이나 YouTube API 호출은 없습니다.',
+    label: 'AI 작업 자료 복사',
+    copiedLabel: 'AI 자료 복사 완료',
+    ariaLabel: `${videoTitle} AI 작업 자료 복사`,
+    title: 'ChatGPT 등 사용자가 선택한 AI 작업 공간에 붙여넣을 요청문과 원본·제목·분석·구성안·대본·메모·일정을 복사합니다. AI를 자동 호출하거나 온라인 저장소(Azure DB)에 저장하지 않습니다.',
   },
   };
 };
@@ -251,6 +251,12 @@ export const getProductionWorkPacketText = ({
 
   return [
     '[Creator OS 제작 작업 묶음]',
+    '',
+    '[AI 작업 요청]',
+    '아래 자료를 바탕으로 내 콘텐츠용 제목·분석·구성안·대본을 검토하고 미작성 부분을 우선 제안해 주세요.',
+    '원본의 문장이나 구성을 그대로 복제하지 말고 내 관점으로 재구성해 주세요.',
+    '현재 확인이 필요한 정책·가격·수치·사실은 확인 필요라고 표시하고, 근거 없는 정보는 만들지 마세요.',
+    '',
     `진행 단계: ${getProductionColumnLabel(columnId)}`,
     `원본 제목: ${sourceTitle}`,
     `내가 만들 제목: ${getWorkPacketValue(record.draftTitle)}`,
