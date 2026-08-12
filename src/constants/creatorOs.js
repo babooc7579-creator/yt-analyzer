@@ -36,7 +36,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'ops-channels', label: '채널 운영실', status: 'live', summary: '채널 관리, 새 채널 등록, 수집 영상 확인과 새 영상 수집을 단계별로 진행합니다.' },
       { id: 'ops-scan-log', label: '최근 수집 상태', status: 'live', summary: '채널별 마지막 수집 결과와 실패·미수집 상태를 한곳에서 확인합니다.' },
-      { id: 'ops-api', label: '수집·API 사용 현황', status: 'soon', summary: '별도 관제 메뉴를 늘리지 않고 최근 수집 상태 또는 설정에서 YouTube API 호출량과 비용 위험을 확인할 예정입니다.' },
+      { id: 'ops-api', label: '수집·API 사용 현황', status: 'soon', summary: '최근 수집 상태에서 Azure DB 조회와 YouTube 신규 수집의 경계를 안내합니다. 정확한 API 쿼터 장부는 아직 없으며, 실제 사용량은 Google Cloud Console을 최종 기준으로 확인합니다.' },
       { id: 'ops-settings', label: '설정', status: 'live', summary: '채널 분야와 데이터 연결 기준을 한곳에서 확인하고 관리합니다.' },
     ],
   },
