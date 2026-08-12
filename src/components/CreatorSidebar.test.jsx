@@ -27,14 +27,14 @@ describe('CreatorSidebar', () => {
     expect(html).not.toContain('data-testid="creator-sidebar-item-ops-add-channel"');
     expect(html).not.toContain('data-testid="creator-sidebar-item-ops-selected-scan"');
     expect(html).toContain('향후 기능');
-    expect(html).toContain('13개');
+    expect(html).toContain('4개');
     expect(html).toContain('aria-expanded="false"');
-    expect(html).not.toContain('트렌드 스캐너');
+    expect(html).not.toContain('키워드 트렌드 신호');
     expect(html).not.toContain('후킹 분석');
     expect(html).not.toContain('성과 리포트');
   });
 
-  it('renders every planned item when the roadmap is expanded', () => {
+  it('renders consolidated planned destinations when the roadmap is expanded', () => {
     const {
       roadmapItemCount,
       roadmapSections,
@@ -51,9 +51,12 @@ describe('CreatorSidebar', () => {
     );
 
     expect(html).toContain('aria-expanded="true"');
-    expect(html).toContain('트렌드 스캐너');
-    expect(html).toContain('후킹 분석');
-    expect(html).toContain('성과 리포트');
-    expect(html.match(/data-testid="creator-sidebar-item-/g)).toHaveLength(13);
+    expect(html).toContain('키워드 트렌드 신호');
+    expect(html).toContain('대본 작업실 확장 도구');
+    expect(html).toContain('수집·API 사용 현황');
+    expect(html).toContain('성과·패턴 인사이트');
+    expect(html).not.toContain('후킹 분석');
+    expect(html).not.toContain('제작 상태판');
+    expect(html.match(/data-testid="creator-sidebar-item-/g)).toHaveLength(4);
   });
 });

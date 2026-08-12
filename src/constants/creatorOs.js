@@ -4,7 +4,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     description: '발굴: 오늘 볼 만한 소재 신호를 찾습니다.',
     items: [
       { id: 'home', label: '오늘의 레이더', status: 'live', summary: '오늘 무엇을 보면 되는지 한 화면에서 확인합니다.' },
-      { id: 'discovery-trends', label: '트렌드 스캐너', status: 'soon', summary: '외부 트렌드와 급상승 신호를 연결할 예정입니다.' },
+      { id: 'discovery-trends', label: '키워드 트렌드 신호', status: 'soon', summary: '별도 탐색 메뉴를 늘리지 않고 키워드 탐색 안에서 외부 트렌드와 급상승 신호를 함께 확인할 예정입니다.' },
       { id: 'discovery-ttotto', label: '또터또 탐색', status: 'live', summary: '6개월 이상 지났고 채널 평균보다 강하게 반응한 수집 영상을 전용 화면에서 검토합니다.' },
       { id: 'discovery-keywords', label: '키워드 탐색', status: 'live', summary: '온라인 저장소(Azure DB)의 수집 영상에서 소재를 찾거나, 검색 버튼으로 YouTube의 새 영상·채널 후보를 찾고 다음 작업으로 연결합니다.' },
       { id: 'discovery-watchlist', label: '오늘 볼 채널', status: 'live', summary: '운영중 채널을 등급과 마지막 수집일 기준으로 정렬하고 오늘 확인할 범위를 고릅니다.' },
@@ -27,20 +27,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
       { id: 'studio-scrapbook', label: '소재 보관함', status: 'live', summary: '별표로 보관한 수집 영상을 나중에 다시 봅니다. 제작 후보함과는 별도로 관리합니다.' },
       { id: 'studio-script', label: '대본 작업실', status: 'live', summary: '제작 후보의 제목, 영상 분석, 구성안, 대본 본문, 진행 단계와 업로드 예정일을 온라인 저장소(Azure DB)에 작성합니다. 기존 통합 작업 메모도 그대로 유지합니다.' },
       { id: 'studio-calendar', label: '업로드 캘린더', status: 'live', summary: '제작 후보함에 온라인 저장소(Azure DB)에 저장된 목표 업로드 날짜를 달력으로 확인합니다.' },
-      { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '미검토, 분석중, 대본화, 제작완료 상태를 관리할 예정입니다.' },
-    ],
-  },
-  {
-    title: 'AI 공방',
-    description: '분석: 소재를 제목, 대본, 작전으로 바꿉니다.',
-    items: [
-      { id: 'ai-hook', label: '후킹 분석', status: 'soon', summary: '영상이 터진 첫 끌림 요소를 분석할 예정입니다.' },
-      { id: 'ai-structure', label: '기승전결 분석', status: 'soon', summary: '원본 영상의 전개 구조를 분해할 예정입니다.' },
-      { id: 'ai-wow', label: '와우포인트 분석', status: 'soon', summary: '시청자가 멈춰 보는 놀람 지점을 찾을 예정입니다.' },
-      { id: 'ai-shorts-script', label: '쇼츠 대본 생성', status: 'soon', summary: '레퍼런스를 쇼츠용 대본 초안으로 바꿀 예정입니다.' },
-      { id: 'ai-title-thumb', label: '제목/썸네일 문구 생성', status: 'soon', summary: '클릭을 부르는 제목과 썸네일 문구를 제안할 예정입니다.' },
-      { id: 'ai-remix', label: '우라까이 재구성 도우미', status: 'soon', summary: '복제가 아니라 안전한 재구성 방향을 잡을 예정입니다.' },
-      { id: 'ai-risk', label: '복사 위험 체크', status: 'soon', summary: '원본과 너무 가까운 표현 위험을 점검할 예정입니다.' },
+      { id: 'studio-script-tools', label: '대본 작업실 확장 도구', status: 'soon', summary: '제작 후보함·대본 작업실·업로드 캘린더의 현재 흐름 안에서 후킹·구조·와우포인트 분석, 대본 초안, 제목·썸네일 문구, 안전한 재구성, 복사 위험 확인을 단계별 도구로 제공할 예정입니다.' },
     ],
   },
   {
@@ -49,7 +36,7 @@ export const CREATOR_OS_PRODUCT_MAP = [
     items: [
       { id: 'ops-channels', label: '채널 운영실', status: 'live', summary: '채널 관리, 새 채널 등록, 수집 영상 확인과 새 영상 수집을 단계별로 진행합니다.' },
       { id: 'ops-scan-log', label: '최근 수집 상태', status: 'live', summary: '채널별 마지막 수집 결과와 실패·미수집 상태를 한곳에서 확인합니다.' },
-      { id: 'ops-api', label: 'API 사용량', status: 'soon', summary: 'YouTube API 호출량과 비용 위험을 볼 수 있게 할 예정입니다.' },
+      { id: 'ops-api', label: '수집·API 사용 현황', status: 'soon', summary: '별도 관제 메뉴를 늘리지 않고 최근 수집 상태 또는 설정에서 YouTube API 호출량과 비용 위험을 확인할 예정입니다.' },
       { id: 'ops-settings', label: '설정', status: 'live', summary: '채널 분야와 데이터 연결 기준을 한곳에서 확인하고 관리합니다.' },
     ],
   },
@@ -64,10 +51,8 @@ export const CREATOR_OS_PRODUCT_MAP = [
     title: '인사이트 / 학습',
     description: '축적: 성과와 패턴을 다음 판단으로 남깁니다.',
     items: [
-      { id: 'insight-report', label: '성과 리포트', status: 'soon', summary: '채널과 소재 성과를 리포트로 볼 예정입니다.' },
-      { id: 'insight-patterns', label: '터진 패턴 학습', status: 'soon', summary: '반복되는 성공 패턴을 정리할 예정입니다.' },
+      { id: 'insight-learning', label: '성과·패턴 인사이트', status: 'soon', summary: '성과 리포트, 터진 패턴 학습, 채널별 벤치마크를 데이터가 충분히 쌓인 뒤 하나의 인사이트 화면에서 제공할 예정입니다.' },
       { id: 'insight-notes', label: '개선 기록', status: 'live', summary: '기능별 현재 상태, 목표, 체크포인트, 다음 작업과 결정 사항을 Git 이력과 함께 관리합니다.' },
-      { id: 'insight-benchmark', label: '벤치마크 리포트', status: 'soon', summary: '채널별 벤치마크 분석을 준비 중입니다.' },
     ],
   },
 ];
@@ -88,10 +73,27 @@ export const LEGACY_CHANNEL_OPERATION_ITEMS = [
   { id: 'ops-selected-scan', label: '선택 채널 새 영상 수집', status: 'live', summary: '채널 운영실의 YouTube API 수집 단계로 이동합니다.', sectionTitle: '오퍼레이션 관제' },
 ];
 
+// Previously exposed roadmap links remain addressable, while the sidebar shows
+// the consolidated destination where each planned capability will belong.
+export const LEGACY_ROADMAP_ITEMS = [
+  { id: 'studio-status', label: '제작 상태판', status: 'soon', summary: '제작 후보함·대본 작업실·업로드 캘린더의 제작 흐름 현황으로 통합할 예정입니다.', sectionTitle: '제작 스튜디오' },
+  { id: 'ai-hook', label: '후킹 분석', status: 'soon', summary: '대본 작업실 확장 도구로 통합할 예정입니다.', sectionTitle: '대본 작업실 확장 도구' },
+  { id: 'ai-structure', label: '기승전결 분석', status: 'soon', summary: '대본 작업실 확장 도구로 통합할 예정입니다.', sectionTitle: '대본 작업실 확장 도구' },
+  { id: 'ai-wow', label: '와우포인트 분석', status: 'soon', summary: '대본 작업실 확장 도구로 통합할 예정입니다.', sectionTitle: '대본 작업실 확장 도구' },
+  { id: 'ai-shorts-script', label: '쇼츠 대본 생성', status: 'soon', summary: '대본 작업실 확장 도구로 통합할 예정입니다.', sectionTitle: '대본 작업실 확장 도구' },
+  { id: 'ai-title-thumb', label: '제목/썸네일 문구 생성', status: 'soon', summary: '대본 작업실 확장 도구로 통합할 예정입니다.', sectionTitle: '대본 작업실 확장 도구' },
+  { id: 'ai-remix', label: '우라까이 재구성 도우미', status: 'soon', summary: '대본 작업실 확장 도구로 통합할 예정입니다.', sectionTitle: '대본 작업실 확장 도구' },
+  { id: 'ai-risk', label: '복사 위험 체크', status: 'soon', summary: '대본 작업실 확장 도구로 통합할 예정입니다.', sectionTitle: '대본 작업실 확장 도구' },
+  { id: 'insight-report', label: '성과 리포트', status: 'soon', summary: '성과·패턴 인사이트로 통합할 예정입니다.', sectionTitle: '인사이트 / 학습' },
+  { id: 'insight-patterns', label: '터진 패턴 학습', status: 'soon', summary: '성과·패턴 인사이트로 통합할 예정입니다.', sectionTitle: '인사이트 / 학습' },
+  { id: 'insight-benchmark', label: '벤치마크 리포트', status: 'soon', summary: '성과·패턴 인사이트로 통합할 예정입니다.', sectionTitle: '인사이트 / 학습' },
+];
+
 export const CREATOR_OS_ITEMS = [
   ...CREATOR_OS_VISIBLE_ITEMS,
   ...LEGACY_REFERENCE_ITEMS,
   ...LEGACY_CHANNEL_OPERATION_ITEMS,
+  ...LEGACY_ROADMAP_ITEMS,
 ];
 
 export const READY_CREATOR_VIEWS = [
