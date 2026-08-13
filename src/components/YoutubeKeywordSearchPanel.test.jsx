@@ -7,6 +7,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     channelRegistrationFilter: 'all',
     changeChannelRegistrationFilter: vi.fn(),
     changeTitleScriptFilter: vi.fn(),
+    changeResultSort: vi.fn(),
     changeFilter: vi.fn(),
     clearResults: vi.fn(),
     clearSelected: vi.fn(),
@@ -44,6 +45,8 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     nextPageToken: 'next',
     notice: '1개 영상을 찾았습니다. 결과는 아직 저장되지 않았습니다.',
     removeSelected: vi.fn(),
+    resetResultView: vi.fn(),
+    resultSort: 'received',
     runSearch: vi.fn(),
     selectedIds: ['video-1'],
     setNotice: vi.fn(),
@@ -82,6 +85,12 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('미등록 채널만');
     expect(html).toContain('한글 포함 제목');
     expect(html).toContain('한글 없는 제목');
+    expect(html).toContain('현재 검색 결과 정렬');
+    expect(html).toContain('조회수 높은순');
+    expect(html).toContain('대박 비율 높은순');
+    expect(html).toContain('결과 좁히기 · 화면에서만 적용');
+    expect(html).toContain('선택 영상 저장 설정');
+    expect(html).toContain('화면 필터 초기화');
     expect(html).toContain('실제 음성·자막 언어를 판정하지 않으며');
     expect(html).toContain('영상 아이디어 작업');
     expect(html).toContain('영상 후보 선택 해제');
