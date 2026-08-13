@@ -1,6 +1,7 @@
 import { Check, ExternalLink, Loader2, Search, Trash2, UserPlus, Users } from 'lucide-react';
 import { useMemo } from 'react';
 import { useYoutubeChannelSearch } from '../hooks/useYoutubeChannelSearch';
+import CreatorActionFeedback from './CreatorActionFeedback';
 import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import {
   formatYoutubeChannelCountry,
@@ -158,7 +159,7 @@ export default function YoutubeChannelSearchPanel({ channelSearchSession, onChan
         trendRegionLabel={trendRegionLabel}
       />
 
-      {search.error ? <p role="alert" className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm font-bold text-rose-200">{search.error}</p> : null}
+      <CreatorActionFeedback error={search.error} />
       {search.notice ? <p className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-100">{search.notice}</p> : null}
       {search.appliedFilters ? (
         <div className="rounded-lg border border-slate-700 bg-slate-900/80 px-4 py-3">

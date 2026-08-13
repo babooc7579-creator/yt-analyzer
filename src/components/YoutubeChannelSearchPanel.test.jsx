@@ -14,7 +14,7 @@ vi.mock('../hooks/useYoutubeChannelSearch', () => ({
     displayedItems: [{
       channelId: 'channel-1', title: '아이디어 채널', customUrl: '@idea', description: '아이디어를 찾는 채널', country: 'KR', subscriberCount: 2000, hiddenSubscriberCount: false, totalVideoCount: 100, totalViewCount: 1000000, avgViewCount: 10000, url: 'https://www.youtube.com/channel/channel-1',
     }],
-    error: '',
+    error: 'Failed to fetch',
     filters: { query: '바이브 코딩', regionCode: '', language: '' },
     items: [{
       channelId: 'channel-1',
@@ -80,6 +80,7 @@ describe('YoutubeChannelSearchPanel', () => {
     expect(html).toContain('외부 관심도 확인');
     expect(html).toContain('Google Trends 기준 지역: 대한민국(기본)');
     expect(html).toContain('geo=KR&amp;q=%EB%B0%94%EC%9D%B4%EB%B8%8C%20%EC%BD%94%EB%94%A9');
+    expect(html).toContain('Microsoft 로그인 다시 열기');
   });
 
   it('marks a channel already present in the channel registry', () => {
