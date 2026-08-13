@@ -73,7 +73,7 @@ export const DISCOVERY_LINK_TAGS = {
 
 export const DISCOVERY_LINK_SAVE_TAG_OPTIONS = [
   { value: '', label: '저장 분류 없음' },
-  { value: DISCOVERY_LINK_TAGS.KAION_LEARNING, label: DISCOVERY_LINK_TAGS.KAION_LEARNING },
+  { value: DISCOVERY_LINK_TAGS.KAION_LEARNING, label: `${DISCOVERY_LINK_TAGS.KAION_LEARNING} (영상 링크 분류)` },
 ];
 
 export const getDiscoveryLinkTags = (link) => (

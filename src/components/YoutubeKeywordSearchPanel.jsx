@@ -56,6 +56,30 @@ function SearchSelect({ label, options, value, onChange, title }) {
   );
 }
 
+function YoutubeSearchOperationGuide() {
+  const operations = [
+    { label: '기존 중복 확인', source: 'Azure DB 조회', text: '발견 링크함을 읽어 저장 여부만 대조' },
+    { label: '새 영상 찾기', source: 'YouTube API', text: '검색 버튼을 누를 때만 실행' },
+    { label: '선택 영상 담기', source: 'Azure DB 저장', text: '링크와 기본 정보만 명시적으로 저장' },
+    { label: '채널 등록 검토', source: '화면 이동', text: '입력 준비만 하며 자동 등록 없음' },
+  ];
+
+  return (
+    <section className="rounded-xl border border-slate-700 bg-slate-950/70 p-3 sm:p-4" aria-label="YouTube 검색 작업과 데이터 변경 구분">
+      <p className="text-xs font-black text-white">이 화면의 작업 구분</p>
+      <div className="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-4">
+        {operations.map((operation) => (
+          <div key={operation.label} className="rounded-lg border border-slate-800 bg-slate-900/80 p-2.5">
+            <p className="text-[10px] font-black text-slate-500">{operation.label}</p>
+            <strong className="mt-1 block text-xs text-cyan-200">{operation.source}</strong>
+            <p className="mt-1 text-[10px] leading-4 text-slate-500">{operation.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, saved, registeredChannel, onPrepareChannelRegistration, onToggle, onToggleChannelRegistration }) {
   return (
     <article className={`overflow-hidden rounded-xl border bg-slate-950/70 ${selected ? 'border-red-400 ring-2 ring-red-400/20' : 'border-slate-800'}`}>
@@ -72,22 +96,24 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
         </span>
         <span className="absolute bottom-2 right-2 rounded bg-black/85 px-2 py-1 text-[11px] font-black text-white">{item.duration || '-'}</span>
       </button>
-      <div className="p-4">
-        <h3 className="line-clamp-2 min-h-12 text-sm font-black leading-6 text-white">{item.title}</h3>
+      <div className="p-3 sm:p-4">
+        <h3 className="line-clamp-2 text-sm font-black leading-6 text-white sm:min-h-12">{item.title}</h3>
         <div className="mt-2 flex items-center gap-2">
           <p className="min-w-0 flex-1 truncate text-xs font-bold text-slate-400">{item.channelTitle}</p>
           {registeredChannel ? <span className="shrink-0 rounded-full bg-emerald-500/20 px-2 py-1 text-[10px] font-black text-emerald-200">등록 채널</span> : null}
         </div>
         <p className="mt-1 text-[11px] text-slate-500">게시 {formatDate(item.publishedAt)}</p>
-        <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+        <div className="mt-3 grid grid-cols-3 gap-2 text-center sm:mt-4">
           <Metric label="조회수" value={formatNumber(item.viewCount)} tone="text-cyan-300" />
           <Metric label="구독자" value={item.hiddenSubscriberCount ? '비공개' : formatNumber(item.subscriberCount)} tone="text-violet-300" />
           <Metric label="대박 비율" value={item.viralRatio === null ? '-' : `${formatNumber(item.viralRatio)}%`} tone="text-emerald-300" />
         </div>
-        <p className="mt-3 text-[11px] leading-5 text-slate-500">
-          대박 비율은 현재 조회수÷현재 구독자 수의 추정값이며, 하루 평균 {item.lifetimeViewsPerDay === null ? '-' : formatNumber(item.lifetimeViewsPerDay)}회는 게시 후 전체 기간 평균입니다.
-        </p>
-        <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/5 p-3">
+        <details className="mt-2 rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2 text-[11px] text-slate-500 sm:mt-3">
+          <summary className="cursor-pointer font-black text-slate-400">앱 계산 지표 기준 보기</summary>
+          <p className="mt-2 leading-5">대박 비율은 현재 조회수÷현재 구독자 수의 추정값이며, 하루 평균 {item.lifetimeViewsPerDay === null ? '-' : formatNumber(item.lifetimeViewsPerDay)}회는 게시 후 전체 기간 평균입니다.</p>
+        </details>
+        <p className="mt-3 text-[11px] font-black text-slate-300">먼저 결정: 이 영상과 출처 채널을 각각 필요한 항목만 선택하세요.</p>
+        <div className="mt-2 rounded-lg border border-red-500/20 bg-red-500/5 p-2.5 sm:p-3">
           <p className="text-[11px] font-black text-red-200">영상 아이디어 작업</p>
           <button
             type="button"
@@ -99,9 +125,9 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
             {saved || selected ? <Check className="h-3.5 w-3.5" /> : <Inbox className="h-3.5 w-3.5" />}
             {saved ? '발견 링크함에 저장됨' : selected ? '영상 후보 선택 해제' : '영상 후보로 선택'}
           </button>
-          <p className="mt-2 text-[11px] leading-5 text-slate-500">선택만으로 저장되지 않습니다. 상단의 `발견 링크함에 담기`에서 저장합니다.</p>
+          <p className="mt-2 hidden text-[11px] leading-5 text-slate-500 sm:block">선택만으로 저장되지 않습니다. 상단의 `발견 링크함에 담기`에서 저장합니다.</p>
         </div>
-        <div className="mt-3 rounded-lg border border-violet-500/20 bg-violet-500/5 p-3">
+        <div className="mt-2 rounded-lg border border-violet-500/20 bg-violet-500/5 p-2.5 sm:mt-3 sm:p-3">
           <p className="text-[11px] font-black text-violet-200">출처 채널 작업</p>
           <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <button
@@ -112,7 +138,7 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
               className={`inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg border px-3 text-xs font-black disabled:cursor-default disabled:border-slate-700 disabled:bg-slate-700 disabled:text-slate-400 ${channelRegistrationSelected ? 'border-emerald-300 bg-emerald-500 text-white' : 'border-emerald-500/50 text-emerald-200 hover:bg-emerald-500/10'}`}
               title="이 출처 채널을 중요 채널 등록 후보로만 선택합니다. 선택만으로 YouTube API 호출이나 Azure DB 저장은 실행되지 않습니다."
             >
-              {channelRegistrationSelected ? <Check className="h-3.5 w-3.5" /> : <Users className="h-3.5 w-3.5" />} {registeredChannel ? '이미 등록된 채널' : channelRegistrationSelected ? '중요 채널 선택됨' : '중요 채널로 선택'}
+              {channelRegistrationSelected ? <Check className="h-3.5 w-3.5" /> : <Users className="h-3.5 w-3.5" />} {registeredChannel ? '이미 등록된 채널' : channelRegistrationSelected ? '등록 후보에 포함됨' : '중요 채널로 선택'}
             </button>
             <button
               type="button"
@@ -132,13 +158,13 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
               href={item.url}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg border border-slate-700 px-2 text-xs font-extrabold text-red-300 hover:bg-slate-900 hover:text-red-200"
+              className="inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg border border-slate-700 px-2 text-xs font-extrabold text-red-300 hover:bg-slate-900 hover:text-red-200 sm:col-span-2"
               title="YouTube 원본을 새 창에서 엽니다. API 호출이나 저장은 실행하지 않습니다."
             >
               <ExternalLink className="h-3.5 w-3.5" /> YouTube 원본 보기
             </a>
           </div>
-          <p className="mt-2 text-[11px] leading-5 text-slate-500">채널 등록 검토는 채널 운영실 입력 준비만 하며 자동 등록하거나 영상을 저장하지 않습니다.</p>
+          <p className="mt-2 hidden text-[11px] leading-5 text-slate-500 sm:block">채널 등록 검토는 채널 운영실 입력 준비만 하며 자동 등록하거나 영상을 저장하지 않습니다.</p>
         </div>
       </div>
     </article>
@@ -266,6 +292,8 @@ function YoutubeVideoSearchPanel({
         </p>
       </div>
 
+      <YoutubeSearchOperationGuide />
+
       <form onSubmit={handleSubmit} className="rounded-xl border border-slate-800 bg-slate-950/55 p-4">
         <div className="flex flex-col gap-2 sm:flex-row">
           <label className="relative min-w-0 flex-1">
@@ -376,7 +404,7 @@ function YoutubeVideoSearchPanel({
               <div>
                 <p className="text-xs font-extrabold text-violet-300">영상을 보며 출처 채널도 모으기</p>
                 <h3 className="mt-1 text-sm font-black text-white">중요 채널 후보 {channelRegistrationItems.length}개 / 최대 50개</h3>
-                <p className="mt-1 text-[11px] leading-5 text-slate-500">영상 후보 선택과 별개입니다. 여기서는 채널만 고르고 채널 운영실에서 태그·언어와 최종 등록을 확인합니다.</p>
+                <p className="mt-1 text-[11px] leading-5 text-slate-500">영상 후보 선택과 별개입니다. 같은 채널의 영상이 여러 개여도 채널 ID 기준 후보 1개로 묶고, 이미 등록된 채널은 제외합니다.</p>
               </div>
               <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                 <button type="button" onClick={() => search.addChannelRegistrationIds(visibleUnregisteredChannelIds)} disabled={visibleUnregisteredChannelIds.length === 0} className="h-10 rounded-lg border border-violet-500/40 px-3 text-xs font-black text-violet-100 disabled:cursor-default disabled:text-slate-600">표시된 미등록 채널 선택</button>
@@ -420,10 +448,14 @@ function YoutubeVideoSearchPanel({
             ) : null}
             {!duplicateCheckUnavailable ? <p className="mt-3 rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-[11px] font-bold leading-5 text-slate-300">현재 검색 결과 {search.items.length}개 중 이미 발견 링크함에 저장된 영상 {savedResultCount}개 · 새로 저장할 선택 {selectedItems.length}개{selectedSavedCount > 0 ? ` · 선택 중 중복 ${selectedSavedCount}개 제외` : ''}</p> : null}
             <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-              <label className="min-w-40 flex-1 sm:flex-none"><span className="sr-only">선택 영상 저장 분류</span><select value={saveTag} onChange={(event) => setSaveTag(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="선택한 영상을 발견 링크함에 저장할 때 함께 기록할 분류입니다. 선택만으로 Azure DB에 저장되지 않습니다.">{DISCOVERY_LINK_SAVE_TAG_OPTIONS.map((option) => <option key={option.value || 'none'} value={option.value}>{option.label}</option>)}</select></label>
+              <label className="min-w-52 flex-1 sm:flex-none">
+                <span className="mb-1 block text-[10px] font-black text-emerald-200">영상 링크 분류</span>
+                <select aria-describedby="youtube-save-tag-help" value={saveTag} onChange={(event) => setSaveTag(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="선택한 영상을 발견 링크함에 저장할 때 함께 기록할 영상 링크 분류입니다. 채널 분야 태그와는 별개이며 선택만으로 Azure DB에 저장되지 않습니다.">{DISCOVERY_LINK_SAVE_TAG_OPTIONS.map((option) => <option key={option.value || 'none'} value={option.value}>{option.label}</option>)}</select>
+              </label>
               <button type="button" onClick={saveSelected} disabled={selectedItems.length === 0 || duplicateCheckUnavailable || savingSelected || discoveryLinksSaving} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 text-xs font-black text-white disabled:cursor-not-allowed disabled:bg-slate-700" title={duplicateCheckUnavailable ? '기존 발견 링크 조회를 완료해야 중복 없이 저장할 수 있습니다.' : '선택한 새 영상의 링크와 기본 정보만 온라인 저장소(Azure DB)의 발견 링크함에 저장합니다. 영상 파일은 저장하지 않습니다.'}>{savingSelected ? <Loader2 className="h-4 w-4 animate-spin" /> : <Inbox className="h-4 w-4" />}{savingSelected ? '발견 링크함 저장 중...' : `새 영상 ${selectedItems.length}개 발견 링크함에 담기`}</button>
               <button type="button" onClick={onOpenDiscoveryLinks} className="h-10 rounded-lg border border-slate-700 px-4 text-xs font-extrabold text-slate-300 hover:bg-slate-800">발견 링크함 열기</button>
             </div>
+            <p id="youtube-save-tag-help" className="mt-2 text-[11px] leading-5 text-slate-500">`카이온학습`은 내 업무 지식·정보 습득용 영상 링크 분류입니다. 채널 전체의 분야를 정하는 채널 태그와는 별개입니다.</p>
           </section>
           <p className="-mt-1 px-4 text-[11px] leading-5 text-slate-500">제목 필터는 한글 문자 포함 여부만 확인합니다. 실제 음성·자막 언어를 판정하지 않으며 추가 API 호출이나 저장이 없습니다.</p>
           {visibleItems.length > 0 ? <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">

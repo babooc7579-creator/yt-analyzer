@@ -23,6 +23,9 @@ export default function KeywordExplorerSourceTabs({ source, onChange }) {
         <span className="flex items-center gap-2 text-sm font-black"><Youtube className="h-4 w-4" /> YouTube에서 새로 찾기</span>
         <span className={`mt-1 block text-xs ${source === 'youtube' ? 'text-red-100' : 'text-slate-500'}`}>버튼 실행 시 YouTube API 사용</span>
       </button>
+      <p className="px-2 pb-1 text-[11px] font-bold leading-5 text-slate-500 sm:col-span-2">
+        이미 모은 영상은 왼쪽에서 다시 찾고, 없을 때만 오른쪽에서 새 후보를 검색합니다. 새 검색 결과는 임시이며 선택해 저장한 링크만 발견 링크함으로 이어집니다.
+      </p>
     </div>
   );
 }
