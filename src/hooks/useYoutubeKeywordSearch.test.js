@@ -105,4 +105,20 @@ describe('useYoutubeKeywordSearch', () => {
     expect(stateSetters[4]).toHaveBeenCalledWith(expect.stringContaining('쇼츠 후보 1개'));
     expect(stateSetters[5]).toHaveBeenCalledWith('next-shorts-page');
   });
+
+  it('restores the local Shorts confidence filter without an API request', () => {
+    const search = useYoutubeKeywordSearch({
+      initialState: {
+        items: [
+          { videoId: 'high', durationSeconds: 60, title: '#shorts sample' },
+          { videoId: 'review', durationSeconds: 60, title: 'sample' },
+        ],
+        shortsConfidenceFilter: 'high',
+      },
+    });
+
+    expect(search.shortsConfidenceFilter).toBe('high');
+    expect(search.displayedItems.map((item) => item.videoId)).toEqual(['high']);
+    expect(searchYoutubeVideosMock).not.toHaveBeenCalled();
+  });
 });

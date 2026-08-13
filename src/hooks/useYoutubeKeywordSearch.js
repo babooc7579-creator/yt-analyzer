@@ -32,18 +32,20 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   const [titleScriptFilter, setTitleScriptFilter] = useState(() => initialState?.titleScriptFilter || 'all');
   const [resultSort, setResultSort] = useState(() => initialState?.resultSort || 'received');
   const [channelRegistrationIds, setChannelRegistrationIds] = useState(() => initialState?.channelRegistrationIds || []);
+  const [shortsConfidenceFilter, setShortsConfidenceFilter] = useState(() => initialState?.shortsConfidenceFilter || 'all');
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, channelRegistrationFilter, channelRegistrationIds, filters, items, lastQuery, nextPageToken, notice, resultSort, selectedIds, titleScriptFilter });
-  }, [appliedFilters, channelRegistrationFilter, channelRegistrationIds, filters, items, lastQuery, nextPageToken, notice, onStateChange, resultSort, selectedIds, titleScriptFilter]);
+    onStateChange?.({ appliedFilters, channelRegistrationFilter, channelRegistrationIds, filters, items, lastQuery, nextPageToken, notice, resultSort, selectedIds, shortsConfidenceFilter, titleScriptFilter });
+  }, [appliedFilters, channelRegistrationFilter, channelRegistrationIds, filters, items, lastQuery, nextPageToken, notice, onStateChange, resultSort, selectedIds, shortsConfidenceFilter, titleScriptFilter]);
 
   const displayedItems = useMemo(
-    () => filterYoutubeSearchResults(items, filters.minimumViews),
-    [filters.minimumViews, items],
+    () => filterYoutubeSearchResults(items, filters.minimumViews, shortsConfidenceFilter),
+    [filters.minimumViews, items, shortsConfidenceFilter],
   );
 
   const changeFilter = (key, value) => {
     setFilters((current) => ({ ...current, [key]: value }));
+    if (key === 'duration' && value !== 'shorts') setShortsConfidenceFilter('all');
     if (key !== 'minimumViews') setNextPageToken('');
   };
 
@@ -107,6 +109,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     setAppliedFilters(null);
     setChannelRegistrationFilter('all');
     setTitleScriptFilter('all');
+    setShortsConfidenceFilter('all');
     setResultSort('received');
     setError('');
     setNotice('임시 영상 검색 결과를 지웠습니다. 입력한 검색 조건은 그대로 유지됩니다.');
@@ -148,10 +151,13 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
       setChannelRegistrationFilter('all');
       setTitleScriptFilter('all');
       setResultSort('received');
+      setShortsConfidenceFilter('all');
     },
     resultSort,
     runSearch,
     selectedIds,
+    shortsConfidenceFilter,
+    changeShortsConfidenceFilter: setShortsConfidenceFilter,
     setNotice,
     toggleSelected,
     toggleChannelRegistration: (channelId) => {

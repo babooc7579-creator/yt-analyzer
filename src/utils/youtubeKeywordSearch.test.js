@@ -9,6 +9,7 @@ import {
   filterYoutubeSearchItemsForRequestedDuration,
   formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
+  getYoutubeShortsAssessment,
   getDiscoveryLinkYoutubeVideoId,
   getPublishedAfter,
   getYoutubeVideoIdFromUrl,
@@ -47,6 +48,20 @@ describe('youtubeKeywordSearch', () => {
     expect(filterYoutubeSearchItemsForRequestedDuration(items, 'short')).toBe(items);
     expect(isYoutubeShortsCandidate(items[1])).toBe(true);
     expect(isYoutubeShortsCandidate(items[2])).toBe(false);
+  });
+
+  it('separates strong Shorts metadata signals from candidates needing visual review', () => {
+    const highByTitle = { videoId: '1', durationSeconds: 180, title: '오늘의 쇼츠 아이디어' };
+    const highByDescription = { videoId: '2', durationSeconds: 90, title: 'Idea', description: 'More details #Shorts' };
+    const review = { videoId: '3', durationSeconds: 45, title: '일반 짧은 영상', description: '세로 화면 정보 없음' };
+    const notCandidate = { videoId: '4', durationSeconds: 181, title: '#shorts지만 너무 긴 영상' };
+
+    expect(getYoutubeShortsAssessment(highByTitle)).toMatchObject({ confidence: 'high', label: '쇼츠 가능성 높음' });
+    expect(getYoutubeShortsAssessment(highByDescription)).toMatchObject({ confidence: 'high' });
+    expect(getYoutubeShortsAssessment(review)).toMatchObject({ confidence: 'review', label: '쇼츠 확인 필요' });
+    expect(getYoutubeShortsAssessment(notCandidate)).toMatchObject({ confidence: 'none' });
+    expect(filterYoutubeSearchResults([highByTitle, highByDescription, review], 0, 'high')).toEqual([highByTitle, highByDescription]);
+    expect(filterYoutubeSearchResults([highByTitle, highByDescription, review], 0, 'review')).toEqual([review]);
   });
 
   it('keeps the first search date boundary when loading a later result page', () => {

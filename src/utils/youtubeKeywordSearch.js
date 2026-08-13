@@ -45,6 +45,12 @@ export const YOUTUBE_SEARCH_DURATION_OPTIONS = [
 
 export const YOUTUBE_SHORTS_MAX_SECONDS = 180;
 
+export const YOUTUBE_SHORTS_CONFIDENCE_FILTER_OPTIONS = [
+  { value: 'all', label: '쇼츠 후보 전체' },
+  { value: 'high', label: '가능성 높음만' },
+  { value: 'review', label: '확인 필요만' },
+];
+
 export const YOUTUBE_SEARCH_ORDER_OPTIONS = [
   { value: 'relevance', label: '관련도순' },
   { value: 'viewCount', label: '조회수순' },
@@ -147,6 +153,25 @@ export function buildYoutubeSearchOptions(filters, pageToken = '') {
 export function isYoutubeShortsCandidate(video = {}) {
   const durationSeconds = Number(video.durationSeconds || 0);
   return durationSeconds > 0 && durationSeconds <= YOUTUBE_SHORTS_MAX_SECONDS;
+}
+
+export function getYoutubeShortsAssessment(video = {}) {
+  if (!isYoutubeShortsCandidate(video)) {
+    return { confidence: 'none', label: '', reason: '' };
+  }
+  const metadata = `${String(video.title || '')} ${String(video.description || '')}`.toLowerCase();
+  const hasShortsMarker = /(^|[\s#])#?(youtube[\s_-]+shorts|shorts|쇼츠|ショート)(?=$|[\s.,!?()[\]{}|/\\-])/iu.test(metadata);
+  return hasShortsMarker
+    ? {
+      confidence: 'high',
+      label: '쇼츠 가능성 높음',
+      reason: '3분 이하이며 제목 또는 설명에 Shorts 표기가 있습니다.',
+    }
+    : {
+      confidence: 'review',
+      label: '쇼츠 확인 필요',
+      reason: '3분 이하이지만 화면비와 YouTube의 실제 분류는 원본에서 확인해야 합니다.',
+    };
 }
 
 export function filterYoutubeSearchItemsForRequestedDuration(items, duration = '') {
@@ -287,9 +312,13 @@ export function sortYoutubeVideoResults(items, sortBy = 'received') {
   return indexed.map(({ item }) => item);
 }
 
-export function filterYoutubeSearchResults(items, minimumViews = 0) {
+export function filterYoutubeSearchResults(items, minimumViews = 0, shortsConfidenceFilter = 'all') {
   const threshold = Number(minimumViews || 0);
-  return (Array.isArray(items) ? items : []).filter((item) => Number(item?.viewCount || 0) >= threshold);
+  return (Array.isArray(items) ? items : []).filter((item) => {
+    if (Number(item?.viewCount || 0) < threshold) return false;
+    if (!['high', 'review'].includes(shortsConfidenceFilter)) return true;
+    return getYoutubeShortsAssessment(item).confidence === shortsConfidenceFilter;
+  });
 }
 
 export function summarizeYoutubeVideoSearchResults(items, registeredIds = [], now = new Date()) {
