@@ -415,6 +415,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '최근 7일·30일·60일과 평균 조회수·출처 채널 수는 현재 받아온 임시 검색 결과만 화면에서 계산하며 YouTube 전체 검색량이나 시장 추세로 표현하지 않습니다.',
       '같은 임시 결과에 2개 이상 영상이 나온 미등록 출처 채널은 최대 3개까지 반복 등장 채널로 모으되, 반복 횟수를 성장률이나 자동 등록 추천 점수로 사용하지 않습니다.',
       '한글 포함 제목 필터는 현재 받은 결과의 제목 문자만 화면에서 구분하며 실제 음성·자막 언어나 YouTube의 공식 언어 판정으로 표현하지 않습니다.',
+      '영상 검색의 화면 필터·현재 결과 정렬과 선택 영상 저장 설정은 별도 영역으로 구분하고, 로그인 연결 오류에는 기존 Microsoft 로그인 복구 안내를 재사용합니다.',
     ],
     checkpoints: [
       {
@@ -440,6 +441,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-search-title-script-filter',
         label: '현재 받은 영상 결과를 전체 제목·한글 포함 제목·한글 없는 제목으로 화면에서 구분',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-search-result-tools-clarity',
+        label: '결과 좁히기·적용 필터·현재 결과 정렬과 선택 영상 저장 설정을 분리하고 로그인 복구 연결',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {

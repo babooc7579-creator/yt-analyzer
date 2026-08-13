@@ -27,10 +27,11 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
   const [channelRegistrationFilter, setChannelRegistrationFilter] = useState(() => initialState?.channelRegistrationFilter || 'all');
   const [titleScriptFilter, setTitleScriptFilter] = useState(() => initialState?.titleScriptFilter || 'all');
+  const [resultSort, setResultSort] = useState(() => initialState?.resultSort || 'received');
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, selectedIds, titleScriptFilter });
-  }, [appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds, titleScriptFilter]);
+    onStateChange?.({ appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, resultSort, selectedIds, titleScriptFilter });
+  }, [appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, onStateChange, resultSort, selectedIds, titleScriptFilter]);
 
   const displayedItems = useMemo(
     () => filterYoutubeSearchResults(items, filters.minimumViews),
@@ -95,6 +96,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     setAppliedFilters(null);
     setChannelRegistrationFilter('all');
     setTitleScriptFilter('all');
+    setResultSort('received');
     setError('');
     setNotice('임시 영상 검색 결과를 지웠습니다. 입력한 검색 조건은 그대로 유지됩니다.');
   };
@@ -120,10 +122,17 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     nextPageToken,
     notice,
     removeSelected,
+    resetResultView: () => {
+      setChannelRegistrationFilter('all');
+      setTitleScriptFilter('all');
+      setResultSort('received');
+    },
+    resultSort,
     runSearch,
     selectedIds,
     setNotice,
     toggleSelected,
     titleScriptFilter,
+    changeResultSort: setResultSort,
   };
 }

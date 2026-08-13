@@ -13,12 +13,14 @@ import { DISCOVERY_LINK_SAVE_TAG_OPTIONS } from '../constants/discoveryLinks';
 import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
 import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
+import CreatorActionFeedback from './CreatorActionFeedback';
 import {
   formatYoutubeSearchCriteria,
   filterYoutubeVideoResultsByChannelRegistration,
   filterYoutubeVideoResultsByTitleScript,
   hasYoutubeSearchCriteriaChanges,
   summarizeYoutubeVideoSearchResults,
+  sortYoutubeVideoResults,
   toDiscoveryLinkPayload,
   YOUTUBE_SEARCH_DATE_OPTIONS,
   YOUTUBE_SEARCH_DURATION_OPTIONS,
@@ -28,6 +30,7 @@ import {
   YOUTUBE_SEARCH_REGION_OPTIONS,
   YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS,
   YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS,
+  YOUTUBE_VIDEO_RESULT_SORT_OPTIONS,
 } from '../utils/youtubeKeywordSearch';
 
 const formatNumber = (value) => Number(value || 0).toLocaleString('ko-KR');
@@ -36,7 +39,7 @@ const formatDate = (value) => {
   return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString('ko-KR');
 };
 
-function SearchSelect({ label, options, value, onChange }) {
+function SearchSelect({ label, options, value, onChange, title }) {
   return (
     <label>
       <span className="sr-only">{label}</span>
@@ -44,7 +47,7 @@ function SearchSelect({ label, options, value, onChange }) {
         value={value}
         onChange={(event) => onChange(event.target.value)}
         className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200 outline-none focus:border-red-400"
-        title={`${label} 검색 조건입니다. 조건 변경만으로 YouTube API를 호출하지 않습니다.`}
+        title={title || `${label} 검색 조건입니다. 조건 변경만으로 YouTube API를 호출하지 않습니다.`}
       >
         {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
       </select>
@@ -162,14 +165,17 @@ function YoutubeVideoSearchPanel({
   ), [discoveryLinks]);
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const selectedItems = search.items.filter((item) => search.selectedIds.includes(item.videoId) && !savedVideoIds.has(item.videoId));
-  const visibleItems = useMemo(() => filterYoutubeVideoResultsByTitleScript(
-    filterYoutubeVideoResultsByChannelRegistration(
-      search.displayedItems,
-      search.channelRegistrationFilter,
-      registeredIds,
+  const visibleItems = useMemo(() => sortYoutubeVideoResults(
+    filterYoutubeVideoResultsByTitleScript(
+      filterYoutubeVideoResultsByChannelRegistration(
+        search.displayedItems,
+        search.channelRegistrationFilter,
+        registeredIds,
+      ),
+      search.titleScriptFilter,
     ),
-    search.titleScriptFilter,
-  ), [registeredIds, search.channelRegistrationFilter, search.displayedItems, search.titleScriptFilter]);
+    search.resultSort,
+  ), [registeredIds, search.channelRegistrationFilter, search.displayedItems, search.resultSort, search.titleScriptFilter]);
   const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters);
   const resultSummary = useMemo(() => summarizeYoutubeVideoSearchResults(
     search.displayedItems,
@@ -178,6 +184,11 @@ function YoutubeVideoSearchPanel({
   const trendRegionOption = YOUTUBE_SEARCH_REGION_OPTIONS.find((option) => option.value === search.filters.regionCode);
   const trendRegionCode = search.filters.regionCode || 'KR';
   const trendRegionLabel = search.filters.regionCode ? trendRegionOption?.label || search.filters.regionCode : '대한민국(기본)';
+  const activeResultViewLabels = [
+    YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS.find((option) => option.value === search.channelRegistrationFilter),
+    YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS.find((option) => option.value === search.titleScriptFilter),
+    YOUTUBE_VIDEO_RESULT_SORT_OPTIONS.find((option) => option.value === search.resultSort),
+  ].filter((option) => option && !['all', 'received'].includes(option.value)).map((option) => option.label);
 
   const applyKoreanPreset = () => {
     search.changeFilter('regionCode', 'KR');
@@ -262,7 +273,7 @@ function YoutubeVideoSearchPanel({
         trendRegionLabel={trendRegionLabel}
       />
 
-      {search.error ? <p role="alert" className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm font-bold text-rose-200">{search.error}</p> : null}
+      <CreatorActionFeedback error={search.error} />
       {search.notice ? <p className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-bold text-cyan-100">{search.notice}</p> : null}
       {search.appliedFilters ? (
         <div className="rounded-lg border border-slate-700 bg-slate-900/80 px-4 py-3">
@@ -324,54 +335,36 @@ function YoutubeVideoSearchPanel({
               </div>
             ) : null}
           </section>
-          <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <section className="rounded-xl border border-slate-800 bg-slate-950/70 p-4" aria-label="검색 결과 좁히기">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="text-xs font-extrabold text-cyan-300">결과 좁히기 · 화면에서만 적용</p>
+                <h3 className="mt-1 text-sm font-black text-white">표시 결과 {visibleItems.length}개 / 검색 결과 {search.displayedItems.length}개</h3>
+                <p className="mt-1 text-[11px] leading-5 text-slate-500">등록 상태·제목 문자·현재 결과 정렬은 YouTube API나 Azure DB를 호출하지 않습니다.</p>
+              </div>
+              <button type="button" onClick={search.resetResultView} disabled={activeResultViewLabels.length === 0} className="h-9 shrink-0 rounded-lg border border-slate-700 px-3 text-xs font-black text-slate-200 disabled:cursor-default disabled:opacity-40">화면 필터 초기화</button>
+            </div>
+            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <SearchSelect label="출처 채널 등록 상태 필터" options={YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS} value={search.channelRegistrationFilter} onChange={search.changeChannelRegistrationFilter} title="이미 받은 결과를 출처 채널의 등록 상태로만 좁힙니다. YouTube API나 Azure DB를 새로 호출하지 않습니다." />
+              <SearchSelect label="영상 제목 한글 포함 필터" options={YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS} value={search.titleScriptFilter} onChange={search.changeTitleScriptFilter} title="이미 받은 결과의 제목에 한글 문자가 포함됐는지만 구분합니다. 언어 판정 기능이 아니며 YouTube API나 Azure DB를 새로 호출하지 않습니다." />
+              <SearchSelect label="현재 검색 결과 정렬" options={YOUTUBE_VIDEO_RESULT_SORT_OPTIONS} value={search.resultSort} onChange={search.changeResultSort} title="이미 받은 결과의 표시 순서만 바꿉니다. YouTube API나 Azure DB를 새로 호출하지 않습니다." />
+            </div>
+            {activeResultViewLabels.length > 0 ? <div className="mt-3 flex flex-wrap gap-2" aria-label="적용 중인 화면 필터">{activeResultViewLabels.map((label) => <span key={label} className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-[11px] font-black text-cyan-100">{label}</span>)}</div> : <p className="mt-3 text-[11px] text-slate-500">적용 중인 화면 필터 없음 · 받은 결과 전체를 표시합니다.</p>}
+            <button type="button" onClick={search.clearResults} className="mt-3 inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-rose-500/40 px-3 text-xs font-black text-rose-200 hover:bg-rose-500/10" title="현재 브라우저의 임시 영상 결과·선택·화면 필터만 지웁니다. 입력한 검색 조건은 유지되며 YouTube API나 Azure DB를 호출하지 않습니다."><Trash2 className="h-3.5 w-3.5" /> 임시 결과 지우기</button>
+            <p className="mt-2 text-[11px] leading-5 text-slate-500">검색 조건을 남기고 결과·영상 선택·화면 필터만 정리합니다. 발견 링크함에 이미 저장한 항목은 삭제하지 않습니다.</p>
+          </section>
+          <section className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4" aria-label="선택 영상 저장 설정">
             <div>
-              <p className="text-sm font-black text-white">표시 결과 {visibleItems.length}개 / 검색 결과 {search.displayedItems.length}개 · 선택 {selectedItems.length}개</p>
-              <p className="mt-1 text-xs text-slate-500">선택하지 않은 검색 결과는 Azure DB에 저장되지 않습니다.</p>
+              <p className="text-xs font-extrabold text-emerald-300">선택 영상 저장 설정</p>
+              <h3 className="mt-1 text-sm font-black text-white">선택 {selectedItems.length}개</h3>
+              <p className="mt-1 text-[11px] leading-5 text-slate-500">영상을 선택한 뒤 저장 분류를 정하고 발견 링크함에 담을 때만 Azure DB에 링크와 기본 정보가 저장됩니다.</p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <label className="min-w-40 flex-1 sm:flex-none">
-                <span className="sr-only">선택 영상 저장 분류</span>
-                <select
-                  value={saveTag}
-                  onChange={(event) => setSaveTag(event.target.value)}
-                  className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200"
-                  title="선택한 영상을 발견 링크함에 저장할 때 함께 기록할 분류입니다. 선택만으로 Azure DB에 저장되지 않습니다."
-                >
-                  {DISCOVERY_LINK_SAVE_TAG_OPTIONS.map((option) => (
-                    <option key={option.value || 'none'} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-              </label>
-              <label className="min-w-40 flex-1 sm:flex-none">
-                <span className="sr-only">출처 채널 등록 상태 필터</span>
-                <select value={search.channelRegistrationFilter} onChange={(event) => search.changeChannelRegistrationFilter(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 영상 결과를 출처 채널의 등록 여부로만 좁힙니다. YouTube API는 호출하지 않습니다.">
-                  {YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-                </select>
-              </label>
-              <label className="min-w-40 flex-1 sm:flex-none">
-                <span className="sr-only">영상 제목 한글 포함 필터</span>
-                <select value={search.titleScriptFilter} onChange={(event) => search.changeTitleScriptFilter(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 결과의 제목에 한글이 포함됐는지만 화면에서 구분합니다. 영상 언어 판정이 아니며 YouTube API나 Azure DB를 호출하지 않습니다.">
-                  {YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-                </select>
-              </label>
-              <button
-                type="button"
-                onClick={saveSelected}
-                disabled={selectedItems.length === 0 || savingSelected || discoveryLinksSaving}
-                className="inline-flex h-10 items-center gap-2 rounded-lg bg-emerald-500 px-4 text-xs font-black text-white disabled:cursor-not-allowed disabled:bg-slate-700"
-                title="선택한 영상의 링크와 기본 정보만 온라인 저장소(Azure DB)의 발견 링크함에 저장합니다. 영상 파일은 저장하지 않습니다."
-              >
-                {savingSelected ? <Loader2 className="h-4 w-4 animate-spin" /> : <Inbox className="h-4 w-4" />}
-                {savingSelected ? '발견 링크함 저장 중...' : `선택 ${selectedItems.length}개 발견 링크함에 담기`}
-              </button>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              <label className="min-w-40 flex-1 sm:flex-none"><span className="sr-only">선택 영상 저장 분류</span><select value={saveTag} onChange={(event) => setSaveTag(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="선택한 영상을 발견 링크함에 저장할 때 함께 기록할 분류입니다. 선택만으로 Azure DB에 저장되지 않습니다.">{DISCOVERY_LINK_SAVE_TAG_OPTIONS.map((option) => <option key={option.value || 'none'} value={option.value}>{option.label}</option>)}</select></label>
+              <button type="button" onClick={saveSelected} disabled={selectedItems.length === 0 || savingSelected || discoveryLinksSaving} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 text-xs font-black text-white disabled:cursor-not-allowed disabled:bg-slate-700" title="선택한 영상의 링크와 기본 정보만 온라인 저장소(Azure DB)의 발견 링크함에 저장합니다. 영상 파일은 저장하지 않습니다.">{savingSelected ? <Loader2 className="h-4 w-4 animate-spin" /> : <Inbox className="h-4 w-4" />}{savingSelected ? '발견 링크함 저장 중...' : `선택 ${selectedItems.length}개 발견 링크함에 담기`}</button>
               <button type="button" onClick={onOpenDiscoveryLinks} className="h-10 rounded-lg border border-slate-700 px-4 text-xs font-extrabold text-slate-300 hover:bg-slate-800">발견 링크함 열기</button>
-              <button type="button" onClick={search.clearResults} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-rose-500/40 px-4 text-xs font-black text-rose-200 hover:bg-rose-500/10" title="현재 브라우저의 임시 영상 결과·선택·등록 상태 필터만 지웁니다. 입력한 검색 조건은 유지되며 YouTube API나 Azure DB를 호출하지 않습니다.">
-                <Trash2 className="h-3.5 w-3.5" /> 임시 결과 지우기
-              </button>
             </div>
-          </div>
-          <p className="-mt-1 px-4 text-[11px] leading-5 text-slate-500">임시 결과 지우기는 검색 조건을 남기고 결과·영상 선택·화면 필터만 정리합니다. 발견 링크함에 이미 저장한 항목은 삭제하지 않습니다.</p>
+          </section>
           <p className="-mt-1 px-4 text-[11px] leading-5 text-slate-500">제목 필터는 한글 문자 포함 여부만 확인합니다. 실제 음성·자막 언어를 판정하지 않으며 추가 API 호출이나 저장이 없습니다.</p>
           {visibleItems.length > 0 ? <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
             {visibleItems.map((item) => (
@@ -385,7 +378,7 @@ function YoutubeVideoSearchPanel({
                 selected={search.selectedIds.includes(item.videoId)}
               />
             ))}
-          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">현재 화면 필터에 맞는 영상이 없습니다</h3><p className="mt-2 text-sm text-slate-500">검색 결과는 그대로 유지됩니다. 등록 상태와 제목 필터를 전체로 바꾸면 모든 결과를 다시 볼 수 있습니다.</p><button type="button" onClick={() => { search.changeChannelRegistrationFilter('all'); search.changeTitleScriptFilter('all'); }} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">모든 화면 필터 초기화</button></div>}
+          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">{search.titleScriptFilter === 'hangul' ? '한글 포함 제목이 없습니다' : '현재 화면 필터에 맞는 영상이 없습니다'}</h3><p className="mt-2 text-sm text-slate-500">{search.titleScriptFilter === 'hangul' ? '한국어 우선 검색도 한글 제목을 보장하지 않습니다. 전체 제목으로 돌아가면 받은 결과를 모두 볼 수 있습니다.' : '검색 결과는 그대로 유지됩니다. 화면 필터를 초기화하면 모든 결과를 다시 볼 수 있습니다.'}</p><button type="button" onClick={search.resetResultView} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">전체 결과 보기</button></div>}
           {search.nextPageToken ? (
             <div className="space-y-2 text-center">
               <button

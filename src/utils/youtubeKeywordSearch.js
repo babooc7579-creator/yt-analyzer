@@ -74,6 +74,14 @@ export const YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS = [
   { value: 'non-hangul', label: '한글 없는 제목' },
 ];
 
+export const YOUTUBE_VIDEO_RESULT_SORT_OPTIONS = [
+  { value: 'received', label: '받은 순서' },
+  { value: 'viewCount', label: '조회수 높은순' },
+  { value: 'viralRatio', label: '대박 비율 높은순' },
+  { value: 'lifetimeViewsPerDay', label: '하루 평균 높은순' },
+  { value: 'publishedAt', label: '최신순' },
+];
+
 export const YOUTUBE_CHANNEL_COUNTRY_FILTER_OPTIONS = [
   { value: 'all', label: '채널 국가 전체' },
   { value: 'declared', label: '국가 등록 채널만' },
@@ -243,6 +251,27 @@ export function filterYoutubeVideoResultsByTitleScript(items, titleScript = 'all
     if (titleScript === 'non-hangul') return !titleHasHangul;
     return true;
   });
+}
+
+export function sortYoutubeVideoResults(items, sortBy = 'received') {
+  const source = Array.isArray(items) ? items : [];
+  if (sortBy === 'received') return source;
+  const indexed = source.map((item, index) => ({ index, item }));
+  const numericValue = (item, key) => {
+    const value = Number(item?.[key]);
+    return Number.isFinite(value) ? value : -1;
+  };
+  indexed.sort((left, right) => {
+    if (sortBy === 'publishedAt') {
+      const leftTime = new Date(left.item?.publishedAt).getTime();
+      const rightTime = new Date(right.item?.publishedAt).getTime();
+      const leftValue = Number.isFinite(leftTime) ? leftTime : -1;
+      const rightValue = Number.isFinite(rightTime) ? rightTime : -1;
+      return rightValue - leftValue || left.index - right.index;
+    }
+    return numericValue(right.item, sortBy) - numericValue(left.item, sortBy) || left.index - right.index;
+  });
+  return indexed.map(({ item }) => item);
 }
 
 export function filterYoutubeSearchResults(items, minimumViews = 0) {

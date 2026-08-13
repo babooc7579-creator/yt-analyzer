@@ -13,6 +13,7 @@ import {
   MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION,
   prepareYoutubeSearchTargetSession,
   sortYoutubeChannelResults,
+  sortYoutubeVideoResults,
   summarizeYoutubeVideoSearchResults,
   toggleYoutubeChannelRegistrationSelection,
   toDiscoveryLinkPayload,
@@ -131,6 +132,19 @@ describe('youtubeKeywordSearch', () => {
     expect(filterYoutubeVideoResultsByTitleScript(videos, 'hangul')).toEqual([videos[0], videos[2]]);
     expect(filterYoutubeVideoResultsByTitleScript(videos, 'non-hangul')).toEqual([videos[1]]);
     expect(filterYoutubeVideoResultsByTitleScript(videos, 'all')).toEqual(videos);
+  });
+
+  it('sorts already received videos locally while preserving the received order for ties', () => {
+    const videos = [
+      { videoId: 'a', viewCount: 100, viralRatio: 20, lifetimeViewsPerDay: 50, publishedAt: '2026-08-01' },
+      { videoId: 'b', viewCount: 300, viralRatio: 10, lifetimeViewsPerDay: 80, publishedAt: '2026-08-03' },
+      { videoId: 'c', viewCount: 300, viralRatio: 90, lifetimeViewsPerDay: 30, publishedAt: '2026-08-02' },
+    ];
+    expect(sortYoutubeVideoResults(videos, 'received')).toBe(videos);
+    expect(sortYoutubeVideoResults(videos, 'viewCount').map((item) => item.videoId)).toEqual(['b', 'c', 'a']);
+    expect(sortYoutubeVideoResults(videos, 'viralRatio').map((item) => item.videoId)).toEqual(['c', 'a', 'b']);
+    expect(sortYoutubeVideoResults(videos, 'lifetimeViewsPerDay').map((item) => item.videoId)).toEqual(['b', 'a', 'c']);
+    expect(sortYoutubeVideoResults(videos, 'publishedAt').map((item) => item.videoId)).toEqual(['b', 'c', 'a']);
   });
 
   it('summarizes only the currently received video results without a new API request', () => {
