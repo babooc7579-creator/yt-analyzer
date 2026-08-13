@@ -46,6 +46,13 @@ describe('LegacyChannelPanelContent operation stages', () => {
     expect(html).not.toContain('load-stored-footer');
   });
 
+  it('explains when bulk registration started from video search source channels', () => {
+    const html = renderPanel('add', 'youtube-video-search-bulk', vi.fn());
+
+    expect(html).toContain('검색 영상에서 고른 중요 출처 채널을 일괄 등록 검토 중입니다');
+    expect(html).toContain('목록만 미리 채웠으며');
+  });
+
   it('explains when registration started from a video search result', () => {
     const html = renderPanel('add', 'youtube-video-search', vi.fn());
 

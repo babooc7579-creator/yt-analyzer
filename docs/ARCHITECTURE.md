@@ -289,6 +289,8 @@ ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function �
 
 `localStorage`는 기준 저장소가 아니라 온라인 저장소 연결 실패 시 임시 fallback과 기존 데이터 보호 용도로만 유지합니다. Azure DB 조회가 성공하면 온라인 저장소 응답이 기준이며, localStorage와 자동 병합하지 않습니다.
 
+YouTube 키워드 탐색의 검색 조건·임시 결과·영상/채널 선택은 `sessionStorage`에 최대 6시간 복구용으로만 둡니다. 같은 브라우저 탭의 새로고침에는 복구되지만 탭을 닫으면 사라지며, 자동 YouTube 재검색이나 Azure DB 저장을 실행하지 않습니다. 이 임시 검색 세션은 업무 기준 데이터나 `localStorage` fallback과 합치지 않습니다.
+
 ### 발견 링크 데이터
 
 ```txt

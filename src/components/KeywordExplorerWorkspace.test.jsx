@@ -128,6 +128,7 @@ describe('KeywordExplorerWorkspace', () => {
     const html = renderToStaticMarkup(
       <KeywordExplorerWorkspace
         keywordExplorerSession={{
+          _restoredFromSession: true,
           source: 'youtube',
           searchTarget: 'video',
           videoSearch: {
@@ -170,6 +171,8 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('다시 검색하지 않아도 남아 있는 영상');
     expect(html).toContain('25개 영상을 찾았습니다. 결과는 아직 저장되지 않았습니다.');
     expect(html).toContain('value="unregistered" selected=""');
+    expect(html).toContain('새로고침 전에 남아 있던 임시 YouTube 검색 조건·결과·선택');
+    expect(html).toContain('자동 재검색이나 Azure DB 저장은 실행하지 않았으며');
   });
 
   it('restores channel result view filters and comparison selection after returning', () => {

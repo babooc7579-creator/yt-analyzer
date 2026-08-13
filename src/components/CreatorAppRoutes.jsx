@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useState } from 'react';
+import { readKeywordExplorerSession, writeKeywordExplorerSession } from '../utils/keywordExplorerSessionStorage';
 import CreatorHomeRoute from './CreatorHomeRoute';
 import CreatorLegacyWorkspaceRoute from './CreatorLegacyWorkspaceRoute';
 import LazyRouteErrorBoundary from './LazyRouteErrorBoundary';
@@ -62,11 +63,14 @@ export default function CreatorAppRoutes({
   uploadCalendarRouteProps,
   workToolsRouteProps,
 }) {
-  const [keywordExplorerSession, setKeywordExplorerSession] = useState({});
+  const [keywordExplorerSession, setKeywordExplorerSession] = useState(() => readKeywordExplorerSession());
   const updateKeywordExplorerSession = useCallback((key, value) => {
-    setKeywordExplorerSession((current) => (
-      current[key] === value ? current : { ...current, [key]: value }
-    ));
+    setKeywordExplorerSession((current) => {
+      if (current[key] === value) return current;
+      const nextSession = { ...current, [key]: value };
+      writeKeywordExplorerSession(nextSession);
+      return nextSession;
+    });
   }, []);
 
   if (isHomeView) {

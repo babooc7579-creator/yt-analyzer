@@ -27,6 +27,7 @@ const OPERATION_SOURCE_COPY = {
   'youtube-video-search': '검색 영상의 출처 채널을 등록 검토 중입니다. 주소만 미리 채웠으며, 아래에서 채널 확인과 최종 저장을 해야 등록됩니다.',
   'youtube-channel-search': 'YouTube 채널 검색에서 찾은 채널을 등록 검토 중입니다. 주소만 미리 채웠으며, 아래에서 채널 확인과 최종 저장을 해야 등록됩니다.',
   'youtube-channel-search-bulk': 'YouTube 채널 검색에서 고른 채널을 일괄 등록 검토 중입니다. 목록만 미리 채웠으며, 아래에서 확인과 최종 등록을 해야 저장됩니다.',
+  'youtube-video-search-bulk': '검색 영상에서 고른 중요 출처 채널을 일괄 등록 검토 중입니다. 목록만 미리 채웠으며, 아래에서 확인과 최종 등록을 해야 저장됩니다.',
 };
 
 export default function LegacyChannelPanelContent({

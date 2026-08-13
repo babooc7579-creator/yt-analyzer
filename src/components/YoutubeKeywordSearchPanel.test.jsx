@@ -4,13 +4,16 @@ import { renderToStaticMarkup } from 'react-dom/server';
 vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
   useYoutubeKeywordSearch: vi.fn(() => ({
     appliedFilters: { query: '아이디어', regionCode: 'KR', language: 'ko', dateRange: '30', duration: '', minimumViews: 0, order: 'relevance' },
+    addChannelRegistrationIds: vi.fn(),
     channelRegistrationFilter: 'all',
+    channelRegistrationIds: ['channel-1'],
     changeChannelRegistrationFilter: vi.fn(),
     changeTitleScriptFilter: vi.fn(),
     changeResultSort: vi.fn(),
     changeFilter: vi.fn(),
     clearResults: vi.fn(),
     clearSelected: vi.fn(),
+    clearChannelRegistrationIds: vi.fn(),
     displayedItems: [{
       videoId: 'video-1',
       title: '좋은 아이디어 영상',
@@ -51,6 +54,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     selectedIds: ['video-1'],
     setNotice: vi.fn(),
     toggleSelected: vi.fn(),
+    toggleChannelRegistration: vi.fn(),
     titleScriptFilter: 'all',
   })),
 }));
@@ -108,6 +112,10 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('평균 조회수');
     expect(html).toContain('반복 등장한 미등록 출처 채널');
     expect(html).toContain('영상 2개 · 등록 검토');
+    expect(html).toContain('중요 채널 후보 1개 / 최대 50개');
+    expect(html).toContain('중요 채널 선택됨');
+    expect(html).toContain('선택 1개 일괄 등록 검토');
+    expect(html).toContain('YouTube API 확인 후 일괄 저장');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {

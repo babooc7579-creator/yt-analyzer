@@ -55,7 +55,7 @@ function SearchSelect({ label, options, value, onChange, title }) {
   );
 }
 
-function YoutubeSearchResultCard({ item, selected, saved, registeredChannel, onPrepareChannelRegistration, onToggle }) {
+function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, saved, registeredChannel, onPrepareChannelRegistration, onToggle, onToggleChannelRegistration }) {
   return (
     <article className={`overflow-hidden rounded-xl border bg-slate-950/70 ${selected ? 'border-red-400 ring-2 ring-red-400/20' : 'border-slate-800'}`}>
       <button
@@ -105,6 +105,16 @@ function YoutubeSearchResultCard({ item, selected, saved, registeredChannel, onP
           <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <button
               type="button"
+              onClick={() => onToggleChannelRegistration?.(item.channelId)}
+              disabled={registeredChannel || !item.channelId}
+              aria-pressed={channelRegistrationSelected}
+              className={`inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg border px-3 text-xs font-black disabled:cursor-default disabled:border-slate-700 disabled:bg-slate-700 disabled:text-slate-400 ${channelRegistrationSelected ? 'border-emerald-300 bg-emerald-500 text-white' : 'border-emerald-500/50 text-emerald-200 hover:bg-emerald-500/10'}`}
+              title="이 출처 채널을 중요 채널 등록 후보로만 선택합니다. 선택만으로 YouTube API 호출이나 Azure DB 저장은 실행되지 않습니다."
+            >
+              {channelRegistrationSelected ? <Check className="h-3.5 w-3.5" /> : <Users className="h-3.5 w-3.5" />} {registeredChannel ? '이미 등록된 채널' : channelRegistrationSelected ? '중요 채널 선택됨' : '중요 채널로 선택'}
+            </button>
+            <button
+              type="button"
               onClick={() => onPrepareChannelRegistration?.({
                 channelId: item.channelId,
                 registrationSource: 'youtube-video-search',
@@ -148,6 +158,7 @@ function YoutubeVideoSearchPanel({
   discoveryLinksSaving = false,
   onOpenDiscoveryLinks,
   onOpenWorkTools,
+  onPrepareBulkChannelRegistration,
   onPrepareChannelRegistration,
   onSaveDiscoveryLink,
   onVideoSearchSessionChange,
@@ -189,6 +200,23 @@ function YoutubeVideoSearchPanel({
     YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS.find((option) => option.value === search.titleScriptFilter),
     YOUTUBE_VIDEO_RESULT_SORT_OPTIONS.find((option) => option.value === search.resultSort),
   ].filter((option) => option && !['all', 'received'].includes(option.value)).map((option) => option.label);
+  const channelRegistrationItems = useMemo(() => {
+    const candidates = new Map();
+    search.items.forEach((item) => {
+      const channelId = String(item?.channelId || '');
+      if (!channelId || registeredIds.has(channelId) || !search.channelRegistrationIds.includes(channelId) || candidates.has(channelId)) return;
+      candidates.set(channelId, {
+        channelId,
+        registrationSource: 'youtube-video-search',
+        title: item.channelTitle || '이름 미확인 채널',
+        url: `https://www.youtube.com/channel/${channelId}`,
+      });
+    });
+    return [...candidates.values()];
+  }, [registeredIds, search.channelRegistrationIds, search.items]);
+  const visibleUnregisteredChannelIds = useMemo(() => [...new Set(visibleItems
+    .map((item) => String(item?.channelId || ''))
+    .filter((channelId) => channelId && !registeredIds.has(channelId)))], [registeredIds, visibleItems]);
 
   const applyKoreanPreset = () => {
     search.changeFilter('regionCode', 'KR');
@@ -226,7 +254,7 @@ function YoutubeVideoSearchPanel({
         <p className="text-xs font-extrabold text-red-300">새 영상 후보 검색</p>
         <h2 className="mt-1 text-xl font-black text-white">키워드로 YouTube 영상 찾기</h2>
         <p className="mt-2 text-sm leading-6 text-slate-400">
-          검색 버튼을 눌렀을 때만 YouTube API로 영상·통계·채널 정보를 확인합니다. 검색 결과는 다른 화면에 다녀와도 유지되며, 새로고침하면 초기화됩니다. 선택한 영상만 발견 링크함에 저장됩니다.
+          검색 버튼을 눌렀을 때만 YouTube API로 영상·통계·채널 정보를 확인합니다. 임시 결과는 같은 브라우저 탭에서 6시간 동안 새로고침 복구되며 탭을 닫으면 사라집니다. 선택한 영상만 발견 링크함에 저장됩니다.
         </p>
       </div>
 
@@ -335,6 +363,21 @@ function YoutubeVideoSearchPanel({
               </div>
             ) : null}
           </section>
+          <section className="rounded-xl border border-violet-500/25 bg-violet-500/5 p-4" aria-label="중요 채널 등록 후보">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-xs font-extrabold text-violet-300">영상을 보며 출처 채널도 모으기</p>
+                <h3 className="mt-1 text-sm font-black text-white">중요 채널 후보 {channelRegistrationItems.length}개 / 최대 50개</h3>
+                <p className="mt-1 text-[11px] leading-5 text-slate-500">영상 후보 선택과 별개입니다. 여기서는 채널만 고르고 채널 운영실에서 태그·언어와 최종 등록을 확인합니다.</p>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <button type="button" onClick={() => search.addChannelRegistrationIds(visibleUnregisteredChannelIds)} disabled={visibleUnregisteredChannelIds.length === 0} className="h-10 rounded-lg border border-violet-500/40 px-3 text-xs font-black text-violet-100 disabled:cursor-default disabled:text-slate-600">표시된 미등록 채널 선택</button>
+                <button type="button" onClick={search.clearChannelRegistrationIds} disabled={search.channelRegistrationIds.length === 0} className="h-10 rounded-lg border border-slate-700 px-3 text-xs font-black text-slate-300 disabled:cursor-default disabled:text-slate-600">중요 채널 전체 해제</button>
+                <button type="button" onClick={() => onPrepareBulkChannelRegistration?.(channelRegistrationItems)} disabled={channelRegistrationItems.length === 0} className="h-10 rounded-lg bg-violet-500 px-4 text-xs font-black text-white disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400" title="채널 운영실의 일괄 등록 검토 화면으로 이동합니다. 이동만으로 YouTube API나 Azure DB 저장은 실행되지 않습니다.">선택 {channelRegistrationItems.length}개 일괄 등록 검토</button>
+              </div>
+            </div>
+            <p className="mt-2 text-[11px] leading-5 text-slate-500">이동만으로는 등록되지 않습니다. 채널 운영실의 `YouTube API 확인 후 일괄 저장`을 직접 눌러야 확인·저장이 실행되며 새 영상 수집은 하지 않습니다.</p>
+          </section>
           <section className="rounded-xl border border-slate-800 bg-slate-950/70 p-4" aria-label="검색 결과 좁히기">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
@@ -370,7 +413,9 @@ function YoutubeVideoSearchPanel({
             {visibleItems.map((item) => (
               <YoutubeSearchResultCard
                 key={item.videoId}
+                channelRegistrationSelected={!registeredIds.has(String(item.channelId || '')) && search.channelRegistrationIds.includes(String(item.channelId || ''))}
                 item={item}
+                onToggleChannelRegistration={search.toggleChannelRegistration}
                 onToggle={search.toggleSelected}
                 onPrepareChannelRegistration={onPrepareChannelRegistration}
                 registeredChannel={registeredIds.has(String(item.channelId || ''))}
