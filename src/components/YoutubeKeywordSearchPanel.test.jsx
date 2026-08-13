@@ -69,7 +69,9 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('키워드로 YouTube 영상 찾기');
     expect(html).toContain('검색 버튼을 눌렀을 때만 YouTube API');
     expect(html).toContain('결과는 아직 저장되지 않았습니다');
-    expect(html).toContain('선택 1개 발견 링크함에 담기');
+    expect(html).toContain('저장할 새 영상 1개');
+    expect(html).toContain('새 영상 1개 발견 링크함에 담기');
+    expect(html).toContain('현재 검색 결과 2개 중 이미 발견 링크함에 저장된 영상 0개');
     expect(html).toContain('선택 영상 저장 분류');
     expect(html).toContain('카이온학습');
     expect(html).toContain('영상 파일은 저장하지 않습니다');
@@ -123,7 +125,31 @@ describe('YoutubeKeywordSearchPanel', () => {
       <YoutubeKeywordSearchPanel discoveryLinks={[{ linkedVideoId: 'video-1' }]} onSaveDiscoveryLink={vi.fn()} />
     );
     expect(html).toContain('발견 링크함에 저장됨');
-    expect(html).toContain('선택 0개 발견 링크함에 담기');
+    expect(html).toContain('현재 검색 결과 2개 중 이미 발견 링크함에 저장된 영상 1개');
+    expect(html).toContain('선택 중 중복 1개 제외');
+    expect(html).toContain('새 영상 0개 발견 링크함에 담기');
+  });
+
+  it('recognizes a manually saved YouTube URL even when linkedVideoId is missing', () => {
+    const html = renderToStaticMarkup(
+      <YoutubeKeywordSearchPanel discoveryLinks={[{ url: 'https://youtu.be/video-1?si=manual' }]} onSaveDiscoveryLink={vi.fn()} />
+    );
+    expect(html).toContain('발견 링크함에 저장됨');
+    expect(html).toContain('이미 발견 링크함에 저장된 영상 1개');
+  });
+
+  it('blocks saving while the discovery inbox duplicate check is loading or unavailable', () => {
+    const loadingHtml = renderToStaticMarkup(
+      <YoutubeKeywordSearchPanel discoveryLinksLoading onSaveDiscoveryLink={vi.fn()} />
+    );
+    expect(loadingHtml).toContain('발견 링크함을 확인해 기존 저장 여부를 대조하고 있습니다');
+    expect(loadingHtml).toContain('기존 발견 링크 조회를 완료해야 중복 없이 저장할 수 있습니다');
+
+    const errorHtml = renderToStaticMarkup(
+      <YoutubeKeywordSearchPanel discoveryLinksError="Cloud lookup failed" onReloadDiscoveryLinks={vi.fn()} onSaveDiscoveryLink={vi.fn()} />
+    );
+    expect(errorHtml).toContain('발견 링크함을 불러오지 못해 중복 여부를 확인할 수 없습니다');
+    expect(errorHtml).toContain('발견 링크함 다시 확인');
   });
 
   it('marks the source channel as already registered and prevents duplicate registration review', () => {

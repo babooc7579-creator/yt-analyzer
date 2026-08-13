@@ -8,7 +8,9 @@ import {
   filterYoutubeSearchResults,
   formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
+  getDiscoveryLinkYoutubeVideoId,
   getPublishedAfter,
+  getYoutubeVideoIdFromUrl,
   hasYoutubeSearchCriteriaChanges,
   MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION,
   prepareYoutubeSearchTargetSession,
@@ -52,6 +54,14 @@ describe('youtubeKeywordSearch', () => {
         tags: ['카이온학습'],
         memo: '키워드 검색: 경제 · 채널: 좋은 채널',
       });
+  });
+
+  it('recognizes an existing YouTube discovery link by stored id or common URL shape', () => {
+    expect(getDiscoveryLinkYoutubeVideoId({ linkedVideoId: 'stored-id', url: 'https://youtu.be/ignored' })).toBe('stored-id');
+    expect(getDiscoveryLinkYoutubeVideoId({ url: 'https://www.youtube.com/watch?v=watch-id&t=30' })).toBe('watch-id');
+    expect(getDiscoveryLinkYoutubeVideoId({ url: 'https://youtu.be/short-id?si=abc' })).toBe('short-id');
+    expect(getYoutubeVideoIdFromUrl('https://www.youtube.com/shorts/shorts-id')).toBe('shorts-id');
+    expect(getYoutubeVideoIdFromUrl('https://example.com/watch?v=not-youtube')).toBe('');
   });
 
   it('explains region availability and language priority in applied criteria', () => {

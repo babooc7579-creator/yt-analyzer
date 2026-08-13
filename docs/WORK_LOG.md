@@ -5908,3 +5908,11 @@ Cloud 조회나 저장 작업 중 Microsoft 로그인 세션이 만료되면 사
 - 390×844에서 `documentElement.scrollWidth` 375px, viewport 390px로 가로 넘침이 없었고 브라우저 error 로그는 0건이었습니다.
 - 최종 `YouTube API 확인 후 일괄 저장`은 누르지 않았으므로 채널 확인 API, Azure DB 쓰기와 새 영상 수집은 실행하지 않았습니다.
 - 검수용 중요 채널 2개는 전체 해제했고 임시 결과 25개만 남겼습니다.
+
+## 270. 2026-08-13 검색 영상 저장 전 중복 확인 강화
+
+- 검색 결과의 기존 저장 판정이 `linkedVideoId`만 확인해 수동 저장된 동일 YouTube URL을 놓칠 수 있음을 확인했습니다.
+- watch·youtu.be·shorts·live·embed URL에서 영상 ID를 추출해 기존 발견 링크와 대조하도록 보완했습니다.
+- 저장 영역에 검색 결과 중 기존 저장 수, 새로 저장할 선택 수, 선택 중 중복 제외 수를 표시합니다.
+- `GET /discovery-links` 조회 중에는 확인 완료 전 저장을 막고, 조회 실패 시 이유와 재확인 버튼을 표시합니다.
+- 기존 Azure DB 발견 링크 읽기 결과만 사용하며 YouTube API 추가 호출, Azure DB 쓰기, 새 자원·container·localStorage 키는 없습니다.

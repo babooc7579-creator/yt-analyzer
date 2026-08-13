@@ -18,6 +18,7 @@ import {
   formatYoutubeSearchCriteria,
   filterYoutubeVideoResultsByChannelRegistration,
   filterYoutubeVideoResultsByTitleScript,
+  getDiscoveryLinkYoutubeVideoId,
   hasYoutubeSearchCriteriaChanges,
   summarizeYoutubeVideoSearchResults,
   sortYoutubeVideoResults,
@@ -155,11 +156,14 @@ function Metric({ label, tone, value }) {
 
 function YoutubeVideoSearchPanel({
   discoveryLinks = [],
+  discoveryLinksError = '',
+  discoveryLinksLoading = false,
   discoveryLinksSaving = false,
   onOpenDiscoveryLinks,
   onOpenWorkTools,
   onPrepareBulkChannelRegistration,
   onPrepareChannelRegistration,
+  onReloadDiscoveryLinks,
   onSaveDiscoveryLink,
   onVideoSearchSessionChange,
   registeredChannelIds = [],
@@ -172,10 +176,14 @@ function YoutubeVideoSearchPanel({
   const [savingSelected, setSavingSelected] = useState(false);
   const [saveTag, setSaveTag] = useState('');
   const savedVideoIds = useMemo(() => new Set(
-    discoveryLinks.map((link) => String(link?.linkedVideoId || '')).filter(Boolean),
+    discoveryLinks.map(getDiscoveryLinkYoutubeVideoId).filter(Boolean),
   ), [discoveryLinks]);
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
-  const selectedItems = search.items.filter((item) => search.selectedIds.includes(item.videoId) && !savedVideoIds.has(item.videoId));
+  const selectedSearchItems = search.items.filter((item) => search.selectedIds.includes(item.videoId));
+  const selectedItems = selectedSearchItems.filter((item) => !savedVideoIds.has(String(item.videoId || '')));
+  const selectedSavedCount = selectedSearchItems.length - selectedItems.length;
+  const savedResultCount = search.items.filter((item) => savedVideoIds.has(String(item.videoId || ''))).length;
+  const duplicateCheckUnavailable = discoveryLinksLoading || Boolean(discoveryLinksError);
   const visibleItems = useMemo(() => sortYoutubeVideoResults(
     filterYoutubeVideoResultsByTitleScript(
       filterYoutubeVideoResultsByChannelRegistration(
@@ -224,7 +232,7 @@ function YoutubeVideoSearchPanel({
   };
 
   const saveSelected = async () => {
-    if (selectedItems.length === 0 || typeof onSaveDiscoveryLink !== 'function') return;
+    if (selectedItems.length === 0 || duplicateCheckUnavailable || typeof onSaveDiscoveryLink !== 'function') return;
     setSavingSelected(true);
     let savedCount = 0;
     for (const item of selectedItems) {
@@ -399,12 +407,21 @@ function YoutubeVideoSearchPanel({
           <section className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4" aria-label="선택 영상 저장 설정">
             <div>
               <p className="text-xs font-extrabold text-emerald-300">선택 영상 저장 설정</p>
-              <h3 className="mt-1 text-sm font-black text-white">선택 {selectedItems.length}개</h3>
+              <h3 className="mt-1 text-sm font-black text-white">저장할 새 영상 {selectedItems.length}개</h3>
               <p className="mt-1 text-[11px] leading-5 text-slate-500">영상을 선택한 뒤 저장 분류를 정하고 발견 링크함에 담을 때만 Azure DB에 링크와 기본 정보가 저장됩니다.</p>
             </div>
+            {discoveryLinksLoading ? <p role="status" className="mt-3 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs font-bold leading-5 text-cyan-100">발견 링크함을 확인해 기존 저장 여부를 대조하고 있습니다. 확인이 끝나면 저장 버튼을 사용할 수 있습니다.</p> : null}
+            {discoveryLinksError ? (
+              <div role="alert" className="mt-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-3">
+                <p className="text-xs font-black text-amber-100">발견 링크함을 불러오지 못해 중복 여부를 확인할 수 없습니다.</p>
+                <p className="mt-1 text-[11px] leading-5 text-amber-200/80">중복 저장을 막기 위해 저장 버튼을 잠시 비활성화했습니다. 다시 확인해 주세요.</p>
+                {typeof onReloadDiscoveryLinks === 'function' ? <button type="button" onClick={onReloadDiscoveryLinks} className="mt-2 h-9 rounded-lg border border-amber-400/50 px-3 text-xs font-black text-amber-100">발견 링크함 다시 확인</button> : null}
+              </div>
+            ) : null}
+            {!duplicateCheckUnavailable ? <p className="mt-3 rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-[11px] font-bold leading-5 text-slate-300">현재 검색 결과 {search.items.length}개 중 이미 발견 링크함에 저장된 영상 {savedResultCount}개 · 새로 저장할 선택 {selectedItems.length}개{selectedSavedCount > 0 ? ` · 선택 중 중복 ${selectedSavedCount}개 제외` : ''}</p> : null}
             <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
               <label className="min-w-40 flex-1 sm:flex-none"><span className="sr-only">선택 영상 저장 분류</span><select value={saveTag} onChange={(event) => setSaveTag(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="선택한 영상을 발견 링크함에 저장할 때 함께 기록할 분류입니다. 선택만으로 Azure DB에 저장되지 않습니다.">{DISCOVERY_LINK_SAVE_TAG_OPTIONS.map((option) => <option key={option.value || 'none'} value={option.value}>{option.label}</option>)}</select></label>
-              <button type="button" onClick={saveSelected} disabled={selectedItems.length === 0 || savingSelected || discoveryLinksSaving} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 text-xs font-black text-white disabled:cursor-not-allowed disabled:bg-slate-700" title="선택한 영상의 링크와 기본 정보만 온라인 저장소(Azure DB)의 발견 링크함에 저장합니다. 영상 파일은 저장하지 않습니다.">{savingSelected ? <Loader2 className="h-4 w-4 animate-spin" /> : <Inbox className="h-4 w-4" />}{savingSelected ? '발견 링크함 저장 중...' : `선택 ${selectedItems.length}개 발견 링크함에 담기`}</button>
+              <button type="button" onClick={saveSelected} disabled={selectedItems.length === 0 || duplicateCheckUnavailable || savingSelected || discoveryLinksSaving} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 text-xs font-black text-white disabled:cursor-not-allowed disabled:bg-slate-700" title={duplicateCheckUnavailable ? '기존 발견 링크 조회를 완료해야 중복 없이 저장할 수 있습니다.' : '선택한 새 영상의 링크와 기본 정보만 온라인 저장소(Azure DB)의 발견 링크함에 저장합니다. 영상 파일은 저장하지 않습니다.'}>{savingSelected ? <Loader2 className="h-4 w-4 animate-spin" /> : <Inbox className="h-4 w-4" />}{savingSelected ? '발견 링크함 저장 중...' : `새 영상 ${selectedItems.length}개 발견 링크함에 담기`}</button>
               <button type="button" onClick={onOpenDiscoveryLinks} className="h-10 rounded-lg border border-slate-700 px-4 text-xs font-extrabold text-slate-300 hover:bg-slate-800">발견 링크함 열기</button>
             </div>
           </section>
@@ -419,7 +436,7 @@ function YoutubeVideoSearchPanel({
                 onToggle={search.toggleSelected}
                 onPrepareChannelRegistration={onPrepareChannelRegistration}
                 registeredChannel={registeredIds.has(String(item.channelId || ''))}
-                saved={savedVideoIds.has(item.videoId)}
+                saved={savedVideoIds.has(String(item.videoId || ''))}
                 selected={search.selectedIds.includes(item.videoId)}
               />
             ))}

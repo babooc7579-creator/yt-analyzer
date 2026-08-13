@@ -14,7 +14,10 @@ describe('keywordExplorerRouteProps', () => {
       addDiscoveryLink: vi.fn(),
       checkedVideos: ['v1'],
       discoveryLinks: [{ id: 'link-1' }],
+      discoveryLinksError: '조회 실패',
+      discoveryLinksLoading: true,
       discoveryLinksSaving: true,
+      loadDiscoveryLinks: vi.fn(),
       loading: true,
       openCreatorView,
       selectedChannelIds: ['c1', 'c2'],
@@ -30,6 +33,8 @@ describe('keywordExplorerRouteProps', () => {
     expect(props).toMatchObject({
       checkedVideos: ['v1'],
       discoveryLinks: [{ id: 'link-1' }],
+      discoveryLinksError: '조회 실패',
+      discoveryLinksLoading: true,
       discoveryLinksSaving: true,
       loading: true,
       selectedChannelCount: 2,
@@ -38,6 +43,7 @@ describe('keywordExplorerRouteProps', () => {
       videos: [{ videoId: 'v1' }],
     });
     expect(openCreatorView).not.toHaveBeenCalled();
+    expect(props.onReloadDiscoveryLinks).toBeTypeOf('function');
 
     props.onOpenChannelWatchlist();
     props.onOpenTtoTto();

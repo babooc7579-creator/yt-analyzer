@@ -336,3 +336,25 @@ export function toDiscoveryLinkPayload(video, query, tags = []) {
       .join(' · '),
   };
 }
+
+export function getYoutubeVideoIdFromUrl(value) {
+  const source = String(value || '').trim();
+  if (!source) return '';
+
+  try {
+    const url = new URL(source);
+    const host = url.hostname.toLowerCase().replace(/^(www\.|m\.)/, '');
+    if (host === 'youtu.be') return decodeURIComponent(url.pathname.split('/').filter(Boolean)[0] || '');
+    if (host !== 'youtube.com' && !host.endsWith('.youtube.com')) return '';
+    if (url.pathname === '/watch') return String(url.searchParams.get('v') || '').trim();
+
+    const [route, videoId] = url.pathname.split('/').filter(Boolean);
+    return ['embed', 'live', 'shorts'].includes(route) ? decodeURIComponent(videoId || '') : '';
+  } catch {
+    return '';
+  }
+}
+
+export function getDiscoveryLinkYoutubeVideoId(link = {}) {
+  return String(link?.linkedVideoId || '').trim() || getYoutubeVideoIdFromUrl(link?.url);
+}

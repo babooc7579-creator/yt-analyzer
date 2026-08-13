@@ -16,6 +16,8 @@ import YoutubeKeywordSearchPanel from './YoutubeKeywordSearchPanel';
 export default function KeywordExplorerWorkspace({
   checkedVideos,
   discoveryLinks,
+  discoveryLinksError,
+  discoveryLinksLoading,
   discoveryLinksSaving,
   isProductionCandidate,
   isVideoSaved,
@@ -24,6 +26,7 @@ export default function KeywordExplorerWorkspace({
   loading = false,
   onFetchComments,
   onLoadStoredVideos,
+  onReloadDiscoveryLinks,
   onOpenDiscoveryLinks,
   onOpenChannelWatchlist,
   onOpenSelectedScan,
@@ -88,9 +91,12 @@ export default function KeywordExplorerWorkspace({
         {source === 'youtube' ? (
           <YoutubeKeywordSearchPanel
             discoveryLinks={discoveryLinks}
+            discoveryLinksError={discoveryLinksError}
+            discoveryLinksLoading={discoveryLinksLoading}
             discoveryLinksSaving={discoveryLinksSaving}
             onOpenDiscoveryLinks={onOpenDiscoveryLinks}
             onOpenWorkTools={onOpenWorkTools}
+            onReloadDiscoveryLinks={onReloadDiscoveryLinks}
             onPrepareBulkChannelRegistration={onPrepareBulkChannelRegistration}
             onPrepareChannelRegistration={onPrepareChannelRegistration}
             onSaveDiscoveryLink={onSaveDiscoveryLink}
