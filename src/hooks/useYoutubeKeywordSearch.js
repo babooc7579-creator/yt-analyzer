@@ -26,10 +26,11 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   const [lastQuery, setLastQuery] = useState(initialState?.lastQuery || '');
   const [appliedFilters, setAppliedFilters] = useState(() => initialState?.appliedFilters || null);
   const [channelRegistrationFilter, setChannelRegistrationFilter] = useState(() => initialState?.channelRegistrationFilter || 'all');
+  const [titleScriptFilter, setTitleScriptFilter] = useState(() => initialState?.titleScriptFilter || 'all');
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, selectedIds });
-  }, [appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds]);
+    onStateChange?.({ appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, selectedIds, titleScriptFilter });
+  }, [appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, onStateChange, selectedIds, titleScriptFilter]);
 
   const displayedItems = useMemo(
     () => filterYoutubeSearchResults(items, filters.minimumViews),
@@ -93,6 +94,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     setLastQuery('');
     setAppliedFilters(null);
     setChannelRegistrationFilter('all');
+    setTitleScriptFilter('all');
     setError('');
     setNotice('임시 영상 검색 결과를 지웠습니다. 입력한 검색 조건은 그대로 유지됩니다.');
   };
@@ -105,6 +107,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     appliedFilters,
     channelRegistrationFilter,
     changeChannelRegistrationFilter: setChannelRegistrationFilter,
+    changeTitleScriptFilter: setTitleScriptFilter,
     changeFilter,
     clearResults,
     clearSelected,
@@ -121,5 +124,6 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     selectedIds,
     setNotice,
     toggleSelected,
+    titleScriptFilter,
   };
 }

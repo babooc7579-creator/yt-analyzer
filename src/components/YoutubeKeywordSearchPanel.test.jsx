@@ -6,6 +6,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     appliedFilters: { query: '아이디어', regionCode: 'KR', language: 'ko', dateRange: '30', duration: '', minimumViews: 0, order: 'relevance' },
     channelRegistrationFilter: 'all',
     changeChannelRegistrationFilter: vi.fn(),
+    changeTitleScriptFilter: vi.fn(),
     changeFilter: vi.fn(),
     clearResults: vi.fn(),
     clearSelected: vi.fn(),
@@ -47,6 +48,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     selectedIds: ['video-1'],
     setNotice: vi.fn(),
     toggleSelected: vi.fn(),
+    titleScriptFilter: 'all',
   })),
 }));
 
@@ -78,6 +80,9 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('검색 조건이 바뀌었습니다');
     expect(html).toContain('표시 결과 2개 / 검색 결과 2개');
     expect(html).toContain('미등록 채널만');
+    expect(html).toContain('한글 포함 제목');
+    expect(html).toContain('한글 없는 제목');
+    expect(html).toContain('실제 음성·자막 언어를 판정하지 않으며');
     expect(html).toContain('영상 아이디어 작업');
     expect(html).toContain('영상 후보 선택 해제');
     expect(html).toContain('출처 채널 작업');
