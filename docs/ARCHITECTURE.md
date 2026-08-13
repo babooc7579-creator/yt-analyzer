@@ -299,6 +299,8 @@ DiscoveryLinksPage → useDiscoveryLinks → services/discoveryLinksApi.js → A
 
 현재 발견 링크는 별도 `discovery_links` container가 아니라 기존 온라인 저장소(Azure DB)의 `videos` container 안에 `docType: discovery_link` 문서로 저장합니다.
 
+YouTube 키워드 검색 결과의 저장 전 중복 확인은 이 기존 발견 링크 목록을 읽어 `linkedVideoId`를 우선 대조하고, 수동 저장 항목처럼 ID가 없으면 YouTube watch·youtu.be·shorts·live·embed URL에서 영상 ID를 추출해 대조합니다. 발견 링크 조회가 진행 중이거나 실패한 경우 중복 확인 전 저장을 막으며, 별도 API·container·localStorage 사본은 만들지 않습니다.
+
 ### 제작 후보 데이터
 
 ```txt
