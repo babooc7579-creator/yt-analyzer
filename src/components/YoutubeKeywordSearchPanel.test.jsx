@@ -82,6 +82,8 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('대박 비율은 현재 조회수÷현재 구독자 수의 추정값');
     expect(html).toContain('앱 계산 지표 기준 보기');
     expect(html).toContain('먼저 결정: 이 영상과 출처 채널을 각각 필요한 항목만 선택');
+    expect(html).toContain('게시 2026. 8. 1. 오전 9:00');
+    expect(html).toMatch(/게시 2026\. 8\. 1\. 오전 9:00 · \d+일 전/);
     expect(html).toContain('다음 결과 25개 불러오기');
     expect(html).toContain('첫 검색의 국가·언어·기간·길이·정렬 조건을 유지');
     expect(html).toContain('이 채널 등록 검토');
