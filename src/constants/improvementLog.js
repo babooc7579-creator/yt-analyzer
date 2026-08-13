@@ -384,6 +384,7 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       '기존 수집 영상 검색과 YouTube 신규 검색은 같은 작업 공간의 별도 탭으로 유지합니다.',
       '검색 결과 전체는 자동 저장하지 않고 사용자가 선택한 영상만 발견 링크함에 저장합니다.',
       '자동 입력 검색은 사용하지 않으며 검색과 다음 페이지는 명시적 YouTube API 작업으로 표시합니다.',
+      '쇼츠 전용 탐색은 YouTube API의 4분 미만 조건을 사용한 뒤 3분 이하만 화면에 남기며, 화면비를 확인할 수 없어 `쇼츠`가 아닌 `쇼츠 후보`로 표시합니다.',
       '대박 비율과 하루 평균 조회수는 공식 지표가 아니라 앱 계산 추정값으로 표시합니다.',
       '새 Azure 자원·Cosmos DB container·유료 서비스를 추가하지 않고 기존 자원을 재사용합니다.',
       '채널 검색 결과는 현재 시점의 누적 통계이며 실제 최근 성장률이나 추세로 표시하지 않습니다.',
@@ -470,6 +471,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
       {
         id: 'youtube-search-filters-results',
         label: '검색 지역·우선 언어·기간·길이·조회수·정렬 조건과 실제 적용 조건·임시 결과 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
+        id: 'youtube-search-shorts-candidates',
+        label: '쇼츠 후보 전용 빠른 설정·3분 길이 경계·빈 페이지 다음 결과 탐색·한계 안내',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {

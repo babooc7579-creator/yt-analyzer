@@ -6,12 +6,14 @@ import {
   filterYoutubeVideoResultsByChannelRegistration,
   filterYoutubeVideoResultsByTitleScript,
   filterYoutubeSearchResults,
+  filterYoutubeSearchItemsForRequestedDuration,
   formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
   getDiscoveryLinkYoutubeVideoId,
   getPublishedAfter,
   getYoutubeVideoIdFromUrl,
   hasYoutubeSearchCriteriaChanges,
+  isYoutubeShortsCandidate,
   MAX_YOUTUBE_CHANNEL_REGISTRATION_SELECTION,
   prepareYoutubeSearchTargetSession,
   sortYoutubeChannelResults,
@@ -30,6 +32,21 @@ describe('youtubeKeywordSearch', () => {
     expect(buildYoutubeSearchOptions({
       query: ' 아이디어 ', order: 'viewCount', duration: 'medium', regionCode: 'KR', language: 'ko', dateRange: 'all',
     })).toMatchObject({ q: '아이디어', maxResults: 25, order: 'viewCount', videoDuration: 'medium', regionCode: 'KR' });
+    expect(buildYoutubeSearchOptions({ query: '아이디어', duration: 'shorts' }))
+      .toMatchObject({ q: '아이디어', videoDuration: 'short' });
+  });
+
+  it('keeps only three-minute-or-shorter candidates after the API short-video search', () => {
+    const items = [
+      { videoId: 'shorts-1', durationSeconds: 60 },
+      { videoId: 'shorts-2', durationSeconds: 180 },
+      { videoId: 'regular-short', durationSeconds: 181 },
+      { videoId: 'unknown', durationSeconds: 0 },
+    ];
+    expect(filterYoutubeSearchItemsForRequestedDuration(items, 'shorts')).toEqual(items.slice(0, 2));
+    expect(filterYoutubeSearchItemsForRequestedDuration(items, 'short')).toBe(items);
+    expect(isYoutubeShortsCandidate(items[1])).toBe(true);
+    expect(isYoutubeShortsCandidate(items[2])).toBe(false);
   });
 
   it('keeps the first search date boundary when loading a later result page', () => {

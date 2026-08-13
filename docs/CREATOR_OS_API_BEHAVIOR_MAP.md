@@ -79,7 +79,7 @@
 | 발견 링크 상태 수정 | `updateDiscoveryLink` | `PATCH /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | `status`, `rightsStatus`, 제목, 메모 변경. 2026-07-03 smoke 성공 |
 | 발견 링크 삭제 | `deleteDiscoveryLink` | `DELETE /discovery-links/{id}` | DB 변경 | 아니오 | 아니오 | 예 | 아니오 | 가능 | Cloud 문서 삭제. localStorage fallback 없음. 2026-07-03 smoke 성공, 임시 링크 잔여 0개 |
 | 댓글 Top 10 보기 | `fetchTopComments` | YouTube `commentThreads` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 사용자의 API Key와 quota 사용. API Key가 없거나 YouTube 오류/비JSON 응답이 오면 저장 작업 없이 오류 안내 |
-| 키워드 영상 검색 | `searchYoutubeVideos` | `GET /youtube-search?q=...` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 검색 버튼과 다음 결과 버튼에서만 실행. 임시 결과 중 선택한 영상만 별도 발견 링크 저장 가능. 기존 `GET /discovery-links` 결과의 영상 ID·YouTube URL을 대조하며 조회 중·실패 시 중복 확인 전 저장 차단 |
+| 키워드 영상 검색 | `searchYoutubeVideos` | `GET /youtube-search?q=...` | YouTube API 조회 | 예 | 아니오 | 아니오 | 아니오 | 가능 | 검색 버튼과 다음 결과 버튼에서만 실행. `쇼츠 후보`는 API의 4분 미만 결과에서 앱이 3분 이하만 남기며 화면비를 확정하지 못하므로 일반 짧은 영상이 포함될 수 있음. 임시 결과 중 선택한 영상만 별도 발견 링크 저장 가능. 기존 `GET /discovery-links` 결과의 영상 ID·YouTube URL을 대조하며 조회 중·실패 시 중복 확인 전 저장 차단 |
 | URL 복사 / URL 목록 복사 | `CopyUrlButton`, `formatNumberedUrlList` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 채널/영상/오늘 레이더/스크랩북/발견 링크 URL을 클립보드에 복사합니다. API 호출, DB 변경, localStorage 변경 없음 |
 | AI 리메이크 프롬프트 복사 | `copyPromptForVideos`, `copyTextToClipboard` | Clipboard | 로컬 동작 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 외부 AI 호출 없음. 선택/스크랩 영상 기반 요청문을 클립보드에 복사하고, 브라우저가 막으면 실패 안내를 표시 |
 | 준비중 메뉴 | `ComingSoonView` | 없음 | 준비중 | 아니오 | 아니오 | 아니오 | 아니오 | 가능 | 실제 기능처럼 보이면 안 됨 |
