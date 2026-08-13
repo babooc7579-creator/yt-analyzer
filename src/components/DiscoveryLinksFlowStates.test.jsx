@@ -121,6 +121,8 @@ describe('DiscoveryLinks flow states', () => {
     expect(successHtml).toContain('온라인 발견함(Azure DB)에 제작 후보로 표시했습니다');
     expect(successHtml).toContain('권리 상태는 별도로 확인해야 합니다');
     expect(successHtml).toContain('후보함에서 이어서');
+    expect(successHtml).toContain('후보함에서 보기');
+    expect(successHtml).toContain('화면 이동만 하며 YouTube API 호출이나 Azure DB 저장은 실행하지 않습니다');
     expect(errorHtml).toContain('온라인 저장소(Azure DB) 후보 표시를 완료하지 못했습니다');
     expect(errorHtml).not.toContain('후보함에서 이어서');
   });

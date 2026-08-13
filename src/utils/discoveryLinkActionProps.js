@@ -71,6 +71,23 @@ export const getDiscoveryLinkCandidateFeedbackProps = ({
   return null;
 };
 
+export const getDiscoveryLinkCandidateOpenActionProps = ({
+  currentStatus,
+  onOpenProductionCandidate,
+  title,
+} = {}) => {
+  if (currentStatus !== 'candidate' || typeof onOpenProductionCandidate !== 'function') return null;
+  const displayTitle = getSafeTitle(title);
+
+  return {
+    'aria-label': `${displayTitle} 제작 후보함에서 이어서 확인`,
+    label: '후보함에서 보기',
+    onClick: onOpenProductionCandidate,
+    title: '이미 제작 후보로 표시된 이 발견 링크 한 건을 후보함에서 바로 보여줍니다. 화면 이동만 하며 YouTube API 호출이나 Azure DB 저장은 실행하지 않습니다.',
+    type: 'button',
+  };
+};
+
 export const getDiscoveryLinkUtilityActionProps = ({
   isEditing = false,
   link,

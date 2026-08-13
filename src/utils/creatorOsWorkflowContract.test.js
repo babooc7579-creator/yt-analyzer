@@ -7,6 +7,8 @@ import { getRadarCandidateDataModel } from './radarCandidates';
 import { getScrapbookWorkspaceViewProps } from './scrapbook';
 import { getScriptBoardItems } from './scriptBoard';
 import { getUploadCalendarItems, getUploadCalendarSummary } from './uploadCalendar';
+import { getDiscoveryLinkScriptSource, getScriptSourceRecordMap } from './discoveryLinkScriptSource';
+import { toDiscoveryLinkPayload } from './youtubeKeywordSearch';
 
 const video = {
   videoId: 'video-1',
@@ -147,6 +149,49 @@ describe('Creator OS workflow contract', () => {
       candidateCount: 1,
       discoveryRightsWarningCount: 1,
       videoCount: 1,
+    });
+  });
+
+  it('keeps one searched YouTube video as the same source from discovery save through script work', () => {
+    const searchedVideo = {
+      videoId: 'searched-video-1',
+      title: '검색에서 고른 영상',
+      channelTitle: '검색 채널',
+      url: 'https://www.youtube.com/watch?v=searched-video-1',
+    };
+    const savedPayload = toDiscoveryLinkPayload(searchedVideo, '업무 자동화', ['카이온학습']);
+    const candidateLink = {
+      ...savedPayload,
+      id: 'discovery-1',
+      status: 'candidate',
+    };
+    const candidateModel = getProductionKanbanDataModel({
+      discoveryLinks: [candidateLink],
+      videoUserRecords: {},
+      videos: [],
+    });
+    const scriptSource = getDiscoveryLinkScriptSource(candidateLink);
+    const scriptRecords = getScriptSourceRecordMap({
+      discoveryLinks: [candidateLink],
+      videoUserRecords: {},
+    });
+
+    expect(candidateLink).toMatchObject({
+      linkedVideoId: searchedVideo.videoId,
+      tags: ['카이온학습'],
+      url: searchedVideo.url,
+    });
+    expect(candidateModel.discoveryLinkCandidates).toEqual([candidateLink]);
+    expect(scriptSource).toMatchObject({
+      discoveryLinkId: candidateLink.id,
+      sourceType: 'discovery_link',
+      sourceUrl: searchedVideo.url,
+      title: searchedVideo.title,
+      videoId: 'discovery-link:discovery-1',
+    });
+    expect(scriptRecords[scriptSource.videoId]).toMatchObject({
+      status: PRODUCTION_STATUS.CANDIDATE,
+      videoId: scriptSource.videoId,
     });
   });
 
