@@ -87,6 +87,11 @@ describe('legacyVaultTabViewProps utils', () => {
     });
     props.scrapbookWorkspaceProps.onOpenReferenceVault();
     props.scrapbookWorkspaceProps.onOpenScriptBoard();
+    props.scrapbookWorkspaceProps.onOpenScriptBoard({
+      id: 'link-1',
+      title: '참고 링크',
+      url: 'https://example.com/link-1',
+    });
     props.scrapbookWorkspaceProps.onOpenUploadCalendar();
 
     expect(openedViews).toEqual([
@@ -110,6 +115,14 @@ describe('legacyVaultTabViewProps utils', () => {
       },
       { id: 'vault-videos' },
       { id: 'studio-script' },
+      {
+        id: 'studio-script',
+        intent: {
+          searchQuery: '참고 링크',
+          source: 'studio-candidates',
+          targetDiscoveryLinkId: 'link-1',
+        },
+      },
       { id: 'studio-calendar' },
     ]);
   });

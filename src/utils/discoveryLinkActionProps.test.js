@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   getDiscoveryLinkCandidateActionProps,
   getDiscoveryLinkCandidateFeedbackProps,
+  getDiscoveryLinkCandidateOpenActionProps,
   getDiscoveryLinkUtilityActionProps,
 } from './discoveryLinkActionProps';
 
@@ -26,6 +27,24 @@ describe('discoveryLinkActionProps utils', () => {
     expect(props.buttonProps['aria-label']).toContain('온라인 발견함(Azure DB) 기록');
     expect(props.buttonProps['aria-label']).toContain('제작 후보로 표시');
     expect(props.buttonProps.title).not.toContain('제작 후보로 저장');
+  });
+
+  it('keeps an existing candidate connected to its focused production-candidate view', () => {
+    const onOpenProductionCandidate = vi.fn();
+    const props = getDiscoveryLinkCandidateOpenActionProps({
+      currentStatus: 'candidate',
+      onOpenProductionCandidate,
+      title: '검색에서 저장한 영상',
+    });
+
+    expect(props).toMatchObject({
+      label: '후보함에서 보기',
+      type: 'button',
+    });
+    expect(props.title).toContain('화면 이동만 하며 YouTube API 호출이나 Azure DB 저장은 실행하지 않습니다');
+    props.onClick();
+    expect(onOpenProductionCandidate).toHaveBeenCalledOnce();
+    expect(getDiscoveryLinkCandidateOpenActionProps({ currentStatus: 'inbox', onOpenProductionCandidate })).toBeNull();
   });
 
   it('shows explicit Cloud candidate success and failure feedback', () => {
