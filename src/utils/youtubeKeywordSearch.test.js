@@ -4,6 +4,7 @@ import {
   addYoutubeChannelRegistrationSelections,
   filterYoutubeChannelResults,
   filterYoutubeVideoResultsByChannelRegistration,
+  filterYoutubeVideoResultsByTitleScript,
   filterYoutubeSearchResults,
   formatYoutubeChannelCountry,
   formatYoutubeSearchCriteria,
@@ -119,6 +120,17 @@ describe('youtubeKeywordSearch', () => {
     expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'registered', ['a'])).toEqual([videos[0]]);
     expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'unregistered', new Set(['a']))).toEqual([videos[1]]);
     expect(filterYoutubeVideoResultsByChannelRegistration(videos, 'all', ['a'])).toEqual(videos);
+  });
+
+  it('filters already received video titles by Hangul characters without an API request', () => {
+    const videos = [
+      { videoId: '1', title: 'Copilot 새로운 기능' },
+      { videoId: '2', title: 'Microsoft Copilot Updates' },
+      { videoId: '3', title: 'AI ㄱ부터 시작하기' },
+    ];
+    expect(filterYoutubeVideoResultsByTitleScript(videos, 'hangul')).toEqual([videos[0], videos[2]]);
+    expect(filterYoutubeVideoResultsByTitleScript(videos, 'non-hangul')).toEqual([videos[1]]);
+    expect(filterYoutubeVideoResultsByTitleScript(videos, 'all')).toEqual(videos);
   });
 
   it('summarizes only the currently received video results without a new API request', () => {

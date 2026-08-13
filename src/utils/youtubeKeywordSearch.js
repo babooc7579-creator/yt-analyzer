@@ -68,6 +68,12 @@ export const YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS = [
   { value: 'registered', label: '등록된 채널만' },
 ];
 
+export const YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS = [
+  { value: 'all', label: '전체 제목' },
+  { value: 'hangul', label: '한글 포함 제목' },
+  { value: 'non-hangul', label: '한글 없는 제목' },
+];
+
 export const YOUTUBE_CHANNEL_COUNTRY_FILTER_OPTIONS = [
   { value: 'all', label: '채널 국가 전체' },
   { value: 'declared', label: '국가 등록 채널만' },
@@ -225,6 +231,16 @@ export function filterYoutubeVideoResultsByChannelRegistration(items, registrati
     const registered = registeredSet.has(String(item?.channelId || ''));
     if (registration === 'registered') return registered;
     if (registration === 'unregistered') return !registered;
+    return true;
+  });
+}
+
+export function filterYoutubeVideoResultsByTitleScript(items, titleScript = 'all') {
+  const hasHangul = (title) => /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/u.test(String(title || ''));
+  return (Array.isArray(items) ? items : []).filter((item) => {
+    const titleHasHangul = hasHangul(item?.title);
+    if (titleScript === 'hangul') return titleHasHangul;
+    if (titleScript === 'non-hangul') return !titleHasHangul;
     return true;
   });
 }

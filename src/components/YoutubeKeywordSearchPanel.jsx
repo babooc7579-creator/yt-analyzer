@@ -16,6 +16,7 @@ import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import {
   formatYoutubeSearchCriteria,
   filterYoutubeVideoResultsByChannelRegistration,
+  filterYoutubeVideoResultsByTitleScript,
   hasYoutubeSearchCriteriaChanges,
   summarizeYoutubeVideoSearchResults,
   toDiscoveryLinkPayload,
@@ -26,6 +27,7 @@ import {
   YOUTUBE_SEARCH_ORDER_OPTIONS,
   YOUTUBE_SEARCH_REGION_OPTIONS,
   YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS,
+  YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS,
 } from '../utils/youtubeKeywordSearch';
 
 const formatNumber = (value) => Number(value || 0).toLocaleString('ko-KR');
@@ -160,11 +162,14 @@ function YoutubeVideoSearchPanel({
   ), [discoveryLinks]);
   const registeredIds = useMemo(() => new Set(registeredChannelIds.map(String)), [registeredChannelIds]);
   const selectedItems = search.items.filter((item) => search.selectedIds.includes(item.videoId) && !savedVideoIds.has(item.videoId));
-  const visibleItems = useMemo(() => filterYoutubeVideoResultsByChannelRegistration(
-    search.displayedItems,
-    search.channelRegistrationFilter,
-    registeredIds,
-  ), [registeredIds, search.channelRegistrationFilter, search.displayedItems]);
+  const visibleItems = useMemo(() => filterYoutubeVideoResultsByTitleScript(
+    filterYoutubeVideoResultsByChannelRegistration(
+      search.displayedItems,
+      search.channelRegistrationFilter,
+      registeredIds,
+    ),
+    search.titleScriptFilter,
+  ), [registeredIds, search.channelRegistrationFilter, search.displayedItems, search.titleScriptFilter]);
   const hasPendingCriteria = hasYoutubeSearchCriteriaChanges(search.filters, search.appliedFilters);
   const resultSummary = useMemo(() => summarizeYoutubeVideoSearchResults(
     search.displayedItems,
@@ -344,6 +349,12 @@ function YoutubeVideoSearchPanel({
                   {YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
               </label>
+              <label className="min-w-40 flex-1 sm:flex-none">
+                <span className="sr-only">영상 제목 한글 포함 필터</span>
+                <select value={search.titleScriptFilter} onChange={(event) => search.changeTitleScriptFilter(event.target.value)} className="h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-bold text-slate-200" title="현재 받은 결과의 제목에 한글이 포함됐는지만 화면에서 구분합니다. 영상 언어 판정이 아니며 YouTube API나 Azure DB를 호출하지 않습니다.">
+                  {YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </select>
+              </label>
               <button
                 type="button"
                 onClick={saveSelected}
@@ -361,6 +372,7 @@ function YoutubeVideoSearchPanel({
             </div>
           </div>
           <p className="-mt-1 px-4 text-[11px] leading-5 text-slate-500">임시 결과 지우기는 검색 조건을 남기고 결과·영상 선택·화면 필터만 정리합니다. 발견 링크함에 이미 저장한 항목은 삭제하지 않습니다.</p>
+          <p className="-mt-1 px-4 text-[11px] leading-5 text-slate-500">제목 필터는 한글 문자 포함 여부만 확인합니다. 실제 음성·자막 언어를 판정하지 않으며 추가 API 호출이나 저장이 없습니다.</p>
           {visibleItems.length > 0 ? <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
             {visibleItems.map((item) => (
               <YoutubeSearchResultCard
@@ -373,7 +385,7 @@ function YoutubeVideoSearchPanel({
                 selected={search.selectedIds.includes(item.videoId)}
               />
             ))}
-          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">현재 채널 등록 필터에 맞는 영상이 없습니다</h3><p className="mt-2 text-sm text-slate-500">검색 결과는 그대로 유지됩니다. 등록 상태 전체로 바꾸면 모든 결과를 다시 볼 수 있습니다.</p><button type="button" onClick={() => search.changeChannelRegistrationFilter('all')} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">등록 상태 전체 보기</button></div>}
+          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">현재 화면 필터에 맞는 영상이 없습니다</h3><p className="mt-2 text-sm text-slate-500">검색 결과는 그대로 유지됩니다. 등록 상태와 제목 필터를 전체로 바꾸면 모든 결과를 다시 볼 수 있습니다.</p><button type="button" onClick={() => { search.changeChannelRegistrationFilter('all'); search.changeTitleScriptFilter('all'); }} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">모든 화면 필터 초기화</button></div>}
           {search.nextPageToken ? (
             <div className="space-y-2 text-center">
               <button
