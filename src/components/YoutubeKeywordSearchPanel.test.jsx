@@ -72,10 +72,13 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('저장할 새 영상 1개');
     expect(html).toContain('새 영상 1개 발견 링크함에 담기');
     expect(html).toContain('현재 검색 결과 2개 중 이미 발견 링크함에 저장된 영상 0개');
-    expect(html).toContain('선택 영상 저장 분류');
-    expect(html).toContain('카이온학습');
+    expect(html).toContain('영상 링크 분류');
+    expect(html).toContain('카이온학습 (영상 링크 분류)');
+    expect(html).toContain('채널 전체의 분야를 정하는 채널 태그와는 별개');
     expect(html).toContain('영상 파일은 저장하지 않습니다');
     expect(html).toContain('대박 비율은 현재 조회수÷현재 구독자 수의 추정값');
+    expect(html).toContain('앱 계산 지표 기준 보기');
+    expect(html).toContain('먼저 결정: 이 영상과 출처 채널을 각각 필요한 항목만 선택');
     expect(html).toContain('다음 결과 25개 불러오기');
     expect(html).toContain('첫 검색의 국가·언어·기간·길이·정렬 조건을 유지');
     expect(html).toContain('이 채널 등록 검토');
@@ -115,9 +118,17 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('반복 등장한 미등록 출처 채널');
     expect(html).toContain('영상 2개 · 등록 검토');
     expect(html).toContain('중요 채널 후보 1개 / 최대 50개');
-    expect(html).toContain('중요 채널 선택됨');
+    expect(html).toContain('등록 후보에 포함됨');
+    expect(html).toContain('같은 채널의 영상이 여러 개여도 채널 ID 기준 후보 1개로 묶고');
     expect(html).toContain('선택 1개 일괄 등록 검토');
     expect(html).toContain('YouTube API 확인 후 일괄 저장');
+    expect(html).toContain('이 화면의 작업 구분');
+    expect(html).toContain('기존 중복 확인');
+    expect(html).toContain('Azure DB 조회');
+    expect(html).toContain('선택 영상 담기');
+    expect(html).toContain('Azure DB 저장');
+    expect(html).toContain('채널 등록 검토');
+    expect(html).toContain('화면 이동');
   });
 
   it('marks a result already present in the discovery inbox as saved', () => {

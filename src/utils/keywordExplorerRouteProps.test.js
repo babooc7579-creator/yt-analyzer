@@ -92,4 +92,20 @@ describe('keywordExplorerRouteProps', () => {
       intent: { operationStage: 'add', source: 'youtube-channel-search' },
     });
   });
+
+  it('prepares duplicate source channels only once for bulk registration review', () => {
+    const setBulkInput = vi.fn();
+    const props = buildKeywordExplorerRouteProps({
+      openCreatorView: vi.fn(),
+      setBulkInput,
+    });
+
+    props.onPrepareBulkChannelRegistration([
+      { channelId: 'same-channel' },
+      { channelId: 'same-channel' },
+      { url: 'https://www.youtube.com/channel/unique-channel' },
+    ]);
+
+    expect(setBulkInput).toHaveBeenCalledWith('same-channel\nhttps://www.youtube.com/channel/unique-channel');
+  });
 });

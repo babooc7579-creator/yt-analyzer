@@ -44,6 +44,8 @@ describe('KeywordExplorerWorkspace', () => {
     expect(html).toContain('현재 키워드 필터 전달 없음');
     expect(html).toContain('Azure DB 조회 저장 및 YouTube API 호출 없음');
     expect(html).toContain('YouTube API를 새로 호출하지 않습니다');
+    expect(html).toContain('이미 모은 영상은 왼쪽에서 다시 찾고');
+    expect(html).toContain('선택해 저장한 링크만 발견 링크함으로 이어집니다');
     expect(html).toContain('수집 채널 반응도');
     expect(html).toContain('외부 검색량이나 완전한 실시간 지표가 아니며');
     expect(html).toContain('반응도 87');
