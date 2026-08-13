@@ -3,7 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   formatDateWithDots,
   formatCompactPublishedDate,
+  formatElapsedTime,
   formatKoreanDateTime,
+  formatKoreanPublishedDateTime,
+  formatPublishedDateTimeWithAge,
   formatPublishedAge,
   formatShortKoreanDate,
   getDateDistanceFromToday,
@@ -50,6 +53,18 @@ describe('dates utils', () => {
     expect(formatKoreanDateTime(value, '기록 없음')).toBe(expected);
     expect(formatKoreanDateTime('', '기록 없음')).toBe('기록 없음');
     expect(formatKoreanDateTime('bad-date', '기록 없음')).toBe('기록 없음');
+  });
+
+  it('formats YouTube publish time in Korea time with elapsed time', () => {
+    const value = '2026-07-07T09:30:00.000Z';
+
+    expect(formatKoreanPublishedDateTime(value)).toBe('2026. 7. 7. 오후 6:30');
+    expect(formatElapsedTime(value, new Date('2026-07-07T12:00:00.000Z'))).toBe('2시간 전');
+    expect(formatElapsedTime('2026-07-07T11:45:00.000Z', new Date('2026-07-07T12:00:00.000Z'))).toBe('15분 전');
+    expect(formatElapsedTime('2026-07-05T12:00:00.000Z', new Date('2026-07-07T12:00:00.000Z'))).toBe('2일 전');
+    expect(formatPublishedDateTimeWithAge(value, new Date('2026-07-07T12:00:00.000Z')))
+      .toBe('2026. 7. 7. 오후 6:30 · 2시간 전');
+    expect(formatPublishedDateTimeWithAge('bad-date')).toBe('게시 시각 미상');
   });
 
   it('formats compact Korean publish dates without changing the source date', () => {

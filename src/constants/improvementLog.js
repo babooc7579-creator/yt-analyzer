@@ -485,6 +485,11 @@ export const CREATOR_OS_IMPROVEMENT_AREAS = [
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
       },
       {
+        id: 'youtube-search-published-time',
+        label: '검색 영상의 한국 시간 게시 시각·경과 시간 표시',
+        status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,
+      },
+      {
         id: 'youtube-search-pagination-criteria-stability',
         label: '기간 검색의 다음 25개 요청에서 첫 검색의 시작 시각·국가·언어·길이·정렬 조건 유지',
         status: IMPROVEMENT_CHECKPOINT_STATUS.DONE,

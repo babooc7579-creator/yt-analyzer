@@ -11,6 +11,7 @@ import {
 import { useMemo, useState } from 'react';
 import { DISCOVERY_LINK_SAVE_TAG_OPTIONS } from '../constants/discoveryLinks';
 import { useYoutubeKeywordSearch } from '../hooks/useYoutubeKeywordSearch';
+import { formatPublishedDateTimeWithAge } from '../utils/dates';
 import KeywordResearchShortcuts from './KeywordResearchShortcuts';
 import YoutubeChannelSearchPanel from './YoutubeChannelSearchPanel';
 import CreatorActionFeedback from './CreatorActionFeedback';
@@ -37,10 +38,6 @@ import {
 } from '../utils/youtubeKeywordSearch';
 
 const formatNumber = (value) => Number(value || 0).toLocaleString('ko-KR');
-const formatDate = (value) => {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString('ko-KR');
-};
 
 function SearchSelect({ label, options, value, onChange, title }) {
   return (
@@ -107,7 +104,7 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
           <p className="min-w-0 flex-1 truncate text-xs font-bold text-slate-400">{item.channelTitle}</p>
           {registeredChannel ? <span className="shrink-0 rounded-full bg-emerald-500/20 px-2 py-1 text-[10px] font-black text-emerald-200">등록 채널</span> : null}
         </div>
-        <p className="mt-1 text-[11px] text-slate-500">게시 {formatDate(item.publishedAt)}</p>
+        <p className="mt-1 text-[11px] text-slate-500">게시 {formatPublishedDateTimeWithAge(item.publishedAt)}</p>
         {shortsCandidate ? <p className={`mt-2 rounded-lg border px-2.5 py-2 text-[11px] font-bold leading-5 ${shortsAssessment.confidence === 'high' ? 'border-pink-500/30 bg-pink-500/10 text-pink-100' : 'border-amber-500/30 bg-amber-500/10 text-amber-100'}`}>{shortsAssessment.reason}</p> : null}
         <div className="mt-3 grid grid-cols-3 gap-2 text-center sm:mt-4">
           <Metric label="조회수" value={formatNumber(item.viewCount)} tone="text-cyan-300" />

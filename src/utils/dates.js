@@ -30,6 +30,47 @@ export const formatKoreanDateTime = (value, fallback = '') => {
   }).format(date);
 };
 
+export const formatKoreanPublishedDateTime = (value, fallback = '게시 시각 미상') => {
+  if (!value) return fallback;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  return new Intl.DateTimeFormat('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  }).format(date)
+    .replace(/\bAM\b/giu, '오전')
+    .replace(/\bPM\b/giu, '오후');
+};
+
+export const formatElapsedTime = (value, now = new Date(), fallback = '경과 시간 미상') => {
+  const publishedAt = new Date(value);
+  const currentTime = now instanceof Date ? now : new Date(now);
+  if (!value || Number.isNaN(publishedAt.getTime()) || Number.isNaN(currentTime.getTime())) return fallback;
+
+  const elapsedMilliseconds = Math.max(0, currentTime.getTime() - publishedAt.getTime());
+  const elapsedMinutes = Math.floor(elapsedMilliseconds / 60000);
+  if (elapsedMinutes < 1) return '방금 전';
+  if (elapsedMinutes < 60) return `${elapsedMinutes}분 전`;
+
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  if (elapsedHours < 24) return `${elapsedHours}시간 전`;
+
+  return `${Math.floor(elapsedHours / 24)}일 전`;
+};
+
+export const formatPublishedDateTimeWithAge = (value, now = new Date(), fallback = '게시 시각 미상') => {
+  const dateTime = formatKoreanPublishedDateTime(value, fallback);
+  if (dateTime === fallback) return fallback;
+  return `${dateTime} · ${formatElapsedTime(value, now)}`;
+};
+
 export const formatShortKoreanDate = (value, fallback = '게시일 미상') => {
   if (!value) return fallback;
 
