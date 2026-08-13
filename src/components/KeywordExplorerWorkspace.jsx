@@ -82,6 +82,9 @@ export default function KeywordExplorerWorkspace({
       <KeywordExplorerSourceTabs source={source} onChange={handleSourceChange} />
 
       <div className="mt-5 space-y-4">
+        {source === 'youtube' && keywordExplorerSession?._restoredFromSession ? (
+          <p role="status" className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-xs font-bold leading-5 text-cyan-100">새로고침 전에 남아 있던 임시 YouTube 검색 조건·결과·선택을 이 브라우저 탭에서 복구했습니다. 자동 재검색이나 Azure DB 저장은 실행하지 않았으며, 통계는 마지막 검색 시점 기준입니다.</p>
+        ) : null}
         {source === 'youtube' ? (
           <YoutubeKeywordSearchPanel
             discoveryLinks={discoveryLinks}

@@ -56,6 +56,9 @@ export function buildKeywordExplorerRouteProps({
       openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add', source: registrationSource } });
     },
     onPrepareBulkChannelRegistration: (channels = []) => {
+      const registrationSource = toArray(channels).some((channel) => channel?.registrationSource === 'youtube-video-search')
+        ? 'youtube-video-search-bulk'
+        : 'youtube-channel-search-bulk';
       const channelInputs = [...new Set(toArray(channels).map((channel) => (
         String(channel?.url || channel?.channelId || '').trim()
       )).filter(Boolean))].slice(0, 50);
@@ -64,7 +67,7 @@ export function buildKeywordExplorerRouteProps({
       setChannelPreview?.(null);
       setBulkResult?.(null);
       setBulkInput?.(channelInputs.join('\n'));
-      openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search-bulk' } });
+      openCreatorView({ id: 'ops-channels', intent: { operationStage: 'add', source: registrationSource } });
     },
     onPromoteToProduction: promoteVideoToProduction,
     onSaveDiscoveryLink: addDiscoveryLink,

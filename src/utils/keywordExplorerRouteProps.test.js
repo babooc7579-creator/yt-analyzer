@@ -51,7 +51,7 @@ describe('keywordExplorerRouteProps', () => {
       url: 'https://www.youtube.com/channel/new-channel',
     });
     props.onPrepareBulkChannelRegistration([
-      { channelId: 'bulk-1', url: 'https://www.youtube.com/channel/bulk-1' },
+      { channelId: 'bulk-1', registrationSource: 'youtube-video-search', url: 'https://www.youtube.com/channel/bulk-1' },
       { channelId: 'bulk-2' },
     ]);
     expect(setAddMode).toHaveBeenCalledWith('single');
@@ -68,7 +68,7 @@ describe('keywordExplorerRouteProps', () => {
       [{ id: 'tools-bookmarks' }],
       [{ id: 'vault-sources' }],
       [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-video-search' } }],
-      [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-channel-search-bulk' } }],
+      [{ id: 'ops-channels', intent: { operationStage: 'add', source: 'youtube-video-search-bulk' } }],
     ]);
   });
 

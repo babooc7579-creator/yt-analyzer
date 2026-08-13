@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { searchYoutubeVideos } from '../services/youtubeSearchApi';
 import {
+  addYoutubeChannelRegistrationSelections,
   buildYoutubeSearchOptions,
   filterYoutubeSearchResults,
+  toggleYoutubeChannelRegistrationSelection,
 } from '../utils/youtubeKeywordSearch';
 
 const INITIAL_FILTERS = {
@@ -28,10 +30,11 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   const [channelRegistrationFilter, setChannelRegistrationFilter] = useState(() => initialState?.channelRegistrationFilter || 'all');
   const [titleScriptFilter, setTitleScriptFilter] = useState(() => initialState?.titleScriptFilter || 'all');
   const [resultSort, setResultSort] = useState(() => initialState?.resultSort || 'received');
+  const [channelRegistrationIds, setChannelRegistrationIds] = useState(() => initialState?.channelRegistrationIds || []);
 
   useEffect(() => {
-    onStateChange?.({ appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, resultSort, selectedIds, titleScriptFilter });
-  }, [appliedFilters, channelRegistrationFilter, filters, items, lastQuery, nextPageToken, notice, onStateChange, resultSort, selectedIds, titleScriptFilter]);
+    onStateChange?.({ appliedFilters, channelRegistrationFilter, channelRegistrationIds, filters, items, lastQuery, nextPageToken, notice, resultSort, selectedIds, titleScriptFilter });
+  }, [appliedFilters, channelRegistrationFilter, channelRegistrationIds, filters, items, lastQuery, nextPageToken, notice, onStateChange, resultSort, selectedIds, titleScriptFilter]);
 
   const displayedItems = useMemo(
     () => filterYoutubeSearchResults(items, filters.minimumViews),
@@ -66,6 +69,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
         return [...merged.values()];
       });
       if (!append) setSelectedIds([]);
+      if (!append) setChannelRegistrationIds([]);
       if (!append) setAppliedFilters({ ...filters, query, publishedAfter: searchOptions.publishedAfter });
       setNextPageToken(data.nextPageToken || '');
       setLastQuery(query);
@@ -91,6 +95,7 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
   const clearResults = () => {
     setItems([]);
     setSelectedIds([]);
+    setChannelRegistrationIds([]);
     setNextPageToken('');
     setLastQuery('');
     setAppliedFilters(null);
@@ -107,11 +112,22 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
 
   return {
     appliedFilters,
+    addChannelRegistrationIds: (channelIds) => {
+      setChannelRegistrationIds((current) => {
+        const result = addYoutubeChannelRegistrationSelections(current, channelIds);
+        setNotice(result.limitReached
+          ? '중요 채널 후보 50개를 선택했습니다. 나머지 채널은 현재 후보에 포함하지 않았습니다.'
+          : `중요 채널 후보 ${result.ids.length}개를 선택했습니다.`);
+        return result.ids;
+      });
+    },
     channelRegistrationFilter,
+    channelRegistrationIds,
     changeChannelRegistrationFilter: setChannelRegistrationFilter,
     changeTitleScriptFilter: setTitleScriptFilter,
     changeFilter,
     clearResults,
+    clearChannelRegistrationIds: () => setChannelRegistrationIds([]),
     clearSelected,
     displayedItems,
     error,
@@ -132,6 +148,13 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
     selectedIds,
     setNotice,
     toggleSelected,
+    toggleChannelRegistration: (channelId) => {
+      setChannelRegistrationIds((current) => {
+        const result = toggleYoutubeChannelRegistrationSelection(current, channelId);
+        if (result.limitReached) setNotice('중요 채널 후보는 한 번에 최대 50개까지 선택할 수 있습니다.');
+        return result.ids;
+      });
+    },
     titleScriptFilter,
     changeResultSort: setResultSort,
   };
