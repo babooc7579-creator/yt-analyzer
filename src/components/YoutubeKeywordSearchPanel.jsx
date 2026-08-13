@@ -19,8 +19,8 @@ import {
   filterYoutubeVideoResultsByChannelRegistration,
   filterYoutubeVideoResultsByTitleScript,
   getDiscoveryLinkYoutubeVideoId,
+  getYoutubeShortsAssessment,
   hasYoutubeSearchCriteriaChanges,
-  isYoutubeShortsCandidate,
   summarizeYoutubeVideoSearchResults,
   sortYoutubeVideoResults,
   toDiscoveryLinkPayload,
@@ -30,6 +30,7 @@ import {
   YOUTUBE_SEARCH_MINIMUM_VIEW_OPTIONS,
   YOUTUBE_SEARCH_ORDER_OPTIONS,
   YOUTUBE_SEARCH_REGION_OPTIONS,
+  YOUTUBE_SHORTS_CONFIDENCE_FILTER_OPTIONS,
   YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS,
   YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS,
   YOUTUBE_VIDEO_RESULT_SORT_OPTIONS,
@@ -82,7 +83,8 @@ function YoutubeSearchOperationGuide() {
 }
 
 function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, saved, registeredChannel, onPrepareChannelRegistration, onToggle, onToggleChannelRegistration }) {
-  const shortsCandidate = isYoutubeShortsCandidate(item);
+  const shortsAssessment = getYoutubeShortsAssessment(item);
+  const shortsCandidate = shortsAssessment.confidence !== 'none';
   return (
     <article className={`overflow-hidden rounded-xl border bg-slate-950/70 ${selected ? 'border-red-400 ring-2 ring-red-400/20' : 'border-slate-800'}`}>
       <button
@@ -97,7 +99,7 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
           {saved ? <Check className="h-4 w-4" /> : selected ? '선택됨' : '선택'}
         </span>
         <span className="absolute bottom-2 right-2 rounded bg-black/85 px-2 py-1 text-[11px] font-black text-white">{item.duration || '-'}</span>
-        {shortsCandidate ? <span className="absolute bottom-2 left-2 rounded bg-pink-500 px-2 py-1 text-[10px] font-black text-white">쇼츠 후보</span> : null}
+        {shortsCandidate ? <span className={`absolute bottom-2 left-2 rounded px-2 py-1 text-[10px] font-black text-white ${shortsAssessment.confidence === 'high' ? 'bg-pink-500' : 'bg-amber-500'}`}>{shortsAssessment.label}</span> : null}
       </button>
       <div className="p-3 sm:p-4">
         <h3 className="line-clamp-2 text-sm font-black leading-6 text-white sm:min-h-12">{item.title}</h3>
@@ -106,6 +108,7 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
           {registeredChannel ? <span className="shrink-0 rounded-full bg-emerald-500/20 px-2 py-1 text-[10px] font-black text-emerald-200">등록 채널</span> : null}
         </div>
         <p className="mt-1 text-[11px] text-slate-500">게시 {formatDate(item.publishedAt)}</p>
+        {shortsCandidate ? <p className={`mt-2 rounded-lg border px-2.5 py-2 text-[11px] font-bold leading-5 ${shortsAssessment.confidence === 'high' ? 'border-pink-500/30 bg-pink-500/10 text-pink-100' : 'border-amber-500/30 bg-amber-500/10 text-amber-100'}`}>{shortsAssessment.reason}</p> : null}
         <div className="mt-3 grid grid-cols-3 gap-2 text-center sm:mt-4">
           <Metric label="조회수" value={formatNumber(item.viewCount)} tone="text-cyan-300" />
           <Metric label="구독자" value={item.hiddenSubscriberCount ? '비공개' : formatNumber(item.subscriberCount)} tone="text-violet-300" />
@@ -164,7 +167,7 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
               className="inline-flex h-9 w-full items-center justify-center gap-1 rounded-lg border border-slate-700 px-2 text-xs font-extrabold text-red-300 hover:bg-slate-900 hover:text-red-200 sm:col-span-2"
               title="YouTube 원본을 새 창에서 엽니다. API 호출이나 저장은 실행하지 않습니다."
             >
-              <ExternalLink className="h-3.5 w-3.5" /> YouTube 원본 보기
+              <ExternalLink className="h-3.5 w-3.5" /> {shortsCandidate ? 'YouTube에서 쇼츠 여부 확인' : 'YouTube 원본 보기'}
             </a>
           </div>
           <p className="mt-2 hidden text-[11px] leading-5 text-slate-500 sm:block">채널 등록 검토는 채널 운영실 입력 준비만 하며 자동 등록하거나 영상을 저장하지 않습니다.</p>
@@ -236,7 +239,14 @@ function YoutubeVideoSearchPanel({
     YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS.find((option) => option.value === search.channelRegistrationFilter),
     YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS.find((option) => option.value === search.titleScriptFilter),
     YOUTUBE_VIDEO_RESULT_SORT_OPTIONS.find((option) => option.value === search.resultSort),
+    YOUTUBE_SHORTS_CONFIDENCE_FILTER_OPTIONS.find((option) => option.value === search.shortsConfidenceFilter),
   ].filter((option) => option && !['all', 'received'].includes(option.value)).map((option) => option.label);
+  const shortsAssessmentSummary = useMemo(() => search.items.reduce((summary, item) => {
+    const confidence = getYoutubeShortsAssessment(item).confidence;
+    if (confidence === 'high') summary.high += 1;
+    if (confidence === 'review') summary.review += 1;
+    return summary;
+  }, { high: 0, review: 0 }), [search.items]);
   const channelRegistrationItems = useMemo(() => {
     const candidates = new Map();
     search.items.forEach((item) => {
@@ -382,6 +392,7 @@ function YoutubeVideoSearchPanel({
               <Metric label="미등록 채널" value={`${resultSummary.unregisteredChannels}개`} tone="text-violet-200" />
               <Metric label="평균 조회수" value={formatNumber(resultSummary.averageViews)} tone="text-emerald-200" />
             </div>
+            {search.appliedFilters?.duration === 'shorts' ? <div className="mt-3 rounded-lg border border-pink-500/25 bg-slate-950/60 px-3 py-2 text-xs font-bold leading-5 text-slate-300"><span className="text-pink-200">쇼츠 가능성 높음 {shortsAssessmentSummary.high}개</span><span className="mx-2 text-slate-600">·</span><span className="text-amber-200">확인 필요 {shortsAssessmentSummary.review}개</span><p className="mt-1 text-[11px] font-normal text-slate-500">가능성 높음은 3분 이하이면서 제목·설명에 Shorts 표기가 있는 결과입니다. 화면비와 YouTube의 최종 분류는 원본에서 확인합니다.</p></div> : null}
             {resultSummary.repeatedUnregisteredChannels.length > 0 ? (
               <div className="mt-4 border-t border-cyan-500/20 pt-4">
                 <p className="text-xs font-black text-violet-100">반복 등장한 미등록 출처 채널</p>
@@ -428,14 +439,15 @@ function YoutubeVideoSearchPanel({
               <div>
                 <p className="text-xs font-extrabold text-cyan-300">결과 좁히기 · 화면에서만 적용</p>
                 <h3 className="mt-1 text-sm font-black text-white">표시 결과 {visibleItems.length}개 / 검색 결과 {search.displayedItems.length}개</h3>
-                <p className="mt-1 text-[11px] leading-5 text-slate-500">등록 상태·제목 문자·현재 결과 정렬은 YouTube API나 Azure DB를 호출하지 않습니다.</p>
+                <p className="mt-1 text-[11px] leading-5 text-slate-500">등록 상태·제목 문자·쇼츠 가능성·현재 결과 정렬은 YouTube API나 Azure DB를 호출하지 않습니다.</p>
               </div>
               <button type="button" onClick={search.resetResultView} disabled={activeResultViewLabels.length === 0} className="h-9 shrink-0 rounded-lg border border-slate-700 px-3 text-xs font-black text-slate-200 disabled:cursor-default disabled:opacity-40">화면 필터 초기화</button>
             </div>
-            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <div className={`mt-3 grid grid-cols-1 gap-2 ${search.appliedFilters?.duration === 'shorts' ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3'}`}>
               <SearchSelect label="출처 채널 등록 상태 필터" options={YOUTUBE_CHANNEL_REGISTRATION_FILTER_OPTIONS} value={search.channelRegistrationFilter} onChange={search.changeChannelRegistrationFilter} title="이미 받은 결과를 출처 채널의 등록 상태로만 좁힙니다. YouTube API나 Azure DB를 새로 호출하지 않습니다." />
               <SearchSelect label="영상 제목 한글 포함 필터" options={YOUTUBE_VIDEO_TITLE_SCRIPT_FILTER_OPTIONS} value={search.titleScriptFilter} onChange={search.changeTitleScriptFilter} title="이미 받은 결과의 제목에 한글 문자가 포함됐는지만 구분합니다. 언어 판정 기능이 아니며 YouTube API나 Azure DB를 새로 호출하지 않습니다." />
               <SearchSelect label="현재 검색 결과 정렬" options={YOUTUBE_VIDEO_RESULT_SORT_OPTIONS} value={search.resultSort} onChange={search.changeResultSort} title="이미 받은 결과의 표시 순서만 바꿉니다. YouTube API나 Azure DB를 새로 호출하지 않습니다." />
+              {search.appliedFilters?.duration === 'shorts' ? <SearchSelect label="쇼츠 가능성 필터" options={YOUTUBE_SHORTS_CONFIDENCE_FILTER_OPTIONS} value={search.shortsConfidenceFilter} onChange={search.changeShortsConfidenceFilter} title="이미 받은 쇼츠 후보를 제목·설명의 Shorts 표기 여부로만 좁힙니다. YouTube API나 Azure DB를 새로 호출하지 않습니다." /> : null}
             </div>
             {activeResultViewLabels.length > 0 ? <div className="mt-3 flex flex-wrap gap-2" aria-label="적용 중인 화면 필터">{activeResultViewLabels.map((label) => <span key={label} className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-[11px] font-black text-cyan-100">{label}</span>)}</div> : <p className="mt-3 text-[11px] text-slate-500">적용 중인 화면 필터 없음 · 받은 결과 전체를 표시합니다.</p>}
             <button type="button" onClick={search.clearResults} className="mt-3 inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-rose-500/40 px-3 text-xs font-black text-rose-200 hover:bg-rose-500/10" title="현재 브라우저의 임시 영상 결과·선택·화면 필터만 지웁니다. 입력한 검색 조건은 유지되며 YouTube API나 Azure DB를 호출하지 않습니다."><Trash2 className="h-3.5 w-3.5" /> 임시 결과 지우기</button>

@@ -3,13 +3,14 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
   useYoutubeKeywordSearch: vi.fn(() => ({
-    appliedFilters: { query: '아이디어', regionCode: 'KR', language: 'ko', dateRange: '30', duration: '', minimumViews: 0, order: 'relevance' },
+    appliedFilters: { query: '아이디어', regionCode: 'KR', language: 'ko', dateRange: '30', duration: 'shorts', minimumViews: 0, order: 'relevance' },
     addChannelRegistrationIds: vi.fn(),
     channelRegistrationFilter: 'all',
     channelRegistrationIds: ['channel-1'],
     changeChannelRegistrationFilter: vi.fn(),
     changeTitleScriptFilter: vi.fn(),
     changeResultSort: vi.fn(),
+    changeShortsConfidenceFilter: vi.fn(),
     changeFilter: vi.fn(),
     clearResults: vi.fn(),
     clearSelected: vi.fn(),
@@ -30,7 +31,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
       url: 'https://www.youtube.com/watch?v=video-1',
     }, {
       videoId: 'video-2', title: '두 번째 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-02T00:00:00Z',
-      duration: '03:00', durationSeconds: 180, viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
+      duration: '03:00', durationSeconds: 180, description: '세로 영상 #Shorts', viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
       lifetimeViewsPerDay: 2500, url: 'https://www.youtube.com/watch?v=video-2',
     }],
     error: '',
@@ -41,7 +42,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
       lifetimeViewsPerDay: 5000, url: 'https://www.youtube.com/watch?v=video-1',
     }, {
       videoId: 'video-2', title: '두 번째 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-02T00:00:00Z',
-      duration: '03:00', durationSeconds: 180, viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
+      duration: '03:00', durationSeconds: 180, description: '세로 영상 #Shorts', viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
       lifetimeViewsPerDay: 2500, url: 'https://www.youtube.com/watch?v=video-2',
     }],
     lastQuery: '아이디어',
@@ -53,6 +54,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
     resultSort: 'received',
     runSearch: vi.fn(),
     selectedIds: ['video-1'],
+    shortsConfidenceFilter: 'all',
     setNotice: vi.fn(),
     toggleSelected: vi.fn(),
     toggleChannelRegistration: vi.fn(),
@@ -94,6 +96,12 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('쇼츠 후보 (3분 이하)');
     expect(html).toContain('API로 세로·정사각형 화면 여부를 확정할 수 없어');
     expect(html).toContain('쇼츠 후보');
+    expect(html).toContain('쇼츠 가능성 높음 1개');
+    expect(html).toContain('확인 필요 0개');
+    expect(html).toContain('가능성 높음만');
+    expect(html).toContain('확인 필요만');
+    expect(html).toContain('제목 또는 설명에 Shorts 표기가 있습니다');
+    expect(html).toContain('YouTube에서 쇼츠 여부 확인');
     expect(html).toContain('검색 조건이 바뀌었습니다');
     expect(html).toContain('표시 결과 2개 / 검색 결과 2개');
     expect(html).toContain('미등록 채널만');
