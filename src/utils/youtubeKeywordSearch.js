@@ -37,10 +37,13 @@ export const YOUTUBE_SEARCH_DATE_OPTIONS = [
 
 export const YOUTUBE_SEARCH_DURATION_OPTIONS = [
   { value: '', label: '영상 길이 전체' },
-  { value: 'short', label: '4분 미만' },
+  { value: 'shorts', label: '쇼츠 후보 (3분 이하)' },
+  { value: 'short', label: '짧은 영상 (4분 미만)' },
   { value: 'medium', label: '4~20분' },
   { value: 'long', label: '20분 초과' },
 ];
+
+export const YOUTUBE_SHORTS_MAX_SECONDS = 180;
 
 export const YOUTUBE_SEARCH_ORDER_OPTIONS = [
   { value: 'relevance', label: '관련도순' },
@@ -133,12 +136,22 @@ export function buildYoutubeSearchOptions(filters, pageToken = '') {
     q: String(filters.query || '').trim(),
     maxResults: 25,
     order: filters.order || 'relevance',
-    videoDuration: filters.duration || '',
+    videoDuration: filters.duration === 'shorts' ? 'short' : (filters.duration || ''),
     regionCode: filters.regionCode || '',
     relevanceLanguage: filters.language || '',
     publishedAfter: filters.publishedAfter || getPublishedAfter(filters.dateRange),
     pageToken,
   };
+}
+
+export function isYoutubeShortsCandidate(video = {}) {
+  const durationSeconds = Number(video.durationSeconds || 0);
+  return durationSeconds > 0 && durationSeconds <= YOUTUBE_SHORTS_MAX_SECONDS;
+}
+
+export function filterYoutubeSearchItemsForRequestedDuration(items, duration = '') {
+  const source = Array.isArray(items) ? items : [];
+  return duration === 'shorts' ? source.filter(isYoutubeShortsCandidate) : source;
 }
 
 const findOptionLabel = (options, value) => options.find((option) => option.value === value)?.label || value;

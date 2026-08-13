@@ -21,6 +21,7 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
       channelId: 'channel-1',
       publishedAt: '2026-08-01T00:00:00Z',
       duration: '08:03',
+      durationSeconds: 483,
       viewCount: 10000,
       subscriberCount: 2000,
       hiddenSubscriberCount: false,
@@ -29,18 +30,18 @@ vi.mock('../hooks/useYoutubeKeywordSearch', () => ({
       url: 'https://www.youtube.com/watch?v=video-1',
     }, {
       videoId: 'video-2', title: '두 번째 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-02T00:00:00Z',
-      duration: '05:00', viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
+      duration: '03:00', durationSeconds: 180, viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
       lifetimeViewsPerDay: 2500, url: 'https://www.youtube.com/watch?v=video-2',
     }],
     error: '',
     filters: { query: '아이디어', regionCode: '', language: '', dateRange: '30', duration: '', minimumViews: 0, order: 'relevance' },
     items: [{
       videoId: 'video-1', title: '좋은 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-01T00:00:00Z',
-      duration: '08:03', viewCount: 10000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 500,
+      duration: '08:03', durationSeconds: 483, viewCount: 10000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 500,
       lifetimeViewsPerDay: 5000, url: 'https://www.youtube.com/watch?v=video-1',
     }, {
       videoId: 'video-2', title: '두 번째 아이디어 영상', channelTitle: '아이디어 채널', channelId: 'channel-1', publishedAt: '2026-08-02T00:00:00Z',
-      duration: '05:00', viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
+      duration: '03:00', durationSeconds: 180, viewCount: 5000, subscriberCount: 2000, hiddenSubscriberCount: false, viralRatio: 250,
       lifetimeViewsPerDay: 2500, url: 'https://www.youtube.com/watch?v=video-2',
     }],
     lastQuery: '아이디어',
@@ -89,6 +90,10 @@ describe('YoutubeKeywordSearchPanel', () => {
     expect(html).toContain('싱가포르');
     expect(html).toContain('포르투갈어 우선');
     expect(html).toContain('대한민국·한국어 우선 빠른 설정');
+    expect(html).toContain('쇼츠 후보 전용');
+    expect(html).toContain('쇼츠 후보 (3분 이하)');
+    expect(html).toContain('API로 세로·정사각형 화면 여부를 확정할 수 없어');
+    expect(html).toContain('쇼츠 후보');
     expect(html).toContain('검색 조건이 바뀌었습니다');
     expect(html).toContain('표시 결과 2개 / 검색 결과 2개');
     expect(html).toContain('미등록 채널만');

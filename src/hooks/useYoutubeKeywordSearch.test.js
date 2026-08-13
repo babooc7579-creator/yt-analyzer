@@ -78,4 +78,31 @@ describe('useYoutubeKeywordSearch', () => {
       publishedAfter: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/),
     }));
   });
+
+  it('requests short videos and keeps only three-minute-or-shorter shorts candidates', async () => {
+    searchYoutubeVideosMock.mockResolvedValue({
+      success: true,
+      items: [
+        { videoId: 'shorts-candidate', durationSeconds: 180 },
+        { videoId: 'too-long', durationSeconds: 181 },
+      ],
+      nextPageToken: 'next-shorts-page',
+    });
+    const search = useYoutubeKeywordSearch({
+      initialState: {
+        filters: { query: 'copilot', duration: 'shorts' },
+      },
+    });
+
+    await search.runSearch();
+
+    expect(searchYoutubeVideosMock).toHaveBeenCalledWith(expect.objectContaining({
+      q: 'copilot',
+      videoDuration: 'short',
+    }));
+    const updateItems = stateSetters[1].mock.calls.at(-1)[0];
+    expect(updateItems([])).toEqual([{ videoId: 'shorts-candidate', durationSeconds: 180 }]);
+    expect(stateSetters[4]).toHaveBeenCalledWith(expect.stringContaining('쇼츠 후보 1개'));
+    expect(stateSetters[5]).toHaveBeenCalledWith('next-shorts-page');
+  });
 });

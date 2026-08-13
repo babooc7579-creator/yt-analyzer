@@ -20,6 +20,7 @@ import {
   filterYoutubeVideoResultsByTitleScript,
   getDiscoveryLinkYoutubeVideoId,
   hasYoutubeSearchCriteriaChanges,
+  isYoutubeShortsCandidate,
   summarizeYoutubeVideoSearchResults,
   sortYoutubeVideoResults,
   toDiscoveryLinkPayload,
@@ -81,6 +82,7 @@ function YoutubeSearchOperationGuide() {
 }
 
 function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, saved, registeredChannel, onPrepareChannelRegistration, onToggle, onToggleChannelRegistration }) {
+  const shortsCandidate = isYoutubeShortsCandidate(item);
   return (
     <article className={`overflow-hidden rounded-xl border bg-slate-950/70 ${selected ? 'border-red-400 ring-2 ring-red-400/20' : 'border-slate-800'}`}>
       <button
@@ -95,6 +97,7 @@ function YoutubeSearchResultCard({ channelRegistrationSelected, item, selected, 
           {saved ? <Check className="h-4 w-4" /> : selected ? '선택됨' : '선택'}
         </span>
         <span className="absolute bottom-2 right-2 rounded bg-black/85 px-2 py-1 text-[11px] font-black text-white">{item.duration || '-'}</span>
+        {shortsCandidate ? <span className="absolute bottom-2 left-2 rounded bg-pink-500 px-2 py-1 text-[10px] font-black text-white">쇼츠 후보</span> : null}
       </button>
       <div className="p-3 sm:p-4">
         <h3 className="line-clamp-2 text-sm font-black leading-6 text-white sm:min-h-12">{item.title}</h3>
@@ -257,6 +260,8 @@ function YoutubeVideoSearchPanel({
     search.changeFilter('language', 'ko');
   };
 
+  const applyShortsPreset = () => search.changeFilter('duration', 'shorts');
+
   const saveSelected = async () => {
     if (selectedItems.length === 0 || duplicateCheckUnavailable || typeof onSaveDiscoveryLink !== 'function') return;
     setSavingSelected(true);
@@ -325,8 +330,12 @@ function YoutubeVideoSearchPanel({
           <SearchSelect label="최소 조회수" options={YOUTUBE_SEARCH_MINIMUM_VIEW_OPTIONS} value={search.filters.minimumViews} onChange={(value) => search.changeFilter('minimumViews', Number(value))} />
           <SearchSelect label="정렬" options={YOUTUBE_SEARCH_ORDER_OPTIONS} value={search.filters.order} onChange={(value) => search.changeFilter('order', value)} />
         </div>
-        <button type="button" onClick={applyKoreanPreset} className="mt-3 rounded-lg border border-red-500/40 px-3 py-2 text-xs font-black text-red-200 hover:bg-red-500/10" title="대한민국 검색 지역과 한국어 우선을 한 번에 선택합니다. YouTube API는 호출하지 않습니다.">대한민국·한국어 우선 빠른 설정</button>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" onClick={applyKoreanPreset} className="rounded-lg border border-red-500/40 px-3 py-2 text-xs font-black text-red-200 hover:bg-red-500/10" title="대한민국 검색 지역과 한국어 우선을 한 번에 선택합니다. YouTube API는 호출하지 않습니다.">대한민국·한국어 우선 빠른 설정</button>
+          <button type="button" onClick={applyShortsPreset} aria-pressed={search.filters.duration === 'shorts'} className={`rounded-lg border px-3 py-2 text-xs font-black ${search.filters.duration === 'shorts' ? 'border-pink-300 bg-pink-500 text-white' : 'border-pink-500/40 text-pink-200 hover:bg-pink-500/10'}`} title="영상 길이를 쇼츠 후보(3분 이하)로 선택합니다. 선택만으로 YouTube API를 호출하지 않습니다.">쇼츠 후보 전용</button>
+        </div>
         <p className="mt-3 text-[11px] leading-5 text-slate-500">검색 지역은 해당 나라에서 시청 가능한 결과이며 제작 국가 제한이 아닙니다. 우선 언어는 관련 결과를 앞세우지만 다른 언어도 포함될 수 있습니다.</p>
+        <p className="mt-1 text-[11px] leading-5 text-pink-200/80">쇼츠 후보는 YouTube API의 4분 미만 결과 중 앱이 3분 이하만 남깁니다. API로 세로·정사각형 화면 여부를 확정할 수 없어 일반 3분 이하 영상이 포함될 수 있습니다.</p>
         <p className="mt-1 text-[11px] leading-5 text-slate-500">기본 25개 · 자동검색 없음 · 조건 변경 후 검색 버튼을 눌러야 새 API 요청이 실행됩니다. 최소 조회수는 받은 결과를 화면에서만 좁힙니다.</p>
       </form>
 
@@ -347,7 +356,7 @@ function YoutubeVideoSearchPanel({
       ) : null}
       {hasPendingCriteria ? <p role="status" className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-100">검색 조건이 바뀌었습니다. 새 조건을 결과에 적용하려면 검색 버튼을 눌러주세요.</p> : null}
 
-      {search.items.length > 0 ? (
+      {search.items.length > 0 || search.nextPageToken ? (
         <>
           <section className="rounded-xl border border-cyan-500/25 bg-cyan-500/5 p-4" aria-label="현재 검색 결과 요약">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -472,7 +481,7 @@ function YoutubeVideoSearchPanel({
                 selected={search.selectedIds.includes(item.videoId)}
               />
             ))}
-          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">{search.titleScriptFilter === 'hangul' ? '한글 포함 제목이 없습니다' : '현재 화면 필터에 맞는 영상이 없습니다'}</h3><p className="mt-2 text-sm text-slate-500">{search.titleScriptFilter === 'hangul' ? '한국어 우선 검색도 한글 제목을 보장하지 않습니다. 전체 제목으로 돌아가면 받은 결과를 모두 볼 수 있습니다.' : '검색 결과는 그대로 유지됩니다. 화면 필터를 초기화하면 모든 결과를 다시 볼 수 있습니다.'}</p><button type="button" onClick={search.resetResultView} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">전체 결과 보기</button></div>}
+          </div> : <div className="rounded-xl border border-dashed border-slate-700 px-5 py-10 text-center"><h3 className="font-black text-white">{search.appliedFilters?.duration === 'shorts' && search.items.length === 0 ? '현재 페이지에 쇼츠 후보가 없습니다' : search.titleScriptFilter === 'hangul' ? '한글 포함 제목이 없습니다' : '현재 화면 필터에 맞는 영상이 없습니다'}</h3><p className="mt-2 text-sm text-slate-500">{search.appliedFilters?.duration === 'shorts' && search.items.length === 0 ? 'YouTube API에서 받은 4분 미만 결과 중 3분 이하 후보가 없었습니다. 다음 결과가 있으면 계속 불러오거나 검색 조건을 넓혀 보세요.' : search.titleScriptFilter === 'hangul' ? '한국어 우선 검색도 한글 제목을 보장하지 않습니다. 전체 제목으로 돌아가면 받은 결과를 모두 볼 수 있습니다.' : '검색 결과는 그대로 유지됩니다. 화면 필터를 초기화하면 모든 결과를 다시 볼 수 있습니다.'}</p>{search.items.length > 0 ? <button type="button" onClick={search.resetResultView} className="mt-4 h-10 rounded-lg border border-slate-700 px-4 text-xs font-black text-slate-200">전체 결과 보기</button> : null}</div>}
           {search.nextPageToken ? (
             <div className="space-y-2 text-center">
               <button

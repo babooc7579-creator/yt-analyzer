@@ -291,6 +291,8 @@ ScrapbookPage → useScrapbook → services/scrapbookApi.js → Azure Function �
 
 YouTube 키워드 탐색의 검색 조건·임시 결과·영상/채널 선택은 `sessionStorage`에 최대 6시간 복구용으로만 둡니다. 같은 브라우저 탭의 새로고침에는 복구되지만 탭을 닫으면 사라지며, 자동 YouTube 재검색이나 Azure DB 저장을 실행하지 않습니다. 이 임시 검색 세션은 업무 기준 데이터나 `localStorage` fallback과 합치지 않습니다.
 
+쇼츠 후보 전용 탐색은 별도 저장소나 자동 수집을 만들지 않습니다. YouTube Data API의 `videoDuration=short`로 4분 미만 결과를 요청한 뒤, 응답의 영상 길이를 기준으로 프론트에서 180초 이하만 남깁니다. API 응답만으로 세로·정사각형 화면비를 확정할 수 없으므로 결과와 배지는 `쇼츠`가 아니라 `쇼츠 후보`로 표현합니다. 한 페이지에 후보가 0개여도 다음 페이지 토큰은 유지해 사용자가 명시적으로 다음 결과를 계속 조회할 수 있습니다.
+
 ### 발견 링크 데이터
 
 ```txt

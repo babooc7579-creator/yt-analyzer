@@ -3,6 +3,7 @@ import { searchYoutubeVideos } from '../services/youtubeSearchApi';
 import {
   addYoutubeChannelRegistrationSelections,
   buildYoutubeSearchOptions,
+  filterYoutubeSearchItemsForRequestedDuration,
   filterYoutubeSearchResults,
   toggleYoutubeChannelRegistrationSelection,
 } from '../utils/youtubeKeywordSearch';
@@ -61,7 +62,8 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
       const searchOptions = buildYoutubeSearchOptions(requestFilters, append ? nextPageToken : '');
       const data = await searchYoutubeVideos(searchOptions);
       if (!data?.success) throw new Error(data?.error || 'YouTube 검색 결과를 불러오지 못했습니다.');
-      const incoming = Array.isArray(data.items) ? data.items : [];
+      const apiItems = Array.isArray(data.items) ? data.items : [];
+      const incoming = filterYoutubeSearchItemsForRequestedDuration(apiItems, requestFilters.duration);
       setItems((current) => {
         if (!append) return incoming;
         const merged = new Map(current.map((item) => [item.videoId, item]));
@@ -74,8 +76,12 @@ export function useYoutubeKeywordSearch({ initialState, onStateChange } = {}) {
       setNextPageToken(data.nextPageToken || '');
       setLastQuery(query);
       setNotice(incoming.length > 0
-        ? `${incoming.length}개 영상을 찾았습니다. 결과는 아직 저장되지 않았습니다.`
-        : '조건에 맞는 영상을 찾지 못했습니다.');
+        ? requestFilters.duration === 'shorts'
+          ? `쇼츠 후보 ${incoming.length}개를 찾았습니다. 3분 이하 길이 기준이며 결과는 아직 저장되지 않았습니다.`
+          : `${incoming.length}개 영상을 찾았습니다. 결과는 아직 저장되지 않았습니다.`
+        : requestFilters.duration === 'shorts'
+          ? '현재 받아온 4분 미만 검색 결과에는 3분 이하 쇼츠 후보가 없습니다. 다음 결과를 확인하거나 조건을 넓혀 보세요.'
+          : '조건에 맞는 영상을 찾지 못했습니다.');
       return true;
     } catch (searchError) {
       setError(searchError.message || 'YouTube 검색 중 오류가 발생했습니다.');
